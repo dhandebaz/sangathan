@@ -1,0 +1,112 @@
+/* Pre-built Tailwind CSS for production */
+/* This file will be replaced by npm run build */
+body {
+    background-color: #FF6B35;
+    color: #000000;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+.min-h-screen {
+    min-height: 100vh;
+}
+
+.flex {
+    display: flex;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.bg-white {
+    background-color: white;
+}
+
+.p-8 {
+    padding: 2rem;
+}
+
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+.shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.max-w-md {
+    max-width: 28rem;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.text-3xl {
+    font-size: 1.875rem;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.mb-6 {
+    margin-bottom: 1.5rem;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-black {
+    color: #000000;
+}
+
+.mb-8 {
+    margin-bottom: 2rem;
+}
+
+.space-y-4 > * + * {
+    margin-top: 1rem;
+}
+
+.block {
+    display: block;
+}
+
+.bg-orange-500 {
+    background-color: #FF6B35;
+}
+
+.text-black {
+    color: #000000;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.hover\:bg-orange-600:hover {
+    background-color: #E55A2B;
+}
+
+.transition-colors {
+    transition: background-color 0.2s ease;
+}
