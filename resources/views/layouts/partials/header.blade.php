@@ -18,6 +18,9 @@
                 <a href="{{ route('members.index') }}" class="text-black hover:text-orange-600 px-3 py-2 text-sm font-medium transition-colors duration-150">
                     Members
                 </a>
+                <a href="{{ route('meetings.index') }}" class="text-black hover:text-orange-600 px-3 py-2 text-sm font-medium transition-colors duration-150">
+                    Meetings
+                </a>
                 <a href="#" class="text-black hover:text-orange-600 px-3 py-2 text-sm font-medium transition-colors duration-150">
                     Users
                 </a>
@@ -101,6 +104,9 @@
             </a>
             <a href="{{ route('members.index') }}" class="text-black hover:text-orange-600 block px-3 py-2 text-base font-medium transition-colors duration-150">
                 Members
+            </a>
+            <a href="{{ route('meetings.index') }}" class="text-black hover:text-orange-600 block px-3 py-2 text-base font-medium transition-colors duration-150">
+                Meetings
             </a>
             <a href="#" class="text-black hover:text-orange-600 block px-3 py-2 text-base font-medium transition-colors duration-150">
                 Users

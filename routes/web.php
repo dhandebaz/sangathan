@@ -2,8 +2,17 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\DonationController;
+use App\Http\Controllers\FormController;
+use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\OrganisationPaymentProfileController;
+use App\Http\Controllers\PaymentClaimController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PdfController;
+use App\Http\Controllers\PublicFormController;
 use App\Http\Controllers\SetupController;
+use App\Http\Controllers\SubmissionController;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckInstallation;
 use App\Http\Middleware\OrganisationContext;
@@ -48,6 +57,18 @@ Route::middleware([CheckInstallation::class])->group(function () {
 
 /*
 |--------------------------------------------------------------------------
+| Public Form Routes (No Authentication Required)
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware([CheckInstallation::class])->prefix('forms/{organisation}/{form}')->name('public.forms.')->group(function () {
+    Route::get('/', [PublicFormController::class, 'show'])->name('show');
+    Route::post('/submit', [PublicFormController::class, 'submit'])->name('submit');
+    Route::get('/success', [PublicFormController::class, 'success'])->name('success');
+});
+
+/*
+|--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 */
@@ -84,6 +105,56 @@ Route::middleware([CheckInstallation::class])->group(function () {
             });
         });
         
+        // Meeting Register Routes
+        Route::prefix('meetings')->name('meetings.')->group(function () {
+            // All authenticated users can view meetings
+            Route::get('/', [MeetingController::class, 'index'])->name('index');
+            Route::get('/{meeting}', [MeetingController::class, 'show'])->name('show');
+            
+            // Admin and Editor can create meetings
+            Route::middleware(['role:admin,editor'])->group(function () {
+                Route::get('/create', [MeetingController::class, 'create'])->name('create');
+                Route::post('/', [MeetingController::class, 'store'])->name('store');
+                Route::get('/{meeting}/edit', [MeetingController::class, 'edit'])->name('edit');
+                Route::put('/{meeting}', [MeetingController::class, 'update'])->name('update');
+            });
+            
+            // Only Admin can delete meetings
+            Route::middleware(['role:admin'])->group(function () {
+                Route::delete('/{meeting}', [MeetingController::class, 'destroy'])->name('destroy');
+            });
+        });
+        
+        // Form Builder Routes
+        Route::prefix('forms')->name('forms.')->group(function () {
+            // All authenticated users can view forms
+            Route::get('/', [FormController::class, 'index'])->name('index');
+            
+            // Admin and Editor can create forms
+            Route::middleware(['role:admin,editor'])->group(function () {
+                Route::get('/create', [FormController::class, 'create'])->name('create');
+                Route::post('/', [FormController::class, 'store'])->name('store');
+                Route::get('/{form}/edit', [FormController::class, 'edit'])->name('edit');
+                Route::put('/{form}', [FormController::class, 'update'])->name('update');
+                Route::get('/{form}/builder', [FormController::class, 'builder'])->name('builder');
+                Route::post('/{form}/fields', [FormController::class, 'addField'])->name('add-field');
+                Route::post('/{form}/fields/order', [FormController::class, 'updateFieldOrder'])->name('update-field-order');
+                Route::delete('/{form}/fields/{field}', [FormController::class, 'deleteField'])->name('delete-field');
+            });
+            
+            // Only Admin can delete forms
+            Route::middleware(['role:admin'])->group(function () {
+                Route::delete('/{form}', [FormController::class, 'destroy'])->name('destroy');
+            });
+            
+            // Form Submissions Routes
+            Route::prefix('{form}/submissions')->name('forms.submissions.')->group(function () {
+                Route::get('/', [SubmissionController::class, 'index'])->name('index');
+                Route::get('/{submission}', [SubmissionController::class, 'show'])->name('show');
+                Route::post('/{submission}/convert-to-member', [SubmissionController::class, 'convertToMember'])->name('convert-to-member');
+            });
+        });
+        
         // Admin only routes
         Route::middleware(['role:admin'])->group(function () {
             // Add admin routes here
@@ -97,6 +168,55 @@ Route::middleware([CheckInstallation::class])->group(function () {
         // All authenticated users
         Route::middleware(['role:admin,editor,viewer'])->group(function () {
             // Add viewer routes here
+        });
+        
+        // PDF Export Routes
+        Route::prefix('export')->name('export.')->group(function () {
+            Route::get('/members/pdf', [PdfController::class, 'exportMembers'])->name('members.pdf');
+            Route::get('/donations/pdf', [PdfController::class, 'exportDonations'])->name('donations.pdf');
+            Route::get('/meetings/{meeting}/minutes/pdf', [PdfController::class, 'exportMeetingMinutes'])->name('meeting.minutes.pdf');
+            Route::get('/forms/{form}/submissions/pdf', [PdfController::class, 'exportFormSubmissionsSummary'])->name('form.submissions.pdf');
+            Route::get('/submissions/{submission}/pdf', [PdfController::class, 'exportFormSubmission'])->name('submission.pdf');
+        });
+        
+        // Payment Routes
+        Route::prefix('payments')->name('payments.')->group(function () {
+            // Public payment page (no auth required)
+            Route::get('/{organisation}', [PaymentController::class, 'publicPage'])->name('public.page');
+            
+            // Payment profile management (Admin and Editor only)
+            Route::middleware(['role:admin,editor'])->group(function () {
+                Route::get('/{organisation}/settings', [OrganisationPaymentProfileController::class, 'edit'])->name('settings.edit');
+                Route::put('/{organisation}/settings', [OrganisationPaymentProfileController::class, 'update'])->name('profile.update');
+            });
+            
+            // Payment claims management
+            Route::prefix('{organisation}/claims')->name('payments.claims.')->group(function () {
+                // Public claim submission (no auth required)
+                Route::post('/', [PaymentClaimController::class, 'store'])->name('store');
+                Route::get('/success', [PaymentClaimController::class, 'success'])->name('success');
+                
+                // Admin and Editor can view and manage claims
+                Route::middleware(['role:admin,editor'])->group(function () {
+                    Route::get('/', [PaymentClaimController::class, 'index'])->name('index');
+                    Route::get('/{claim}', [PaymentClaimController::class, 'show'])->name('show');
+                    Route::post('/{claim}/verify', [PaymentClaimController::class, 'verify'])->name('verify');
+                    Route::post('/{claim}/reject', [PaymentClaimController::class, 'reject'])->name('reject');
+                });
+            });
+        });
+        
+        // Donation Routes
+        Route::prefix('donations')->name('donations.')->group(function () {
+            Route::get('/', [DonationController::class, 'index'])->name('index');
+            Route::get('/create', [DonationController::class, 'create'])->name('create');
+            Route::post('/', [DonationController::class, 'store'])->name('store');
+            Route::get('/{donation}', [DonationController::class, 'show'])->name('show');
+            Route::middleware(['role:admin,editor'])->group(function () {
+                Route::get('/{donation}/edit', [DonationController::class, 'edit'])->name('edit');
+                Route::put('/{donation}', [DonationController::class, 'update'])->name('update');
+                Route::delete('/{donation}', [DonationController::class, 'destroy'])->name('destroy');
+            });
         });
     });
 });
