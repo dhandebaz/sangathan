@@ -15,6 +15,9 @@
                 <a href="{{ route('dashboard') }}" class="text-black hover:text-orange-600 px-3 py-2 text-sm font-medium transition-colors duration-150">
                     Dashboard
                 </a>
+                <a href="{{ route('members.index') }}" class="text-black hover:text-orange-600 px-3 py-2 text-sm font-medium transition-colors duration-150">
+                    Members
+                </a>
                 <a href="#" class="text-black hover:text-orange-600 px-3 py-2 text-sm font-medium transition-colors duration-150">
                     Users
                 </a>
@@ -71,7 +74,7 @@
                             Settings
                         </a>
                         <hr class="border-black">
-                        <form method="POST" action="#" class="block">
+                        <form method="POST" action="{{ route('logout') }}" class="block">
                             @csrf
                             <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-orange-50 transition-colors duration-150">
                                 Sign out
@@ -95,6 +98,9 @@
         <div class="px-2 pt-2 pb-3 space-y-1">
             <a href="{{ route('dashboard') }}" class="text-black hover:text-orange-600 block px-3 py-2 text-base font-medium transition-colors duration-150">
                 Dashboard
+            </a>
+            <a href="{{ route('members.index') }}" class="text-black hover:text-orange-600 block px-3 py-2 text-base font-medium transition-colors duration-150">
+                Members
             </a>
             <a href="#" class="text-black hover:text-orange-600 block px-3 py-2 text-base font-medium transition-colors duration-150">
                 Users

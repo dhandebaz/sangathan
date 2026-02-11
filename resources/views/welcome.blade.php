@@ -17,9 +17,14 @@
             
             @if(app(\App\Services\InstallationService::class)->isInstalled())
                 <div class="space-y-4">
-                    <a href="{{ route('login') }}" class="block w-full bg-orange-500 text-black text-center py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors">
-                        Login
-                    </a>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="{{ route('login') }}" class="flex-1 bg-orange-500 text-black text-center py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors">
+                            Login
+                        </a>
+                        <a href="{{ route('register') }}" class="flex-1 bg-white border-2 border-orange-500 text-orange-600 text-center py-3 rounded-lg font-semibold hover:bg-orange-50 transition-colors">
+                            Register
+                        </a>
+                    </div>
                     <p class="text-sm text-black">
                         Application is installed and ready to use.
                     </p>
