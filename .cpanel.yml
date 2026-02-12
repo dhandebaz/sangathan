@@ -1,5 +1,0 @@
----
-deployment:
-  tasks:
-    - export DEPLOYPATH=/home/yppnfmcprj/sangathan.space
-    - /bin/cp -R . $DEPLOYPATH
