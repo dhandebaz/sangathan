@@ -104,23 +104,15 @@
             </button>
             
             <div x-show="open" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="mt-2 space-y-1 pl-4">
-                @can('update', $currentOrg)
+                @if(auth()->user()->hasRole('admin'))
                     <a href="{{ route('supporter.index') }}" class="block px-3 py-2 text-sm text-black hover:bg-orange-50 rounded-lg transition-colors duration-150 {{ request()->routeIs('supporter.*') ? 'bg-orange-50' : '' }}">
                         Supporter Plan
-                        @if($currentOrg->is_supporter)
-                            <span class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
-                                Active
-                            </span>
+                        @if(\App\Models\Organisation::find(session('current_organisation_id'))?->is_supporter)
+                            <span class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pro</span>
                         @endif
                     </a>
-                @endcan
-            </div>
-        </div>
-            
-            <div x-show="open" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="mt-2 space-y-1 pl-4">
-                <a href="#" class="block px-3 py-2 text-sm text-black hover:bg-orange-50 rounded-lg transition-colors duration-150">General</a>
-                <a href="#" class="block px-3 py-2 text-sm text-black hover:bg-orange-50 rounded-lg transition-colors duration-150">Security</a>
-                <a href="#" class="block px-3 py-2 text-sm text-black hover:bg-orange-50 rounded-lg transition-colors duration-150">Appearance</a>
+                    <a href="{{ route('organisation.export') }}" class="block px-3 py-2 text-sm text-black hover:bg-orange-50 rounded-lg transition-colors duration-150">Export Data</a>
+                @endif
             </div>
         </div>
     </nav>

@@ -49,11 +49,14 @@ Route::prefix('setup')->name('setup.')->group(function () {
 
 Route::middleware([CheckInstallation::class])->group(function () {
     // Razorpay Webhook
-    Route::post('/webhooks/razorpay', [WebhookController::class, 'handleRazorpay'])->name('webhooks.razorpay');
+    Route::post('/webhooks/razorpay', [WebhookController::class, 'handleRazorpay'])
+        ->middleware('throttle:webhook')
+        ->name('webhooks.razorpay');
 
     // Login routes
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [LoginController::class, 'login']);
+    Route::post('/login', [LoginController::class, 'login'])
+        ->middleware('throttle:login');
     
     // Registration routes
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
@@ -71,7 +74,9 @@ Route::middleware([CheckInstallation::class])->group(function () {
 
 Route::middleware([CheckInstallation::class])->prefix('forms/{organisation}/{form}')->name('public.forms.')->group(function () {
     Route::get('/', [PublicFormController::class, 'show'])->name('show');
-    Route::post('/submit', [PublicFormController::class, 'submit'])->name('submit');
+    Route::post('/submit', [PublicFormController::class, 'submit'])
+        ->middleware('throttle:public_form')
+        ->name('submit');
     Route::get('/success', [PublicFormController::class, 'success'])->name('success');
 });
 
@@ -87,9 +92,18 @@ Route::middleware([CheckInstallation::class])->group(function () {
     });
 
     // Protected routes (require authentication)
-    Route::middleware(['auth', 'org.context'])->group(function () {
-        
-        // Supporter Routes
+    use App\Http\Controllers\ExportController;
+
+// ...
+
+Route::middleware(['auth', 'org.context'])->group(function () {
+    
+    // Organisation Backup
+    Route::get('/organisation/export', [ExportController::class, 'exportOrganisationData'])
+        ->name('organisation.export')
+        ->middleware('role:admin');
+
+    // Supporter Routes
         Route::middleware(['role:admin'])->prefix('supporter')->name('supporter.')->group(function () {
             Route::get('/', [SupporterController::class, 'index'])->name('index');
             Route::post('/subscribe', [SupporterController::class, 'subscribe'])->name('subscribe');
@@ -254,6 +268,7 @@ Route::prefix('system-admin')->name('system-admin.')->group(function () {
         
         // Dashboard
         Route::get('/dashboard', [SystemAdminController::class, 'dashboard'])->name('dashboard');
+        Route::post('/maintenance/toggle', [SystemAdminController::class, 'toggleMaintenance'])->name('maintenance.toggle');
         
         // Organisations management
         Route::prefix('organisations')->name('organisations.')->group(function () {

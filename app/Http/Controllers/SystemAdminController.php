@@ -34,8 +34,22 @@ class SystemAdminController extends Controller
         ];
 
         $monthly_remr = $metrics['total_supporters'] * 99; // ₹99 per supporter
+        $maintenance_mode = Storage::exists('maintenance_mode');
 
-        return view('system-admin.dashboard', compact('metrics', 'monthly_remr'));
+        return view('system-admin.dashboard', compact('metrics', 'monthly_remr', 'maintenance_mode'));
+    }
+
+    public function toggleMaintenance(Request $request)
+    {
+        if (Storage::exists('maintenance_mode')) {
+            Storage::delete('maintenance_mode');
+            $message = 'Maintenance mode deactivated.';
+        } else {
+            Storage::put('maintenance_mode', 'true');
+            $message = 'Maintenance mode activated.';
+        }
+        
+        return back()->with('success', $message);
     }
 
     /**

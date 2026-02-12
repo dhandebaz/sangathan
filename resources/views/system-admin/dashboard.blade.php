@@ -6,6 +6,28 @@
 
 @section('content')
 <div class="space-y-6">
+    <!-- Maintenance Mode Toggle -->
+    <div class="card bg-gray-50 border-l-4 {{ $maintenance_mode ? 'border-red-500' : 'border-green-500' }}">
+        <div class="card-body flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-medium text-black">Maintenance Mode</h3>
+                <p class="text-sm text-gray-600">
+                    @if($maintenance_mode)
+                        The application is currently in maintenance mode. Only system admins can access it.
+                    @else
+                        The application is live and accessible to all users.
+                    @endif
+                </p>
+            </div>
+            <form action="{{ route('system-admin.maintenance.toggle') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn {{ $maintenance_mode ? 'btn-danger' : 'btn-primary' }}">
+                    {{ $maintenance_mode ? 'Deactivate Maintenance Mode' : 'Activate Maintenance Mode' }}
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Platform Metrics -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="card">

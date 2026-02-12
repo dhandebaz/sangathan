@@ -4,6 +4,7 @@ use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckInstallation;
 use App\Http\Middleware\OrganisationContext;
 use App\Http\Middleware\RoleCheck;
+use App\Http\Middleware\CheckMaintenanceMode;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Foundation\Bootstrap\BootProviders;
@@ -23,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
             CheckInstallation::class,
+            CheckMaintenanceMode::class,
         ]);
         
         $middleware->validateCsrfTokens(except: [
