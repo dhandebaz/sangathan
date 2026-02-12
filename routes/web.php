@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\SystemAdminLoginController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\MeetingController;
@@ -13,9 +14,13 @@ use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PublicFormController;
 use App\Http\Controllers\SetupController;
 use App\Http\Controllers\SubmissionController;
+use App\Http\Controllers\SystemAdminController;
+use App\Http\Controllers\SupporterController;
+use App\Http\Controllers\WebhookController;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckInstallation;
 use App\Http\Middleware\OrganisationContext;
+use App\Http\Middleware\SystemAdmin as SystemAdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,6 +48,9 @@ Route::prefix('setup')->name('setup.')->group(function () {
 */
 
 Route::middleware([CheckInstallation::class])->group(function () {
+    // Razorpay Webhook
+    Route::post('/webhooks/razorpay', [WebhookController::class, 'handleRazorpay'])->name('webhooks.razorpay');
+
     // Login routes
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
@@ -80,6 +88,14 @@ Route::middleware([CheckInstallation::class])->group(function () {
 
     // Protected routes (require authentication)
     Route::middleware(['auth', 'org.context'])->group(function () {
+        
+        // Supporter Routes
+        Route::middleware(['role:admin'])->prefix('supporter')->name('supporter.')->group(function () {
+            Route::get('/', [SupporterController::class, 'index'])->name('index');
+            Route::post('/subscribe', [SupporterController::class, 'subscribe'])->name('subscribe');
+            Route::post('/settings', [SupporterController::class, 'updateSettings'])->name('settings.update');
+        });
+
         Route::get('/dashboard', function () {
             return view('dashboard');
         })->name('dashboard');
@@ -218,5 +234,58 @@ Route::middleware([CheckInstallation::class])->group(function () {
                 Route::delete('/{donation}', [DonationController::class, 'destroy'])->name('destroy');
             });
         });
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| System Admin Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('system-admin')->name('system-admin.')->group(function () {
+    // Login routes (no auth required)
+    Route::get('/login', [SystemAdminLoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [SystemAdminLoginController::class, 'login']);
+    
+    // Protected routes (system admin only)
+    Route::middleware([SystemAdminMiddleware::class])->group(function () {
+        Route::post('/logout', [SystemAdminLoginController::class, 'logout'])->name('logout');
+        
+        // Dashboard
+        Route::get('/dashboard', [SystemAdminController::class, 'dashboard'])->name('dashboard');
+        
+        // Organisations management
+        Route::prefix('organisations')->name('organisations.')->group(function () {
+            Route::get('/', [SystemAdminController::class, 'organisations'])->name('index');
+            Route::get('/{organisation}', [SystemAdminController::class, 'organisation'])->name('show');
+            Route::post('/{organisation}/suspend', [SystemAdminController::class, 'suspendOrganisation'])->name('suspend');
+            Route::post('/{organisation}/unsuspend', [SystemAdminController::class, 'unsuspendOrganisation'])->name('unsuspend');
+            Route::post('/{organisation}/toggle-supporter', [SystemAdminController::class, 'toggleSupporterStatus'])->name('toggle-supporter');
+        });
+        
+        // Users management
+        Route::prefix('users')->name('users.')->group(function () {
+            Route::get('/', [SystemAdminController::class, 'users'])->name('index');
+            Route::get('/{user}', [SystemAdminController::class, 'user'])->name('show');
+            Route::post('/{user}/disable', [SystemAdminController::class, 'disableUser'])->name('disable');
+            Route::post('/{user}/enable', [SystemAdminController::class, 'enableUser'])->name('enable');
+        });
+        
+        // Supporters overview
+        Route::get('/supporters', [SystemAdminController::class, 'supporters'])->name('supporters');
+        
+        // Forms abuse monitoring
+        Route::prefix('forms-abuse')->name('forms-abuse.')->group(function () {
+            Route::get('/', [SystemAdminController::class, 'formsAbuse'])->name('index');
+            Route::post('/forms/{form}/disable', [SystemAdminController::class, 'disableForm'])->name('forms.disable');
+            Route::post('/forms/{form}/enable', [SystemAdminController::class, 'enableForm'])->name('forms.enable');
+        });
+        
+        // Storage monitoring
+        Route::get('/storage', [SystemAdminController::class, 'storage'])->name('storage');
+        
+        // Audit logs
+        Route::get('/audit-logs', [SystemAdminController::class, 'auditLogs'])->name('audit-logs');
     });
 });

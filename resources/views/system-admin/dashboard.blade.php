@@ -132,15 +132,19 @@
             <h3 class="text-lg font-medium text-black">Supporter Revenue Overview</h3>
         </div>
         <div class="card-body">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="text-center">
                     <p class="text-sm font-medium text-black">Total Supporters</p>
                     <p class="text-3xl font-bold text-black">{{ number_format($metrics['total_supporters']) }}</p>
                 </div>
                 <div class="text-center">
-                    <p class="text-sm font-medium text-black">Monthly Recurring Revenue</p>
+                    <p class="text-sm font-medium text-black">Active Subscriptions</p>
+                    <p class="text-3xl font-bold text-black">{{ number_format($metrics['active_subscriptions']) }}</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-sm font-medium text-black">Estimated MRR</p>
                     <p class="text-3xl font-bold text-green-600">₹{{ number_format($monthly_remr) }}</p>
-                    <p class="text-xs text-black/70">₹99 per supporter</p>
+                    <p class="text-xs text-black/70">₹99 per active supporter</p>
                 </div>
                 <div class="text-center">
                     <p class="text-sm font-medium text-black">Payment Claims</p>

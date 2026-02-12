@@ -4,9 +4,20 @@
         <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <!-- Left Section: Copyright and Links -->
             <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
-                <p class="text-sm text-black">
-                    &copy; {{ date('Y') }} {{ config('app.name', 'Sangathan') }}. All rights reserved.
-                </p>
+                @php
+                    $currentOrg = \App\Models\Organisation::find(session('current_organisation_id'));
+                    $showBranding = $currentOrg ? (!$currentOrg->is_supporter || !$currentOrg->branding_disabled) : true;
+                @endphp
+
+                @if($showBranding)
+                    <p class="text-sm text-black">
+                        &copy; {{ date('Y') }} {{ config('app.name', 'Sangathan') }}. All rights reserved.
+                    </p>
+                @else
+                    <p class="text-sm text-black">
+                        &copy; {{ date('Y') }} All rights reserved.
+                    </p>
+                @endif
                 
                 <div class="flex space-x-4">
                     <a href="#" class="text-sm text-black hover:text-orange-600 transition-colors duration-150">

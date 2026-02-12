@@ -30,6 +30,11 @@ class Organisation extends Model
         'registration_number',
         'registration_date',
         'is_active',
+        'is_supporter',
+        'supporter_since',
+        'branding_disabled',
+        'razorpay_customer_id',
+        'razorpay_subscription_id',
     ];
 
     /**
@@ -40,6 +45,9 @@ class Organisation extends Model
     protected $casts = [
         'registration_date' => 'date',
         'is_active' => 'boolean',
+        'is_supporter' => 'boolean',
+        'branding_disabled' => 'boolean',
+        'supporter_since' => 'datetime',
     ];
 
     /**

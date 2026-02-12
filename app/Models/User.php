@@ -23,6 +23,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'designation',
         'is_active',
+        'is_system_admin',
+        'is_disabled',
+        'last_login_at',
     ];
 
     /**
@@ -46,6 +49,9 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'is_system_admin' => 'boolean',
+            'is_disabled' => 'boolean',
+            'last_login_at' => 'datetime',
         ];
     }
 

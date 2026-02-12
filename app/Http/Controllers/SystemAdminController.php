@@ -30,6 +30,7 @@ class SystemAdminController extends Controller
             'total_meetings' => Meeting::count(),
             'total_payment_claims' => PaymentClaim::count(),
             'total_supporters' => Organisation::where('is_supporter', true)->count(),
+            'active_subscriptions' => Organisation::where('is_supporter', true)->whereNotNull('razorpay_subscription_id')->count(),
         ];
 
         $monthly_remr = $metrics['total_supporters'] * 99; // ₹99 per supporter

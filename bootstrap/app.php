@@ -25,6 +25,10 @@ return Application::configure(basePath: dirname(__DIR__))
             CheckInstallation::class,
         ]);
         
+        $middleware->validateCsrfTokens(except: [
+            'webhooks/razorpay',
+        ]);
+        
         $middleware->alias([
             'auth' => Authenticate::class,
             'org.context' => OrganisationContext::class,
