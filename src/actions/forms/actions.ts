@@ -1,3 +1,5 @@
+'use server'
+
 import { createSafeAction } from '@/lib/auth/actions'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'

@@ -55,68 +55,58 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  // Protect all /dashboard routes
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith('/en') && // Allow Public Site
-    !request.nextUrl.pathname.startsWith('/hi') && // Allow Public Site
-    request.nextUrl.pathname.startsWith('/') && // Default protection
-    !request.nextUrl.pathname.startsWith('/login') &&
-    !request.nextUrl.pathname.startsWith('/signup') &&
-    !request.nextUrl.pathname.startsWith('/auth') &&
-    !request.nextUrl.pathname.startsWith('/api') &&
-    !request.nextUrl.pathname.startsWith('/f') && // Allow Public Forms
-    !request.nextUrl.pathname.startsWith('/donate') && // Allow Public Donation
-    request.nextUrl.pathname !== '/' // Allow landing page (which redirects to /en)
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
+  const pathname = request.nextUrl.pathname
+  const locales = ['en', 'hi']
+  
+  // Helper to check if path starts with locale
+  const hasLocale = locales.some(
+    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+  )
+
+  // Auth Routes that should be public but redirected to dashboard if logged in
+  const authRoutes = ['/login', '/signup', '/forgot-password', '/reset-password', '/verify-email']
+  const isAuthRoute = authRoutes.some(route => 
+    pathname === route || 
+    locales.some(loc => pathname === `/${loc}${route}`)
+  )
+
+  // If user is logged in and tries to access auth pages, redirect to dashboard
+  if (user && isAuthRoute) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/dashboard'
+    return NextResponse.redirect(url)
+  }
+
+  // Define strictly public paths (no auth required)
+  const isPublicPath = 
+    pathname === '/' ||
+    pathname.startsWith('/api') ||
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/f/') || // Public Forms
+    pathname.startsWith('/donate') || // Public Donation
+    pathname.startsWith('/auth') || // Auth Callback
+    authRoutes.some(route => pathname === route || locales.some(loc => pathname.startsWith(`/${loc}${route}`))) || // Auth pages
+    locales.some(loc => pathname === `/${loc}` || pathname.startsWith(`/${loc}/docs`) || pathname.startsWith(`/${loc}/contact`) || pathname.startsWith(`/${loc}/status`) || pathname.startsWith(`/${loc}/terms`) || pathname.startsWith(`/${loc}/privacy`))
+
+  // Protect all other routes (Dashboard, etc)
+  if (!user && !isPublicPath) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
   }
 
-  // Explicit dashboard protection
-  if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
-     const url = request.nextUrl.clone()
-     url.pathname = '/login'
-     return NextResponse.redirect(url)
-  }
-
-  // If user is logged in and tries to access auth pages, redirect to dashboard
-  if (
-    user &&
-    (request.nextUrl.pathname.startsWith('/login') ||
-     request.nextUrl.pathname.startsWith('/signup'))
-  ) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    return NextResponse.redirect(url)
-  }
-
   // i18n Redirection Logic
-  const pathname = request.nextUrl.pathname
-  const locales = ['en', 'hi']
-  
   // Check if path is missing locale
-  // We exclude api, _next, static, f, dashboard, login, signup, admin
-  const pathnameIsMissingLocale = locales.every(
-    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
-  )
-
-  const isPublicSite = 
+  // We exclude api, _next, static, f, auth
+  const shouldHandleLocale = 
     !pathname.startsWith('/api') &&
     !pathname.startsWith('/_next') &&
-    !pathname.startsWith('/f/') && // Public Forms
-    !pathname.startsWith('/dashboard') &&
-    !pathname.startsWith('/login') &&
-    !pathname.startsWith('/signup') &&
-    !pathname.startsWith('/admin') &&
-    !pathname.includes('.') // Exclude files
+    !pathname.startsWith('/f/') &&
+    !pathname.startsWith('/auth') &&
+    !pathname.includes('.') 
 
-  if (pathnameIsMissingLocale && isPublicSite) {
-      const locale = 'en' // Default or detect from request.headers.get('accept-language')
-      
-      // Redirect to /en/...
+  if (shouldHandleLocale && !hasLocale) {
+      const locale = 'en' // Default
       return NextResponse.redirect(
         new URL(`/${locale}${pathname.startsWith('/') ? '' : '/'}${pathname}`, request.url)
       )
