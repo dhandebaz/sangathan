@@ -7,21 +7,42 @@ export const dynamic = 'force-dynamic'
 export default async function DashboardPage() {
   const supabase = await createClient()
 
-  // Parallel Fetching
-  const [
-    { count: memberCount },
-    { count: formCount },
-    { count: meetingCount },
-    { data: recentForms },
-    { data: upcomingMeetings }
-  ] = await Promise.all([
+  // Parallel Fetching with Safe Defaults
+  // We use Promise.allSettled to ensure that one failure doesn't crash the entire dashboard
+  const results = await Promise.allSettled([
     supabase.from('members').select('*', { count: 'exact', head: true }),
     supabase.from('forms').select('*', { count: 'exact', head: true }).eq('is_active', true),
     supabase.from('meetings').select('*', { count: 'exact', head: true }),
-    // Note: We use a separate query for counts if relation counting is tricky, but Supabase supports table(count)
     supabase.from('forms').select('id, title, form_submissions(count)').order('created_at', { ascending: false }).limit(5),
     supabase.from('meetings').select('id, title, start_time').gte('start_time', new Date().toISOString()).order('start_time', { ascending: true }).limit(5)
   ])
+
+  // Helper to extract data or default
+  const getResult = (index: number) => {
+    const res = results[index]
+    return res.status === 'fulfilled' ? res.value : { count: 0, data: [] }
+  }
+
+  const memberRes = getResult(0) as any
+  const formRes = getResult(1) as any
+  const meetingRes = getResult(2) as any
+  const recentFormsRes = getResult(3) as any
+  const upcomingMeetingsRes = getResult(4) as any
+
+  // Log failures for debugging (only in server logs)
+  results.forEach((res, i) => {
+    if (res.status === 'rejected') {
+      console.error(`Dashboard fetch failed at index ${i}:`, res.reason)
+    } else if (res.value.error) {
+      console.error(`Dashboard query error at index ${i}:`, res.value.error)
+    }
+  })
+
+  const memberCount = memberRes.data !== null ? memberRes.count : 0
+  const formCount = formRes.data !== null ? formRes.count : 0
+  const meetingCount = meetingRes.data !== null ? meetingRes.count : 0
+  const recentForms = recentFormsRes.data || []
+  const upcomingMeetings = upcomingMeetingsRes.data || []
 
   return (
     <div className="space-y-8">
