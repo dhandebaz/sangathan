@@ -1,220 +1,166 @@
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Terms of Service - Sangathan',
-  description: 'Rules governing the use of the Sangathan platform.',
-}
-
-export const dynamic = 'force-dynamic'
-
-interface PageProps {
-  params: Promise<{ lang: string }>
-}
-
-export default async function TermsPage({ params }: PageProps) {
-  const { lang } = await params
-  const isHindi = lang === 'hi'
-
-  if (isHindi) {
-    return (
-      <div className="max-w-3xl mx-auto px-4 py-16 prose prose-orange">
-        <h1>सेवा की शर्तें</h1>
-        <p className="text-gray-500 font-medium">अंतिम अद्यतन: {new Date().toLocaleDateString('hi-IN')}</p>
-        
-        <p>
-          संगठन ("प्लेटफ़ॉर्म") में आपका स्वागत है। ये सेवा की शर्तें ("शर्तें") हमारी वेबसाइट, एप्लिकेशन और सेवाओं के आपके उपयोग को नियंत्रित करती हैं। 
-          संगठन तक पहुंच कर या उसका उपयोग करके, आप इन शर्तों से बंधे होने के लिए सहमत हैं।
-        </p>
-
-        <h2>1. परिचय</h2>
-        <p>
-          संगठन <strong>बहुजन क्वीर फाउंडेशन</strong> ("हम", "हमें", या "हमारा") की एक पहल है, जो भारत में स्थित एक गैर-लाभकारी संस्था है। 
-          यह प्लेटफ़ॉर्म जमीनी संगठनों को सदस्यों, बैठकों और रिकॉर्ड के प्रबंधन के लिए डिजिटल बुनियादी ढांचा प्रदान करता है।
-        </p>
-
-        <h2>2. परिभाषाएँ</h2>
-        <ul>
-          <li><strong>"उपयोगकर्ता"</strong> का अर्थ है कोई भी व्यक्ति जो खाता बनाता है या प्लेटफ़ॉर्म तक पहुंचता है।</li>
-          <li><strong>"संगठन"</strong> का अर्थ है प्लेटफ़ॉर्म पर उपयोगकर्ता द्वारा बनाई गई सामूहिक इकाई।</li>
-          <li><strong>"सदस्य डेटा"</strong> का अर्थ है किसी संगठन द्वारा अपने सदस्यों के बारे में अपलोड की गई जानकारी।</li>
-          <li><strong>"समर्थक योजना"</strong> का अर्थ है वैकल्पिक सशुल्क सदस्यता सेवा।</li>
-        </ul>
-
-        <h2>3. पात्रता और खाता निर्माण</h2>
-        <p>
-          इस प्लेटफ़ॉर्म का उपयोग करने के लिए आपकी आयु कम से कम 18 वर्ष होनी चाहिए। आप पंजीकरण के दौरान सटीक, वर्तमान और पूर्ण जानकारी प्रदान करने के लिए सहमत हैं। 
-          आप अपने खाते के क्रेडेंशियल की गोपनीयता बनाए रखने के लिए जिम्मेदार हैं।
-        </p>
-
-        <h2>4. प्लेटफ़ॉर्म की भूमिका और सीमाएँ</h2>
-        <p>
-          संगठन विशुद्ध रूप से एक तकनीकी बुनियादी ढांचा प्रदाता है।
-        </p>
-        <ul>
-          <li>हम आपके संगठन के लिए सीधे भुगतान संसाधित <strong>नहीं</strong> करते हैं। "दान" मॉड्यूल सख्ती से आपके अपने रिकॉर्ड रखने के लिए एक मैनुअल बहीखाता है।</li>
-          <li>हम हमारे प्लेटफ़ॉर्म का उपयोग करने वाले किसी भी संगठन की वैधता को सत्यापित <strong>नहीं</strong> करते हैं।</li>
-          <li>हम किसी भी संगठन द्वारा धन, डेटा या अधिकार के किसी भी दुरुपयोग के लिए जिम्मेदार <strong>नहीं</strong> हैं।</li>
-        </ul>
-
-        <h2>5. उपयोगकर्ता और संगठन की जिम्मेदारियां</h2>
-        <p>
-          संगठन पूरी तरह से इसके लिए जिम्मेदार हैं:
-        </p>
-        <ul>
-          <li>डेटा अपलोड करने से पहले अपने सदस्यों से आवश्यक सहमति प्राप्त करना।</li>
-          <li>डिजिटल पर्सनल डेटा प्रोटेक्शन एक्ट, 2023 (DPDP एक्ट) सहित सभी लागू कानूनों का अनुपालन करना।</li>
-          <li>अपने वित्तीय बहीखातों की सटीकता सुनिश्चित करना।</li>
-        </ul>
-
-        <h2>6. डेटा स्वामित्व</h2>
-        <p>
-          आप अपने डेटा के मालिक हैं। हम आपके द्वारा अपलोड किए गए सदस्य डेटा या रिकॉर्ड पर किसी भी बौद्धिक संपदा अधिकार का दावा नहीं करते हैं। 
-          हम डेटा प्रोसेसर के रूप में कार्य करते हैं, आपकी जानकारी को आपकी ओर से सुरक्षित रूप से संग्रहीत करते हैं।
-        </p>
-
-        <h2>7. समर्थक सदस्यता</h2>
-        <p>
-          "समर्थक योजना" ₹99/माह की एक वैकल्पिक, स्वैच्छिक सदस्यता है।
-        </p>
-        <ul>
-          <li>भुगतान <strong>रेज़रपे</strong>, एक तृतीय-पक्ष भुगतान गेटवे द्वारा संसाधित किए जाते हैं।</li>
-          <li>सदस्यता छिपी हुई सुविधाओं को अनलॉक नहीं करती है; यह मुख्य रूप से प्लेटफ़ॉर्म के रखरखाव की लागत का समर्थन करती है।</li>
-          <li>हम आपके क्रेडिट कार्ड या बैंकिंग विवरण संग्रहीत नहीं करते हैं।</li>
-        </ul>
-
-        <h2>8. स्वीकार्य उपयोग</h2>
-        <p>
-          आप निम्नलिखित के लिए प्लेटफ़ॉर्म का उपयोग नहीं करने के लिए सहमत हैं:
-        </p>
-        <ul>
-          <li>भारतीय कानून के तहत अवैध गतिविधियाँ।</li>
-          <li>अभद्र भाषा, हिंसा को उकसाना, या उत्पीड़न।</li>
-          <li>धोखाधड़ी से धन जुटाना या वित्तीय घोटाले।</li>
-          <li>मैलवेयर वितरित करना या प्लेटफ़ॉर्म की सुरक्षा से समझौता करने का प्रयास करना।</li>
-        </ul>
-        <p>इन नियमों के उल्लंघन के परिणामस्वरूप आपके खाते को तत्काल निलंबित या समाप्त कर दिया जाएगा।</p>
-
-        <h2>9. दायित्व की सीमा</h2>
-        <p>
-          कानून द्वारा अनुमति दी गई पूर्ण सीमा तक, संगठन और बहुजन क्वीर फाउंडेशन किसी भी अप्रत्यक्ष, आकस्मिक, विशेष, परिणामी, या दंडात्मक क्षति के लिए उत्तरदायी नहीं होंगे, जिसमें लाभ, डेटा, या सद्भावना की हानि शामिल है, जो आपके प्लेटफ़ॉर्म के उपयोग से उत्पन्न होती है।
-        </p>
-
-        <h2>10. शासी कानून और विवाद समाधान</h2>
-        <p>
-          ये शर्तें भारत के कानूनों द्वारा शासित और उनके अनुसार होंगी। 
-          इन शर्तों से उत्पन्न होने वाले किसी भी विवाद को विशेष रूप से नई दिल्ली, भारत में स्थित अदालतों के अधिकार क्षेत्र के अधीन किया जाएगा।
-        </p>
-
-        <h2>11. संपर्क जानकारी</h2>
-        <p>
-          कानूनी पूछताछ के लिए, कृपया हमसे संपर्क करें:<br />
-          <strong>ईमेल:</strong> legal@sangathan.app<br />
-          <strong>पता:</strong> बहुजन क्वीर फाउंडेशन, नई दिल्ली, भारत।
-        </p>
-
-        <hr className="my-8" />
-        <p className="text-sm text-gray-500 italic">
-          <strong>Note:</strong> In case of any inconsistency between the Hindi and English versions, the English version shall prevail.
-        </p>
-      </div>
-    )
-  }
-
+export default function TermsPage() {
   return (
-    <div className="max-w-3xl mx-auto px-4 py-16 prose prose-orange">
-      <h1>Terms of Service</h1>
-      <p className="text-gray-500 font-medium">Last Updated: {new Date().toLocaleDateString()}</p>
+    <div className="max-w-4xl mx-auto py-12 px-6">
+      <h1 className="text-3xl font-bold mb-8">Terms of Service</h1>
       
-      <p>
-        Welcome to Sangathan ("Platform"). These Terms of Service ("Terms") govern your use of our website, application, and services. 
-        By accessing or using Sangathan, you agree to be bound by these Terms.
-      </p>
+      <div className="prose prose-slate max-w-none text-gray-700 space-y-8">
+        <p className="text-sm text-gray-500">Last Updated: February 14, 2026</p>
 
-      <h2>1. Introduction</h2>
-      <p>
-        Sangathan is an initiative by the <strong>Bahujan Queer Foundation</strong> ("we", "us", or "our"), a non-profit entity based in India. 
-        The Platform provides digital infrastructure for grassroots organisations to manage members, meetings, and records.
-      </p>
+        <section>
+          <h2 className="text-xl font-semibold text-black mb-3">1. Introduction</h2>
+          <p>
+            Welcome to Sangathan ("Platform"). These Terms of Service ("Terms") constitute a legally binding agreement between you ("User," "Organisation Admin," or "Member") and Sangathan regarding your access to and use of the Sangathan platform, website, and associated services.
+          </p>
+          <p>
+            By accessing or using the Platform, you agree to be bound by these Terms. If you do not agree to these Terms, you must not access or use the Platform.
+          </p>
+        </section>
 
-      <h2>2. Definitions</h2>
-      <ul>
-        <li><strong>"User"</strong> means any individual who creates an account or accesses the Platform.</li>
-        <li><strong>"Organisation"</strong> means the collective entity created by a User on the Platform.</li>
-        <li><strong>"Member Data"</strong> means the information uploaded by an Organisation regarding its members.</li>
-        <li><strong>"Supporter Plan"</strong> means the optional paid subscription service.</li>
-      </ul>
+        <section>
+          <h2 className="text-xl font-semibold text-black mb-3">2. Definitions</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong>"Platform"</strong> refers to the Sangathan digital infrastructure, including its website, database, and associated services.</li>
+            <li><strong>"Organisation"</strong> refers to any collective, NGO, student group, union, or community entity created on the Platform.</li>
+            <li><strong>"Admin"</strong> refers to the User who creates an Organisation or is granted administrative privileges within an Organisation.</li>
+            <li><strong>"Member"</strong> refers to an individual whose data is recorded within an Organisation's database on the Platform.</li>
+            <li><strong>"User Data"</strong> refers to all information, data, and content uploaded, entered, or managed by an Organisation on the Platform.</li>
+          </ul>
+        </section>
 
-      <h2>3. Eligibility & Account Creation</h2>
-      <p>
-        You must be at least 18 years old to use this Platform. You agree to provide accurate, current, and complete information during registration. 
-        You are responsible for maintaining the confidentiality of your account credentials.
-      </p>
+        <section>
+          <h2 className="text-xl font-semibold text-black mb-3">3. Infrastructure Neutrality</h2>
+          <p>
+            Sangathan acts solely as a neutral technical infrastructure provider. We provide the tools for governance, membership management, and operational tracking. We do not direct, control, or supervise the activities, objectives, or financial decisions of any Organisation using the Platform. The existence of an Organisation on the Platform does not constitute an endorsement by Sangathan of that Organisation's views, mission, or actions.
+          </p>
+        </section>
 
-      <h2>4. Platform Role & Limitations</h2>
-      <p>
-        Sangathan is purely a technology infrastructure provider.
-      </p>
-      <ul>
-        <li>We do <strong>not</strong> process payments directly for your Organisation. The "Donations" module is strictly a manual ledger for your own record-keeping.</li>
-        <li>We do <strong>not</strong> verify the legitimacy of any Organisation using our Platform.</li>
-        <li>We are <strong>not</strong> responsible for any misuse of funds, data, or authority by any Organisation.</li>
-      </ul>
+        <section>
+          <h2 className="text-xl font-semibold text-black mb-3">4. Eligibility & Registration</h2>
+          <p>
+            To use the Platform, you must be at least 18 years old and capable of entering into a binding contract under Indian law. By registering, you represent that all information provided is accurate and current.
+          </p>
+          <div>
+            <strong>Verification Requirements:</strong>
+            <ul className="list-disc pl-5 mt-2">
+              <li>Email verification is required for all User accounts.</li>
+              <li>Phone number verification is mandatory for all Organisation Admins to ensure accountability.</li>
+            </ul>
+          </div>
+        </section>
 
-      <h2>5. User & Organisation Responsibilities</h2>
-      <p>
-        Organisations are solely responsible for:
-      </p>
-      <ul>
-        <li>Obtaining necessary consent from their members before uploading data.</li>
-        <li>Complying with all applicable laws, including the Digital Personal Data Protection Act, 2023 (DPDP Act).</li>
-        <li>Ensuring the accuracy of their financial ledgers.</li>
-      </ul>
+        <section>
+          <h2 className="text-xl font-semibold text-black mb-3">5. Organisation Responsibilities</h2>
+          <p>
+            The Organisation Admin is solely responsible for:
+          </p>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>Ensuring that the Organisation's activities comply with all applicable laws, including the Information Technology Act, 2000, and relevant local regulations.</li>
+            <li>Obtaining necessary consent from Members before collecting or processing their personal data on the Platform.</li>
+            <li>Managing access controls and roles within their Organisation environment.</li>
+            <li>The accuracy, legality, and integrity of all User Data entered into the Platform.</li>
+          </ul>
+        </section>
 
-      <h2>6. Data Ownership</h2>
-      <p>
-        You own your data. We claim no intellectual property rights over the Member Data or records you upload. 
-        We act as a data processor, storing your information securely on your behalf.
-      </p>
+        <section>
+          <h2 className="text-xl font-semibold text-black mb-3">6. Financial Disclaimer</h2>
+          <p>
+            <strong>No Financial Intermediation:</strong> Sangathan does not process, hold, or transfer donations or funds on behalf of Organisations. The Platform provides tools to <em>log</em> and <em>track</em> financial records, but the actual movement of money occurs outside the Platform.
+          </p>
+          <p>
+            <strong>Responsibility for Funds:</strong> Any dispute regarding funds, donations, or financial mismanagement is strictly between the Organisation and its donors or members. Sangathan bears no liability for financial fraud, misuse of funds, or accounting errors committed by an Organisation.
+          </p>
+        </section>
 
-      <h2>7. Supporter Subscription</h2>
-      <p>
-        The "Supporter Plan" is an optional, voluntary subscription of ₹99/month.
-      </p>
-      <ul>
-        <li>Payments are processed by <strong>Razorpay</strong>, a third-party payment gateway.</li>
-        <li>Subscription does not unlock hidden features; it primarily supports the Platform's maintenance costs.</li>
-        <li>We do not store your credit card or banking details.</li>
-      </ul>
+        <section>
+          <h2 className="text-xl font-semibold text-black mb-3">7. Data Ownership & Privacy</h2>
+          <p>
+            <strong>Ownership:</strong> You retain full ownership of all User Data you upload to the Platform. Sangathan claims no intellectual property rights over your Organisation's data.
+          </p>
+          <p>
+            <strong>Data Export:</strong> Organisations maintain the right to export their data (members, logs, records) at any time in a standard, machine-readable format.
+          </p>
+          <p>
+            <strong>Data Isolation:</strong> The Platform utilizes a multi-tenant architecture with Row-Level Security (RLS) to ensure strict isolation of data between different Organisations.
+          </p>
+        </section>
 
-      <h2>8. Acceptable Usage</h2>
-      <p>
-        You agree not to use the Platform for:
-      </p>
-      <ul>
-        <li>Illegal activities under Indian law.</li>
-        <li>Hate speech, incitement to violence, or harassment.</li>
-        <li>Fraudulent fundraising or financial scams.</li>
-        <li>Distributing malware or attempting to compromise the Platform's security.</li>
-      </ul>
-      <p>Violation of these rules will result in immediate suspension or termination of your account.</p>
+        <section>
+          <h2 className="text-xl font-semibold text-black mb-3">8. Supporter Subscription & Payments</h2>
+          <p>
+            <strong>Optional Subscription:</strong> The core functionality of Sangathan is free. Users may optionally purchase a "Supporter Subscription" to support the Platform's maintenance.
+          </p>
+          <p>
+            <strong>Payment Processing:</strong> All subscription payments are processed by third-party payment gateways (e.g., Razorpay). Sangathan does not store your credit card or banking information. By subscribing, you agree to the terms and conditions of the respective payment processor.
+          </p>
+          <p>
+            <strong>Refunds:</strong> Subscriptions are non-refundable except where required by law or explicitly stated in our Refund Policy.
+          </p>
+        </section>
 
-      <h2>9. Limitation of Liability</h2>
-      <p>
-        To the fullest extent permitted by law, Sangathan and the Bahujan Queer Foundation shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, or goodwill, arising from your use of the Platform.
-      </p>
+        <section>
+          <h2 className="text-xl font-semibold text-black mb-3">9. Acceptable Use Policy</h2>
+          <p>You agree not to use the Platform to:</p>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>Violate any local, state, national, or international law.</li>
+            <li>Organize or promote violence, terrorism, hate speech, or illegal activities.</li>
+            <li>Attempt to gain unauthorized access to the Platform's infrastructure or other Organisations' data.</li>
+            <li>Use the Platform for spamming, phishing, or distributing malware.</li>
+          </ul>
+          <p className="mt-2">
+            Violation of this policy may result in immediate suspension or termination of your account and Organisation workspace.
+          </p>
+        </section>
 
-      <h2>10. Governing Law & Dispute Resolution</h2>
-      <p>
-        These Terms shall be governed by and construed in accordance with the laws of India. 
-        Any disputes arising out of these Terms shall be subject to the exclusive jurisdiction of the courts located in New Delhi, India.
-      </p>
+        <section>
+          <h2 className="text-xl font-semibold text-black mb-3">10. Termination & Data Retention</h2>
+          <p>
+            <strong>Termination by User:</strong> You may delete your account or Organisation at any time. Upon deletion request, data enters a "soft-delete" grace period (e.g., 7-14 days) before permanent removal, subject to legal retention requirements.
+          </p>
+          <p>
+            <strong>Termination by Platform:</strong> We reserve the right to suspend or terminate access if we determine, in our sole discretion, that an account is being used for illegal purposes or in violation of these Terms.
+          </p>
+          <p>
+            <strong>Legal Hold:</strong> In the event of a valid legal order or investigation, we may preserve (place a "legal hold" on) relevant data and audit logs, preventing deletion until the matter is resolved.
+          </p>
+        </section>
 
-      <h2>11. Contact Information</h2>
-      <p>
-        For legal inquiries, please contact us at:<br />
-        <strong>Email:</strong> legal@sangathan.app<br />
-        <strong>Address:</strong> Bahujan Queer Foundation, New Delhi, India.
-      </p>
+        <section>
+          <h2 className="text-xl font-semibold text-black mb-3">11. Limitation of Liability</h2>
+          <p className="uppercase text-sm font-bold text-gray-600 mb-2">Please read this section carefully.</p>
+          <p>
+            To the maximum extent permitted by applicable law, Sangathan shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, use, goodwill, or other intangible losses, resulting from:
+          </p>
+          <ul className="list-disc pl-5 mt-2 space-y-1">
+            <li>Your access to or use of (or inability to access or use) the Platform;</li>
+            <li>Any conduct or content of any third party on the Platform;</li>
+            <li>Any unauthorized access, use, or alteration of your transmissions or content.</li>
+          </ul>
+          <p className="mt-2">
+            The Platform is provided on an "AS IS" and "AS AVAILABLE" basis without warranties of any kind, whether express or implied.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold text-black mb-3">12. Indemnification</h2>
+          <p>
+            You agree to indemnify and hold harmless Sangathan and its operators from any claims, damages, liabilities, costs, or expenses (including legal fees) arising out of or related to your Organisation's activities, your use of the Platform, or your violation of these Terms.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold text-black mb-3">13. Governing Law & Dispute Resolution</h2>
+          <p>
+            These Terms shall be governed by and construed in accordance with the laws of India. Any dispute arising out of or relating to these Terms or the Platform shall be subject to the exclusive jurisdiction of the courts located in New Delhi, India.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold text-black mb-3">14. Contact Information</h2>
+          <p>
+            For legal notices or questions regarding these Terms, please contact us at: <a href="mailto:legal@sangathan.app" className="text-blue-600 hover:underline">legal@sangathan.app</a>
+          </p>
+        </section>
+      </div>
     </div>
   )
 }

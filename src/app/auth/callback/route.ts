@@ -24,39 +24,10 @@ export async function GET(request: Request) {
           .single()
 
         if (!profile) {
-          // First time setup
-          const metadata = user.user_metadata
-          const orgName = metadata.organization_name
-          const fullName = metadata.full_name
-
-          if (orgName && fullName) {
-            // Generate Slug
-            const baseSlug = orgName.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-            const uniqueSlug = `${baseSlug}-${Math.random().toString(36).substring(2, 7)}`
-
-            // Create Organisation
-            const { data: orgData, error: orgError } = await supabase
-              .from('organisations')
-              .insert({
-                name: orgName,
-                slug: uniqueSlug,
-              } as any)
-              .select('id')
-              .single()
-            
-            const org = orgData as any
-
-            if (!orgError && org) {
-              // Create Profile
-              await supabase.from('profiles').insert({
-                id: user.id,
-                organisation_id: org.id,
-                full_name: fullName,
-                email: user.email,
-                role: 'admin',
-              } as any)
-            }
-          }
+            // New User Flow: Redirect to Phone Verification
+            // We do NOT create the organisation here anymore.
+            // Accountability is locked until phone is verified.
+            return NextResponse.redirect(`${origin}/en/verify-phone`)
         }
       }
 

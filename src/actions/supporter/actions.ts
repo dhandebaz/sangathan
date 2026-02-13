@@ -37,9 +37,11 @@ export const createSubscription = createSafeAction(
     }
 
     // 2. Create Razorpay Subscription
-    // Plan ID should be in Env or Config. Hardcoding a placeholder for now or using ENV.
     const planId = process.env.RAZORPAY_PLAN_ID
-    if (!planId) throw new Error('Subscription Plan ID not configured.')
+    if (!planId) {
+       console.error('RAZORPAY_PLAN_ID is missing in environment variables')
+       throw new Error('Subscription configuration error. Please contact support.')
+    }
 
     const sub = await razorpay.subscriptions.create({
       plan_id: planId,

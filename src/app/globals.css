@@ -1,46 +1,177 @@
 @import "tailwindcss";
 
 :root {
-  /* Sangathan Theme - Serious, Minimal */
-  --primary: #000000;
-  --primary-foreground: #ffffff;
+  /* 
+   * SANGATHAN ENTERPRISE DESIGN SYSTEM
+   * Token-based architecture
+   */
+
+  /* Base Neutral Scale (Slate) */
+  --neutral-50: #f8fafc;
+  --neutral-100: #f1f5f9;
+  --neutral-200: #e2e8f0;
+  --neutral-300: #cbd5e1;
+  --neutral-400: #94a3b8;
+  --neutral-500: #64748b;
+  --neutral-600: #475569;
+  --neutral-700: #334155;
+  --neutral-800: #1e293b;
+  --neutral-900: #0f172a;
+  --neutral-950: #020617;
+
+  /* Brand Colors - Controlled Orange */
+  --brand-50: #fff7ed;
+  --brand-100: #ffedd5;
+  --brand-200: #fed7aa;
+  --brand-300: #fdba74;
+  --brand-400: #fb923c;
+  --brand-500: #f97316; /* Primary Action */
+  --brand-600: #ea580c; /* Hover */
+  --brand-700: #c2410c;
+  --brand-800: #9a3412;
+  --brand-900: #7c2d12;
+
+  /* Semantic Colors */
+  --success-bg: #ecfdf5;
+  --success-text: #059669;
+  --warning-bg: #fffbeb;
+  --warning-text: #d97706;
+  --danger-bg: #fef2f2;
+  --danger-text: #dc2626;
+  --info-bg: #eff6ff;
+  --info-text: #2563eb;
+
+  /* Surfaces */
+  --background: #ffffff;
+  --foreground: var(--neutral-900);
   
-  --background: #f97316; /* Orange 500 - Adjust as needed */
-  --foreground: #000000;
-  
+  --sidebar-bg: var(--neutral-50);
+  --sidebar-border: var(--neutral-200);
+  --sidebar-fg: var(--neutral-600);
+  --sidebar-fg-active: var(--brand-600);
+  --sidebar-bg-active: var(--brand-50);
+
   --card: #ffffff;
-  --card-foreground: #000000;
+  --card-foreground: var(--neutral-900);
   
-  --border: #000000;
-  --input: #ffffff;
-  --ring: #000000;
+  --popover: #ffffff;
+  --popover-foreground: var(--neutral-900);
+
+  /* UI Elements */
+  --primary: var(--brand-600);
+  --primary-foreground: #ffffff;
+
+  --secondary: var(--neutral-100);
+  --secondary-foreground: var(--neutral-900);
+
+  --muted: var(--neutral-100);
+  --muted-foreground: var(--neutral-500);
+
+  --accent: var(--neutral-100);
+  --accent-foreground: var(--neutral-900);
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --border: var(--neutral-200);
+  --input: var(--neutral-200);
+  --ring: var(--brand-500);
+
+  --radius: 0.5rem;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  
+  --color-sidebar: var(--sidebar-bg);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-fg: var(--sidebar-fg);
+  --color-sidebar-fg-active: var(--sidebar-fg-active);
+  --color-sidebar-bg-active: var(--sidebar-bg-active);
+
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: calc(var(--radius));
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 4px);
+  
+  --animate-fade-in: fade-in 0.3s ease-out;
+  --animate-slide-up: slide-up 0.4s ease-out;
+  
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slide-up {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  min-height: 100vh;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Minimal utility classes for cards */
-.content-card {
-  background-color: var(--card);
-  color: var(--card-foreground);
-  padding: 1.5rem;
-  box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.1); /* Minimal shadow */
+/* Enterprise Utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+}
+
+.table-row-hover {
+  transition: background-color 0.15s ease;
+}
+.table-row-hover:hover {
+  background-color: var(--neutral-50);
+}
+
+::selection {
+  background-color: var(--brand-200);
+  color: var(--brand-900);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--neutral-300);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neutral-400);
 }

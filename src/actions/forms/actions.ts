@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { logAction } from '@/lib/audit/log'
+import { headers } from 'next/headers'
 
 // --- Types & Schemas ---
 
@@ -229,9 +230,31 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
     return { success: false, error: 'Validation failed', fieldErrors: errors }
   }
 
-  // 4. Rate Limiting (Basic Placeholder)
-  // In production, check Redis or a DB log.
-  // Here we assume Vercel/Next.js edge protection or basic spam prevention is enough for "Simple".
+  // 4. Rate Limiting
+  try {
+    const headerStore = await headers()
+    const ip = headerStore.get('x-forwarded-for') || 'unknown'
+    const key = `submission:${input.formId}:${ip}`
+    
+    // Check limit: Max 5 submissions per hour per IP for this form
+    // We access 'rate_limits' which might not exist if migration hasn't run.
+    const { count, error: rateError } = await (supabase.from('rate_limits') as any)
+      .select('*', { count: 'exact', head: true })
+      .eq('key', key)
+      .gt('created_at', new Date(Date.now() - 3600 * 1000).toISOString())
+    
+    if (!rateError && count !== null && count >= 5) {
+      return { success: false, error: 'Too many submissions. Please try again later.' }
+    }
+    
+    // Record attempt
+    if (!rateError) {
+      await (supabase.from('rate_limits') as any).insert({ key })
+    }
+  } catch (err) {
+    // Fail open - log error but allow submission if rate limit system is down/missing
+    console.warn('Rate limit check failed:', err)
+  }
   
   // 5. Insert Submission
   // We use Service Client because 'form_submissions' insert policy is "Public can submit forms" (TRUE).

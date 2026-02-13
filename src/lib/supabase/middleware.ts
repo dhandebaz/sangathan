@@ -57,6 +57,34 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
+  // --- MAINTENANCE MODE CHECK ---
+  // We check this for all non-admin routes to allow admins to fix things
+  const isSystemAdmin = user?.email && process.env.SUPER_ADMIN_EMAILS?.includes(user.email)
+  
+  if (!isSystemAdmin && !request.nextUrl.pathname.startsWith('/maintenance') && !request.nextUrl.pathname.startsWith('/login') && !request.nextUrl.pathname.startsWith('/api')) {
+     // NOTE: We are doing a DB call here. In high scale, this should be cached or edge-config.
+     // Re-using the supabase client created for auth
+     let supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        { cookies: { getAll() { return request.cookies.getAll() }, setAll() {} } }
+     )
+     
+     const { data: maintenance } = await supabase
+        .from('system_settings')
+        .select('value')
+        .eq('key', 'maintenance_mode')
+        .single()
+     
+     const settings = maintenance?.value as { enabled: boolean } | null
+     
+     if (settings?.enabled) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/maintenance'
+        return NextResponse.redirect(url)
+     }
+  }
+
   const pathname = request.nextUrl.pathname
   const locales = ['en', 'hi']
   
@@ -88,13 +116,103 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith('/donate') || // Public Donation
     pathname.startsWith('/auth') || // Auth Callback
     authRoutes.some(route => pathname === route || locales.some(loc => pathname.startsWith(`/${loc}${route}`))) || // Auth pages
-    locales.some(loc => pathname === `/${loc}` || pathname.startsWith(`/${loc}/docs`) || pathname.startsWith(`/${loc}/contact`) || pathname.startsWith(`/${loc}/status`) || pathname.startsWith(`/${loc}/terms`) || pathname.startsWith(`/${loc}/privacy`))
+    locales.some(loc => 
+      pathname === `/${loc}` || 
+      pathname.startsWith(`/${loc}/docs`) || 
+      pathname.startsWith(`/${loc}/contact`) || 
+      pathname.startsWith(`/${loc}/status`) || 
+      pathname.startsWith(`/${loc}/terms`) || 
+      pathname.startsWith(`/${loc}/privacy`) ||
+      pathname.startsWith(`/${loc}/about`) ||
+      pathname.startsWith(`/${loc}/governance`) ||
+      pathname.startsWith(`/${loc}/security`) ||
+      pathname.startsWith(`/${loc}/transparency`) ||
+      pathname.startsWith(`/${loc}/roadmap`) ||
+      pathname.startsWith(`/${loc}/changelog`) ||
+      pathname.startsWith(`/${loc}/brand`) ||
+      pathname.startsWith(`/${loc}/press`) ||
+      pathname.startsWith(`/${loc}/acceptable-use-policy`) ||
+      pathname.startsWith(`/${loc}/refund-policy`) ||
+      pathname.startsWith(`/${loc}/vision`) ||
+      pathname.startsWith(`/${loc}/community-guidelines`) ||
+      pathname.startsWith(`/${loc}/data-practices`) ||
+      pathname.startsWith(`/${loc}/admin-accountability`)
+    )
 
   // Protect all other routes (Dashboard, etc)
   if (!user && !isPublicPath) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
+  }
+
+  // --- PHONE VERIFICATION ENFORCEMENT ---
+  // If user is accessing protected routes (Dashboard), enforce verification.
+  // We check if it's a dashboard route AND not the verification page itself.
+  const isDashboardRoute = locales.some(loc => pathname.startsWith(`/${loc}/dashboard`)) || pathname.startsWith('/dashboard')
+  const isVerificationPage = locales.some(loc => pathname.startsWith(`/${loc}/verify-phone`)) || pathname === '/verify-phone'
+
+  if (user && isDashboardRoute && !isVerificationPage) {
+     // Cache Strategy: In a real app, check a signed cookie first.
+     // For now, we optimize by selecting minimal fields.
+     
+     let supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          cookies: {
+            getAll() { return request.cookies.getAll() },
+            setAll() {}
+          }
+        }
+      )
+
+     // Use RPC for potentially faster lookup if function exists, or fallback to direct select
+     // Direct select on ID is extremely fast (primary key lookup)
+     const { data: profile } = await supabase
+       .from('profiles')
+       .select('role, phone_verified')
+       .eq('id', user.id)
+       .single()
+     
+     if (!profile || (profile.role === 'admin' && !profile.phone_verified)) {
+        const locale = hasLocale ? pathname.split('/')[1] : 'en'
+        const url = request.nextUrl.clone()
+        url.pathname = `/${locale}/verify-phone`
+        return NextResponse.redirect(url)
+     }
+  }
+
+  // Security Headers
+  supabaseResponse.headers.set('X-Frame-Options', 'DENY')
+  supabaseResponse.headers.set('X-Content-Type-Options', 'nosniff')
+  supabaseResponse.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  
+  // If user is verified and tries to access verify-phone, redirect to dashboard
+  if (user && isVerificationPage) {
+      // Check if actually verified
+     let supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          cookies: {
+            getAll() { return request.cookies.getAll() },
+            setAll() {}
+          }
+        }
+      )
+
+     const { data: profile } = await supabase
+       .from('profiles')
+       .select('role, phone_verified')
+       .eq('id', user.id)
+       .single()
+
+     if (profile && (profile.role !== 'admin' || profile.phone_verified)) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/dashboard'
+        return NextResponse.redirect(url)
+     }
   }
 
   // i18n Redirection Logic

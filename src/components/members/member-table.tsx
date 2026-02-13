@@ -2,8 +2,18 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { MoreHorizontal, Printer } from 'lucide-react'
-import { updateMember, changeMemberStatus } from '@/actions/members/actions'
+import { MoreHorizontal } from 'lucide-react'
+import { changeMemberStatus } from '@/actions/members/actions'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 
 interface Member {
   id: string
@@ -22,7 +32,7 @@ export function MemberTable({ members }: { members: Member[] }) {
   const [isUpdating, setIsUpdating] = useState(false)
 
   const handleStatusToggle = async (member: Member) => {
-    // Only toggle, optimistic UI would be better but simple is fine for now
+    // Optimistic UI could be implemented here
     if (confirm(`Are you sure you want to ${member.status === 'active' ? 'deactivate' : 'activate'} this member?`)) {
         setIsUpdating(true)
         const newStatus = member.status === 'active' ? 'inactive' : 'active'
@@ -33,57 +43,53 @@ export function MemberTable({ members }: { members: Member[] }) {
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-left border-collapse">
-        <thead>
-          <tr className="border-b border-gray-200 text-sm text-gray-500 uppercase bg-gray-50">
-            <th className="py-3 px-4 font-semibold">Name</th>
-            <th className="py-3 px-4 font-semibold">Phone</th>
-            <th className="py-3 px-4 font-semibold hidden md:table-cell">Designation</th>
-            <th className="py-3 px-4 font-semibold hidden md:table-cell">Area</th>
-            <th className="py-3 px-4 font-semibold">Status</th>
-            <th className="py-3 px-4 font-semibold text-right">Actions</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-100">
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Phone</TableHead>
+            <TableHead className="hidden md:table-cell">Designation</TableHead>
+            <TableHead className="hidden md:table-cell">Area</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {members.length === 0 ? (
-             <tr>
-               <td colSpan={6} className="py-8 text-center text-gray-500">
-                 No members found.
-               </td>
-             </tr>
+            <TableRow>
+              <TableCell colSpan={6} className="h-24 text-center">
+                No members found.
+              </TableCell>
+            </TableRow>
           ) : (
             members.map((member) => (
-              <tr key={member.id} className="hover:bg-gray-50 transition-colors">
-                <td className="py-3 px-4 font-medium">{member.full_name}</td>
-                <td className="py-3 px-4 text-gray-600">{member.phone || '-'}</td>
-                <td className="py-3 px-4 text-gray-600 hidden md:table-cell">{member.designation || '-'}</td>
-                <td className="py-3 px-4 text-gray-600 hidden md:table-cell">{member.area || '-'}</td>
-                <td className="py-3 px-4">
-                  <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      member.status === 'active'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}
-                  >
+              <TableRow key={member.id} className="group">
+                <TableCell className="font-medium">{member.full_name}</TableCell>
+                <TableCell className="text-muted-foreground">{member.phone || '-'}</TableCell>
+                <TableCell className="hidden md:table-cell text-muted-foreground">{member.designation || '-'}</TableCell>
+                <TableCell className="hidden md:table-cell text-muted-foreground">{member.area || '-'}</TableCell>
+                <TableCell>
+                  <Badge variant={member.status === 'active' ? 'success' : 'secondary'}>
                     {member.status || 'active'}
-                  </span>
-                </td>
-                <td className="py-3 px-4 text-right">
-                  <button
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     disabled={isUpdating}
                     onClick={() => handleStatusToggle(member)}
-                    className="text-sm text-gray-500 hover:text-black underline disabled:opacity-50"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     {member.status === 'active' ? 'Deactivate' : 'Activate'}
-                  </button>
-                </td>
-              </tr>
+                  </Button>
+                </TableCell>
+              </TableRow>
             ))
           )}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   )
 }

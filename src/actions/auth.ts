@@ -107,7 +107,8 @@ export async function signup(input: z.infer<typeof SignupSchema>) {
 
   // 3. Sign Up
   // We store metadata for the Callback route to handle DB creation
-  const origin = (await headers()).get('origin')
+  const headersList = await headers()
+  const origin = headersList.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space'
   
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -281,4 +282,71 @@ export async function linkPhoneToAccount(input: z.infer<typeof LoginSchema> & { 
     .eq('id', authData.user.id)
     
   redirect('/dashboard')
+}
+
+export async function finalizeSignup(input: { idToken: string }) {
+  // 1. Verify Firebase Token
+  let decodedToken
+  try {
+    decodedToken = await firebaseAdminAuth.verifyIdToken(input.idToken)
+  } catch (error) {
+    return { success: false, error: 'Invalid phone verification' }
+  }
+
+  const phoneNumber = decodedToken.phone_number
+  if (!phoneNumber) return { success: false, error: 'No phone number in token' }
+  const firebaseUid = decodedToken.uid
+
+  // 2. Get Authenticated User
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user || !user.email) {
+    return { success: false, error: 'Session expired. Please login again.' }
+  }
+
+  // 3. Check Phone Uniqueness (Global Check)
+  const supabaseAdmin = createServiceClient()
+  const { data: existingPhone } = await supabaseAdmin
+    .from('profiles')
+    .select('id')
+    .eq('phone', phoneNumber)
+    .maybeSingle()
+  
+  if (existingPhone) {
+    return { success: false, error: 'This phone number is already registered as an admin.' }
+  }
+
+  // 4. Retrieve Metadata
+  const metadata = user.user_metadata
+  const orgName = metadata.organization_name
+  const fullName = metadata.full_name
+
+  if (!orgName || !fullName) {
+    // Edge case: Metadata lost or direct access
+    // We could prompt user to re-enter details, but for now error out.
+    return { success: false, error: 'Registration details not found. Please sign up again.' }
+  }
+
+  // 5. Atomic Creation (Organisation + Profile)
+  // Generate Slug
+  const baseSlug = orgName.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+  const uniqueSlug = `${baseSlug}-${Math.random().toString(36).substring(2, 7)}`
+
+  const { error: rpcError } = await (supabaseAdmin.rpc as any)('create_organisation_and_admin', {
+    p_org_name: orgName,
+    p_org_slug: uniqueSlug,
+    p_user_id: user.id,
+    p_full_name: fullName,
+    p_email: user.email,
+    p_phone: phoneNumber,
+    p_firebase_uid: firebaseUid
+  })
+
+  if (rpcError) {
+    console.error('Signup RPC Error:', rpcError)
+    return { success: false, error: 'Failed to complete registration. Please try again.' }
+  }
+
+  return { success: true }
 }

@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, Download, Trash2 } from 'lucide-react'
 import Link from 'next/link'
+import { CsvExportButton } from '@/components/forms/csv-export-button'
 import { FormStatusToggle } from '@/components/forms/form-status-toggle'
 import { deleteForm } from '@/actions/forms/actions'
 
@@ -52,11 +53,7 @@ export default async function FormDetailsPage({ params }: PageProps) {
          <div className="ml-auto flex items-center gap-2">
             <FormStatusToggle formId={form.id} isActive={form.is_active} />
             
-            {/* CSV Export Button (Simple client-side logic placeholder) */}
-            <button className="bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded-lg flex items-center gap-2 text-sm hover:bg-gray-50">
-               <Download size={14} />
-               Export CSV
-            </button>
+            <CsvExportButton data={submissions} filename={`${form.title}-submissions.csv`} />
             
             <form action={async () => {
                'use server'
