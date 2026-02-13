@@ -34,10 +34,9 @@ export const suspendOrganisation = async (input: z.infer<typeof OrgActionSchema>
   // 1. Update Org Status
   // Assuming we added `is_suspended` column. If not, we need to add it to schema.
   // I will assume it exists or I will try to update it.
-  const { error } = await supabase
-    .from('organisations')
-    .update({ is_suspended: true })
-    .eq('id', input.organisationId)
+  const { error } = await (supabase.from('organisations') as any)
+      .update({ is_suspended: true })
+      .eq('id', input.organisationId)
 
   if (error) throw new Error(error.message)
 
@@ -59,10 +58,9 @@ export const reactivateOrganisation = async (input: z.infer<typeof OrgActionSche
   const user = await checkSuperAdmin()
   const supabase = createServiceClient()
 
-  const { error } = await supabase
-    .from('organisations')
-    .update({ is_suspended: false })
-    .eq('id', input.organisationId)
+  const { error } = await (supabase.from('organisations') as any)
+      .update({ is_suspended: false })
+      .eq('id', input.organisationId)
 
   if (error) throw new Error(error.message)
 

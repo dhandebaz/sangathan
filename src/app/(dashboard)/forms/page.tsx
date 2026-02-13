@@ -8,10 +8,12 @@ export const dynamic = 'force-dynamic'
 export default async function FormsPage() {
   const supabase = await createClient()
 
-  const { data: forms, error } = await supabase
+  const { data, error } = await supabase
     .from('forms')
     .select('id, title, description, is_active, created_at, form_submissions(count)')
     .order('created_at', { ascending: false })
+  
+  const forms = data as any[]
 
   if (error) {
     return <div className="p-4 text-red-500">Error loading forms</div>

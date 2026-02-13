@@ -8,19 +8,23 @@ export default async function PrintMembersPage() {
   const supabase = await createClient()
   const ctx = await getUserContext()
   
-  const { data: members, error } = await supabase
+  const { data, error } = await supabase
     .from('members')
     .select('*')
     .eq('status', 'active')
     .order('full_name', { ascending: true })
+  
+  const members = data as any[]
     
   if (error) return <div>Error loading members</div>
 
-  const { data: org } = await supabase
+  const { data: orgData } = await supabase
     .from('organisations')
     .select('name')
     .eq('id', ctx.organizationId)
     .single()
+  
+  const org = orgData as any
 
   return (
     <PrintLayout title="Member List" orgName={org?.name || 'Organisation'}>

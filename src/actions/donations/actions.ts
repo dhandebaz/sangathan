@@ -68,9 +68,11 @@ export const logDonation = createSafeAction(
         upi_reference: input.upi_reference,
         notes: input.notes,
         verified_by: context.user.id // Auto-verify if logged manually
-      })
+      } as any)
       .select('id')
       .single()
+    
+    const donation = data as any
 
     if (error) {
        if (error.code === '23505') throw new Error('Duplicate entry.')
@@ -82,12 +84,12 @@ export const logDonation = createSafeAction(
       user_id: context.user.id,
       action: 'DONATION_LOGGED',
       resource_table: 'donations',
-      resource_id: data.id,
+      resource_id: donation.id,
       details: { amount: input.amount, donor: input.donor_name }
     })
 
     revalidatePath('/dashboard/donations')
-    return { donationId: data.id }
+    return { donationId: donation.id }
   },
   { allowedRoles: ['admin', 'editor'] }
 )
@@ -97,8 +99,7 @@ export const verifyDonation = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await supabase
-      .from('donations')
+    const { error } = await (supabase.from('donations') as any)
       .update({ verified_by: context.user.id }) // Mark as verified by current user
       .eq('id', input.donationId)
       .eq('organisation_id', context.organizationId)
@@ -162,35 +163,45 @@ export async function submitPublicDonation(input: z.infer<typeof PublicDonationS
     .select('id')
     .eq('slug', input.orgSlug)
     .single()
+  
+  const organisation = org as any
 
-  if (orgError || !org) {
+  if (orgError || !organisation) {
     return { success: false, error: 'Organisation not found' }
   }
 
+  if (organisation.is_suspended) {
+    return { success: false, error: 'Organisation is suspended' }
+  }
+
   // 3. Check Duplicate UPI (Service Role bypasses RLS, so we must be specific)
-  const { data: existing } = await supabase
+  // Use Admin client for check to ensure we see all records
+  const { data: existingData } = await supabase
     .from('donations')
     .select('id')
-    .eq('organisation_id', org.id)
+    .eq('organisation_id', organisation.id)
     .eq('upi_reference', input.upi_reference)
     .single()
+  
+  const existing = existingData as any
 
   if (existing) {
     return { success: false, error: 'This UPI reference has already been submitted.' }
   }
 
-  // 4. Insert
+  // 4. Insert Donation (Admin client)
   const { error } = await supabase
     .from('donations')
     .insert({
-      organisation_id: org.id,
+      organisation_id: organisation.id,
       donor_name: input.donor_name,
       amount: input.amount,
+      date: new Date().toISOString(), // Use current date for public submission
       payment_method: 'upi',
       upi_reference: input.upi_reference,
       notes: `Phone: ${input.phone}`, // Storing phone in notes as per schema limitation or design
       verified_by: null // Pending verification
-    })
+    } as any)
 
   if (error) {
     console.error('Donation Insert Error:', error)

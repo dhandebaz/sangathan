@@ -13,11 +13,13 @@ export default async function PublicFormPage({ params }: PageProps) {
   const supabase = createServiceClient()
 
   // Fetch form details
-  const { data: form, error } = await supabase
+  const { data, error } = await supabase
     .from('forms')
     .select('id, title, description, fields, is_active, organisation_id')
     .eq('id', formId)
     .single()
+  
+  const form = data as any
 
   if (error || !form) {
     notFound()
@@ -35,11 +37,13 @@ export default async function PublicFormPage({ params }: PageProps) {
   }
 
   // Fetch Organisation Name for branding
-  const { data: org } = await supabase
+  const { data: orgData } = await supabase
     .from('organisations')
     .select('name')
     .eq('id', form.organisation_id)
     .single()
+  
+  const org = orgData as any
 
   return (
     <div className="min-h-screen bg-orange-50/30 py-12 px-4 sm:px-6">

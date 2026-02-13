@@ -15,12 +15,14 @@ export default async function AuditLogPage() {
   }
 
   // Fetch Logs
-  const { data: logs, error } = await supabase
+  const { data, error } = await supabase
     .from('audit_logs')
     .select('*, profiles(full_name)')
     .eq('organisation_id', ctx.organizationId)
     .order('created_at', { ascending: false })
     .limit(100)
+  
+  const logs = data as any[]
 
   if (error) {
     return <div className="p-4 text-red-500">Error loading audit logs.</div>

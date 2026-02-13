@@ -16,20 +16,24 @@ export default async function FormDetailsPage({ params }: PageProps) {
   const supabase = await createClient()
 
   // Fetch form details
-  const { data: form, error } = await supabase
+  const { data, error } = await supabase
     .from('forms')
     .select('*')
     .eq('id', id)
     .single()
+  
+  const form = data as any
 
   if (error || !form) notFound()
 
   // Fetch submissions
-  const { data: submissions } = await supabase
+  const { data: subData } = await supabase
     .from('form_submissions')
     .select('*')
     .eq('form_id', id)
     .order('submitted_at', { ascending: false })
+  
+  const submissions = subData as any[]
 
   const fields = form.fields as any[]
 

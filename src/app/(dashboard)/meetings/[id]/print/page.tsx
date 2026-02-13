@@ -14,27 +14,33 @@ export default async function PrintMeetingPage({ params }: PageProps) {
   const ctx = await getUserContext()
   
   // Fetch Meeting
-  const { data: meeting, error } = await supabase
+  const { data, error } = await supabase
     .from('meetings')
     .select('*')
     .eq('id', id)
     .single()
+  
+  const meeting = data as any
     
   if (error || !meeting) notFound()
 
   // Fetch Attendance
-  const { data: attendance } = await supabase
+  const { data: attData } = await supabase
     .from('meeting_attendance')
     .select('status, members(full_name)')
     .eq('meeting_id', id)
     .order('status', { ascending: false })
+  
+  const attendance = attData as any[]
 
   // Fetch Organisation Name
-  const { data: org } = await supabase
+  const { data: orgData } = await supabase
     .from('organisations')
     .select('name')
     .eq('id', ctx.organizationId)
     .single()
+  
+  const org = orgData as any
 
   return (
     <div className="p-8 bg-white min-h-screen text-black">

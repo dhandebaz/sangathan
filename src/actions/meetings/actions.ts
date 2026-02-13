@@ -38,7 +38,7 @@ export const createMeeting = createSafeAction(
     const supabase = await createClient()
     
     // 1. Insert Meeting
-    const { data: meeting, error } = await supabase
+    const { data: meetingData, error } = await supabase
       .from('meetings')
       .insert({
         organisation_id: context.organizationId,
@@ -47,9 +47,11 @@ export const createMeeting = createSafeAction(
         date: input.date,
         location: input.location,
         created_by: context.user.id
-      })
+      } as any)
       .select('id')
       .single()
+    
+    const meeting = meetingData as any
 
     if (error) throw new Error(error.message)
 
@@ -69,7 +71,7 @@ export const createMeeting = createSafeAction(
 
       const { error: attendanceError } = await supabase
         .from('meeting_attendance')
-        .insert(attendanceRows)
+        .insert(attendanceRows as any)
       
       if (attendanceError) {
         // Log error but don't fail the whole action if meeting was created
@@ -80,10 +82,10 @@ export const createMeeting = createSafeAction(
     await logAction({
       organisation_id: context.organizationId,
       user_id: context.user.id,
-      action: 'MEETING_CREATED',
+      action: 'MEETING_SCHEDULED',
       resource_table: 'meetings',
       resource_id: meeting.id,
-      details: { title: input.title }
+      details: { title: input.title, date: input.date }
     })
 
     revalidatePath('/dashboard/meetings')
@@ -97,8 +99,7 @@ export const updateMeeting = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await supabase
-      .from('meetings')
+    const { error } = await (supabase.from('meetings') as any)
       .update({
         title: input.title,
         description: input.description,
@@ -139,7 +140,7 @@ export const markAttendance = createSafeAction(
          meeting_id: input.meetingId,
          member_id: input.memberId,
          status: input.status
-      }, { onConflict: 'meeting_id, member_id' })
+      } as any, { onConflict: 'meeting_id, member_id' })
 
     if (error) throw new Error(error.message)
 

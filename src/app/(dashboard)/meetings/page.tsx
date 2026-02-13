@@ -8,10 +8,12 @@ export default async function MeetingsPage() {
   const supabase = await createClient()
 
   // Fetch meetings with attendance count
-  const { data: meetings, error } = await supabase
+  const { data, error } = await supabase
     .from('meetings')
     .select('id, title, date, location, meeting_attendance(count)')
     .order('date', { ascending: false })
+  
+  const meetings = data as any[]
 
   if (error) {
     return <div className="p-4 text-red-500">Error loading meetings</div>

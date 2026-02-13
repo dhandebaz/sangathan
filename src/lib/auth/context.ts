@@ -23,11 +23,13 @@ export async function getUserContext(): Promise<UserContext> {
   }
 
   // Fetch Profile with Organization ID and Role
-  const { data: profile, error: profileError } = await supabase
+  const { data, error: profileError } = await supabase
     .from('profiles')
-    .select('organization_id, role, full_name')
+    .select('organisation_id, role, full_name')
     .eq('id', user.id)
     .single()
+  
+  const profile = data as any
 
   if (profileError || !profile) {
     // Edge case: User is authenticated but has no profile.
@@ -48,7 +50,7 @@ export async function getUserContext(): Promise<UserContext> {
       id: user.id,
       email: user.email,
     },
-    organizationId: profile.organization_id,
+    organizationId: profile.organisation_id,
     role: role,
   }
 }

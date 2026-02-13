@@ -9,20 +9,24 @@ export default async function SupporterPlanPage() {
   const ctx = await getUserContext()
 
   // Fetch Organisation Details
-  const { data: org } = await supabase
+  const { data: orgData } = await supabase
     .from('organisations')
     .select('remove_branding')
     .eq('id', ctx.organizationId)
     .single()
+  
+  const org = orgData as any
 
   // Fetch Subscription Status
-  const { data: subscription } = await supabase
+  const { data: subData } = await supabase
     .from('supporter_subscriptions')
     .select('*')
     .eq('organisation_id', ctx.organizationId)
     .order('created_at', { ascending: false })
     .limit(1)
     .single()
+  
+  const subscription = subData as any
 
   return (
     <SupporterDashboard 

@@ -35,14 +35,16 @@ export async function GET(request: Request) {
             const uniqueSlug = `${baseSlug}-${Math.random().toString(36).substring(2, 7)}`
 
             // Create Organisation
-            const { data: org, error: orgError } = await supabase
+            const { data: orgData, error: orgError } = await supabase
               .from('organisations')
               .insert({
                 name: orgName,
                 slug: uniqueSlug,
-              })
+              } as any)
               .select('id')
               .single()
+            
+            const org = orgData as any
 
             if (!orgError && org) {
               // Create Profile
@@ -52,7 +54,7 @@ export async function GET(request: Request) {
                 full_name: fullName,
                 email: user.email,
                 role: 'admin',
-              })
+              } as any)
             }
           }
         }

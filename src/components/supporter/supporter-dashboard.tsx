@@ -12,8 +12,8 @@ export function SupporterDashboard({ subscription, organisation }: { subscriptio
     setLoading(true)
     try {
       const result = await createSubscription({})
-      if (result.shortUrl) {
-        window.location.href = result.shortUrl
+      if (result.success && result.data?.shortUrl) {
+        window.location.href = result.data.shortUrl
       }
     } catch (err: any) {
       alert(err.message)

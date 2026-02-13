@@ -21,11 +21,13 @@ export default async function GlobalAuditPage() {
   const supabase = createServiceClient()
 
   // Fetch Global Logs
-  const { data: logs, error } = await supabase
+  const { data, error } = await supabase
     .from('audit_logs')
     .select('*, organisations(name), profiles(full_name)')
     .order('created_at', { ascending: false })
     .limit(100)
+  
+  const logs = data as any[]
 
   if (error) return <div className="p-8">Error loading logs</div>
 

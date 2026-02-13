@@ -51,9 +51,11 @@ export const addMember = createSafeAction(
         status: input.status, // Add status column to DB schema if missing
         notes: input.notes, // Add notes column to DB schema if missing
         role: input.role,
-      })
+      } as any)
       .select('id')
       .single()
+
+    const member = data as any
 
     if (error) {
       if (error.code === '23505') { // Unique violation
@@ -67,12 +69,12 @@ export const addMember = createSafeAction(
       user_id: context.user.id,
       action: 'MEMBER_CREATED',
       resource_table: 'members',
-      resource_id: data.id,
+      resource_id: member.id,
       details: { full_name: input.full_name, role: input.role }
     })
 
     revalidatePath('/members')
-    return { memberId: data.id }
+    return { memberId: member.id }
   },
   { allowedRoles: ['admin', 'editor'] } // Editor can create too
 )
@@ -82,8 +84,7 @@ export const updateMember = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
     
-    const { error } = await supabase
-      .from('members')
+    const { error } = await (supabase.from('members') as any)
       .update({
         full_name: input.full_name,
         email: input.email || null,
@@ -125,8 +126,7 @@ export const changeMemberStatus = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await supabase
-      .from('members')
+    const { error } = await (supabase.from('members') as any)
       .update({ status: input.status })
       .eq('id', input.memberId)
       .eq('organisation_id', context.organizationId)

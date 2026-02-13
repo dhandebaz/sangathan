@@ -1,13 +1,14 @@
 import Link from 'next/link'
 import { ShieldCheck, Lock, EyeOff } from 'lucide-react'
 
-export default function AuthLayout({
+export default async function AuthLayout({
   children,
   params
 }: {
   children: React.ReactNode
-  params: { lang: string }
+  params: Promise<{ lang: string }>
 }) {
+  const { lang } = await params
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-gray-50">
       {/* Left Panel - Trust & Branding */}

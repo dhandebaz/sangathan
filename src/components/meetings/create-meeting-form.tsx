@@ -35,7 +35,7 @@ export function CreateMeetingForm({ members }: { members: Member[] }) {
     })
 
     if (result.success) {
-       router.push(`/dashboard/meetings/${result.meetingId}`)
+       router.push(`/dashboard/meetings/${result.data?.meetingId}`)
     } else {
        alert(result.error)
        setLoading(false)

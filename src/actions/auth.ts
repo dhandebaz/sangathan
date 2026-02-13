@@ -48,7 +48,7 @@ export async function login(input: z.infer<typeof LoginSchema>) {
   // 1. Validate Input
   const result = LoginSchema.safeParse(input)
   if (!result.success) {
-    return { success: false, error: result.error.errors[0].message }
+    return { success: false, error: result.error.issues[0].message }
   }
 
   const supabase = await createClient()
@@ -66,19 +66,23 @@ export async function login(input: z.infer<typeof LoginSchema>) {
 
   // 3. Check Suspension
   // We need to fetch the profile -> organisation
-  const { data: profile } = await supabase
+  const { data: profileData } = await supabase
     .from('profiles')
-    .select('organisation_id')
+    .select('*')
     .eq('id', data.user.id)
     .single()
   
+  const profile = profileData as any
+
   if (profile && profile.organisation_id) {
-    const { data: org } = await supabase
+    const { data: orgData } = await supabase
       .from('organisations')
-      .select('is_suspended')
+      .select('*')
       .eq('id', profile.organisation_id)
       .single()
     
+    const org = orgData as any
+
     if (org && org.is_suspended) {
       await supabase.auth.signOut()
       return { success: false, error: 'Your organisation has been suspended. Please contact support.' }
@@ -92,7 +96,7 @@ export async function signup(input: z.infer<typeof SignupSchema>) {
   // 1. Validate Input
   const result = SignupSchema.safeParse(input)
   if (!result.success) {
-    return { success: false, error: result.error.errors[0].message }
+    return { success: false, error: result.error.issues[0].message }
   }
 
   const { email, password, fullName, organizationName } = result.data
@@ -130,7 +134,7 @@ export async function signup(input: z.infer<typeof SignupSchema>) {
 
 export async function otpLogin(input: z.infer<typeof OtpLoginSchema>) {
   const result = OtpLoginSchema.safeParse(input)
-  if (!result.success) return { success: false, error: result.error.errors[0].message }
+  if (!result.success) return { success: false, error: result.error.issues[0].message }
 
   const supabase = await createClient()
   const origin = (await headers()).get('origin')
@@ -150,7 +154,7 @@ export async function otpLogin(input: z.infer<typeof OtpLoginSchema>) {
 
 export async function forgotPassword(input: z.infer<typeof ForgotPasswordSchema>) {
   const result = ForgotPasswordSchema.safeParse(input)
-  if (!result.success) return { success: false, error: result.error.errors[0].message }
+  if (!result.success) return { success: false, error: result.error.issues[0].message }
 
   const supabase = await createClient()
   const origin = (await headers()).get('origin')
@@ -166,7 +170,7 @@ export async function forgotPassword(input: z.infer<typeof ForgotPasswordSchema>
 
 export async function resetPassword(input: z.infer<typeof ResetPasswordSchema>) {
   const result = ResetPasswordSchema.safeParse(input)
-  if (!result.success) return { success: false, error: result.error.errors[0].message }
+  if (!result.success) return { success: false, error: result.error.issues[0].message }
 
   const supabase = await createClient()
   
@@ -176,5 +180,105 @@ export async function resetPassword(input: z.infer<typeof ResetPasswordSchema>) 
 
   if (error) return { success: false, error: error.message }
 
+  redirect('/dashboard')
+}
+
+import { firebaseAdminAuth } from '@/lib/firebase/admin'
+
+const PhoneLoginSchema = z.object({
+  idToken: z.string().min(1, "Firebase ID Token required"),
+})
+
+export async function phoneLogin(input: z.infer<typeof PhoneLoginSchema>) {
+  // 1. Verify Firebase Token
+  const result = PhoneLoginSchema.safeParse(input)
+  if (!result.success) return { success: false, error: result.error.issues[0].message }
+
+  let decodedToken
+  try {
+    decodedToken = await firebaseAdminAuth.verifyIdToken(input.idToken)
+  } catch (error) {
+    return { success: false, error: 'Invalid phone verification' }
+  }
+
+  const phoneNumber = decodedToken.phone_number
+  if (!phoneNumber) return { success: false, error: 'No phone number in token' }
+
+  // 2. Find Profile by Phone
+  const supabaseAdmin = createServiceClient()
+  
+  const { data } = await supabaseAdmin
+    .from('profiles')
+    .select('*')
+    .eq('phone', phoneNumber)
+    .single()
+    
+  const profile = data as any
+
+  if (profile) {
+    // User exists. Generate magic link session.
+    const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
+      type: 'magiclink',
+      email: profile.email,
+    })
+    
+    if (linkError) return { success: false, error: 'Failed to generate session' }
+    
+    return { success: true, redirectUrl: linkData.properties.action_link }
+  }
+  
+  // User not found -> Link Flow
+  return { success: false, code: 'LINK_REQUIRED', phoneNumber }
+}
+
+export async function linkPhoneToAccount(input: z.infer<typeof LoginSchema> & { idToken: string }) {
+  // 1. Verify Credentials (Login)
+  const result = LoginSchema.safeParse(input)
+  if (!result.success) return { success: false, error: result.error.issues[0].message }
+  
+  const supabase = await createClient()
+  const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+    email: result.data.email,
+    password: result.data.password
+  })
+  
+  if (authError || !authData.user) return { success: false, error: 'Invalid credentials' }
+  
+  // 2. Verify Firebase Token
+  let decodedToken
+  try {
+    decodedToken = await firebaseAdminAuth.verifyIdToken(input.idToken)
+  } catch (error) {
+    return { success: false, error: 'Invalid phone verification' }
+  }
+  
+  const phoneNumber = decodedToken.phone_number
+  if (!phoneNumber) return { success: false, error: 'No phone number in token' }
+  
+  // 3. Update Profile
+  const supabaseAdmin = createServiceClient()
+  
+  // Check if phone already used
+  const { data } = await supabaseAdmin
+    .from('profiles')
+    .select('id')
+    .eq('phone', phoneNumber)
+    .neq('id', authData.user.id) // Allow re-linking to self
+    .single()
+    
+  const existing = data as any
+
+  if (existing) return { success: false, error: 'Phone number already linked to another account' }
+  
+  const admin: any = supabaseAdmin
+  await admin
+    .from('profiles')
+    .update({ 
+      phone: phoneNumber,
+      phone_verified: true,
+      firebase_uid: decodedToken.uid
+    })
+    .eq('id', authData.user.id)
+    
   redirect('/dashboard')
 }

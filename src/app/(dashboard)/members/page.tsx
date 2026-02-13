@@ -43,7 +43,8 @@ export default async function MembersPage({ searchParams }: PageProps) {
   const to = from + pageSize - 1
   dbQuery = dbQuery.range(from, to)
 
-  const { data: members, error, count } = await dbQuery
+  const { data, error, count } = await dbQuery
+  const members = data as any[]
 
   if (error) {
     console.error('Error fetching members:', error)

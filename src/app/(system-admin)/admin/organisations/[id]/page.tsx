@@ -27,11 +27,13 @@ export default async function OrganisationDetailsPage({ params }: PageProps) {
   const supabase = createServiceClient()
 
   // Fetch Organisation
-  const { data: org, error } = await supabase
+  const { data, error } = await supabase
     .from('organisations')
     .select('*')
     .eq('id', id)
     .single()
+  
+  const org = data as any
 
   if (error || !org) return <div className="p-8">Organisation not found</div>
 

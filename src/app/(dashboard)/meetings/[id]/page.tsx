@@ -16,20 +16,24 @@ export default async function MeetingDetailsPage({ params }: PageProps) {
   const supabase = await createClient()
 
   // Fetch meeting details
-  const { data: meeting, error } = await supabase
+  const { data, error } = await supabase
     .from('meetings')
     .select('*, organisation_id')
     .eq('id', id)
     .single()
+  
+  const meeting = data as any
 
   if (error || !meeting) notFound()
 
   // Fetch attendance
-  const { data: attendance } = await supabase
+  const { data: attData } = await supabase
     .from('meeting_attendance')
     .select('member_id, status, members(full_name)')
     .eq('meeting_id', id)
     .order('status', { ascending: false }) // Present first usually
+  
+  const attendance = attData as any[]
 
   // Generate Jitsi Link (Deterministic)
   // https://meet.jit.si/sangathan-{orgId}-{meetingId}

@@ -54,9 +54,11 @@ export const createForm = createSafeAction(
         fields: input.fields, // JSONB
         is_active: true,
         created_by: context.user.id
-      })
+      } as any)
       .select('id')
       .single()
+    
+    const form = data as any
 
     if (error) throw new Error(error.message)
 
@@ -65,12 +67,12 @@ export const createForm = createSafeAction(
       user_id: context.user.id,
       action: 'FORM_CREATED',
       resource_table: 'forms',
-      resource_id: data.id,
+      resource_id: form.id,
       details: { title: input.title }
     })
 
     revalidatePath('/dashboard/forms')
-    return { formId: data.id }
+    return { formId: form.id }
   },
   { allowedRoles: ['admin', 'editor'] }
 )
@@ -80,8 +82,7 @@ export const updateForm = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await supabase
-      .from('forms')
+    const { error } = await (supabase.from('forms') as any)
       .update({
         title: input.title,
         description: input.description,
@@ -114,8 +115,7 @@ export const toggleFormStatus = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await supabase
-      .from('forms')
+    const { error } = await (supabase.from('forms') as any)
       .update({ is_active: input.isActive })
       .eq('id', input.formId)
       .eq('organisation_id', context.organizationId)
@@ -187,11 +187,13 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
   
   const supabase = createServiceClient()
 
-  const { data: form, error: formError } = await supabase
+  const { data, error: formError } = await supabase
     .from('forms')
     .select('id, organisation_id, fields, is_active')
     .eq('id', input.formId)
     .single()
+  
+  const form = data as any
 
   if (formError || !form) {
     return { success: false, error: 'Form not found' }
@@ -244,7 +246,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
       form_id: form.id,
       organisation_id: form.organisation_id, // Derived from form
       data: input.data,
-    })
+    } as any)
 
   if (submissionError) {
     console.error('Submission Error:', submissionError)

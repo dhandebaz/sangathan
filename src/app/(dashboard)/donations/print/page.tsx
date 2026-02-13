@@ -7,16 +7,20 @@ export default async function PrintDonationLedger() {
   const supabase = await createClient()
   const ctx = await getUserContext()
   
-  const { data: donations } = await supabase
+  const { data } = await supabase
     .from('donations')
     .select('*')
     .order('date', { ascending: false })
+  
+  const donations = data as any[]
 
-  const { data: org } = await supabase
+  const { data: orgData } = await supabase
     .from('organisations')
     .select('name')
     .eq('id', ctx.organizationId)
     .single()
+  
+  const org = orgData as any
 
   const totalAmount = donations?.reduce((sum, d) => sum + Number(d.amount), 0) || 0
 

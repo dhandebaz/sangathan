@@ -21,10 +21,12 @@ export default async function OrganisationsPage() {
   const supabase = createServiceClient()
 
   // Fetch Organisations
-  const { data: orgs, error } = await supabase
+  const { data, error } = await supabase
     .from('organisations')
     .select('*, profiles(count), supporter_subscriptions(status)')
     .order('created_at', { ascending: false })
+  
+  const orgs = data as any[]
 
   if (error) return <div className="p-8">Error loading organisations</div>
 

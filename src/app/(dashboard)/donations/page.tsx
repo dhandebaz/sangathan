@@ -36,7 +36,9 @@ export default async function DonationsPage({ searchParams }: PageProps) {
     dbQuery = dbQuery.is('verified_by', null)
   }
 
-  const { data: donations, error } = await dbQuery
+  const { data, error } = await dbQuery
+  
+  const donations = data as any[]
 
   if (error) {
     return <div className="p-4 text-red-500">Error loading donations</div>
