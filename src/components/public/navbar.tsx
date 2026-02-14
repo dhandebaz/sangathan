@@ -2,13 +2,25 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Menu, X, Globe } from 'lucide-react'
-import { useState } from 'react'
+import { Menu, X, Globe, LayoutDashboard } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import { User } from '@supabase/supabase-js'
 
 export function Navbar({ lang }: { lang: string }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
   const pathname = usePathname()
   const router = useRouter()
+  const supabase = createClient()
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
+    }
+    getUser()
+  }, [])
 
   const getPathForLang = (targetLang: string) => {
     if (!pathname) return `/${targetLang}`
@@ -62,12 +74,21 @@ export function Navbar({ lang }: { lang: string }) {
               </div>
 
               <div className="flex items-center gap-4 ml-4 pl-4 border-l">
-                 <Link href="/login" className="text-sm font-medium text-gray-900">
-                   {lang === 'hi' ? 'लॉग इन' : 'Login'}
-                 </Link>
-                 <Link href="/signup" className="bg-black text-white px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90">
-                   {lang === 'hi' ? 'शुरू करें' : 'Start Free'}
-                 </Link>
+                 {user ? (
+                   <Link href="/dashboard" className="bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-orange-700 flex items-center gap-2 transition-colors">
+                     <LayoutDashboard size={16} />
+                     {lang === 'hi' ? 'डैशबोर्ड' : 'Dashboard'}
+                   </Link>
+                 ) : (
+                   <>
+                     <Link href="/login" className="text-sm font-medium text-gray-900">
+                       {lang === 'hi' ? 'लॉग इन' : 'Login'}
+                     </Link>
+                     <Link href="/signup" className="bg-black text-white px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90">
+                       {lang === 'hi' ? 'शुरू करें' : 'Start Free'}
+                     </Link>
+                   </>
+                 )}
               </div>
            </div>
 
@@ -97,12 +118,20 @@ export function Navbar({ lang }: { lang: string }) {
                </div>
 
                <div className="mt-4 pt-4 border-t px-3 space-y-2">
-                  <Link href="/login" className="block w-full text-center px-4 py-2 border border-gray-300 rounded-lg text-base font-medium text-gray-700">
-                    {lang === 'hi' ? 'लॉग इन' : 'Login'}
-                  </Link>
-                  <Link href="/signup" className="block w-full text-center px-4 py-2 bg-black text-white rounded-lg text-base font-bold">
-                    {lang === 'hi' ? 'शुरू करें' : 'Start Free'}
-                  </Link>
+                  {user ? (
+                    <Link href="/dashboard" className="block w-full text-center px-4 py-2 bg-orange-600 text-white rounded-lg text-base font-bold">
+                      {lang === 'hi' ? 'डैशबोर्ड' : 'Dashboard'}
+                    </Link>
+                  ) : (
+                    <>
+                      <Link href="/login" className="block w-full text-center px-4 py-2 border border-gray-300 rounded-lg text-base font-medium text-gray-700">
+                        {lang === 'hi' ? 'लॉग इन' : 'Login'}
+                      </Link>
+                      <Link href="/signup" className="block w-full text-center px-4 py-2 bg-black text-white rounded-lg text-base font-bold">
+                        {lang === 'hi' ? 'शुरू करें' : 'Start Free'}
+                      </Link>
+                    </>
+                  )}
                </div>
             </div>
          </div>
