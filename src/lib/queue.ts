@@ -1,5 +1,6 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import { logger } from '@/lib/logger'
+import { sendEmail, type EmailPayload } from '@/lib/email/sender'
 
 export type JobType = 'send_email' | 'process_webhook' | 'audit_log_batch' | 'export_data'
 
@@ -47,13 +48,19 @@ export async function processNextJob() {
     // --- JOB HANDLERS ---
     switch (job.type) {
       case 'send_email':
-        // await sendEmail(job.payload)
+        const emailPayload = job.payload as EmailPayload
+        const result = await sendEmail(emailPayload)
+        if (!result.success) {
+          throw new Error(`Email failed: ${result.error}`)
+        }
         break
       case 'process_webhook':
         // await processWebhook(job.payload)
         break
       default:
-        throw new Error(`Unknown job type: ${job.type}`)
+        // Allow other job types to pass if handled elsewhere, or throw
+        // For now we just log warning for unimplemented types
+        logger.warn('queue', `Unimplemented job type: ${job.type}`)
     }
     
     // Success
