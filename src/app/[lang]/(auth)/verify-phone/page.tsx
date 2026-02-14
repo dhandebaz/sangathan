@@ -52,22 +52,46 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
       }
 
       // Basic validation
-      if (phoneNumber.length < 10) {
+      if (!phoneNumber || phoneNumber.length < 10) {
         throw new Error('Please enter a valid phone number')
       }
 
-      // Ensure E.164 format (simple check, assuming user enters +91... or just number)
-      // For India/Generic, better to use a library like libphonenumber-js, but for now simple prepend
-      const formattedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+91${phoneNumber}`
+      // Ensure appVerifier exists
+      if (!window.recaptchaVerifier) {
+        // Try to re-initialize if missing (e.g. fast navigation or race condition)
+        try {
+          window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+            'size': 'normal',
+            'callback': (response: any) => {
+              // reCAPTCHA solved
+            }
+          })
+        } catch (e) {
+          console.error('Recaptcha init failed:', e)
+          throw new Error('Security check failed. Please refresh the page.')
+        }
+      }
 
       const appVerifier = window.recaptchaVerifier
+      if (!appVerifier) {
+        throw new Error('ReCAPTCHA not initialized.')
+      }
+
+      // Format phone: E.164 standard
+      const cleaned = phoneNumber.replace(/[^\d+]/g, '') // Keep only digits and plus
+      const formattedPhone = cleaned.startsWith('+') ? cleaned : `+91${cleaned}`
+      
+      console.log('Sending OTP to:', formattedPhone)
+
       const confirmation = await signInWithPhoneNumber(auth, formattedPhone, appVerifier)
       setConfirmationResult(confirmation)
       setStep('otp')
     } catch (err: any) {
-      console.error(err)
+      console.error('OTP Error:', err)
       if (err.code === 'auth/operation-not-allowed') {
         setError('Phone authentication is not enabled in the database configuration. Please contact support.')
+      } else if (err.code === 'auth/argument-error') {
+        setError('Invalid phone number format or security check failed.')
       } else {
         setError(err.message || 'Failed to send OTP. Try again.')
       }

@@ -47,15 +47,28 @@ export function PhoneAuth({ mode, email, password, onSuccess }: PhoneAuthProps) 
       const auth = firebaseAuth
       if (!auth) throw new Error('Phone verification service unavailable')
 
+      // Ensure appVerifier exists
+      if (!window.recaptchaVerifier) {
+         window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+          'size': 'invisible',
+          'callback': () => {}
+        })
+      }
+
       const appVerifier = window.recaptchaVerifier
+      if (!appVerifier) throw new Error('Security check failed (ReCAPTCHA missing)')
+
       // Format phone: +91XXXXXXXXXX
-      const formattedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+91${phoneNumber}`
+      const cleaned = phoneNumber.replace(/[^\d+]/g, '')
+      const formattedPhone = cleaned.startsWith('+') ? cleaned : `+91${cleaned}`
       
       const confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, appVerifier)
       setVerificationId(confirmationResult)
     } catch (err: any) {
       if (err.code === 'auth/operation-not-allowed') {
         setError('Phone authentication is not enabled in the database configuration.')
+      } else if (err.code === 'auth/argument-error') {
+        setError('Invalid phone number or security check failed.')
       } else {
         setError(err instanceof Error ? err.message : 'Failed to send OTP')
       }
