@@ -38,11 +38,11 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
 
     const { data: profile } = await supabase
       .from('profiles')
-      .select('role, organization_id')
+      .select('role, organisation_id')
       .eq('id', user.id)
-      .single() as { data: { role: string; organization_id: string } | null, error: { message: string } | null }
+      .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
 
-    if (!profile || profile.organization_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role || '')) {
+    if (!profile || profile.organisation_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role || '')) {
       return { success: false, error: 'Permission denied' }
     }
     
@@ -54,8 +54,8 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
        }
     }
 
-    const { data: announcement, error } = await supabase
-      .from('announcements')
+    const { data: announcement, error } = await (supabase
+      .from('announcements') as any)
       .insert({
         ...input,
         created_by: user.id
@@ -121,8 +121,8 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
         }
 
         // Update stats
-        await supabaseAdmin
-          .from('announcements')
+        await (supabaseAdmin
+          .from('announcements') as any)
           .update({ 
             email_sent_at: new Date().toISOString(),
             email_stats: { recipient_count: sentCount }
@@ -146,8 +146,8 @@ export async function markAnnouncementRead(announcementId: string) {
     
     if (!user) return { success: false }
 
-    const { error } = await supabase
-      .from('announcement_views')
+    const { error } = await (supabase
+      .from('announcement_views') as any)
       .insert({
         announcement_id: announcementId,
         user_id: user.id
@@ -167,7 +167,7 @@ export async function deleteAnnouncement(id: string) {
   try {
     const supabase = await createClient()
     // Permission check handled by RLS partially, but we should be explicit
-    const { error } = await supabase.from('announcements').delete().eq('id', id)
+    const { error } = await supabase.from('announcements' as any).delete().eq('id', id)
     if (error) throw error
     
     revalidatePath('/dashboard/announcements')

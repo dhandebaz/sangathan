@@ -52,8 +52,8 @@ export const createForm = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { data, error } = await supabase
-      .from('forms')
+    const { data, error } = await (supabase
+      .from('forms') as any)
       .insert({
         organisation_id: context.organizationId,
         title: input.title,
@@ -89,8 +89,8 @@ export const updateForm = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await supabase
-      .from('forms')
+    const { error } = await (supabase
+      .from('forms') as any)
       .update({
         title: input.title,
         description: input.description,
@@ -123,8 +123,8 @@ export const toggleFormStatus = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await supabase
-      .from('forms')
+    const { error } = await (supabase
+      .from('forms') as any)
       .update({ is_active: input.isActive })
       .eq('id', input.formId)
       .eq('organisation_id', context.organizationId)
@@ -151,8 +151,8 @@ export const deleteForm = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await supabase
-      .from('forms')
+    const { error } = await (supabase
+      .from('forms') as any)
       .delete()
       .eq('id', input.formId)
       .eq('organisation_id', context.organizationId)
@@ -190,8 +190,8 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
   
   const supabase = createServiceClient()
 
-  const { data, error: formError } = await supabase
-    .from('forms')
+  const { data, error: formError } = await (supabase
+    .from('forms') as any)
     .select('id, organisation_id, fields, is_active')
     .eq('id', input.formId)
     .single() as { data: { id: string; organisation_id: string; fields: z.infer<typeof FormFieldSchema>[]; is_active: boolean } | null, error: { message: string } | null }
@@ -240,7 +240,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
     
     // Check limit: Max 5 submissions per hour per IP for this form
     // We access 'rate_limits' which might not exist if migration hasn't run.
-    const { count, error: rateError } = await supabase.from('rate_limits')
+    const { count, error: rateError } = await (supabase.from('rate_limits') as any)
       .select('*', { count: 'exact', head: true })
       .eq('key', key)
       .gt('created_at', new Date(Date.now() - 3600 * 1000).toISOString())
@@ -251,7 +251,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
     
     // Record attempt
     if (!rateError) {
-      await supabase.from('rate_limits').insert({ key })
+      await (supabase.from('rate_limits') as any).insert({ key })
     }
   } catch (err) {
     // Fail open - log error but allow submission if rate limit system is down/missing
@@ -265,8 +265,8 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
   // If we rely on Anon client, we can't force `organisation_id` easily without exposing it in the payload.
   // So using Service Client here is SAFER to enforce the correct org ID.
   
-  const { error: submissionError } = await supabase
-    .from('form_submissions')
+  const { error: submissionError } = await (supabase
+    .from('form_submissions') as any)
     .insert({
       form_id: form.id,
       organisation_id: form.organisation_id, // Derived from form

@@ -50,22 +50,22 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
     // Check permissions
     const { data: profileData } = await supabase
       .from('profiles')
-      .select('role, organization_id')
+      .select('role, organisation_id')
       .eq('id', user.id)
-      .single() as { data: { role: string; organization_id: string } | null, error: { message: string } | null }
+      .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
 
     const profile = profileData
 
-    if (!profile || profile.organization_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role)) {
+    if (!profile || profile.organisation_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role)) {
       return { success: false, error: 'Permission denied' }
     }
 
     // Verify collaborations if any
     if (input.collaborating_org_ids && input.collaborating_org_ids.length > 0) {
-      const { count } = await supabase
-        .from('organisation_links')
+      const { count } = await (supabase
+        .from('organisation_links') as any)
         .select('*', { count: 'exact', head: true })
-        .or(`and(requester_org_id.eq.${profile.organization_id},responder_org_id.in.(${input.collaborating_org_ids.join(',')})),and(requester_org_id.in.(${input.collaborating_org_ids.join(',')}),responder_org_id.eq.${profile.organization_id})`)
+        .or(`and(requester_org_id.eq.${profile.organisation_id},responder_org_id.in.(${input.collaborating_org_ids.join(',')})),and(requester_org_id.in.(${input.collaborating_org_ids.join(',')}),responder_org_id.eq.${profile.organisation_id})`)
         .eq('status', 'active')
       
       if ((count || 0) < input.collaborating_org_ids.length) {
@@ -73,8 +73,8 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
       }
     }
 
-    const { data: event, error } = await supabase
-      .from('events')
+    const { data: event, error } = await (supabase
+      .from('events') as any)
       .insert({
         organisation_id: input.organisation_id,
         title: input.title,
@@ -99,8 +99,8 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
          organisation_id: orgId
        }))
        
-       const { error: jointError } = await supabase
-         .from('joint_events')
+       const { error: jointError } = await (supabase
+         .from('joint_events') as any)
          .insert(jointEvents)
          
        if (jointError) console.error('Joint Event Error:', jointError)
@@ -119,8 +119,8 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
     const supabaseAdmin = createServiceClient() // Use admin for public inserts/checks if needed
 
     // 1. Get Event Details
-    const { data: eventData, error: eventError } = await supabaseAdmin
-      .from('events')
+    const { data: eventData, error: eventError } = await (supabaseAdmin
+      .from('events') as any)
       .select('*')
       .eq('id', input.event_id)
       .single() as { data: { rsvp_enabled: boolean; capacity: number | null; event_type: string; organisation_id: string; id: string } | null, error: { message: string } | null }
@@ -133,8 +133,8 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
 
     // Check Capacity
     if (event.capacity) {
-      const { count } = await supabaseAdmin
-        .from('event_rsvps')
+      const { count } = await (supabaseAdmin
+        .from('event_rsvps') as any)
         .select('*', { count: 'exact', head: true })
         .eq('event_id', input.event_id)
         .eq('status', 'registered')
@@ -156,11 +156,11 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
       
       // Check Profile Role
       // Fetch profile AND check if their org is allowed
-      const { data: profileData } = await supabaseAdmin
-        .from('profiles')
-        .select('role, status, organization_id')
+      const { data: profileData } = await (supabaseAdmin
+        .from('profiles') as any)
+        .select('role, status, organisation_id')
         .eq('id', userId)
-        .single() as { data: { role: string; status: string; organization_id: string } | null, error: { message: string } | null }
+        .single() as { data: { role: string; status: string; organisation_id: string } | null, error: { message: string } | null }
       
       const profile = profileData
 
@@ -168,12 +168,12 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
         return { success: false, error: 'You must be an active member to join' }
       }
 
-      let isAllowedOrg = profile.organization_id === event.organisation_id
+      let isAllowedOrg = profile.organisation_id === event.organisation_id
       
       // Check joint events if not primary org
       if (!isAllowedOrg) {
-         const { data: joint } = await supabaseAdmin
-           .from('joint_events')
+         const { data: joint } = await (supabaseAdmin
+           .from('joint_events') as any)
            .select('id')
            .eq('event_id', event.id)
            .eq('organisation_id', profile.organisation_id)
@@ -205,8 +205,8 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
     // 4. Create RSVP
     // Check existing
     if (userId) {
-       const { data: existing } = await supabaseAdmin
-         .from('event_rsvps')
+       const { data: existing } = await (supabaseAdmin
+         .from('event_rsvps') as any)
          .select('id')
          .eq('event_id', input.event_id)
          .eq('user_id', userId)
@@ -214,8 +214,8 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
        
        if (existing) return { success: false, error: 'Already registered' }
     } else if (guestEmail) {
-       const { data: existing } = await supabaseAdmin
-         .from('event_rsvps')
+       const { data: existing } = await (supabaseAdmin
+         .from('event_rsvps') as any)
          .select('id')
          .eq('event_id', input.event_id)
          .eq('guest_email', guestEmail)
@@ -224,8 +224,8 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
        if (existing) return { success: false, error: 'Email already registered' }
     }
 
-    const { error: insertError } = await supabaseAdmin
-      .from('event_rsvps')
+    const { error: insertError } = await (supabaseAdmin
+      .from('event_rsvps') as any)
       .insert({
         event_id: input.event_id,
         user_id: userId || null,
@@ -272,7 +272,7 @@ export async function verifyAndCheckIn(input: { qrData: string, scannedByUserId:
      const supabaseAdmin = createServiceClient()
      
      // Find RSVP
-     let query = supabaseAdmin.from('event_rsvps').select('id, status').eq('event_id', eventId)
+     let query = (supabaseAdmin.from('event_rsvps') as any).select('id, status').eq('event_id', eventId)
      if (userId) query = query.eq('user_id', userId)
      else if (rsvpId) query = query.eq('id', rsvpId)
      else return { success: false, error: 'Invalid Token Data' }
@@ -287,8 +287,8 @@ export async function verifyAndCheckIn(input: { qrData: string, scannedByUserId:
      if (rsvp.status === 'cancelled') return { success: false, error: 'RSVP was cancelled' }
 
      // Mark Attended
-     await supabaseAdmin
-       .from('event_rsvps')
+     await (supabaseAdmin
+       .from('event_rsvps') as any)
        .update({ status: 'attended', checked_in_at: new Date().toISOString() })
        .eq('id', rsvp.id)
        

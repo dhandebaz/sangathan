@@ -300,8 +300,8 @@ export async function linkPhoneToAccount(input: z.infer<typeof LoginSchema> & { 
 
   if (existing) return { success: false, error: 'Phone number already linked to another account' }
   
-  await supabaseAdmin
-    .from('profiles')
+  await (supabaseAdmin
+    .from('profiles') as any)
     .update({ 
       phone: phoneNumber,
       phone_verified: true,
@@ -370,7 +370,7 @@ export async function finalizeSignup(input: { idToken: string }) {
   const baseSlug = orgName.toLowerCase().replace(/[^a-z0-9]+/g, '-')
   const uniqueSlug = `${baseSlug}-${Math.random().toString(36).substring(2, 7)}`
 
-  const { error: rpcError } = await supabaseAdmin.rpc('create_organisation_and_admin', {
+  const { error: rpcError } = await (supabaseAdmin as any).rpc('create_organisation_and_admin', {
     p_org_name: orgName,
     p_org_slug: uniqueSlug,
     p_user_id: user.id,
@@ -382,7 +382,7 @@ export async function finalizeSignup(input: { idToken: string }) {
 
   // Explicitly set approved_at and status for admin
   if (!rpcError) {
-      await supabaseAdmin.from('profiles').update({ status: 'active', approved_at: new Date().toISOString() }).eq('id', user.id)
+      await (supabaseAdmin.from('profiles') as any).update({ status: 'active', approved_at: new Date().toISOString() }).eq('id', user.id)
   }
 
   if (rpcError) {

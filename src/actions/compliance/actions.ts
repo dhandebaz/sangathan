@@ -19,15 +19,15 @@ export async function requestDataExport() {
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
-    .single()
+    .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
     
   if (!profile || profile.role !== 'admin') {
     return { error: 'Only admins can export organisation data' }
   }
   
   // Log Request
-  const { data: request, error } = await adminClient
-    .from('data_requests')
+  const { data: request, error } = await (adminClient
+    .from('data_requests') as any)
     .insert({
       organisation_id: profile.organisation_id,
       user_id: user.id,
@@ -35,7 +35,7 @@ export async function requestDataExport() {
       status: 'pending'
     })
     .select()
-    .single()
+    .single() as { data: { id: string } | null, error: { message: string } | null }
     
   if (error || !request) return { error: 'Failed to create request' }
   
@@ -60,8 +60,8 @@ export async function requestAccountDeletion() {
   const adminClient = createServiceClient()
   
   // Log Request
-  const { error } = await adminClient
-    .from('data_requests')
+  const { error } = await (adminClient
+    .from('data_requests') as any)
     .insert({
       user_id: user.id,
       request_type: 'deletion',
@@ -110,7 +110,7 @@ export async function deleteOrganisation(orgId: string, confirmation: string) {
   }
   
   // Soft Delete Org
-  await softDelete('organisations', orgId, user.id)
+  await softDelete('organisations', orgId)
   
   // Soft Delete Members (Cascade logic usually handles this in hard delete, but for soft delete we might need a job)
   // For now, simple org-level flag is enough to hide data in UI

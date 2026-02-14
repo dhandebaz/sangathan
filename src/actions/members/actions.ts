@@ -38,8 +38,8 @@ export const addMember = createSafeAction(
     const supabase = await createClient()
 
     // We are adding to the 'members' table
-    const { data, error } = await supabase
-      .from('members')
+    const { data, error } = await (supabase
+      .from('members') as any)
       .insert({
         organisation_id: context.organizationId,
         full_name: input.full_name,
@@ -84,8 +84,8 @@ export const updateMember = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
     
-    const { error } = await supabase
-      .from('members')
+    const { error } = await (supabase
+      .from('members') as any)
       .update({
         full_name: input.full_name,
         email: input.email || null,
@@ -127,8 +127,8 @@ export const changeMemberStatus = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await supabase
-      .from('members')
+    const { error } = await (supabase
+      .from('members') as any)
       .update({ status: input.status })
       .eq('id', input.memberId)
       .eq('organisation_id', context.organizationId)

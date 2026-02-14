@@ -37,13 +37,13 @@ export async function updateTransparency(input: z.infer<typeof UpdateTransparenc
 
     const { data: profileData } = await supabase
       .from('profiles')
-      .select('role, organization_id')
+      .select('role, organisation_id')
       .eq('id', user.id)
       .single()
 
-    const profile = profileData
+    const profile = profileData as { role: string; organisation_id: string } | null
 
-    if (!profile || profile.organization_id !== input.orgId || profile.role !== 'admin') {
+    if (!profile || profile.organisation_id !== input.orgId || profile.role !== 'admin') {
       return { success: false, error: 'Permission denied' }
     }
 
@@ -74,11 +74,11 @@ export async function updateMembershipPolicy(input: z.infer<typeof UpdatePolicyS
     // Check permissions (must be admin)
     const { data: profile } = await supabase
       .from('profiles')
-      .select('role, organization_id')
+      .select('role, organisation_id')
       .eq('id', user.id)
-      .single()
+      .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
 
-    if (!profile || profile.organization_id !== input.orgId || profile.role !== 'admin') {
+    if (!profile || profile.organisation_id !== input.orgId || profile.role !== 'admin') {
       return { success: false, error: 'Permission denied' }
     }
 
@@ -149,11 +149,11 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
     const fullName = userData.user?.user_metadata?.full_name || 'Unknown User'
     const email = userData.user?.email ?? ''
 
-    const { error: insertError } = await supabaseAdmin
-      .from('profiles')
+    const { error: insertError } = await (supabaseAdmin
+      .from('profiles') as any)
       .insert({
         id: user.id,
-        organization_id: input.orgId,
+        organisation_id: input.orgId,
         email: email,
         full_name: fullName,
         role: 'member', // Default role
@@ -166,10 +166,10 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
     // 4. Notifications
     if (status === 'pending') {
       // Notify Admins
-      const { data: admins } = await supabaseAdmin
-        .from('profiles')
+      const { data: admins } = await (supabaseAdmin
+        .from('profiles') as any)
         .select('email, full_name')
-        .eq('organization_id', input.orgId)
+        .eq('organisation_id', input.orgId)
         .eq('role', 'admin')
       
       const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/membership-requests`
@@ -216,9 +216,9 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
     // Check admin
     const { data: adminProfileData } = await supabase
       .from('profiles')
-      .select('role, organization_id')
+      .select('role, organisation_id')
       .eq('id', user.id)
-      .single() as { data: { role: string; organization_id: string } | null, error: { message: string } | null }
+      .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
 
     const adminProfile = adminProfileData
 
@@ -229,30 +229,30 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
     const supabaseAdmin = createServiceClient()
 
     // Get Member
-    const { data: memberData } = await supabaseAdmin
-      .from('profiles')
-      .select('email, full_name, organization_id')
+    const { data: memberData } = await (supabaseAdmin
+      .from('profiles') as any)
+      .select('email, full_name, organisation_id')
       .eq('id', input.memberId)
-      .single() as { data: { email: string; full_name: string | null; organization_id: string } | null, error: { message: string } | null }
+      .single() as { data: { email: string; full_name: string | null; organisation_id: string } | null, error: { message: string } | null }
 
     const member = memberData
 
-    if (!member || member.organization_id !== adminProfile.organization_id) {
+    if (!member || member.organisation_id !== adminProfile.organisation_id) {
         return { success: false, error: 'Member not found in your organisation' }
     }
 
     // Get Org Name
-    const { data: orgData } = await supabaseAdmin
-        .from('organisations')
+    const { data: orgData } = await (supabaseAdmin
+        .from('organisations') as any)
         .select('name')
-        .eq('id', adminProfile.organization_id)
+        .eq('id', adminProfile.organisation_id)
         .single() as { data: { name: string } | null, error: { message: string } | null }
 
     const org = orgData
 
     // Update
-    const { error } = await supabaseAdmin
-      .from('profiles')
+    const { error } = await (supabaseAdmin
+      .from('profiles') as any)
       .update({ 
         status: 'active',
         approved_at: new Date().toISOString()
@@ -286,9 +286,9 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
 
     const { data: adminProfileData } = await supabase
       .from('profiles')
-      .select('role, organization_id')
+      .select('role, organisation_id')
       .eq('id', user.id)
-      .single() as { data: { role: string; organization_id: string } | null, error: { message: string } | null }
+      .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
 
     const adminProfile = adminProfileData
 
@@ -299,30 +299,30 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
     const supabaseAdmin = createServiceClient()
 
      // Get Member
-    const { data: memberData } = await supabaseAdmin
-      .from('profiles')
-      .select('email, full_name, organization_id')
+    const { data: memberData } = await (supabaseAdmin
+      .from('profiles') as any)
+      .select('email, full_name, organisation_id')
       .eq('id', input.memberId)
-      .single() as { data: { email: string; full_name: string | null; organization_id: string } | null, error: { message: string } | null }
+      .single() as { data: { email: string; full_name: string | null; organisation_id: string } | null, error: { message: string } | null }
       
     const member = memberData
 
-    if (!member || member.organization_id !== adminProfile.organization_id) {
+    if (!member || member.organisation_id !== adminProfile.organisation_id) {
         return { success: false, error: 'Member not found' }
     }
 
     // Get Org Name
-    const { data: orgData } = await supabaseAdmin
-        .from('organisations')
+    const { data: orgData } = await (supabaseAdmin
+        .from('organisations') as any)
         .select('name')
-        .eq('id', adminProfile.organization_id)
+        .eq('id', adminProfile.organisation_id)
         .single() as { data: { name: string } | null, error: { message: string } | null }
 
     const org = orgData
 
     // Update
-    const { error } = await supabaseAdmin
-      .from('profiles')
+    const { error } = await (supabaseAdmin
+      .from('profiles') as any)
       .update({ 
         status: 'rejected'
       })

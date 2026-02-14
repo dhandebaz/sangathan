@@ -43,17 +43,17 @@ export async function createTask(input: z.infer<typeof CreateTaskSchema>) {
     // Check permissions
     const { data: profile } = await supabase
       .from('profiles')
-      .select('role, organization_id')
+      .select('role, organisation_id')
       .eq('id', user.id)
-      .single()
+      .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
 
-    if (!profile || profile.organization_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role)) {
+    if (!profile || profile.organisation_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role)) {
       return { success: false, error: 'Permission denied' }
     }
 
     // Create Task
-    const { data: task, error } = await supabase
-      .from('tasks')
+    const { data: task, error } = await (supabase
+      .from('tasks') as any)
       .insert({
         organisation_id: input.organisation_id,
         title: input.title,
@@ -77,8 +77,8 @@ export async function createTask(input: z.infer<typeof CreateTaskSchema>) {
         assigned_at: new Date().toISOString()
       }))
       
-      const { error: assignError } = await supabase
-        .from('task_assignments')
+      const { error: assignError } = await (supabase
+        .from('task_assignments') as any)
         .insert(assignments)
       
       if (assignError) console.error('Assignment Error:', assignError)
@@ -95,8 +95,8 @@ export async function createTask(input: z.infer<typeof CreateTaskSchema>) {
 export async function updateTaskStatus(taskId: string, status: string) {
   try {
     const supabase = await createClient()
-    const { error } = await supabase
-      .from('tasks')
+    const { error } = await (supabase
+      .from('tasks') as any)
       .update({ status })
       .eq('id', taskId)
 
@@ -117,8 +117,8 @@ export async function logHours(input: z.infer<typeof LogHoursSchema>) {
     if (!user) return { success: false, error: 'Unauthorized' }
 
     // Log Hours
-    const { error } = await supabase
-      .from('task_logs')
+    const { error } = await (supabase
+      .from('task_logs') as any)
       .insert({
         task_id: input.task_id,
         member_id: user.id,
@@ -133,15 +133,15 @@ export async function logHours(input: z.infer<typeof LogHoursSchema>) {
     const supabaseAdmin = createServiceClient()
     
     // Fetch current score
-    const { data: profile } = await supabaseAdmin
-      .from('profiles')
+    const { data: profile } = await (supabaseAdmin
+      .from('profiles') as any)
       .select('engagement_score')
       .eq('id', user.id)
       .single() as { data: { engagement_score: number | null } | null }
       
     if (profile) {
-      await supabaseAdmin
-        .from('profiles')
+      await (supabaseAdmin
+        .from('profiles') as any)
         .update({ engagement_score: (profile.engagement_score || 0) + Math.ceil(input.hours) })
         .eq('id', user.id)
     }
@@ -161,8 +161,8 @@ export async function acceptAssignment(taskId: string) {
     
     if (!user) return { success: false }
 
-    const { error } = await supabase
-      .from('task_assignments')
+    const { error } = await (supabase
+      .from('task_assignments') as any)
       .update({ accepted: true })
       .eq('task_id', taskId)
       .eq('member_id', user.id)

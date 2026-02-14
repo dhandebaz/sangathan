@@ -650,6 +650,76 @@ export interface Database {
           metadata?: Json | null
         }
       }
+      announcements: {
+        Row: {
+          id: string
+          organisation_id: string
+          title: string
+          content: string
+          visibility_level: 'public' | 'members' | 'volunteer' | 'core' | 'executive'
+          is_pinned: boolean
+          send_email: boolean
+          scheduled_at: string | null
+          expires_at: string | null
+          created_by: string | null
+          created_at: string
+          updated_at: string
+          email_sent_at: string | null
+          email_stats: Json
+        }
+        Insert: {
+          id?: string
+          organisation_id: string
+          title: string
+          content: string
+          visibility_level?: 'public' | 'members' | 'volunteer' | 'core' | 'executive'
+          is_pinned?: boolean
+          send_email?: boolean
+          scheduled_at?: string | null
+          expires_at?: string | null
+          created_by?: string | null
+          created_at?: string
+          updated_at?: string
+          email_sent_at?: string | null
+          email_stats?: Json
+        }
+        Update: {
+          id?: string
+          organisation_id?: string
+          title?: string
+          content?: string
+          visibility_level?: 'public' | 'members' | 'volunteer' | 'core' | 'executive'
+          is_pinned?: boolean
+          send_email?: boolean
+          scheduled_at?: string | null
+          expires_at?: string | null
+          created_by?: string | null
+          created_at?: string
+          updated_at?: string
+          email_sent_at?: string | null
+          email_stats?: Json
+        }
+      }
+      announcement_views: {
+        Row: {
+          id: string
+          announcement_id: string
+          user_id: string
+          viewed_at: string
+        }
+        Insert: {
+          id?: string
+          announcement_id: string
+          user_id: string
+          viewed_at?: string
+        }
+        Update: {
+          id?: string
+          announcement_id?: string
+          user_id?: string
+          viewed_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never

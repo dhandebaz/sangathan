@@ -41,17 +41,17 @@ export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
     // Check permissions
     const { data: profile } = await supabase
       .from('profiles')
-      .select('role, organization_id')
+      .select('role, organisation_id')
       .eq('id', user.id)
-      .single() as { data: { role: string; organization_id: string } | null, error: { message: string } | null }
+      .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
 
-    if (!profile || profile.organization_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role)) {
+    if (!profile || profile.organisation_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role)) {
       return { success: false, error: 'Permission denied' }
     }
 
     // Create Poll
-    const { data: poll, error } = await supabase
-      .from('polls')
+    const { data: poll, error } = await (supabase
+      .from('polls') as any)
       .insert({
         organisation_id: input.organisation_id,
         title: input.title,
@@ -77,7 +77,7 @@ export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
       display_order: idx
     }))
 
-    const { error: optError } = await supabase.from('poll_options').insert(options)
+    const { error: optError } = await (supabase.from('poll_options') as any).insert(options)
     if (optError) throw optError
 
     revalidatePath('/dashboard/polls')
@@ -98,8 +98,8 @@ export async function castVote(input: z.infer<typeof VoteSchema>) {
     const supabaseAdmin = createServiceClient()
 
     // 1. Get Poll Details
-    const { data: poll } = await supabaseAdmin
-      .from('polls')
+    const { data: poll } = await (supabaseAdmin
+      .from('polls') as any)
       .select('*')
       .eq('id', input.poll_id)
       .single() as { data: { organisation_id: string; status: string; end_time: string | null; voting_method: string; visibility_level: string } | null, error: { message: string } | null }
@@ -108,13 +108,13 @@ export async function castVote(input: z.infer<typeof VoteSchema>) {
     if (poll.end_time && new Date(poll.end_time) < new Date()) return { success: false, error: 'Poll has ended' }
 
     // 2. Check Eligibility (Role)
-    const { data: profile } = await supabaseAdmin
-      .from('profiles')
-      .select('role, organization_id, status')
+    const { data: profile } = await (supabaseAdmin
+      .from('profiles') as any)
+      .select('role, organisation_id, status')
       .eq('id', user.id)
-      .single() as { data: { role: string; organization_id: string; status: string } | null, error: { message: string } | null }
+      .single() as { data: { role: string; organisation_id: string; status: string } | null, error: { message: string } | null }
 
-    if (!profile || profile.organization_id !== poll.organisation_id || profile.status !== 'active') {
+    if (!profile || profile.organisation_id !== poll.organisation_id || profile.status !== 'active') {
        return { success: false, error: 'Not eligible to vote' }
     }
     

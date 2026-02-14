@@ -28,9 +28,9 @@ export async function createCollaborationRequest(targetOrgId: string) {
     // Check permissions
     const { data: profileData } = await supabase
       .from('profiles')
-      .select('role, organization_id')
+      .select('role, organisation_id')
       .eq('id', user.id)
-      .single() as { data: { role: string; organization_id: string } | null, error: { message: string } | null }
+      .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
 
     const profile = profileData
 
@@ -38,7 +38,7 @@ export async function createCollaborationRequest(targetOrgId: string) {
       return { success: false, error: 'Permission denied' }
     }
 
-    if (profile.organization_id === targetOrgId) {
+    if (profile.organisation_id === targetOrgId) {
       return { success: false, error: 'Cannot collaborate with yourself' }
     }
 
@@ -46,7 +46,7 @@ export async function createCollaborationRequest(targetOrgId: string) {
     const { data: existingData } = await supabase
       .from('organisation_links')
       .select('id, status')
-      .or(`and(requester_org_id.eq.${profile.organization_id},responder_org_id.eq.${targetOrgId}),and(requester_org_id.eq.${targetOrgId},responder_org_id.eq.${profile.organization_id})`)
+      .or(`and(requester_org_id.eq.${profile.organisation_id},responder_org_id.eq.${targetOrgId}),and(requester_org_id.eq.${targetOrgId},responder_org_id.eq.${profile.organisation_id})`)
       .single() as { data: { id: string; status: string } | null, error: { message: string } | null }
 
     const existing = existingData
@@ -58,10 +58,10 @@ export async function createCollaborationRequest(targetOrgId: string) {
       return { success: false, error: 'Previous request exists' }
     }
 
-    const { error } = await supabase
-      .from('organisation_links')
+    const { error } = await (supabase
+      .from('organisation_links') as any)
       .insert({
-        requester_org_id: profile.organization_id,
+        requester_org_id: profile.organisation_id,
         responder_org_id: targetOrgId,
         status: 'pending',
         created_by: user.id
@@ -87,9 +87,9 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
     // Check permissions
     const { data: profileData } = await supabase
       .from('profiles')
-      .select('role, organization_id')
+      .select('role, organisation_id')
       .eq('id', user.id)
-      .single() as { data: { role: string; organization_id: string } | null, error: { message: string } | null }
+      .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
 
     const profile = profileData
 
@@ -98,8 +98,8 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
     }
 
     // Verify ownership of the request (must be responder)
-    const { data: linkData } = await supabase
-      .from('organisation_links')
+    const { data: linkData } = await (supabase
+      .from('organisation_links') as any)
       .select('*')
       .eq('id', linkId)
       .single() as { data: { responder_org_id: string; requester_org_id: string } | null, error: { message: string } | null }
@@ -108,17 +108,17 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
 
     if (!link) return { success: false, error: 'Request not found' }
 
-    if (link.responder_org_id !== profile.organization_id) {
+    if (link.responder_org_id !== profile.organisation_id) {
        // Allow requester to cancel? Maybe only if pending.
-       if (link.requester_org_id === profile.organization_id && status === 'rejected') {
+       if (link.requester_org_id === profile.organisation_id && status === 'rejected') {
           // requester cancelling
        } else {
           return { success: false, error: 'Not authorized to respond' }
        }
     }
 
-    const { error } = await supabase
-      .from('organisation_links')
+    const { error } = await (supabase
+      .from('organisation_links') as any)
       .update({ status })
       .eq('id', linkId)
 
@@ -136,8 +136,8 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
 export async function getCollaboratingOrgs(orgId: string) {
     const supabase = createServiceClient()
     
-    const { data: links } = await supabase
-      .from('organisation_links')
+    const { data: links } = await (supabase
+      .from('organisation_links') as any)
       .select(`
         id, 
         status, 
@@ -158,8 +158,8 @@ export async function getCollaboratingOrgs(orgId: string) {
 export async function getPendingRequests(orgId: string) {
   const supabase = createServiceClient()
   
-  const { data: incoming } = await supabase
-    .from('organisation_links')
+  const { data: incoming } = await (supabase
+    .from('organisation_links') as any)
     .select(`
       id, 
       status, 
@@ -168,8 +168,8 @@ export async function getPendingRequests(orgId: string) {
     .eq('responder_org_id', orgId)
     .eq('status', 'pending')
 
-  const { data: outgoing } = await supabase
-    .from('organisation_links')
+  const { data: outgoing } = await (supabase
+    .from('organisation_links') as any)
     .select(`
       id, 
       status, 

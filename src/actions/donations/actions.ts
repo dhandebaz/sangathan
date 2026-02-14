@@ -44,8 +44,8 @@ export const logDonation = createSafeAction(
 
     // 1. Check uniqueness of UPI reference if provided
     if (input.upi_reference) {
-      const { data: existing } = await supabase
-        .from('donations')
+      const { data: existing } = await (supabase
+        .from('donations') as any)
         .select('id')
         .eq('organisation_id', context.organizationId)
         .eq('upi_reference', input.upi_reference)
@@ -57,8 +57,8 @@ export const logDonation = createSafeAction(
     }
 
     // 2. Insert
-    const { data, error } = await supabase
-      .from('donations')
+    const { data, error } = await (supabase
+      .from('donations') as any)
       .insert({
         organisation_id: context.organizationId,
         donor_name: input.donor_name,
@@ -99,7 +99,7 @@ export const verifyDonation = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await supabase.from('donations')
+    const { error } = await (supabase.from('donations') as any)
       .update({ verified_by: context.user.id }) // Mark as verified by current user
       .eq('id', input.donationId)
       .eq('organisation_id', context.organizationId)
@@ -125,8 +125,8 @@ export const deleteDonation = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await supabase
-      .from('donations')
+    const { error } = await (supabase
+      .from('donations') as any)
       .delete()
       .eq('id', input.donationId)
       .eq('organisation_id', context.organizationId)
@@ -176,8 +176,8 @@ export async function submitPublicDonation(input: z.infer<typeof PublicDonationS
 
   // 3. Check Duplicate UPI (Service Role bypasses RLS, so we must be specific)
   // Use Admin client for check to ensure we see all records
-  const { data: existingData } = await supabase
-    .from('donations')
+  const { data: existingData } = await (supabase
+    .from('donations') as any)
     .select('id')
     .eq('organisation_id', organisation.id)
     .eq('upi_reference', input.upi_reference)
@@ -190,8 +190,8 @@ export async function submitPublicDonation(input: z.infer<typeof PublicDonationS
   }
 
   // 4. Insert Donation (Admin client)
-  const { error } = await supabase
-    .from('donations')
+  const { error } = await (supabase
+    .from('donations') as any)
     .insert({
       organisation_id: organisation.id,
       donor_name: input.donor_name,
@@ -199,7 +199,7 @@ export async function submitPublicDonation(input: z.infer<typeof PublicDonationS
       date: new Date().toISOString(), // Use current date for public submission
       payment_method: 'upi',
       upi_reference: input.upi_reference,
-      notes: `Phone: ${input.phone}`, // Storing phone in notes as per schema limitation or design
+      notes: `Public submission from ${input.phone}`,
       verified_by: null // Pending verification
     })
 

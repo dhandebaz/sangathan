@@ -33,8 +33,8 @@ export const createMeeting = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { data: meetingData, error } = await supabase
-      .from('meetings')
+    const { data: meetingData, error } = await (supabase
+      .from('meetings') as any)
       .insert({
         organisation_id: context.organizationId,
         title: input.title,
@@ -58,8 +58,8 @@ export const createMeeting = createSafeAction(
         status: 'absent' // Default
       }))
 
-      const { error: attError } = await supabase
-        .from('meeting_attendance')
+      const { error: attError } = await (supabase
+        .from('meeting_attendance') as any)
         .insert(attendees)
       
       if (attError) console.error('Attendance Insert Error:', attError)
@@ -85,8 +85,8 @@ export const markAttendance = createSafeAction(
   async (input) => {
     const supabase = await createClient()
 
-    const { error } = await supabase
-      .from('meeting_attendance')
+    const { error } = await (supabase
+      .from('meeting_attendance') as any)
       .upsert({
         meeting_id: input.meetingId,
         member_id: input.memberId,
@@ -106,8 +106,8 @@ export const deleteMeeting = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await supabase
-      .from('meetings')
+    const { error } = await (supabase
+      .from('meetings') as any)
       .delete()
       .eq('id', input.meetingId)
       .eq('organisation_id', context.organizationId)
