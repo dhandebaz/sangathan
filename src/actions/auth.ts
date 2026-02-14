@@ -45,17 +45,17 @@ const ResetPasswordSchema = z.object({
 // --- Actions ---
 
 export async function login(input: z.infer<typeof LoginSchema>) {
-  // 1. Validate Input
-  const result = LoginSchema.safeParse(input)
-  if (!result.success) {
-    return { success: false, error: result.error.issues[0].message }
-  }
-
-  const supabase = await createClient()
-  const { email, password } = result.data
-
-  // 2. Sign In
   try {
+    // 1. Validate Input
+    const result = LoginSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0].message }
+    }
+
+    const supabase = await createClient()
+    const { email, password } = result.data
+
+    // 2. Sign In
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -98,24 +98,24 @@ export async function login(input: z.infer<typeof LoginSchema>) {
 }
 
 export async function signup(input: z.infer<typeof SignupSchema>) {
-  // 1. Validate Input
-  const result = SignupSchema.safeParse(input)
-  if (!result.success) {
-    return { success: false, error: result.error.issues[0].message }
-  }
-
-  const { email, password, fullName, organizationName } = result.data
-  const supabase = await createClient()
-  
-  // 2. Rate Limit (Basic IP check via headers if possible, or assume Supabase handles it)
-  // Supabase Auth has built-in rate limits.
-
-  // 3. Sign Up
-  // We store metadata for the Callback route to handle DB creation
-  const headersList = await headers()
-  const origin = headersList.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space'
-  
   try {
+    // 1. Validate Input
+    const result = SignupSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0].message }
+    }
+
+    const { email, password, fullName, organizationName } = result.data
+    const supabase = await createClient()
+    
+    // 2. Rate Limit (Basic IP check via headers if possible, or assume Supabase handles it)
+    // Supabase Auth has built-in rate limits.
+
+    // 3. Sign Up
+    // We store metadata for the Callback route to handle DB creation
+    const headersList = await headers()
+    const origin = headersList.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space'
+    
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
