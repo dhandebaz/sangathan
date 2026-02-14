@@ -21,27 +21,27 @@ export function ContextualFAB({ lang, role, capabilities }: ContextualFABProps) 
 
   let action = null
 
-  if (pathname.endsWith('/dashboard/members') && isAdmin) {
+  if (pathname.endsWith('/members') && isAdmin) {
     action = {
-      href: `/${lang}/dashboard/members/new`, // Assuming we have this
+      href: `/${lang}/members/new`, // Assuming we have this
       icon: UserPlus,
       label: 'Add Member'
     }
-  } else if (pathname.endsWith('/dashboard/events') && isAdmin) {
+  } else if (pathname.endsWith('/events') && isAdmin) {
     action = {
-      href: `/${lang}/dashboard/events/new`,
+      href: `/${lang}/events/new`,
       icon: Plus,
       label: 'Create Event'
     }
-  } else if (pathname.endsWith('/dashboard/tasks') && isAdmin && capabilities.volunteer_engine) {
+  } else if (pathname.endsWith('/tasks') && isAdmin && capabilities.volunteer_engine) {
     action = {
-      href: `/${lang}/dashboard/tasks/new`,
+      href: `/${lang}/tasks/new`,
       icon: CheckCircle,
       label: 'New Task'
     }
-  } else if (pathname.endsWith('/dashboard/polls') && isAdmin && capabilities.voting_engine) {
+  } else if (pathname.endsWith('/polls') && isAdmin && capabilities.voting_engine) {
     action = {
-      href: `/${lang}/dashboard/polls/new`,
+      href: `/${lang}/polls/new`,
       icon: Vote,
       label: 'New Poll'
     }

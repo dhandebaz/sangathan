@@ -26,7 +26,7 @@ export function AdminDashboard({ lang, stats, recentActivity }: { lang: string, 
           </Link>
         </Button>
         <Button asChild variant="outline" className="h-24 flex flex-col gap-2 bg-white shadow-sm hover:shadow-md border-primary/10">
-          <Link href={`/${lang}/dashboard/events/new`}>
+          <Link href={`/${lang}/events/new`}>
             <Calendar className="w-6 h-6 text-primary" />
             <span className="font-medium">New Event</span>
           </Link>

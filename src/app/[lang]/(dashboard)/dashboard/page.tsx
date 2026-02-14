@@ -17,14 +17,38 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
   if (!user) redirect(`/${lang}/login`)
 
   // Check Membership Status
-  const { data: profileData } = await supabase
+  const { data: profileData, error: profileError } = await supabase
     .from('profiles')
     .select('status, role, organization_id')
     .eq('id', user.id)
     .single()
 
+  // Handle case where profile record doesn't exist yet
+  if (profileError || !profileData) {
+    return (
+      <div className="max-w-4xl mx-auto py-20 px-4 text-center">
+        <div className="bg-white border border-gray-200 shadow-sm rounded-xl p-8 md:p-12">
+          <div className="w-16 h-16 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Users className="w-8 h-8" />
+          </div>
+          <h1 className="text-2xl font-bold mb-4">Complete Your Profile</h1>
+          <p className="text-gray-600 mb-8 max-w-md mx-auto">
+            We couldn't find your organisation profile. This usually happens if your account setup wasn't completed.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Button asChild className="px-8">
+              <Link href={`/${lang}/signup`}>Set Up Organisation</Link>
+            </Button>
+            <Button asChild variant="outline" className="px-8">
+              <Link href={`/${lang}/docs`}>Read Guide</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   const profile = profileData as any
-  if (!profile) return <div>Profile not found</div>
 
   if (profile?.status === 'pending') {
     return (
