@@ -61,7 +61,7 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
         // Try to re-initialize if missing (e.g. fast navigation or race condition)
         try {
           window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-            'size': 'normal',
+            'size': 'invisible',
             'callback': (response: any) => {
               // reCAPTCHA solved
             }
