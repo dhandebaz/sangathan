@@ -10,11 +10,16 @@ if (!admin.apps.length) {
     try {
       // Robust key handling: remove quotes if they exist, handle escaped newlines
       const cleanKey = privateKey.replace(/^"|"$/g, '').replace(/\\n/g, '\n');
+      const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL?.trim();
+
+      if (!clientEmail) {
+        throw new Error('FIREBASE_ADMIN_CLIENT_EMAIL is missing or empty');
+      }
       
       admin.initializeApp({
         credential: admin.credential.cert({
           projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-          clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
+          clientEmail: clientEmail,
           privateKey: cleanKey,
         }),
       })
