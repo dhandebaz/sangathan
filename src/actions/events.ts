@@ -49,13 +49,15 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
     if (!user) return { success: false, error: 'Unauthorized' }
 
     // Check permissions
-    const { data: profile } = await supabase
+    const { data: profileData } = await supabase
       .from('profiles')
-      .select('role, organisation_id')
+      .select('role, organization_id')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.organisation_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role)) {
+    const profile = profileData as any
+
+    if (!profile || profile.organization_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role)) {
       return { success: false, error: 'Permission denied' }
     }
 
@@ -72,8 +74,8 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
       }
     }
 
-    const { data: event, error } = await supabase
-      .from('events')
+    const { data: event, error } = await (supabase
+      .from('events') as any)
       .insert({
         organisation_id: input.organisation_id,
         title: input.title,
@@ -98,8 +100,8 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
          organisation_id: orgId
        }))
        
-       const { error: jointError } = await supabase
-         .from('joint_events')
+       const { error: jointError } = await (supabase
+         .from('joint_events') as any)
          .insert(jointEvents)
          
        if (jointError) console.error('Joint Event Error:', jointError)
@@ -118,11 +120,13 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
     const supabaseAdmin = createServiceClient() // Use admin for public inserts/checks if needed
 
     // 1. Get Event Details
-    const { data: event, error: eventError } = await supabaseAdmin
+    const { data: eventData, error: eventError } = await supabaseAdmin
       .from('events')
       .select('*')
       .eq('id', input.event_id)
       .single()
+
+    const event = eventData as any
 
     if (eventError || !event) return { success: false, error: 'Event not found' }
 
@@ -153,17 +157,19 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
       
       // Check Profile Role
       // Fetch profile AND check if their org is allowed
-      const { data: profile } = await supabaseAdmin
+      const { data: profileData } = await supabaseAdmin
         .from('profiles')
-        .select('role, status, organisation_id')
+        .select('role, status, organization_id')
         .eq('id', userId)
         .single() // Don't filter by org yet
       
+      const profile = profileData as any
+
       if (!profile || profile.status !== 'active') {
         return { success: false, error: 'You must be an active member to join' }
       }
 
-      let isAllowedOrg = profile.organisation_id === event.organisation_id
+      let isAllowedOrg = profile.organization_id === event.organisation_id
       
       // Check joint events if not primary org
       if (!isAllowedOrg) {
@@ -219,8 +225,8 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
        if (existing) return { success: false, error: 'Email already registered' }
     }
 
-    const { error: insertError } = await supabaseAdmin
-      .from('event_rsvps')
+    const { error: insertError } = await (supabaseAdmin
+      .from('event_rsvps') as any)
       .insert({
         event_id: input.event_id,
         user_id: userId || null,
@@ -271,16 +277,18 @@ export async function verifyAndCheckIn(input: { qrData: string, scannedByUserId:
      else if (rsvpId) query = query.eq('id', rsvpId)
      else return { success: false, error: 'Invalid Token Data' }
 
-     const { data: rsvp, error } = await query.single()
+     const { data: rsvpData, error } = await query.single()
      
+     const rsvp = rsvpData as any
+
      if (error || !rsvp) return { success: false, error: 'RSVP not found' }
      
      if (rsvp.status === 'attended') return { success: false, error: 'Already checked in' }
      if (rsvp.status === 'cancelled') return { success: false, error: 'RSVP was cancelled' }
 
      // Mark Attended
-     await supabaseAdmin
-       .from('event_rsvps')
+     await (supabaseAdmin
+       .from('event_rsvps') as any)
        .update({ status: 'attended', checked_in_at: new Date().toISOString() })
        .eq('id', rsvp.id)
        

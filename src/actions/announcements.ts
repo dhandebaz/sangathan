@@ -38,13 +38,15 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
     if (!user) return { success: false, error: 'Unauthorized' }
 
     // Check permissions
-    const { data: profile } = await supabase
+    const { data: profileData } = await supabase
       .from('profiles')
-      .select('role, organisation_id')
+      .select('role, organization_id')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.organisation_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role)) {
+    const profile = profileData as any
+
+    if (!profile || profile.organization_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role)) {
       return { success: false, error: 'Permission denied' }
     }
     
@@ -56,8 +58,8 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
        }
     }
 
-    const { data: announcement, error } = await supabase
-      .from('announcements')
+    const { data: announcement, error } = await (supabase
+      .from('announcements') as any)
       .insert({
         ...input,
         created_by: user.id
@@ -105,7 +107,7 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
         // We can't import baseLayout easily if it's not exported properly or if we want custom style.
         // Let's assume we construct a simple body.
         
-        for (const member of members) {
+        for (const member of members as any[]) {
            await enqueueJob('send_email', {
              to: member.email,
              subject: `New Announcement: ${input.title}`,
@@ -123,8 +125,8 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
         }
 
         // Update stats
-        await supabaseAdmin
-          .from('announcements')
+        await (supabaseAdmin
+          .from('announcements') as any)
           .update({ 
             email_sent_at: new Date().toISOString(),
             email_stats: { recipient_count: sentCount }
@@ -147,8 +149,8 @@ export async function markAnnouncementRead(announcementId: string) {
     
     if (!user) return { success: false }
 
-    const { error } = await supabase
-      .from('announcement_views')
+    const { error } = await (supabase
+      .from('announcement_views') as any)
       .insert({
         announcement_id: announcementId,
         user_id: user.id

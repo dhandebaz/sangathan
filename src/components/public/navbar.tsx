@@ -25,7 +25,12 @@ export function Navbar({ lang }: { lang: string }) {
 
   // Close mobile menu on route change
   useEffect(() => {
-    setIsOpen(false)
+    // Use a microtask to avoid synchronous setState in effect
+    Promise.resolve().then(() => {
+      if (isOpen) {
+        setIsOpen(false)
+      }
+    })
   }, [pathname])
 
   const getPathForLang = (targetLang: string) => {

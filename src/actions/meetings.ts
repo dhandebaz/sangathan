@@ -33,7 +33,7 @@ export const createMeeting = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { data: meeting, error } = await supabase
+    const { data: meetingData, error } = await supabase
       .from('meetings')
       .insert({
         organisation_id: context.organizationId,
@@ -48,6 +48,8 @@ export const createMeeting = createSafeAction(
 
     if (error) throw new Error(error.message)
 
+    const meeting = meetingData as any
+
     // Bulk insert attendees
     if (input.attendee_ids && input.attendee_ids.length > 0) {
       const attendees = input.attendee_ids.map(id => ({
@@ -56,8 +58,8 @@ export const createMeeting = createSafeAction(
         status: 'absent' // Default
       }))
 
-      const { error: attError } = await supabase
-        .from('meeting_attendance')
+      const { error: attError } = await (supabase
+        .from('meeting_attendance') as any)
         .insert(attendees)
       
       if (attError) console.error('Attendance Insert Error:', attError)

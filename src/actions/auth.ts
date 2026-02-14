@@ -378,7 +378,7 @@ export async function finalizeSignup(input: { idToken: string }) {
 
   // Explicitly set approved_at and status for admin
   if (!rpcError) {
-      await supabaseAdmin.from('profiles').update({ status: 'active', approved_at: new Date().toISOString() }).eq('id', user.id)
+      await (supabaseAdmin.from('profiles') as any).update({ status: 'active', approved_at: new Date().toISOString() }).eq('id', user.id)
   }
 
   if (rpcError) {

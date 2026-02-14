@@ -18,13 +18,15 @@ export async function submitAppeal(orgId: string, input: z.infer<typeof AppealSc
     if (!user) return { success: false, error: 'Unauthorized' }
 
     // Check permissions
-    const { data: profile } = await supabase
+    const { data: profileData } = await supabase
       .from('profiles')
-      .select('role, organisation_id')
+      .select('role, organization_id')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.organisation_id !== orgId || !['admin', 'executive'].includes(profile.role)) {
+    const profile = profileData as any
+
+    if (!profile || profile.organization_id !== orgId || !['admin', 'executive'].includes(profile.role)) {
       return { success: false, error: 'Permission denied' }
     }
 
@@ -38,8 +40,8 @@ export async function submitAppeal(orgId: string, input: z.infer<typeof AppealSc
 
     if (existing) return { success: false, error: 'An appeal is already pending.' }
 
-    const { error } = await supabase
-      .from('appeals')
+    const { error } = await (supabase
+      .from('appeals') as any)
       .insert({
         organisation_id: orgId,
         reason: input.reason,

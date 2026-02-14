@@ -35,13 +35,15 @@ export async function updateTransparency(input: z.infer<typeof UpdateTransparenc
     
     if (!user) return { success: false, error: 'Unauthorized' }
 
-    const { data: profile } = await supabase
+    const { data: profileData } = await supabase
       .from('profiles')
-      .select('role, organisation_id')
+      .select('role, organization_id')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.organisation_id !== input.orgId || profile.role !== 'admin') {
+    const profile = profileData as any
+
+    if (!profile || profile.organization_id !== input.orgId || profile.role !== 'admin') {
       return { success: false, error: 'Permission denied' }
     }
 

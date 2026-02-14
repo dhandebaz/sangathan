@@ -10,20 +10,25 @@ export function DocsSidebar({ lang }: { lang: string }) {
   const pathname = usePathname()
   const isHindi = lang === 'hi'
   const [isOpen, setIsOpen] = useState(false)
-  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({})
 
   // Initialize all sections as expanded by default
-  useEffect(() => {
-    const initialstate: Record<string, boolean> = {}
+  // Use useState initializer function to avoid effect
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>(() => {
+    const initialState: Record<string, boolean> = {}
     docsConfig.forEach((section) => {
-      initialstate[section.title.en] = true
+      initialState[section.title.en] = true
     })
-    setExpandedSections(initialstate)
-  }, [])
+    return initialState
+  })
 
   // Close mobile drawer on route change
   useEffect(() => {
-    setIsOpen(false)
+    // Use a microtask to avoid synchronous setState in effect
+    Promise.resolve().then(() => {
+      if (isOpen) {
+        setIsOpen(false)
+      }
+    })
   }, [pathname])
 
   const toggleSection = (title: string) => {

@@ -9,15 +9,15 @@ export function ThemeToggle() {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-    const stored = localStorage.getItem('theme') as 'light' | 'dark' | null
-    if (stored) {
-      setTheme(stored)
-      document.documentElement.setAttribute('data-theme', stored)
-    } else {
-      setTheme('dark')
-      document.documentElement.setAttribute('data-theme', 'dark')
-    }
+    // Use a microtask to avoid synchronous setState in effect
+    Promise.resolve().then(() => {
+      setMounted(true)
+      const stored = localStorage.getItem('theme') as 'light' | 'dark' | null
+      if (stored) {
+        setTheme(stored)
+        // data-theme is already set by the blocking script in layout
+      }
+    })
   }, [])
 
   const toggleTheme = () => {

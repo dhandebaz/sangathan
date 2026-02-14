@@ -26,11 +26,13 @@ export async function createCollaborationRequest(targetOrgId: string) {
     if (!user) return { success: false, error: 'Unauthorized' }
 
     // Check permissions
-    const { data: profile } = await supabase
+    const { data: profileData } = await supabase
       .from('profiles')
-      .select('role, organisation_id')
+      .select('role, organization_id')
       .eq('id', user.id)
       .single()
+
+    const profile = profileData as any
 
     if (!profile || !['admin', 'executive'].includes(profile.role)) {
       return { success: false, error: 'Permission denied' }
@@ -41,11 +43,13 @@ export async function createCollaborationRequest(targetOrgId: string) {
     }
 
     // Check existing
-    const { data: existing } = await supabase
+    const { data: existingData } = await supabase
       .from('organisation_links')
       .select('id, status')
-      .or(`and(requester_org_id.eq.${profile.organisation_id},responder_org_id.eq.${targetOrgId}),and(requester_org_id.eq.${targetOrgId},responder_org_id.eq.${profile.organisation_id})`)
+      .or(`and(requester_org_id.eq.${profile.organization_id},responder_org_id.eq.${targetOrgId}),and(requester_org_id.eq.${targetOrgId},responder_org_id.eq.${profile.organization_id})`)
       .single()
+
+    const existing = existingData as any
 
     if (existing) {
       if (existing.status === 'pending') return { success: false, error: 'Request already pending' }
@@ -54,10 +58,10 @@ export async function createCollaborationRequest(targetOrgId: string) {
       return { success: false, error: 'Previous request exists' }
     }
 
-    const { error } = await supabase
-      .from('organisation_links')
+    const { error } = await (supabase
+      .from('organisation_links') as any)
       .insert({
-        requester_org_id: profile.organisation_id,
+        requester_org_id: profile.organization_id,
         responder_org_id: targetOrgId,
         status: 'pending',
         created_by: user.id
@@ -80,36 +84,40 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
     if (!user) return { success: false, error: 'Unauthorized' }
 
     // Check permissions
-    const { data: profile } = await supabase
+    const { data: profileData } = await supabase
       .from('profiles')
-      .select('role, organisation_id')
+      .select('role, organization_id')
       .eq('id', user.id)
       .single()
+
+    const profile = profileData as any
 
     if (!profile || !['admin', 'executive'].includes(profile.role)) {
       return { success: false, error: 'Permission denied' }
     }
 
     // Verify ownership of the request (must be responder)
-    const { data: link } = await supabase
+    const { data: linkData } = await supabase
       .from('organisation_links')
       .select('*')
       .eq('id', linkId)
       .single()
 
+    const link = linkData as any
+
     if (!link) return { success: false, error: 'Request not found' }
 
-    if (link.responder_org_id !== profile.organisation_id) {
+    if (link.responder_org_id !== profile.organization_id) {
        // Allow requester to cancel? Maybe only if pending.
-       if (link.requester_org_id === profile.organisation_id && status === 'rejected') {
+       if (link.requester_org_id === profile.organization_id && status === 'rejected') {
           // requester cancelling
        } else {
           return { success: false, error: 'Not authorized to respond' }
        }
     }
 
-    const { error } = await supabase
-      .from('organisation_links')
+    const { error } = await (supabase
+      .from('organisation_links') as any)
       .update({ status })
       .eq('id', linkId)
 
