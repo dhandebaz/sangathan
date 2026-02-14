@@ -48,7 +48,7 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
     
     // Risk Check: Broadcast Limit
     if (input.send_email) {
-       const limitCheck = await checkBroadcastLimit(input.organisation_id, 0) // Count deferred
+       const limitCheck = await checkBroadcastLimit(input.organisation_id)
        if (!limitCheck.allowed) {
           return { success: false, error: `Broadcast blocked: ${limitCheck.reason}` }
        }
