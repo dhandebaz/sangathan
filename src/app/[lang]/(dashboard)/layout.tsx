@@ -7,6 +7,7 @@ export default async function DashboardLayout(props: {
   params: Promise<{ lang: string }>
 }) {
   const { lang } = await props.params
+  const { children } = props
   return (
     <div className="flex min-h-screen bg-background text-foreground">
       {/* Sidebar */}
