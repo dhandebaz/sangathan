@@ -112,9 +112,10 @@ export async function signup(input: z.infer<typeof SignupSchema>) {
     // Supabase Auth has built-in rate limits.
 
     // 3. Sign Up
-    // We store metadata for the Callback route to handle DB creation
+    // We store metadata for the Callback route to handle database creation
     const headersList = await headers()
-    const origin = headersList.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space'
+    // Prioritize NEXT_PUBLIC_APP_URL for consistent production behavior
+    const origin = process.env.NEXT_PUBLIC_APP_URL || headersList.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space'
     
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -294,6 +295,9 @@ export async function linkPhoneToAccount(input: z.infer<typeof LoginSchema> & { 
   redirect('/dashboard')
 }
 
+import { sendEmail } from '@/lib/email/sender'
+import { welcomeAdminEmail } from '@/lib/email/templates'
+
 export async function finalizeSignup(input: { idToken: string }) {
   // 1. Verify Firebase Token
   let decodedToken
@@ -357,6 +361,17 @@ export async function finalizeSignup(input: { idToken: string }) {
     console.error('Signup RPC Error:', rpcError)
     return { success: false, error: 'Failed to complete registration. Please try again.' }
   }
+
+  // 6. Send Welcome Email (Fire and forget)
+  const dashboardUrl = process.env.NEXT_PUBLIC_APP_URL ? `${process.env.NEXT_PUBLIC_APP_URL}/dashboard` : 'https://sangathan.space/dashboard'
+  
+  // We don't await this to speed up the response, but we log errors in the background
+  sendEmail({
+    to: user.email,
+    subject: `Welcome to Sangathan, ${fullName}`,
+    html: welcomeAdminEmail(fullName, orgName, dashboardUrl),
+    tags: ['welcome', 'signup']
+  }).catch(err => console.error('Failed to send welcome email:', err))
 
   return { success: true }
 }

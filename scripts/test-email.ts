@@ -1,39 +1,31 @@
-// scripts/test-email.ts
-// Run with: npx ts-node --project tsconfig.json scripts/test-email.ts
-// Or better: create a temporary API route
 
-import { enqueueJob } from '@/lib/queue'
-import { welcomeAdminEmail } from '@/lib/email/templates'
+import { sendEmail } from '../src/lib/email/sender';
+import { welcomeAdminEmail } from '../src/lib/email/templates';
 
-// Mocking Next.js request context isn't easy in scripts, so we'll simulate via an API route if needed.
-// For now, let's just log what we WOULD do.
-
-async function test() {
-  console.log('🚀 Testing Email System...')
-
-  const emailHtml = welcomeAdminEmail('Test User', 'Test Org', 'https://sangathan.space/dashboard')
-  
-  console.log('📧 Generated HTML Preview (First 100 chars):', emailHtml.substring(0, 100))
-
-  const jobPayload = {
-    to: 'test@example.com',
-    subject: 'Welcome to Sangathan (Test)',
-    html: emailHtml,
-    tags: ['test', 'welcome']
+async function main() {
+  const email = process.argv[2];
+  if (!email) {
+    console.error('Please provide an email address: npx tsx scripts/test-email.ts user@example.com');
+    process.exit(1);
   }
 
-  console.log('📦 Enqueuing Job:', jobPayload)
+  console.log(`Sending test email to ${email}...`);
   
-  // This requires DB connection which might not work in standalone script without setup
-  // So we will just explain how to test it in the app.
-  /*
-  const success = await enqueueJob('send_email', jobPayload)
-  if (success) {
-    console.log('✅ Job enqueued successfully!')
+  const result = await sendEmail({
+    to: email,
+    subject: 'Test Email from Sangathan',
+    html: welcomeAdminEmail('Test User', 'Test Org', 'https://sangathan.space/dashboard'),
+    tags: ['test']
+  });
+
+  if (result.success) {
+    console.log('✅ Email sent successfully!');
+    console.log('ID:', result.id);
   } else {
-    console.error('❌ Failed to enqueue job.')
+    console.error('❌ Failed to send email.');
+    console.error('Error:', result.error);
+    if (result.code) console.error('Code:', result.code);
   }
-  */
 }
 
-test()
+main();
