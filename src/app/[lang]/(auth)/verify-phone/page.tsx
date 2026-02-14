@@ -21,8 +21,14 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
 
   // Initialize Recaptcha
   useEffect(() => {
+    const auth = firebaseAuth
+    if (!auth) {
+      setError("Phone verification service is unavailable (Auth not initialized).")
+      return
+    }
+
     if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(firebaseAuth, 'recaptcha-container', {
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
         'size': 'normal',
         'callback': (response: any) => {
           // reCAPTCHA solved, allow signInWithPhoneNumber.
@@ -40,17 +46,22 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
     setError('')
 
     try {
+      const auth = firebaseAuth
+      if (!auth) {
+        throw new Error("Phone verification service is unavailable.")
+      }
+
       // Basic validation
       if (phoneNumber.length < 10) {
         throw new Error('Please enter a valid phone number')
       }
-      
+
       // Ensure E.164 format (simple check, assuming user enters +91... or just number)
       // For India/Generic, better to use a library like libphonenumber-js, but for now simple prepend
       const formattedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+91${phoneNumber}`
 
       const appVerifier = window.recaptchaVerifier
-      const confirmation = await signInWithPhoneNumber(firebaseAuth, formattedPhone, appVerifier)
+      const confirmation = await signInWithPhoneNumber(auth, formattedPhone, appVerifier)
       setConfirmationResult(confirmation)
       setStep('otp')
     } catch (err: any) {

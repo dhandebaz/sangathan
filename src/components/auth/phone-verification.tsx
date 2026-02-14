@@ -22,8 +22,15 @@ export function PhoneAuth({ mode, email, password, onSuccess }: PhoneAuthProps) 
 
   useEffect(() => {
     // Initialize Recaptcha
+    const auth = firebaseAuth
+    if (!auth) {
+      console.error('Firebase Auth not initialized')
+      setError('Phone verification service unavailable')
+      return
+    }
+
     if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(firebaseAuth, 'recaptcha-container', {
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
         'size': 'invisible',
         'callback': () => {
           // reCAPTCHA solved
@@ -37,11 +44,14 @@ export function PhoneAuth({ mode, email, password, onSuccess }: PhoneAuthProps) 
     setError(null)
     
     try {
+      const auth = firebaseAuth
+      if (!auth) throw new Error('Phone verification service unavailable')
+
       const appVerifier = window.recaptchaVerifier
       // Format phone: +91XXXXXXXXXX
       const formattedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+91${phoneNumber}`
       
-      const confirmationResult = await signInWithPhoneNumber(firebaseAuth, formattedPhone, appVerifier)
+      const confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, appVerifier)
       setVerificationId(confirmationResult)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to send OTP')
