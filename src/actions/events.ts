@@ -242,7 +242,7 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
 // Helper to sign QR data
 import { createHmac } from 'crypto'
 
-export function generateQRData(eventId: string, userId?: string, rsvpId?: string) {
+export async function generateQRData(eventId: string, userId?: string, rsvpId?: string) {
   const secret = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'fallback-secret'
   const payload = JSON.stringify({ e: eventId, u: userId, r: rsvpId, t: Date.now() })
   const signature = createHmac('sha256', secret).update(payload).digest('hex')

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { ArrowLeft, Calendar, MapPin, Printer, Trash2, Video } from 'lucide-react'
 import Link from 'next/link'
 import { AttendanceList } from '@/components/meetings/attendance-list'
-import { deleteMeeting } from '@/actions/meetings/actions'
+import { deleteMeeting } from '@/actions/meetings'
 
 interface PageProps {
   params: Promise<{ id: string }>

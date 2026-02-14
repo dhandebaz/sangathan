@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Check, X, Minus } from 'lucide-react'
-import { markAttendance } from '@/actions/meetings/actions'
+import { markAttendance } from '@/actions/meetings'
 
 interface Attendee {
   member_id: string
