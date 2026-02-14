@@ -39,9 +39,9 @@ export default function TermsPage() {
           <p>
             To use the Platform, you must be at least 18 years old and capable of entering into a binding contract under Indian law. By registering, you represent that all information provided is accurate and current.
           </p>
-          <div>
-            <strong>Verification Requirements:</strong>
-            <ul className="list-disc pl-5 mt-2">
+          <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
+            <h3 className="font-bold text-gray-900 mb-2">Verification Requirements:</h3>
+            <ul className="list-disc pl-5 space-y-1">
               <li>Email verification is required for all User accounts.</li>
               <li>Phone number verification is mandatory for all Organisation Admins to ensure accountability.</li>
             </ul>

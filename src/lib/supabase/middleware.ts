@@ -57,35 +57,46 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  // --- MAINTENANCE MODE CHECK ---
-  // We check this for all non-admin routes to allow admins to fix things
-  const isSystemAdmin = user?.email && process.env.SUPER_ADMIN_EMAILS?.includes(user.email)
+  const pathname = request.nextUrl.pathname // Declare pathname early for use below
+
+  const isSystemAdmin = user?.email && (process.env.SUPER_ADMIN_EMAILS?.split(',') || []).includes(user.email)
   
-  if (!isSystemAdmin && !request.nextUrl.pathname.startsWith('/maintenance') && !request.nextUrl.pathname.startsWith('/login') && !request.nextUrl.pathname.startsWith('/api')) {
-     // NOTE: We are doing a DB call here. In high scale, this should be cached or edge-config.
-     // Re-using the supabase client created for auth
-     let supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        { cookies: { getAll() { return request.cookies.getAll() }, setAll() {} } }
-     )
-     
-     const { data: maintenance } = await supabase
-        .from('system_settings')
-        .select('value')
-        .eq('key', 'maintenance_mode')
-        .single()
-     
-     const settings = maintenance?.value as { enabled: boolean } | null
-     
-     if (settings?.enabled) {
-        const url = request.nextUrl.clone()
-        url.pathname = '/maintenance'
-        return NextResponse.redirect(url)
+  const isMaintenanceExempt = 
+    isSystemAdmin || 
+    pathname.includes('/maintenance') || 
+    pathname.includes('/login') || 
+    pathname.startsWith('/api') ||
+    pathname.startsWith('/_next') ||
+    pathname.includes('.') // Static files
+
+  if (!isMaintenanceExempt) {
+     try {
+       // Re-using the supabase client created for auth
+       const maintenanceClient = createServerClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          { cookies: { getAll() { return request.cookies.getAll() }, setAll() {} } }
+       )
+       
+       const { data: maintenance, error: maintenanceError } = await maintenanceClient
+          .from('system_settings')
+          .select('value')
+          .eq('key', 'maintenance_mode')
+          .maybeSingle()
+       
+       if (!maintenanceError && maintenance) {
+         const settings = maintenance.value as { enabled: boolean } | null
+         if (settings?.enabled) {
+            const url = request.nextUrl.clone()
+            url.pathname = '/maintenance'
+            return NextResponse.redirect(url)
+         }
+       }
+     } catch (err) {
+       // Fail open if maintenance check fails
+       console.error('Maintenance check failed:', err)
      }
   }
-
-  const pathname = request.nextUrl.pathname
   const locales = ['en', 'hi']
   
   // Helper to check if path starts with locale
