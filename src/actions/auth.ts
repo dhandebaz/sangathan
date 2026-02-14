@@ -75,11 +75,11 @@ export async function login(input: z.infer<typeof LoginSchema>) {
     
     const profile = profileData as any
 
-    if (profile && profile.organisation_id) {
+    if (profile && profile.organization_id) {
       const { data: orgData } = await supabase
         .from('organisations')
         .select('*')
-        .eq('id', profile.organisation_id)
+        .eq('id', profile.organization_id)
         .single()
       
       const org = orgData as any

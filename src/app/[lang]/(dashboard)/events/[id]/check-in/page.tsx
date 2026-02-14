@@ -11,11 +11,13 @@ export default async function CheckInPage(props: { params: Promise<{ lang: strin
 
   if (!user) redirect(`/${lang}/login`)
 
-  const { data: event } = await supabase
+  const { data: eventData } = await supabase
     .from('events')
     .select('title')
     .eq('id', id)
     .single()
+
+  const event = eventData as any
 
   return (
     <div className="max-w-md mx-auto py-8 px-4">

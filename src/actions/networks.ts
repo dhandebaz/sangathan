@@ -20,11 +20,13 @@ export async function createNetwork(input: z.infer<typeof NetworkSchema>) {
     if (!user) return { success: false, error: 'Unauthorized' }
 
     // Check permissions (must be org admin with federation_mode)
-    const { data: profile } = await supabase
+    const { data: profileData } = await supabase
       .from('profiles')
-      .select('role, organisation_id, organisations(capabilities)')
+      .select('role, organization_id, organisations(capabilities)')
       .eq('id', user.id)
       .single()
+
+    const profile = profileData as any
 
     if (!profile || profile.role !== 'admin') {
       return { success: false, error: 'Permission denied' }
@@ -39,8 +41,8 @@ export async function createNetwork(input: z.infer<typeof NetworkSchema>) {
     const supabaseAdmin = createServiceClient()
 
     // Create Network
-    const { data: network, error } = await supabaseAdmin
-      .from('networks')
+    const { data: networkData, error } = await (supabaseAdmin
+      .from('networks') as any)
       .insert({
         ...input,
         created_by: user.id
@@ -48,19 +50,21 @@ export async function createNetwork(input: z.infer<typeof NetworkSchema>) {
       .select()
       .single()
 
+    const network = networkData as any
+
     if (error) throw error
 
     // Add Creator as Admin
-    await supabaseAdmin.from('network_admins').insert({
+    await (supabaseAdmin.from('network_admins') as any).insert({
         network_id: network.id,
         user_id: user.id,
         role: 'coordinator'
     })
 
     // Add Creator's Org as Member
-    await supabaseAdmin.from('network_memberships').insert({
+    await (supabaseAdmin.from('network_memberships') as any).insert({
         network_id: network.id,
-        organisation_id: profile.organisation_id,
+        organization_id: profile.organization_id,
         status: 'active'
     })
 

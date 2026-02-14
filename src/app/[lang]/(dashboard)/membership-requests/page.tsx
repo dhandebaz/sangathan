@@ -8,11 +8,13 @@ export default async function RequestsPage() {
 
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase
+  const { data: profileData } = await supabase
     .from('profiles')
-    .select('organisation_id, role')
+    .select('organization_id, role')
     .eq('id', user.id)
     .single()
+
+  const profile = profileData as any
 
   if (!profile || profile.role !== 'admin') {
       return (
@@ -23,10 +25,10 @@ export default async function RequestsPage() {
       )
   }
 
-  const { data: requests } = await supabase
-    .from('profiles')
+  const { data: requests } = await (supabase
+    .from('profiles') as any)
     .select('*')
-    .eq('organisation_id', profile.organisation_id)
+    .eq('organization_id', profile.organization_id)
     .eq('status', 'pending')
     .order('created_at', { ascending: false })
 

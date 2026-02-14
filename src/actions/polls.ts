@@ -39,19 +39,21 @@ export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
     if (!user) return { success: false, error: 'Unauthorized' }
 
     // Check permissions
-    const { data: profile } = await supabase
+    const { data: profileData } = await supabase
       .from('profiles')
-      .select('role, organisation_id')
+      .select('role, organization_id')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.organisation_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role)) {
+    const profile = profileData as any
+
+    if (!profile || profile.organization_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role)) {
       return { success: false, error: 'Permission denied' }
     }
 
     // Create Poll
-    const { data: poll, error } = await supabase
-      .from('polls')
+    const { data: pollData, error } = await (supabase
+      .from('polls') as any)
       .insert({
         organisation_id: input.organisation_id,
         title: input.title,
@@ -68,6 +70,8 @@ export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
       .select()
       .single()
 
+    const poll = pollData as any
+
     if (error) throw error
 
     // Create Options
@@ -77,7 +81,7 @@ export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
       display_order: idx
     }))
 
-    const { error: optError } = await supabase.from('poll_options').insert(options)
+    const { error: optError } = await (supabase.from('poll_options') as any).insert(options)
     if (optError) throw optError
 
     revalidatePath('/dashboard/polls')
@@ -97,23 +101,27 @@ export async function castVote(input: z.infer<typeof VoteSchema>) {
     const supabaseAdmin = createServiceClient()
 
     // 1. Get Poll Details
-    const { data: poll } = await supabaseAdmin
+    const { data: pollData } = await supabaseAdmin
       .from('polls')
       .select('*')
       .eq('id', input.poll_id)
       .single()
 
+    const poll = pollData as any
+
     if (!poll || poll.status !== 'active') return { success: false, error: 'Poll is not active' }
     if (poll.end_time && new Date(poll.end_time) < new Date()) return { success: false, error: 'Poll has ended' }
 
     // 2. Check Eligibility (Role)
-    const { data: profile } = await supabaseAdmin
+    const { data: profileData } = await supabaseAdmin
       .from('profiles')
-      .select('role, organisation_id, status')
+      .select('role, organization_id, status')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.organisation_id !== poll.organisation_id || profile.status !== 'active') {
+    const profile = profileData as any
+
+    if (!profile || profile.organization_id !== poll.organisation_id || profile.status !== 'active') {
        return { success: false, error: 'Not eligible to vote' }
     }
     
@@ -160,7 +168,7 @@ export async function castVote(input: z.infer<typeof VoteSchema>) {
        if (existing) return { success: false, error: 'Already voted' }
     }
 
-    const { error } = await supabaseAdmin.from('poll_votes').insert(voteRecord)
+    const { error } = await (supabaseAdmin.from('poll_votes') as any).insert(voteRecord)
     if (error) throw error
 
     revalidatePath(`/dashboard/polls/${input.poll_id}`)
@@ -193,16 +201,17 @@ export async function closePoll(pollId: string) {
     const totalVotes = votes?.length || 0
     
     // Check Quorum if formal
-    const { data: poll } = await supabaseAdmin.from('polls').select('*').eq('id', pollId).single()
+    const { data: pollData } = await supabaseAdmin.from('polls').select('*').eq('id', pollId).single()
+    const poll = pollData as any
     let passed = true
     
-    if (poll.type === 'formal' && poll.quorum_percentage) {
+    if (poll && poll.type === 'formal' && poll.quorum_percentage) {
        // Get total eligible members count (Approximation)
        // This is expensive for large orgs, better to cache "eligible_count" at poll creation or fetch now
        const { count: totalMembers } = await supabaseAdmin
          .from('profiles')
          .select('*', { count: 'exact', head: true })
-         .eq('organisation_id', poll.organisation_id)
+         .eq('organization_id', poll.organization_id)
          .eq('status', 'active')
          // Filter by role if needed... let's assume total active members for simplicity or apply role filter
        
@@ -217,8 +226,8 @@ export async function closePoll(pollId: string) {
       passed
     }
 
-    await supabaseAdmin
-      .from('polls')
+    await (supabaseAdmin
+      .from('polls') as any)
       .update({ status: 'closed', final_results: finalData })
       .eq('id', pollId)
 

@@ -12,17 +12,19 @@ export default async function NewNetworkPage(props: { params: Promise<{ lang: st
 
   if (!user) redirect(`/${lang}/login`)
 
-  const { data: profile } = await supabase
+  const { data: profileData } = await supabase
     .from('profiles')
-    .select('organisation_id, role')
+    .select('organization_id, role')
     .eq('id', user.id)
     .single()
+
+  const profile = profileData as any
 
   if (!profile || !['admin', 'executive'].includes(profile.role)) {
     return <div>Access Denied</div>
   }
 
-  const canFederate = await checkCapability(profile.organisation_id, 'federation_mode')
+  const canFederate = await checkCapability(profile.organization_id, 'federation_mode')
   if (!canFederate) return <div>Federation Mode not enabled for your organisation.</div>
 
   return (

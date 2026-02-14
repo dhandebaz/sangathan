@@ -11,11 +11,13 @@ export default async function NewPollPage(props: { params: Promise<{ lang: strin
 
   if (!user) redirect(`/${lang}/login`)
 
-  const { data: profile } = await supabase
+  const { data: profileData } = await supabase
     .from('profiles')
-    .select('organisation_id, role')
+    .select('organization_id, role')
     .eq('id', user.id)
     .single()
+
+  const profile = profileData as any
 
   if (!profile || !['admin', 'editor'].includes(profile.role)) {
     return <div>Access Denied</div>
@@ -30,7 +32,7 @@ export default async function NewPollPage(props: { params: Promise<{ lang: strin
         </Link>
         <h1 className="text-2xl font-bold">Create New Poll</h1>
       </div>
-      <PollForm orgId={profile.organisation_id} />
+      <PollForm orgId={profile.organization_id} />
     </div>
   )
 }

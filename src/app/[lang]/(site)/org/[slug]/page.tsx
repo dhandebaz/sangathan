@@ -11,11 +11,13 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
   const { slug } = params
   const supabaseAdmin = createServiceClient()
   
-  const { data: org } = await supabaseAdmin
-    .from('organisations')
-    .select('id, name, membership_policy, created_at, slug')
+  const { data: orgData } = await (supabaseAdmin
+    .from('organisations') as any)
+    .select('id, name, membership_policy, created_at, slug, public_transparency_enabled')
     .eq('slug', slug)
     .single()
+
+  const org = orgData as any
 
   if (!org) notFound()
 
@@ -25,18 +27,19 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
   
   let memberStatus = null
   if (user) {
-    const { data: profile } = await supabaseAdmin
-      .from('profiles')
+    const { data: profileData } = await (supabaseAdmin
+      .from('profiles') as any)
       .select('status')
       .eq('id', user.id)
-      .eq('organisation_id', org.id)
+      .eq('organization_id', org.id)
       .single()
     
+    const profile = profileData as any
     if (profile) memberStatus = profile.status
   }
 
-  const { data: announcements } = await supabaseAdmin
-    .from('announcements')
+  const { data: announcements } = await (supabaseAdmin
+    .from('announcements') as any)
     .select('*')
     .eq('organisation_id', org.id)
     .eq('visibility_level', 'public')
@@ -45,15 +48,15 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
     .limit(5)
 
   // Fetch Events (Owned + Joint)
-  const { data: ownedEvents } = await supabaseAdmin
-    .from('events')
+  const { data: ownedEvents } = await (supabaseAdmin
+    .from('events') as any)
     .select('*')
     .eq('organisation_id', org.id)
     .eq('event_type', 'public')
     .gte('start_time', new Date().toISOString())
   
-  const { data: jointMappings } = await supabaseAdmin
-    .from('joint_events')
+  const { data: jointMappings } = await (supabaseAdmin
+    .from('joint_events') as any)
     .select('event:events(*)')
     .eq('organisation_id', org.id)
   
@@ -70,9 +73,9 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
   
   if (org.public_transparency_enabled) {
     const [members, events, hours] = await Promise.all([
-      supabaseAdmin.from('members').select('*', { count: 'exact', head: true }).eq('organisation_id', org.id),
-      supabaseAdmin.from('events').select('*', { count: 'exact', head: true }).eq('organisation_id', org.id),
-      supabaseAdmin.from('task_logs').select('hours_logged, task:tasks!inner(organisation_id)').eq('task.organisation_id', org.id)
+      (supabaseAdmin.from('profiles') as any).select('*', { count: 'exact', head: true }).eq('organization_id', org.id),
+      (supabaseAdmin.from('events') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', org.id),
+      (supabaseAdmin.from('task_logs') as any).select('hours_logged, task:tasks!inner(organisation_id)').eq('task.organisation_id', org.id)
     ])
     
     const totalHours = (hours.data || []).reduce((sum: number, log: any) => sum + (Number(log.hours_logged) || 0), 0)

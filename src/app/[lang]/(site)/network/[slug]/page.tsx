@@ -7,13 +7,14 @@ import { Calendar, Users, Globe } from 'lucide-react'
 export default async function PublicNetworkPage(props: { params: Promise<{ slug: string, lang: string }> }) {
   const { slug, lang } = await props.params
   
-  const network = await getNetworkDetails(slug)
-  if (!network) notFound()
+  const networkData = await getNetworkDetails(slug)
+  if (!networkData) notFound()
+  const network = networkData as any
 
   // Fetch Public Network Events
   const supabase = createServiceClient()
-  const { data: events } = await supabase
-    .from('events')
+  const { data: events } = await (supabase
+    .from('events') as any)
     .select('*')
     .eq('network_id', network.id)
     .gte('start_time', new Date().toISOString())

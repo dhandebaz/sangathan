@@ -11,21 +11,24 @@ export default async function EventPage(props: { params: Promise<{ slug: string,
   const supabaseAdmin = createServiceClient()
   
   // 1. Fetch Event
-  const { data: event } = await supabaseAdmin
-    .from('events')
+  const { data: eventData } = await (supabaseAdmin
+    .from('events') as any)
     .select('*, organisation_id')
     .eq('id', eventId)
     .single()
 
+  const event = eventData as any
+
   if (!event) notFound()
 
   // 2. Fetch Org (for branding/verification)
-  const { data: org } = await supabaseAdmin
-    .from('organisations')
+  const { data: orgData } = await (supabaseAdmin
+    .from('organisations') as any)
     .select('id, name, slug')
     .eq('id', event.organisation_id)
     .single()
   
+  const org = orgData as any
   if (org?.slug !== slug) notFound()
 
   // 3. Check User Status
@@ -34,26 +37,26 @@ export default async function EventPage(props: { params: Promise<{ slug: string,
   
   let rsvp = null
   if (user) {
-    const { data } = await supabaseAdmin
-      .from('event_rsvps')
+    const { data } = await (supabaseAdmin
+      .from('event_rsvps') as any)
       .select('*, user:user_id(full_name)')
       .eq('event_id', eventId)
       .eq('user_id', user.id)
       .single()
-    rsvp = data
+    rsvp = data as any
   }
 
   // 4. Generate QR if RSVPed
   let qrToken = ''
   if (rsvp) {
-    qrToken = generateQRData(event.id, user?.id, rsvp.id)
+    qrToken = await generateQRData(event.id, user?.id, (rsvp as any).id)
   }
 
   // 5. Check Capacity
   let remainingSpots = null
   if (event.capacity) {
-    const { count } = await supabaseAdmin
-      .from('event_rsvps')
+    const { count } = await (supabaseAdmin
+      .from('event_rsvps') as any)
       .select('*', { count: 'exact', head: true })
       .eq('event_id', eventId)
       .eq('status', 'registered')

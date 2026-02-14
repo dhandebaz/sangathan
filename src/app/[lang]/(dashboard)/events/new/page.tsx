@@ -10,22 +10,24 @@ export default async function NewEventPage(props: { params: Promise<{ lang: stri
 
   if (!user) redirect(`/${lang}/login`)
 
-  const { data: profile } = await supabase
+  const { data: profileData } = await supabase
     .from('profiles')
-    .select('organisation_id, role')
+    .select('organization_id, role')
     .eq('id', user.id)
     .single()
+
+  const profile = profileData as any
 
   if (!profile || !['admin', 'editor'].includes(profile.role)) {
     return <div>Access Denied</div>
   }
 
-  const partners = await getCollaboratingOrgs(profile.organisation_id)
+  const partners = await getCollaboratingOrgs(profile.organization_id)
 
   return (
     <div className="max-w-3xl mx-auto py-8">
       <h1 className="text-2xl font-bold mb-6">Create New Event</h1>
-      <EventForm orgId={profile.organisation_id} partners={partners} />
+      <EventForm orgId={profile.organization_id} partners={partners} />
     </div>
   )
 }

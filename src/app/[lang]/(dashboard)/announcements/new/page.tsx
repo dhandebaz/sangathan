@@ -11,11 +11,13 @@ export default async function NewAnnouncementPage(props: { params: Promise<{ lan
 
   if (!user) redirect(`/${lang}/login`)
 
-  const { data: profile } = await supabase
+  const { data: profileData } = await supabase
     .from('profiles')
-    .select('organisation_id, role')
+    .select('organization_id, role')
     .eq('id', user.id)
     .single()
+
+  const profile = profileData as any
 
   if (!profile || !['admin', 'editor'].includes(profile.role)) {
     return (
@@ -36,7 +38,7 @@ export default async function NewAnnouncementPage(props: { params: Promise<{ lan
         <p className="text-gray-500 text-sm">Broadcast updates to your organisation members.</p>
       </div>
       
-      <AnnouncementForm orgId={profile.organisation_id} />
+      <AnnouncementForm orgId={profile.organization_id} />
     </div>
   )
 }

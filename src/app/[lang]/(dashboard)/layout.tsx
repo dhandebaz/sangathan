@@ -19,9 +19,10 @@ export default async function DashboardLayout(props: {
   let role = ''
   
   if (user) {
-    const { data: profile } = await supabase.from('profiles').select('organisation_id, role').eq('id', user.id).single()
-    if (profile?.organisation_id) {
-      capabilities = await getOrgCapabilities(profile.organisation_id)
+    const { data: profileData } = await supabase.from('profiles').select('organization_id, role').eq('id', user.id).single()
+    const profile = profileData as any
+    if (profile?.organization_id) {
+      capabilities = await getOrgCapabilities(profile.organization_id)
       role = profile.role
     }
   }

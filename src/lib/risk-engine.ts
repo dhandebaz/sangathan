@@ -17,14 +17,14 @@ export async function detectOTPRisk(phone: string, ip: string) {
   const supabase = createServiceClient()
   
   // Clean up old attempts (Naive approach, better to use cron or expiration)
-  await supabase.from('otp_attempts').delete().lt('attempted_at', new Date(Date.now() - 3600000).toISOString())
+  await (supabase.from('otp_attempts') as any).delete().lt('attempted_at', new Date(Date.now() - 3600000).toISOString())
   
   // Log attempt
-  await supabase.from('otp_attempts').insert({ phone, ip_address: ip })
+  await (supabase.from('otp_attempts') as any).insert({ phone, ip_address: ip })
   
   // Check counts
-  const { count: phoneCount } = await supabase.from('otp_attempts').select('*', { count: 'exact', head: true }).eq('phone', phone)
-  const { count: ipCount } = await supabase.from('otp_attempts').select('*', { count: 'exact', head: true }).eq('ip_address', ip)
+  const { count: phoneCount } = await (supabase.from('otp_attempts') as any).select('*', { count: 'exact', head: true }).eq('phone', phone)
+  const { count: ipCount } = await (supabase.from('otp_attempts') as any).select('*', { count: 'exact', head: true }).eq('ip_address', ip)
   
   if ((phoneCount || 0) > MAX_OTP_PER_PHONE_HOUR || (ipCount || 0) > MAX_OTP_PER_IP_HOUR) {
      await logRiskEvent({
@@ -44,8 +44,8 @@ export async function checkBroadcastLimit(orgId: string, recipientCount: number)
   const supabase = createServiceClient()
   
   // Check daily broadcasts
-  const { count: dailyCount } = await supabase
-    .from('announcements')
+  const { count: dailyCount } = await (supabase
+    .from('announcements') as any)
     .select('*', { count: 'exact', head: true })
     .eq('organisation_id', orgId)
     .eq('send_email', true)
@@ -71,8 +71,8 @@ export async function checkBroadcastLimit(orgId: string, recipientCount: number)
 export async function checkFormSpam(orgId: string, ip: string) {
   const supabase = createServiceClient()
   
-  const { count } = await supabase
-    .from('form_submissions')
+  const { count } = await (supabase
+    .from('form_submissions') as any)
     .select('*', { count: 'exact', head: true })
     .eq('ip_address', ip) // Assuming we log IP on submission
     .gte('created_at', new Date(Date.now() - 3600000).toISOString())
@@ -100,7 +100,7 @@ export async function logRiskEvent(event: {
 }) {
   const supabase = createServiceClient()
   
-  await supabase.from('risk_events').insert({
+  await (supabase.from('risk_events') as any).insert({
     ...event,
     detected_at: new Date().toISOString()
   })
@@ -108,10 +108,11 @@ export async function logRiskEvent(event: {
   // Auto-escalate if high severity
   if (event.severity === 'high' && event.entity_type === 'org') {
      // 1. Set Warning Status
-     await supabase.from('organisations').update({ status: 'warning' }).eq('id', event.entity_id)
+     await (supabase.from('organisations') as any).update({ status: 'warning' }).eq('id', event.entity_id)
      
      // 2. Restrict Capabilities (Auto-Response)
-     const { data: org } = await supabase.from('organisations').select('capabilities').eq('id', event.entity_id).single()
+     const { data: orgData } = await (supabase.from('organisations') as any).select('capabilities').eq('id', event.entity_id).single()
+     const org = orgData as any
      if (org?.capabilities) {
         const restricted = { 
            ...org.capabilities, 
@@ -119,10 +120,10 @@ export async function logRiskEvent(event: {
            federation_mode: false, // Stop networking
            broadcast_restricted: true // Custom flag or just capability removal
         }
-        await supabase.from('organisations').update({ capabilities: restricted }).eq('id', event.entity_id)
+        await (supabase.from('organisations') as any).update({ capabilities: restricted }).eq('id', event.entity_id)
         
         // Log Action
-        await supabase.from('platform_actions').insert({
+        await (supabase.from('platform_actions') as any).insert({
            action_type: 'restriction',
            target_org_id: event.entity_id,
            severity: 'level_2',

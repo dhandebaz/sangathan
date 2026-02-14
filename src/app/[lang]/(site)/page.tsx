@@ -24,6 +24,29 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
     <div className="overflow-hidden bg-[var(--bg-primary)] text-[var(--text-primary)]">
       {/* 1. HERO SECTION - Dark Default, Structured */}
       <section className="relative pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-[var(--border-subtle)]">
+        {/* Background Animation */}
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+          {/* Dot Grid */}
+          <div 
+            className="absolute inset-0 opacity-[0.15] dark:opacity-[0.1]" 
+            style={{ 
+              backgroundImage: `radial-gradient(circle, var(--text-secondary) 1px, transparent 1px)`,
+              backgroundSize: '32px 32px',
+              maskImage: 'radial-gradient(ellipse at center, black, transparent 80%)',
+              WebkitMaskImage: 'radial-gradient(ellipse at center, black, transparent 80%)'
+            }} 
+          />
+          {/* Subtle Moving Glows */}
+          <div 
+            className="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] rounded-full bg-[var(--accent)] opacity-[0.05] blur-[120px] animate-pulse"
+            style={{ animationDuration: '10s' }}
+          />
+          <div 
+            className="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] rounded-full bg-[var(--success)] opacity-[0.03] blur-[100px] animate-pulse"
+            style={{ animationDuration: '15s', animationDelay: '2s' }}
+          />
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
            {/* Left Content */}
            <div className="lg:col-span-7 animate-fade-up">
@@ -37,8 +60,8 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
               </h1>
               <p className="text-xl text-[var(--text-secondary)] max-w-xl mb-10 leading-relaxed">
                 {isHindi
-                  ? 'एनजीओ और यूनियनों के लिए सुरक्षित बुनियादी ढांचा। सदस्यों, धन और शासन का प्रबंधन करें—बिना अराजकता के।'
-                  : 'Secure infrastructure for NGOs and Unions. Manage members, funds, and governance—without the chaos.'}
+                  ? 'एनजीओ और यूनियनों के लिए सुरक्षित बुनियादी ढांचा। सदस्यों, धन और शासन का प्रबंधन करें बिना अराजकता के।'
+                  : 'Secure infrastructure for NGOs and Unions. Manage members, funds, and governance without the chaos.'}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link 

@@ -19,8 +19,8 @@ export async function subscribeToPush(input: z.infer<typeof SubscriptionSchema>)
     if (!user) return { success: false, error: 'Unauthorized' }
 
     // Upsert subscription
-    const { error } = await supabase
-      .from('push_subscriptions')
+    const { error } = await (supabase
+      .from('push_subscriptions') as any)
       .upsert({
         user_id: user.id,
         endpoint: input.endpoint,

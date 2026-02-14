@@ -15,13 +15,13 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
   if (!user) redirect(`/${lang}/login`)
 
   // Check Membership Status
-  const { data: profile } = await supabase
+  const { data: profileData } = await supabase
     .from('profiles')
-    .select('status, role, organisation_id')
+    .select('status, role, organization_id')
     .eq('id', user.id)
     .single()
 
-  // ... (existing status checks) ...
+  const profile = profileData as any
 
   if (profile?.status === 'pending') {
     return (
@@ -56,11 +56,13 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
   }
 
   // Check Org Suspension
-  const { data: org } = await supabase
+  const { data: orgData } = await supabase
     .from('organisations')
     .select('status')
-    .eq('id', profile.organisation_id)
+    .eq('id', profile.organization_id)
     .single()
+
+  const org = orgData as any
 
   if (org?.status === 'suspended') {
     return (
@@ -79,45 +81,58 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
 
   // Try to unlock capabilities if admin visits dashboard
   if (isAdmin) {
-     await unlockCapabilities(profile.organisation_id)
+     await unlockCapabilities(profile.organization_id)
   }
 
   if (isAdmin) {
     // Admin Data Fetching
     const [members, events, tasks, donations, activity] = await Promise.all([
-      supabase.from('members').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organisation_id),
-      supabase.from('events').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organisation_id),
-      supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organisation_id).eq('status', 'open'),
-      supabase.from('donations').select('amount').eq('organisation_id', profile.organisation_id),
-      supabase.from('audit_logs').select('action, created_at, details').eq('organisation_id', profile.organisation_id).order('created_at', { ascending: false }).limit(5)
+      (supabase.from('members') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organization_id),
+      (supabase.from('events') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organization_id),
+      (supabase.from('tasks') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organization_id).eq('status', 'open'),
+      (supabase.from('donations') as any).select('amount').eq('organisation_id', profile.organization_id),
+      (supabase.from('audit_logs') as any).select('action, created_at, details').eq('organisation_id', profile.organization_id).order('created_at', { ascending: false }).limit(5)
     ])
 
-    const totalDonations = (donations.data || []).reduce((sum, d) => sum + (Number(d.amount) || 0), 0)
+    const totalDonations = ((donations as any).data || []).reduce((sum: number, d: any) => sum + (Number(d.amount) || 0), 0)
     
     // Transform audit logs to recent activity format
-    const recentActivity = (activity.data || []).map((log: any) => ({
+    const recentActivity = ((activity as any).data || []).map((log: any) => ({
       title: log.action.replace(/_/g, ' '),
       type: 'audit',
-      created_at: log.created_at
+      time: new Date(log.created_at).toLocaleDateString()
     }))
 
-    return <AdminDashboard lang={lang} stats={{
-      members: members.count || 0,
-      events: events.count || 0,
-      tasks: tasks.count || 0,
-      donations: `₹${totalDonations.toLocaleString()}`
-    }} recentActivity={recentActivity} />
-  } else {
-    // Member Data Fetching
-    const [events, tasks, announcements] = await Promise.all([
-      supabase.from('events').select('*').eq('organisation_id', profile.organisation_id).gte('start_time', new Date().toISOString()).order('start_time', { ascending: true }).limit(3),
-      supabase.from('task_assignments').select('task:tasks(*)').eq('member_id', user.id).eq('accepted', true).limit(3),
-      supabase.from('announcements').select('*').eq('organisation_id', profile.organisation_id).order('created_at', { ascending: false }).limit(3)
-    ])
-
-    // Filter tasks correctly
-    const myTasks = (tasks.data || []).map((t: any) => t.task).filter(Boolean)
-
-    return <MemberDashboard lang={lang} events={events.data || []} tasks={myTasks} announcements={announcements.data || []} />
+    return (
+      <AdminDashboard 
+        stats={{
+          members: members.count || 0,
+          events: events.count || 0,
+          tasks: tasks.count || 0,
+          donations: totalDonations
+        }}
+        recentActivity={recentActivity}
+        lang={lang}
+      />
+    )
   }
+
+  // Member Data Fetching
+  const [events, tasks, announcements] = await Promise.all([
+    (supabase.from('events') as any).select('*').eq('organisation_id', profile.organization_id).gte('start_time', new Date().toISOString()).order('start_time', { ascending: true }).limit(3),
+    (supabase.from('task_assignments') as any).select('task:tasks(*)').eq('member_id', user.id).limit(3),
+    (supabase.from('announcements') as any).select('*').eq('organisation_id', profile.organization_id).order('created_at', { ascending: false }).limit(3)
+  ])
+
+  // Filter tasks correctly
+  const myTasks = ((tasks as any).data || []).map((t: any) => t.task).filter(Boolean)
+
+  return (
+    <MemberDashboard 
+      events={(events as any).data || []}
+      tasks={myTasks}
+      announcements={(announcements as any).data || []}
+      lang={lang}
+    />
+  )
 }

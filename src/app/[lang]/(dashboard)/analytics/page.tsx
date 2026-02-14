@@ -14,17 +14,19 @@ export default async function AnalyticsPage(props: { params: Promise<{ lang: str
   if (!user) redirect(`/${lang}/login`)
 
   // Check Permission
-  const { data: profile } = await supabase
+  const { data: profileData } = await supabase
     .from('profiles')
-    .select('organisation_id, role')
+    .select('organization_id, role')
     .eq('id', user.id)
     .single()
+
+  const profile = profileData as any
 
   if (!profile || !['admin', 'editor'].includes(profile.role)) {
     return <div className="p-8 text-center text-red-600">Access Denied</div>
   }
 
-  const orgId = profile.organisation_id
+  const orgId = profile.organization_id
 
   const canAnalytics = await checkCapability(orgId, 'advanced_analytics')
   if (!canAnalytics) return <div className="p-8 text-center text-gray-500">Advanced Analytics is not enabled for your organisation.</div>
@@ -32,29 +34,29 @@ export default async function AnalyticsPage(props: { params: Promise<{ lang: str
   // --- Parallel Data Fetching ---
   const results = await Promise.allSettled([
     // 1. Members
-    supabase.from('members').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId),
-    supabase.from('members').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'active'),
+    (supabase.from('members') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', orgId),
+    (supabase.from('members') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'active'),
     
     // 2. Events
-    supabase.from('events').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId),
-    supabase.from('event_rsvps').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'attended'),
+    (supabase.from('events') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', orgId),
+    (supabase.from('event_rsvps') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'attended'),
     
     // 3. Tasks
-    supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'open'),
-    supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'completed'),
-    supabase.from('task_logs').select('hours_logged').eq('organisation_id', orgId), // This might fail if task_logs doesn't have org_id directly, check schema.
+    (supabase.from('tasks') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'open'),
+    (supabase.from('tasks') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'completed'),
+    (supabase.from('task_logs') as any).select('hours_logged').eq('organisation_id', orgId), // This might fail if task_logs doesn't have org_id directly, check schema.
     // task_logs links to task which links to org. RLS handles it, but direct select needs join or we fetch all logs via RLS (which filters by org).
     // Let's assume RLS filters correctly for simple select if we use the right client.
     // Actually, task_logs doesn't have organisation_id in my previous schema (it has task_id). 
     // We need to join. Supabase JS doesn't do aggregation sums easily without RPC.
     // We will fetch raw logs for now (assuming not huge scale yet) or use a view later.
-    supabase.from('task_logs').select('hours_logged, task:tasks!inner(organisation_id)').eq('task.organisation_id', orgId),
+    (supabase.from('task_logs') as any).select('hours_logged, task:tasks!inner(organisation_id)').eq('task.organisation_id', orgId),
 
     // 4. Donations
-    supabase.from('donations').select('amount').eq('organisation_id', orgId),
+    (supabase.from('donations') as any).select('amount').eq('organisation_id', orgId),
 
     // 5. Announcements
-    supabase.from('announcements').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId),
+    (supabase.from('announcements') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', orgId),
   ])
 
   // Helpers

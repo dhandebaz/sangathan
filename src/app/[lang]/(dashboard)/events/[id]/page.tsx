@@ -10,16 +10,18 @@ export default async function EventDetailsPage(props: { params: Promise<{ lang: 
   const { lang, id } = await props.params
   const supabase = await createClient()
   
-  const { data: event } = await supabase
+  const { data: eventData } = await supabase
     .from('events')
     .select('*')
     .eq('id', id)
     .single()
 
+  const event = eventData as any
+
   if (!event) notFound()
 
-  const { data: rsvps } = await supabase
-    .from('event_rsvps')
+  const { data: rsvps } = await (supabase
+    .from('event_rsvps') as any)
     .select('*, user:user_id(full_name, email)')
     .eq('event_id', id)
     .order('created_at', { ascending: false })

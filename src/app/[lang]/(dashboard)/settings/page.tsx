@@ -11,21 +11,25 @@ export default async function SettingsPage() {
 
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase
+  const { data: profileData } = await supabase
     .from('profiles')
-    .select('organisation_id, role')
+    .select('organization_id, role')
     .eq('id', user.id)
     .single()
+
+  const profile = profileData as any
 
   if (!profile || profile.role !== 'admin') {
       return <div>Access Denied</div>
   }
 
-  const { data: org } = await supabase
+  const { data: orgData } = await supabase
     .from('organisations')
     .select('*')
-    .eq('id', profile.organisation_id)
+    .eq('id', profile.organization_id)
     .single()
+
+  const org = orgData as any
 
   const capabilities = await getOrgCapabilities(org.id)
 

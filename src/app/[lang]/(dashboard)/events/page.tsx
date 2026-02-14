@@ -3,6 +3,8 @@ import { Plus, Calendar, MapPin, Users } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
+import { redirect } from 'next/navigation'
+
 export const dynamic = 'force-dynamic'
 
 export default async function EventsPage(props: { params: Promise<{ lang: string }> }) {
@@ -10,17 +12,20 @@ export default async function EventsPage(props: { params: Promise<{ lang: string
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { data: profile } = await supabase
+  if (!user) redirect(`/${lang}/login`)
+
+  const { data: profileData } = await supabase
     .from('profiles')
-    .select('organisation_id')
-    .eq('id', user?.id)
+    .select('organization_id')
+    .eq('id', user.id)
     .single()
 
-  const orgId = profile?.organisation_id
+  const profile = profileData as any
+  const orgId = profile?.organization_id
 
   const [ownedEventsRes, jointEventsRes] = await Promise.all([
-    supabase.from('events').select('*, event_rsvps(count)').eq('organisation_id', orgId).order('start_time', { ascending: true }),
-    supabase.from('joint_events').select('event:events(*, event_rsvps(count))').eq('organisation_id', orgId)
+    (supabase.from('events') as any).select('*, event_rsvps(count)').eq('organisation_id', orgId).order('start_time', { ascending: true }),
+    (supabase.from('joint_events') as any).select('event:events(*, event_rsvps(count))').eq('organisation_id', orgId)
   ])
 
   const allEvents = [

@@ -20,7 +20,8 @@ export function PollForm({ orgId }: { orgId: string }) {
     visibility_level: 'members',
     voting_method: 'anonymous',
     end_time: '',
-    options: ['', '']
+    options: ['', ''],
+    is_public: false
   })
 
   const addOption = () => setFormData(p => ({ ...p, options: [...p.options, ''] }))
@@ -43,7 +44,8 @@ export function PollForm({ orgId }: { orgId: string }) {
       visibility_level: formData.visibility_level as any,
       voting_method: formData.voting_method as any,
       end_time: formData.end_time ? new Date(formData.end_time).toISOString() : undefined,
-      options: formData.options.filter(o => o.trim().length > 0)
+      options: formData.options.filter(o => o.trim().length > 0),
+      is_public: formData.is_public
     })
 
     setLoading(false)
@@ -118,11 +120,11 @@ export function PollForm({ orgId }: { orgId: string }) {
         </div>
       </div>
 
-      <div className="space-y-3">
-        <Label>Options</Label>
+      <div className="space-y-4 pt-4 border-t">
+        <Label className="text-base">Poll Options</Label>
         {formData.options.map((opt, idx) => (
           <div key={idx} className="flex gap-2">
-            <Input value={opt} onChange={e => updateOption(idx, e.target.value)} placeholder={`Option ${idx + 1}`} />
+            <Input required value={opt} onChange={e => updateOption(idx, e.target.value)} placeholder={`Option ${idx + 1}`} />
             {formData.options.length > 2 && (
               <Button type="button" variant="outline" size="icon" onClick={() => removeOption(idx)}>
                 <Trash className="w-4 h-4 text-red-500" />
@@ -130,9 +132,21 @@ export function PollForm({ orgId }: { orgId: string }) {
             )}
           </div>
         ))}
-        <Button type="button" variant="outline" size="sm" onClick={addOption} className="mt-2">
-          <Plus className="w-4 h-4 mr-2" /> Add Option
+        <Button type="button" variant="outline" className="w-full" onClick={addOption}>
+          <Plus className="w-4 h-4 mr-2" />
+          Add Option
         </Button>
+      </div>
+
+      <div className="flex items-center space-x-2 pt-2">
+        <input 
+          type="checkbox" 
+          id="is_public" 
+          className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
+          checked={formData.is_public} 
+          onChange={e => setFormData({...formData, is_public: e.target.checked})} 
+        />
+        <Label htmlFor="is_public">Make Poll Public (Visible on Organisation Page)</Label>
       </div>
 
       <Button type="submit" disabled={loading} className="w-full">
