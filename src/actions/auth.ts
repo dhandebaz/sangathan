@@ -55,38 +55,43 @@ export async function login(input: z.infer<typeof LoginSchema>) {
   const { email, password } = result.data
 
   // 2. Sign In
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  })
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
 
-  if (error) {
-    return { success: false, error: error.message }
-  }
+    if (error) {
+      return { success: false, error: error.message }
+    }
 
-  // 3. Check Suspension
-  // We need to fetch the profile -> organisation
-  const { data: profileData } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', data.user.id)
-    .single()
-  
-  const profile = profileData as any
-
-  if (profile && profile.organisation_id) {
-    const { data: orgData } = await supabase
-      .from('organisations')
+    // 3. Check Suspension
+    // We need to fetch the profile -> organisation
+    const { data: profileData } = await supabase
+      .from('profiles')
       .select('*')
-      .eq('id', profile.organisation_id)
+      .eq('id', data.user.id)
       .single()
     
-    const org = orgData as any
+    const profile = profileData as any
 
-    if (org && org.is_suspended) {
-      await supabase.auth.signOut()
-      return { success: false, error: 'Your organisation has been suspended. Please contact support.' }
+    if (profile && profile.organisation_id) {
+      const { data: orgData } = await supabase
+        .from('organisations')
+        .select('*')
+        .eq('id', profile.organisation_id)
+        .single()
+      
+      const org = orgData as any
+
+      if (org && org.is_suspended) {
+        await supabase.auth.signOut()
+        return { success: false, error: 'Your organisation has been suspended. Please contact support.' }
+      }
     }
+  } catch (err: any) {
+    console.error('Login Error:', err)
+    return { success: false, error: err.message || 'Failed to login' }
   }
 
   redirect('/dashboard')
@@ -110,27 +115,32 @@ export async function signup(input: z.infer<typeof SignupSchema>) {
   const headersList = await headers()
   const origin = headersList.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space'
   
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        full_name: fullName,
-        organization_name: organizationName,
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: fullName,
+          organization_name: organizationName,
+        },
+        emailRedirectTo: `${origin}/auth/callback`,
       },
-      emailRedirectTo: `${origin}/auth/callback`,
-    },
-  })
+    })
 
-  if (error) {
-    return { success: false, error: error.message }
+    if (error) {
+      return { success: false, error: error.message }
+    }
+
+    if (data.user && data.user.identities && data.user.identities.length === 0) {
+      return { success: false, error: 'User already registered. Please login.' }
+    }
+
+    return { success: true, message: 'Check your email to verify your account.' }
+  } catch (err: any) {
+    console.error('Signup Error:', err)
+    return { success: false, error: err.message || 'Failed to sign up' }
   }
-
-  if (data.user && data.user.identities && data.user.identities.length === 0) {
-    return { success: false, error: 'User already registered. Please login.' }
-  }
-
-  return { success: true, message: 'Check your email to verify your account.' }
 }
 
 export async function otpLogin(input: z.infer<typeof OtpLoginSchema>) {

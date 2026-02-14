@@ -44,7 +44,7 @@ export default async function StatusPage({ params }: { params: Promise<{ lang: s
          <div className="p-4 border border-gray-200 rounded-xl flex justify-between items-center bg-white">
             <div className="flex items-center gap-3">
                <Activity className="text-gray-400" size={20} />
-               <span className="font-medium text-gray-900">{isHindi ? 'डेटाबेस (Supabase)' : 'Database (Supabase)'}</span>
+               <span className="font-medium text-gray-900">{isHindi ? 'डेटाबेस (Primary)' : 'Database (Primary)'}</span>
             </div>
             <span className="inline-flex items-center gap-2 text-green-600 text-sm font-bold bg-green-50 px-3 py-1 rounded-full">
                <span className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span> {isHindi ? 'संचालन में' : 'Operational'}
@@ -53,7 +53,7 @@ export default async function StatusPage({ params }: { params: Promise<{ lang: s
          <div className="p-4 border border-gray-200 rounded-xl flex justify-between items-center bg-white">
             <div className="flex items-center gap-3">
                <Activity className="text-gray-400" size={20} />
-               <span className="font-medium text-gray-900">{isHindi ? 'ओटीपी डिलीवरी (Firebase)' : 'OTP Delivery (Firebase)'}</span>
+               <span className="font-medium text-gray-900">{isHindi ? 'ओटीपी डिलीवरी (Secure)' : 'OTP Delivery (Secure)'}</span>
             </div>
             <span className="inline-flex items-center gap-2 text-green-600 text-sm font-bold bg-green-50 px-3 py-1 rounded-full">
                <span className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span> {isHindi ? 'संचालन में' : 'Operational'}
