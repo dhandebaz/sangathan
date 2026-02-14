@@ -3,6 +3,7 @@ import { MetricCard } from '@/components/analytics/metric-card'
 import { Users, Calendar, CheckSquare, DollarSign, Megaphone } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import { checkCapability } from '@/lib/capabilities'
+import { AccessDenied } from '@/components/dashboard/access-denied'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,8 +23,8 @@ export default async function AnalyticsPage(props: { params: Promise<{ lang: str
 
   const profile = profileData as any
 
-  if (!profile || !profile.organization_id || !['admin', 'editor'].includes(profile.role)) {
-    return <div className="p-8 text-center text-red-600">Access Denied</div>
+  if (!profile || !profile.organization_id || !['admin', 'executive'].includes(profile.role)) {
+    return <AccessDenied lang={lang} />
   }
 
   const orgId = profile.organization_id

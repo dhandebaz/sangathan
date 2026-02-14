@@ -24,10 +24,9 @@ export async function GET(request: Request) {
           .single()
 
         if (!profile) {
-            // New User Flow: Redirect to Phone Verification
-            // We do NOT create the organisation here anymore.
-            // Accountability is locked until phone is verified.
-            return NextResponse.redirect(`${origin}/en/verify-phone`)
+            // New User Flow: Redirect to Onboarding
+            // Ensure they have organization name and full name before phone verification
+            return NextResponse.redirect(`${origin}/en/onboarding`)
         }
       }
 

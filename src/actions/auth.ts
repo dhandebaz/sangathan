@@ -399,3 +399,26 @@ export async function finalizeSignup(input: { idToken: string }) {
 
   return { success: true }
 }
+
+export async function updateOnboardingMetadata(input: { fullName: string; organizationName: string }) {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) return { success: false, error: 'Not authenticated' }
+
+    const { error } = await supabase.auth.updateUser({
+      data: {
+        full_name: input.fullName,
+        organization_name: input.organizationName,
+      }
+    })
+
+    if (error) throw error
+
+    return { success: true }
+  } catch (err: any) {
+    console.error('Update Metadata Error:', err)
+    return { success: false, error: err.message || 'Failed to update details' }
+  }
+}

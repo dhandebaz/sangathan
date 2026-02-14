@@ -1,8 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { TaskForm } from '@/components/tasks/task-form'
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
+import { AccessDenied } from '@/components/dashboard/access-denied'
 
 export default async function NewTaskPage(props: { params: Promise<{ lang: string }> }) {
   const { lang } = await props.params
@@ -19,8 +18,8 @@ export default async function NewTaskPage(props: { params: Promise<{ lang: strin
 
   const profile = profileData as any
 
-  if (!profile || !profile.organization_id || !['admin', 'editor'].includes(profile.role)) {
-    return <div>Access Denied</div>
+  if (!profile || !profile.organization_id || !['admin', 'editor', 'executive'].includes(profile.role)) {
+    return <AccessDenied lang={lang} />
   }
 
   return (

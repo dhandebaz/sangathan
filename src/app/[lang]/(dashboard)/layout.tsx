@@ -40,6 +40,9 @@ export default async function DashboardLayout(props: {
     }
   }
 
+  const isAdmin = ['admin', 'executive'].includes(role)
+  const isEditor = isAdmin || role === 'editor'
+
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] text-foreground pb-16 md:pb-0 font-sans">
       {/* Sidebar (Desktop) */}
@@ -75,7 +78,9 @@ export default async function DashboardLayout(props: {
                {capabilities.federation_mode && (
                  <SidebarLink href={`/${lang}/networks`} icon={Globe} label="Networks" />
                )}
-               <SidebarLink href={`/${lang}/appeals`} icon={Scale} label="Appeals" />
+               {isEditor && (
+                 <SidebarLink href={`/${lang}/appeals`} icon={Scale} label="Appeals" />
+               )}
                <SidebarLink href={`/${lang}/members`} icon={Users} label="Members" />
             </nav>
           </div>
@@ -83,10 +88,12 @@ export default async function DashboardLayout(props: {
           <div>
             <h3 className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">System</h3>
             <nav className="space-y-1">
-               {capabilities.advanced_analytics && (
+               {capabilities.advanced_analytics && isAdmin && (
                  <SidebarLink href={`/${lang}/analytics`} icon={BarChart} label="Analytics" />
                )}
-               <SidebarLink href={`/${lang}/settings`} icon={Settings} label="Settings" />
+               {isAdmin && (
+                 <SidebarLink href={`/${lang}/settings`} icon={Settings} label="Settings" />
+               )}
             </nav>
           </div>
         </div>

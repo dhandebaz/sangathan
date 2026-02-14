@@ -3,6 +3,7 @@ import { AppealForm } from '@/components/governance/appeal-form'
 import { redirect } from 'next/navigation'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { AccessDenied } from '@/components/dashboard/access-denied'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,8 +22,8 @@ export default async function AppealsPage(props: { params: Promise<{ lang: strin
 
   const profile = profileData as any
 
-  if (!profile || !profile.organization_id || !['admin', 'executive'].includes(profile.role)) {
-    return <div>Access Denied</div>
+  if (!profile || !profile.organization_id || !['admin', 'executive', 'editor'].includes(profile.role)) {
+    return <AccessDenied lang={lang} />
   }
 
   // Fetch Appeals

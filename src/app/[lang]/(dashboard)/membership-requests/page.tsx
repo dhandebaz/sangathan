@@ -1,12 +1,14 @@
 import { createClient } from '@/lib/supabase/server'
 import { RequestList } from '@/components/members/request-list'
 import { redirect } from 'next/navigation'
+import { AccessDenied } from '@/components/dashboard/access-denied'
 
-export default async function RequestsPage() {
+export default async function RequestsPage(props: { params: Promise<{ lang: string }> }) {
+  const { lang } = await props.params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) redirect('/login')
+  if (!user) redirect(`/${lang}/login`)
 
   const { data: profileData } = await supabase
     .from('profiles')
@@ -17,12 +19,7 @@ export default async function RequestsPage() {
   const profile = profileData as any
 
   if (!profile || !profile.organization_id || profile.role !== 'admin') {
-      return (
-        <div className="p-8 text-center">
-          <h1 className="text-xl font-bold text-red-600">Access Denied</h1>
-          <p className="text-gray-500">Only administrators can manage membership requests.</p>
-        </div>
-      )
+      return <AccessDenied lang={lang} />
   }
 
   const { data: requests } = await (supabase

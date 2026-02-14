@@ -1,11 +1,11 @@
 import { createClient } from '@/lib/supabase/server'
 import { AddMemberDialog } from '@/components/members/add-member-dialog'
 import { MemberTable } from '@/components/members/member-table'
-import { Search, Printer } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Printer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { MemberFilters } from '@/components/members/member-filters'
+import Link from 'next/link'
 
 export const dynamic = 'force-dynamic' // Ensure we fetch fresh data on navigation
 
@@ -77,38 +77,7 @@ export default async function MembersPage({ searchParams, params }: PageProps & 
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col md:flex-row gap-4">
-        <form className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
-          <Input
-            name="q"
-            defaultValue={query}
-            placeholder="Search by name or phone..."
-            className="pl-10"
-          />
-          <input type="hidden" name="status" value={status} />
-          {/* Hidden submit to enable Enter key search */}
-          <button type="submit" className="hidden" />
-        </form>
-
-        <form className="w-full md:w-48 flex gap-2" action="">
-            <input type="hidden" name="q" value={query} />
-            <Select
-                name="status"
-                defaultValue={status}
-            >
-                <SelectTrigger className="w-full">
-                    <SelectValue placeholder="All Status" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
-                </SelectContent>
-            </Select>
-            <Button type="submit" variant="secondary">Filter</Button>
-        </form>
-      </div>
+      <MemberFilters initialQuery={query} initialStatus={status} />
 
       <Card>
         <CardContent className="p-0">
@@ -124,14 +93,14 @@ export default async function MembersPage({ searchParams, params }: PageProps & 
          <div className="flex gap-2">
             <Button variant="outline" size="sm" disabled={page <= 1} asChild>
                 {page > 1 ? (
-                    <a href={`/${lang}/members?page=${page - 1}&q=${query}&status=${status}`}>Previous</a>
+                    <Link href={`/${lang}/members?page=${page - 1}&q=${query}&status=${status}`}>Previous</Link>
                 ) : (
                     <span>Previous</span>
                 )}
             </Button>
             <Button variant="outline" size="sm" disabled={page >= totalPages} asChild>
                 {page < totalPages ? (
-                    <a href={`/${lang}/members?page=${page + 1}&q=${query}&status=${status}`}>Next</a>
+                    <Link href={`/${lang}/members?page=${page + 1}&q=${query}&status=${status}`}>Next</Link>
                 ) : (
                     <span>Next</span>
                 )}
@@ -141,3 +110,4 @@ export default async function MembersPage({ searchParams, params }: PageProps & 
     </div>
   )
 }
+

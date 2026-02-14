@@ -3,13 +3,15 @@ import { MembershipPolicyForm, TransparencyToggle } from '@/components/settings/
 import { CollaborationManager } from '@/components/settings/collaboration-manager'
 import { getCollaboratingOrgs, getPendingRequests } from '@/actions/collaboration'
 import { redirect } from 'next/navigation'
-import { checkCapability, getOrgCapabilities } from '@/lib/capabilities'
+import { getOrgCapabilities } from '@/lib/capabilities'
+import { AccessDenied } from '@/components/dashboard/access-denied'
 
-export default async function SettingsPage() {
+export default async function SettingsPage(props: { params: Promise<{ lang: string }> }) {
+  const { lang } = await props.params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) redirect('/login')
+  if (!user) redirect(`/${lang}/login`)
 
   const { data: profileData } = await supabase
     .from('profiles')
@@ -20,7 +22,7 @@ export default async function SettingsPage() {
   const profile = profileData as any
 
   if (!profile || !profile.organization_id || profile.role !== 'admin') {
-      return <div>Access Denied</div>
+      return <AccessDenied lang={lang} />
   }
 
   const { data: orgData } = await supabase

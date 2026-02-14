@@ -3,6 +3,7 @@ import { AnnouncementForm } from '@/components/announcements/announcement-form'
 import { redirect } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { AccessDenied } from '@/components/dashboard/access-denied'
 
 export default async function NewAnnouncementPage(props: { params: Promise<{ lang: string }> }) {
   const { lang } = await props.params
@@ -19,12 +20,8 @@ export default async function NewAnnouncementPage(props: { params: Promise<{ lan
 
   const profile = profileData as any
 
-  if (!profile || !profile.organization_id || !['admin', 'editor'].includes(profile.role)) {
-    return (
-      <div className="p-8 text-center text-red-600">
-        Access Denied. You do not have permission to post announcements.
-      </div>
-    )
+  if (!profile || !profile.organization_id || !['admin', 'editor', 'executive'].includes(profile.role)) {
+    return <AccessDenied lang={lang} />
   }
 
   return (

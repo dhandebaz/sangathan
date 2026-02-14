@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { EventForm } from '@/components/events/event-form'
 import { getCollaboratingOrgs } from '@/actions/collaboration'
 import { redirect } from 'next/navigation'
+import { AccessDenied } from '@/components/dashboard/access-denied'
 
 export default async function NewEventPage(props: { params: Promise<{ lang: string }> }) {
   const { lang } = await props.params
@@ -18,8 +19,8 @@ export default async function NewEventPage(props: { params: Promise<{ lang: stri
 
   const profile = profileData as any
 
-  if (!profile || !profile.organization_id || !['admin', 'editor'].includes(profile.role)) {
-    return <div>Access Denied</div>
+  if (!profile || !profile.organization_id || !['admin', 'editor', 'executive'].includes(profile.role)) {
+    return <AccessDenied lang={lang} />
   }
 
   const partners = await getCollaboratingOrgs(profile.organization_id)

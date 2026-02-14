@@ -2,19 +2,32 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Plus, X } from 'lucide-react'
+import { Plus, Loader2 } from 'lucide-react'
 import { addMember } from '@/actions/members/actions'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { toast } from 'sonner'
 
 export function AddMemberDialog() {
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
   const router = useRouter()
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
     setIsLoading(true)
-    setError('')
 
+    const formData = new FormData(event.currentTarget)
     const data = {
       full_name: formData.get('full_name') as string,
       phone: formData.get('phone') as string,
@@ -30,108 +43,113 @@ export function AddMemberDialog() {
 
     if (result.success) {
       setIsOpen(false)
+      toast.success('Member added successfully')
       router.refresh()
     } else {
-      setError(result.error || 'Failed to add member')
+      toast.error(result.error || 'Failed to add member')
     }
     setIsLoading(false)
   }
 
-  if (!isOpen) {
-    return (
-      <button
-        onClick={() => setIsOpen(true)}
-        className="bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:opacity-90"
-      >
-        <Plus size={16} />
-        Add Member
-      </button>
-    )
-  }
-
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg w-full max-w-md p-6 relative">
-        <button
-          onClick={() => setIsOpen(false)}
-          className="absolute top-4 right-4 text-gray-500 hover:text-black"
-        >
-          <X size={20} />
-        </button>
-
-        <h2 className="text-xl font-bold mb-4">Add New Member</h2>
-
-        {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm mb-4">
-            {error}
-          </div>
-        )}
-
-        <form action={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Full Name *</label>
-            <input
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button className="gap-2">
+          <Plus className="w-4 h-4" />
+          Add Member
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Add New Member</DialogTitle>
+          <DialogDescription>
+            Enter the details of the new member here. Click save when you're done.
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4 py-4">
+          <div className="grid gap-2">
+            <Label htmlFor="full_name">Full Name *</Label>
+            <Input
+              id="full_name"
               name="full_name"
               required
-              className="w-full border rounded-md p-2 focus:ring-2 focus:ring-orange-500 outline-none"
+              placeholder="e.g. John Doe"
+              disabled={isLoading}
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Phone *</label>
-            <input
+          <div className="grid gap-2">
+            <Label htmlFor="phone">Phone *</Label>
+            <Input
+              id="phone"
               name="phone"
               required
               type="tel"
-              className="w-full border rounded-md p-2 focus:ring-2 focus:ring-orange-500 outline-none"
+              placeholder="e.g. +91 9876543210"
+              disabled={isLoading}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Designation</label>
-              <input
+            <div className="grid gap-2">
+              <Label htmlFor="designation">Designation</Label>
+              <Input
+                id="designation"
                 name="designation"
-                className="w-full border rounded-md p-2 focus:ring-2 focus:ring-orange-500 outline-none"
+                placeholder="e.g. Member"
+                disabled={isLoading}
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Area</label>
-              <input
+            <div className="grid gap-2">
+              <Label htmlFor="area">Area</Label>
+              <Input
+                id="area"
                 name="area"
-                className="w-full border rounded-md p-2 focus:ring-2 focus:ring-orange-500 outline-none"
+                placeholder="e.g. Mumbai"
+                disabled={isLoading}
               />
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Email (Optional)</label>
-            <input
+          <div className="grid gap-2">
+            <Label htmlFor="email">Email (Optional)</Label>
+            <Input
+              id="email"
               name="email"
               type="email"
-              className="w-full border rounded-md p-2 focus:ring-2 focus:ring-orange-500 outline-none"
+              placeholder="e.g. john@example.com"
+              disabled={isLoading}
             />
           </div>
-          
-           <div>
-            <label className="block text-sm font-medium mb-1">Joining Date</label>
-            <input
+
+          <div className="grid gap-2">
+            <Label htmlFor="joining_date">Joining Date</Label>
+            <Input
+              id="joining_date"
               name="joining_date"
               type="date"
               defaultValue={new Date().toISOString().split('T')[0]}
-              className="w-full border rounded-md p-2 focus:ring-2 focus:ring-orange-500 outline-none"
+              disabled={isLoading}
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-black text-white py-2 rounded-md font-medium hover:opacity-90 disabled:opacity-50 mt-2"
-          >
-            {isLoading ? 'Adding...' : 'Add Member'}
-          </button>
+          <DialogFooter className="pt-4">
+            <Button type="button" variant="outline" onClick={() => setIsOpen(false)} disabled={isLoading}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isLoading} className="min-w-[100px]">
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                'Save Member'
+              )}
+            </Button>
+          </DialogFooter>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   )
 }

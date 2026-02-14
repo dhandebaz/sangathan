@@ -144,7 +144,7 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
       if (response.success) {
         setVerified(true)
         setTimeout(() => {
-          router.push('/dashboard')
+          router.push(`/${params.lang}/dashboard`)
         }, 2000)
       } else {
         throw new Error(response.error || 'Server verification failed')

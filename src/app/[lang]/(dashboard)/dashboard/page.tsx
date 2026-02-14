@@ -37,7 +37,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Button asChild className="px-8">
-              <Link href={`/${lang}/signup`}>Set Up Organisation</Link>
+              <Link href={`/${lang}/onboarding`}>Set Up Organisation</Link>
             </Button>
             <Button asChild variant="outline" className="px-8">
               <Link href={`/${lang}/docs`}>Read Guide</Link>
@@ -89,7 +89,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
         <p className="text-gray-600 mb-8">You are not currently a member of any organisation.</p>
         <div className="flex justify-center gap-4">
           <Button asChild>
-            <Link href={`/${lang}/signup`}>Create New Organisation</Link>
+            <Link href={`/${lang}/onboarding`}>Create New Organisation</Link>
           </Button>
           <Button asChild variant="outline">
             <Link href={`/${lang}/docs`}>View Documentation</Link>
