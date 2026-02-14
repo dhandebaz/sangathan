@@ -84,10 +84,12 @@ export function PhoneAuth({ mode, email, password, onSuccess }: PhoneAuthProps) 
     setError(null)
 
     try {
-      const result = await verificationId.confirm(otp)
+      // 1. Confirm with Firebase (Client-side)
+      const cleanOtp = otp.trim()
+      const result = await verificationId.confirm(cleanOtp)
       const idToken = await result.user.getIdToken()
 
-      // Send to Server Action
+      // 2. Send to Server Action
       if (mode === 'login') {
         const res = await phoneLogin({ idToken })
         if (!res.success) {
@@ -106,8 +108,15 @@ export function PhoneAuth({ mode, email, password, onSuccess }: PhoneAuthProps) 
         if (onSuccess) onSuccess()
       }
 
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Verification failed')
+    } catch (err: any) {
+      console.error('Verification Error:', err)
+      if (err.code === 'auth/invalid-verification-code') {
+        setError('The verification code is incorrect.')
+      } else if (err.code === 'auth/code-expired') {
+        setError('The verification code has expired.')
+      } else {
+        setError(err instanceof Error ? err.message : 'Verification failed')
+      }
     } finally {
       setLoading(false)
     }

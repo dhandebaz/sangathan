@@ -114,11 +114,13 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
     setError('')
 
     try {
-      const result = await confirmationResult.confirm(otp)
+      // 1. Confirm with Firebase (Client-side)
+      const cleanOtp = otp.trim()
+      const result = await confirmationResult.confirm(cleanOtp)
       const user = result.user
       const idToken = await user.getIdToken()
 
-      // Call Server Action
+      // 2. Call Server Action (Server-side)
       const response = await finalizeSignup({ idToken })
 
       if (response.success) {
@@ -127,11 +129,21 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
           router.push('/dashboard')
         }, 2000)
       } else {
-        throw new Error(response.error || 'Verification failed')
+        throw new Error(response.error || 'Server verification failed')
       }
     } catch (err: any) {
-      console.error(err)
-      setError(err.message || 'Invalid OTP')
+      console.error('Verification Error:', err)
+      
+      // Distinguish between Firebase errors and Server errors
+      if (err.code === 'auth/invalid-verification-code') {
+        setError('The verification code is incorrect. Please check and try again.')
+      } else if (err.code === 'auth/code-expired') {
+        setError('The verification code has expired. Please request a new one.')
+      } else if (err.message && err.message.includes('Server verification failed')) {
+        setError(err.message) // Show server error directly
+      } else {
+        setError(err.message || 'Verification failed. Please try again.')
+      }
     } finally {
       setLoading(false)
     }
