@@ -209,8 +209,9 @@ export async function phoneLogin(input: z.infer<typeof PhoneLoginSchema>) {
   let decodedToken
   try {
     decodedToken = await firebaseAdminAuth.verifyIdToken(input.idToken)
-  } catch (error) {
-    return { success: false, error: 'Invalid phone verification' }
+  } catch (error: any) {
+    console.error('Firebase Admin Verify Error (Login):', JSON.stringify(error, Object.getOwnPropertyNames(error)))
+    return { success: false, error: `Invalid phone verification: ${error.message}` }
   }
 
   const phoneNumber = decodedToken.phone_number
@@ -303,8 +304,9 @@ export async function finalizeSignup(input: { idToken: string }) {
   let decodedToken
   try {
     decodedToken = await firebaseAdminAuth.verifyIdToken(input.idToken)
-  } catch (error) {
-    return { success: false, error: 'Invalid phone verification' }
+  } catch (error: any) {
+    console.error('Firebase Admin Verify Error:', JSON.stringify(error, Object.getOwnPropertyNames(error)))
+    return { success: false, error: `Phone verification failed: ${error.message}` }
   }
 
   const phoneNumber = decodedToken.phone_number

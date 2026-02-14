@@ -21,22 +21,40 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
 
   // Initialize Recaptcha
   useEffect(() => {
+    // Only initialize once per component mount
+    if (window.recaptchaVerifier) {
+      window.recaptchaVerifier.clear()
+      window.recaptchaVerifier = undefined
+    }
+
     const auth = firebaseAuth
     if (!auth) {
       setError("Phone verification service is unavailable (Auth not initialized).")
       return
     }
 
-    if (!window.recaptchaVerifier) {
+    try {
       window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-        'size': 'normal',
+        'size': 'invisible',
         'callback': (response: any) => {
           // reCAPTCHA solved, allow signInWithPhoneNumber.
+          console.log("Recaptcha solved automatically")
         },
         'expired-callback': () => {
           // Response expired. Ask user to solve reCAPTCHA again.
+          console.warn("Recaptcha expired")
         }
       })
+    } catch (e) {
+      console.error("Recaptcha init error:", e)
+    }
+
+    return () => {
+      // Cleanup on unmount
+      if (window.recaptchaVerifier) {
+        window.recaptchaVerifier.clear()
+        window.recaptchaVerifier = undefined
+      }
     }
   }, [])
 
