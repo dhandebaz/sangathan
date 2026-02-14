@@ -53,8 +53,12 @@ export function PhoneAuth({ mode, email, password, onSuccess }: PhoneAuthProps) 
       
       const confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, appVerifier)
       setVerificationId(confirmationResult)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to send OTP')
+    } catch (err: any) {
+      if (err.code === 'auth/operation-not-allowed') {
+        setError('Phone authentication is not enabled in the database configuration.')
+      } else {
+        setError(err instanceof Error ? err.message : 'Failed to send OTP')
+      }
       console.error(err)
     } finally {
       setLoading(false)

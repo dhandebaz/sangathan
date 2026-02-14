@@ -66,12 +66,16 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
       setStep('otp')
     } catch (err: any) {
       console.error(err)
-      setError(err.message || 'Failed to send OTP. Try again.')
+      if (err.code === 'auth/operation-not-allowed') {
+        setError('Phone authentication is not enabled in the database configuration. Please contact support.')
+      } else {
+        setError(err.message || 'Failed to send OTP. Try again.')
+      }
+      
       // Reset captcha if needed
       if (window.recaptchaVerifier) {
         window.recaptchaVerifier.clear()
-        window.recaptchaVerifier = undefined // Force re-init on next render/attempt logic
-        // Actually better to just reset it
+        window.recaptchaVerifier = undefined 
       }
     } finally {
       setLoading(false)
