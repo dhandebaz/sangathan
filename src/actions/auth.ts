@@ -361,7 +361,7 @@ export async function finalizeSignup(input: { idToken: string }) {
 
   if (rpcError) {
     console.error('Signup RPC Error:', rpcError)
-    return { success: false, error: 'Failed to complete registration. Please try again.' }
+    return { success: false, error: `Database Registration Failed: ${rpcError.message} (Code: ${rpcError.code})` }
   }
 
   // 6. Send Welcome Email (Fire and forget)

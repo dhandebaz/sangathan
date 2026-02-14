@@ -160,6 +160,7 @@ export async function updateSession(request: NextRequest) {
   // --- PHONE VERIFICATION ENFORCEMENT ---
   // If user is accessing protected routes (Dashboard), enforce verification.
   // We check if it's a dashboard route AND not the verification page itself.
+  // CRITICAL FIX: Add explicit dashboard route check without locale
   const isDashboardRoute = locales.some(loc => pathname.startsWith(`/${loc}/dashboard`)) || pathname.startsWith('/dashboard')
   const isVerificationPage = locales.some(loc => pathname.startsWith(`/${loc}/verify-phone`)) || pathname === '/verify-phone'
 
@@ -234,9 +235,10 @@ export async function updateSession(request: NextRequest) {
     !pathname.startsWith('/_next') &&
     !pathname.startsWith('/f/') &&
     !pathname.startsWith('/auth') &&
-    !pathname.includes('.') 
+    !pathname.includes('.') &&
+    !hasLocale
 
-  if (shouldHandleLocale && !hasLocale) {
+  if (shouldHandleLocale) {
       const locale = 'en' // Default
       return NextResponse.redirect(
         new URL(`/${locale}${pathname.startsWith('/') ? '' : '/'}${pathname}`, request.url)
