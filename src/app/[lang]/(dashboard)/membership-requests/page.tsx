@@ -16,7 +16,7 @@ export default async function RequestsPage() {
 
   const profile = profileData as any
 
-  if (!profile || profile.role !== 'admin') {
+  if (!profile || !profile.organization_id || profile.role !== 'admin') {
       return (
         <div className="p-8 text-center">
           <h1 className="text-xl font-bold text-red-600">Access Denied</h1>

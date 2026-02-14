@@ -21,7 +21,7 @@ export default async function AppealsPage(props: { params: Promise<{ lang: strin
 
   const profile = profileData as any
 
-  if (!profile || !['admin', 'executive'].includes(profile.role)) {
+  if (!profile || !profile.organization_id || !['admin', 'executive'].includes(profile.role)) {
     return <div>Access Denied</div>
   }
 

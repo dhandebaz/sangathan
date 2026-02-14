@@ -23,6 +23,14 @@ export default async function EventsPage(props: { params: Promise<{ lang: string
   const profile = profileData as any
   const orgId = profile?.organization_id
 
+  if (!orgId) {
+    return (
+      <div className="p-8 text-center text-gray-500">
+        You are not currently a member of any organisation.
+      </div>
+    )
+  }
+
   const [ownedEventsRes, jointEventsRes] = await Promise.all([
     (supabase.from('events') as any).select('*, event_rsvps(count)').eq('organisation_id', orgId).order('start_time', { ascending: true }),
     (supabase.from('joint_events') as any).select('event:events(*, event_rsvps(count))').eq('organisation_id', orgId)

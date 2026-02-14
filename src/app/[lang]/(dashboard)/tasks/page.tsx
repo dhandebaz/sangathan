@@ -17,7 +17,7 @@ export default async function TasksPage(props: { params: Promise<{ lang: string 
   const { data: profileData } = await supabase.from('profiles').select('organization_id, role').eq('id', user.id).single()
   const profile = profileData as any
   
-  if (!profile) return <div>Profile not found</div>
+  if (!profile || !profile.organization_id) return <div>No Organisation</div>
 
   const canTasks = await checkCapability(profile.organization_id, 'volunteer_engine')
   if (!canTasks) return <div className="p-8 text-center text-gray-500">This feature is not enabled for your organisation.</div>

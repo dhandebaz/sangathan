@@ -22,7 +22,7 @@ export default async function AnnouncementsPage(props: { params: Promise<{ lang:
   
   const profile = profileData as any
 
-  if (!profile) return <div>Profile not found</div>
+  if (!profile || !profile.organization_id) return <div>No Organisation Found</div>
 
   const { data: announcements } = await (supabase
     .from('announcements') as any)

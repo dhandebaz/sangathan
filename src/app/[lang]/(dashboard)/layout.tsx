@@ -24,6 +24,9 @@ export default async function DashboardLayout(props: {
     if (profile?.organization_id) {
       capabilities = await getOrgCapabilities(profile.organization_id)
       role = profile.role
+    } else {
+      // Handle users without an organization (e.g., just signed up)
+      capabilities = { basic_governance: false }
     }
   }
 

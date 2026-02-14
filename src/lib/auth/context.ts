@@ -25,7 +25,7 @@ export async function getUserContext(): Promise<UserContext> {
   // Fetch Profile with Organization ID and Role
   const { data, error: profileError } = await supabase
     .from('profiles')
-    .select('organisation_id, role, full_name')
+    .select('organization_id, role, full_name')
     .eq('id', user.id)
     .single()
   
@@ -50,7 +50,7 @@ export async function getUserContext(): Promise<UserContext> {
       id: user.id,
       email: user.email,
     },
-    organizationId: profile.organisation_id,
+    organizationId: profile.organization_id,
     role: role,
   }
 }

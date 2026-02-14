@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation'
 import { AdminDashboard } from '@/components/dashboard/admin-view'
 import { MemberDashboard } from '@/components/dashboard/member-view'
 import { unlockCapabilities } from '@/lib/capabilities'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,6 +24,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     .single()
 
   const profile = profileData as any
+  if (!profile) return <div>Profile not found</div>
 
   if (profile?.status === 'pending') {
     return (
@@ -50,6 +53,23 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
           <p className="text-red-700">
             Your request to join this organisation was not approved.
           </p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!profile.organization_id) {
+    return (
+      <div className="max-w-4xl mx-auto py-20 px-4 text-center">
+        <h1 className="text-2xl font-bold mb-4">No Organisation Found</h1>
+        <p className="text-gray-600 mb-8">You are not currently a member of any organisation.</p>
+        <div className="flex justify-center gap-4">
+          <Button asChild>
+            <Link href={`/${lang}/signup`}>Create New Organisation</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href={`/${lang}/docs`}>View Documentation</Link>
+          </Button>
         </div>
       </div>
     )

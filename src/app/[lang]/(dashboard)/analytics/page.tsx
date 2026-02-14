@@ -22,7 +22,7 @@ export default async function AnalyticsPage(props: { params: Promise<{ lang: str
 
   const profile = profileData as any
 
-  if (!profile || !['admin', 'editor'].includes(profile.role)) {
+  if (!profile || !profile.organization_id || !['admin', 'editor'].includes(profile.role)) {
     return <div className="p-8 text-center text-red-600">Access Denied</div>
   }
 

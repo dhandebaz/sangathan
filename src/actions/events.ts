@@ -66,7 +66,7 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
       const { count } = await supabase
         .from('organisation_links')
         .select('*', { count: 'exact', head: true })
-        .or(`and(requester_org_id.eq.${profile.organisation_id},responder_org_id.in.(${input.collaborating_org_ids.join(',')})),and(requester_org_id.in.(${input.collaborating_org_ids.join(',')}),responder_org_id.eq.${profile.organisation_id})`)
+        .or(`and(requester_org_id.eq.${profile.organization_id},responder_org_id.in.(${input.collaborating_org_ids.join(',')})),and(requester_org_id.in.(${input.collaborating_org_ids.join(',')}),responder_org_id.eq.${profile.organization_id})`)
         .eq('status', 'active')
       
       if ((count || 0) < input.collaborating_org_ids.length) {

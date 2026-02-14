@@ -38,7 +38,7 @@ export async function createCollaborationRequest(targetOrgId: string) {
       return { success: false, error: 'Permission denied' }
     }
 
-    if (profile.organisation_id === targetOrgId) {
+    if (profile.organization_id === targetOrgId) {
       return { success: false, error: 'Cannot collaborate with yourself' }
     }
 

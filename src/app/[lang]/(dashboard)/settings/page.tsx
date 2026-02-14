@@ -19,7 +19,7 @@ export default async function SettingsPage() {
 
   const profile = profileData as any
 
-  if (!profile || profile.role !== 'admin') {
+  if (!profile || !profile.organization_id || profile.role !== 'admin') {
       return <div>Access Denied</div>
   }
 

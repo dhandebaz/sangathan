@@ -19,7 +19,7 @@ export default async function NewPollPage(props: { params: Promise<{ lang: strin
 
   const profile = profileData as any
 
-  if (!profile || !['admin', 'editor'].includes(profile.role)) {
+  if (!profile || !profile.organization_id || !['admin', 'editor'].includes(profile.role)) {
     return <div>Access Denied</div>
   }
 

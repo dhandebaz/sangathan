@@ -20,7 +20,7 @@ export default async function NewNetworkPage(props: { params: Promise<{ lang: st
 
   const profile = profileData as any
 
-  if (!profile || !['admin', 'executive'].includes(profile.role)) {
+  if (!profile || !profile.organization_id || !['admin', 'executive'].includes(profile.role)) {
     return <div>Access Denied</div>
   }
 
