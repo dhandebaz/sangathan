@@ -1,141 +1,123 @@
 import { createClient } from '@/lib/supabase/server'
-import { Users, FileText, Calendar } from 'lucide-react'
-import Link from 'next/link'
+import { Users } from 'lucide-react'
+import { redirect } from 'next/navigation'
+import { AdminDashboard } from '@/components/dashboard/admin-view'
+import { MemberDashboard } from '@/components/dashboard/member-view'
+import { unlockCapabilities } from '@/lib/capabilities'
 
 export const dynamic = 'force-dynamic'
 
-export default async function DashboardPage() {
+export default async function DashboardPage(props: { params: Promise<{ lang: string }> }) {
+  const { lang } = await props.params
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
 
-  // Parallel Fetching with Safe Defaults
-  // We use Promise.allSettled to ensure that one failure doesn't crash the entire dashboard
-  const results = await Promise.allSettled([
-    supabase.from('members').select('*', { count: 'exact', head: true }),
-    supabase.from('forms').select('*', { count: 'exact', head: true }).eq('is_active', true),
-    supabase.from('meetings').select('*', { count: 'exact', head: true }),
-    supabase.from('forms').select('id, title, form_submissions(count)').order('created_at', { ascending: false }).limit(5),
-    supabase.from('meetings').select('id, title, start_time').gte('start_time', new Date().toISOString()).order('start_time', { ascending: true }).limit(5)
-  ])
+  if (!user) redirect(`/${lang}/login`)
 
-  // Helper to extract data or default
-  const getResult = (index: number) => {
-    const res = results[index]
-    return res.status === 'fulfilled' ? res.value : { count: 0, data: [] }
+  // Check Membership Status
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('status, role, organisation_id')
+    .eq('id', user.id)
+    .single()
+
+  // ... (existing status checks) ...
+
+  if (profile?.status === 'pending') {
+    return (
+      <div className="max-w-4xl mx-auto py-20 px-4 text-center">
+        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-8">
+          <div className="flex justify-center mb-4">
+             <div className="bg-yellow-100 p-3 rounded-full">
+               <Users className="w-8 h-8 text-yellow-600" />
+             </div>
+          </div>
+          <h1 className="text-2xl font-bold text-yellow-800 mb-2">Membership Pending</h1>
+          <p className="text-yellow-700 max-w-lg mx-auto">
+            Your request to join this organisation is currently pending approval by an administrator.
+            You will be notified via email once your request is processed.
+          </p>
+        </div>
+      </div>
+    )
   }
 
-  const memberRes = getResult(0) as any
-  const formRes = getResult(1) as any
-  const meetingRes = getResult(2) as any
-  const recentFormsRes = getResult(3) as any
-  const upcomingMeetingsRes = getResult(4) as any
-
-  // Log failures for debugging (only in server logs)
-  results.forEach((res, i) => {
-    if (res.status === 'rejected') {
-      console.error(`Dashboard fetch failed at index ${i}:`, res.reason)
-    } else if (res.value.error) {
-      console.error(`Dashboard query error at index ${i}:`, res.value.error)
-    }
-  })
-
-  const memberCount = memberRes.data !== null ? memberRes.count : 0
-  const formCount = formRes.data !== null ? formRes.count : 0
-  const meetingCount = meetingRes.data !== null ? meetingRes.count : 0
-  const recentForms = recentFormsRes.data || []
-  const upcomingMeetings = upcomingMeetingsRes.data || []
-
-  return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground mt-1">Overview of your organisation's activity.</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-blue-50 text-blue-600 rounded-lg">
-              <Users size={24} />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-500 uppercase">Total Members</p>
-              <h3 className="text-3xl font-bold">{memberCount || 0}</h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-orange-50 text-orange-600 rounded-lg">
-              <FileText size={24} />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-500 uppercase">Active Forms</p>
-              <h3 className="text-3xl font-bold">{formCount || 0}</h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-green-50 text-green-600 rounded-lg">
-              <Calendar size={24} />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-500 uppercase">Total Meetings</p>
-              <h3 className="text-3xl font-bold">{meetingCount || 0}</h3>
-            </div>
-          </div>
+  if (profile?.status === 'rejected') {
+    return (
+      <div className="max-w-4xl mx-auto py-20 px-4 text-center">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-8">
+          <h1 className="text-2xl font-bold text-red-800 mb-2">Membership Rejected</h1>
+          <p className="text-red-700">
+            Your request to join this organisation was not approved.
+          </p>
         </div>
       </div>
+    )
+  }
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Recent Forms */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-             <h3 className="font-bold text-lg">Recent Forms</h3>
-             <Link href="/dashboard/forms" className="text-sm text-blue-600 hover:underline">View All</Link>
-          </div>
-          <div className="divide-y">
-            {recentForms?.map((form: any) => (
-               <Link href={`/dashboard/forms/${form.id}`} key={form.id} className="block p-4 hover:bg-gray-50 transition-colors">
-                 <div className="flex justify-between items-center">
-                    <span className="font-medium">{form.title}</span>
-                    <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
-                       {form.form_submissions?.[0]?.count || 0} submissions
-                    </span>
-                 </div>
-               </Link>
-            ))}
-            {(!recentForms || recentForms.length === 0) && (
-               <div className="p-8 text-center text-gray-400 italic">No forms created yet.</div>
-            )}
-          </div>
-        </div>
+  // Check Org Suspension
+  const { data: org } = await supabase
+    .from('organisations')
+    .select('status')
+    .eq('id', profile.organisation_id)
+    .single()
 
-        {/* Upcoming Meetings */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-             <h3 className="font-bold text-lg">Upcoming Meetings</h3>
-             <Link href="/dashboard/meetings" className="text-sm text-blue-600 hover:underline">View All</Link>
-          </div>
-          <div className="divide-y">
-            {upcomingMeetings?.map((meeting: any) => (
-               <Link href={`/dashboard/meetings/${meeting.id}`} key={meeting.id} className="block p-4 hover:bg-gray-50 transition-colors">
-                 <div className="flex justify-between items-center">
-                    <span className="font-medium">{meeting.title}</span>
-                    <span className="text-sm text-gray-500">
-                       {new Date(meeting.start_time).toLocaleDateString()} {new Date(meeting.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                 </div>
-               </Link>
-            ))}
-            {(!upcomingMeetings || upcomingMeetings.length === 0) && (
-               <div className="p-8 text-center text-gray-400 italic">No upcoming meetings.</div>
-            )}
-          </div>
+  if (org?.status === 'suspended') {
+    return (
+      <div className="max-w-4xl mx-auto py-20 px-4 text-center">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-8">
+          <h1 className="text-2xl font-bold text-red-800 mb-2">Organisation Suspended</h1>
+          <p className="text-red-700">
+            This organisation has been suspended due to policy violations. Please contact platform support.
+          </p>
         </div>
       </div>
-    </div>
-  )
+    )
+  }
+
+  const isAdmin = ['admin', 'editor', 'executive'].includes(profile.role)
+
+  // Try to unlock capabilities if admin visits dashboard
+  if (isAdmin) {
+     await unlockCapabilities(profile.organisation_id)
+  }
+
+  if (isAdmin) {
+    // Admin Data Fetching
+    const [members, events, tasks, donations, activity] = await Promise.all([
+      supabase.from('members').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organisation_id),
+      supabase.from('events').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organisation_id),
+      supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organisation_id).eq('status', 'open'),
+      supabase.from('donations').select('amount').eq('organisation_id', profile.organisation_id),
+      supabase.from('audit_logs').select('action, created_at, details').eq('organisation_id', profile.organisation_id).order('created_at', { ascending: false }).limit(5)
+    ])
+
+    const totalDonations = (donations.data || []).reduce((sum, d) => sum + (Number(d.amount) || 0), 0)
+    
+    // Transform audit logs to recent activity format
+    const recentActivity = (activity.data || []).map((log: any) => ({
+      title: log.action.replace(/_/g, ' '),
+      type: 'audit',
+      created_at: log.created_at
+    }))
+
+    return <AdminDashboard lang={lang} stats={{
+      members: members.count || 0,
+      events: events.count || 0,
+      tasks: tasks.count || 0,
+      donations: `₹${totalDonations.toLocaleString()}`
+    }} recentActivity={recentActivity} />
+  } else {
+    // Member Data Fetching
+    const [events, tasks, announcements] = await Promise.all([
+      supabase.from('events').select('*').eq('organisation_id', profile.organisation_id).gte('start_time', new Date().toISOString()).order('start_time', { ascending: true }).limit(3),
+      supabase.from('task_assignments').select('task:tasks(*)').eq('member_id', user.id).eq('accepted', true).limit(3),
+      supabase.from('announcements').select('*').eq('organisation_id', profile.organisation_id).order('created_at', { ascending: false }).limit(3)
+    ])
+
+    // Filter tasks correctly
+    const myTasks = (tasks.data || []).map((t: any) => t.task).filter(Boolean)
+
+    return <MemberDashboard lang={lang} events={events.data || []} tasks={myTasks} announcements={announcements.data || []} />
+  }
 }

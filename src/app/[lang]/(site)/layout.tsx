@@ -38,7 +38,20 @@ export default async function SiteLayout({
   const { lang } = await params
   
   return (
-    <div className="flex flex-col min-h-screen bg-white text-black font-sans selection:bg-orange-100">
+    <div className="flex flex-col min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] font-sans selection:bg-[var(--accent)] selection:text-white">
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              try {
+                var stored = localStorage.getItem('theme');
+                var theme = stored || 'dark';
+                document.documentElement.setAttribute('data-theme', theme);
+              } catch (e) {}
+            })();
+          `,
+        }}
+      />
       <Navbar lang={lang} />
       <main className="flex-grow pt-16">
         {children}

@@ -1,8 +1,9 @@
 import { getDocContent } from '@/lib/docs'
 import ReactMarkdown from 'react-markdown'
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Clock, AlertCircle } from 'lucide-react'
 import { Metadata } from 'next'
+import { TableOfContents } from '@/components/docs/table-of-contents'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,7 +15,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { lang, slug } = await params
   const isHindi = lang === 'hi'
   
-  // Basic title mapping for metadata
+  // Basic title mapping for metadata (can be moved to a shared config if needed)
   const titles: Record<string, string> = {
     'getting-started': 'Getting Started',
     'members': 'Members',
@@ -40,6 +41,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+function slugify(text: string): string {
+  return text
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '')
+}
+
 export default async function DocPage({ params }: PageProps) {
   const { lang, slug } = await params
   const isHindi = lang === 'hi'
@@ -48,41 +60,156 @@ export default async function DocPage({ params }: PageProps) {
 
   if (!content) {
     return (
-      <div className="max-w-3xl mx-auto py-12 px-6 text-center">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">
+      <div className="py-12 px-6 text-center bg-[var(--surface)] rounded-2xl border border-[var(--border-subtle)]">
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[var(--bg-secondary)] mb-4">
+          <AlertCircle className="text-[var(--text-secondary)]" size={24} />
+        </div>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">
           {isHindi ? 'दस्तावेज़ नहीं मिला' : 'Document Not Found'}
         </h1>
-        <p className="text-gray-500 mb-8">
+        <p className="text-[var(--text-secondary)] mb-8 max-w-md mx-auto">
           {isHindi
             ? 'क्षमा करें, आप जिस गाइड की तलाश कर रहे हैं वह मौजूद नहीं है।'
             : 'Sorry, the guide you are looking for does not exist.'}
         </p>
-        <Link href={`/${lang}/docs`} className="text-orange-600 hover:underline flex items-center justify-center gap-2">
+        <Link href={`/${lang}/docs`} className="inline-flex items-center gap-2 text-[var(--accent)] font-medium hover:underline">
           <ArrowLeft size={16} /> {isHindi ? 'वापस दस्तावेजों पर जाएं' : 'Back to Docs'}
         </Link>
       </div>
     )
   }
 
-  return (
-    <div className="max-w-4xl mx-auto py-12 px-6">
-      <div className="mb-8">
-        <Link href={`/${lang}/docs`} className="text-gray-500 hover:text-gray-900 flex items-center gap-2 mb-4 text-sm">
-          <ArrowLeft size={14} /> {isHindi ? 'दस्तावेज़' : 'Documentation'}
-        </Link>
+  // Custom components for ReactMarkdown to handle IDs and Styling
+  const MarkdownComponents: any = {
+    h1: ({ children }: any) => {
+      const id = typeof children === 'string' ? slugify(children) : ''
+      return <h1 id={id} className="text-3xl md:text-4xl font-bold tracking-tight text-[var(--text-primary)] mb-6 mt-10 first:mt-0">{children}</h1>
+    },
+    h2: ({ children }: any) => {
+      const id = typeof children === 'string' ? slugify(children) : ''
+      return <h2 id={id} className="text-2xl font-bold tracking-tight text-[var(--text-primary)] mb-4 mt-10 scroll-mt-24">{children}</h2>
+    },
+    h3: ({ children }: any) => {
+      const id = typeof children === 'string' ? slugify(children) : ''
+      return <h3 id={id} className="text-xl font-bold text-[var(--text-primary)] mb-3 mt-8 scroll-mt-24">{children}</h3>
+    },
+    p: ({ children }: any) => <p className="text-[var(--text-secondary)] leading-7 mb-5 text-[1.05rem]">{children}</p>,
+    ul: ({ children }: any) => <ul className="list-disc pl-6 mb-5 space-y-2 text-[var(--text-secondary)]">{children}</ul>,
+    ol: ({ children }: any) => <ol className="list-decimal pl-6 mb-5 space-y-2 text-[var(--text-secondary)]">{children}</ol>,
+    li: ({ children }: any) => <li className="pl-1">{children}</li>,
+    a: ({ href, children }: any) => <a href={href} className="text-[var(--accent)] hover:underline font-medium decoration-2 underline-offset-2">{children}</a>,
+    blockquote: ({ children }: any) => (
+      <blockquote className="border-l-4 border-[var(--accent)] pl-4 py-1 my-6 bg-[var(--surface)] italic text-[var(--text-secondary)] rounded-r-lg">
+        {children}
+      </blockquote>
+    ),
+    code: ({ node, inline, className, children, ...props }: any) => {
+      const match = /language-(\w+)/.exec(className || '')
+      return !inline ? (
+        <div className="relative my-6 rounded-lg overflow-hidden border border-[var(--border-subtle)] bg-[var(--surface)]">
+          <div className="px-4 py-2 border-b border-[var(--border-subtle)] bg-[var(--bg-secondary)] flex items-center gap-2">
+            <div className="flex gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-full bg-red-500/20"></div>
+              <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/20"></div>
+              <div className="w-2.5 h-2.5 rounded-full bg-green-500/20"></div>
+            </div>
+            <span className="text-xs text-[var(--text-secondary)] font-mono ml-2 uppercase opacity-60">
+              {match?.[1] || 'text'}
+            </span>
+          </div>
+          <div className="overflow-x-auto p-4">
+            <code className={`${className} text-sm font-mono text-[var(--text-primary)]`} {...props}>
+              {children}
+            </code>
+          </div>
+        </div>
+      ) : (
+        <code className="px-1.5 py-0.5 rounded-md bg-[var(--bg-secondary)] border border-[var(--border-subtle)] text-[0.9em] font-mono text-[var(--text-primary)]" {...props}>
+          {children}
+        </code>
+      )
+    },
+    hr: () => <hr className="my-10 border-[var(--border-subtle)]" />,
+    table: ({ children }: any) => (
+      <div className="overflow-x-auto my-8 border border-[var(--border-subtle)] rounded-lg">
+        <table className="min-w-full divide-y divide-[var(--border-subtle)]">
+          {children}
+        </table>
       </div>
-      
-      <article className="prose prose-slate max-w-none prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-a:text-orange-600 hover:prose-a:text-orange-700">
-        <ReactMarkdown>{content}</ReactMarkdown>
+    ),
+    thead: ({ children }: any) => <thead className="bg-[var(--bg-secondary)]">{children}</thead>,
+    tbody: ({ children }: any) => <tbody className="divide-y divide-[var(--border-subtle)] bg-[var(--bg-primary)]">{children}</tbody>,
+    tr: ({ children }: any) => <tr>{children}</tr>,
+    th: ({ children }: any) => <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">{children}</th>,
+    td: ({ children }: any) => <td className="px-4 py-3 whitespace-nowrap text-sm text-[var(--text-secondary)]">{children}</td>,
+  }
+
+  return (
+    <div className="flex flex-col xl:flex-row gap-12 w-full">
+      {/* Content Column */}
+      <article className="flex-1 min-w-0 max-w-3xl">
+        <div className="mb-8 pb-8 border-b border-[var(--border-subtle)]">
+          <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)] mb-4">
+             <Link href={`/${lang}/docs`} className="hover:text-[var(--text-primary)] transition-colors">
+               {isHindi ? 'दस्तावेज़' : 'Docs'}
+             </Link>
+             <ChevronRight size={14} />
+             <span className="text-[var(--text-primary)] font-medium capitalize">
+               {slug.replace(/-/g, ' ')}
+             </span>
+          </div>
+          <div className="flex items-center gap-4 text-sm text-[var(--text-secondary)] mt-4">
+            <div className="flex items-center gap-1.5">
+               <Clock size={14} />
+               <span>5 min read</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="docs-content">
+           <ReactMarkdown components={MarkdownComponents}>
+             {content}
+           </ReactMarkdown>
+        </div>
+
+        <div className="mt-16 pt-8 border-t border-[var(--border-subtle)] flex justify-between items-center">
+          <p className="text-sm text-[var(--text-secondary)]">
+            {isHindi 
+              ? 'क्या यह पृष्ठ मददगार था?'
+              : 'Was this page helpful?'}
+          </p>
+          <a 
+            href="https://github.com/bahujan-queer/sangathan"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium text-[var(--accent)] hover:underline"
+          >
+            {isHindi ? 'गिटहब पर संपादित करें' : 'Edit on GitHub'}
+          </a>
+        </div>
       </article>
 
-      <div className="mt-12 pt-8 border-t border-gray-200">
-        <p className="text-sm text-gray-500">
-          {isHindi 
-            ? 'क्या यह पृष्ठ मददगार था? हमें बताएं।'
-            : 'Was this page helpful? Let us know.'}
-        </p>
-      </div>
+      {/* Right Column: Table of Contents */}
+      <TableOfContents lang={lang} />
     </div>
+  )
+}
+
+function ChevronRight({ size = 16, className = "" }: { size?: number, className?: string }) {
+  return (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      width={size} 
+      height={size} 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      className={className}
+    >
+      <path d="m9 18 6-6-6-6"/>
+    </svg>
   )
 }

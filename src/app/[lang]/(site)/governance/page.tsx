@@ -19,20 +19,20 @@ export default async function GovernancePage({ params }: { params: Promise<{ lan
 
   return (
     <div className="max-w-4xl mx-auto py-12 px-6">
-      <h1 className="text-4xl font-bold mb-6 text-gray-900">
+      <h1 className="text-4xl font-bold mb-6 text-[var(--text-primary)]">
         {isHindi ? 'शासन और तटस्थता' : 'Governance & Neutrality'}
       </h1>
-      <p className="text-xl text-gray-500 mb-12 leading-relaxed">
+      <p className="text-xl text-[var(--text-secondary)] mb-12 leading-relaxed">
         {isHindi 
           ? 'एक तटस्थ, सुरक्षित और विश्वसनीय मंच बनाए रखने के लिए हमारी रूपरेखा।'
           : 'Our framework for maintaining a neutral, safe, and reliable platform.'}
       </p>
 
-      <div className="prose prose-slate max-w-none text-gray-700 space-y-12">
+      <div className="prose prose-slate max-w-none text-[var(--text-secondary)] space-y-12">
         <section>
           <div className="flex items-center gap-3 mb-4">
-            <Scale className="w-8 h-8 text-orange-600" />
-            <h2 className="text-2xl font-bold text-gray-900 m-0">{isHindi ? 'प्लेटफ़ॉर्म तटस्थता' : 'Platform Neutrality'}</h2>
+            <Scale className="w-8 h-8 text-[var(--accent)]" />
+            <h2 className="text-2xl font-bold text-[var(--text-primary)] m-0">{isHindi ? 'प्लेटफ़ॉर्म तटस्थता' : 'Platform Neutrality'}</h2>
           </div>
           <p>
             {isHindi
@@ -41,15 +41,15 @@ export default async function GovernancePage({ params }: { params: Promise<{ lan
           </p>
           <p>
             {isHindi
-              ? 'हम वैचारिक सामग्री को तब तक पुलिस नहीं करते जब तक कि वह हमारी <Link href={`/${lang}/acceptable-use-policy`} className="text-orange-600 hover:underline">स्वीकार्य उपयोग नीति</Link> (जैसे, अभद्र भाषा, हिंसा, धोखाधड़ी) का उल्लंघन नहीं करती। हम सामग्री-अज्ञेयवादी हैं लेकिन सुरक्षा-अनिवार्य हैं।'
-              : 'We do not police ideological content unless it violates our <Link href={`/${lang}/acceptable-use-policy`} className="text-orange-600 hover:underline">Acceptable Use Policy</Link> (e.g., hate speech, violence, fraud). We are content-agnostic but safety-mandatory.'}
+              ? 'हम वैचारिक सामग्री को तब तक पुलिस नहीं करते जब तक कि वह हमारी <Link href={`/${lang}/acceptable-use-policy`} className="text-[var(--accent)] hover:underline">स्वीकार्य उपयोग नीति</Link> (जैसे, अभद्र भाषा, हिंसा, धोखाधड़ी) का उल्लंघन नहीं करती। हम सामग्री-अज्ञेयवादी हैं लेकिन सुरक्षा-अनिवार्य हैं।'
+              : 'We do not police ideological content unless it violates our <Link href={`/${lang}/acceptable-use-policy`} className="text-[var(--accent)] hover:underline">Acceptable Use Policy</Link> (e.g., hate speech, violence, fraud). We are content-agnostic but safety-mandatory.'}
           </p>
         </section>
 
         <section>
           <div className="flex items-center gap-3 mb-4">
-            <Ban className="w-8 h-8 text-orange-600" />
-            <h2 className="text-2xl font-bold text-gray-900 m-0">{isHindi ? 'निलंबन नीति' : 'Suspension Policy'}</h2>
+            <Ban className="w-8 h-8 text-[var(--accent)]" />
+            <h2 className="text-2xl font-bold text-[var(--text-primary)] m-0">{isHindi ? 'निलंबन नीति' : 'Suspension Policy'}</h2>
           </div>
           <p>
             {isHindi
@@ -65,8 +65,8 @@ export default async function GovernancePage({ params }: { params: Promise<{ lan
 
         <section>
           <div className="flex items-center gap-3 mb-4">
-            <ShieldAlert className="w-8 h-8 text-orange-600" />
-            <h2 className="text-2xl font-bold text-gray-900 m-0">{isHindi ? 'कानूनी होल्ड फ्रेमवर्क' : 'Legal Hold Framework'}</h2>
+            <ShieldAlert className="w-8 h-8 text-[var(--accent)]" />
+            <h2 className="text-2xl font-bold text-[var(--text-primary)] m-0">{isHindi ? 'कानूनी होल्ड फ्रेमवर्क' : 'Legal Hold Framework'}</h2>
           </div>
           <p>
             {isHindi
@@ -82,13 +82,13 @@ export default async function GovernancePage({ params }: { params: Promise<{ lan
 
         <section>
           <div className="flex items-center gap-3 mb-4">
-            <Eye className="w-8 h-8 text-orange-600" />
-            <h2 className="text-2xl font-bold text-gray-900 m-0">{isHindi ? 'पारदर्शिता प्रतिबद्धता' : 'Transparency Commitment'}</h2>
+            <Eye className="w-8 h-8 text-[var(--accent)]" />
+            <h2 className="text-2xl font-bold text-[var(--text-primary)] m-0">{isHindi ? 'पारदर्शिता प्रतिबद्धता' : 'Transparency Commitment'}</h2>
           </div>
           <p>
             {isHindi
-              ? 'हम अपने शासन में पारदर्शिता के लिए प्रतिबद्ध हैं। हम एक <Link href={`/${lang}/transparency`} className="text-orange-600 hover:underline">पारदर्शिता रिपोर्ट</Link> प्रकाशित करते हैं जिसमें सरकारी डेटा अनुरोधों, टेकडाउन नोटिस और प्लेटफॉर्म द्वारा की गई प्रवर्तन कार्रवाई का विवरण होता है।'
-              : 'We are committed to transparency in our governance. We publish a <Link href={`/${lang}/transparency`} className="text-orange-600 hover:underline">Transparency Report</Link> detailing government data requests, takedown notices, and enforcement actions taken by the platform.'}
+              ? 'हम अपने शासन में पारदर्शिता के लिए प्रतिबद्ध हैं। हम एक <Link href={`/${lang}/transparency`} className="text-[var(--accent)] hover:underline">पारदर्शिता रिपोर्ट</Link> प्रकाशित करते हैं जिसमें सरकारी डेटा अनुरोधों, टेकडाउन नोटिस और प्लेटफॉर्म द्वारा की गई प्रवर्तन कार्रवाई का विवरण होता है।'
+              : 'We are committed to transparency in our governance. We publish a <Link href={`/${lang}/transparency`} className="text-[var(--accent)] hover:underline">Transparency Report</Link> detailing government data requests, takedown notices, and enforcement actions taken by the platform.'}
           </p>
         </section>
       </div>

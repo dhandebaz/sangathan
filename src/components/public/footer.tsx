@@ -3,51 +3,138 @@ import Link from 'next/link'
 export function Footer({ lang }: { lang: string }) {
   const isHindi = lang === 'hi'
   
+  const footerLinks = {
+    product: {
+      title: isHindi ? 'उत्पाद' : 'Product',
+      links: [
+        { label: isHindi ? 'विशेषताएं' : 'Features', href: `/${lang}/#features` },
+        { label: isHindi ? 'रोडमैप' : 'Roadmap', href: `/${lang}/roadmap` },
+        { label: isHindi ? 'परिवर्तन लॉग' : 'Changelog', href: `/${lang}/changelog` },
+        { label: isHindi ? 'सिस्टम स्थिति' : 'System Status', href: `/${lang}/status` },
+      ]
+    },
+    trust: {
+      title: isHindi ? 'विश्वास' : 'Trust',
+      links: [
+        { label: isHindi ? 'शासन' : 'Governance', href: `/${lang}/governance` },
+        { label: isHindi ? 'सुरक्षा' : 'Security', href: `/${lang}/security` },
+        { label: isHindi ? 'पारदर्शिता' : 'Transparency', href: `/${lang}/transparency` },
+        { label: isHindi ? 'रिपोर्ट' : 'Reports', href: `/${lang}/reports` },
+      ]
+    },
+    legal: {
+      title: isHindi ? 'कानूनी' : 'Legal',
+      links: [
+        { label: isHindi ? 'गोपनीयता नीति' : 'Privacy Policy', href: `/${lang}/privacy` },
+        { label: isHindi ? 'सेवा की शर्तें' : 'Terms of Service', href: `/${lang}/terms` },
+        { label: isHindi ? 'डेटा अधिकार' : 'Data Rights', href: `/${lang}/data-rights` },
+        { label: isHindi ? 'कुकीज़' : 'Cookies', href: `/${lang}/cookies` },
+      ]
+    },
+    contact: {
+      title: isHindi ? 'संपर्क' : 'Contact',
+      links: [
+        { label: 'Email', href: 'mailto:hello@sangathan.space' },
+        { label: 'Twitter / X', href: 'https://twitter.com/sangathan_app' },
+        { label: 'GitHub', href: 'https://github.com/bahujan-queer/sangathan' },
+        { label: isHindi ? 'मदद चाहिए?' : 'Need Help?', href: `/${lang}/contact` },
+      ]
+    }
+  }
+
   return (
-    <footer className="bg-white border-t border-gray-100 py-12 mt-auto">
+    <footer className="bg-[var(--surface)] border-t border-[var(--border-subtle)] mt-auto pt-16 pb-8 text-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-           <div className="col-span-1 md:col-span-2">
-              <Link href={`/${lang}`} className="text-2xl font-bold tracking-tight mb-4 block">
-                {isHindi ? 'संगठन' : 'Sangathan'}
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-12">
+           {/* Brand Column (Span 2 on LG) */}
+           <div className="col-span-2 md:col-span-2 lg:col-span-2 pr-8">
+              <Link href={`/${lang}`} className="text-2xl font-bold tracking-tight text-[var(--text-primary)] mb-4 block hover:opacity-90">
+                Sangathan
               </Link>
-              <p className="text-gray-500 text-sm max-w-xs">
+              <p className="text-[var(--text-secondary)] leading-relaxed mb-6 max-w-sm">
                  {isHindi 
                    ? 'जमीनी संगठनों के लिए डिजिटल बुनियादी ढांचा। न्यूनतम, शांत और गोपनीयता के लिए निर्मित।' 
-                   : 'Infrastructure for grassroots organisations. Minimal, calm, and built for privacy.'}
+                   : 'Digital infrastructure for grassroots organisations. Built for privacy, autonomy, and institutional integrity.'}
               </p>
            </div>
            
-           <div>
-              <h4 className="font-bold mb-4 text-sm uppercase tracking-wider">{isHindi ? 'मंच' : 'Platform'}</h4>
-              <ul className="space-y-2 text-sm text-gray-600">
-                 <li><Link href={`/${lang}/about`} className="hover:text-black">{isHindi ? 'हमारे बारे में' : 'About Us'}</Link></li>
-                 <li><Link href={`/${lang}/docs`} className="hover:text-black">{isHindi ? 'दस्तावेज़' : 'Documentation'}</Link></li>
-                 <li><Link href={`/${lang}/roadmap`} className="hover:text-black">{isHindi ? 'रोडमैप' : 'Roadmap'}</Link></li>
-                 <li><Link href={`/${lang}/changelog`} className="hover:text-black">{isHindi ? 'परिवर्तन लॉग' : 'Changelog'}</Link></li>
-                 <li><Link href={`/${lang}/status`} className="hover:text-black">{isHindi ? 'सिस्टम स्थिति' : 'System Status'}</Link></li>
+           {/* Links Columns */}
+           <div className="col-span-1">
+              <h4 className="font-bold mb-4 text-[var(--text-primary)]">{footerLinks.product.title}</h4>
+              <ul className="space-y-3">
+                 {footerLinks.product.links.map((link) => (
+                   <li key={link.href}>
+                     <Link href={link.href} className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
+                       {link.label}
+                     </Link>
+                   </li>
+                 ))}
               </ul>
            </div>
 
-           <div>
-              <h4 className="font-bold mb-4 text-sm uppercase tracking-wider">{isHindi ? 'कानूनी और संपर्क' : 'Legal & Contact'}</h4>
-              <ul className="space-y-2 text-sm text-gray-600">
-                 <li><Link href={`/${lang}/governance`} className="hover:text-black">{isHindi ? 'शासन' : 'Governance'}</Link></li>
-                 <li><Link href={`/${lang}/security`} className="hover:text-black">{isHindi ? 'सुरक्षा' : 'Security'}</Link></li>
-                 <li><Link href={`/${lang}/transparency`} className="hover:text-black">{isHindi ? 'पारदर्शिता' : 'Transparency'}</Link></li>
-                 <li><Link href={`/${lang}/contact`} className="hover:text-black">{isHindi ? 'संपर्क करें' : 'Contact'}</Link></li>
-                 <li><Link href={`/${lang}/privacy`} className="hover:text-black">{isHindi ? 'गोपनीयता' : 'Privacy'}</Link></li>
-                 <li><Link href={`/${lang}/terms`} className="hover:text-black">{isHindi ? 'शर्तें' : 'Terms'}</Link></li>
+           <div className="col-span-1">
+              <h4 className="font-bold mb-4 text-[var(--text-primary)]">{footerLinks.trust.title}</h4>
+              <ul className="space-y-3">
+                 {footerLinks.trust.links.map((link) => (
+                   <li key={link.href}>
+                     <Link href={link.href} className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
+                       {link.label}
+                     </Link>
+                   </li>
+                 ))}
+              </ul>
+           </div>
+
+           <div className="col-span-1">
+              <h4 className="font-bold mb-4 text-[var(--text-primary)]">{footerLinks.legal.title}</h4>
+              <ul className="space-y-3">
+                 {footerLinks.legal.links.map((link) => (
+                   <li key={link.href}>
+                     <Link href={link.href} className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
+                       {link.label}
+                     </Link>
+                   </li>
+                 ))}
+              </ul>
+           </div>
+
+           <div className="col-span-1">
+              <h4 className="font-bold mb-4 text-[var(--text-primary)]">{footerLinks.contact.title}</h4>
+              <ul className="space-y-3">
+                 {footerLinks.contact.links.map((link) => (
+                   <li key={link.href}>
+                     {link.href.startsWith('http') || link.href.startsWith('mailto') ? (
+                       <a href={link.href} target={link.href.startsWith('http') ? "_blank" : undefined} rel="noopener noreferrer" className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
+                         {link.label}
+                       </a>
+                     ) : (
+                       <Link href={link.href} className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
+                         {link.label}
+                       </Link>
+                     )}
+                   </li>
+                 ))}
               </ul>
            </div>
         </div>
         
-        <div className="pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400 font-medium">
-           <div>
-              {isHindi ? 'एक पहल' : 'An Initiative by'} <span className="text-gray-900">Bahujan Queer Foundation</span>
+        {/* Bottom Strip */}
+        <div className="pt-8 border-t border-[var(--border-subtle)] flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-[var(--text-secondary)]">
+           <div className="flex items-center gap-1">
+              {isHindi ? 'द्वारा संचालित' : 'Powered by'} 
+              <a 
+                href="https://ziddi.space" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors font-bold ml-1"
+              >
+                ziddi
+              </a>
            </div>
-           <div>
-              {isHindi ? 'द्वारा संचालित' : 'Powered by'} <a href="https://ziddi.space" target="_blank" rel="noopener noreferrer" className="text-gray-900 hover:underline">ziddi</a>
+           
+           <div className="text-center md:text-right">
+              {isHindi ? 'एक पहल' : 'An Initiative by'} 
+              <span className="text-[var(--text-primary)] ml-1 font-semibold">Bahujan Queer Foundation</span>
            </div>
         </div>
       </div>

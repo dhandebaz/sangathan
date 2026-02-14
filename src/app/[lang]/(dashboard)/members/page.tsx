@@ -3,7 +3,7 @@ import { AddMemberDialog } from '@/components/members/add-member-dialog'
 import { MemberTable } from '@/components/members/member-table'
 import { Search, Printer } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -17,11 +17,12 @@ interface PageProps {
   }>
 }
 
-export default async function MembersPage({ searchParams }: PageProps) {
-  const params = await searchParams
-  const query = params.q || ''
-  const status = params.status || 'all'
-  const page = Number(params.page) || 1
+export default async function MembersPage({ searchParams, params }: PageProps & { params: Promise<{ lang: string }> }) {
+  const { lang } = await params
+  const p = await searchParams
+  const query = p.q || ''
+  const status = p.status || 'all'
+  const page = Number(p.page) || 1
   const pageSize = 20
 
   const supabase = await createClient()
@@ -66,7 +67,7 @@ export default async function MembersPage({ searchParams }: PageProps) {
         </div>
         <div className="flex gap-2">
             <Button variant="outline" asChild>
-                <a href="/members/print" target="_blank">
+                <a href={`/${lang}/members/print`} target="_blank">
                     <Printer className="mr-2 h-4 w-4" />
                     Print List
                 </a>
@@ -85,19 +86,25 @@ export default async function MembersPage({ searchParams }: PageProps) {
             placeholder="Search by name or phone..."
             className="pl-10"
           />
+          <input type="hidden" name="status" value={status} />
           {/* Hidden submit to enable Enter key search */}
           <button type="submit" className="hidden" />
         </form>
 
-        <form className="w-full md:w-48 flex gap-2">
+        <form className="w-full md:w-48 flex gap-2" action="">
+            <input type="hidden" name="q" value={query} />
             <Select
                 name="status"
                 defaultValue={status}
-                className="w-full"
             >
-                <option value="all">All Status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
+                <SelectTrigger className="w-full">
+                    <SelectValue placeholder="All Status" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="inactive">Inactive</SelectItem>
+                </SelectContent>
             </Select>
             <Button type="submit" variant="secondary">Filter</Button>
         </form>
@@ -117,14 +124,14 @@ export default async function MembersPage({ searchParams }: PageProps) {
          <div className="flex gap-2">
             <Button variant="outline" size="sm" disabled={page <= 1} asChild>
                 {page > 1 ? (
-                    <a href={`/members?page=${page - 1}&q=${query}&status=${status}`}>Previous</a>
+                    <a href={`/${lang}/members?page=${page - 1}&q=${query}&status=${status}`}>Previous</a>
                 ) : (
                     <span>Previous</span>
                 )}
             </Button>
             <Button variant="outline" size="sm" disabled={page >= totalPages} asChild>
                 {page < totalPages ? (
-                    <a href={`/members?page=${page + 1}&q=${query}&status=${status}`}>Next</a>
+                    <a href={`/${lang}/members?page=${page + 1}&q=${query}&status=${status}`}>Next</a>
                 ) : (
                     <span>Next</span>
                 )}

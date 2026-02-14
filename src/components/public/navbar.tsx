@@ -1,18 +1,19 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { Menu, X, Globe, LayoutDashboard } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { Menu, X, LayoutDashboard, ChevronRight } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { User } from '@supabase/supabase-js'
+import { ThemeToggle } from '@/components/site/theme-toggle'
 
 export function Navbar({ lang }: { lang: string }) {
   const [isOpen, setIsOpen] = useState(false)
   const [user, setUser] = useState<User | null>(null)
   const pathname = usePathname()
-  const router = useRouter()
   const supabase = createClient()
+  const isHindi = lang === 'hi'
 
   useEffect(() => {
     const getUser = async () => {
@@ -22,115 +23,202 @@ export function Navbar({ lang }: { lang: string }) {
     getUser()
   }, [])
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsOpen(false)
+  }, [pathname])
+
   const getPathForLang = (targetLang: string) => {
     if (!pathname) return `/${targetLang}`
     const segments = pathname.split('/')
-    // Handle root / or empty segments properly
     if (segments.length < 2) return `/${targetLang}`
-    
-    // segments[0] is empty string (split on /)
-    // segments[1] is 'en' or 'hi'
     segments[1] = targetLang
     return segments.join('/')
   }
 
+  const navLinks = [
+    { href: `/${lang}/docs`, label: isHindi ? 'दस्तावेज़' : 'Docs' },
+    { href: `/${lang}/governance`, label: isHindi ? 'शासन' : 'Governance' },
+    { href: `/${lang}/status`, label: isHindi ? 'स्थिति' : 'Status' },
+    { href: `/${lang}/contact`, label: isHindi ? 'संपर्क' : 'Contact' },
+  ]
+
   return (
-    <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <nav 
+      className="fixed top-0 w-full z-50 bg-[var(--bg-primary)]/90 backdrop-blur-md border-b border-[var(--border-subtle)] transition-all duration-300"
+      aria-label="Main Navigation"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-           {/* Logo */}
-           <div className="flex-shrink-0">
-             <Link href={`/${lang}`} className="text-2xl font-bold tracking-tight">
+           {/* 1. Left: Logo */}
+           <div className="flex-shrink-0 flex items-center">
+             <Link 
+               href={`/${lang}`} 
+               className="text-2xl font-bold tracking-tight text-[var(--text-primary)] hover:opacity-90 transition-opacity"
+               aria-label="Sangathan Home"
+             >
                Sangathan
              </Link>
            </div>
 
-           {/* Desktop Links */}
-           <div className="hidden md:flex items-center space-x-8">
-              <Link href={`/${lang}/docs`} className="text-sm font-medium text-gray-700 hover:text-black transition-colors">
-                {lang === 'hi' ? 'दस्तावेज़' : 'Docs'}
-              </Link>
-              <Link href={`/${lang}/contact`} className="text-sm font-medium text-gray-700 hover:text-black transition-colors">
-                {lang === 'hi' ? 'संपर्क' : 'Contact'}
-              </Link>
-              <Link href={`/${lang}/status`} className="text-sm font-medium text-gray-700 hover:text-black transition-colors">
-                {lang === 'hi' ? 'स्थिति' : 'Status'}
-              </Link>
-              
-              <div className="flex items-center gap-2 text-sm font-medium border-l pl-4 ml-4">
+           {/* 2. Center: Nav Links (Desktop) */}
+           <div className="hidden md:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <Link 
+                  key={link.href}
+                  href={link.href} 
+                  className={`text-sm font-medium transition-colors duration-200 ${
+                    pathname === link.href 
+                      ? 'text-[var(--accent)]' 
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+           </div>
+
+           {/* 3. Right: Utility Controls (Desktop) */}
+           <div className="hidden md:flex items-center gap-6">
+              {/* Language Switcher */}
+              <div className="flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)]">
                  <Link 
                    href={getPathForLang('en')} 
-                   className={`hover:text-black transition-colors ${lang === 'en' ? 'text-black font-bold' : 'text-gray-400'}`}
+                   className={`transition-colors hover:text-[var(--text-primary)] ${lang === 'en' ? 'text-[var(--text-primary)] font-bold' : ''}`}
+                   aria-label="Switch to English"
                  >
                    EN
                  </Link>
-                 <span className="text-gray-300">|</span>
+                 <span className="opacity-30">/</span>
                  <Link 
                    href={getPathForLang('hi')} 
-                   className={`hover:text-black transition-colors ${lang === 'hi' ? 'text-black font-bold' : 'text-gray-400'}`}
+                   className={`transition-colors hover:text-[var(--text-primary)] ${lang === 'hi' ? 'text-[var(--text-primary)] font-bold' : ''}`}
+                   aria-label="Switch to Hindi"
                  >
-                   हिंदी
+                   HI
                  </Link>
               </div>
 
-              <div className="flex items-center gap-4 ml-4 pl-4 border-l">
+              <div className="h-4 w-px bg-[var(--border-subtle)]"></div>
+
+              {/* Theme Toggle */}
+              <ThemeToggle />
+
+              {/* Auth Action */}
+              <div className="pl-2">
                  {user ? (
-                   <Link href="/dashboard" className="bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-orange-700 flex items-center gap-2 transition-colors">
-                     <LayoutDashboard size={16} />
-                     {lang === 'hi' ? 'डैशबोर्ड' : 'Dashboard'}
+                   <Link 
+                     href="/dashboard" 
+                     className="bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[var(--bg-secondary)] flex items-center gap-2 transition-all"
+                   >
+                     <LayoutDashboard size={16} className="text-[var(--accent)]" />
+                     {isHindi ? 'डैशबोर्ड' : 'Dashboard'}
                    </Link>
                  ) : (
-                   <>
-                     <Link href="/login" className="text-sm font-medium text-gray-900">
-                       {lang === 'hi' ? 'लॉग इन' : 'Login'}
+                   <div className="flex items-center gap-4">
+                     <Link 
+                       href="/login" 
+                       className="text-sm font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                     >
+                       {isHindi ? 'लॉग इन' : 'Login'}
                      </Link>
-                     <Link href="/signup" className="bg-black text-white px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90">
-                       {lang === 'hi' ? 'शुरू करें' : 'Start Free'}
+                     <Link 
+                       href="/signup" 
+                       className="bg-[var(--text-primary)] text-[var(--bg-primary)] px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition-opacity"
+                     >
+                       {isHindi ? 'शुरू करें' : 'Start Free'}
                      </Link>
-                   </>
+                   </div>
                  )}
               </div>
            </div>
 
            {/* Mobile Menu Button */}
-           <div className="flex items-center md:hidden">
-              <button onClick={() => setIsOpen(!isOpen)} className="text-gray-500 hover:text-black p-2">
+           <div className="flex items-center md:hidden gap-4">
+              <button 
+                onClick={() => setIsOpen(!isOpen)} 
+                className="text-[var(--text-primary)] p-3 -mr-2 hover:bg-[var(--bg-secondary)] rounded-md transition-colors min-h-[48px] min-w-[48px] flex items-center justify-center"
+                aria-expanded={isOpen}
+                aria-label="Toggle Navigation Menu"
+              >
                  {isOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
            </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       {isOpen && (
-         <div className="md:hidden bg-white border-b border-gray-100">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-               <Link href={`/${lang}/docs`} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">
-                 {lang === 'hi' ? 'दस्तावेज़' : 'Docs'}
-               </Link>
-               <Link href={`/${lang}/contact`} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">
-                 {lang === 'hi' ? 'संपर्क' : 'Contact'}
-               </Link>
-               
-               <div className="flex items-center gap-4 px-3 py-2">
-                 <Link href={getPathForLang('en')} className={`text-base font-medium ${lang === 'en' ? 'text-black font-bold' : 'text-gray-500'}`}>English</Link>
-                 <Link href={getPathForLang('hi')} className={`text-base font-medium ${lang === 'hi' ? 'text-black font-bold' : 'text-gray-500'}`}>हिंदी</Link>
+         <div className="md:hidden bg-[var(--bg-primary)] border-b border-[var(--border-subtle)] shadow-xl animate-fade-in absolute w-full left-0 top-16 h-[calc(100vh-4rem)] overflow-y-auto">
+            <div className="px-4 pt-4 pb-8 space-y-6">
+               {/* Mobile Nav Links */}
+               <div className="space-y-1">
+                  {navLinks.map((link) => (
+                    <Link 
+                      key={link.href}
+                      href={link.href} 
+                      className={`block px-4 py-3 rounded-lg text-lg font-medium transition-colors ${
+                        pathname === link.href
+                          ? 'bg-[var(--bg-secondary)] text-[var(--accent)]'
+                          : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
                </div>
 
-               <div className="mt-4 pt-4 border-t px-3 space-y-2">
+               <div className="h-px bg-[var(--border-subtle)] my-4"></div>
+
+               {/* Mobile Utilities */}
+               <div className="space-y-6 px-4">
+                  {/* Theme & Language Row */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4 bg-[var(--bg-secondary)] rounded-full p-1 border border-[var(--border-subtle)]">
+                       <Link 
+                         href={getPathForLang('en')} 
+                         className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                           lang === 'en' ? 'bg-[var(--surface)] text-[var(--text-primary)] shadow-sm' : 'text-[var(--text-secondary)]'
+                         }`}
+                       >
+                         English
+                       </Link>
+                       <Link 
+                         href={getPathForLang('hi')} 
+                         className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                           lang === 'hi' ? 'bg-[var(--surface)] text-[var(--text-primary)] shadow-sm' : 'text-[var(--text-secondary)]'
+                         }`}
+                       >
+                         हिंदी
+                       </Link>
+                    </div>
+                    <ThemeToggle />
+                  </div>
+
+                  {/* Mobile Auth */}
                   {user ? (
-                    <Link href="/dashboard" className="block w-full text-center px-4 py-2 bg-orange-600 text-white rounded-lg text-base font-bold">
-                      {lang === 'hi' ? 'डैशबोर्ड' : 'Dashboard'}
+                    <Link 
+                      href="/dashboard" 
+                      className="flex w-full items-center justify-center gap-2 bg-[var(--accent)] text-white px-4 py-3 rounded-lg text-lg font-bold hover:opacity-90 transition-opacity"
+                    >
+                      <LayoutDashboard size={20} />
+                      {isHindi ? 'डैशबोर्ड खोलें' : 'Open Dashboard'}
                     </Link>
                   ) : (
-                    <>
-                      <Link href="/login" className="block w-full text-center px-4 py-2 border border-gray-300 rounded-lg text-base font-medium text-gray-700">
-                        {lang === 'hi' ? 'लॉग इन' : 'Login'}
+                    <div className="grid grid-cols-2 gap-4">
+                      <Link 
+                        href="/login" 
+                        className="flex items-center justify-center px-4 py-3 border border-[var(--border-subtle)] rounded-lg text-base font-semibold text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]"
+                      >
+                        {isHindi ? 'लॉग इन' : 'Login'}
                       </Link>
-                      <Link href="/signup" className="block w-full text-center px-4 py-2 bg-black text-white rounded-lg text-base font-bold">
-                        {lang === 'hi' ? 'शुरू करें' : 'Start Free'}
+                      <Link 
+                        href="/signup" 
+                        className="flex items-center justify-center px-4 py-3 bg-[var(--text-primary)] text-[var(--bg-primary)] rounded-lg text-base font-bold hover:opacity-90"
+                      >
+                        {isHindi ? 'शुरू करें' : 'Start Free'}
                       </Link>
-                    </>
+                    </div>
                   )}
                </div>
             </div>

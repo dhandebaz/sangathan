@@ -22,6 +22,8 @@ export interface Database {
           created_at: string
           updated_at: string
           deleted_at: string | null
+          status: 'active' | 'pending' | 'rejected' | 'removed'
+          approved_at: string | null
         }
         Insert: {
           id: string
@@ -35,6 +37,8 @@ export interface Database {
           created_at?: string
           updated_at?: string
           deleted_at?: string | null
+          status?: 'active' | 'pending' | 'rejected' | 'removed'
+          approved_at?: string | null
         }
         Update: {
           id?: string
@@ -48,6 +52,8 @@ export interface Database {
           created_at?: string
           updated_at?: string
           deleted_at?: string | null
+          status?: 'active' | 'pending' | 'rejected' | 'removed'
+          approved_at?: string | null
         }
       }
       organisations: {
@@ -63,6 +69,7 @@ export interface Database {
           legal_hold: boolean
           legal_hold_reason: string | null
           deletion_requested_at: string | null
+          membership_policy: 'open_auto' | 'admin_approval' | 'invite_only'
         }
         Insert: {
           id?: string
@@ -76,6 +83,7 @@ export interface Database {
           legal_hold?: boolean
           legal_hold_reason?: string | null
           deletion_requested_at?: string | null
+          membership_policy?: 'open_auto' | 'admin_approval' | 'invite_only'
         }
         Update: {
           id?: string
@@ -89,6 +97,7 @@ export interface Database {
           legal_hold?: boolean
           legal_hold_reason?: string | null
           deletion_requested_at?: string | null
+          membership_policy?: 'open_auto' | 'admin_approval' | 'invite_only'
         }
       }
       donations: {

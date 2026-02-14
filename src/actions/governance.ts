@@ -1,0 +1,57 @@
+'use server'
+
+import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
+import { revalidatePath } from 'next/cache'
+import { z } from 'zod'
+
+const AppealSchema = z.object({
+  reason: z.string().min(10, "Reason must be detailed"),
+  supporting_docs_url: z.string().url().optional().or(z.literal('')),
+})
+
+export async function submitAppeal(orgId: string, input: z.infer<typeof AppealSchema>) {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) return { success: false, error: 'Unauthorized' }
+
+    // Check permissions
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role, organisation_id')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile || profile.organisation_id !== orgId || !['admin', 'executive'].includes(profile.role)) {
+      return { success: false, error: 'Permission denied' }
+    }
+
+    // Check existing pending appeal
+    const { data: existing } = await supabase
+      .from('appeals')
+      .select('id')
+      .eq('organisation_id', orgId)
+      .in('status', ['pending', 'under_review'])
+      .single()
+
+    if (existing) return { success: false, error: 'An appeal is already pending.' }
+
+    const { error } = await supabase
+      .from('appeals')
+      .insert({
+        organisation_id: orgId,
+        reason: input.reason,
+        supporting_docs_url: input.supporting_docs_url || null,
+        created_by: user.id
+      })
+
+    if (error) throw error
+
+    revalidatePath('/dashboard/appeals')
+    return { success: true }
+  } catch (error: any) {
+    return { success: false, error: error.message }
+  }
+}

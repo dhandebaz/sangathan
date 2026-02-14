@@ -138,3 +138,32 @@ export const exportReadyEmail = (link: string, expiryHours: number) => baseLayou
     </div>
     <p style="font-size: 13px; color: #666;">The file is encrypted with the standard encryption key provided in your dashboard settings.</p>
 `, `Download Ready: Your data export`)
+
+// --- 8. New Membership Request Email (To Admin) ---
+export const newMemberRequestEmail = (adminName: string, requesterName: string, orgName: string, link: string) => baseLayout(`
+    <h2>New Membership Request</h2>
+    <p>Hello ${adminName},</p>
+    <p><strong>${requesterName}</strong> has requested to join <strong>${orgName}</strong>.</p>
+    <div style="text-align: center;">
+        <a href="${link}" class="button">Review Request</a>
+    </div>
+`, `New membership request for ${orgName}`)
+
+// --- 9. Membership Approved Email (To Member) ---
+export const membershipApprovedEmail = (memberName: string, orgName: string, link: string) => baseLayout(`
+    <h2>Membership Approved</h2>
+    <p>Hello ${memberName},</p>
+    <p>Congratulations! Your request to join <strong>${orgName}</strong> has been approved.</p>
+    <p>You can now access the organisation dashboard.</p>
+    <div style="text-align: center;">
+        <a href="${link}" class="button">Access Dashboard</a>
+    </div>
+`, `You have joined ${orgName}`)
+
+// --- 10. Membership Rejected Email (To Member) ---
+export const membershipRejectedEmail = (memberName: string, orgName: string) => baseLayout(`
+    <h2>Membership Update</h2>
+    <p>Hello ${memberName},</p>
+    <p>Thank you for your interest in joining <strong>${orgName}</strong>.</p>
+    <p>At this time, we are unable to approve your membership request. If you believe this is an error, please contact the organisation administrator directly.</p>
+`, `Update regarding your request to join ${orgName}`)

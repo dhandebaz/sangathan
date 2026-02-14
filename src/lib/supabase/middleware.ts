@@ -147,7 +147,8 @@ export async function updateSession(request: NextRequest) {
       pathname.startsWith(`/${loc}/vision`) ||
       pathname.startsWith(`/${loc}/community-guidelines`) ||
       pathname.startsWith(`/${loc}/data-practices`) ||
-      pathname.startsWith(`/${loc}/admin-accountability`)
+      pathname.startsWith(`/${loc}/admin-accountability`) ||
+      pathname.startsWith(`/${loc}/org/`) // Public Organization Pages
     )
 
   // Protect all other routes (Dashboard, etc)

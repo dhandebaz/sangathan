@@ -97,6 +97,8 @@ export async function login(input: z.infer<typeof LoginSchema>) {
   redirect('/dashboard')
 }
 
+import { checkRateLimit } from '@/lib/rate-limit/db-limiter'
+
 export async function signup(input: z.infer<typeof SignupSchema>) {
   try {
     // 1. Validate Input
@@ -108,9 +110,10 @@ export async function signup(input: z.infer<typeof SignupSchema>) {
     const { email, password, fullName, organizationName } = result.data
     const supabase = await createClient()
     
-    // 2. Rate Limit (Basic IP check via headers if possible, or assume Supabase handles it)
-    // Supabase Auth has built-in rate limits.
-
+    // 2. Rate Limit (IP based is handled by Supabase Auth).
+    // We can't do much here for IP since we don't have a reliable IP store yet.
+    // We rely on Supabase Auth's built-in protections for now.
+    
     // 3. Sign Up
     // We store metadata for the Callback route to handle database creation
     const headersList = await headers()
@@ -144,9 +147,18 @@ export async function signup(input: z.infer<typeof SignupSchema>) {
   }
 }
 
+import { detectOTPRisk } from '@/lib/risk-engine'
+
 export async function otpLogin(input: z.infer<typeof OtpLoginSchema>) {
   const result = OtpLoginSchema.safeParse(input)
   if (!result.success) return { success: false, error: result.error.issues[0].message }
+  
+  const headersList = await headers()
+  const ip = headersList.get('x-forwarded-for') || 'unknown'
+  
+  // Risk Check
+  const riskCheck = await detectOTPRisk(result.data.email, ip) // Using email as identifier for now since we don't have phone
+  if (riskCheck.blocked) return { success: false, error: 'Too many login attempts. Please try again later.' }
 
   const supabase = await createClient()
   const origin = (await headers()).get('origin')
@@ -321,7 +333,12 @@ export async function finalizeSignup(input: { idToken: string }) {
     return { success: false, error: 'Session expired. Please login again.' }
   }
 
-  // 3. Check Phone Uniqueness (Global Check)
+  // 3. Check Rate Limit (Org Creation)
+  // Max 2 orgs per user per 24h
+  const rateLimit = await checkRateLimit('create_org', user.id, 2, 86400)
+  if (!rateLimit.allowed) return { success: false, error: rateLimit.error }
+
+  // 4. Check Phone Uniqueness (Global Check)
   const supabaseAdmin = createServiceClient()
   const { data: existingPhone } = await supabaseAdmin
     .from('profiles')
@@ -333,7 +350,7 @@ export async function finalizeSignup(input: { idToken: string }) {
     return { success: false, error: 'This phone number is already registered as an admin.' }
   }
 
-  // 4. Retrieve Metadata
+  // 5. Retrieve Metadata
   const metadata = user.user_metadata
   const orgName = metadata.organization_name
   const fullName = metadata.full_name
@@ -344,7 +361,7 @@ export async function finalizeSignup(input: { idToken: string }) {
     return { success: false, error: 'Registration details not found. Please sign up again.' }
   }
 
-  // 5. Atomic Creation (Organisation + Profile)
+  // 6. Atomic Creation (Organisation + Profile)
   // Generate Slug
   const baseSlug = orgName.toLowerCase().replace(/[^a-z0-9]+/g, '-')
   const uniqueSlug = `${baseSlug}-${Math.random().toString(36).substring(2, 7)}`
@@ -359,12 +376,17 @@ export async function finalizeSignup(input: { idToken: string }) {
     p_firebase_uid: firebaseUid
   })
 
+  // Explicitly set approved_at and status for admin
+  if (!rpcError) {
+      await supabaseAdmin.from('profiles').update({ status: 'active', approved_at: new Date().toISOString() }).eq('id', user.id)
+  }
+
   if (rpcError) {
     console.error('Signup RPC Error:', rpcError)
     return { success: false, error: `Database Registration Failed: ${rpcError.message} (Code: ${rpcError.code})` }
   }
 
-  // 6. Send Welcome Email (Fire and forget)
+  // 7. Send Welcome Email (Fire and forget)
   const dashboardUrl = process.env.NEXT_PUBLIC_APP_URL ? `${process.env.NEXT_PUBLIC_APP_URL}/dashboard` : 'https://sangathan.space/dashboard'
   
   // We don't await this to speed up the response, but we log errors in the background

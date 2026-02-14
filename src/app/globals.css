@@ -149,6 +149,43 @@ body {
   border: 1px solid var(--border);
 }
 
+/* --- PUBLIC THEME SYSTEM (Isolated) --- */
+:root {
+  /* Default Dark Theme Variables */
+  --bg-primary: #0F1115;
+  --bg-secondary: #171A21;
+  --surface: #1F232C;
+  --accent: #FF6A00;
+  --accent-hover: #E65F00;
+  --text-primary: #F5F7FA;
+  --text-secondary: #B8C0CC;
+  --border-subtle: #2A2F3A;
+  --success: #2ECC71;
+  --danger: #E74C3C;
+}
+
+[data-theme="light"] {
+  /* Light Theme Overrides */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F7F8FA;
+  --surface: #FFFFFF;
+  --accent: #FF6A00; /* Flat Electric Saffron */
+  --accent-hover: #E65F00;
+  --text-primary: #0F1115;
+  --text-secondary: #4A5568;
+  --border-subtle: #E2E8F0;
+  --success: #2ECC71;
+  --danger: #E74C3C;
+}
+
+/* Public Utility Classes */
+.public-bg { background-color: var(--bg-primary); }
+.public-bg-subtle { background-color: var(--bg-secondary); }
+.public-surface { background-color: var(--surface); }
+.public-text { color: var(--text-primary); }
+.public-text-subtle { color: var(--text-secondary); }
+.public-border { border-color: var(--border-subtle); }
+
 .table-row-hover {
   transition: background-color 0.15s ease;
 }

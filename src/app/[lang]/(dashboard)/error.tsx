@@ -17,18 +17,17 @@ export default function Error({
   }, [error])
 
   return (
-    <div className="flex h-[80vh] w-full flex-col items-center justify-center gap-4 text-center">
+    <div className="flex h-[80vh] w-full flex-col items-center justify-center gap-4 text-center px-4">
       <div className="p-4 bg-red-50 text-red-600 rounded-full">
         <AlertTriangle size={48} />
       </div>
       <h2 className="text-2xl font-bold tracking-tight">Something went wrong!</h2>
       <p className="text-muted-foreground max-w-md">
-        We encountered an error while loading your dashboard. This might be due to a temporary connection issue or a missing configuration.
+        We encountered an error while loading your dashboard. This might be due to a temporary connection issue.
       </p>
       {process.env.NODE_ENV === 'development' && (
         <pre className="text-xs bg-gray-100 p-4 rounded text-left overflow-auto max-w-lg w-full border border-gray-200">
           {error.message}
-          {error.stack}
         </pre>
       )}
       <div className="flex gap-4 mt-4">
