@@ -51,13 +51,13 @@ export const addMember = createSafeAction(
         status: input.status, // Add status column to DB schema if missing
         notes: input.notes, // Add notes column to DB schema if missing
         role: input.role,
-      } as any)
+      })
       .select('id')
       .single()
 
-    const member = data as any
+    const member = data as { id: string } | null;
 
-    if (error) {
+    if (error || !member) {
       if (error.code === '23505') { // Unique violation
         throw new Error('Phone number already exists in this organisation.')
       }
@@ -84,7 +84,8 @@ export const updateMember = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
     
-    const { error } = await (supabase.from('members') as any)
+    const { error } = await supabase
+      .from('members')
       .update({
         full_name: input.full_name,
         email: input.email || null,
@@ -126,7 +127,8 @@ export const changeMemberStatus = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await (supabase.from('members') as any)
+    const { error } = await supabase
+      .from('members')
       .update({ status: input.status })
       .eq('id', input.memberId)
       .eq('organisation_id', context.organizationId)

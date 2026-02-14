@@ -21,7 +21,7 @@ export async function requestDataExport() {
     .eq('id', user.id)
     .single()
     
-  if (!profile || (profile as any).role !== 'admin') {
+  if (!profile || profile.role !== 'admin') {
     return { error: 'Only admins can export organisation data' }
   }
   
@@ -29,24 +29,24 @@ export async function requestDataExport() {
   const { data: request, error } = await adminClient
     .from('data_requests')
     .insert({
-      organisation_id: (profile as any).organisation_id,
+      organisation_id: profile.organisation_id,
       user_id: user.id,
       request_type: 'export',
       status: 'pending'
-    } as any)
+    })
     .select()
     .single()
     
-  if (error) return { error: 'Failed to create request' }
+  if (error || !request) return { error: 'Failed to create request' }
   
   // Queue Job
   await enqueueJob('export_data', { 
-    requestId: (request as any).id, 
-    organisationId: (profile as any).organisation_id,
+    requestId: request.id, 
+    organisationId: profile.organisation_id,
     userId: user.id 
   })
   
-  await logger.security('compliance', `Data export requested by ${user.email}`, { orgId: (profile as any).organisation_id })
+  await logger.security('compliance', `Data export requested by ${user.email}`, { orgId: profile.organisation_id })
   
   return { success: true, message: 'Export started. You will receive an email when ready.' }
 }
@@ -67,7 +67,7 @@ export async function requestAccountDeletion() {
       request_type: 'deletion',
       status: 'pending',
       details: { reason: 'User requested via dashboard' }
-    } as any)
+    })
     
   if (error) return { error: 'Failed to submit deletion request' }
   
@@ -91,9 +91,9 @@ export async function deleteOrganisation(orgId: string, confirmation: string) {
     .from('profiles')
     .select('role, organisation_id')
     .eq('id', user.id)
-    .single()
+    .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
     
-  if (!profile || (profile as any).role !== 'admin' || (profile as any).organisation_id !== orgId) {
+  if (!profile || profile.role !== 'admin' || profile.organisation_id !== orgId) {
     return { error: 'Unauthorized' }
   }
   
@@ -102,9 +102,9 @@ export async function deleteOrganisation(orgId: string, confirmation: string) {
     .from('organisations')
     .select('legal_hold')
     .eq('id', orgId)
-    .single()
+    .single() as { data: { legal_hold: boolean } | null, error: { message: string } | null }
     
-  if (org && (org as any).legal_hold) {
+  if (org && org.legal_hold) {
     await logger.security('compliance', `Blocked deletion attempt on Legal Hold org ${orgId}`)
     return { error: 'Organisation is under Legal Hold and cannot be deleted.' }
   }

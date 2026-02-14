@@ -18,7 +18,7 @@ export default async function NewNetworkPage(props: { params: Promise<{ lang: st
     .eq('id', user.id)
     .single()
 
-  const profile = profileData as any
+  const profile = profileData as { organization_id: string; role: string } | null
 
   if (!profile || !profile.organization_id || !['admin', 'executive'].includes(profile.role)) {
     return <div>Access Denied</div>

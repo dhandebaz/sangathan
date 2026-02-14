@@ -28,8 +28,8 @@ export function TaskForm({ orgId }: { orgId: string }) {
       organisation_id: orgId,
       title: formData.title,
       description: formData.description,
-      priority: formData.priority as any,
-      visibility_level: formData.visibility_level as any,
+      priority: formData.priority as 'low' | 'medium' | 'high',
+      visibility_level: formData.visibility_level as 'members' | 'volunteer' | 'core' | 'executive',
       due_date: formData.due_date ? new Date(formData.due_date).toISOString() : undefined
     })
 

@@ -18,8 +18,8 @@ export async function checkMaintenanceMode(): Promise<MaintenanceStatus> {
       .eq('key', 'maintenance_mode')
       .single()
 
-    if (data && (data as any).value) {
-      return (data as any).value as MaintenanceStatus
+    if (data?.value) {
+      return data.value as unknown as MaintenanceStatus
     }
   } catch (error) {
     // Fail open

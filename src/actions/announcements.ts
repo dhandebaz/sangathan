@@ -5,12 +5,11 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { enqueueJob } from '@/lib/queue'
-import { baseLayout } from '@/lib/email/templates'
 import { checkBroadcastLimit } from '@/lib/risk-engine'
 
 // --- Schemas ---
 
-const AnnouncementSchema = z.object({
+export const AnnouncementSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 chars"),
   content: z.string().min(10, "Content must be at least 10 chars"),
   visibility_level: z.enum(['public', 'members', 'volunteer', 'core', 'executive']),
@@ -20,11 +19,11 @@ const AnnouncementSchema = z.object({
   expires_at: z.string().datetime().optional().nullable(),
 })
 
-const CreateAnnouncementSchema = AnnouncementSchema.extend({
+export const CreateAnnouncementSchema = AnnouncementSchema.extend({
   organisation_id: z.string().uuid(),
 })
 
-const UpdateAnnouncementSchema = AnnouncementSchema.partial().extend({
+export const UpdateAnnouncementSchema = AnnouncementSchema.partial().extend({
   id: z.string().uuid(),
 })
 
@@ -37,16 +36,13 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
     
     if (!user) return { success: false, error: 'Unauthorized' }
 
-    // Check permissions
-    const { data: profileData } = await supabase
+    const { data: profile } = await supabase
       .from('profiles')
       .select('role, organization_id')
       .eq('id', user.id)
-      .single()
+      .single() as { data: { role: string; organization_id: string } | null, error: { message: string } | null }
 
-    const profile = profileData as any
-
-    if (!profile || profile.organization_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role)) {
+    if (!profile || profile.organization_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role || '')) {
       return { success: false, error: 'Permission denied' }
     }
     
@@ -58,16 +54,16 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
        }
     }
 
-    const { data: announcement, error } = await (supabase
-      .from('announcements') as any)
+    const { data: announcement, error } = await supabase
+      .from('announcements')
       .insert({
         ...input,
         created_by: user.id
       })
       .select()
-      .single()
+      .single() as { data: { id: string } | null, error: { message: string } | null }
 
-    if (error) throw error
+    if (error || !announcement) throw new Error(error?.message || 'Failed to create announcement')
 
     // Handle Email Broadcasting
     if (input.send_email) {
@@ -97,7 +93,7 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
       }
       // 'members' and 'public' go to all active members
 
-      const { data: members } = await query
+      const { data: members } = await query as { data: { email: string; full_name: string }[] | null, error: { message: string } | null }
       
       if (members) {
         let sentCount = 0
@@ -107,7 +103,7 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
         // We can't import baseLayout easily if it's not exported properly or if we want custom style.
         // Let's assume we construct a simple body.
         
-        for (const member of members as any[]) {
+        for (const member of members) {
            await enqueueJob('send_email', {
              to: member.email,
              subject: `New Announcement: ${input.title}`,
@@ -125,8 +121,8 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
         }
 
         // Update stats
-        await (supabaseAdmin
-          .from('announcements') as any)
+        await supabaseAdmin
+          .from('announcements')
           .update({ 
             email_sent_at: new Date().toISOString(),
             email_stats: { recipient_count: sentCount }
@@ -137,8 +133,9 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
 
     revalidatePath('/dashboard/announcements')
     return { success: true }
-  } catch (error: any) {
-    return { success: false, error: error.message }
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'An unexpected error occurred'
+    return { success: false, error: message }
   }
 }
 
@@ -149,8 +146,8 @@ export async function markAnnouncementRead(announcementId: string) {
     
     if (!user) return { success: false }
 
-    const { error } = await (supabase
-      .from('announcement_views') as any)
+    const { error } = await supabase
+      .from('announcement_views')
       .insert({
         announcement_id: announcementId,
         user_id: user.id
@@ -160,7 +157,8 @@ export async function markAnnouncementRead(announcementId: string) {
     if (error) throw error
     
     return { success: true }
-  } catch (error) {
+  } catch (err: unknown) {
+    console.error('Failed to mark announcement as read:', err)
     return { success: false }
   }
 }
@@ -174,7 +172,8 @@ export async function deleteAnnouncement(id: string) {
     
     revalidatePath('/dashboard/announcements')
     return { success: true }
-  } catch (error: any) {
-    return { success: false, error: error.message }
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'An unexpected error occurred'
+    return { success: false, error: message }
   }
 }

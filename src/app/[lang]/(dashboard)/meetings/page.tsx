@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { Plus, Calendar, MapPin, Users, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import { Meeting } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,7 +14,7 @@ export default async function MeetingsPage() {
     .select('id, title, date, location, meeting_attendance(count)')
     .order('date', { ascending: false })
   
-  const meetings = data as any[]
+  const meetings = data as Meeting[] | null
 
   if (error) {
     return <div className="p-4 text-red-500">Error loading meetings</div>

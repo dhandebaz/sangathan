@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { MoreHorizontal } from 'lucide-react'
 import { changeMemberStatus } from '@/actions/members/actions'
+import { Member } from '@/types/dashboard'
 import {
   Table,
   TableBody,
@@ -15,17 +15,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 
-interface Member {
-  id: string
-  full_name: string
-  phone: string | null
-  email: string | null
-  designation: string | null
-  area: string | null
-  status: 'active' | 'inactive' | null
-  joining_date: string | null
-  role: string | null
-}
+// Removed local interface Member since it's now imported from @/types/dashboard
 
 export function MemberTable({ members }: { members: Member[] }) {
   const router = useRouter()

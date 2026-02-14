@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { getUserContext } from '@/lib/auth/context'
+import { Donation, Organisation } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,7 +13,7 @@ export default async function PrintDonationLedger() {
     .select('*')
     .order('date', { ascending: false })
   
-  const donations = data as any[]
+  const donations = data as Donation[] | null
 
   const { data: orgData } = await supabase
     .from('organisations')
@@ -20,7 +21,7 @@ export default async function PrintDonationLedger() {
     .eq('id', ctx.organizationId)
     .single()
   
-  const org = orgData as any
+  const org = orgData as Organisation | null
 
   const totalAmount = donations?.reduce((sum, d) => sum + Number(d.amount), 0) || 0
 

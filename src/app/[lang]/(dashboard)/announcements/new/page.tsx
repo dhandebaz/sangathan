@@ -18,7 +18,7 @@ export default async function NewAnnouncementPage(props: { params: Promise<{ lan
     .eq('id', user.id)
     .single()
 
-  const profile = profileData as any
+  const profile = profileData as { organization_id: string; role: string } | null
 
   if (!profile || !profile.organization_id || !['admin', 'editor', 'executive'].includes(profile.role)) {
     return <AccessDenied lang={lang} />

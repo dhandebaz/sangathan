@@ -4,11 +4,10 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
-import { redirect } from 'next/navigation'
 
 // --- Schemas ---
 
-const EventSchema = z.object({
+export const EventSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 chars"),
   description: z.string().optional(),
   start_time: z.string().datetime(),
@@ -19,22 +18,22 @@ const EventSchema = z.object({
   capacity: z.number().optional(),
 })
 
-const CreateEventSchema = EventSchema.extend({
+export const CreateEventSchema = EventSchema.extend({
   organisation_id: z.string().uuid(),
   collaborating_org_ids: z.array(z.string().uuid()).optional(),
 })
 
-const UpdateEventSchema = EventSchema.partial().extend({
+export const UpdateEventSchema = EventSchema.partial().extend({
   id: z.string().uuid(),
 })
 
-const RSVPSchema = z.object({
+export const RSVPSchema = z.object({
   event_id: z.string().uuid(),
   guest_name: z.string().optional(),
   guest_email: z.string().email().optional(),
 })
 
-const CheckInSchema = z.object({
+export const CheckInSchema = z.object({
   event_id: z.string().uuid(),
   token: z.string(), // Signed token containing user_id/rsvp_id
 })
@@ -53,9 +52,9 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
       .from('profiles')
       .select('role, organization_id')
       .eq('id', user.id)
-      .single()
+      .single() as { data: { role: string; organization_id: string } | null, error: { message: string } | null }
 
-    const profile = profileData as any
+    const profile = profileData
 
     if (!profile || profile.organization_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role)) {
       return { success: false, error: 'Permission denied' }
@@ -74,8 +73,8 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
       }
     }
 
-    const { data: event, error } = await (supabase
-      .from('events') as any)
+    const { data: event, error } = await supabase
+      .from('events')
       .insert({
         organisation_id: input.organisation_id,
         title: input.title,
@@ -89,9 +88,9 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
         created_by: user.id
       })
       .select()
-      .single()
+      .single() as { data: { id: string } | null, error: { message: string } | null }
 
-    if (error) throw error
+    if (error || !event) throw error || new Error('Failed to create event')
 
     // Insert Joint Events
     if (input.collaborating_org_ids && input.collaborating_org_ids.length > 0) {
@@ -100,8 +99,8 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
          organisation_id: orgId
        }))
        
-       const { error: jointError } = await (supabase
-         .from('joint_events') as any)
+       const { error: jointError } = await supabase
+         .from('joint_events')
          .insert(jointEvents)
          
        if (jointError) console.error('Joint Event Error:', jointError)
@@ -109,8 +108,8 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
 
     revalidatePath('/dashboard/events')
     return { success: true }
-  } catch (error: any) {
-    return { success: false, error: error.message }
+  } catch (error: unknown) {
+    return { success: false, error: error instanceof Error ? error.message : 'An unexpected error occurred' }
   }
 }
 
@@ -124,9 +123,9 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
       .from('events')
       .select('*')
       .eq('id', input.event_id)
-      .single()
+      .single() as { data: { rsvp_enabled: boolean; capacity: number | null; event_type: string; organisation_id: string; id: string } | null, error: { message: string } | null }
 
-    const event = eventData as any
+    const event = eventData
 
     if (eventError || !event) return { success: false, error: 'Event not found' }
 
@@ -147,9 +146,9 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
 
     // 2. Determine User
     const { data: { user } } = await supabase.auth.getUser()
-    let userId = user?.id
-    let guestName = input.guest_name
-    let guestEmail = input.guest_email
+    const userId = user?.id
+    const guestName = input.guest_name
+    const guestEmail = input.guest_email
 
     // 3. Check Permissions based on Event Type
     if (event.event_type !== 'public') {
@@ -161,9 +160,9 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
         .from('profiles')
         .select('role, status, organization_id')
         .eq('id', userId)
-        .single() // Don't filter by org yet
+        .single() as { data: { role: string; status: string; organization_id: string } | null, error: { message: string } | null }
       
-      const profile = profileData as any
+      const profile = profileData
 
       if (!profile || profile.status !== 'active') {
         return { success: false, error: 'You must be an active member to join' }
@@ -225,8 +224,8 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
        if (existing) return { success: false, error: 'Email already registered' }
     }
 
-    const { error: insertError } = await (supabaseAdmin
-      .from('event_rsvps') as any)
+    const { error: insertError } = await supabaseAdmin
+      .from('event_rsvps')
       .insert({
         event_id: input.event_id,
         user_id: userId || null,
@@ -240,8 +239,9 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
     revalidatePath(`/events/${input.event_id}`)
     return { success: true }
 
-  } catch (error: any) {
-    return { success: false, error: error.message }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error'
+    return { success: false, error: message }
   }
 }
 
@@ -277,9 +277,9 @@ export async function verifyAndCheckIn(input: { qrData: string, scannedByUserId:
      else if (rsvpId) query = query.eq('id', rsvpId)
      else return { success: false, error: 'Invalid Token Data' }
 
-     const { data: rsvpData, error } = await query.single()
+     const { data: rsvpData, error } = await query.single() as { data: { id: string; status: string } | null, error: { message: string } | null }
      
-     const rsvp = rsvpData as any
+     const rsvp = rsvpData
 
      if (error || !rsvp) return { success: false, error: 'RSVP not found' }
      
@@ -287,13 +287,14 @@ export async function verifyAndCheckIn(input: { qrData: string, scannedByUserId:
      if (rsvp.status === 'cancelled') return { success: false, error: 'RSVP was cancelled' }
 
      // Mark Attended
-     await (supabaseAdmin
-       .from('event_rsvps') as any)
+     await supabaseAdmin
+       .from('event_rsvps')
        .update({ status: 'attended', checked_in_at: new Date().toISOString() })
        .eq('id', rsvp.id)
        
      return { success: true }
-  } catch (error: any) {
-    return { success: false, error: error.message }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error'
+    return { success: false, error: message }
   }
 }

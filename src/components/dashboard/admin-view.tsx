@@ -3,8 +3,17 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Calendar, Users, CheckSquare, Megaphone, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import { AdminStats, RecentActivityItem } from '@/types/dashboard'
 
-export function AdminDashboard({ lang, stats, recentActivity }: { lang: string, stats: any, recentActivity: any[] }) {
+export function AdminDashboard({ 
+  lang, 
+  stats, 
+  recentActivity 
+}: { 
+  lang: string, 
+  stats: AdminStats, 
+  recentActivity: RecentActivityItem[] 
+}) {
   return (
     <div className="space-y-6 pb-20 md:pb-0">
       <h1 className="text-2xl font-bold tracking-tight">Admin Overview</h1>
@@ -43,7 +52,7 @@ export function AdminDashboard({ lang, stats, recentActivity }: { lang: string, 
             {recentActivity.length === 0 ? (
                <div className="p-8 text-center text-gray-500 text-sm">No recent activity found.</div>
             ) : (
-               recentActivity.map((item: any, i: number) => (
+               recentActivity.map((item, i) => (
                  <div key={i} className="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
                     <div>
                       <p className="font-medium text-sm line-clamp-1">{item.title || 'Untitled Activity'}</p>

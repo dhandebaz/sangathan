@@ -4,7 +4,16 @@ import { useState } from 'react'
 import { createSubscription, toggleBranding } from '@/actions/supporter/actions'
 import { Check, Star, ShieldCheck, Zap } from 'lucide-react'
 
-export function SupporterDashboard({ subscription, organisation }: { subscription: any, organisation: any }) {
+interface Subscription {
+  status: string
+  current_period_end: string
+}
+
+interface Organisation {
+  remove_branding: boolean
+}
+
+export function SupporterDashboard({ subscription, organisation }: { subscription: Subscription | null, organisation: Organisation }) {
   const [loading, setLoading] = useState(false)
   const [toggleLoading, setToggleLoading] = useState(false)
 
@@ -15,8 +24,9 @@ export function SupporterDashboard({ subscription, organisation }: { subscriptio
       if (result.success && result.data?.shortUrl) {
         window.location.href = result.data.shortUrl
       }
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Subscription failed'
+      alert(errorMessage)
       setLoading(false)
     }
   }
@@ -26,8 +36,9 @@ export function SupporterDashboard({ subscription, organisation }: { subscriptio
     try {
       await toggleBranding({ removeBranding: !organisation.remove_branding })
       // Optimistic or refresh needed? Server action revalidates.
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to toggle branding'
+      alert(errorMessage)
     }
     setToggleLoading(false)
   }
@@ -92,7 +103,7 @@ export function SupporterDashboard({ subscription, organisation }: { subscriptio
                   </li>
                   <li className="flex items-start gap-3">
                      <Check size={18} className="text-orange-500 mt-0.5" />
-                     <span className="text-sm text-gray-600">Remove "Powered by Sangathan" branding from public forms.</span>
+                     <span className="text-sm text-gray-600">Remove &quot;Powered by Sangathan&quot; branding from public forms.</span>
                   </li>
                   <li className="flex items-start gap-3">
                      <Check size={18} className="text-orange-500 mt-0.5" />

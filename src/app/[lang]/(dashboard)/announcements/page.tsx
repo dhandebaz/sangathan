@@ -3,6 +3,7 @@ import { AnnouncementCard } from '@/components/announcements/announcement-card'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
+import { DashboardAnnouncement } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,17 +21,18 @@ export default async function AnnouncementsPage(props: { params: Promise<{ lang:
   
   const { data: profileData } = await supabase.from('profiles').select('organization_id, role').eq('id', user.id).single()
   
-  const profile = profileData as any
+  const profile = profileData as { organization_id: string; role: string } | null
 
   if (!profile || !profile.organization_id) return <div>No Organisation Found</div>
 
-  const { data: announcements } = await (supabase
-    .from('announcements') as any)
+  const { data: announcementsData } = await supabase
+    .from('announcements')
     .select('*, announcement_views(user_id)')
     .eq('organisation_id', profile.organization_id)
     .order('is_pinned', { ascending: false })
     .order('created_at', { ascending: false })
 
+  const announcements = announcementsData as unknown as DashboardAnnouncement[] | null
   const canManage = ['admin', 'editor'].includes(profile.role)
 
   return (
@@ -51,8 +53,8 @@ export default async function AnnouncementsPage(props: { params: Promise<{ lang:
       </div>
 
       <div className="space-y-4">
-        {announcements?.map((a: any) => {
-          const isRead = a.announcement_views?.some((v: any) => v.user_id === user.id)
+        {announcements?.map((a) => {
+          const isRead = a.announcement_views?.some((v) => v.user_id === user.id)
           // Filter logic should ideally be server-side but RLS handles security.
           // UI filtering for expired?
           if (a.expires_at && new Date(a.expires_at) < new Date()) return null

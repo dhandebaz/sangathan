@@ -1,5 +1,3 @@
-import { z } from 'zod'
-
 // --- Configuration ---
 const SENDER_API_URL = 'https://api.sender.net/v2'
 const API_KEY = process.env.SENDER_API_KEY
@@ -79,8 +77,9 @@ export async function sendEmail(payload: EmailPayload): Promise<EmailResult> {
     console.log(`✅ Email sent to ${payload.to} (ID: ${data.data?.id || 'unknown'})`)
     return { success: true, id: data.data?.id }
 
-  } catch (error: any) {
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Network request failed'
     console.error('❌ Network Error sending email:', error)
-    return { success: false, error: error.message || 'Network request failed' }
+    return { success: false, error: errorMessage }
   }
 }

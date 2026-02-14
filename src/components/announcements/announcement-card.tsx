@@ -1,12 +1,19 @@
 'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Bell, Pin, Eye } from 'lucide-react'
+import { Pin, Eye } from 'lucide-react'
 import { markAnnouncementRead } from '@/actions/announcements'
 import { useState } from 'react'
+import { DashboardAnnouncement } from '@/types/dashboard'
 
-export function AnnouncementCard({ announcement, isRead, onRead }: { announcement: any, isRead: boolean, onRead?: () => void }) {
+interface Announcement extends DashboardAnnouncement {
+  visibility_level: string;
+  email_sent_at?: string;
+  view_count?: number;
+}
+
+export function AnnouncementCard({ announcement, isRead, onRead }: { announcement: Announcement, isRead: boolean, onRead?: () => void }) {
   const [read, setRead] = useState(isRead)
 
   const handleMarkRead = async () => {

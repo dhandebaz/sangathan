@@ -1,10 +1,10 @@
 import { createServiceClient } from '@/lib/supabase/service'
 
-export async function softDelete(table: string, id: string, userId: string) {
+export async function softDelete(table: string, id: string) {
   const supabase = createServiceClient()
   
-  const { error } = await (supabase
-    .from(table) as any)
+  const { error } = await supabase
+    .from(table)
     .update({ 
       deleted_at: new Date().toISOString() 
       // In a real system, we might also want 'deleted_by': userId
@@ -24,8 +24,8 @@ export async function hardDelete(table: string, id: string) {
 
 export async function restoreRecord(table: string, id: string) {
   const supabase = createServiceClient()
-  const { error } = await (supabase
-    .from(table) as any)
+  const { error } = await supabase
+    .from(table)
     .update({ deleted_at: null })
     .eq('id', id)
   return { error }

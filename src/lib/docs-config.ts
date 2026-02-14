@@ -1,8 +1,8 @@
-import { Book, Shield, Users, Settings } from 'lucide-react'
+import { Book, Shield, Users, Settings, LucideIcon } from 'lucide-react'
 
 export type DocSection = {
   title: { en: string; hi: string }
-  icon?: any
+  icon?: LucideIcon
   items: { title: { en: string; hi: string }; slug: string }[]
 }
 

@@ -15,15 +15,15 @@ export default async function TasksPage(props: { params: Promise<{ lang: string 
   if (!user) return <div>Please login</div>
 
   const { data: profileData } = await supabase.from('profiles').select('organization_id, role').eq('id', user.id).single()
-  const profile = profileData as any
+  const profile = profileData as { organization_id: string; role: string } | null
   
   if (!profile || !profile.organization_id) return <div>No Organisation</div>
 
   const canTasks = await checkCapability(profile.organization_id, 'volunteer_engine')
   if (!canTasks) return <div className="p-8 text-center text-gray-500">This feature is not enabled for your organisation.</div>
 
-  const { data: tasks } = await (supabase
-    .from('tasks') as any)
+  const { data: tasks } = await supabase
+    .from('tasks')
     .select('*, task_assignments(member_id, accepted)')
     .eq('organisation_id', profile.organization_id)
     .neq('status', 'archived')
@@ -49,7 +49,7 @@ export default async function TasksPage(props: { params: Promise<{ lang: string 
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {tasks?.map((task: any) => (
+        {tasks?.map((task) => (
           <TaskCard key={task.id} task={task} userId={user.id} />
         ))}
 

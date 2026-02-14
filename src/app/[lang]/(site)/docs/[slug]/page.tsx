@@ -1,7 +1,7 @@
 import { getDocContent } from '@/lib/docs'
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown, { Components } from 'react-markdown'
 import Link from 'next/link'
-import { ArrowLeft, Clock, AlertCircle } from 'lucide-react'
+import { ArrowLeft, Clock, AlertCircle, ChevronRight } from 'lucide-react'
 import { Metadata } from 'next'
 import { TableOfContents } from '@/components/docs/table-of-contents'
 
@@ -80,31 +80,32 @@ export default async function DocPage({ params }: PageProps) {
   }
 
   // Custom components for ReactMarkdown to handle IDs and Styling
-  const MarkdownComponents: any = {
-    h1: ({ children }: any) => {
+  const MarkdownComponents: Components = {
+    h1: ({ children }) => {
       const id = typeof children === 'string' ? slugify(children) : ''
       return <h1 id={id} className="text-3xl md:text-4xl font-bold tracking-tight text-[var(--text-primary)] mb-6 mt-10 first:mt-0">{children}</h1>
     },
-    h2: ({ children }: any) => {
+    h2: ({ children }) => {
       const id = typeof children === 'string' ? slugify(children) : ''
       return <h2 id={id} className="text-2xl font-bold tracking-tight text-[var(--text-primary)] mb-4 mt-10 scroll-mt-24">{children}</h2>
     },
-    h3: ({ children }: any) => {
+    h3: ({ children }) => {
       const id = typeof children === 'string' ? slugify(children) : ''
       return <h3 id={id} className="text-xl font-bold text-[var(--text-primary)] mb-3 mt-8 scroll-mt-24">{children}</h3>
     },
-    p: ({ children }: any) => <p className="text-[var(--text-secondary)] leading-7 mb-5 text-[1.05rem]">{children}</p>,
-    ul: ({ children }: any) => <ul className="list-disc pl-6 mb-5 space-y-2 text-[var(--text-secondary)]">{children}</ul>,
-    ol: ({ children }: any) => <ol className="list-decimal pl-6 mb-5 space-y-2 text-[var(--text-secondary)]">{children}</ol>,
-    li: ({ children }: any) => <li className="pl-1">{children}</li>,
-    a: ({ href, children }: any) => <a href={href} className="text-[var(--accent)] hover:underline font-medium decoration-2 underline-offset-2">{children}</a>,
-    blockquote: ({ children }: any) => (
+    p: ({ children }) => <p className="text-[var(--text-secondary)] leading-7 mb-5 text-[1.05rem]">{children}</p>,
+    ul: ({ children }) => <ul className="list-disc pl-6 mb-5 space-y-2 text-[var(--text-secondary)]">{children}</ul>,
+    ol: ({ children }) => <ol className="list-decimal pl-6 mb-5 space-y-2 text-[var(--text-secondary)]">{children}</ol>,
+    li: ({ children }) => <li className="pl-1">{children}</li>,
+    a: ({ href, children }) => <a href={href} className="text-[var(--accent)] hover:underline font-medium decoration-2 underline-offset-2">{children}</a>,
+    blockquote: ({ children }) => (
       <blockquote className="border-l-4 border-[var(--accent)] pl-4 py-1 my-6 bg-[var(--surface)] italic text-[var(--text-secondary)] rounded-r-lg">
         {children}
       </blockquote>
     ),
-    code: ({ node, inline, className, children, ...props }: any) => {
+    code: ({ className, children, ...props }) => {
       const match = /language-(\w+)/.exec(className || '')
+      const inline = !match;
       return !inline ? (
         <div className="relative my-6 rounded-lg overflow-hidden border border-[var(--border-subtle)] bg-[var(--surface)]">
           <div className="px-4 py-2 border-b border-[var(--border-subtle)] bg-[var(--bg-secondary)] flex items-center gap-2">
@@ -130,18 +131,18 @@ export default async function DocPage({ params }: PageProps) {
       )
     },
     hr: () => <hr className="my-10 border-[var(--border-subtle)]" />,
-    table: ({ children }: any) => (
+    table: ({ children }) => (
       <div className="overflow-x-auto my-8 border border-[var(--border-subtle)] rounded-lg">
         <table className="min-w-full divide-y divide-[var(--border-subtle)]">
           {children}
         </table>
       </div>
     ),
-    thead: ({ children }: any) => <thead className="bg-[var(--bg-secondary)]">{children}</thead>,
-    tbody: ({ children }: any) => <tbody className="divide-y divide-[var(--border-subtle)] bg-[var(--bg-primary)]">{children}</tbody>,
-    tr: ({ children }: any) => <tr>{children}</tr>,
-    th: ({ children }: any) => <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">{children}</th>,
-    td: ({ children }: any) => <td className="px-4 py-3 whitespace-nowrap text-sm text-[var(--text-secondary)]">{children}</td>,
+    thead: ({ children }) => <thead className="bg-[var(--bg-secondary)]">{children}</thead>,
+    tbody: ({ children }) => <tbody className="divide-y divide-[var(--border-subtle)] bg-[var(--bg-primary)]">{children}</tbody>,
+    tr: ({ children }) => <tr>{children}</tr>,
+    th: ({ children }) => <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">{children}</th>,
+    td: ({ children }) => <td className="px-4 py-3 whitespace-nowrap text-sm text-[var(--text-secondary)]">{children}</td>,
   }
 
   return (
@@ -192,24 +193,5 @@ export default async function DocPage({ params }: PageProps) {
       {/* Right Column: Table of Contents */}
       <TableOfContents lang={lang} />
     </div>
-  )
-}
-
-function ChevronRight({ size = 16, className = "" }: { size?: number, className?: string }) {
-  return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      width={size} 
-      height={size} 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className={className}
-    >
-      <path d="m9 18 6-6-6-6"/>
-    </svg>
   )
 }

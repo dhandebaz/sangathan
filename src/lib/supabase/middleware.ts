@@ -19,7 +19,7 @@ export async function updateSession(request: NextRequest) {
               return request.cookies.getAll()
             },
             setAll(cookiesToSet) {
-              cookiesToSet.forEach(({ name, value, options }) =>
+              cookiesToSet.forEach(({ name, value }) =>
                 request.cookies.set(name, value)
               )
               supabaseResponse = NextResponse.next({
@@ -169,7 +169,7 @@ export async function updateSession(request: NextRequest) {
      // Cache Strategy: In a real app, check a signed cookie first.
      // For now, we optimize by selecting minimal fields.
      
-     let supabase = createServerClient(
+     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
         {
@@ -204,7 +204,7 @@ export async function updateSession(request: NextRequest) {
   // If user is verified and tries to access verify-phone, redirect to dashboard
   if (user && isVerificationPage) {
       // Check if actually verified
-     let supabase = createServerClient(
+     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
         {

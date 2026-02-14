@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Check, ShieldCheck, Heart, Users, FileText, Video, Banknote, HelpCircle, ChevronDown, Activity, Globe, Vote, Megaphone, Lock, Scale } from 'lucide-react'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import { ArrowRight, Check, ShieldCheck, Video, Banknote, Activity, Globe, Vote, Megaphone, Lock, Users } from 'lucide-react'
 import { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'

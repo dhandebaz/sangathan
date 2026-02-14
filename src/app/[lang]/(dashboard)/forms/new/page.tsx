@@ -95,7 +95,7 @@ export default function NewFormPage() {
         </div>
 
         <div className="space-y-4">
-           {fields.map((field, index) => (
+           {fields.map((field) => (
              <div key={field.id} className="content-card rounded-lg p-4 relative group">
                 <div className="absolute top-4 right-4">
                    <button 

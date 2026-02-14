@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (event.event === 'subscription.activated') {
-       await (supabase.from('supporter_subscriptions') as any)
+       await supabase.from('supporter_subscriptions')
          .update({
            status: 'active',
            updated_at: new Date().toISOString()
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
        // Razorpay sends unix timestamp (seconds)
        const currentPeriodEnd = nextCharge ? new Date(nextCharge * 1000).toISOString() : new Date(Date.now() + 30*24*60*60*1000).toISOString()
 
-       await (supabase.from('supporter_subscriptions') as any)
+       await supabase.from('supporter_subscriptions')
          .update({
            status: 'active',
            current_period_end: currentPeriodEnd,
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
     
     else if (event.event === 'subscription.cancelled' || event.event === 'subscription.halted') {
-       await (supabase.from('supporter_subscriptions') as any)
+       await supabase.from('supporter_subscriptions')
          .update({
            status: 'cancelled',
            updated_at: new Date().toISOString()

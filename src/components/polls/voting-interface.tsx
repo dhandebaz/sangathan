@@ -3,12 +3,27 @@
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Progress } from '@/components/ui/progress' // Assuming we have this
 import { castVote } from '@/actions/polls'
 import { useRouter } from 'next/navigation'
 import { CheckCircle, Lock } from 'lucide-react'
 
-export function VotingInterface({ poll, options, hasVoted, isEligible, totalVotes, results }: { poll: any, options: any[], hasVoted: boolean, isEligible: boolean, totalVotes: number, results: any }) {
+import { Poll, PollOption, PollResults } from '@/types/dashboard'
+
+export function VotingInterface({ 
+  poll, 
+  options, 
+  hasVoted, 
+  isEligible, 
+  totalVotes, 
+  results 
+}: { 
+  poll: Poll, 
+  options: PollOption[], 
+  hasVoted: boolean, 
+  isEligible: boolean, 
+  totalVotes: number, 
+  results: PollResults 
+}) {
   const [selected, setSelected] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -25,7 +40,6 @@ export function VotingInterface({ poll, options, hasVoted, isEligible, totalVote
     }
   }
 
-  const showResults = hasVoted || poll.status === 'closed' || (poll.type === 'informal' && hasVoted)
   // Formal polls usually hide results until closed, but if "informal" we can show live.
   // Requirement: "If formal: Results visible only after close".
   const canSeeResults = poll.type === 'informal' || poll.status === 'closed'

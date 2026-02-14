@@ -4,6 +4,7 @@ import { ArrowLeft, Calendar, MapPin, Printer, Trash2, Video } from 'lucide-reac
 import Link from 'next/link'
 import { AttendanceList } from '@/components/meetings/attendance-list'
 import { deleteMeeting } from '@/actions/meetings'
+import { Meeting, MeetingAttendance } from '@/types/dashboard'
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -16,24 +17,20 @@ export default async function MeetingDetailsPage({ params }: PageProps) {
   const supabase = await createClient()
 
   // Fetch meeting details
-  const { data, error } = await supabase
+  const { data: meeting, error } = await supabase
     .from('meetings')
     .select('*, organisation_id')
     .eq('id', id)
-    .single()
-  
-  const meeting = data as any
+    .single() as { data: Meeting | null, error: { message: string } | null }
 
   if (error || !meeting) notFound()
 
   // Fetch attendance
-  const { data: attData } = await supabase
+  const { data: attendance } = await supabase
     .from('meeting_attendance')
     .select('member_id, status, members(full_name)')
     .eq('meeting_id', id)
-    .order('status', { ascending: false }) // Present first usually
-  
-  const attendance = attData as any[]
+    .order('status', { ascending: false }) as { data: MeetingAttendance[] | null }
 
   // Generate Jitsi Link (Deterministic)
   // https://meet.jit.si/sangathan-{orgId}-{meetingId}

@@ -5,6 +5,10 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 import { headers } from 'next/headers'
+import { Database } from '@/types/database'
+
+type Profile = Database['public']['Tables']['profiles']['Row']
+type Organisation = Database['public']['Tables']['organisations']['Row']
 
 // --- Input Schemas ---
 
@@ -73,25 +77,25 @@ export async function login(input: z.infer<typeof LoginSchema>) {
       .eq('id', data.user.id)
       .single()
     
-    const profile = profileData as any
+    const profile = profileData as Profile | null
 
-    if (profile && profile.organization_id) {
+    if (profile && profile.organisation_id) {
       const { data: orgData } = await supabase
         .from('organisations')
         .select('*')
-        .eq('id', profile.organization_id)
+        .eq('id', profile.organisation_id)
         .single()
       
-      const org = orgData as any
+      const org = orgData as Organisation | null
 
       if (org && org.is_suspended) {
         await supabase.auth.signOut()
         return { success: false, error: 'Your organisation has been suspended. Please contact support.' }
       }
     }
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Login Error:', err)
-    return { success: false, error: err.message || 'Failed to login' }
+    return { success: false, error: err instanceof Error ? err.message : 'Failed to login' }
   }
 
   redirect('/dashboard')
@@ -141,9 +145,9 @@ export async function signup(input: z.infer<typeof SignupSchema>) {
     }
 
     return { success: true, message: 'Check your email to verify your account.' }
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Signup Error:', err)
-    return { success: false, error: err.message || 'Failed to sign up' }
+    return { success: false, error: err instanceof Error ? err.message : 'Failed to sign up' }
   }
 }
 
@@ -221,9 +225,9 @@ export async function phoneLogin(input: z.infer<typeof PhoneLoginSchema>) {
   let decodedToken
   try {
     decodedToken = await firebaseAdminAuth.verifyIdToken(input.idToken)
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Firebase Admin Verify Error (Login):', JSON.stringify(error, Object.getOwnPropertyNames(error)))
-    return { success: false, error: `Invalid phone verification: ${error.message}` }
+    return { success: false, error: `Invalid phone verification: ${error instanceof Error ? error.message : 'Unknown error'}` }
   }
 
   const phoneNumber = decodedToken.phone_number
@@ -238,7 +242,7 @@ export async function phoneLogin(input: z.infer<typeof PhoneLoginSchema>) {
     .eq('phone', phoneNumber)
     .single()
     
-  const profile = data as any
+  const profile = data as Profile | null
 
   if (profile) {
     // User exists. Generate magic link session.
@@ -273,7 +277,8 @@ export async function linkPhoneToAccount(input: z.infer<typeof LoginSchema> & { 
   let decodedToken
   try {
     decodedToken = await firebaseAdminAuth.verifyIdToken(input.idToken)
-  } catch (error) {
+  } catch (err) {
+    console.error('Firebase Admin Verify Error:', err)
     return { success: false, error: 'Invalid phone verification' }
   }
   
@@ -291,12 +296,11 @@ export async function linkPhoneToAccount(input: z.infer<typeof LoginSchema> & { 
     .neq('id', authData.user.id) // Allow re-linking to self
     .single()
     
-  const existing = data as any
+  const existing = data as Profile | null
 
   if (existing) return { success: false, error: 'Phone number already linked to another account' }
   
-  const admin: any = supabaseAdmin
-  await admin
+  await supabaseAdmin
     .from('profiles')
     .update({ 
       phone: phoneNumber,
@@ -316,9 +320,9 @@ export async function finalizeSignup(input: { idToken: string }) {
   let decodedToken
   try {
     decodedToken = await firebaseAdminAuth.verifyIdToken(input.idToken)
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Firebase Admin Verify Error:', JSON.stringify(error, Object.getOwnPropertyNames(error)))
-    return { success: false, error: `Phone verification failed: ${error.message}` }
+    return { success: false, error: `Phone verification failed: ${error instanceof Error ? error.message : 'Unknown error'}` }
   }
 
   const phoneNumber = decodedToken.phone_number
@@ -366,7 +370,7 @@ export async function finalizeSignup(input: { idToken: string }) {
   const baseSlug = orgName.toLowerCase().replace(/[^a-z0-9]+/g, '-')
   const uniqueSlug = `${baseSlug}-${Math.random().toString(36).substring(2, 7)}`
 
-  const { error: rpcError } = await (supabaseAdmin.rpc as any)('create_organisation_and_admin', {
+  const { error: rpcError } = await supabaseAdmin.rpc('create_organisation_and_admin', {
     p_org_name: orgName,
     p_org_slug: uniqueSlug,
     p_user_id: user.id,
@@ -378,7 +382,7 @@ export async function finalizeSignup(input: { idToken: string }) {
 
   // Explicitly set approved_at and status for admin
   if (!rpcError) {
-      await (supabaseAdmin.from('profiles') as any).update({ status: 'active', approved_at: new Date().toISOString() }).eq('id', user.id)
+      await supabaseAdmin.from('profiles').update({ status: 'active', approved_at: new Date().toISOString() }).eq('id', user.id)
   }
 
   if (rpcError) {
@@ -417,8 +421,8 @@ export async function updateOnboardingMetadata(input: { fullName: string; organi
     if (error) throw error
 
     return { success: true }
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Update Metadata Error:', err)
-    return { success: false, error: err.message || 'Failed to update details' }
+    return { success: false, error: err instanceof Error ? err.message : 'Failed to update details' }
   }
 }

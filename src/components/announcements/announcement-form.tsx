@@ -13,7 +13,15 @@ export function AnnouncementForm({ orgId }: { orgId: string }) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: string;
+    content: string;
+    visibility_level: 'public' | 'members' | 'volunteer' | 'core' | 'executive';
+    is_pinned: boolean;
+    send_email: boolean;
+    scheduled_at: string;
+    expires_at: string;
+  }>({
     title: '',
     content: '',
     visibility_level: 'members',
@@ -31,7 +39,7 @@ export function AnnouncementForm({ orgId }: { orgId: string }) {
       organisation_id: orgId,
       title: formData.title,
       content: formData.content,
-      visibility_level: formData.visibility_level as any,
+      visibility_level: formData.visibility_level,
       is_pinned: formData.is_pinned,
       send_email: formData.send_email,
       scheduled_at: formData.scheduled_at ? new Date(formData.scheduled_at).toISOString() : undefined,
@@ -68,7 +76,10 @@ export function AnnouncementForm({ orgId }: { orgId: string }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <Label>Visibility</Label>
-          <Select value={formData.visibility_level} onValueChange={v => setFormData({...formData, visibility_level: v})}>
+          <Select 
+            value={formData.visibility_level} 
+            onValueChange={(v: 'public' | 'members' | 'volunteer' | 'core' | 'executive') => setFormData({...formData, visibility_level: v})}
+          >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>

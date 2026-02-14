@@ -1,10 +1,11 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, Download, Trash2 } from 'lucide-react'
+import { ArrowLeft, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { CsvExportButton } from '@/components/forms/csv-export-button'
 import { FormStatusToggle } from '@/components/forms/form-status-toggle'
 import { deleteForm } from '@/actions/forms/actions'
+import { DashboardForm, DashboardFormField } from '@/types/dashboard'
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -23,7 +24,7 @@ export default async function FormDetailsPage({ params }: PageProps) {
     .eq('id', id)
     .single()
   
-  const form = data as any
+  const form = data as DashboardForm | null
 
   if (error || !form) notFound()
 
@@ -34,9 +35,9 @@ export default async function FormDetailsPage({ params }: PageProps) {
     .eq('form_id', id)
     .order('submitted_at', { ascending: false })
   
-  const submissions = subData as any[]
+  const submissions = subData as Record<string, unknown>[] | null
 
-  const fields = form.fields as any[]
+  const fields = (form.fields || []) as DashboardFormField[]
 
   return (
     <div>
@@ -53,7 +54,7 @@ export default async function FormDetailsPage({ params }: PageProps) {
          <div className="ml-auto flex items-center gap-2">
             <FormStatusToggle formId={form.id} isActive={form.is_active} />
             
-            <CsvExportButton data={submissions} filename={`${form.title}-submissions.csv`} />
+            <CsvExportButton data={submissions || []} filename={`${form.title}-submissions.csv`} />
             
             <form action={async () => {
                'use server'

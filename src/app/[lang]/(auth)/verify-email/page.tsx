@@ -15,7 +15,7 @@ export default function VerifyEmailPage() {
       </div>
       <h2 className="text-2xl font-bold text-gray-900 mb-2">Check your email</h2>
       <p className="text-gray-500 mb-8 max-w-sm mx-auto">
-        We've sent a verification link to <strong>{email || 'your email address'}</strong>. 
+        We&apos;ve sent a verification link to <strong>{email || 'your email address'}</strong>. 
         Please click the link to activate your organisation workspace.
       </p>
       

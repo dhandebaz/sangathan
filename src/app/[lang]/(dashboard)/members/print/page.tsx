@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { getUserContext } from '@/lib/auth/context'
 import { PrintLayout } from '@/components/print/print-layout'
+import { Member, Organisation } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,7 +15,7 @@ export default async function PrintMembersPage() {
     .eq('status', 'active')
     .order('full_name', { ascending: true })
   
-  const members = data as any[]
+  const members = data as Member[] | null
     
   if (error) return <div>Error loading members</div>
 
@@ -24,7 +25,7 @@ export default async function PrintMembersPage() {
     .eq('id', ctx.organizationId)
     .single()
   
-  const org = orgData as any
+  const org = orgData as Organisation | null
 
   return (
     <PrintLayout title="Member List" orgName={org?.name || 'Organisation'}>

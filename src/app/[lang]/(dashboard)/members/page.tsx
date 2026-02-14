@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { MemberFilters } from '@/components/members/member-filters'
 import Link from 'next/link'
+import { Member } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic' // Ensure we fetch fresh data on navigation
 
@@ -48,8 +49,7 @@ export default async function MembersPage({ searchParams, params }: PageProps & 
   const to = from + pageSize - 1
   dbQuery = dbQuery.range(from, to)
 
-  const { data, error, count } = await dbQuery
-  const members = data as any[]
+  const { data: members, error, count } = await dbQuery as { data: Member[] | null, error: { message: string } | null, count: number | null }
 
   if (error) {
     console.error('Error fetching members:', error)
@@ -63,7 +63,7 @@ export default async function MembersPage({ searchParams, params }: PageProps & 
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
            <h1 className="text-3xl font-bold tracking-tight text-foreground">Members</h1>
-           <p className="text-muted-foreground mt-1">Manage your organisation's members and staff.</p>
+           <p className="text-muted-foreground mt-1">Manage your organisation&apos;s members and staff.</p>
         </div>
         <div className="flex gap-2">
             <Button variant="outline" asChild>

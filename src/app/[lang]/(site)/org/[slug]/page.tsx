@@ -5,19 +5,20 @@ import { JoinButton } from '@/components/org/join-button'
 import { getCollaboratingOrgs } from '@/actions/collaboration'
 import Link from 'next/link'
 import { Calendar, MapPin } from 'lucide-react'
+import { Organisation, DashboardEvent, DashboardAnnouncement } from '@/types/dashboard'
 
 export default async function OrgPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
   const { slug } = params
   const supabaseAdmin = createServiceClient()
   
-  const { data: orgData } = await (supabaseAdmin
-    .from('organisations') as any)
+  const { data: orgData } = await supabaseAdmin
+    .from('organisations')
     .select('id, name, membership_policy, created_at, slug, public_transparency_enabled')
     .eq('slug', slug)
     .single()
 
-  const org = orgData as any
+  const org = orgData as Organisation & { membership_policy: string; created_at: string; public_transparency_enabled: boolean } | null
 
   if (!org) notFound()
 
@@ -27,19 +28,19 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
   
   let memberStatus = null
   if (user) {
-    const { data: profileData } = await (supabaseAdmin
-      .from('profiles') as any)
+    const { data: profileData } = await supabaseAdmin
+      .from('profiles')
       .select('status')
       .eq('id', user.id)
       .eq('organization_id', org.id)
       .single()
     
-    const profile = profileData as any
+    const profile = profileData as { status: string } | null
     if (profile) memberStatus = profile.status
   }
 
-  const { data: announcements } = await (supabaseAdmin
-    .from('announcements') as any)
+  const { data: announcements } = await supabaseAdmin
+    .from('announcements')
     .select('*')
     .eq('organisation_id', org.id)
     .eq('visibility_level', 'public')
@@ -48,48 +49,41 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
     .limit(5)
 
   // Fetch Events (Owned + Joint)
-  const { data: ownedEvents } = await (supabaseAdmin
-    .from('events') as any)
+  const { data: ownedEvents } = await supabaseAdmin
+    .from('events')
     .select('*')
     .eq('organisation_id', org.id)
     .eq('event_type', 'public')
     .gte('start_time', new Date().toISOString())
   
-  const { data: jointMappings } = await (supabaseAdmin
-    .from('joint_events') as any)
+  const { data: jointMappings } = await supabaseAdmin
+    .from('joint_events')
     .select('event:events(*)')
     .eq('organisation_id', org.id)
   
-  const jointEvents = jointMappings?.map((j: any) => j.event).filter((e: any) => e.event_type === 'public' && new Date(e.start_time) >= new Date()) || []
+  const jointEvents = (jointMappings as unknown as { event: DashboardEvent }[])?.map(j => j.event).filter(e => e.event_type === 'public' && new Date(e.start_time) >= new Date()) || []
   
-  const allEvents = [...(ownedEvents || []), ...jointEvents].sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime())
+  const allEvents = [...(ownedEvents as DashboardEvent[] || []), ...jointEvents].sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime())
 
   // Fetch Partners
-  const partners = await getCollaboratingOrgs(org.id)
+  const partners = await getCollaboratingOrgs(org.id) as (Organisation & { id: string })[]
 
   // Transparency Metrics (if enabled)
   let metrics = null
-  let governanceSummary = null
   
   if (org.public_transparency_enabled) {
     const [members, events, hours] = await Promise.all([
-      (supabaseAdmin.from('profiles') as any).select('*', { count: 'exact', head: true }).eq('organization_id', org.id),
-      (supabaseAdmin.from('events') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', org.id),
-      (supabaseAdmin.from('task_logs') as any).select('hours_logged, task:tasks!inner(organisation_id)').eq('task.organisation_id', org.id)
+      supabaseAdmin.from('profiles').select('*', { count: 'exact', head: true }).eq('organization_id', org.id),
+      supabaseAdmin.from('events').select('*', { count: 'exact', head: true }).eq('organisation_id', org.id),
+      supabaseAdmin.from('task_logs').select('hours_logged, task:tasks!inner(organisation_id)').eq('task.organisation_id', org.id)
     ])
     
-    const totalHours = (hours.data || []).reduce((sum: number, log: any) => sum + (Number(log.hours_logged) || 0), 0)
+    const totalHours = (hours.data as { hours_logged: number }[] || []).reduce((sum: number, log) => sum + (Number(log.hours_logged) || 0), 0)
     
     metrics = {
       members: members.count || 0,
       events: events.count || 0,
       hours: Math.round(totalHours)
-    }
-    
-    governanceSummary = {
-      status: 'active', // Should fetch from org.status
-      lastAudit: new Date().toLocaleDateString(), // Placeholder
-      charterLink: '/governance/platform-charter'
     }
   }
 
@@ -103,7 +97,7 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
             {partners.length > 0 && (
                <div className="mt-2 text-sm text-gray-600">
                  Part of a coalition with: 
-                 {partners.map((p: any, i: number) => (
+                 {partners.map((p, i) => (
                    <span key={p.id}>
                      {i > 0 && ', '}
                      <Link href={`/${slug.split('/')[0] || 'en'}/org/${p.slug}`} className="text-blue-600 hover:underline ml-1">
@@ -184,7 +178,7 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
           <section>
              <h2 className="text-xl font-bold text-gray-900 mb-4">Upcoming Events</h2>
              <div className="grid gap-4 md:grid-cols-2">
-               {allEvents.map((e: any) => (
+               {allEvents.map((e) => (
                  <div key={e.id} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
                    <div className="flex justify-between items-start mb-2">
                      <span className="text-sm font-semibold text-orange-600 uppercase tracking-wide">
@@ -220,7 +214,7 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
           <section>
             <h2 className="text-xl font-bold text-gray-900 mb-4">Public Announcements</h2>
             <div className="space-y-4">
-              {announcements.map((a: any) => (
+              {(announcements as unknown as DashboardAnnouncement[]).map((a) => (
                 <div key={a.id} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
                   <div className="flex items-center gap-2 mb-2">
                     {a.is_pinned && <span className="text-orange-500 font-bold text-xs uppercase tracking-wide">Pinned</span>}

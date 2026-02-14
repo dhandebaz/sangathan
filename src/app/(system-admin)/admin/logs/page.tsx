@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { formatDistanceToNow } from 'date-fns'
+import { SystemLog } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,13 +21,13 @@ export default async function SystemLogsPage() {
     .from('system_logs')
     .select('*')
     .order('created_at', { ascending: false })
-    .limit(50)
+    .limit(50) as { data: SystemLog[] | null, error: { message: string } | null }
 
   if (error) {
     return <div className="p-4 text-red-500">Error loading logs: {error.message}</div>
   }
 
-  const getBadgeVariant = (level: string) => {
+  const getBadgeVariant = (level: SystemLog['level']) => {
     switch (level) {
       case 'info': return 'secondary'
       case 'warn': return 'warning'
@@ -56,7 +57,7 @@ export default async function SystemLogsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {(logs as any[])?.map((log) => (
+            {logs?.map((log) => (
               <TableRow key={log.id}>
                 <TableCell>
                   <Badge variant={getBadgeVariant(log.level)} className="uppercase text-[10px]">

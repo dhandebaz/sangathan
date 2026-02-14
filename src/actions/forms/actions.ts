@@ -10,9 +10,9 @@ import { headers } from 'next/headers'
 
 // --- Types & Schemas ---
 
-const FieldTypeSchema = z.enum(['text', 'number', 'phone', 'textarea', 'dropdown'])
+export const FieldTypeSchema = z.enum(['text', 'number', 'phone', 'textarea', 'dropdown'])
 
-const FormFieldSchema = z.object({
+export const FormFieldSchema = z.object({
   id: z.string(),
   label: z.string().min(1),
   type: FieldTypeSchema,
@@ -20,23 +20,29 @@ const FormFieldSchema = z.object({
   options: z.array(z.string()).optional(), // For dropdowns
 })
 
-const CreateFormSchema = z.object({
+export const CreateFormSchema = z.object({
   title: z.string().min(3, "Title is required"),
   description: z.string().optional(),
   fields: z.array(FormFieldSchema).min(1, "At least one field is required"),
 })
 
-const UpdateFormSchema = CreateFormSchema.partial().extend({
+export const UpdateFormSchema = CreateFormSchema.partial().extend({
   formId: z.string().uuid(),
 })
 
-const ToggleFormStatusSchema = z.object({
+export const ToggleFormStatusSchema = z.object({
   formId: z.string().uuid(),
   isActive: z.boolean(),
 })
 
-const DeleteFormSchema = z.object({
+export const DeleteFormSchema = z.object({
   formId: z.string().uuid(),
+})
+
+export const SubmitFormSchema = z.object({
+  formId: z.string().uuid(),
+  data: z.record(z.string(), z.any()), // Field ID -> Value
+  honeypot: z.string().optional(), // Spam protection
 })
 
 // --- Dashboard Actions ---
@@ -55,13 +61,13 @@ export const createForm = createSafeAction(
         fields: input.fields, // JSONB
         is_active: true,
         created_by: context.user.id
-      } as any)
+      })
       .select('id')
-      .single()
+      .single() as { data: { id: string } | null, error: { message: string } | null }
     
-    const form = data as any
+    const form = data
 
-    if (error) throw new Error(error.message)
+    if (error || !form) throw new Error(error?.message || 'Failed to create form')
 
     await logAction({
       organisation_id: context.organizationId,
@@ -83,7 +89,8 @@ export const updateForm = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await (supabase.from('forms') as any)
+    const { error } = await supabase
+      .from('forms')
       .update({
         title: input.title,
         description: input.description,
@@ -116,7 +123,8 @@ export const toggleFormStatus = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await (supabase.from('forms') as any)
+    const { error } = await supabase
+      .from('forms')
       .update({ is_active: input.isActive })
       .eq('id', input.formId)
       .eq('organisation_id', context.organizationId)
@@ -168,12 +176,6 @@ export const deleteForm = createSafeAction(
 // --- Public Submission Action ---
 // NOTE: This does NOT use createSafeAction because it's public (no auth context)
 
-const SubmitFormSchema = z.object({
-  formId: z.string().uuid(),
-  data: z.record(z.string(), z.any()), // Field ID -> Value
-  honeypot: z.string().optional(), // Spam protection
-})
-
 export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>) {
   // 1. Spam Check
   if (input.honeypot && input.honeypot.length > 0) {
@@ -192,9 +194,9 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
     .from('forms')
     .select('id, organisation_id, fields, is_active')
     .eq('id', input.formId)
-    .single()
+    .single() as { data: { id: string; organisation_id: string; fields: z.infer<typeof FormFieldSchema>[]; is_active: boolean } | null, error: { message: string } | null }
   
-  const form = data as any
+  const form = data
 
   if (formError || !form) {
     return { success: false, error: 'Form not found' }
@@ -238,7 +240,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
     
     // Check limit: Max 5 submissions per hour per IP for this form
     // We access 'rate_limits' which might not exist if migration hasn't run.
-    const { count, error: rateError } = await (supabase.from('rate_limits') as any)
+    const { count, error: rateError } = await supabase.from('rate_limits')
       .select('*', { count: 'exact', head: true })
       .eq('key', key)
       .gt('created_at', new Date(Date.now() - 3600 * 1000).toISOString())
@@ -249,7 +251,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
     
     // Record attempt
     if (!rateError) {
-      await (supabase.from('rate_limits') as any).insert({ key })
+      await supabase.from('rate_limits').insert({ key })
     }
   } catch (err) {
     // Fail open - log error but allow submission if rate limit system is down/missing
@@ -269,7 +271,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
       form_id: form.id,
       organisation_id: form.organisation_id, // Derived from form
       data: input.data,
-    } as any)
+    })
 
   if (submissionError) {
     console.error('Submission Error:', submissionError)

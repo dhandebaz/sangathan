@@ -1,6 +1,5 @@
 'use server'
 
-import { createSafeAction } from '@/lib/auth/actions'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { createServiceClient } from '@/lib/supabase/service'
@@ -21,7 +20,7 @@ async function checkSuperAdmin() {
 
 // --- Schemas ---
 
-const OrgActionSchema = z.object({
+export const OrgActionSchema = z.object({
   organisationId: z.string().uuid(),
 })
 
@@ -32,9 +31,7 @@ export const suspendOrganisation = async (input: z.infer<typeof OrgActionSchema>
   const supabase = createServiceClient()
 
   // 1. Update Org Status
-  // Assuming we added `is_suspended` column. If not, we need to add it to schema.
-  // I will assume it exists or I will try to update it.
-  const { error } = await (supabase.from('organisations') as any)
+  const { error } = await supabase.from('organisations')
       .update({ is_suspended: true })
       .eq('id', input.organisationId)
 
@@ -58,7 +55,7 @@ export const reactivateOrganisation = async (input: z.infer<typeof OrgActionSche
   const user = await checkSuperAdmin()
   const supabase = createServiceClient()
 
-  const { error } = await (supabase.from('organisations') as any)
+  const { error } = await supabase.from('organisations')
       .update({ is_suspended: false })
       .eq('id', input.organisationId)
 

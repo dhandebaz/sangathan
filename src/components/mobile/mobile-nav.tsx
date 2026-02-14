@@ -2,16 +2,15 @@
 
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { LayoutDashboard, Calendar, CheckSquare, Vote, Megaphone, Users, Menu, Globe } from 'lucide-react'
+import { LayoutDashboard, Calendar, CheckSquare, Vote, Menu, Globe } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface MobileNavProps {
   lang: string
-  role: string
   capabilities: Record<string, boolean>
 }
 
-export function MobileNav({ lang, role, capabilities }: MobileNavProps) {
+export function MobileNav({ lang, capabilities }: MobileNavProps) {
   const pathname = usePathname()
 
   const navItems = [

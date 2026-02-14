@@ -8,20 +8,20 @@ import { sendEmail } from '@/lib/email/sender'
 import { newMemberRequestEmail, membershipApprovedEmail, membershipRejectedEmail } from '@/lib/email/templates'
 
 // --- Schemas ---
-const UpdatePolicySchema = z.object({
+export const UpdatePolicySchema = z.object({
   orgId: z.string().uuid(),
   policy: z.enum(['open_auto', 'admin_approval', 'invite_only']),
 })
 
-const RequestJoinSchema = z.object({
+export const RequestJoinSchema = z.object({
   orgId: z.string().uuid(),
 })
 
-const ManageMemberSchema = z.object({
+export const ManageMemberSchema = z.object({
   memberId: z.string().uuid(),
 })
 
-const UpdateTransparencySchema = z.object({
+export const UpdateTransparencySchema = z.object({
   orgId: z.string().uuid(),
   enabled: z.boolean(),
 })
@@ -41,14 +41,14 @@ export async function updateTransparency(input: z.infer<typeof UpdateTransparenc
       .eq('id', user.id)
       .single()
 
-    const profile = profileData as any
+    const profile = profileData
 
     if (!profile || profile.organization_id !== input.orgId || profile.role !== 'admin') {
       return { success: false, error: 'Permission denied' }
     }
 
-    const { error } = await (supabase
-      .from('organisations') as any)
+    const { error } = await supabase
+      .from('organisations')
       .update({ public_transparency_enabled: input.enabled })
       .eq('id', input.orgId)
 
@@ -58,8 +58,9 @@ export async function updateTransparency(input: z.infer<typeof UpdateTransparenc
     revalidatePath(`/org`) // This might not be specific enough for dynamic routes, but Next.js usually handles revalidation well.
     // Ideally we revalidate the specific org page if we knew the slug.
     return { success: true }
-  } catch (error: any) {
-    return { success: false, error: error.message }
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    return { success: false, error: errorMessage }
   }
 }
 
@@ -71,20 +72,18 @@ export async function updateMembershipPolicy(input: z.infer<typeof UpdatePolicyS
     if (!user) return { success: false, error: 'Unauthorized' }
 
     // Check permissions (must be admin)
-    const { data: profileData } = await supabase
+    const { data: profile } = await supabase
       .from('profiles')
       .select('role, organization_id')
       .eq('id', user.id)
       .single()
 
-    const profile = profileData as any
-
     if (!profile || profile.organization_id !== input.orgId || profile.role !== 'admin') {
       return { success: false, error: 'Permission denied' }
     }
 
-    const { error } = await (supabase
-      .from('organisations') as any)
+    const { error } = await supabase
+      .from('organisations')
       .update({ membership_policy: input.policy })
       .eq('id', input.orgId)
 
@@ -92,9 +91,10 @@ export async function updateMembershipPolicy(input: z.infer<typeof UpdatePolicyS
 
     revalidatePath('/dashboard/settings')
     return { success: true }
-  } catch (error: any) {
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     console.error('Update Policy Error:', error)
-    return { success: false, error: error.message }
+    return { success: false, error: errorMessage }
   }
 }
 
@@ -115,9 +115,9 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
       .from('organisations')
       .select('name, membership_policy, slug')
       .eq('id', input.orgId)
-      .single()
+      .single() as { data: { name: string; membership_policy: string; slug: string } | null, error: { message: string } | null }
 
-    const org = orgData as any
+    const org = orgData
 
     if (orgError || !org) return { success: false, error: 'Organisation not found' }
 
@@ -146,11 +146,11 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
     
     // We need user metadata for name/email
     const { data: userData } = await supabaseAdmin.auth.admin.getUserById(user.id)
-    const fullName = userData.user?.user_metadata.full_name || 'Unknown User'
-    const email = userData.user?.email!
+    const fullName = userData.user?.user_metadata?.full_name || 'Unknown User'
+    const email = userData.user?.email ?? ''
 
-    const { error: insertError } = await (supabaseAdmin
-      .from('profiles') as any)
+    const { error: insertError } = await supabaseAdmin
+      .from('profiles')
       .insert({
         id: user.id,
         organization_id: input.orgId,
@@ -175,7 +175,7 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
       const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/membership-requests`
       
       if (admins) {
-        for (const admin of (admins as any[])) {
+        for (const admin of (admins as { email: string; full_name: string | null }[])) {
            await sendEmail({
              to: admin.email,
              subject: `New Membership Request: ${fullName}`,
@@ -200,9 +200,10 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
 
     revalidatePath('/dashboard')
     return { success: true, status }
-  } catch (error: any) {
+  } catch (error) {
     console.error('Join Error:', error)
-    return { success: false, error: error.message }
+    const message = error instanceof Error ? error.message : 'Unknown error'
+    return { success: false, error: message }
   }
 }
 
@@ -217,9 +218,9 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
       .from('profiles')
       .select('role, organization_id')
       .eq('id', user.id)
-      .single()
+      .single() as { data: { role: string; organization_id: string } | null, error: { message: string } | null }
 
-    const adminProfile = adminProfileData as any
+    const adminProfile = adminProfileData
 
     if (!adminProfile || adminProfile.role !== 'admin') {
       return { success: false, error: 'Permission denied' }
@@ -232,9 +233,9 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
       .from('profiles')
       .select('email, full_name, organization_id')
       .eq('id', input.memberId)
-      .single()
+      .single() as { data: { email: string; full_name: string | null; organization_id: string } | null, error: { message: string } | null }
 
-    const member = memberData as any
+    const member = memberData
 
     if (!member || member.organization_id !== adminProfile.organization_id) {
         return { success: false, error: 'Member not found in your organisation' }
@@ -245,13 +246,13 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
         .from('organisations')
         .select('name')
         .eq('id', adminProfile.organization_id)
-        .single()
+        .single() as { data: { name: string } | null, error: { message: string } | null }
 
-    const org = orgData as any
+    const org = orgData
 
     // Update
-    const { error } = await (supabaseAdmin
-      .from('profiles') as any)
+    const { error } = await supabaseAdmin
+      .from('profiles')
       .update({ 
         status: 'active',
         approved_at: new Date().toISOString()
@@ -271,8 +272,9 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
 
     revalidatePath('/dashboard/membership-requests')
     return { success: true }
-  } catch (error: any) {
-    return { success: false, error: error.message }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error'
+    return { success: false, error: message }
   }
 }
 
@@ -286,9 +288,9 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
       .from('profiles')
       .select('role, organization_id')
       .eq('id', user.id)
-      .single()
+      .single() as { data: { role: string; organization_id: string } | null, error: { message: string } | null }
 
-    const adminProfile = adminProfileData as any
+    const adminProfile = adminProfileData
 
     if (!adminProfile || adminProfile.role !== 'admin') {
       return { success: false, error: 'Permission denied' }
@@ -301,9 +303,9 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
       .from('profiles')
       .select('email, full_name, organization_id')
       .eq('id', input.memberId)
-      .single()
+      .single() as { data: { email: string; full_name: string | null; organization_id: string } | null, error: { message: string } | null }
       
-    const member = memberData as any
+    const member = memberData
 
     if (!member || member.organization_id !== adminProfile.organization_id) {
         return { success: false, error: 'Member not found' }
@@ -314,13 +316,13 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
         .from('organisations')
         .select('name')
         .eq('id', adminProfile.organization_id)
-        .single()
+        .single() as { data: { name: string } | null, error: { message: string } | null }
 
-    const org = orgData as any
+    const org = orgData
 
     // Update
-    const { error } = await (supabaseAdmin
-      .from('profiles') as any)
+    const { error } = await supabaseAdmin
+      .from('profiles')
       .update({ 
         status: 'rejected'
       })
@@ -339,7 +341,8 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
 
     revalidatePath('/dashboard/membership-requests')
     return { success: true }
-  } catch (error: any) {
-    return { success: false, error: error.message }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error'
+    return { success: false, error: message }
   }
 }

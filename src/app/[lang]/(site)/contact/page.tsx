@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { Mail, ShieldAlert, CreditCard, MessageSquare } from 'lucide-react'
 import { Metadata } from 'next'
 

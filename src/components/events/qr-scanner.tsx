@@ -3,10 +3,8 @@
 import { useEffect, useState } from 'react'
 import { Html5QrcodeScanner } from 'html5-qrcode'
 import { verifyAndCheckIn } from '@/actions/events'
-import { Button } from '@/components/ui/button'
 
-export function QRScanner({ eventId, userId }: { eventId: string, userId: string }) {
-  const [scanResult, setScanResult] = useState<string | null>(null)
+export function QRScanner({ userId }: { eventId: string, userId: string }) {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
 
@@ -19,7 +17,7 @@ export function QRScanner({ eventId, userId }: { eventId: string, userId: string
 
     scanner.render(onScanSuccess, onScanFailure)
 
-    async function onScanSuccess(decodedText: string, decodedResult: any) {
+    async function onScanSuccess(decodedText: string) {
       if (status === 'success' || status === 'error') return // Debounce
       
       // Pause scanning logic handled by state? 
@@ -46,13 +44,13 @@ export function QRScanner({ eventId, userId }: { eventId: string, userId: string
              setMessage('')
           }, 3000)
         }
-      } catch (err) {
+      } catch {
         setStatus('error')
         setMessage('System Error')
       }
     }
 
-    function onScanFailure(error: any) {
+    function onScanFailure() {
       // handle scan failure, usually better to ignore and keep scanning.
       // console.warn(`Code scan error = ${error}`);
     }
@@ -62,7 +60,7 @@ export function QRScanner({ eventId, userId }: { eventId: string, userId: string
         console.error('Failed to clear html5QrcodeScanner. ', error)
       })
     }
-  }, [eventId, userId])
+  }, [userId, status])
 
   return (
     <div className="max-w-md mx-auto space-y-4">
@@ -78,7 +76,7 @@ export function QRScanner({ eventId, userId }: { eventId: string, userId: string
       )}
       
       <div className="text-center text-sm text-gray-500">
-        Point camera at attendee's QR code ticket.
+        Point camera at attendee&apos;s QR code ticket.
       </div>
     </div>
   )

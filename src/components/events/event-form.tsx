@@ -8,7 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { createEvent } from '@/actions/events'
 import { useRouter } from 'next/navigation'
 
-export function EventForm({ orgId, partners = [] }: { orgId: string, partners?: any[] }) {
+import { EventType } from '@/types/events'
+
+interface Partner {
+  id: string
+  name: string
+}
+
+export function EventForm({ orgId, partners = [] }: { orgId: string, partners?: Partner[] }) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   
@@ -18,7 +25,7 @@ export function EventForm({ orgId, partners = [] }: { orgId: string, partners?: 
     start_time: '',
     end_time: '',
     location: '',
-    event_type: 'members',
+    event_type: 'members' as EventType,
     rsvp_enabled: true,
     capacity: '',
     collaborating_org_ids: [] as string[]
@@ -47,7 +54,7 @@ export function EventForm({ orgId, partners = [] }: { orgId: string, partners?: 
       start_time: new Date(formData.start_time).toISOString(),
       end_time: formData.end_time ? new Date(formData.end_time).toISOString() : undefined,
       location: formData.location,
-      event_type: formData.event_type as any,
+      event_type: formData.event_type,
       rsvp_enabled: formData.rsvp_enabled,
       capacity: formData.capacity ? parseInt(formData.capacity) : undefined,
       collaborating_org_ids: formData.collaborating_org_ids

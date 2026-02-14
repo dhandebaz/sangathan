@@ -16,14 +16,14 @@ export default async function RequestsPage(props: { params: Promise<{ lang: stri
     .eq('id', user.id)
     .single()
 
-  const profile = profileData as any
+  const profile = profileData as { organization_id: string; role: string } | null
 
   if (!profile || !profile.organization_id || profile.role !== 'admin') {
       return <AccessDenied lang={lang} />
   }
 
-  const { data: requests } = await (supabase
-    .from('profiles') as any)
+  const { data: requests } = await supabase
+    .from('profiles')
     .select('*')
     .eq('organization_id', profile.organization_id)
     .eq('status', 'pending')
@@ -41,7 +41,7 @@ export default async function RequestsPage(props: { params: Promise<{ lang: stri
         </div>
       </div>
       
-      <RequestList requests={requests || []} />
+      <RequestList requests={(requests || []) as unknown as { id: string; full_name?: string | null; email?: string | null; created_at: string }[]} />
     </div>
   )
 }

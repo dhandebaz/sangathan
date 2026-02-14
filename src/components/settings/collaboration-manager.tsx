@@ -6,9 +6,22 @@ import { Input } from '@/components/ui/input'
 import { createCollaborationRequest, respondToCollaborationRequest } from '@/actions/collaboration'
 import { searchOrganisations } from '@/actions/search'
 import { useRouter } from 'next/navigation'
-import { Loader2, Plus, X, Check, Search } from 'lucide-react'
+import { Loader2, X, Check, Search } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+
+interface Partner {
+  id: string
+  name: string
+  slug: string
+}
+
+interface CollaborationRequest {
+  id: string
+  requester?: Partner
+  responder?: Partner
+  created_at: string
+}
 
 export function CollaborationManager({ 
   orgId, 
@@ -16,12 +29,12 @@ export function CollaborationManager({
   pendingRequests 
 }: { 
   orgId: string, 
-  activePartners: any[], 
-  pendingRequests: { incoming: any[], outgoing: any[] } 
+  activePartners: Partner[], 
+  pendingRequests: { incoming: CollaborationRequest[], outgoing: CollaborationRequest[] } 
 }) {
   const [loading, setLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const [searchResults, setSearchResults] = useState<any[]>([])
+  const [searchResults, setSearchResults] = useState<Partner[]>([])
   const [isSearching, setIsSearching] = useState(false)
   const router = useRouter()
 
@@ -29,7 +42,7 @@ export function CollaborationManager({
     if (searchQuery.length < 3) return
     setIsSearching(true)
     const results = await searchOrganisations(searchQuery)
-    setSearchResults(results.filter((r: any) => r.id !== orgId)) // Filter self
+    setSearchResults(results.filter((r) => r.id !== orgId)) // Filter self
     setIsSearching(false)
   }
 
@@ -96,10 +109,10 @@ export function CollaborationManager({
             {pendingRequests.incoming.length > 0 && (
               <div className="space-y-3">
                 <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Incoming Requests</h4>
-                {pendingRequests.incoming.map((req: any) => (
+                {pendingRequests.incoming.map((req) => (
                   <div key={req.id} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-100">
                     <div>
-                      <h4 className="font-medium">{req.requester.name}</h4>
+                      <h4 className="font-medium">{req.requester?.name}</h4>
                       <p className="text-xs text-gray-500">wants to collaborate</p>
                     </div>
                     <div className="flex gap-2">
@@ -119,10 +132,10 @@ export function CollaborationManager({
             {pendingRequests.outgoing.length > 0 && (
               <div className="space-y-3">
                 <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Sent Requests</h4>
-                {pendingRequests.outgoing.map((req: any) => (
+                {pendingRequests.outgoing.map((req) => (
                   <div key={req.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200 opacity-75">
                     <div>
-                      <h4 className="font-medium">{req.responder.name}</h4>
+                      <h4 className="font-medium">{req.responder?.name}</h4>
                       <p className="text-xs text-gray-500">Waiting for response...</p>
                     </div>
                     <Badge variant="secondary">Pending</Badge>
@@ -154,7 +167,7 @@ export function CollaborationManager({
           
           {searchResults.length > 0 && (
             <div className="space-y-2 border rounded-lg p-2 max-h-48 overflow-y-auto">
-              {searchResults.map((org: any) => (
+              {searchResults.map((org) => (
                 <div key={org.id} className="flex items-center justify-between p-2 hover:bg-gray-50 rounded cursor-pointer group">
                   <div>
                     <div className="font-medium">{org.name}</div>

@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 
-const SubscriptionSchema = z.object({
+export const SubscriptionSchema = z.object({
   endpoint: z.string(),
   keys: z.object({
     p256dh: z.string(),
@@ -19,8 +19,8 @@ export async function subscribeToPush(input: z.infer<typeof SubscriptionSchema>)
     if (!user) return { success: false, error: 'Unauthorized' }
 
     // Upsert subscription
-    const { error } = await (supabase
-      .from('push_subscriptions') as any)
+    const { error } = await supabase
+      .from('push_subscriptions')
       .upsert({
         user_id: user.id,
         endpoint: input.endpoint,
@@ -32,8 +32,9 @@ export async function subscribeToPush(input: z.infer<typeof SubscriptionSchema>)
     if (error) throw error
 
     return { success: true }
-  } catch (error: any) {
-    return { success: false, error: error.message }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error'
+    return { success: false, error: message }
   }
 }
 

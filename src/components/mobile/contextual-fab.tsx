@@ -17,7 +17,6 @@ export function ContextualFAB({ lang, role, capabilities }: ContextualFABProps) 
   if (!role) return null
 
   const isAdmin = ['admin', 'editor', 'executive'].includes(role)
-  const isVolunteer = ['volunteer', 'core', 'executive', 'admin', 'editor'].includes(role)
 
   let action = null
 

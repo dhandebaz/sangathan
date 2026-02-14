@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, LayoutDashboard, ChevronRight } from 'lucide-react'
+import { Menu, X, LayoutDashboard } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { User } from '@supabase/supabase-js'
@@ -21,7 +21,7 @@ export function Navbar({ lang }: { lang: string }) {
       setUser(user)
     }
     getUser()
-  }, [])
+  }, [supabase.auth])
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -31,7 +31,7 @@ export function Navbar({ lang }: { lang: string }) {
         setIsOpen(false)
       }
     })
-  }, [pathname])
+  }, [pathname, isOpen])
 
   const getPathForLang = (targetLang: string) => {
     if (!pathname) return `/${targetLang}`

@@ -1,9 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { AppealForm } from '@/components/governance/appeal-form'
 import { redirect } from 'next/navigation'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { AccessDenied } from '@/components/dashboard/access-denied'
+import { Appeal } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,18 +21,20 @@ export default async function AppealsPage(props: { params: Promise<{ lang: strin
     .eq('id', user.id)
     .single()
 
-  const profile = profileData as any
+  const profile = profileData as { organization_id: string; role: string } | null
 
   if (!profile || !profile.organization_id || !['admin', 'executive', 'editor'].includes(profile.role)) {
     return <AccessDenied lang={lang} />
   }
 
   // Fetch Appeals
-  const { data: appeals } = await (supabase
-    .from('appeals') as any)
+  const { data: appealsData } = await supabase
+    .from('appeals')
     .select('*')
     .eq('organisation_id', profile.organization_id)
     .order('created_at', { ascending: false })
+
+  const appeals = appealsData as unknown as Appeal[] | null
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4 space-y-8">
@@ -49,7 +52,7 @@ export default async function AppealsPage(props: { params: Promise<{ lang: strin
         <div>
           <h2 className="text-lg font-semibold mb-4">Appeal History</h2>
           <div className="space-y-4">
-            {appeals?.map((appeal: any) => (
+            {appeals?.map((appeal) => (
               <Card key={appeal.id}>
                 <CardHeader className="pb-2">
                   <div className="flex justify-between items-start">

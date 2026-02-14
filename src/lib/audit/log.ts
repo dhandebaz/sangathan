@@ -6,7 +6,7 @@ interface LogActionParams {
   action: string
   resource_table: string
   resource_id: string
-  details?: Record<string, any>
+  details?: Record<string, unknown>
 }
 
 export async function logAction(params: LogActionParams) {
@@ -25,7 +25,7 @@ export async function logAction(params: LogActionParams) {
       resource_table: params.resource_table,
       resource_id: params.resource_id,
       details: params.details
-    } as any)
+    })
 
     if (error) {
       console.error('Audit Log Failed:', error)

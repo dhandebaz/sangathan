@@ -4,7 +4,7 @@ import { Download } from 'lucide-react'
 import { useState } from 'react'
 
 interface CsvExportButtonProps {
-  data: any[]
+  data: Record<string, unknown>[]
   filename?: string
 }
 
@@ -26,10 +26,11 @@ export function CsvExportButton({ data, filename = 'export.csv' }: CsvExportButt
       
       const headers = new Set<string>()
       const flattenedData = data.map(item => {
-        const flat: Record<string, any> = {
+        const itemData = (item.data as Record<string, unknown>) || {}
+        const flat: Record<string, unknown> = {
           id: item.id,
-          submitted_at: new Date(item.submitted_at).toISOString(),
-          ...item.data // Spread the form data
+          submitted_at: item.submitted_at ? new Date(item.submitted_at as string).toISOString() : '',
+          ...itemData // Spread the form data
         }
         Object.keys(flat).forEach(k => headers.add(k))
         return flat

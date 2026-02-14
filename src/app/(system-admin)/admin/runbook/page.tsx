@@ -26,7 +26,7 @@ export default function RunbookPage() {
                     <li>Check <strong>Supabase Status Page</strong> for regional outages.</li>
                     <li>If local issue, check connection pooler limits in Supabase Dashboard.</li>
                     <li><strong>Action:</strong> Enable <code>Maintenance Mode</code> via System Settings immediately.</li>
-                    <li>If permanent data corruption: Initiate Point-in-Time Recovery (PITR) from yesterday's backup.</li>
+                    <li>If permanent data corruption: Initiate Point-in-Time Recovery (PITR) from yesterday&apos;s backup.</li>
                     <li>Notify users via Status Page or Email (if external email provider is working).</li>
                   </ol>
                 </AccordionContent>
@@ -59,7 +59,7 @@ export default function RunbookPage() {
                 <AccordionContent className="text-sm">
                   Run SQL: 
                   <pre className="bg-gray-100 p-2 rounded mt-2 text-xs">
-                    UPDATE system_settings SET value = '{`{"enabled": true, "message": "Upgrading DB"}`}' WHERE key = 'maintenance_mode';
+                    {`UPDATE system_settings SET value = '{"enabled": true, "message": "Upgrading DB"}' WHERE key = 'maintenance_mode';`}
                   </pre>
                 </AccordionContent>
               </AccordionItem>
@@ -68,7 +68,7 @@ export default function RunbookPage() {
                 <AccordionContent className="text-sm">
                   Run SQL:
                   <pre className="bg-gray-100 p-2 rounded mt-2 text-xs">
-                    UPDATE organisations SET deleted_at = NULL WHERE id = 'ORG_UUID';
+                    {`UPDATE organisations SET deleted_at = NULL WHERE id = 'ORG_UUID';`}
                   </pre>
                 </AccordionContent>
               </AccordionItem>
@@ -89,9 +89,9 @@ export default function RunbookPage() {
                 <AccordionContent className="text-sm">
                   To retry all failed jobs from the last hour:
                   <pre className="bg-gray-100 p-2 rounded mt-2 text-xs">
-                    UPDATE system_jobs 
-                    SET status = 'pending', attempts = 0, last_error = NULL 
-                    WHERE status = 'failed' AND created_at &gt; NOW() - INTERVAL '1 hour';
+                    {`UPDATE system_jobs 
+SET status = 'pending', attempts = 0, last_error = NULL 
+WHERE status = 'failed' AND created_at > NOW() - INTERVAL '1 hour';`}
                   </pre>
                 </AccordionContent>
               </AccordionItem>

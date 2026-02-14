@@ -3,6 +3,7 @@ import { QRScanner } from '@/components/events/qr-scanner'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
+import { DashboardEvent } from '@/types/dashboard'
 
 export default async function CheckInPage(props: { params: Promise<{ lang: string, id: string }> }) {
   const { lang, id } = await props.params
@@ -17,7 +18,7 @@ export default async function CheckInPage(props: { params: Promise<{ lang: strin
     .eq('id', id)
     .single()
 
-  const event = eventData as any
+  const event = eventData as DashboardEvent | null
 
   return (
     <div className="max-w-md mx-auto py-8 px-4">

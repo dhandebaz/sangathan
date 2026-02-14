@@ -40,9 +40,23 @@ export default async function GovernancePage({ params }: { params: Promise<{ lan
               : 'Sangathan acts solely as technical infrastructure. We do not endorse, fund, or direct any organisation on our platform. Whether you are a student union, a neighborhood collective, or a non-profit, our role is to provide the tools you need to govern yourself.'}
           </p>
           <p>
-            {isHindi
-              ? 'हम वैचारिक सामग्री को तब तक पुलिस नहीं करते जब तक कि वह हमारी <Link href={`/${lang}/acceptable-use-policy`} className="text-[var(--accent)] hover:underline">स्वीकार्य उपयोग नीति</Link> (जैसे, अभद्र भाषा, हिंसा, धोखाधड़ी) का उल्लंघन नहीं करती। हम सामग्री-अज्ञेयवादी हैं लेकिन सुरक्षा-अनिवार्य हैं।'
-              : 'We do not police ideological content unless it violates our <Link href={`/${lang}/acceptable-use-policy`} className="text-[var(--accent)] hover:underline">Acceptable Use Policy</Link> (e.g., hate speech, violence, fraud). We are content-agnostic but safety-mandatory.'}
+            {isHindi ? (
+              <>
+                हम वैचारिक सामग्री को तब तक पुलिस नहीं करते जब तक कि वह हमारी{' '}
+                <Link href={`/${lang}/acceptable-use-policy`} className="text-[var(--accent)] hover:underline">
+                  स्वीकार्य उपयोग नीति
+                </Link>{' '}
+                (जैसे, अभद्र भाषा, हिंसा, धोखाधड़ी) का उल्लंघन नहीं करती। हम सामग्री-अज्ञेयवादी हैं लेकिन सुरक्षा-अनिवार्य हैं।
+              </>
+            ) : (
+              <>
+                We do not police ideological content unless it violates our{' '}
+                <Link href={`/${lang}/acceptable-use-policy`} className="text-[var(--accent)] hover:underline">
+                  Acceptable Use Policy
+                </Link>{' '}
+                (e.g., hate speech, violence, fraud). We are content-agnostic but safety-mandatory.
+              </>
+            )}
           </p>
         </section>
 
@@ -86,9 +100,23 @@ export default async function GovernancePage({ params }: { params: Promise<{ lan
             <h2 className="text-2xl font-bold text-[var(--text-primary)] m-0">{isHindi ? 'पारदर्शिता प्रतिबद्धता' : 'Transparency Commitment'}</h2>
           </div>
           <p>
-            {isHindi
-              ? 'हम अपने शासन में पारदर्शिता के लिए प्रतिबद्ध हैं। हम एक <Link href={`/${lang}/transparency`} className="text-[var(--accent)] hover:underline">पारदर्शिता रिपोर्ट</Link> प्रकाशित करते हैं जिसमें सरकारी डेटा अनुरोधों, टेकडाउन नोटिस और प्लेटफॉर्म द्वारा की गई प्रवर्तन कार्रवाई का विवरण होता है।'
-              : 'We are committed to transparency in our governance. We publish a <Link href={`/${lang}/transparency`} className="text-[var(--accent)] hover:underline">Transparency Report</Link> detailing government data requests, takedown notices, and enforcement actions taken by the platform.'}
+            {isHindi ? (
+              <>
+                हम अपने शासन में पारदर्शिता के लिए प्रतिबद्ध हैं। हम एक{' '}
+                <Link href={`/${lang}/transparency`} className="text-[var(--accent)] hover:underline">
+                  पारदर्शिता रिपोर्ट
+                </Link>{' '}
+                प्रकाशित करते हैं जिसमें सरकारी डेटा अनुरोधों, टेकडाउन नोटिस और प्लेटफॉर्म द्वारा की गई प्रवर्तन कार्रवाई का विवरण होता है।
+              </>
+            ) : (
+              <>
+                We are committed to transparency in our governance. We publish a{' '}
+                <Link href={`/${lang}/transparency`} className="text-[var(--accent)] hover:underline">
+                  Transparency Report
+                </Link>{' '}
+                detailing government data requests, takedown notices, and enforcement actions taken by the platform.
+              </>
+            )}
           </p>
         </section>
       </div>

@@ -1,4 +1,3 @@
-import { PostgrestFilterBuilder } from '@supabase/postgrest-js'
 
 export type PaginationParams = {
   cursor?: string // Typically created_at timestamp
@@ -12,6 +11,13 @@ export type PaginatedResult<T> = {
   prevCursor: string | null
 }
 
+interface SupabaseQuery {
+  order(column: string, options: { ascending: boolean }): SupabaseQuery
+  gt(column: string, value: string): SupabaseQuery
+  lt(column: string, value: string): SupabaseQuery
+  limit(value: number): SupabaseQuery
+}
+
 /**
  * Applies cursor-based pagination to a Supabase query.
  * Designed for large tables (Members, Submissions) to avoid OFFSET drift.
@@ -21,10 +27,10 @@ export type PaginatedResult<T> = {
  * - Next Page: WHERE created_at < cursor
  * - Prev Page: WHERE created_at > cursor (and reverse order, then flip back)
  */
-export function applyCursorPagination<T>(
-  query: any, // Typed as any because Supabase types are complex generic chains
+export function applyCursorPagination<T extends SupabaseQuery>(
+  query: T,
   params: PaginationParams
-) {
+): T {
   const limit = params.limit || 20
   // Fetch one extra to check if there's a next page
   const fetchLimit = limit + 1
@@ -44,7 +50,7 @@ export function applyCursorPagination<T>(
     }
   }
 
-  return modifiedQuery.limit(fetchLimit)
+  return modifiedQuery.limit(fetchLimit) as T
 }
 
 export function processPaginatedResult<T extends { created_at: string }>(
@@ -63,9 +69,6 @@ export function processPaginatedResult<T extends { created_at: string }>(
     items.reverse()
   }
 
-  const nextCursor = hasMore || direction === 'prev' ? items[items.length - 1]?.created_at : null
-  const prevCursor = (direction === 'next' && data.length > 0) ? items[0]?.created_at : null 
-  
   // Note: True bidirectional cursor pagination usually requires passing both start/end cursors 
   // or maintaining state. This is a simplified version for "Load More" style or basic prev/next.
   

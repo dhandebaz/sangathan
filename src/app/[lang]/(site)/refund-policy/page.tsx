@@ -9,7 +9,7 @@ export default function RefundPolicyPage() {
         <section>
           <h2 className="text-xl font-semibold text-black mb-3">1. Introduction</h2>
           <p>
-            Sangathan offers an optional "Supporter Subscription" to help sustain the platform's infrastructure. This policy outlines the terms regarding billing, cancellations, and refunds for this subscription. By subscribing, you agree to these terms.
+            Sangathan offers an optional &quot;Supporter Subscription&quot; to help sustain the platform&apos;s infrastructure. This policy outlines the terms regarding billing, cancellations, and refunds for this subscription. By subscribing, you agree to these terms.
           </p>
         </section>
 
@@ -27,8 +27,8 @@ export default function RefundPolicyPage() {
           <h2 className="text-xl font-semibold text-black mb-3">3. Subscription Benefits</h2>
           <p>The Supporter Subscription (₹99/month) includes:</p>
           <ul className="list-disc pl-5 space-y-2">
-            <li>A "Supporter" badge on your Organisation profile.</li>
-            <li>The option to remove "Powered by Sangathan" branding from public forms.</li>
+            <li>A &quot;Supporter&quot; badge on your Organisation profile.</li>
+            <li>The option to remove &quot;Powered by Sangathan&quot; branding from public forms.</li>
             <li>Recognition on our public supporters page (optional).</li>
           </ul>
           <p className="mt-2">
@@ -50,7 +50,7 @@ export default function RefundPolicyPage() {
             <strong>Payment Processor:</strong> All payments are processed securely via <strong>Razorpay</strong>. Sangathan does not store your credit card, debit card, or banking information.
           </p>
           <p>
-            <strong>Third-Party Terms:</strong> By making a payment, you are also subject to Razorpay's terms of service and privacy policy. We are not responsible for payment failures caused by the banking network or payment gateway.
+            <strong>Third-Party Terms:</strong> By making a payment, you are also subject to Razorpay&apos;s terms of service and privacy policy. We are not responsible for payment failures caused by the banking network or payment gateway.
           </p>
         </section>
 
@@ -75,7 +75,7 @@ export default function RefundPolicyPage() {
         <section>
           <h2 className="text-xl font-semibold text-black mb-3">6. Cancellation Process</h2>
           <p>
-            You may cancel your subscription at any time via the "Billing" section of your Organisation dashboard.
+            You may cancel your subscription at any time via the &quot;Billing&quot; section of your Organisation dashboard.
           </p>
           <p>
             <strong>Effect of Cancellation:</strong>

@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { Phone, FileText, UserCheck } from 'lucide-react'
 
 export default function AdminAccountabilityPage() {
@@ -26,7 +25,7 @@ export default function AdminAccountabilityPage() {
                    We require every Organisation Admin to verify their mobile phone number via OTP.
                 </p>
                 <p className="text-sm text-gray-600">
-                   <strong>Why?</strong> To prevent anonymous abuse. If an organisation is used for fraud or harassment, we need to know there is a real human being responsible for it. This discourages "burner" accounts and builds trust in the ecosystem.
+                   <strong>Why?</strong> To prevent anonymous abuse. If an organisation is used for fraud or harassment, we need to know there is a real human being responsible for it. This discourages &quot;burner&quot; accounts and builds trust in the ecosystem.
                 </p>
              </div>
           </div>
@@ -53,10 +52,10 @@ export default function AdminAccountabilityPage() {
              <div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Data Integrity Commitment</h3>
                 <p className="text-gray-700 mb-2">
-                   Admins agree to our Acceptable Use Policy, which strictly prohibits falsifying financial records or misrepresenting the organisation's mission.
+                   Admins agree to our Acceptable Use Policy, which strictly prohibits falsifying financial records or misrepresenting the organisation&apos;s mission.
                 </p>
                 <p className="text-sm text-gray-600">
-                   <strong>Why?</strong> Sangathan is infrastructure for <em>serious</em> collectives. Maintaining the integrity of the data is essential for the platform's reputation and utility.
+                   <strong>Why?</strong> Sangathan is infrastructure for <em>serious</em> collectives. Maintaining the integrity of the data is essential for the platform&apos;s reputation and utility.
                 </p>
              </div>
           </div>

@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowUp, ArrowDown, Minus } from 'lucide-react'
 
-export function MetricCard({ title, value, subtext, trend, icon: Icon }: { title: string, value: string | number, subtext?: string, trend?: 'up' | 'down' | 'neutral', icon?: any }) {
+export function MetricCard({ title, value, subtext, trend, icon: Icon }: { title: string, value: string | number, subtext?: string, trend?: 'up' | 'down' | 'neutral', icon?: React.ElementType }) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

@@ -27,7 +27,7 @@ export function NetworkForm() {
       name: formData.name,
       slug: formData.slug,
       description: formData.description,
-      visibility: formData.visibility as any
+      visibility: formData.visibility as 'public' | 'private'
     })
 
     setLoading(false)

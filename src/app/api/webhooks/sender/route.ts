@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase/service'
 import { logger } from '@/lib/logger'
 
 // Verify Sender signature if available (Sender.net might not sign, but good to check IP or shared secret)
@@ -19,9 +18,6 @@ export async function POST(req: NextRequest) {
     
     // Check for bounces/complaints
     if (eventType === 'hard_bounce' || eventType === 'spam_complaint') {
-      const supabase = createServiceClient()
-      // Mark user as bounced/suppressed if we have a table for it
-      // await supabase.from('email_suppressions').insert({ email, reason: eventType })
       logger.warn('email', `Suppression event: ${eventType} for ${email}`)
     }
 

@@ -36,7 +36,7 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
     try {
       window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
         'size': 'invisible',
-        'callback': (response: any) => {
+        'callback': () => {
           // reCAPTCHA solved, allow signInWithPhoneNumber.
           console.log("Recaptcha solved automatically")
         },
@@ -80,39 +80,40 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
         try {
           window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
             'size': 'invisible',
-            'callback': (response: any) => {
-              // reCAPTCHA solved
-            }
-          })
-        } catch (e) {
-          console.error('Recaptcha init failed:', e)
-          throw new Error('Security check failed. Please refresh the page.')
+            'callback': () => {
+          // reCAPTCHA solved
         }
-      }
+      })
+    } catch (e) {
+      console.error('Recaptcha init failed:', e)
+      throw new Error('Security check failed. Please refresh the page.')
+    }
+  }
 
-      const appVerifier = window.recaptchaVerifier
-      if (!appVerifier) {
-        throw new Error('ReCAPTCHA not initialized.')
-      }
+  const appVerifier = window.recaptchaVerifier
+  if (!appVerifier) {
+    throw new Error('ReCAPTCHA not initialized.')
+  }
 
-      // Format phone: E.164 standard
-      const cleaned = phoneNumber.replace(/[^\d+]/g, '') // Keep only digits and plus
-      const formattedPhone = cleaned.startsWith('+') ? cleaned : `+91${cleaned}`
-      
-      console.log('Sending OTP to:', formattedPhone)
+  // Format phone: E.164 standard
+  const cleaned = phoneNumber.replace(/[^\d+]/g, '') // Keep only digits and plus
+  const formattedPhone = cleaned.startsWith('+') ? cleaned : `+91${cleaned}`
+  
+  console.log('Sending OTP to:', formattedPhone)
 
-      const confirmation = await signInWithPhoneNumber(auth, formattedPhone, appVerifier)
-      setConfirmationResult(confirmation)
-      setStep('otp')
-    } catch (err: any) {
-      console.error('OTP Error:', err)
-      if (err.code === 'auth/operation-not-allowed') {
-        setError('Phone authentication is not enabled in the database configuration. Please contact support.')
-      } else if (err.code === 'auth/argument-error') {
-        setError('Invalid phone number format or security check failed.')
-      } else {
-        setError(err.message || 'Failed to send OTP. Try again.')
-      }
+  const confirmation = await signInWithPhoneNumber(auth, formattedPhone, appVerifier)
+  setConfirmationResult(confirmation)
+  setStep('otp')
+} catch (err) {
+  const error = err as { code?: string; message?: string }
+  console.error('OTP Error:', error)
+  if (error.code === 'auth/operation-not-allowed') {
+    setError('Phone authentication is not enabled in the database configuration. Please contact support.')
+  } else if (error.code === 'auth/argument-error') {
+    setError('Invalid phone number format or security check failed.')
+  } else {
+    setError(error.message || 'Failed to send OTP. Try again.')
+  }
       
       // Reset captcha if needed
       if (window.recaptchaVerifier) {
@@ -149,18 +150,19 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
       } else {
         throw new Error(response.error || 'Server verification failed')
       }
-    } catch (err: any) {
-      console.error('Verification Error:', err)
+    } catch (err) {
+      const error = err as { code?: string; message?: string }
+      console.error('Verification Error:', error)
       
       // Distinguish between Firebase errors and Server errors
-      if (err.code === 'auth/invalid-verification-code') {
+      if (error.code === 'auth/invalid-verification-code') {
         setError('The verification code is incorrect. Please check and try again.')
-      } else if (err.code === 'auth/code-expired') {
+      } else if (error.code === 'auth/code-expired') {
         setError('The verification code has expired. Please request a new one.')
-      } else if (err.message && err.message.includes('Server verification failed')) {
-        setError(err.message) // Show server error directly
+      } else if (error.message && error.message.includes('Server verification failed')) {
+        setError(error.message) // Show server error directly
       } else {
-        setError(err.message || 'Verification failed. Please try again.')
+        setError(error.message || 'Verification failed. Please try again.')
       }
     } finally {
       setLoading(false)
@@ -274,6 +276,6 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
 
 declare global {
   interface Window {
-    recaptchaVerifier: any;
+    recaptchaVerifier: RecaptchaVerifier | undefined;
   }
 }

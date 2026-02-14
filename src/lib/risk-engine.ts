@@ -8,23 +8,20 @@ import { createServiceClient } from '@/lib/supabase/service'
 const MAX_OTP_PER_PHONE_HOUR = 5
 const MAX_OTP_PER_IP_HOUR = 20
 const MAX_BROADCASTS_PER_ORG_DAY = 3
-const MAX_RECIPIENTS_PER_HOUR = 100
 const FORM_SPAM_THRESHOLD_PER_IP_HOUR = 10
-const DONATION_SPIKE_THRESHOLD = 50000 // e.g. 50k INR suddenly
-const GROWTH_RATE_ALERT_THRESHOLD = 50 // % per day
 
 export async function detectOTPRisk(phone: string, ip: string) {
   const supabase = createServiceClient()
   
   // Clean up old attempts (Naive approach, better to use cron or expiration)
-  await (supabase.from('otp_attempts') as any).delete().lt('attempted_at', new Date(Date.now() - 3600000).toISOString())
+  await supabase.from('otp_attempts').delete().lt('attempted_at', new Date(Date.now() - 3600000).toISOString())
   
   // Log attempt
-  await (supabase.from('otp_attempts') as any).insert({ phone, ip_address: ip })
+  await supabase.from('otp_attempts').insert({ phone, ip_address: ip })
   
   // Check counts
-  const { count: phoneCount } = await (supabase.from('otp_attempts') as any).select('*', { count: 'exact', head: true }).eq('phone', phone)
-  const { count: ipCount } = await (supabase.from('otp_attempts') as any).select('*', { count: 'exact', head: true }).eq('ip_address', ip)
+  const { count: phoneCount } = await supabase.from('otp_attempts').select('*', { count: 'exact', head: true }).eq('phone', phone)
+  const { count: ipCount } = await supabase.from('otp_attempts').select('*', { count: 'exact', head: true }).eq('ip_address', ip)
   
   if ((phoneCount || 0) > MAX_OTP_PER_PHONE_HOUR || (ipCount || 0) > MAX_OTP_PER_IP_HOUR) {
      await logRiskEvent({
@@ -40,12 +37,12 @@ export async function detectOTPRisk(phone: string, ip: string) {
   return { blocked: false }
 }
 
-export async function checkBroadcastLimit(orgId: string, recipientCount: number) {
+export async function checkBroadcastLimit(orgId: string) {
   const supabase = createServiceClient()
   
   // Check daily broadcasts
-  const { count: dailyCount } = await (supabase
-    .from('announcements') as any)
+  const { count: dailyCount } = await supabase
+    .from('announcements')
     .select('*', { count: 'exact', head: true })
     .eq('organisation_id', orgId)
     .eq('send_email', true)
@@ -71,8 +68,8 @@ export async function checkBroadcastLimit(orgId: string, recipientCount: number)
 export async function checkFormSpam(orgId: string, ip: string) {
   const supabase = createServiceClient()
   
-  const { count } = await (supabase
-    .from('form_submissions') as any)
+  const { count } = await supabase
+    .from('form_submissions')
     .select('*', { count: 'exact', head: true })
     .eq('ip_address', ip) // Assuming we log IP on submission
     .gte('created_at', new Date(Date.now() - 3600000).toISOString())
@@ -96,11 +93,11 @@ export async function logRiskEvent(event: {
   entity_id: string,
   risk_type: 'spam_signup' | 'otp_abuse' | 'broadcast_spam' | 'bot_forms' | 'donation_spike' | 'unusual_growth' | 'suspicious_collaboration',
   severity: 'low' | 'medium' | 'high',
-  metadata?: any
+  metadata?: Record<string, unknown>
 }) {
   const supabase = createServiceClient()
   
-  await (supabase.from('risk_events') as any).insert({
+  await supabase.from('risk_events').insert({
     ...event,
     detected_at: new Date().toISOString()
   })
@@ -108,11 +105,11 @@ export async function logRiskEvent(event: {
   // Auto-escalate if high severity
   if (event.severity === 'high' && event.entity_type === 'org') {
      // 1. Set Warning Status
-     await (supabase.from('organisations') as any).update({ status: 'warning' }).eq('id', event.entity_id)
+     await supabase.from('organisations').update({ status: 'warning' }).eq('id', event.entity_id)
      
      // 2. Restrict Capabilities (Auto-Response)
-     const { data: orgData } = await (supabase.from('organisations') as any).select('capabilities').eq('id', event.entity_id).single()
-     const org = orgData as any
+     const { data: orgData } = await supabase.from('organisations').select('capabilities').eq('id', event.entity_id).single()
+     const org = orgData as { capabilities: Record<string, unknown> } | null
      if (org?.capabilities) {
         const restricted = { 
            ...org.capabilities, 
@@ -120,10 +117,10 @@ export async function logRiskEvent(event: {
            federation_mode: false, // Stop networking
            broadcast_restricted: true // Custom flag or just capability removal
         }
-        await (supabase.from('organisations') as any).update({ capabilities: restricted }).eq('id', event.entity_id)
+        await supabase.from('organisations').update({ capabilities: restricted }).eq('id', event.entity_id)
         
         // Log Action
-        await (supabase.from('platform_actions') as any).insert({
+        await supabase.from('platform_actions').insert({
            action_type: 'restriction',
            target_org_id: event.entity_id,
            severity: 'level_2',

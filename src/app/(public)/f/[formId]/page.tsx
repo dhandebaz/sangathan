@@ -1,6 +1,8 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import { notFound } from 'next/navigation'
 import { PublicForm } from '@/components/forms/public-form'
+import { z } from 'zod'
+import { FormFieldSchema } from '@/actions/forms/actions'
 
 interface PageProps {
   params: Promise<{ formId: string }>
@@ -13,13 +15,11 @@ export default async function PublicFormPage({ params }: PageProps) {
   const supabase = createServiceClient()
 
   // Fetch form details
-  const { data, error } = await supabase
+  const { data: form, error } = await supabase
     .from('forms')
     .select('id, title, description, fields, is_active, organisation_id')
     .eq('id', formId)
-    .single()
-  
-  const form = data as any
+    .single() as { data: { id: string; title: string; description: string | null; fields: z.infer<typeof FormFieldSchema>[]; is_active: boolean; organisation_id: string } | null, error: { message: string } | null }
 
   if (error || !form) {
     notFound()
@@ -37,13 +37,11 @@ export default async function PublicFormPage({ params }: PageProps) {
   }
 
   // Fetch Organisation Name for branding
-  const { data: orgData } = await supabase
+  const { data: org } = await supabase
     .from('organisations')
     .select('name')
     .eq('id', form.organisation_id)
-    .single()
-  
-  const org = orgData as any
+    .single() as { data: { name: string } | null, error: { message: string } | null }
 
   return (
     <div className="min-h-screen bg-orange-50/30 py-12 px-4 sm:px-6">

@@ -5,7 +5,6 @@ import { useRouter, useSearchParams, useParams } from 'next/navigation'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
 import { useDebounce } from '@/hooks/use-debounce'
 
 interface MemberFiltersProps {

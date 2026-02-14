@@ -2,20 +2,16 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { login, otpLogin } from '@/actions/auth'
 import { Loader2, Mail, Lock, ArrowRight, ShieldAlert } from 'lucide-react'
 
 import { PhoneAuth } from '@/components/auth/phone-verification'
-import { use } from 'react'
 
-export default function LoginPage({ params }: { params: Promise<{ lang: string }> }) {
-  const { lang } = use(params)
+export default function LoginPage() {
   const [authMethod, setAuthMethod] = useState<'password' | 'email-otp' | 'phone'>('password')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
-  const router = useRouter()
 
   async function handleSubmit(formData: FormData) {
     setLoading(true)
@@ -144,7 +140,7 @@ export default function LoginPage({ params }: { params: Promise<{ lang: string }
 
       <div className="mt-6 space-y-4">
         <p className="text-center text-sm text-gray-500">
-          Don't have an organisation?{' '}
+          Don&apos;t have an organisation?{' '}
           <Link href="/signup" className="text-orange-600 font-bold hover:underline">
             Create one
           </Link>

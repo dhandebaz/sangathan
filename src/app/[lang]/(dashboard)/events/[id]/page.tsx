@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { QrCode, ArrowLeft } from 'lucide-react'
+import { DashboardEvent, EventRSVP } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,17 +17,19 @@ export default async function EventDetailsPage(props: { params: Promise<{ lang: 
     .eq('id', id)
     .single()
 
-  const event = eventData as any
+  const event = eventData as DashboardEvent | null
 
   if (!event) notFound()
 
-  const { data: rsvps } = await (supabase
-    .from('event_rsvps') as any)
+  const { data: rsvpsData } = await supabase
+    .from('event_rsvps')
     .select('*, user:user_id(full_name, email)')
     .eq('event_id', id)
     .order('created_at', { ascending: false })
 
-  const attendedCount = rsvps?.filter((r: any) => r.status === 'attended').length || 0
+  const rsvps = rsvpsData as (EventRSVP & { user: { full_name: string; email: string } | null })[] | null
+
+  const attendedCount = rsvps?.filter((r) => r.status === 'attended').length || 0
   const registeredCount = rsvps?.length || 0
 
   return (
@@ -87,7 +90,7 @@ export default async function EventDetailsPage(props: { params: Promise<{ lang: 
               </tr>
             </thead>
             <tbody className="divide-y">
-              {rsvps?.map((rsvp: any) => (
+              {rsvps?.map((rsvp) => (
                 <tr key={rsvp.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 font-medium">
                     {rsvp.guest_name || rsvp.user?.full_name || 'Unknown'}
@@ -98,14 +101,14 @@ export default async function EventDetailsPage(props: { params: Promise<{ lang: 
                   <td className="px-6 py-4">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                       rsvp.status === 'attended' ? 'bg-green-100 text-green-800' :
-                      rsvp.status === 'cancelled' ? 'bg-red-100 text-red-800' :
-                      'bg-blue-100 text-blue-800'
+                      rsvp.status === 'registered' ? 'bg-blue-100 text-blue-800' :
+                      'bg-gray-100 text-gray-800'
                     }`}>
-                      {rsvp.status.toUpperCase()}
+                      {rsvp.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-gray-500">
-                    {rsvp.checked_in_at ? new Date(rsvp.checked_in_at).toLocaleTimeString() : '-'}
+                    {rsvp.status === 'attended' ? 'Yes' : 'No'}
                   </td>
                 </tr>
               ))}

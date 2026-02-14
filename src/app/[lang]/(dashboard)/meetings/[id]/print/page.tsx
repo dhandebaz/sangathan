@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { getUserContext } from '@/lib/auth/context'
 import { notFound } from 'next/navigation'
+import { Meeting, MeetingAttendance, Organisation } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,7 +21,7 @@ export default async function PrintMeetingPage({ params }: PageProps) {
     .eq('id', id)
     .single()
   
-  const meeting = data as any
+  const meeting = data as Meeting | null
     
   if (error || !meeting) notFound()
 
@@ -31,7 +32,7 @@ export default async function PrintMeetingPage({ params }: PageProps) {
     .eq('meeting_id', id)
     .order('status', { ascending: false })
   
-  const attendance = attData as any[]
+  const attendance = attData as unknown as MeetingAttendance[] | null
 
   // Fetch Organisation Name
   const { data: orgData } = await supabase
@@ -40,7 +41,7 @@ export default async function PrintMeetingPage({ params }: PageProps) {
     .eq('id', ctx.organizationId)
     .single()
   
-  const org = orgData as any
+  const org = orgData as Organisation | null
 
   return (
     <div className="p-8 bg-white min-h-screen text-black">

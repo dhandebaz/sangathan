@@ -15,7 +15,7 @@ interface FormField {
 
 interface Form {
   id: string
-  fields: any // JSONB
+  fields: FormField[] // JSONB
 }
 
 export function PublicForm({ form }: { form: Form }) {
@@ -24,7 +24,7 @@ export function PublicForm({ form }: { form: Form }) {
   const [error, setError] = useState('')
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   
-  const fields = form.fields as FormField[]
+  const fields = form.fields
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -33,7 +33,7 @@ export function PublicForm({ form }: { form: Form }) {
     setFieldErrors({})
 
     const formData = new FormData(e.currentTarget)
-    const data: Record<string, any> = {}
+    const data: Record<string, string | File | null> = {}
     
     fields.forEach(field => {
        data[field.id] = formData.get(field.id)

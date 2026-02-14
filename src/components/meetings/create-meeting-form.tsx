@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Calendar, MapPin, Users } from 'lucide-react'
+import { ArrowLeft, Users } from 'lucide-react'
 import { createMeeting } from '@/actions/meetings'
 import Link from 'next/link'
 

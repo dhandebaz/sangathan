@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { Download, Info, Image as ImageIcon } from 'lucide-react'
 import { Metadata } from 'next'
 

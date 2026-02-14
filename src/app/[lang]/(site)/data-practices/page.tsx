@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { Database, HardDrive, RefreshCw, Download } from 'lucide-react'
 
 export default function DataPracticesPage() {
@@ -34,7 +33,7 @@ export default function DataPracticesPage() {
            </p>
            <ul className="list-disc pl-5 space-y-2 text-gray-600 text-sm">
               <li><strong>Active Accounts:</strong> Data is retained indefinitely.</li>
-              <li><strong>Deleted Accounts:</strong> Data enters a "Soft Delete" bin for 14 days, allowing you to recover from mistakes.</li>
+              <li><strong>Deleted Accounts:</strong> Data enters a &quot;Soft Delete&quot; bin for 14 days, allowing you to recover from mistakes.</li>
               <li><strong>Permanent Erase:</strong> After 14 days, data is permanently wiped from our live database.</li>
            </ul>
         </div>

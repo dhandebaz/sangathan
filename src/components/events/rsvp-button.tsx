@@ -7,8 +7,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { rsvpToEvent } from '@/actions/events'
 import { useRouter } from 'next/navigation'
+import { Event } from '@/types/events'
 
-export function RSVPButton({ event, isAuthenticated }: { event: any, isAuthenticated: boolean }) {
+export function RSVPButton({ event, isAuthenticated }: { event: Event, isAuthenticated: boolean }) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [guestName, setGuestName] = useState('')

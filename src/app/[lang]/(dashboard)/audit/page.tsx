@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { getUserContext } from '@/lib/auth/context'
-import { redirect } from 'next/navigation'
+import { AuditLog } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,7 +22,7 @@ export default async function AuditLogPage() {
     .order('created_at', { ascending: false })
     .limit(100)
   
-  const logs = data as any[]
+  const logs = data as unknown as AuditLog[] | null
 
   if (error) {
     return <div className="p-4 text-red-500">Error loading audit logs.</div>

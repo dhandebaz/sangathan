@@ -5,7 +5,14 @@ import { Button } from '@/components/ui/button'
 import { approveMember, rejectMember } from '@/actions/membership'
 import { useRouter } from 'next/navigation'
 
-export function RequestList({ requests }: { requests: any[] }) {
+interface MembershipRequest {
+  id: string
+  full_name?: string | null
+  email?: string | null
+  created_at: string
+}
+
+export function RequestList({ requests }: { requests: MembershipRequest[] }) {
   const router = useRouter()
   const [loading, setLoading] = useState<string | null>(null)
 

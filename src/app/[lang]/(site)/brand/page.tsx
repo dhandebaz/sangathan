@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { Check, X } from 'lucide-react'
 import { Metadata } from 'next'
 
@@ -77,8 +76,8 @@ export default async function BrandPage({ params }: { params: Promise<{ lang: st
               : 'When using the Sangathan brand in your materials, you must not imply that Sangathan endorses your specific organization or cause.'}
           </p>
           <p className="text-sm bg-gray-100 p-4 rounded-lg border border-gray-200 font-mono">
-             "Powered by Sangathan" - <span className="text-green-600">{isHindi ? 'अनुमति है' : 'Allowed'}</span><br/>
-             "Partnered with Sangathan" - <span className="text-red-600">{isHindi ? 'अनुमति नहीं है (बिना अनुमति के)' : 'Not Allowed (without permission)'}</span>
+             &quot;Powered by Sangathan&quot; - <span className="text-green-600">{isHindi ? 'अनुमति है' : 'Allowed'}</span><br/>
+             &quot;Partnered with Sangathan&quot; - <span className="text-red-600">{isHindi ? 'अनुमति नहीं है (बिना अनुमति के)' : 'Not Allowed (without permission)'}</span>
           </p>
         </section>
       </div>

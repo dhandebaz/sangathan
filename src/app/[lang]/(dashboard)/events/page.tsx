@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { Plus, Calendar, MapPin, Users } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-
+import { DashboardEvent } from '@/types/dashboard'
 import { redirect } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
@@ -20,7 +20,7 @@ export default async function EventsPage(props: { params: Promise<{ lang: string
     .eq('id', user.id)
     .single()
 
-  const profile = profileData as any
+  const profile = profileData as { organization_id: string } | null
   const orgId = profile?.organization_id
 
   if (!orgId) {
@@ -32,13 +32,13 @@ export default async function EventsPage(props: { params: Promise<{ lang: string
   }
 
   const [ownedEventsRes, jointEventsRes] = await Promise.all([
-    (supabase.from('events') as any).select('*, event_rsvps(count)').eq('organisation_id', orgId).order('start_time', { ascending: true }),
-    (supabase.from('joint_events') as any).select('event:events(*, event_rsvps(count))').eq('organisation_id', orgId)
+    supabase.from('events').select('*, event_rsvps(count)').eq('organisation_id', orgId).order('start_time', { ascending: true }),
+    supabase.from('joint_events').select('event:events(*, event_rsvps(count))').eq('organisation_id', orgId)
   ])
 
   const allEvents = [
-    ...(ownedEventsRes.data || []),
-    ...(jointEventsRes.data?.map((j: any) => j.event) || [])
+    ...(ownedEventsRes.data as DashboardEvent[] || []),
+    ...(jointEventsRes.data?.map((j) => (j as unknown as { event: DashboardEvent }).event) || [])
   ].sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime())
 
   return (
@@ -46,7 +46,7 @@ export default async function EventsPage(props: { params: Promise<{ lang: string
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Events</h1>
-          <p className="text-muted-foreground mt-1">Manage your organisation's events and participation.</p>
+          <p className="text-muted-foreground mt-1">Manage your organisation&apos;s events and participation.</p>
         </div>
         <Button asChild>
           <Link href={`/${lang}/dashboard/events/new`}>
@@ -57,7 +57,7 @@ export default async function EventsPage(props: { params: Promise<{ lang: string
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {allEvents?.map((event: any) => (
+        {allEvents?.map((event) => (
           <Link href={`/${lang}/dashboard/events/${event.id}`} key={event.id} className="group block">
             <div className="bg-white border rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col">
               <div className="flex justify-between items-start mb-4">

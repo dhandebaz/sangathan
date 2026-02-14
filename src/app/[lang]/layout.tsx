@@ -1,9 +1,7 @@
 export default async function LocalisedLayout({
-  children,
-  params
+  children
 }: Readonly<{
   children: React.ReactNode;
-  params: Promise<{ lang: string }>;
 }>) {
   return (
     <>

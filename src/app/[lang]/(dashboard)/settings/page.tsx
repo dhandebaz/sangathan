@@ -19,7 +19,7 @@ export default async function SettingsPage(props: { params: Promise<{ lang: stri
     .eq('id', user.id)
     .single()
 
-  const profile = profileData as any
+  const profile = profileData as { organization_id: string; role: string } | null
 
   if (!profile || !profile.organization_id || profile.role !== 'admin') {
       return <AccessDenied lang={lang} />
@@ -31,7 +31,9 @@ export default async function SettingsPage(props: { params: Promise<{ lang: stri
     .eq('id', profile.organization_id)
     .single()
 
-  const org = orgData as any
+  const org = orgData as { id: string; membership_policy: string; public_transparency_enabled: boolean } | null
+
+  if (!org) return <div>Organisation not found</div>
 
   const capabilities = await getOrgCapabilities(org.id)
 

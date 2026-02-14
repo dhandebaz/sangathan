@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Check, Trash2, Printer } from 'lucide-react'
+import { Check, Trash2 } from 'lucide-react'
 import { verifyDonation, deleteDonation } from '@/actions/donations/actions'
 import { useRouter } from 'next/navigation'
 

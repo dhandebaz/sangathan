@@ -1,4 +1,4 @@
-import { Map, Flag, Zap, Box } from 'lucide-react'
+import { Flag, Zap, Box } from 'lucide-react'
 import { Metadata } from 'next'
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {

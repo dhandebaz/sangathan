@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { PollForm } from '@/components/polls/poll-form'
 import { redirect } from 'next/navigation'
 import { AccessDenied } from '@/components/dashboard/access-denied'
+import Link from 'next/link'
+import { ArrowLeft } from 'lucide-react'
 
 export default async function NewPollPage(props: { params: Promise<{ lang: string }> }) {
   const { lang } = await props.params
@@ -16,7 +18,7 @@ export default async function NewPollPage(props: { params: Promise<{ lang: strin
     .eq('id', user.id)
     .single()
 
-  const profile = profileData as any
+  const profile = profileData as { organization_id: string; role: string } | null
 
   if (!profile || !profile.organization_id || !['admin', 'editor', 'executive'].includes(profile.role)) {
     return <AccessDenied lang={lang} />

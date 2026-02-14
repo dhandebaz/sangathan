@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { CheckCircle, Clock, PlayCircle } from 'lucide-react'
@@ -10,9 +10,24 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-export function TaskCard({ task, userId }: { task: any, userId: string }) {
+interface TaskAssignment {
+  member_id: string
+  accepted: boolean
+}
+
+interface Task {
+  id: string
+  title: string
+  description: string
+  status: string
+  priority: string
+  due_date?: string
+  task_assignments?: TaskAssignment[]
+}
+
+export function TaskCard({ task, userId }: { task: Task, userId: string }) {
   const [loading, setLoading] = useState(false)
-  const assignment = task.task_assignments?.find((a: any) => a.member_id === userId)
+  const assignment = task.task_assignments?.find((a) => a.member_id === userId)
   const [hours, setHours] = useState('')
   const [note, setNote] = useState('')
   const [logOpen, setLogOpen] = useState(false)

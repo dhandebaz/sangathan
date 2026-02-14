@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ShieldAlert } from 'lucide-react'
+import { SystemAdminOrganisation } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,12 +22,10 @@ export default async function OrganisationsPage() {
   const supabase = createServiceClient()
 
   // Fetch Organisations
-  const { data, error } = await supabase
+  const { data: orgs, error } = await supabase
     .from('organisations')
     .select('*, profiles(count), supporter_subscriptions(status)')
-    .order('created_at', { ascending: false })
-  
-  const orgs = data as any[]
+    .order('created_at', { ascending: false }) as { data: SystemAdminOrganisation[] | null, error: { message: string } | null }
 
   if (error) return <div className="p-8">Error loading organisations</div>
 
@@ -58,8 +57,8 @@ export default async function OrganisationsPage() {
                   </tr>
                </thead>
                <tbody className="divide-y">
-                  {orgs?.map((org: any) => {
-                     const isActiveSupporter = org.supporter_subscriptions?.some((s: any) => s.status === 'active')
+                  {orgs?.map((org) => {
+                     const isActiveSupporter = org.supporter_subscriptions?.some((s) => s.status === 'active')
                      return (
                         <tr key={org.id} className="hover:bg-gray-50">
                            <td className="py-3 px-6 font-medium">{org.name}</td>

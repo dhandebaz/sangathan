@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Scale, FileText, Trash2, Shield } from 'lucide-react'
+import { Scale } from 'lucide-react'
+import { DataRequest } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -73,7 +74,7 @@ export default async function GovernanceDashboard() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {(requests as any[])?.map((req: any) => (
+            {(requests as unknown as DataRequest[])?.map((req) => (
               <TableRow key={req.id}>
                 <TableCell className="capitalize font-medium">{req.request_type}</TableCell>
                 <TableCell>{req.profiles?.email}</TableCell>

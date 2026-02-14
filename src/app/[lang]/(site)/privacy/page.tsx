@@ -9,7 +9,7 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-xl font-semibold text-black mb-3">1. Introduction</h2>
           <p>
-            Sangathan ("Platform," "We," "Us") is a governance infrastructure provider for collectives, NGOs, and community organisations. We respect your privacy and are committed to protecting the personal data you entrust to our infrastructure. This Privacy Policy explains how we collect, use, store, and share your information in compliance with the Information Technology Act, 2000, and other applicable laws in India.
+            Sangathan (&quot;Platform,&quot; &quot;We,&quot; &quot;Us&quot;) is a governance infrastructure provider for collectives, NGOs, and community organisations. We respect your privacy and are committed to protecting the personal data you entrust to our infrastructure. This Privacy Policy explains how we collect, use, store, and share your information in compliance with the Information Technology Act, 2000, and other applicable laws in India.
           </p>
         </section>
 
@@ -47,14 +47,14 @@ export default function PrivacyPage() {
           <h2 className="text-xl font-semibold text-black mb-3">4. How We Use Information</h2>
           <p>We use your information strictly for the following purposes:</p>
           <ul className="list-disc pl-5 space-y-2">
-            <li>To provide, maintain, and improve the Platform's infrastructure.</li>
+            <li>To provide, maintain, and improve the Platform&apos;s infrastructure.</li>
             <li>To verify the identity of Organisation Admins (via phone OTP).</li>
             <li>To enforce our Terms of Service and prevent abuse (spam, fraud, illegal activities).</li>
             <li>To comply with legal obligations and law enforcement requests under Indian law.</li>
             <li>To communicate with you regarding security updates, technical issues, or policy changes.</li>
           </ul>
           <p className="mt-2">
-            <strong>No Political Profiling:</strong> We do not use your data to build political profiles, target advertising, or influence your Organisation's objectives.
+            <strong>No Political Profiling:</strong> We do not use your data to build political profiles, target advertising, or influence your Organisation&apos;s objectives.
           </p>
         </section>
 
@@ -77,7 +77,7 @@ export default function PrivacyPage() {
           <ul className="list-disc pl-5 space-y-2">
             <li><strong>Supabase:</strong> Database hosting and authentication services.</li>
             <li><strong>Firebase (Google):</strong> SMS delivery and phone number verification.</li>
-            <li><strong>Razorpay:</strong> Processing optional "Supporter Subscription" payments. (We do not store card details).</li>
+            <li><strong>Razorpay:</strong> Processing optional &quot;Supporter Subscription&quot; payments. (We do not store card details).</li>
             <li><strong>Vercel:</strong> Web hosting and edge network services.</li>
           </ul>
           <p className="mt-2">
@@ -91,7 +91,7 @@ export default function PrivacyPage() {
             <strong>Retention:</strong> We retain your data for as long as your account is active.
           </p>
           <p>
-            <strong>Soft Deletion:</strong> When you delete an account or Organisation, data enters a "soft-delete" state for a grace period (e.g., 7-14 days) to allow for recovery from accidental deletion. After this period, data is permanently removed from our active database.
+            <strong>Soft Deletion:</strong> When you delete an account or Organisation, data enters a &quot;soft-delete&quot; state for a grace period (e.g., 7-14 days) to allow for recovery from accidental deletion. After this period, data is permanently removed from our active database.
           </p>
           <p>
             <strong>Legal Hold:</strong> We may retain specific data (including Audit Logs and Admin contact info) beyond deletion if required for ongoing legal investigations or compliance with Indian data retention laws.
@@ -101,7 +101,7 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-xl font-semibold text-black mb-3">8. Your Rights</h2>
           <ul className="list-disc pl-5 space-y-2">
-            <li><strong>Access & Export:</strong> Organisation Admins can export their Organisation's data (members, logs, submissions) at any time via the dashboard.</li>
+            <li><strong>Access &amp; Export:</strong> Organisation Admins can export their Organisation&apos;s data (members, logs, submissions) at any time via the dashboard.</li>
             <li><strong>Correction:</strong> You may update your account information directly through the settings.</li>
             <li><strong>Deletion:</strong> You may request the deletion of your account or Organisation via the platform settings.</li>
           </ul>

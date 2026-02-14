@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { LogDonationDialog } from '@/components/donations/log-donation-dialog'
 import { DonationList } from '@/components/donations/donation-list'
 import { Printer } from 'lucide-react'
+import { Donation } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -38,7 +39,7 @@ export default async function DonationsPage({ searchParams }: PageProps) {
 
   const { data, error } = await dbQuery
   
-  const donations = data as any[]
+  const donations = data as Donation[] | null
 
   if (error) {
     return <div className="p-4 text-red-500">Error loading donations</div>

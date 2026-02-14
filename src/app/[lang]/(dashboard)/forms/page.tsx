@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
-import { Plus, Eye, Copy, FileText, ToggleLeft, ToggleRight, Trash2 } from 'lucide-react'
+import { Plus, Eye, Copy, FileText } from 'lucide-react'
 import Link from 'next/link'
 import { FormStatusToggle } from '@/components/forms/form-status-toggle'
+import { DashboardForm } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,7 +14,7 @@ export default async function FormsPage() {
     .select('id, title, description, is_active, created_at, form_submissions(count)')
     .order('created_at', { ascending: false })
   
-  const forms = data as any[]
+  const forms = data as DashboardForm[] | null
 
   if (error) {
     return <div className="p-4 text-red-500">Error loading forms</div>

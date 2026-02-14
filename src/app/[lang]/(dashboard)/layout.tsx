@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { LayoutDashboard, Users, Settings, LogOut, Menu, Megaphone, Calendar, CheckSquare, BarChart, Vote, Scale, Globe } from 'lucide-react'
+import { LayoutDashboard, Users, Settings, LogOut, Megaphone, Calendar, CheckSquare, BarChart, Vote, Scale, Globe } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/server'
 import { getOrgCapabilities } from '@/lib/capabilities'
@@ -30,7 +30,7 @@ export default async function DashboardLayout(props: {
       // In a real app, you'd trigger profile creation here or redirect to onboarding
       capabilities = { basic_governance: false }
     } else {
-      const profile = profileData as any
+      const profile = profileData
       if (profile?.organization_id) {
         capabilities = await getOrgCapabilities(profile.organization_id)
         role = profile.role
@@ -133,7 +133,7 @@ export default async function DashboardLayout(props: {
       </div>
 
       {/* Mobile Navigation */}
-      <MobileNav lang={lang} role={role} capabilities={capabilities} />
+      <MobileNav lang={lang} capabilities={capabilities} />
       
       {/* Floating Action Button */}
       <ContextualFAB lang={lang} role={role} capabilities={capabilities} />
@@ -141,7 +141,7 @@ export default async function DashboardLayout(props: {
   )
 }
 
-function SidebarLink({ href, icon: Icon, label }: { href: string; icon: any; label: string }) {
+function SidebarLink({ href, icon: Icon, label }: { href: string; icon: React.ElementType; label: string }) {
   return (
     <Link 
       href={href} 

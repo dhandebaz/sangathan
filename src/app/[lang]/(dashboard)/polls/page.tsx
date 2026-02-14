@@ -4,6 +4,7 @@ import { Plus, BarChart2 } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { checkCapability } from '@/lib/capabilities'
+import { Poll } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,21 +16,21 @@ export default async function PollsPage(props: { params: Promise<{ lang: string 
   if (!user) return <div>Please login</div>
 
   const { data: profileData } = await supabase.from('profiles').select('organization_id, role').eq('id', user.id).single()
-  const profile = profileData as any
+  const profile = profileData as { organization_id: string; role: string } | null
   
   if (!profile?.organization_id) return <div>No Organisation</div>
 
   const canVote = await checkCapability(profile.organization_id, 'voting_engine')
   if (!canVote) return <div className="p-8 text-center text-gray-500">This feature is not enabled for your organisation.</div>
 
-  const { data: polls } = await (supabase
-    .from('polls') as any)
+  const { data: polls } = await supabase
+    .from('polls')
     .select('*')
     .eq('organisation_id', profile.organization_id)
     .neq('status', 'archived')
-    .order('created_at', { ascending: false })
+    .order('created_at', { ascending: false }) as { data: Poll[] | null }
 
-  const canManage = ['admin', 'editor'].includes(profile?.role)
+  const canManage = profile?.role && ['admin', 'editor'].includes(profile.role)
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto py-6">
@@ -49,7 +50,7 @@ export default async function PollsPage(props: { params: Promise<{ lang: string 
       </div>
 
       <div className="grid gap-4">
-        {polls?.map((poll: any) => (
+        {polls?.map((poll) => (
           <Link href={`/${lang}/dashboard/polls/${poll.id}`} key={poll.id} className="block group">
             <div className="bg-white p-6 rounded-xl border shadow-sm hover:shadow-md transition-shadow">
               <div className="flex justify-between items-start">

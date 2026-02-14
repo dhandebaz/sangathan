@@ -21,7 +21,7 @@ export default async function AnalyticsPage(props: { params: Promise<{ lang: str
     .eq('id', user.id)
     .single()
 
-  const profile = profileData as any
+  const profile = profileData as { organization_id: string; role: string } | null
 
   if (!profile || !profile.organization_id || !['admin', 'executive'].includes(profile.role)) {
     return <AccessDenied lang={lang} />
@@ -35,51 +35,50 @@ export default async function AnalyticsPage(props: { params: Promise<{ lang: str
   // --- Parallel Data Fetching ---
   const results = await Promise.allSettled([
     // 1. Members
-    (supabase.from('members') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', orgId),
-    (supabase.from('members') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'active'),
+    supabase.from('members').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId),
+    supabase.from('members').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'active'),
     
     // 2. Events
-    (supabase.from('events') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', orgId),
-    (supabase.from('event_rsvps') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'attended'),
+    supabase.from('events').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId),
+    supabase.from('event_rsvps').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'attended'),
     
     // 3. Tasks
-    (supabase.from('tasks') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'open'),
-    (supabase.from('tasks') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'completed'),
-    (supabase.from('task_logs') as any).select('hours_logged').eq('organisation_id', orgId), // This might fail if task_logs doesn't have org_id directly, check schema.
-    // task_logs links to task which links to org. RLS handles it, but direct select needs join or we fetch all logs via RLS (which filters by org).
-    // Let's assume RLS filters correctly for simple select if we use the right client.
-    // Actually, task_logs doesn't have organisation_id in my previous schema (it has task_id). 
-    // We need to join. Supabase JS doesn't do aggregation sums easily without RPC.
-    // We will fetch raw logs for now (assuming not huge scale yet) or use a view later.
-    (supabase.from('task_logs') as any).select('hours_logged, task:tasks!inner(organisation_id)').eq('task.organisation_id', orgId),
+    supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'open'),
+    supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'completed'),
+    
+    // 4. Task Logs (Inner join tasks to verify org)
+    supabase.from('task_logs').select('hours_logged, task:tasks!inner(organisation_id)').eq('task.organisation_id', orgId),
 
-    // 4. Donations
-    (supabase.from('donations') as any).select('amount').eq('organisation_id', orgId),
+    // 5. Donations
+    supabase.from('donations').select('amount').eq('organisation_id', orgId),
 
-    // 5. Announcements
-    (supabase.from('announcements') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', orgId),
+    // 6. Announcements
+    supabase.from('announcements').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId),
   ])
 
   // Helpers
-  const getCount = (res: any) => (res.status === 'fulfilled' && res.value.data !== null ? res.value.count : 0)
-  const getData = (res: any) => (res.status === 'fulfilled' ? res.value.data : [])
-
-  const totalMembers = getCount(results[0])
-  const activeMembers = getCount(results[1])
+  const getCount = (res: PromiseSettledResult<{ count: number | null }>) => 
+    (res.status === 'fulfilled' && res.value && 'count' in res.value ? res.value.count || 0 : 0)
   
-  const totalEvents = getCount(results[2])
-  const totalAttended = getCount(results[3])
-  
-  const openTasks = getCount(results[4])
-  const completedTasks = getCount(results[5])
-  
-  const taskLogs = getData(results[6]) || []
-  const totalHours = taskLogs.reduce((sum: number, log: any) => sum + (Number(log.hours_logged) || 0), 0)
+  const getData = <T,>(res: PromiseSettledResult<{ data: T[] | null }>) => 
+    (res.status === 'fulfilled' && res.value ? res.value.data : [])
 
-  const donations = getData(results[7]) || []
-  const totalDonations = donations.reduce((sum: number, d: any) => sum + (Number(d.amount) || 0), 0)
+  const totalMembers = getCount(results[0] as PromiseSettledResult<{ count: number | null }>)
+  const activeMembers = getCount(results[1] as PromiseSettledResult<{ count: number | null }>)
+  
+  const totalEvents = getCount(results[2] as PromiseSettledResult<{ count: number | null }>)
+  const totalAttended = getCount(results[3] as PromiseSettledResult<{ count: number | null }>)
+  
+  const openTasks = getCount(results[4] as PromiseSettledResult<{ count: number | null }>)
+  const completedTasks = getCount(results[5] as PromiseSettledResult<{ count: number | null }>)
+  
+  const taskLogs = (getData<{ hours_logged: number }>(results[6] as PromiseSettledResult<{ data: { hours_logged: number }[] | null }>) || [])
+  const totalHours = taskLogs.reduce((sum: number, log) => sum + (Number(log.hours_logged) || 0), 0)
 
-  const totalAnnouncements = getCount(results[8])
+  const donations = (getData<{ amount: number }>(results[7] as PromiseSettledResult<{ data: { amount: number }[] | null }>) || [])
+  const totalDonations = donations.reduce((sum: number, d) => sum + (Number(d.amount) || 0), 0)
+
+  const totalAnnouncements = getCount(results[8] as PromiseSettledResult<{ count: number | null }>)
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto py-6">

@@ -14,7 +14,10 @@ export function MembershipPolicyForm({ orgId, currentPolicy }: { orgId: string, 
 
   const handleSave = async () => {
     setLoading(true)
-    const res = await updateMembershipPolicy({ orgId, policy: policy as any })
+    const res = await updateMembershipPolicy({ 
+      orgId, 
+      policy: policy as 'open_auto' | 'admin_approval' | 'invite_only' 
+    })
     setLoading(false)
     if (res.success) {
       alert('Policy updated')

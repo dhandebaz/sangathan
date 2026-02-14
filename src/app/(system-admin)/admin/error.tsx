@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { ShieldAlert, RefreshCcw } from 'lucide-react'
+import { ShieldAlert } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default function Error({

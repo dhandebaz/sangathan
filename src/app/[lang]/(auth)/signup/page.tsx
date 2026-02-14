@@ -6,81 +6,10 @@ import { useRouter } from 'next/navigation'
 import { signup } from '@/actions/auth'
 import { Loader2, Mail, Lock, User, Building2, ShieldAlert } from 'lucide-react'
 
-import { PhoneAuth } from '@/components/auth/phone-verification'
-import { use } from 'react'
-
-export default function SignupPage({ params }: { params: Promise<{ lang: string }> }) {
-  const { lang } = use(params)
-  const [step, setStep] = useState<'details' | 'phone'>('details')
-  const [signupData, setSignupData] = useState<any>(null)
+export default function SignupPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
-
-  async function handleDetailsSubmit(formData: FormData) {
-    setLoading(true)
-    setError(null)
-
-    const fullName = formData.get('fullName') as string
-    const organizationName = formData.get('organizationName') as string
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-    const confirmPassword = formData.get('confirmPassword') as string
-    const terms = formData.get('terms') === 'on'
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match")
-      setLoading(false)
-      return
-    }
-
-    // Store data and move to phone step (optional)
-    setSignupData({ fullName, organizationName, email, password, confirmPassword, terms })
-    setStep('phone')
-    setLoading(false)
-  }
-
-  async function completeSignup(idToken?: string) {
-    setLoading(true)
-    try {
-      const res = await signup({ ...signupData }) // Basic signup first
-      if (!res.success) throw new Error(res.error)
-      
-      // If phone linked, we need to call link action separately after signup?
-      // Actually, signup action creates the user. Linking phone requires the user to be logged in.
-      // But verify-email flow interrupts this.
-      // Strategy:
-      // 1. User signs up (Email).
-      // 2. User verifies email.
-      // 3. User logs in.
-      // 4. User links phone (Dashboard).
-      //
-      // If we want to link phone DURING signup:
-      // We can't, because Supabase user doesn't exist yet or isn't verified.
-      // We can store the phone verification token in metadata? No, token expires.
-      //
-      // Revised Flow for MVP:
-      // Signup is Email only. Phone linking happens inside dashboard.
-      // OR: We skip phone step here to keep it simple as per "Optional phone linking step" requirement.
-      // Let's just do standard signup for now and allow phone linking later to reduce friction.
-      //
-      // Wait, prompt said "Signup... Optional phone linking step".
-      // If I implement it, I need to pass the phone credential to the signup action.
-      // Supabase `signUp` can accept `phone` but verification is separate.
-      // Let's stick to Email Signup for now to ensure robustness, and offer Phone Link in Dashboard.
-      // Reverting to single step signup for stability.
-      
-      router.push(`/${lang}/verify-email?email=${encodeURIComponent(signupData.email)}`)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Signup failed')
-      setStep('details') // Go back
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // Reverting to simple form for now as Phone Linking logic during signup is complex with Email Verification requirement.
-  // We will stick to the robust email flow.
 
   async function handleSubmit(formData: FormData) {
     setLoading(true)
@@ -97,7 +26,7 @@ export default function SignupPage({ params }: { params: Promise<{ lang: string 
       const res = await signup({ fullName, organizationName, email, password, confirmPassword, terms })
       if (!res.success) throw new Error(res.error)
       
-      router.push(`/${lang}/verify-email?email=${encodeURIComponent(email)}`)
+      router.push(`/verify-email?email=${encodeURIComponent(email)}`)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Signup failed')
     } finally {

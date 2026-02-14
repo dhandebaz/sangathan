@@ -8,7 +8,7 @@ import { logAction } from '@/lib/audit/log'
 
 // --- Schemas ---
 
-const CreateMeetingSchema = z.object({
+export const CreateMeetingSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 chars"),
   description: z.string().optional(),
   date: z.string().datetime(),
@@ -16,13 +16,13 @@ const CreateMeetingSchema = z.object({
   attendee_ids: z.array(z.string().uuid()).optional(),
 })
 
-const MarkAttendanceSchema = z.object({
+export const MarkAttendanceSchema = z.object({
   meetingId: z.string().uuid(),
   memberId: z.string().uuid(),
   status: z.enum(['present', 'absent', 'excused'])
 })
 
-const DeleteMeetingSchema = z.object({
+export const DeleteMeetingSchema = z.object({
   meetingId: z.string().uuid()
 })
 
@@ -42,13 +42,13 @@ export const createMeeting = createSafeAction(
         date: input.date,
         location: input.location,
         created_by: context.user.id
-      } as any)
+      })
       .select('id')
-      .single()
+      .single() as { data: { id: string } | null, error: { message: string } | null }
 
-    if (error) throw new Error(error.message)
+    if (error || !meetingData) throw new Error(error?.message || 'Failed to create meeting')
 
-    const meeting = meetingData as any
+    const meeting = meetingData
 
     // Bulk insert attendees
     if (input.attendee_ids && input.attendee_ids.length > 0) {
@@ -58,8 +58,8 @@ export const createMeeting = createSafeAction(
         status: 'absent' // Default
       }))
 
-      const { error: attError } = await (supabase
-        .from('meeting_attendance') as any)
+      const { error: attError } = await supabase
+        .from('meeting_attendance')
         .insert(attendees)
       
       if (attError) console.error('Attendance Insert Error:', attError)
@@ -82,7 +82,7 @@ export const createMeeting = createSafeAction(
 
 export const markAttendance = createSafeAction(
   MarkAttendanceSchema,
-  async (input, context) => {
+  async (input) => {
     const supabase = await createClient()
 
     const { error } = await supabase
@@ -91,7 +91,7 @@ export const markAttendance = createSafeAction(
         meeting_id: input.meetingId,
         member_id: input.memberId,
         status: input.status
-      } as any, { onConflict: 'meeting_id, member_id' })
+      }, { onConflict: 'meeting_id, member_id' })
 
     if (error) throw new Error(error.message)
 

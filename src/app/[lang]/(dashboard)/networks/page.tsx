@@ -1,9 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
-import { Plus, Globe, Users } from 'lucide-react'
+import { Plus, Globe } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { checkCapability } from '@/lib/capabilities'
+import { Network } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,7 +16,7 @@ export default async function NetworksPage(props: { params: Promise<{ lang: stri
   if (!user) return <div>Please login</div>
 
   const { data: profileData } = await supabase.from('profiles').select('organization_id, role').eq('id', user.id).single()
-  const profile = profileData as any
+  const profile = profileData as { organization_id: string; role: string } | null
   
   if (!profile?.organization_id) return <div>No Organisation</div>
 
@@ -23,13 +24,13 @@ export default async function NetworksPage(props: { params: Promise<{ lang: stri
   if (!canFederate) return <div className="p-8 text-center text-gray-500">Federation Mode is not enabled for your organisation.</div>
 
   // Fetch Networks where Org is a Member
-  const { data: memberships } = await (supabase
-    .from('network_memberships') as any)
+  const { data: memberships } = await supabase
+    .from('network_memberships')
     .select('network:networks(*)')
     .eq('organisation_id', profile.organization_id)
-    .eq('status', 'active')
+    .eq('status', 'active') as { data: { network: Network }[] | null }
 
-  const networks = memberships?.map((m: any) => m.network) || []
+  const networks = memberships?.map((m) => m.network) || []
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto py-6">
@@ -47,11 +48,13 @@ export default async function NetworksPage(props: { params: Promise<{ lang: stri
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
-        {networks.map((network: any) => (
+        {networks.map((network) => (
           <div key={network.id} className="bg-white p-6 rounded-xl border shadow-sm">
              <div className="flex justify-between items-start mb-4">
                 <h3 className="text-xl font-bold">{network.name}</h3>
-                <Badge variant={network.visibility === 'public' ? 'default' : 'secondary'}>{network.visibility}</Badge>
+                <Badge variant={network.visibility === 'public' ? 'default' : 'secondary'}>
+                  {network.visibility || 'private'}
+                </Badge>
              </div>
              <p className="text-gray-500 mb-6">{network.description}</p>
              <div className="flex justify-between items-center">

@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ShieldAlert, AlertTriangle } from 'lucide-react'
 import { suspendOrganisation, reactivateOrganisation } from '@/actions/system/actions'
+import { SystemAdminOrganisation } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,13 +28,11 @@ export default async function OrganisationDetailsPage({ params }: PageProps) {
   const supabase = createServiceClient()
 
   // Fetch Organisation
-  const { data, error } = await supabase
+  const { data: org, error } = await supabase
     .from('organisations')
     .select('*')
     .eq('id', id)
-    .single()
-  
-  const org = data as any
+    .single() as { data: SystemAdminOrganisation | null, error: { message: string } | null }
 
   if (error || !org) return <div className="p-8">Organisation not found</div>
 
@@ -109,7 +108,7 @@ export default async function OrganisationDetailsPage({ params }: PageProps) {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                <h3 className="font-bold mb-4">Administrators</h3>
                <ul className="space-y-2">
-                  {admins?.map((admin: any) => (
+                  {admins?.map((admin) => (
                      <li key={admin.id} className="text-sm border-b pb-2 last:border-0">
                         <div className="font-medium">{admin.full_name}</div>
                         <div className="text-gray-500">{admin.email}</div>

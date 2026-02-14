@@ -7,9 +7,9 @@ export default function AUPPage() {
         <p className="text-sm text-gray-500">Last Updated: February 14, 2026</p>
 
         <section>
-          <h2 className="text-xl font-semibold text-black mb-3">1. Purpose & Scope</h2>
+          <h2 className="text-xl font-semibold text-black mb-3">1. Purpose &amp; Scope</h2>
           <p>
-            This Acceptable Use Policy ("AUP") defines the boundaries of acceptable behavior on the Sangathan platform. It applies to all users, organisations, administrators, and members who access or use our infrastructure. By using Sangathan, you agree to comply with this AUP.
+            This Acceptable Use Policy (&quot;AUP&quot;) defines the boundaries of acceptable behavior on the Sangathan platform. It applies to all users, organisations, administrators, and members who access or use our infrastructure. By using Sangathan, you agree to comply with this AUP.
           </p>
           <p>
             Sangathan is a neutral governance infrastructure provider. While we do not police the ideological content of our users, we strictly prohibit activities that threaten the safety of our community, the integrity of our infrastructure, or violate the laws of India.
@@ -27,7 +27,7 @@ export default function AUPPage() {
             <li>Promote, organize, or incite criminal activity.</li>
           </ul>
 
-          <h3 className="text-lg font-medium text-black mt-4 mb-2">B. Fraud & Financial Misrepresentation</h3>
+          <h3 className="text-lg font-medium text-black mt-4 mb-2">B. Fraud &amp; Financial Misrepresentation</h3>
           <p>Since Sangathan provides donation logging tools, trust is paramount. You prohibited from:</p>
           <ul className="list-disc pl-5 space-y-1">
             <li>Falsifying financial records or donation logs.</li>
@@ -36,7 +36,7 @@ export default function AUPPage() {
             <li>Impersonating another charity, organisation, or individual for financial gain.</li>
           </ul>
 
-          <h3 className="text-lg font-medium text-black mt-4 mb-2">C. Hate Speech, Harassment & Extremism</h3>
+          <h3 className="text-lg font-medium text-black mt-4 mb-2">C. Hate Speech, Harassment &amp; Extremism</h3>
           <p>We strictly prohibit content or conduct that:</p>
           <ul className="list-disc pl-5 space-y-1">
             <li>Promotes violence, incites hatred, or dehumanizes individuals or groups based on race, religion, caste, gender, sexual orientation, or disability.</li>
@@ -44,22 +44,22 @@ export default function AUPPage() {
             <li>Supports or glorifies terrorist organizations or violent extremist groups.</li>
           </ul>
 
-          <h3 className="text-lg font-medium text-black mt-4 mb-2">D. Misinformation & Manipulation</h3>
+          <h3 className="text-lg font-medium text-black mt-4 mb-2">D. Misinformation &amp; Manipulation</h3>
           <p>You may not use the Platform to:</p>
           <ul className="list-disc pl-5 space-y-1">
             <li>Disseminate verifiably false information intended to cause public harm or manipulate democratic processes.</li>
             <li>Create inauthentic accounts or organisations to artificially inflate support or membership numbers.</li>
-            <li>Engage in "astroturfing" or coordinated inauthentic behavior.</li>
+            <li>Engage in &quot;astroturfing&quot; or coordinated inauthentic behavior.</li>
           </ul>
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold text-black mb-3">3. Security & Infrastructure Abuse</h2>
+          <h2 className="text-xl font-semibold text-black mb-3">3. Security &amp; Infrastructure Abuse</h2>
           <p>To protect the integrity of the Platform for all users, you must not:</p>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong>Automated Abuse:</strong> Use bots, scripts, or automated tools to access the Platform, create accounts, or submit forms (except via approved APIs).</li>
             <li><strong>Security Circumvention:</strong> Attempt to bypass authentication measures, exploit vulnerabilities, or circumvent Row-Level Security (RLS) isolation.</li>
-            <li><strong>OTP Abuse:</strong> Intentionally trigger excessive SMS/OTP verification requests ("SMS bombing") against any number.</li>
+            <li><strong>OTP Abuse:</strong> Intentionally trigger excessive SMS/OTP verification requests (&quot;SMS bombing&quot;) against any number.</li>
             <li><strong>Scraping:</strong> Harvest or scrape data from the Platform without authorization.</li>
             <li><strong>Load Testing:</strong> Conduct unauthorized load testing or stress testing that degrades performance for other users.</li>
           </ul>
@@ -68,17 +68,17 @@ export default function AUPPage() {
         <section>
           <h2 className="text-xl font-semibold text-black mb-3">4. Child Exploitation Zero-Tolerance</h2>
           <p>
-            We have a zero-tolerance policy towards any content or activity that exploits or harms children. Any evidence of Child Sexual Abuse Material (CSAM) or grooming will result in immediate termination, data preservation, and reporting to the National Center for Missing & Exploited Children (NCMEC) and relevant Indian law enforcement agencies.
+            We have a zero-tolerance policy towards any content or activity that exploits or harms children. Any evidence of Child Sexual Abuse Material (CSAM) or grooming will result in immediate termination, data preservation, and reporting to the National Center for Missing &amp; Exploited Children (NCMEC) and relevant Indian law enforcement agencies.
           </p>
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold text-black mb-3">5. Enforcement & Investigation</h2>
+          <h2 className="text-xl font-semibold text-black mb-3">5. Enforcement &amp; Investigation</h2>
           <p>
             <strong>Right to Investigate:</strong> We reserve the right to investigate any reported violation of this AUP. This may involve reviewing Organisation data, audit logs, and system traffic.
           </p>
           <p>
-            <strong>Suspension & Termination:</strong> Violations may result in:
+            <strong>Suspension &amp; Termination:</strong> Violations may result in:
           </p>
           <ul className="list-disc pl-5 space-y-1">
             <li>Removal of specific content or forms.</li>
@@ -87,7 +87,7 @@ export default function AUPPage() {
             <li>A ban on creating future accounts.</li>
           </ul>
           <p className="mt-2">
-            <strong>Legal Hold:</strong> In cases of illegal activity or investigation, we may place a "Legal Hold" on your data, preventing deletion and preserving records for law enforcement.
+            <strong>Legal Hold:</strong> In cases of illegal activity or investigation, we may place a &quot;Legal Hold&quot; on your data, preventing deletion and preserving records for law enforcement.
           </p>
         </section>
 
@@ -99,7 +99,7 @@ export default function AUPPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold text-black mb-3">7. Reporting & Appeals</h2>
+          <h2 className="text-xl font-semibold text-black mb-3">7. Reporting &amp; Appeals</h2>
           <p>
             <strong>Reporting Violations:</strong> If you identify a violation of this policy, please report it to <a href="mailto:abuse@sangathan.space" className="text-blue-600 hover:underline">abuse@sangathan.space</a>. Please provide specific evidence and context.
           </p>

@@ -1,4 +1,3 @@
-import { createServiceClient } from '@/lib/supabase/service'
 import { logger } from '@/lib/logger'
 
 // Simple in-memory state for circuit breakers

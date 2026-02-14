@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { Network, Layers, Code, Globe } from 'lucide-react'
 
 export default function VisionPage() {
@@ -6,7 +5,7 @@ export default function VisionPage() {
     <div className="max-w-4xl mx-auto py-12 px-6">
       <h1 className="text-4xl font-bold mb-6 text-gray-900">Future Vision</h1>
       <p className="text-xl text-gray-500 mb-12 leading-relaxed">
-        Building the "Governance OS" for the next century of civic engagement.
+        Building the &quot;Governance OS&quot; for the next century of civic engagement.
       </p>
 
       <div className="prose prose-slate max-w-none text-gray-700 space-y-12">
@@ -64,7 +63,7 @@ export default function VisionPage() {
               <div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Public Transparency Portals</h3>
                 <p className="text-gray-600">
-                  Organisations will be able to publish "Transparency Dashboards" to the public web with one click, showcasing their impact, financials, and membership growth in real-time.
+                  Organisations will be able to publish &quot;Transparency Dashboards&quot; to the public web with one click, showcasing their impact, financials, and membership growth in real-time.
                 </p>
               </div>
             </div>

@@ -1,9 +1,20 @@
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Calendar, CheckSquare, Megaphone, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import { DashboardEvent, DashboardTask, DashboardAnnouncement } from '@/types/dashboard'
 
-export function MemberDashboard({ lang, events, tasks, announcements }: { lang: string, events: any[], tasks: any[], announcements: any[] }) {
+export function MemberDashboard({ 
+  lang, 
+  events, 
+  tasks, 
+  announcements 
+}: { 
+  lang: string, 
+  events: DashboardEvent[], 
+  tasks: DashboardTask[], 
+  announcements: DashboardAnnouncement[] 
+}) {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold tracking-tight">Welcome Back!</h1>

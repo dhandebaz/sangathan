@@ -7,11 +7,11 @@ import { z } from 'zod'
 
 // --- Schemas ---
 
-const LinkRequestSchema = z.object({
+export const LinkRequestSchema = z.object({
   target_org_id: z.string().uuid(),
 })
 
-const LinkResponseSchema = z.object({
+export const LinkResponseSchema = z.object({
   link_id: z.string().uuid(),
   status: z.enum(['active', 'rejected']),
 })
@@ -30,9 +30,9 @@ export async function createCollaborationRequest(targetOrgId: string) {
       .from('profiles')
       .select('role, organization_id')
       .eq('id', user.id)
-      .single()
+      .single() as { data: { role: string; organization_id: string } | null, error: { message: string } | null }
 
-    const profile = profileData as any
+    const profile = profileData
 
     if (!profile || !['admin', 'executive'].includes(profile.role)) {
       return { success: false, error: 'Permission denied' }
@@ -47,9 +47,9 @@ export async function createCollaborationRequest(targetOrgId: string) {
       .from('organisation_links')
       .select('id, status')
       .or(`and(requester_org_id.eq.${profile.organization_id},responder_org_id.eq.${targetOrgId}),and(requester_org_id.eq.${targetOrgId},responder_org_id.eq.${profile.organization_id})`)
-      .single()
+      .single() as { data: { id: string; status: string } | null, error: { message: string } | null }
 
-    const existing = existingData as any
+    const existing = existingData
 
     if (existing) {
       if (existing.status === 'pending') return { success: false, error: 'Request already pending' }
@@ -58,8 +58,8 @@ export async function createCollaborationRequest(targetOrgId: string) {
       return { success: false, error: 'Previous request exists' }
     }
 
-    const { error } = await (supabase
-      .from('organisation_links') as any)
+    const { error } = await supabase
+      .from('organisation_links')
       .insert({
         requester_org_id: profile.organization_id,
         responder_org_id: targetOrgId,
@@ -71,8 +71,9 @@ export async function createCollaborationRequest(targetOrgId: string) {
 
     revalidatePath('/dashboard/settings')
     return { success: true }
-  } catch (error: any) {
-    return { success: false, error: error.message }
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'An unexpected error occurred'
+    return { success: false, error: message }
   }
 }
 
@@ -88,9 +89,9 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
       .from('profiles')
       .select('role, organization_id')
       .eq('id', user.id)
-      .single()
+      .single() as { data: { role: string; organization_id: string } | null, error: { message: string } | null }
 
-    const profile = profileData as any
+    const profile = profileData
 
     if (!profile || !['admin', 'executive'].includes(profile.role)) {
       return { success: false, error: 'Permission denied' }
@@ -101,9 +102,9 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
       .from('organisation_links')
       .select('*')
       .eq('id', linkId)
-      .single()
+      .single() as { data: { responder_org_id: string; requester_org_id: string } | null, error: { message: string } | null }
 
-    const link = linkData as any
+    const link = linkData
 
     if (!link) return { success: false, error: 'Request not found' }
 
@@ -116,8 +117,8 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
        }
     }
 
-    const { error } = await (supabase
-      .from('organisation_links') as any)
+    const { error } = await supabase
+      .from('organisation_links')
       .update({ status })
       .eq('id', linkId)
 
@@ -125,10 +126,12 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
 
     revalidatePath('/dashboard/settings')
     return { success: true }
-  } catch (error: any) {
-    return { success: false, error: error.message }
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'An unexpected error occurred'
+    return { success: false, error: message }
   }
 }
+
 
 export async function getCollaboratingOrgs(orgId: string) {
     const supabase = createServiceClient()
@@ -142,10 +145,10 @@ export async function getCollaboratingOrgs(orgId: string) {
         responder:responder_org_id(id, name, slug)
       `)
       .or(`requester_org_id.eq.${orgId},responder_org_id.eq.${orgId}`)
-      .eq('status', 'active')
+      .eq('status', 'active') as { data: { id: string, status: string, requester: { id: string, name: string, slug: string }, responder: { id: string, name: string, slug: string } }[] | null, error: { message: string } | null }
       
     // Transform to flat list of partners
-    const partners = links?.map((link: any) => {
+    const partners = links?.map((link) => {
         return link.requester.id === orgId ? link.responder : link.requester
     }) || []
     

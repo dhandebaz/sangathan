@@ -63,7 +63,7 @@ export function AddMemberDialog() {
         <DialogHeader>
           <DialogTitle>Add New Member</DialogTitle>
           <DialogDescription>
-            Enter the details of the new member here. Click save when you're done.
+            Enter the details of the new member here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 py-4">

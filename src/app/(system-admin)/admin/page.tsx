@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { ShieldAlert, Users, Building, Activity } from 'lucide-react'
 import Link from 'next/link'
+import { SystemAdminOrganisation } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,19 +26,17 @@ export default async function SystemAdminDashboard() {
 
   try {
     // Fetch Stats
-    const [orgRes, userRes, subRes, recentOrgsRes] = await Promise.all([
+    const [orgRes, userRes, recentOrgsRes] = await Promise.all([
        supabase.from('organisations').select('*', { count: 'exact', head: true }),
        supabase.from('profiles').select('*', { count: 'exact', head: true }),
-       supabase.from('supporter_subscriptions').select('*', { count: 'exact', head: true }).eq('status', 'active'),
        supabase.from('organisations')
         .select('*, profiles(count), supporter_subscriptions(status)')
         .order('created_at', { ascending: false })
-        .limit(5)
+        .limit(5) as Promise<{ data: SystemAdminOrganisation[] | null }>
     ])
 
     const orgCount = orgRes.count || 0
     const userCount = userRes.count || 0
-    const subCount = subRes.count || 0
     const recentOrgs = recentOrgsRes.data || []
 
     return (
@@ -91,8 +90,8 @@ export default async function SystemAdminDashboard() {
                        </tr>
                     </thead>
                     <tbody className="divide-y">
-                       {recentOrgs?.map((org: any) => {
-                          const isActiveSupporter = org.supporter_subscriptions?.some((s: any) => s.status === 'active')
+                       {recentOrgs?.map((org) => {
+                          const isActiveSupporter = org.supporter_subscriptions?.some((s) => s.status === 'active')
                           return (
                              <tr key={org.id} className="hover:bg-gray-50">
                                 <td className="py-3 px-6 font-medium">
@@ -127,12 +126,12 @@ export default async function SystemAdminDashboard() {
         </main>
       </div>
     )
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Admin Dashboard Error:', error)
     return (
       <div className="p-8 text-center text-red-600">
         <h2 className="text-xl font-bold mb-2">Error Loading Dashboard</h2>
-        <p className="text-sm">{error.message}</p>
+        <p className="text-sm">{error instanceof Error ? error.message : 'An unexpected error occurred'}</p>
         <p className="text-xs mt-4 text-gray-500">Check logs for details. Ensure SUPABASE_SERVICE_ROLE_KEY is set.</p>
       </div>
     )

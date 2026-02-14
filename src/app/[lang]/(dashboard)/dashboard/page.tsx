@@ -6,8 +6,19 @@ import { MemberDashboard } from '@/components/dashboard/member-view'
 import { unlockCapabilities } from '@/lib/capabilities'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { DashboardEvent, DashboardTask, DashboardAnnouncement } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
+
+interface Profile {
+  status: 'active' | 'pending' | 'rejected' | 'inactive';
+  role: string;
+  organization_id: string;
+}
+
+interface Organisation {
+  status: string;
+}
 
 export default async function DashboardPage(props: { params: Promise<{ lang: string }> }) {
   const { lang } = await props.params
@@ -33,7 +44,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
           </div>
           <h1 className="text-2xl font-bold mb-4">Complete Your Profile</h1>
           <p className="text-gray-600 mb-8 max-w-md mx-auto">
-            We couldn't find your organisation profile. This usually happens if your account setup wasn't completed.
+            We couldn&apos;t find your organisation profile. This usually happens if your account setup wasn&apos;t completed.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Button asChild className="px-8">
@@ -48,9 +59,9 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     )
   }
 
-  const profile = profileData as any
+  const profile = profileData as unknown as Profile
 
-  if (profile?.status === 'pending') {
+  if (profile.status === 'pending') {
     return (
       <div className="max-w-4xl mx-auto py-20 px-4 text-center">
         <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-8">
@@ -69,7 +80,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     )
   }
 
-  if (profile?.status === 'rejected') {
+  if (profile.status === 'rejected') {
     return (
       <div className="max-w-4xl mx-auto py-20 px-4 text-center">
         <div className="bg-red-50 border border-red-200 rounded-xl p-8">
@@ -106,7 +117,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     .eq('id', profile.organization_id)
     .single()
 
-  const org = orgData as any
+  const org = orgData as unknown as Organisation | null
 
   if (org?.status === 'suspended') {
     return (
@@ -130,18 +141,18 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
 
   if (isAdmin) {
     // Admin Data Fetching
-    const [members, events, tasks, donations, activity] = await Promise.all([
-      (supabase.from('members') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organization_id),
-      (supabase.from('events') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organization_id),
-      (supabase.from('tasks') as any).select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organization_id).eq('status', 'open'),
-      (supabase.from('donations') as any).select('amount').eq('organisation_id', profile.organization_id),
-      (supabase.from('audit_logs') as any).select('action, created_at, details').eq('organisation_id', profile.organization_id).order('created_at', { ascending: false }).limit(5)
+    const [membersRes, eventsRes, tasksRes, donationsRes, activityRes] = await Promise.all([
+      supabase.from('members').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organization_id),
+      supabase.from('events').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organization_id),
+      supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organization_id).eq('status', 'open'),
+      supabase.from('donations').select('amount').eq('organisation_id', profile.organization_id),
+      supabase.from('audit_logs').select('action, created_at, details').eq('organisation_id', profile.organization_id).order('created_at', { ascending: false }).limit(5)
     ])
 
-    const totalDonations = ((donations as any).data || []).reduce((sum: number, d: any) => sum + (Number(d.amount) || 0), 0)
+    const totalDonations = (donationsRes.data || []).reduce((sum: number, d) => sum + (Number(d.amount) || 0), 0)
     
     // Transform audit logs to recent activity format
-    const recentActivity = ((activity as any).data || []).map((log: any) => ({
+    const recentActivity = (activityRes.data || []).map((log) => ({
       title: log.action.replace(/_/g, ' '),
       type: 'audit',
       time: new Date(log.created_at).toLocaleDateString()
@@ -150,9 +161,9 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     return (
       <AdminDashboard 
         stats={{
-          members: members.count || 0,
-          events: events.count || 0,
-          tasks: tasks.count || 0,
+          members: membersRes.count || 0,
+          events: eventsRes.count || 0,
+          tasks: tasksRes.count || 0,
           donations: totalDonations
         }}
         recentActivity={recentActivity}
@@ -162,20 +173,22 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
   }
 
   // Member Data Fetching
-  const [events, tasks, announcements] = await Promise.all([
-    (supabase.from('events') as any).select('*').eq('organisation_id', profile.organization_id).gte('start_time', new Date().toISOString()).order('start_time', { ascending: true }).limit(3),
-    (supabase.from('task_assignments') as any).select('task:tasks(*)').eq('member_id', user.id).limit(3),
-    (supabase.from('announcements') as any).select('*').eq('organisation_id', profile.organization_id).order('created_at', { ascending: false }).limit(3)
+  const [eventsRes, tasksRes, announcementsRes] = await Promise.all([
+    supabase.from('events').select('*').eq('organisation_id', profile.organization_id).gte('start_time', new Date().toISOString()).order('start_time', { ascending: true }).limit(3),
+    supabase.from('task_assignments').select('task:tasks(*)').eq('member_id', user.id).limit(3),
+    supabase.from('announcements').select('*').eq('organisation_id', profile.organization_id).order('created_at', { ascending: false }).limit(3)
   ])
 
   // Filter tasks correctly
-  const myTasks = ((tasks as any).data || []).map((t: any) => t.task).filter(Boolean)
+  const myTasks = (tasksRes.data || [])
+    .map((t) => t.task as unknown as DashboardTask)
+    .filter(Boolean)
 
   return (
     <MemberDashboard 
-      events={(events as any).data || []}
+      events={(eventsRes.data || []) as unknown as DashboardEvent[]}
       tasks={myTasks}
-      announcements={(announcements as any).data || []}
+      announcements={(announcementsRes.data || []) as unknown as DashboardAnnouncement[]}
       lang={lang}
     />
   )

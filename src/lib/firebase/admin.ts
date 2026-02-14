@@ -24,9 +24,9 @@ if (!admin.apps.length) {
         }),
       })
       console.log('✅ [Firebase Admin] Initialized successfully')
-    } catch (error: any) {
+    } catch (error) {
       console.error('❌ [Firebase Admin] Initialization Error:', error)
-      initError = error;
+      initError = error instanceof Error ? error : new Error(String(error));
     }
   } else {
     console.warn('⚠️ [Firebase Admin] FIREBASE_ADMIN_PRIVATE_KEY is missing.')
@@ -37,11 +37,11 @@ if (!admin.apps.length) {
 export const firebaseAdmin = admin
 
 // Export a safe version of auth that throws at runtime if not initialized
-let auth: admin.auth.Auth
+let auth: admin.auth.Auth | null = null
 try {
-  auth = admin.apps.length ? admin.auth() : null as any
-} catch (e) {
-  auth = null as any
+  auth = admin.apps.length ? admin.auth() : null
+} catch {
+  auth = null
 }
 
 // Proxy to intercept calls if auth is null

@@ -3,25 +3,28 @@ import { getNetworkDetails } from '@/actions/networks'
 import { createServiceClient } from '@/lib/supabase/service'
 import Link from 'next/link'
 import { Calendar, Users, Globe } from 'lucide-react'
+import { Network, PublicEvent, NetworkMember } from '@/types/dashboard'
 
 export default async function PublicNetworkPage(props: { params: Promise<{ slug: string, lang: string }> }) {
   const { slug, lang } = await props.params
   
   const networkData = await getNetworkDetails(slug)
   if (!networkData) notFound()
-  const network = networkData as any
+  const network = networkData as unknown as Network
 
   // Fetch Public Network Events
   const supabase = createServiceClient()
-  const { data: events } = await (supabase
-    .from('events') as any)
+  const { data: eventsData } = await supabase
+    .from('events')
     .select('*')
     .eq('network_id', network.id)
     .gte('start_time', new Date().toISOString())
     .order('start_time', { ascending: true })
 
+  const events = eventsData as unknown as PublicEvent[]
+
   // Calculate Aggregates
-  const totalMembers = network.members.reduce((sum: number, m: any) => sum + (m.organisation.member_count?.[0]?.count || 0), 0)
+  const totalMembers = network.members.reduce((sum: number, m: NetworkMember) => sum + (m.organisation.member_count?.[0]?.count || 0), 0)
   const orgCount = network.members.length
 
   return (
@@ -58,7 +61,7 @@ export default async function PublicNetworkPage(props: { params: Promise<{ slug:
             Member Organisations
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {network.members.map((m: any) => (
+            {network.members.map((m: NetworkMember) => (
               <Link href={`/${lang}/org/${m.organisation.slug}`} key={m.organisation.id} className="group">
                 <div className="border rounded-xl p-6 hover:shadow-md transition-shadow">
                   <h3 className="font-bold text-lg group-hover:text-blue-600 transition-colors">{m.organisation.name}</h3>
@@ -77,7 +80,7 @@ export default async function PublicNetworkPage(props: { params: Promise<{ slug:
               Network Events
             </h2>
             <div className="grid gap-6 md:grid-cols-2">
-              {events.map((event: any) => (
+              {events.map((event: PublicEvent) => (
                 <div key={event.id} className="border rounded-xl p-6 hover:shadow-md transition-shadow bg-gray-50">
                    <div className="text-sm text-gray-500 mb-2">
                      {new Date(event.start_time).toLocaleDateString()} • {event.location || 'Online'}

@@ -33,28 +33,28 @@ export async function checkRateLimit(key: string, config: RateLimitConfig): Prom
       .eq('key', key)
       .single()
 
-    if (current && new Date((current as any).updated_at) < windowStart) {
+    if (current && new Date(current.updated_at) < windowStart) {
       // Reset if window passed
-      await (supabase
-        .from('rate_limits') as any)
+      await supabase
+        .from('rate_limits')
         .update({ points: 1, updated_at: now.toISOString(), window_start: now.toISOString() })
         .eq('key', key)
       return true
     }
 
     if (current) {
-      if ((current as any).points >= config.points) {
+      if (current.points >= config.points) {
         // Limit exceeded
-        await logger.security('ratelimit', `Rate limit exceeded for ${key}`, { config })
+        await logger.security('ratelimit', `Rate limit exceeded for ${key}`, { config: config as unknown as Record<string, unknown> })
         return false
       }
 
       // Increment
-      await supabase.rpc('increment_rate_limit', { key_param: key } as any)
+      await supabase.rpc('increment_rate_limit', { key_param: key })
       return true
     } else {
       // Create new
-      await (supabase.from('rate_limits') as any).insert({
+      await supabase.from('rate_limits').insert({
         key,
         points: 1,
         window_start: now.toISOString(),

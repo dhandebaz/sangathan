@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult } from 'firebase/auth'
 import { firebaseAuth } from '@/lib/firebase/client'
 import { phoneLogin, linkPhoneToAccount } from '@/actions/auth'
-import { Loader2, Phone, ArrowRight, ShieldCheck } from 'lucide-react'
+import { Loader2, Phone, ShieldCheck } from 'lucide-react'
 
 interface PhoneAuthProps {
   mode: 'login' | 'link'
@@ -64,10 +64,11 @@ export function PhoneAuth({ mode, email, password, onSuccess }: PhoneAuthProps) 
       
       const confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, appVerifier)
       setVerificationId(confirmationResult)
-    } catch (err: any) {
-      if (err.code === 'auth/operation-not-allowed') {
+    } catch (err: unknown) {
+      const error = err as { code?: string; message?: string }
+      if (error.code === 'auth/operation-not-allowed') {
         setError('Phone authentication is not enabled in the database configuration.')
-      } else if (err.code === 'auth/argument-error') {
+      } else if (error.code === 'auth/argument-error') {
         setError('Invalid phone number or security check failed.')
       } else {
         setError(err instanceof Error ? err.message : 'Failed to send OTP')
@@ -108,11 +109,12 @@ export function PhoneAuth({ mode, email, password, onSuccess }: PhoneAuthProps) 
         if (onSuccess) onSuccess()
       }
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Verification Error:', err)
-      if (err.code === 'auth/invalid-verification-code') {
+      const error = err as { code?: string; message?: string }
+      if (error.code === 'auth/invalid-verification-code') {
         setError('The verification code is incorrect.')
-      } else if (err.code === 'auth/code-expired') {
+      } else if (error.code === 'auth/code-expired') {
         setError('The verification code has expired.')
       } else {
         setError(err instanceof Error ? err.message : 'Verification failed')
@@ -194,6 +196,6 @@ export function PhoneAuth({ mode, email, password, onSuccess }: PhoneAuthProps) 
 // Add types to window
 declare global {
   interface Window {
-    recaptchaVerifier: any
+    recaptchaVerifier: RecaptchaVerifier
   }
 }

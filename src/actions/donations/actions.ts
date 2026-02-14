@@ -9,7 +9,7 @@ import { logAction } from '@/lib/audit/log'
 
 // --- Schemas ---
 
-const LogDonationSchema = z.object({
+export const LogDonationSchema = z.object({
   donor_name: z.string().min(2),
   amount: z.coerce.number().positive(), // Coerce handles string->number from forms
   date: z.string().datetime(),
@@ -18,15 +18,15 @@ const LogDonationSchema = z.object({
   notes: z.string().optional(),
 })
 
-const VerifyDonationSchema = z.object({
+export const VerifyDonationSchema = z.object({
   donationId: z.string().uuid(),
 })
 
-const DeleteDonationSchema = z.object({
+export const DeleteDonationSchema = z.object({
   donationId: z.string().uuid(),
 })
 
-const PublicDonationSchema = z.object({
+export const PublicDonationSchema = z.object({
   orgSlug: z.string(),
   donor_name: z.string().min(2),
   phone: z.string().min(10),
@@ -68,15 +68,15 @@ export const logDonation = createSafeAction(
         upi_reference: input.upi_reference,
         notes: input.notes,
         verified_by: context.user.id // Auto-verify if logged manually
-      } as any)
+      })
       .select('id')
-      .single()
+      .single() as { data: { id: string } | null, error: { message: string; code?: string } | null }
     
-    const donation = data as any
+    const donation = data
 
-    if (error) {
-       if (error.code === '23505') throw new Error('Duplicate entry.')
-       throw new Error(error.message)
+    if (error || !donation) {
+       if (error?.code === '23505') throw new Error('Duplicate entry.')
+       throw new Error(error?.message || 'Failed to log donation')
     }
 
     await logAction({
@@ -99,7 +99,7 @@ export const verifyDonation = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await (supabase.from('donations') as any)
+    const { error } = await supabase.from('donations')
       .update({ verified_by: context.user.id }) // Mark as verified by current user
       .eq('id', input.donationId)
       .eq('organisation_id', context.organizationId)
@@ -160,11 +160,11 @@ export async function submitPublicDonation(input: z.infer<typeof PublicDonationS
   // 2. Resolve Organisation from Slug
   const { data: org, error: orgError } = await supabase
     .from('organisations')
-    .select('id')
+    .select('id, is_suspended')
     .eq('slug', input.orgSlug)
-    .single()
+    .single() as { data: { id: string; is_suspended: boolean } | null, error: { message: string } | null }
   
-  const organisation = org as any
+  const organisation = org
 
   if (orgError || !organisation) {
     return { success: false, error: 'Organisation not found' }
@@ -181,9 +181,9 @@ export async function submitPublicDonation(input: z.infer<typeof PublicDonationS
     .select('id')
     .eq('organisation_id', organisation.id)
     .eq('upi_reference', input.upi_reference)
-    .single()
+    .single() as { data: { id: string } | null, error: { message: string } | null }
   
-  const existing = existingData as any
+  const existing = existingData
 
   if (existing) {
     return { success: false, error: 'This UPI reference has already been submitted.' }
@@ -201,7 +201,7 @@ export async function submitPublicDonation(input: z.infer<typeof PublicDonationS
       upi_reference: input.upi_reference,
       notes: `Phone: ${input.phone}`, // Storing phone in notes as per schema limitation or design
       verified_by: null // Pending verification
-    } as any)
+    })
 
   if (error) {
     console.error('Donation Insert Error:', error)

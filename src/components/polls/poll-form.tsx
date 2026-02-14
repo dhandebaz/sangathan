@@ -40,9 +40,9 @@ export function PollForm({ orgId }: { orgId: string }) {
       organisation_id: orgId,
       title: formData.title,
       description: formData.description,
-      type: formData.type as any,
-      visibility_level: formData.visibility_level as any,
-      voting_method: formData.voting_method as any,
+      type: formData.type as 'informal' | 'formal',
+      visibility_level: formData.visibility_level as 'members' | 'volunteer' | 'core' | 'executive',
+      voting_method: formData.voting_method as 'anonymous' | 'identifiable',
       end_time: formData.end_time ? new Date(formData.end_time).toISOString() : undefined,
       options: formData.options.filter(o => o.trim().length > 0),
       is_public: formData.is_public

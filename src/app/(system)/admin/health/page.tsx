@@ -1,9 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
-import { redirect } from 'next/navigation'
 import { MetricCard } from '@/components/analytics/metric-card'
 import { AlertTriangle, ShieldCheck, Activity, Users, Mail, Phone, Flag } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { RiskEvent } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -33,9 +33,9 @@ export default async function SystemHealthPage() {
 
   const totalOrgs = orgs.count || 0
   const totalRisks = risks.data?.length || 0 // Total fetched
-  const highSeverityRisks = risks.data?.filter((r: any) => r.severity === 'high').length || 0
+  const highSeverityRisks = risks.data?.filter((r: RiskEvent) => r.severity === 'high').length || 0
   
-  const riskEvents = risks.data || []
+  const riskEvents = (risks.data as unknown as RiskEvent[]) || []
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -74,7 +74,7 @@ export default async function SystemHealthPage() {
                   {riskEvents.length === 0 ? (
                     <p className="text-gray-500 text-center py-8">No recent risk events detected.</p>
                   ) : (
-                    riskEvents.map((event: any) => (
+                    riskEvents.map((event: RiskEvent) => (
                       <div key={event.id} className="flex items-start justify-between p-4 border rounded-lg bg-white hover:bg-gray-50 transition-colors">
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">

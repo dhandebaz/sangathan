@@ -2,12 +2,9 @@
 
 import { QRCodeSVG } from 'qrcode.react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { generateQRData } from '@/actions/events' // We'll need to move helper to a shared lib or duplicate logic? 
-// Actually server actions can't be imported directly for client-side usage if they rely on node modules or secrets. 
-// Wait, generateQRData uses crypto (Node). It won't work on client. 
-// I should generate the token on server and pass it here.
+import { Event, RSVP } from '@/types/events'
 
-export function TicketView({ event, rsvp, qrToken }: { event: any, rsvp: any, qrToken: string }) {
+export function TicketView({ event, rsvp, qrToken }: { event: Event, rsvp: RSVP, qrToken: string }) {
   return (
     <Card className="max-w-sm mx-auto border-2 border-dashed border-gray-300 bg-gray-50">
       <CardHeader className="text-center pb-2">

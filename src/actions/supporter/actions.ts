@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { razorpay } from '@/lib/razorpay'
 import { logAction } from '@/lib/audit/log'
+import { SupporterSubscription } from '@/types/dashboard'
 
 // --- Schemas ---
 
@@ -23,14 +24,12 @@ export const createSubscription = createSafeAction(
     const supabase = await createClient()
 
     // 1. Check if already active
-    const { data } = await supabase
+    const { data: existing } = await supabase
       .from('supporter_subscriptions')
       .select('id, status')
       .eq('organisation_id', context.organizationId)
       .in('status', ['active', 'created'])
-      .maybeSingle()
-    
-    const existing = data as any
+      .maybeSingle() as { data: Pick<SupporterSubscription, 'id' | 'status'> | null }
 
     if (existing && existing.status === 'active') {
       throw new Error('Subscription is already active.')
@@ -63,7 +62,7 @@ export const createSubscription = createSafeAction(
         razorpay_plan_id: sub.plan_id,
         status: 'created',
         amount: 99.00 // Fixed amount for now
-      } as any)
+      })
 
     if (error) throw new Error(error.message)
 
@@ -86,21 +85,20 @@ export const toggleBranding = createSafeAction(
     const supabase = await createClient()
 
     // 1. Verify Active Subscription
-    const { data } = await supabase
+    const { data: sub } = await supabase
       .from('supporter_subscriptions')
       .select('status')
       .eq('organisation_id', context.organizationId)
       .eq('status', 'active')
-      .maybeSingle()
-    
-    const sub = data as any
+      .maybeSingle() as { data: Pick<SupporterSubscription, 'status'> | null }
 
     if (!sub) {
       throw new Error('Active Supporter Subscription required to remove branding.')
     }
 
     // 2. Update Organisation
-    const { error } = await (supabase.from('organisations') as any)
+    const { error } = await supabase
+      .from('organisations')
       .update({ remove_branding: input.removeBranding })
       .eq('id', context.organizationId)
 

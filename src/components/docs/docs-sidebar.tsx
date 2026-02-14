@@ -29,7 +29,7 @@ export function DocsSidebar({ lang }: { lang: string }) {
         setIsOpen(false)
       }
     })
-  }, [pathname])
+  }, [pathname, isOpen])
 
   const toggleSection = (title: string) => {
     setExpandedSections(prev => ({

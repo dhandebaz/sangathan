@@ -19,7 +19,7 @@ export function LogDonationDialog() {
       donor_name: formData.get('donor_name') as string,
       amount: Number(formData.get('amount')),
       date: (formData.get('date') as string) || new Date().toISOString(),
-      payment_method: formData.get('payment_method') as any,
+      payment_method: formData.get('payment_method') as 'cash' | 'upi' | 'bank_transfer' | 'other',
       upi_reference: (formData.get('upi_reference') as string) || undefined,
       notes: (formData.get('notes') as string) || undefined,
     })

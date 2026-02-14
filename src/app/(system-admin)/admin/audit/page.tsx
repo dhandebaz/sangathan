@@ -2,7 +2,8 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, ShieldAlert, FileText } from 'lucide-react'
+import { ArrowLeft, ShieldAlert } from 'lucide-react'
+import { AuditLog } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,7 +28,7 @@ export default async function GlobalAuditPage() {
     .order('created_at', { ascending: false })
     .limit(100)
   
-  const logs = data as any[]
+  const logs = data as AuditLog[]
 
   if (error) return <div className="p-8">Error loading logs</div>
 
@@ -58,7 +59,7 @@ export default async function GlobalAuditPage() {
                   </tr>
                </thead>
                <tbody className="divide-y">
-                  {logs?.map((log: any) => (
+                  {logs?.map((log: AuditLog) => (
                      <tr key={log.id} className="hover:bg-gray-50">
                         <td className="py-3 px-4 text-gray-600 whitespace-nowrap">
                            {new Date(log.created_at).toLocaleString()}

@@ -5,7 +5,7 @@ import { sendEmail, type EmailPayload } from '@/lib/email/sender'
 export type JobType = 'send_email' | 'process_webhook' | 'audit_log_batch' | 'export_data'
 
 export interface JobPayload {
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export async function enqueueJob(type: JobType, payload: JobPayload) {
@@ -17,7 +17,7 @@ export async function enqueueJob(type: JobType, payload: JobPayload) {
       payload,
       status: 'pending',
       attempts: 0
-    } as any)
+    })
 
     if (error) throw error
     
@@ -25,7 +25,7 @@ export async function enqueueJob(type: JobType, payload: JobPayload) {
     // to a processing endpoint, but purely queuing is safer.
     return true
   } catch (err) {
-    logger.error('queue', `Failed to enqueue job ${type}`, { error: err })
+    logger.error('queue', `Failed to enqueue job ${type}`, { error: err as Record<string, unknown> })
     return false
   }
 }
@@ -37,10 +37,9 @@ export async function processNextJob() {
   // We need a custom RPC for "SELECT FOR UPDATE SKIP LOCKED" because Supabase JS doesn't support it directly
   // Fallback: Optimistic locking
   
-  const { data: jobData, error } = await supabase.rpc('lock_next_job')
+  const { data: job, error } = await supabase.rpc('lock_next_job')
   
-  if (error || !jobData) return null
-  const job = jobData as any
+  if (error || !job) return null
 
   try {
     logger.info('queue', `Processing job ${job.id} (${job.type})`)
@@ -48,7 +47,7 @@ export async function processNextJob() {
     // --- JOB HANDLERS ---
     switch (job.type) {
       case 'send_email':
-        const emailPayload = job.payload as EmailPayload
+        const emailPayload = job.payload as unknown as EmailPayload
         const result = await sendEmail(emailPayload)
         if (!result.success) {
           throw new Error(`Email failed: ${result.error}`)
@@ -64,21 +63,22 @@ export async function processNextJob() {
     }
     
     // Success
-    await (supabase.from('system_jobs') as any).update({
+    await supabase.from('system_jobs').update({
       status: 'completed',
       updated_at: new Date().toISOString()
     }).eq('id', job.id)
     
-  } catch (err: any) {
-    logger.error('queue', `Job ${job.id} failed`, { error: err })
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : String(err)
+    logger.error('queue', `Job ${job.id} failed`, { error: err as Record<string, unknown> })
     
     const nextStatus = job.attempts >= (job.max_attempts || 3) ? 'failed' : 'pending'
     // Exponential backoff could be calculated here for next 'locked_until'
     
-    await (supabase.from('system_jobs') as any).update({
+    await supabase.from('system_jobs').update({
       status: nextStatus,
       attempts: job.attempts + 1,
-      last_error: err.message,
+      last_error: errorMessage,
       updated_at: new Date().toISOString()
     }).eq('id', job.id)
   }

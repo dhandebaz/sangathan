@@ -33,9 +33,8 @@ export async function unlockCapabilities(orgId: string) {
   const completedEvents = events.count || 0
   
   // 2. Fetch Current Capabilities
-  const { data: orgData } = await (supabase.from('organisations') as any).select('capabilities').eq('id', orgId).single()
-  const org = orgData as any
-  const current = (org?.capabilities || DEFAULT_CAPABILITIES) as Record<string, boolean>
+  const { data: org } = await supabase.from('organisations').select('capabilities').eq('id', orgId).single()
+  const current = (org?.capabilities as Record<string, boolean> || DEFAULT_CAPABILITIES)
   
   const updates: Record<string, boolean> = {}
   let hasUpdates = false
@@ -55,10 +54,10 @@ export async function unlockCapabilities(orgId: string) {
   // 4. Update if needed
   if (hasUpdates) {
     const newCapabilities = { ...current, ...updates }
-    await (supabase.from('organisations') as any).update({ capabilities: newCapabilities }).eq('id', orgId)
+    await supabase.from('organisations').update({ capabilities: newCapabilities }).eq('id', orgId)
     
     // Log Unlock
-    await (supabase.from('audit_logs') as any).insert({
+    await supabase.from('audit_logs').insert({
       organisation_id: orgId,
       action: 'capabilities_unlocked',
       details: updates,
@@ -71,30 +70,29 @@ export async function unlockCapabilities(orgId: string) {
 export async function checkCapability(orgId: string, capability: OrgCapability): Promise<boolean> {
   const supabase = createServiceClient()
   
-  const { data: dataAny } = await (supabase
-    .from('organisations') as any)
+  const { data } = await supabase
+    .from('organisations')
     .select('capabilities')
     .eq('id', orgId)
     .single()
     
-  const data = dataAny as any
   if (!data || !data.capabilities) return DEFAULT_CAPABILITIES[capability] || false
   
+  const capabilities = data.capabilities as Record<string, boolean>
   // JSONB comes back as object
-  return !!data.capabilities[capability]
+  return !!capabilities[capability]
 }
 
 export async function getOrgCapabilities(orgId: string): Promise<Record<string, boolean>> {
   const supabase = createServiceClient()
   
-  const { data: dataAny } = await (supabase
-    .from('organisations') as any)
+  const { data } = await supabase
+    .from('organisations')
     .select('capabilities')
     .eq('id', orgId)
     .single()
     
-  const data = dataAny as any
   if (!data || !data.capabilities) return { basic_governance: true }
   
-  return data.capabilities
+  return data.capabilities as Record<string, boolean>
 }

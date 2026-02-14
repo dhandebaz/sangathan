@@ -11,7 +11,7 @@ export function AccessDenied({ lang }: { lang: string }) {
       
       <h1 className="text-3xl font-bold text-slate-900 mb-3">Access Denied</h1>
       <p className="text-slate-600 max-w-md mb-10 leading-relaxed">
-        You don't have the required permissions to view this page. This section is restricted to administrators or specific roles.
+        You don&apos;t have the required permissions to view this page. This section is restricted to administrators or specific roles.
       </p>
       
       <div className="flex flex-col sm:flex-row gap-4">

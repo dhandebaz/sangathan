@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import { headers } from 'next/headers'
 
 // Simple KV-based rate limiter using Supabase if we had a Redis.
 // Since we only have Postgres, we'll use a table 'rate_limits' or 'audit_logs' to count.

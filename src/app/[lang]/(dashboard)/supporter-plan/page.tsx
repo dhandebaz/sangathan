@@ -15,7 +15,7 @@ export default async function SupporterPlanPage() {
     .eq('id', ctx.organizationId)
     .single()
   
-  const org = orgData as any
+  const org = orgData as { remove_branding: boolean } | null
 
   // Fetch Subscription Status
   const { data: subData } = await supabase
@@ -26,7 +26,7 @@ export default async function SupporterPlanPage() {
     .limit(1)
     .single()
   
-  const subscription = subData as any
+  const subscription = subData as Record<string, unknown> | null
 
   return (
     <SupporterDashboard 

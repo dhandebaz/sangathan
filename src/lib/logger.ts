@@ -6,7 +6,7 @@ export interface LogEntry {
   level: LogLevel
   source: string
   message: string
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
   user_id?: string
   organisation_id?: string
   ip_address?: string
@@ -15,7 +15,7 @@ export interface LogEntry {
 export async function log(entry: LogEntry) {
   try {
     const supabase = createServiceClient()
-    const { error } = await supabase.from('system_logs').insert(entry as any)
+    const { error } = await supabase.from('system_logs').insert(entry)
     
     if (error) {
       console.error('Failed to write log to DB:', error)
@@ -28,18 +28,18 @@ export async function log(entry: LogEntry) {
 }
 
 export const logger = {
-  info: (source: string, message: string, meta?: any) => 
+  info: (source: string, message: string, meta?: Record<string, unknown>) => 
     log({ level: 'info', source, message, metadata: meta }),
     
-  warn: (source: string, message: string, meta?: any) => 
+  warn: (source: string, message: string, meta?: Record<string, unknown>) => 
     log({ level: 'warn', source, message, metadata: meta }),
     
-  error: (source: string, message: string, meta?: any) => 
+  error: (source: string, message: string, meta?: Record<string, unknown>) => 
     log({ level: 'error', source, message, metadata: meta }),
     
-  security: (source: string, message: string, meta?: any, userId?: string, ip?: string) => 
+  security: (source: string, message: string, meta?: Record<string, unknown>, userId?: string, ip?: string) => 
     log({ level: 'security', source, message, metadata: meta, user_id: userId, ip_address: ip }),
 
-  critical: (source: string, message: string, meta?: any) => 
+  critical: (source: string, message: string, meta?: Record<string, unknown>) => 
     log({ level: 'critical', source, message, metadata: meta }),
 }

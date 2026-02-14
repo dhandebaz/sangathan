@@ -1,14 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { resetPassword } from '@/actions/auth'
 import { Loader2, Lock, ShieldAlert } from 'lucide-react'
 
 export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const router = useRouter()
 
   async function handleSubmit(formData: FormData) {
     setLoading(true)

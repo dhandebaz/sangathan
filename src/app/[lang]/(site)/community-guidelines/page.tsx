@@ -12,7 +12,7 @@ export default function CommunityGuidelinesPage() {
         <section>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">The Spirit of Sangathan</h2>
           <p>
-            Sangathan means "Organisation" or "Union." It implies coming together for a shared purpose. We expect all users to act with integrity and respect for the platform and other communities.
+            Sangathan means &quot;Organisation&quot; or &quot;Union.&quot; It implies coming together for a shared purpose. We expect all users to act with integrity and respect for the platform and other communities.
           </p>
         </section>
 

@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
 import { Role, UserContext } from '@/types/auth'
-import { redirect } from 'next/navigation'
 
 /**
  * Retrieves the current authenticated user context, including organization and role.
@@ -23,13 +22,11 @@ export async function getUserContext(): Promise<UserContext> {
   }
 
   // Fetch Profile with Organization ID and Role
-  const { data, error: profileError } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('organization_id, role, full_name')
     .eq('id', user.id)
     .single()
-  
-  const profile = data as any
 
   if (profileError || !profile) {
     // Edge case: User is authenticated but has no profile.
