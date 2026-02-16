@@ -22,18 +22,16 @@ export default async function DashboardLayout(props: {
   if (user) {
     const { data: profileData, error: profileError } = await supabase
       .from('profiles')
-      .select('organization_id, role')
+      .select('organisation_id, role')
       .eq('id', user.id)
       .single()
     
-    // If profile is missing but user is logged in, this is a state that needs handling
     if (profileError || !profileData) {
-      // In a real app, you'd trigger profile creation here or redirect to onboarding
       capabilities = { basic_governance: false }
     } else {
-      const profile = profileData
-      if (profile?.organization_id) {
-        capabilities = await getOrgCapabilities(profile.organization_id)
+      const profile = profileData as { organisation_id: string | null; role: string }
+      if (profile.organisation_id) {
+        capabilities = await getOrgCapabilities(profile.organisation_id)
         role = profile.role
       } else {
         capabilities = { basic_governance: false }

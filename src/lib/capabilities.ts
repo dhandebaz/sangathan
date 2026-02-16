@@ -29,7 +29,13 @@ export const DEFAULT_CAPABILITIES: Record<OrgCapability, boolean> = {
 
 // Logic to unlock capabilities based on org maturity
 export async function unlockCapabilities(orgId: string) {
-  const supabase = createServiceClient()
+  let supabase
+  try {
+    supabase = createServiceClient()
+  } catch (error) {
+    console.error('Capabilities unlock skipped: service client not configured', error)
+    return
+  }
   
   // 1. Fetch Stats
   const [members, events] = await Promise.all([
@@ -78,7 +84,13 @@ export async function unlockCapabilities(orgId: string) {
 
 
 export async function checkCapability(orgId: string, capability: OrgCapability): Promise<boolean> {
-  const supabase = createServiceClient()
+  let supabase
+  try {
+    supabase = createServiceClient()
+  } catch (error) {
+    console.error('Capability check fallback: service client not configured', error)
+    return DEFAULT_CAPABILITIES[capability] || false
+  }
   
   const { data } = await supabase
     .from('organisations')
@@ -94,7 +106,13 @@ export async function checkCapability(orgId: string, capability: OrgCapability):
 }
 
 export async function getOrgCapabilities(orgId: string): Promise<Record<string, boolean>> {
-  const supabase = createServiceClient()
+  let supabase
+  try {
+    supabase = createServiceClient()
+  } catch (error) {
+    console.error('Org capabilities fallback: service client not configured', error)
+    return { basic_governance: true }
+  }
   
   const { data } = await supabase
     .from('organisations')

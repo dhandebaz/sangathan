@@ -19,16 +19,20 @@ export default async function AnnouncementsPage(props: { params: Promise<{ lang:
   // This is tricky with simple Supabase queries. 
   // We'll fetch announcements and user's view records separately or use a join if possible.
 
-  const { data: profileData } = await supabase.from('profiles').select('organization_id, role').eq('id', user.id).single()
+  const { data: profileData } = await supabase
+    .from('profiles')
+    .select('organisation_id, role')
+    .eq('id', user.id)
+    .single()
 
-  const profile = profileData as { organization_id: string; role: string } | null
+  const profile = profileData as { organisation_id: string | null; role: string } | null
 
-  if (!profile || !profile.organization_id) return <div>No Organisation Found</div>
+  if (!profile || !profile.organisation_id) return <div>No Organisation Found</div>
 
   const { data: announcementsData } = await supabase
     .from('announcements')
     .select('*, announcement_views(user_id)')
-    .eq('organisation_id', profile.organization_id)
+    .eq('organisation_id', profile.organisation_id)
     .order('is_pinned', { ascending: false })
     .order('created_at', { ascending: false })
 
