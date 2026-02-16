@@ -20,10 +20,10 @@ export type OrgCapability =
 export const DEFAULT_CAPABILITIES: Record<OrgCapability, boolean> = {
   basic_governance: true,
   advanced_analytics: false,
-  federation_mode: false,
-  voting_engine: false,
-  volunteer_engine: false,
-  transparency_mode: false, // Default false for new orgs until criteria met
+  federation_mode: true,
+  voting_engine: true,
+  volunteer_engine: true,
+  transparency_mode: false,
   coalition_tools: false
 }
 
@@ -101,7 +101,6 @@ export async function checkCapability(orgId: string, capability: OrgCapability):
   if (!data || !data.capabilities) return DEFAULT_CAPABILITIES[capability] || false
   
   const capabilities = data.capabilities as Record<string, boolean>
-  // JSONB comes back as object
   return !!capabilities[capability]
 }
 
@@ -111,7 +110,7 @@ export async function getOrgCapabilities(orgId: string): Promise<Record<string, 
     supabase = createServiceClient()
   } catch (error) {
     console.error('Org capabilities fallback: service client not configured', error)
-    return { basic_governance: true }
+    return DEFAULT_CAPABILITIES
   }
   
   const { data } = await supabase
@@ -120,7 +119,8 @@ export async function getOrgCapabilities(orgId: string): Promise<Record<string, 
     .eq('id', orgId)
     .single()
     
-  if (!data || !data.capabilities) return { basic_governance: true }
+  if (!data || !data.capabilities) return DEFAULT_CAPABILITIES
   
-  return data.capabilities as Record<string, boolean>
+  const capabilities = data.capabilities as Record<string, boolean>
+  return { ...DEFAULT_CAPABILITIES, ...capabilities }
 }

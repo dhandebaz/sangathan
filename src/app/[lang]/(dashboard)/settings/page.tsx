@@ -5,6 +5,8 @@ import { getCollaboratingOrgs, getPendingRequests } from '@/actions/collaboratio
 import { redirect } from 'next/navigation'
 import { getOrgCapabilities } from '@/lib/capabilities'
 import { AccessDenied } from '@/components/dashboard/access-denied'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 export default async function SettingsPage(props: { params: Promise<{ lang: string }> }) {
   const { lang } = await props.params
@@ -65,6 +67,16 @@ export default async function SettingsPage(props: { params: Promise<{ lang: stri
             <CollaborationManager orgId={org.id} activePartners={partners} pendingRequests={pending} />
           </section>
         )}
+
+        <section>
+          <h2 className="text-lg font-semibold mb-2">Support</h2>
+          <p className="text-sm text-gray-600 mb-4">
+            Raise policy or moderation issues with the platform team.
+          </p>
+          <Button asChild variant="outline">
+            <Link href={`/${lang}/appeals`}>Open Appeals</Link>
+          </Button>
+        </section>
       </div>
     </div>
   )

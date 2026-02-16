@@ -91,9 +91,6 @@ export default async function DashboardLayout(props: {
                {capabilities.federation_mode && (
                  <SidebarLink href={`/${lang}/networks`} icon={Globe} label="Networks" />
                )}
-               {isEditor && (
-                 <SidebarLink href={`/${lang}/appeals`} icon={Scale} label="Appeals" />
-               )}
                <SidebarLink href={`/${lang}/members`} icon={Users} label="Members" />
             </nav>
           </div>
@@ -149,9 +146,13 @@ export default async function DashboardLayout(props: {
                 <span className="text-sm font-semibold text-slate-900">{user?.email?.split('@')[0]}</span>
                 <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">{role || 'Member'}</span>
              </div>
-             <div className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 font-bold hover:bg-slate-200 transition-colors cursor-pointer shadow-sm">
+             <Link
+               href={`/${lang}/settings`}
+               className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 font-bold hover:bg-slate-200 transition-colors cursor-pointer shadow-sm"
+               aria-label="Open organisation settings"
+             >
                {user?.email?.[0].toUpperCase()}
-             </div>
+             </Link>
            </div>
         </header>
 
