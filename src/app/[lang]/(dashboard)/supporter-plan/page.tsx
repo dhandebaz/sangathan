@@ -17,7 +17,6 @@ export default async function SupporterPlanPage() {
   
   const org = orgData as { remove_branding: boolean } | null
 
-  // Fetch Subscription Status
   const { data: subData } = await supabase
     .from('supporter_subscriptions')
     .select('*')
@@ -26,7 +25,14 @@ export default async function SupporterPlanPage() {
     .limit(1)
     .single()
   
-  const subscription = subData as Record<string, unknown> | null
+  const subscription = subData
+    ? {
+        status: subData.status,
+        current_period_end: subData.current_period_end,
+      }
+    : null
+
+  if (!org) return null
 
   return (
     <SupporterDashboard 

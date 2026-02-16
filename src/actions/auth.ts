@@ -289,24 +289,22 @@ export async function linkPhoneToAccount(input: z.infer<typeof LoginSchema> & { 
   const supabaseAdmin = createServiceClient()
   
   // Check if phone already used
-  const { data } = await supabaseAdmin
+  const { data: existing } = await supabaseAdmin
     .from('profiles')
     .select('id')
     .eq('phone', phoneNumber)
     .neq('id', authData.user.id) // Allow re-linking to self
     .single()
-    
-  const existing = data as Profile | null
 
   if (existing) return { success: false, error: 'Phone number already linked to another account' }
   
-  await (supabaseAdmin
-    .from('profiles') as any)
-    .update({ 
+  await supabaseAdmin
+    .from('profiles')
+    .update({
       phone: phoneNumber,
       phone_verified: true,
-      firebase_uid: decodedToken.uid
-    })
+      firebase_uid: decodedToken.uid,
+    } as never)
     .eq('id', authData.user.id)
     
   redirect('/dashboard')
@@ -365,24 +363,27 @@ export async function finalizeSignup(input: { idToken: string }) {
     return { success: false, error: 'Registration details not found. Please sign up again.' }
   }
 
-  // 6. Atomic Creation (Organisation + Profile)
-  // Generate Slug
   const baseSlug = orgName.toLowerCase().replace(/[^a-z0-9]+/g, '-')
   const uniqueSlug = `${baseSlug}-${Math.random().toString(36).substring(2, 7)}`
 
-  const { error: rpcError } = await (supabaseAdmin as any).rpc('create_organisation_and_admin', {
+  const { error: rpcError } = await supabaseAdmin.rpc('create_organisation_and_admin', {
     p_org_name: orgName,
     p_org_slug: uniqueSlug,
     p_user_id: user.id,
     p_full_name: fullName,
     p_email: user.email,
     p_phone: phoneNumber,
-    p_firebase_uid: firebaseUid
-  })
+    p_firebase_uid: firebaseUid,
+  } as never)
 
-  // Explicitly set approved_at and status for admin
   if (!rpcError) {
-      await (supabaseAdmin.from('profiles') as any).update({ status: 'active', approved_at: new Date().toISOString() }).eq('id', user.id)
+    await supabaseAdmin
+      .from('profiles')
+      .update({
+        status: 'active',
+        approved_at: new Date().toISOString(),
+      } as never)
+      .eq('id', user.id)
   }
 
   if (rpcError) {

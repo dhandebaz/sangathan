@@ -1,12 +1,11 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import { logger } from '@/lib/logger'
 import { sendEmail, type EmailPayload } from '@/lib/email/sender'
+import type { Json } from '@/types/database'
 
 export type JobType = 'send_email' | 'process_webhook' | 'audit_log_batch' | 'export_data'
 
-export interface JobPayload {
-  [key: string]: unknown
-}
+export type JobPayload = Json
 
 export async function enqueueJob(type: JobType, payload: JobPayload) {
   const supabase = createServiceClient()

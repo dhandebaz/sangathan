@@ -24,6 +24,7 @@ export interface Database {
           deleted_at: string | null
           status: 'active' | 'pending' | 'rejected' | 'removed'
           approved_at: string | null
+          engagement_score: number
         }
         Insert: {
           id: string
@@ -39,6 +40,7 @@ export interface Database {
           deleted_at?: string | null
           status?: 'active' | 'pending' | 'rejected' | 'removed'
           approved_at?: string | null
+          engagement_score?: number
         }
         Update: {
           id?: string
@@ -54,7 +56,9 @@ export interface Database {
           deleted_at?: string | null
           status?: 'active' | 'pending' | 'rejected' | 'removed'
           approved_at?: string | null
+          engagement_score?: number
         }
+        Relationships: []
       }
       organisations: {
         Row: {
@@ -63,6 +67,11 @@ export interface Database {
           slug: string
           is_suspended: boolean
           remove_branding: boolean
+          public_transparency_enabled: boolean
+          risk_score: number
+          status: 'active' | 'warning' | 'suspended' | 'under_review'
+          broadcast_restricted: boolean
+          capabilities: Json
           created_at: string
           updated_at: string
           deleted_at: string | null
@@ -77,6 +86,11 @@ export interface Database {
           slug: string
           is_suspended?: boolean
           remove_branding?: boolean
+          public_transparency_enabled?: boolean
+          risk_score?: number
+          status?: 'active' | 'warning' | 'suspended' | 'under_review'
+          broadcast_restricted?: boolean
+          capabilities?: Json
           created_at?: string
           updated_at?: string
           deleted_at?: string | null
@@ -91,6 +105,11 @@ export interface Database {
           slug?: string
           is_suspended?: boolean
           remove_branding?: boolean
+          public_transparency_enabled?: boolean
+          risk_score?: number
+          status?: 'active' | 'warning' | 'suspended' | 'under_review'
+          broadcast_restricted?: boolean
+          capabilities?: Json
           created_at?: string
           updated_at?: string
           deleted_at?: string | null
@@ -99,6 +118,7 @@ export interface Database {
           deletion_requested_at?: string | null
           membership_policy?: 'open_auto' | 'admin_approval' | 'invite_only'
         }
+        Relationships: []
       }
       donations: {
         Row: {
@@ -107,13 +127,12 @@ export interface Database {
           donor_name: string
           amount: number
           date: string
-          payment_method: string
+          payment_method: 'cash' | 'upi' | 'bank_transfer' | 'other'
           upi_reference: string | null
           notes: string | null
           verified_by: string | null
           created_at: string
           updated_at: string
-          deleted_at: string | null
         }
         Insert: {
           id?: string
@@ -121,13 +140,12 @@ export interface Database {
           donor_name: string
           amount: number
           date: string
-          payment_method: string
+          payment_method: 'cash' | 'upi' | 'bank_transfer' | 'other'
           upi_reference?: string | null
           notes?: string | null
           verified_by?: string | null
           created_at?: string
           updated_at?: string
-          deleted_at?: string | null
         }
         Update: {
           id?: string
@@ -135,59 +153,23 @@ export interface Database {
           donor_name?: string
           amount?: number
           date?: string
-          payment_method?: string
+          payment_method?: 'cash' | 'upi' | 'bank_transfer' | 'other'
           upi_reference?: string | null
           notes?: string | null
           verified_by?: string | null
           created_at?: string
           updated_at?: string
-          deleted_at?: string | null
         }
-      }
-      members: {
-        Row: {
-          id: string
-          organisation_id: string
-          full_name: string
-          phone: string
-          role: string
-          status: string
-          created_at: string
-          updated_at: string
-          deleted_at: string | null
-        }
-        Insert: {
-          id?: string
-          organisation_id: string
-          full_name: string
-          phone: string
-          role?: string
-          status?: string
-          created_at?: string
-          updated_at?: string
-          deleted_at?: string | null
-        }
-        Update: {
-          id?: string
-          organisation_id?: string
-          full_name?: string
-          phone?: string
-          role?: string
-          status?: string
-          created_at?: string
-          updated_at?: string
-          deleted_at?: string | null
-        }
+        Relationships: []
       }
       meetings: {
         Row: {
           id: string
           organisation_id: string
           title: string
+          description: string | null
           date: string
-          time: string
           location: string | null
-          notes: string | null
           created_by: string
           created_at: string
           updated_at: string
@@ -197,10 +179,9 @@ export interface Database {
           id?: string
           organisation_id: string
           title: string
+          description?: string | null
           date: string
-          time: string
           location?: string | null
-          notes?: string | null
           created_by: string
           created_at?: string
           updated_at?: string
@@ -210,15 +191,15 @@ export interface Database {
           id?: string
           organisation_id?: string
           title?: string
+          description?: string | null
           date?: string
-          time?: string
           location?: string | null
-          notes?: string | null
           created_by?: string
           created_at?: string
           updated_at?: string
           deleted_at?: string | null
         }
+        Relationships: []
       }
       meeting_attendance: {
         Row: {
@@ -226,15 +207,15 @@ export interface Database {
           organisation_id: string
           meeting_id: string
           member_id: string
-          status: string
+          status: 'present' | 'absent' | 'excused'
           created_at: string
         }
         Insert: {
           id?: string
-          organisation_id: string
+          organisation_id?: string
           meeting_id: string
           member_id: string
-          status: string
+          status: 'present' | 'absent' | 'excused'
           created_at?: string
         }
         Update: {
@@ -242,9 +223,10 @@ export interface Database {
           organisation_id?: string
           meeting_id?: string
           member_id?: string
-          status?: string
+          status?: 'present' | 'absent' | 'excused'
           created_at?: string
         }
+        Relationships: []
       }
       forms: {
         Row: {
@@ -286,93 +268,40 @@ export interface Database {
           updated_at?: string
           deleted_at?: string | null
         }
+        Relationships: []
       }
       form_submissions: {
         Row: {
           id: string
           form_id: string
           organisation_id: string
+          user_id: string | null
           data: Json
+          ip_address: string | null
+          user_agent: string | null
           created_at: string
         }
         Insert: {
           id?: string
           form_id: string
           organisation_id: string
+          user_id?: string | null
           data: Json
+          ip_address?: string | null
+          user_agent?: string | null
           created_at?: string
         }
         Update: {
           id?: string
           form_id?: string
           organisation_id?: string
+          user_id?: string | null
           data?: Json
+          ip_address?: string | null
+          user_agent?: string | null
           created_at?: string
         }
-      }
-      supporter_subscriptions: {
-        Row: {
-          id: string
-          organisation_id: string
-          razorpay_subscription_id: string
-          razorpay_plan_id: string
-          status: string
-          amount: number
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          organisation_id: string
-          razorpay_subscription_id: string
-          razorpay_plan_id: string
-          status: string
-          amount: number
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          organisation_id?: string
-          razorpay_subscription_id?: string
-          razorpay_plan_id?: string
-          status?: string
-          amount?: number
-          created_at?: string
-          updated_at?: string
-        }
-      }
-      audit_logs: {
-        Row: {
-          id: string
-          organisation_id: string
-          actor_id: string | null
-          action: string
-          resource_table: string
-          resource_id: string
-          details: Json | null
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          organisation_id: string
-          actor_id?: string | null
-          action: string
-          resource_table: string
-          resource_id: string
-          details?: Json | null
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          organisation_id?: string
-          actor_id?: string | null
-          action?: string
-          resource_table?: string
-          resource_id?: string
-          details?: Json | null
-          created_at?: string
-        }
+        Relationships: []
       }
       system_jobs: {
         Row: {
@@ -411,6 +340,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
         }
+        Relationships: []
       }
       system_logs: {
         Row: {
@@ -446,6 +376,7 @@ export interface Database {
           ip_address?: string | null
           created_at?: string
         }
+        Relationships: []
       }
       rate_limits: {
         Row: {
@@ -469,6 +400,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
         }
+        Relationships: []
       }
       webhook_events: {
         Row: {
@@ -501,6 +433,7 @@ export interface Database {
           processing_error?: string | null
           created_at?: string
         }
+        Relationships: []
       }
       system_settings: {
         Row: {
@@ -524,44 +457,40 @@ export interface Database {
           updated_at?: string
           updated_by?: string | null
         }
+        Relationships: []
       }
       data_requests: {
         Row: {
           id: string
           organisation_id: string | null
-          user_id: string | null
-          request_type: string
-          status: string
+          user_id: string
+          request_type: 'export' | 'deletion'
+          status: 'pending' | 'processing' | 'completed' | 'failed'
           details: Json | null
-          processed_at: string | null
-          processed_by: string | null
           created_at: string
-          updated_at: string
+          completed_at: string | null
         }
         Insert: {
           id?: string
           organisation_id?: string | null
-          user_id?: string | null
-          request_type: string
-          status?: string
+          user_id: string
+          request_type: 'export' | 'deletion'
+          status?: 'pending' | 'processing' | 'completed' | 'failed'
           details?: Json | null
-          processed_at?: string | null
-          processed_by?: string | null
           created_at?: string
-          updated_at?: string
+          completed_at?: string | null
         }
         Update: {
           id?: string
           organisation_id?: string | null
-          user_id?: string | null
-          request_type?: string
-          status?: string
+          user_id?: string
+          request_type?: 'export' | 'deletion'
+          status?: 'pending' | 'processing' | 'completed' | 'failed'
           details?: Json | null
-          processed_at?: string | null
-          processed_by?: string | null
           created_at?: string
-          updated_at?: string
+          completed_at?: string | null
         }
+        Relationships: []
       }
       data_access_logs: {
         Row: {
@@ -594,31 +523,31 @@ export interface Database {
           ip_address?: string | null
           created_at?: string
         }
+        Relationships: []
       }
       otp_attempts: {
         Row: {
           id: string
           phone: string
-          ip_address: string | null
-          success: boolean
-          created_at: string
+          ip_address: string
+          attempted_at: string
         }
         Insert: {
           id?: string
           phone: string
-          ip_address?: string | null
-          success?: boolean
-          created_at?: string
+          ip_address: string
+          attempted_at?: string
         }
         Update: {
           id?: string
           phone?: string
-          ip_address?: string | null
-          success?: boolean
-          created_at?: string
+          ip_address?: string
+          attempted_at?: string
         }
+        Relationships: []
       }
       incident_logs: {
+
         Row: {
           id: string
           severity: string
@@ -649,6 +578,7 @@ export interface Database {
           resolved_at?: string | null
           metadata?: Json | null
         }
+        Relationships: []
       }
       announcements: {
         Row: {
@@ -699,6 +629,7 @@ export interface Database {
           email_sent_at?: string | null
           email_stats?: Json
         }
+        Relationships: []
       }
       announcement_views: {
         Row: {
@@ -719,11 +650,778 @@ export interface Database {
           user_id?: string
           viewed_at?: string
         }
+        Relationships: []
+      }
+      risk_events: {
+        Row: {
+          id: string
+          entity_type: 'org' | 'user' | 'member' | 'event'
+          entity_id: string
+          risk_type: string
+          severity: 'low' | 'medium' | 'high'
+          metadata: Json | null
+          detected_at: string
+          status: 'pending' | 'investigated' | 'resolved' | 'dismissed'
+        }
+        Insert: {
+          id?: string
+          entity_type: 'org' | 'user' | 'member' | 'event'
+          entity_id: string
+          risk_type: string
+          severity: 'low' | 'medium' | 'high'
+          metadata?: Json | null
+          detected_at?: string
+          status?: 'pending' | 'investigated' | 'resolved' | 'dismissed'
+        }
+        Update: {
+          id?: string
+          entity_type?: 'org' | 'user' | 'member' | 'event'
+          entity_id?: string
+          risk_type?: string
+          severity?: 'low' | 'medium' | 'high'
+          metadata?: Json | null
+          detected_at?: string
+          status?: 'pending' | 'investigated' | 'resolved' | 'dismissed'
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organisation_links_requester_org_id_fkey"
+            columns: ["requester_org_id"]
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organisation_links_responder_org_id_fkey"
+            columns: ["responder_org_id"]
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+        Row: {
+          id: string
+          organisation_id: string
+          actor_id: string | null
+          action: string
+          resource_table: string
+          resource_id: string
+          details: Json | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          organisation_id: string
+          actor_id?: string | null
+          action: string
+          resource_table: string
+          resource_id: string
+          details?: Json | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          organisation_id?: string
+          actor_id?: string | null
+          action?: string
+          resource_table?: string
+          resource_id?: string
+          details?: Json | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      broadcasts: {
+        Row: {
+          id: string
+          organisation_id: string
+          title: string
+          content: string
+          type: 'email' | 'sms' | 'push' | 'app'
+          target_roles: string[]
+          status: 'draft' | 'scheduled' | 'sending' | 'sent' | 'failed'
+          scheduled_at: string | null
+          sent_at: string | null
+          created_by: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          organisation_id: string
+          title: string
+          content: string
+          type: 'email' | 'sms' | 'push' | 'app'
+          target_roles: string[]
+          status?: 'draft' | 'scheduled' | 'sending' | 'sent' | 'failed'
+          scheduled_at?: string | null
+          sent_at?: string | null
+          created_by: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          organisation_id?: string
+          title?: string
+          content?: string
+          type?: 'email' | 'sms' | 'push' | 'app'
+          target_roles?: string[]
+          status?: 'draft' | 'scheduled' | 'sending' | 'sent' | 'failed'
+          scheduled_at?: string | null
+          sent_at?: string | null
+          created_by?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      broadcast_recipients: {
+        Row: {
+          id: string
+          broadcast_id: string
+          user_id: string
+          status: 'pending' | 'sent' | 'failed' | 'read'
+          error_message: string | null
+          sent_at: string | null
+          read_at: string | null
+        }
+        Insert: {
+          id?: string
+          broadcast_id: string
+          user_id: string
+          status?: 'pending' | 'sent' | 'failed' | 'read'
+          error_message?: string | null
+          sent_at?: string | null
+          read_at?: string | null
+        }
+        Update: {
+          id?: string
+          broadcast_id?: string
+          user_id?: string
+          status?: 'pending' | 'sent' | 'failed' | 'read'
+          error_message?: string | null
+          sent_at?: string | null
+          read_at?: string | null
+        }
+        Relationships: []
+      }
+      polls: {
+        Row: {
+          id: string
+          organisation_id: string
+          title: string
+          description: string | null
+          type: 'informal' | 'formal'
+          visibility_level: 'members' | 'volunteer' | 'core' | 'executive'
+          voting_method: 'anonymous' | 'identifiable'
+          quorum_percentage: number | null
+          end_time: string | null
+          status: 'active' | 'closed' | 'cancelled'
+          created_by: string
+          created_at: string
+          updated_at: string
+          is_public: boolean
+        }
+        Insert: {
+          id?: string
+          organisation_id: string
+          title: string
+          description?: string | null
+          type: 'informal' | 'formal'
+          visibility_level: 'members' | 'volunteer' | 'core' | 'executive'
+          voting_method: 'anonymous' | 'identifiable'
+          quorum_percentage?: number | null
+          end_time?: string | null
+          status?: 'active' | 'closed' | 'cancelled'
+          created_by: string
+          created_at?: string
+          updated_at?: string
+          is_public?: boolean
+        }
+        Update: {
+          id?: string
+          organisation_id?: string
+          title?: string
+          description?: string | null
+          type?: 'informal' | 'formal'
+          visibility_level?: 'members' | 'volunteer' | 'core' | 'executive'
+          voting_method?: 'anonymous' | 'identifiable'
+          quorum_percentage?: number | null
+          end_time?: string | null
+          status?: 'active' | 'closed' | 'cancelled'
+          created_by?: string
+          created_at?: string
+          updated_at?: string
+          is_public?: boolean
+        }
+        Relationships: []
+      }
+      poll_options: {
+        Row: {
+          id: string
+          poll_id: string
+          label: string
+          display_order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          poll_id: string
+          label: string
+          display_order: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          poll_id?: string
+          label?: string
+          display_order?: number
+          created_at?: string
+        }
+        Relationships: []
+      }
+      push_subscriptions: {
+        Row: {
+          id: string
+          user_id: string
+          endpoint: string
+          p256dh: string
+          auth: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          endpoint: string
+          p256dh: string
+          auth: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          endpoint?: string
+          p256dh?: string
+          auth?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      poll_votes: {
+        Row: {
+          id: string
+          poll_id: string
+          option_id: string
+          user_id: string | null
+          ip_hash: string
+          voter_metadata: Json | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          poll_id: string
+          option_id: string
+          user_id?: string | null
+          ip_hash: string
+          voter_metadata?: Json | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          poll_id?: string
+          option_id?: string
+          user_id?: string | null
+          ip_hash?: string
+          voter_metadata?: Json | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      platform_actions: {
+        Row: {
+          id: string
+          action_type: string
+          target_org_id: string | null
+          target_user_id: string | null
+          severity: string
+          reason: string
+          details: Json | null
+          created_by: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          action_type: string
+          target_org_id?: string | null
+          target_user_id?: string | null
+          severity: string
+          reason: string
+          details?: Json | null
+          created_by: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          action_type?: string
+          target_org_id?: string | null
+          target_user_id?: string | null
+          severity?: string
+          reason?: string
+          details?: Json | null
+          created_by?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      tasks: {
+        Row: {
+          id: string
+          organisation_id: string
+          title: string
+          description: string | null
+          status: 'open' | 'in_progress' | 'completed' | 'archived'
+          priority: 'low' | 'medium' | 'high' | 'urgent'
+          visibility_level: 'members' | 'volunteer' | 'core' | 'executive'
+          due_date: string | null
+          created_by: string
+          created_at: string
+          updated_at: string
+          deleted_at: string | null
+        }
+        Insert: {
+          id?: string
+          organisation_id: string
+          title: string
+          description?: string | null
+          status?: 'open' | 'in_progress' | 'completed' | 'archived'
+          priority?: 'low' | 'medium' | 'high' | 'urgent'
+          visibility_level?: 'members' | 'volunteer' | 'core' | 'executive'
+          due_date?: string | null
+          created_by: string
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Update: {
+          id?: string
+          organisation_id?: string
+          title?: string
+          description?: string | null
+          status?: 'open' | 'in_progress' | 'completed' | 'archived'
+          priority?: 'low' | 'medium' | 'high' | 'urgent'
+          visibility_level?: 'members' | 'volunteer' | 'core' | 'executive'
+          due_date?: string | null
+          created_by?: string
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Relationships: []
+      }
+      task_assignments: {
+        Row: {
+          id: string
+          task_id: string
+          member_id: string
+          assigned_by: string
+          assigned_at: string
+          accepted: boolean
+        }
+        Insert: {
+          id?: string
+          task_id: string
+          member_id: string
+          assigned_by: string
+          assigned_at?: string
+          accepted?: boolean
+        }
+        Update: {
+          id?: string
+          task_id?: string
+          member_id?: string
+          assigned_by?: string
+          assigned_at?: string
+          accepted?: boolean
+        }
+        Relationships: []
+      }
+      task_logs: {
+        Row: {
+          id: string
+          task_id: string
+          member_id: string
+          action: string
+          hours_logged: number | null
+          note: string | null
+          details: Json | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          task_id: string
+          member_id: string
+          action: string
+          hours_logged?: number | null
+          note?: string | null
+          details?: Json | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          task_id?: string
+          member_id?: string
+          action?: string
+          hours_logged?: number | null
+          note?: string | null
+          details?: Json | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      networks: {
+        Row: {
+          id: string
+          name: string
+          description: string | null
+          slug: string
+          visibility: 'public' | 'private'
+          created_by: string
+          created_at: string
+          updated_at: string
+          deleted_at: string | null
+        }
+        Insert: {
+          id?: string
+          name: string
+          description?: string | null
+          slug: string
+          visibility?: 'public' | 'private'
+          created_by: string
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Update: {
+          id?: string
+          name?: string
+          description?: string | null
+          slug?: string
+          visibility?: 'public' | 'private'
+          created_by?: string
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Relationships: []
+      }
+      network_admins: {
+        Row: {
+          id: string
+          network_id: string
+          user_id: string
+          role: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          network_id: string
+          user_id: string
+          role: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          network_id?: string
+          user_id?: string
+          role?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      network_memberships: {
+        Row: {
+          id: string
+          network_id: string
+          organisation_id: string
+          status: 'pending' | 'active' | 'rejected' | 'suspended'
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          network_id: string
+          organisation_id: string
+          status?: 'pending' | 'active' | 'rejected' | 'suspended'
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          network_id?: string
+          organisation_id?: string
+          status?: 'pending' | 'active' | 'rejected' | 'suspended'
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      members: {
+        Row: {
+          id: string
+          organisation_id: string
+          full_name: string
+          email: string | null
+          phone: string | null
+          membership_number: string | null
+          status: 'active' | 'inactive' | 'pending'
+          metadata: Json | null
+          created_at: string
+          updated_at: string
+          deleted_at: string | null
+        }
+        Insert: {
+          id?: string
+          organisation_id: string
+          full_name: string
+          email?: string | null
+          phone?: string | null
+          membership_number?: string | null
+          status?: 'active' | 'inactive' | 'pending'
+          metadata?: Json | null
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Update: {
+          id?: string
+          organisation_id?: string
+          full_name?: string
+          email?: string | null
+          phone?: string | null
+          membership_number?: string | null
+          status?: 'active' | 'inactive' | 'pending'
+          metadata?: Json | null
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Relationships: []
+      }
+      appeals: {
+        Row: {
+          id: string
+          organisation_id: string
+          created_by: string
+          type: string
+          reason: string
+          supporting_docs_url: string | null
+          status: 'pending' | 'under_review' | 'approved' | 'rejected'
+          metadata: Json | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          organisation_id: string
+          created_by: string
+          type: string
+          reason: string
+          supporting_docs_url?: string | null
+          status?: 'pending' | 'under_review' | 'approved' | 'rejected'
+          metadata?: Json | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          organisation_id?: string
+          created_by?: string
+          type?: string
+          reason?: string
+          supporting_docs_url?: string | null
+          status?: 'pending' | 'under_review' | 'approved' | 'rejected'
+          metadata?: Json | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      organisation_links: {
+        Row: {
+          id: string
+          requester_org_id: string
+          responder_org_id: string
+          status: 'pending' | 'active' | 'rejected'
+          created_by: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          requester_org_id: string
+          responder_org_id: string
+          status?: 'pending' | 'active' | 'rejected'
+          created_by: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          requester_org_id?: string
+          responder_org_id?: string
+          status?: 'pending' | 'active' | 'rejected'
+          created_by?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      events: {
+        Row: {
+          id: string
+          organisation_id: string
+          title: string
+          description: string | null
+          start_time: string
+          end_time: string
+          location: string | null
+          event_type: 'public' | 'members' | 'volunteer' | 'core' | 'executive'
+          rsvp_enabled: boolean
+          capacity: number | null
+          created_by: string
+          created_at: string
+          updated_at: string
+          deleted_at: string | null
+        }
+        Insert: {
+          id?: string
+          organisation_id: string
+          title: string
+          description?: string | null
+          start_time: string
+          end_time: string
+          location?: string | null
+          event_type?: 'public' | 'members' | 'volunteer' | 'core' | 'executive'
+          rsvp_enabled?: boolean
+          capacity?: number | null
+          created_by: string
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Update: {
+          id?: string
+          organisation_id?: string
+          title?: string
+          description?: string | null
+          start_time?: string
+          end_time?: string
+          location?: string | null
+          event_type?: 'public' | 'members' | 'volunteer' | 'core' | 'executive'
+          rsvp_enabled?: boolean
+          capacity?: number | null
+          created_by?: string
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Relationships: []
+      }
+      joint_events: {
+        Row: {
+          id: string
+          event_id: string
+          organisation_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          event_id: string
+          organisation_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          event_id?: string
+          organisation_id?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      event_rsvps: {
+        Row: {
+          id: string
+          event_id: string
+          user_id: string | null
+          guest_name: string | null
+          guest_email: string | null
+          status: 'registered' | 'attended' | 'cancelled'
+          metadata: Json | null
+          checked_in_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          event_id: string
+          user_id?: string | null
+          guest_name?: string | null
+          guest_email?: string | null
+          status?: 'registered' | 'attended' | 'cancelled'
+          metadata?: Json | null
+          checked_in_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          event_id?: string
+          user_id?: string | null
+          guest_name?: string | null
+          guest_email?: string | null
+          status?: 'registered' | 'attended' | 'cancelled'
+          metadata?: Json | null
+          checked_in_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      supporter_subscriptions: {
+        Row: {
+          id: string
+          organisation_id: string
+          razorpay_subscription_id: string
+          razorpay_plan_id: string
+          status: string
+          amount: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          organisation_id: string
+          razorpay_subscription_id: string
+          razorpay_plan_id: string
+          status?: string
+          amount: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          organisation_id?: string
+          razorpay_subscription_id?: string
+          razorpay_plan_id?: string
+          status?: string
+          amount?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
     }
-    Views: {
-      [_ in never]: never
-    }
+    Views: Record<string, never>
     Functions: {
       create_organisation_and_admin: {
         Args: {
@@ -745,14 +1443,25 @@ export interface Database {
       }
       lock_next_job: {
         Args: Record<PropertyKey, never>
-        Returns: Json
+        Returns: {
+          id: string
+          type: string
+          payload: Json
+          status: string
+          attempts: number
+          max_attempts: number
+          last_error: string | null
+          locked_until: string | null
+          created_at: string
+          updated_at: string
+        }
+      }
+      get_auth_org_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string
       }
     }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
+    Enums: Record<string, never>
+    CompositeTypes: Record<string, never>
   }
 }

@@ -44,8 +44,8 @@ export const logDonation = createSafeAction(
 
     // 1. Check uniqueness of UPI reference if provided
     if (input.upi_reference) {
-      const { data: existing } = await (supabase
-        .from('donations') as any)
+      const { data: existing } = await supabase
+        .from('donations')
         .select('id')
         .eq('organisation_id', context.organizationId)
         .eq('upi_reference', input.upi_reference)
@@ -57,8 +57,12 @@ export const logDonation = createSafeAction(
     }
 
     // 2. Insert
-    const { data, error } = await (supabase
-      .from('donations') as any)
+    type DonationRow = {
+      id: string
+    }
+
+    const { data: donation, error } = (await supabase
+      .from('donations')
       .insert({
         organisation_id: context.organizationId,
         donor_name: input.donor_name,
@@ -67,12 +71,10 @@ export const logDonation = createSafeAction(
         payment_method: input.payment_method,
         upi_reference: input.upi_reference,
         notes: input.notes,
-        verified_by: context.user.id // Auto-verify if logged manually
-      })
+        verified_by: context.user.id,
+      } as never)
       .select('id')
-      .single() as { data: { id: string } | null, error: { message: string; code?: string } | null }
-    
-    const donation = data
+      .single()) as { data: DonationRow | null, error: { message: string } | null }
 
     if (error || !donation) {
        if (error?.code === '23505') throw new Error('Duplicate entry.')
@@ -99,8 +101,9 @@ export const verifyDonation = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await (supabase.from('donations') as any)
-      .update({ verified_by: context.user.id }) // Mark as verified by current user
+    const { error } = await supabase
+      .from('donations')
+      .update({ verified_by: context.user.id } as never)
       .eq('id', input.donationId)
       .eq('organisation_id', context.organizationId)
 
@@ -125,8 +128,8 @@ export const deleteDonation = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await (supabase
-      .from('donations') as any)
+    const { error } = await supabase
+      .from('donations')
       .delete()
       .eq('id', input.donationId)
       .eq('organisation_id', context.organizationId)
@@ -158,14 +161,12 @@ export async function submitPublicDonation(input: z.infer<typeof PublicDonationS
   const supabase = createServiceClient()
 
   // 2. Resolve Organisation from Slug
-  const { data: org, error: orgError } = await supabase
+  const { data: organisation, error: orgError } = await supabase
     .from('organisations')
     .select('id, is_suspended')
     .eq('slug', input.orgSlug)
-    .single() as { data: { id: string; is_suspended: boolean } | null, error: { message: string } | null }
+    .single()
   
-  const organisation = org
-
   if (orgError || !organisation) {
     return { success: false, error: 'Organisation not found' }
   }
@@ -176,32 +177,30 @@ export async function submitPublicDonation(input: z.infer<typeof PublicDonationS
 
   // 3. Check Duplicate UPI (Service Role bypasses RLS, so we must be specific)
   // Use Admin client for check to ensure we see all records
-  const { data: existingData } = await (supabase
-    .from('donations') as any)
+  const { data: existing } = await supabase
+    .from('donations')
     .select('id')
     .eq('organisation_id', organisation.id)
     .eq('upi_reference', input.upi_reference)
-    .single() as { data: { id: string } | null, error: { message: string } | null }
+    .single()
   
-  const existing = existingData
-
   if (existing) {
     return { success: false, error: 'This UPI reference has already been submitted.' }
   }
 
   // 4. Insert Donation (Admin client)
-  const { error } = await (supabase
-    .from('donations') as any)
+  const { error } = await supabase
+    .from('donations')
     .insert({
       organisation_id: organisation.id,
       donor_name: input.donor_name,
       amount: input.amount,
-      date: new Date().toISOString(), // Use current date for public submission
+      date: new Date().toISOString(),
       payment_method: 'upi',
       upi_reference: input.upi_reference,
       notes: `Public submission from ${input.phone}`,
-      verified_by: null // Pending verification
-    })
+      verified_by: null,
+    } as never)
 
   if (error) {
     console.error('Donation Insert Error:', error)

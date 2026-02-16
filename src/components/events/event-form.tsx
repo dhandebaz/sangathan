@@ -103,7 +103,7 @@ export function EventForm({ orgId, partners = [] }: { orgId: string, partners?: 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label>Event Type</Label>
-          <Select value={formData.event_type} onValueChange={v => setFormData({...formData, event_type: v})}>
+          <Select value={formData.event_type} onValueChange={v => setFormData({...formData, event_type: v as EventType})}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>

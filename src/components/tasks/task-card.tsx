@@ -18,7 +18,7 @@ interface TaskAssignment {
 interface Task {
   id: string
   title: string
-  description: string
+  description: string | null
   status: string
   priority: string
   due_date?: string

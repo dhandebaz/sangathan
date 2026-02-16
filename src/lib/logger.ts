@@ -1,4 +1,5 @@
 import { createServiceClient } from '@/lib/supabase/service'
+import type { Json } from '@/types/database'
 
 export type LogLevel = 'info' | 'warn' | 'error' | 'security' | 'critical'
 
@@ -6,7 +7,7 @@ export interface LogEntry {
   level: LogLevel
   source: string
   message: string
-  metadata?: Record<string, unknown>
+  metadata?: Json
   user_id?: string
   organisation_id?: string
   ip_address?: string
@@ -29,17 +30,17 @@ export async function log(entry: LogEntry) {
 
 export const logger = {
   info: (source: string, message: string, meta?: Record<string, unknown>) => 
-    log({ level: 'info', source, message, metadata: meta }),
+    log({ level: 'info', source, message, metadata: meta as Json }),
     
   warn: (source: string, message: string, meta?: Record<string, unknown>) => 
-    log({ level: 'warn', source, message, metadata: meta }),
+    log({ level: 'warn', source, message, metadata: meta as Json }),
     
   error: (source: string, message: string, meta?: Record<string, unknown>) => 
-    log({ level: 'error', source, message, metadata: meta }),
+    log({ level: 'error', source, message, metadata: meta as Json }),
     
   security: (source: string, message: string, meta?: Record<string, unknown>, userId?: string, ip?: string) => 
-    log({ level: 'security', source, message, metadata: meta, user_id: userId, ip_address: ip }),
+    log({ level: 'security', source, message, metadata: meta as Json, user_id: userId, ip_address: ip }),
 
   critical: (source: string, message: string, meta?: Record<string, unknown>) => 
-    log({ level: 'critical', source, message, metadata: meta }),
+    log({ level: 'critical', source, message, metadata: meta as Json }),
 }

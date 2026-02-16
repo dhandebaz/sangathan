@@ -42,14 +42,16 @@ export async function createCollaborationRequest(targetOrgId: string) {
       return { success: false, error: 'Cannot collaborate with yourself' }
     }
 
-    // Check existing
-    const { data: existingData } = await supabase
+    type OrganisationLinkStatus = {
+      id: string
+      status: string
+    }
+
+    const { data: existing } = (await supabase
       .from('organisation_links')
       .select('id, status')
       .or(`and(requester_org_id.eq.${profile.organisation_id},responder_org_id.eq.${targetOrgId}),and(requester_org_id.eq.${targetOrgId},responder_org_id.eq.${profile.organisation_id})`)
-      .single() as { data: { id: string; status: string } | null, error: { message: string } | null }
-
-    const existing = existingData
+      .single()) as { data: OrganisationLinkStatus | null }
 
     if (existing) {
       if (existing.status === 'pending') return { success: false, error: 'Request already pending' }
@@ -58,14 +60,14 @@ export async function createCollaborationRequest(targetOrgId: string) {
       return { success: false, error: 'Previous request exists' }
     }
 
-    const { error } = await (supabase
-      .from('organisation_links') as any)
+    const { error } = await supabase
+      .from('organisation_links')
       .insert({
-        requester_org_id: profile.organisation_id,
+        requester_org_id: profile.organisation_id as string,
         responder_org_id: targetOrgId,
         status: 'pending',
-        created_by: user.id
-      })
+        created_by: user.id,
+      } as never)
 
     if (error) throw error
 
@@ -98,15 +100,20 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
     }
 
     // Verify ownership of the request (must be responder)
-    const { data: linkData } = await (supabase
-      .from('organisation_links') as any)
+    type OrganisationLinkRow = {
+      id: string
+      requester_org_id: string
+      responder_org_id: string
+      status: string
+    }
+
+    const { data: link, error: linkError } = (await supabase
+      .from('organisation_links')
       .select('*')
       .eq('id', linkId)
-      .single() as { data: { responder_org_id: string; requester_org_id: string } | null, error: { message: string } | null }
+      .single()) as { data: OrganisationLinkRow | null, error: { message: string } | null }
 
-    const link = linkData
-
-    if (!link) return { success: false, error: 'Request not found' }
+    if (linkError || !link) return { success: false, error: 'Request not found' }
 
     if (link.responder_org_id !== profile.organisation_id) {
        // Allow requester to cancel? Maybe only if pending.
@@ -117,9 +124,9 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
        }
     }
 
-    const { error } = await (supabase
-      .from('organisation_links') as any)
-      .update({ status })
+    const { error } = await supabase
+      .from('organisation_links')
+      .update({ status } as never)
       .eq('id', linkId)
 
     if (error) throw error
@@ -136,8 +143,8 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
 export async function getCollaboratingOrgs(orgId: string) {
     const supabase = createServiceClient()
     
-    const { data: links } = await (supabase
-      .from('organisation_links') as any)
+    const { data: links } = await supabase
+      .from('organisation_links')
       .select(`
         id, 
         status, 
@@ -145,12 +152,25 @@ export async function getCollaboratingOrgs(orgId: string) {
         responder:responder_org_id(id, name, slug)
       `)
       .or(`requester_org_id.eq.${orgId},responder_org_id.eq.${orgId}`)
-      .eq('status', 'active') as { data: { id: string, status: string, requester: { id: string, name: string, slug: string }, responder: { id: string, name: string, slug: string } }[] | null, error: { message: string } | null }
+      .eq('status', 'active')
       
-    // Transform to flat list of partners
-    const partners = links?.map((link) => {
-        return link.requester.id === orgId ? link.responder : link.requester
-    }) || []
+    type OrganisationSummary = {
+      id: string
+      name: string
+      slug: string
+    }
+
+    type CollaborationLink = {
+      id: string
+      status: string
+      requester: OrganisationSummary
+      responder: OrganisationSummary
+    }
+
+    const partners =
+      (links as CollaborationLink[] | null)?.map((link) =>
+        link.requester.id === orgId ? link.responder : link.requester
+      ) || []
     
     return partners
 }
@@ -158,8 +178,8 @@ export async function getCollaboratingOrgs(orgId: string) {
 export async function getPendingRequests(orgId: string) {
   const supabase = createServiceClient()
   
-  const { data: incoming } = await (supabase
-    .from('organisation_links') as any)
+  const { data: incoming } = await supabase
+    .from('organisation_links')
     .select(`
       id, 
       status, 
@@ -168,8 +188,8 @@ export async function getPendingRequests(orgId: string) {
     .eq('responder_org_id', orgId)
     .eq('status', 'pending')
 
-  const { data: outgoing } = await (supabase
-    .from('organisation_links') as any)
+  const { data: outgoing } = await supabase
+    .from('organisation_links')
     .select(`
       id, 
       status, 
@@ -180,4 +200,3 @@ export async function getPendingRequests(orgId: string) {
 
   return { incoming: incoming || [], outgoing: outgoing || [] }
 }
-

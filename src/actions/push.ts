@@ -21,13 +21,16 @@ export async function subscribeToPush(input: z.infer<typeof SubscriptionSchema>)
     // Upsert subscription
     const { error } = await supabase
       .from('push_subscriptions')
-      .upsert({
-        user_id: user.id,
-        endpoint: input.endpoint,
-        p256dh: input.keys.p256dh,
-        auth: input.keys.auth,
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'user_id, endpoint' })
+      .upsert(
+        {
+          user_id: user.id,
+          endpoint: input.endpoint,
+          p256dh: input.keys.p256dh,
+          auth: input.keys.auth,
+          updated_at: new Date().toISOString(),
+        } as never,
+        { onConflict: 'user_id, endpoint' },
+      )
 
     if (error) throw error
 

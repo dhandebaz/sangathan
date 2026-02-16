@@ -38,30 +38,30 @@ export const addMember = createSafeAction(
     const supabase = await createClient()
 
     // We are adding to the 'members' table
-    const { data, error } = await (supabase
-      .from('members') as any)
+    const { data, error } = await supabase
+      .from('members')
       .insert({
         organisation_id: context.organizationId,
         full_name: input.full_name,
-        email: input.email || null, // Convert empty string to null
+        email: input.email || null,
         phone: input.phone,
         designation: input.designation,
         area: input.area,
         joining_date: input.joining_date,
-        status: input.status, // Add status column to DB schema if missing
-        notes: input.notes, // Add notes column to DB schema if missing
+        status: input.status,
+        notes: input.notes,
         role: input.role,
-      })
+      } as never)
       .select('id')
       .single()
 
-    const member = data as { id: string } | null;
+    const member = data
 
     if (error || !member) {
-      if (error.code === '23505') { // Unique violation
+      if (error?.code === '23505') { // Unique violation
         throw new Error('Phone number already exists in this organisation.')
       }
-      throw new Error(error.message)
+      throw new Error(error?.message || 'Failed to add member')
     }
 
     await logAction({
@@ -84,8 +84,8 @@ export const updateMember = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
     
-    const { error } = await (supabase
-      .from('members') as any)
+    const { error } = await supabase
+      .from('members')
       .update({
         full_name: input.full_name,
         email: input.email || null,
@@ -96,7 +96,7 @@ export const updateMember = createSafeAction(
         status: input.status,
         notes: input.notes,
         role: input.role,
-      })
+      } as never)
       .eq('id', input.memberId)
       .eq('organisation_id', context.organizationId)
 
@@ -127,9 +127,9 @@ export const changeMemberStatus = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await (supabase
-      .from('members') as any)
-      .update({ status: input.status })
+    const { error } = await supabase
+      .from('members')
+      .update({ status: input.status } as never)
       .eq('id', input.memberId)
       .eq('organisation_id', context.organizationId)
 

@@ -54,14 +54,14 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
        }
     }
 
-    const { data: announcement, error } = await (supabase
-      .from('announcements') as any)
+    const { data: announcement, error } = await supabase
+      .from('announcements')
       .insert({
         ...input,
-        created_by: user.id
-      })
+        created_by: user.id,
+      } as never)
       .select()
-      .single() as { data: { id: string } | null, error: { message: string } | null }
+      .single()
 
     if (error || !announcement) throw new Error(error?.message || 'Failed to create announcement')
 
@@ -93,7 +93,10 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
       }
       // 'members' and 'public' go to all active members
 
-      const { data: members } = await query as { data: { email: string; full_name: string }[] | null, error: { message: string } | null }
+      const { data: members } = (await query) as {
+        data: { email: string; full_name: string | null }[] | null
+        error: unknown
+      }
       
       if (members) {
         let sentCount = 0
@@ -120,14 +123,13 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
            sentCount++
         }
 
-        // Update stats
-        await (supabaseAdmin
-          .from('announcements') as any)
-          .update({ 
+        await supabaseAdmin
+          .from('announcements')
+          .update({
             email_sent_at: new Date().toISOString(),
-            email_stats: { recipient_count: sentCount }
-          })
-          .eq('id', announcement.id)
+            email_stats: { recipient_count: sentCount },
+          } as never)
+          .eq('id', (announcement as { id: string }).id)
       }
     }
 
@@ -146,13 +148,15 @@ export async function markAnnouncementRead(announcementId: string) {
     
     if (!user) return { success: false }
 
-    const { error } = await (supabase
-      .from('announcement_views') as any)
-      .insert({
-        announcement_id: announcementId,
-        user_id: user.id
-      })
-      .ignoreDuplicates() // Prevent error if already viewed
+    const { error } = await supabase
+      .from('announcement_views')
+      .upsert(
+        {
+          announcement_id: announcementId,
+          user_id: user.id,
+        } as never,
+        { onConflict: 'announcement_id,user_id' },
+      )
 
     if (error) throw error
     
@@ -167,7 +171,7 @@ export async function deleteAnnouncement(id: string) {
   try {
     const supabase = await createClient()
     // Permission check handled by RLS partially, but we should be explicit
-    const { error } = await supabase.from('announcements' as any).delete().eq('id', id)
+    const { error } = await supabase.from('announcements').delete().eq('id', id)
     if (error) throw error
     
     revalidatePath('/dashboard/announcements')

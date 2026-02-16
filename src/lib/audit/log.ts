@@ -1,12 +1,20 @@
 import { createClient } from '@/lib/supabase/server'
 
+type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
 interface LogActionParams {
   organisation_id: string
   user_id?: string
   action: string
   resource_table: string
   resource_id: string
-  details?: Record<string, unknown>
+  details?: Json
 }
 
 export async function logAction(params: LogActionParams) {
@@ -24,7 +32,7 @@ export async function logAction(params: LogActionParams) {
       action: params.action,
       resource_table: params.resource_table,
       resource_id: params.resource_id,
-      details: params.details
+      details: params.details ?? null
     })
 
     if (error) {

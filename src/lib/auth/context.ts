@@ -24,11 +24,11 @@ export async function getUserContext(): Promise<UserContext> {
   // Fetch Profile with Organization ID and Role
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
-    .select('organization_id, role, full_name')
+    .select('organisation_id, role, full_name')
     .eq('id', user.id)
     .single()
 
-  if (profileError || !profile) {
+  if (profileError || !profile || !profile.organisation_id) {
     // Edge case: User is authenticated but has no profile.
     // This could happen if signup failed halfway or data was corrupted.
     // We treat this as an unauthorized state for business logic.
@@ -47,7 +47,7 @@ export async function getUserContext(): Promise<UserContext> {
       id: user.id,
       email: user.email,
     },
-    organizationId: profile.organization_id,
+    organizationId: profile.organisation_id,
     role: role,
   }
 }

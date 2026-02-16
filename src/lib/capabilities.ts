@@ -1,5 +1,13 @@
 import { createServiceClient } from '@/lib/supabase/service'
 
+type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
 export type OrgCapability = 
   | 'basic_governance' 
   | 'advanced_analytics' 
@@ -60,7 +68,9 @@ export async function unlockCapabilities(orgId: string) {
     await supabase.from('audit_logs').insert({
       organisation_id: orgId,
       action: 'capabilities_unlocked',
-      details: updates,
+      resource_table: 'organisations',
+      resource_id: orgId,
+      details: updates as Json,
       actor_id: '00000000-0000-0000-0000-000000000000' // System
     })
   }

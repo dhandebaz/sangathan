@@ -52,18 +52,18 @@ export const createForm = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { data, error } = await (supabase
-      .from('forms') as any)
+    const { data, error } = await supabase
+      .from('forms')
       .insert({
         organisation_id: context.organizationId,
         title: input.title,
         description: input.description,
-        fields: input.fields, // JSONB
+        fields: input.fields,
         is_active: true,
-        created_by: context.user.id
-      })
+        created_by: context.user.id,
+      } as never)
       .select('id')
-      .single() as { data: { id: string } | null, error: { message: string } | null }
+      .single()
     
     const form = data
 
@@ -89,14 +89,14 @@ export const updateForm = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await (supabase
-      .from('forms') as any)
+    const { error } = await supabase
+      .from('forms')
       .update({
         title: input.title,
         description: input.description,
         fields: input.fields,
-        updated_at: new Date().toISOString()
-      })
+        updated_at: new Date().toISOString(),
+      } as never)
       .eq('id', input.formId)
       .eq('organisation_id', context.organizationId)
 
@@ -123,9 +123,9 @@ export const toggleFormStatus = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await (supabase
-      .from('forms') as any)
-      .update({ is_active: input.isActive })
+    const { error } = await supabase
+      .from('forms')
+      .update({ is_active: input.isActive } as never)
       .eq('id', input.formId)
       .eq('organisation_id', context.organizationId)
 
@@ -151,8 +151,8 @@ export const deleteForm = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await (supabase
-      .from('forms') as any)
+    const { error } = await supabase
+      .from('forms')
       .delete()
       .eq('id', input.formId)
       .eq('organisation_id', context.organizationId)
@@ -190,11 +190,11 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
   
   const supabase = createServiceClient()
 
-  const { data, error: formError } = await (supabase
-    .from('forms') as any)
+  const { data, error: formError } = await supabase
+    .from('forms')
     .select('id, organisation_id, fields, is_active')
     .eq('id', input.formId)
-    .single() as { data: { id: string; organisation_id: string; fields: z.infer<typeof FormFieldSchema>[]; is_active: boolean } | null, error: { message: string } | null }
+    .single()
   
   const form = data
 
@@ -240,7 +240,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
     
     // Check limit: Max 5 submissions per hour per IP for this form
     // We access 'rate_limits' which might not exist if migration hasn't run.
-    const { count, error: rateError } = await (supabase.from('rate_limits') as any)
+    const { count, error: rateError } = await supabase.from('rate_limits')
       .select('*', { count: 'exact', head: true })
       .eq('key', key)
       .gt('created_at', new Date(Date.now() - 3600 * 1000).toISOString())
@@ -251,7 +251,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
     
     // Record attempt
     if (!rateError) {
-      await (supabase.from('rate_limits') as any).insert({ key })
+      await supabase.from('rate_limits').insert({ key })
     }
   } catch (err) {
     // Fail open - log error but allow submission if rate limit system is down/missing
@@ -265,13 +265,13 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
   // If we rely on Anon client, we can't force `organisation_id` easily without exposing it in the payload.
   // So using Service Client here is SAFER to enforce the correct org ID.
   
-  const { error: submissionError } = await (supabase
-    .from('form_submissions') as any)
+  const { error: submissionError } = await supabase
+    .from('form_submissions')
     .insert({
       form_id: form.id,
-      organisation_id: form.organisation_id, // Derived from form
+      organisation_id: form.organisation_id,
       data: input.data,
-    })
+    } as never)
 
   if (submissionError) {
     console.error('Submission Error:', submissionError)

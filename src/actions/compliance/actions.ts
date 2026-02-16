@@ -6,6 +6,11 @@ import { logger } from '@/lib/logger'
 import { enqueueJob } from '@/lib/queue'
 import { softDelete } from '@/lib/db-utils'
 
+type ProfileRow = {
+  organisation_id: string | null
+  role: string
+}
+
 // 1. Request Data Export (Async)
 export async function requestDataExport() {
   const supabase = await createClient()
@@ -15,27 +20,36 @@ export async function requestDataExport() {
   const adminClient = createServiceClient()
   
   // Get User Org
-  const { data: profile } = await adminClient
+
+  const { data: profile, error: profileError } = (await adminClient
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
-    .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
+    .single()) as { data: ProfileRow | null, error: { message: string } | null }
     
-  if (!profile || profile.role !== 'admin') {
+  if (profileError || !profile || profile.role !== 'admin' || !profile.organisation_id) {
     return { error: 'Only admins can export organisation data' }
   }
   
   // Log Request
-  const { data: request, error } = await (adminClient
-    .from('data_requests') as any)
+  type DataRequestRow = {
+    id: string
+    organisation_id: string
+    user_id: string
+    request_type: string
+    status: string
+  }
+
+  const { data: request, error } = (await adminClient
+    .from('data_requests')
     .insert({
       organisation_id: profile.organisation_id,
       user_id: user.id,
       request_type: 'export',
-      status: 'pending'
-    })
+      status: 'pending',
+    } as never)
     .select()
-    .single() as { data: { id: string } | null, error: { message: string } | null }
+    .single()) as { data: DataRequestRow | null, error: { message: string } | null }
     
   if (error || !request) return { error: 'Failed to create request' }
   
@@ -60,14 +74,14 @@ export async function requestAccountDeletion() {
   const adminClient = createServiceClient()
   
   // Log Request
-  const { error } = await (adminClient
-    .from('data_requests') as any)
+  const { error } = await adminClient
+    .from('data_requests')
     .insert({
       user_id: user.id,
       request_type: 'deletion',
       status: 'pending',
-      details: { reason: 'User requested via dashboard' }
-    })
+      details: { reason: 'User requested via dashboard' },
+    } as never)
     
   if (error) return { error: 'Failed to submit deletion request' }
   
@@ -87,24 +101,27 @@ export async function deleteOrganisation(orgId: string, confirmation: string) {
   const adminClient = createServiceClient()
   
   // Verify Admin
-  const { data: profile } = await adminClient
+  const { data: profile, error: profileError } = (await adminClient
     .from('profiles')
     .select('role, organisation_id')
     .eq('id', user.id)
-    .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
+    .single()) as { data: ProfileRow | null, error: { message: string } | null }
     
-  if (!profile || profile.role !== 'admin' || profile.organisation_id !== orgId) {
+  if (profileError || !profile || profile.role !== 'admin' || profile.organisation_id !== orgId) {
     return { error: 'Unauthorized' }
   }
   
-  // Check Legal Hold
-  const { data: org } = await adminClient
+  type OrganisationRow = {
+    legal_hold: boolean
+  }
+
+  const { data: org, error: orgError } = (await adminClient
     .from('organisations')
     .select('legal_hold')
     .eq('id', orgId)
-    .single() as { data: { legal_hold: boolean } | null, error: { message: string } | null }
+    .single()) as { data: OrganisationRow | null, error: { message: string } | null }
     
-  if (org && org.legal_hold) {
+  if (orgError || !org || org.legal_hold) {
     await logger.security('compliance', `Blocked deletion attempt on Legal Hold org ${orgId}`)
     return { error: 'Organisation is under Legal Hold and cannot be deleted.' }
   }

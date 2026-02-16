@@ -33,18 +33,18 @@ export const createMeeting = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { data: meetingData, error } = await (supabase
-      .from('meetings') as any)
+    const { data: meetingData, error } = await supabase
+      .from('meetings')
       .insert({
         organisation_id: context.organizationId,
         title: input.title,
         description: input.description,
         date: input.date,
         location: input.location,
-        created_by: context.user.id
-      })
+        created_by: context.user.id,
+      } as never)
       .select('id')
-      .single() as { data: { id: string } | null, error: { message: string } | null }
+      .single()
 
     if (error || !meetingData) throw new Error(error?.message || 'Failed to create meeting')
 
@@ -52,15 +52,15 @@ export const createMeeting = createSafeAction(
 
     // Bulk insert attendees
     if (input.attendee_ids && input.attendee_ids.length > 0) {
-      const attendees = input.attendee_ids.map(id => ({
+      const attendees = input.attendee_ids.map((id) => ({
         meeting_id: meeting.id,
         member_id: id,
-        status: 'absent' // Default
+        status: 'absent' as const,
       }))
 
-      const { error: attError } = await (supabase
-        .from('meeting_attendance') as any)
-        .insert(attendees)
+      const { error: attError } = await supabase
+        .from('meeting_attendance')
+        .insert(attendees as never)
       
       if (attError) console.error('Attendance Insert Error:', attError)
     }
@@ -85,13 +85,16 @@ export const markAttendance = createSafeAction(
   async (input) => {
     const supabase = await createClient()
 
-    const { error } = await (supabase
-      .from('meeting_attendance') as any)
-      .upsert({
-        meeting_id: input.meetingId,
-        member_id: input.memberId,
-        status: input.status
-      }, { onConflict: 'meeting_id, member_id' })
+    const { error } = await supabase
+      .from('meeting_attendance')
+      .upsert(
+        {
+          meeting_id: input.meetingId,
+          member_id: input.memberId,
+          status: input.status,
+        } as never,
+        { onConflict: 'meeting_id, member_id' },
+      )
 
     if (error) throw new Error(error.message)
 
@@ -106,8 +109,8 @@ export const deleteMeeting = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    const { error } = await (supabase
-      .from('meetings') as any)
+    const { error } = await supabase
+      .from('meetings')
       .delete()
       .eq('id', input.meetingId)
       .eq('organisation_id', context.organizationId)

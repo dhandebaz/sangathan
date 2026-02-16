@@ -31,9 +31,10 @@ export const suspendOrganisation = async (input: z.infer<typeof OrgActionSchema>
   const supabase = createServiceClient()
 
   // 1. Update Org Status
-  const { error } = await supabase.from('organisations')
-      .update({ is_suspended: true })
-      .eq('id', input.organisationId)
+  const { error } = await supabase
+    .from('organisations')
+    .update({ is_suspended: true } as never)
+    .eq('id', input.organisationId)
 
   if (error) throw new Error(error.message)
 
@@ -55,9 +56,10 @@ export const reactivateOrganisation = async (input: z.infer<typeof OrgActionSche
   const user = await checkSuperAdmin()
   const supabase = createServiceClient()
 
-  const { error } = await supabase.from('organisations')
-      .update({ is_suspended: false })
-      .eq('id', input.organisationId)
+  const { error } = await supabase
+    .from('organisations')
+    .update({ is_suspended: false } as never)
+    .eq('id', input.organisationId)
 
   if (error) throw new Error(error.message)
 
