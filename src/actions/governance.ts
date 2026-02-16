@@ -13,7 +13,7 @@ export async function submitAppeal(orgId: string, input: z.infer<typeof AppealSc
   try {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    
+
     if (!user) return { success: false, error: 'Unauthorized' }
 
     // Check permissions

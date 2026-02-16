@@ -44,7 +44,7 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
   try {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    
+
     if (!user) return { success: false, error: 'Unauthorized' }
 
     // Check permissions
@@ -52,7 +52,7 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
       .from('profiles')
       .select('role, organisation_id')
       .eq('id', user.id)
-      .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
+      .single()
 
     const profile = profileData
 
@@ -67,9 +67,9 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
         .select('*', { count: 'exact', head: true })
         .or(`and(requester_org_id.eq.${profile.organisation_id},responder_org_id.in.(${input.collaborating_org_ids.join(',')})),and(requester_org_id.in.(${input.collaborating_org_ids.join(',')}),responder_org_id.eq.${profile.organisation_id})`)
         .eq('status', 'active')
-      
+
       if ((count || 0) < input.collaborating_org_ids.length) {
-         return { success: false, error: 'One or more selected organizations are not active partners.' }
+        return { success: false, error: 'One or more selected organizations are not active partners.' }
       }
     }
 
@@ -86,7 +86,7 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
         rsvp_enabled: input.rsvp_enabled,
         capacity: input.capacity,
         created_by: user.id,
-      } as never)
+      })
       .select()
       .single()
 
@@ -94,16 +94,16 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
 
     // Insert Joint Events
     if (input.collaborating_org_ids && input.collaborating_org_ids.length > 0) {
-       const jointEvents = input.collaborating_org_ids.map((orgId) => ({
-         event_id: event.id,
-         organisation_id: orgId,
-       }))
-       
-       const { error: jointError } = await supabase
-         .from('joint_events')
-         .insert(jointEvents as never)
-         
-       if (jointError) console.error('Joint Event Error:', jointError)
+      const jointEvents = input.collaborating_org_ids.map((orgId) => ({
+        event_id: event.id,
+        organisation_id: orgId,
+      }))
+
+      const { error: jointError } = await supabase
+        .from('joint_events')
+        .insert(jointEvents)
+
+      if (jointError) console.error('Joint Event Error:', jointError)
     }
 
     revalidatePath('/dashboard/events')
@@ -136,7 +136,7 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
         .select('*', { count: 'exact', head: true })
         .eq('event_id', input.event_id)
         .eq('status', 'registered')
-      
+
       if ((count || 0) >= event.capacity) {
         return { success: false, error: 'Event is full' }
       }
@@ -151,7 +151,7 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
     // 3. Check Permissions based on Event Type
     if (event.event_type !== 'public') {
       if (!userId) return { success: false, error: 'Login required for this event' }
-      
+
       // Check Profile Role
       // Fetch profile AND check if their org is allowed
       const { data: profile } = await supabaseAdmin
@@ -159,37 +159,37 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
         .select('role, status, organisation_id')
         .eq('id', userId)
         .single()
-      
+
       if (!profile || profile.status !== 'active') {
         return { success: false, error: 'You must be an active member to join' }
       }
 
       let isAllowedOrg = profile.organisation_id === event.organisation_id
-      
+
       // Check joint events if not primary org
       if (!isAllowedOrg) {
-         const { data: joint } = await supabaseAdmin
-           .from('joint_events')
-           .select('id')
-           .eq('event_id', event.id)
-           .eq('organisation_id', profile.organisation_id)
-           .single()
-         
-         if (joint) isAllowedOrg = true
+        const { data: joint } = await supabaseAdmin
+          .from('joint_events')
+          .select('id')
+          .eq('event_id', event.id)
+          .eq('organisation_id', profile.organisation_id)
+          .single()
+
+        if (joint) isAllowedOrg = true
       }
 
       if (!isAllowedOrg) {
-         return { success: false, error: 'You are not a member of the hosting or collaborating organisations.' }
+        return { success: false, error: 'You are not a member of the hosting or collaborating organisations.' }
       }
 
       const roleHierarchy = { 'viewer': 0, 'member': 1, 'general': 1, 'volunteer': 2, 'core': 3, 'executive': 4, 'editor': 5, 'admin': 6 }
       const requiredRole = event.event_type // 'members', 'volunteer', 'core', 'executive'
-      
+
       const userLevel = roleHierarchy[profile.role as keyof typeof roleHierarchy] || 0
       const requiredLevel = roleHierarchy[requiredRole as keyof typeof roleHierarchy] || 1 // default to member level
 
       if (requiredRole !== 'members' && userLevel < requiredLevel) {
-         return { success: false, error: `This event is restricted to ${requiredRole} members.` }
+        return { success: false, error: `This event is restricted to ${requiredRole} members.` }
       }
     } else {
       // Public Event
@@ -201,23 +201,23 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
     // 4. Create RSVP
     // Check existing
     if (userId) {
-       const { data: existing } = await supabaseAdmin
-         .from('event_rsvps')
-         .select('id')
-         .eq('event_id', input.event_id)
-         .eq('user_id', userId)
-         .single()
-       
-       if (existing) return { success: false, error: 'Already registered' }
-    } else if (input.guest_email) {
-       const { data: existing } = await supabaseAdmin
-         .from('event_rsvps')
-         .select('id')
-         .eq('event_id', input.event_id)
-         .eq('guest_email', input.guest_email)
-         .single()
+      const { data: existing } = await supabaseAdmin
+        .from('event_rsvps')
+        .select('id')
+        .eq('event_id', input.event_id)
+        .eq('user_id', userId)
+        .single()
 
-       if (existing) return { success: false, error: 'Email already registered' }
+      if (existing) return { success: false, error: 'Already registered' }
+    } else if (input.guest_email) {
+      const { data: existing } = await supabaseAdmin
+        .from('event_rsvps')
+        .select('id')
+        .eq('event_id', input.event_id)
+        .eq('guest_email', input.guest_email)
+        .single()
+
+      if (existing) return { success: false, error: 'Email already registered' }
     }
 
     const { error: insertError } = await supabaseAdmin
@@ -253,40 +253,40 @@ export async function generateQRData(eventId: string, userId?: string, rsvpId?: 
 
 export async function verifyAndCheckIn(input: { qrData: string, scannedByUserId: string }) {
   try {
-     const [payloadStr, signature] = input.qrData.split('.')
-     if (!payloadStr || !signature) return { success: false, error: 'Invalid QR Format' }
+    const [payloadStr, signature] = input.qrData.split('.')
+    if (!payloadStr || !signature) return { success: false, error: 'Invalid QR Format' }
 
-     // Verify Signature
-     const secret = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'fallback-secret'
-     const expectedSig = createHmac('sha256', secret).update(payloadStr).digest('hex')
-     
-     if (signature !== expectedSig) return { success: false, error: 'Invalid Signature' }
+    // Verify Signature
+    const secret = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'fallback-secret'
+    const expectedSig = createHmac('sha256', secret).update(payloadStr).digest('hex')
 
-     const payload = JSON.parse(payloadStr)
-     const { e: eventId, u: userId, r: rsvpId } = payload
+    if (signature !== expectedSig) return { success: false, error: 'Invalid Signature' }
 
-     const supabaseAdmin = createServiceClient()
-     
-     // Find RSVP
-     let query = supabaseAdmin.from('event_rsvps').select('id, status').eq('event_id', eventId)
-     if (userId) query = query.eq('user_id', userId)
-     else if (rsvpId) query = query.eq('id', rsvpId)
-     else return { success: false, error: 'Invalid Token Data' }
+    const payload = JSON.parse(payloadStr)
+    const { e: eventId, u: userId, r: rsvpId } = payload
 
-     const { data: rsvp, error } = await query.single()
-     
-     if (error || !rsvp) return { success: false, error: 'RSVP not found' }
-     
-     if (rsvp.status === 'attended') return { success: false, error: 'Already checked in' }
-     if (rsvp.status === 'cancelled') return { success: false, error: 'RSVP was cancelled' }
+    const supabaseAdmin = createServiceClient()
 
-     // Mark Attended
-     await supabaseAdmin
-       .from('event_rsvps')
-       .update({ status: 'attended', checked_in_at: new Date().toISOString() })
-       .eq('id', rsvp.id)
-       
-     return { success: true }
+    // Find RSVP
+    let query = supabaseAdmin.from('event_rsvps').select('id, status').eq('event_id', eventId)
+    if (userId) query = query.eq('user_id', userId)
+    else if (rsvpId) query = query.eq('id', rsvpId)
+    else return { success: false, error: 'Invalid Token Data' }
+
+    const { data: rsvp, error } = await query.single()
+
+    if (error || !rsvp) return { success: false, error: 'RSVP not found' }
+
+    if (rsvp.status === 'attended') return { success: false, error: 'Already checked in' }
+    if (rsvp.status === 'cancelled') return { success: false, error: 'RSVP was cancelled' }
+
+    // Mark Attended
+    await supabaseAdmin
+      .from('event_rsvps')
+      .update({ status: 'attended', checked_in_at: new Date().toISOString() })
+      .eq('id', rsvp.id)
+
+    return { success: true }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     return { success: false, error: message }

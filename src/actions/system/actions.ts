@@ -11,16 +11,16 @@ async function checkSuperAdmin() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user || !user.email) throw new Error('Unauthorized')
-  
+
   const superAdmins = process.env.SUPER_ADMIN_EMAILS?.split(',') || []
   if (!superAdmins.includes(user.email)) throw new Error('Unauthorized: System Admin only')
-  
+
   return user
 }
 
 // --- Schemas ---
 
-export const OrgActionSchema = z.object({
+const OrgActionSchema = z.object({
   organisationId: z.string().uuid(),
 })
 

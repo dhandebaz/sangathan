@@ -76,7 +76,7 @@ export async function login(input: z.infer<typeof LoginSchema>) {
       .select('*')
       .eq('id', data.user.id)
       .single()
-    
+
     const profile = profileData as Profile | null
 
     if (profile && profile.organisation_id) {
@@ -85,7 +85,7 @@ export async function login(input: z.infer<typeof LoginSchema>) {
         .select('*')
         .eq('id', profile.organisation_id)
         .single()
-      
+
       const org = orgData as Organisation | null
 
       if (org && org.is_suspended) {
@@ -113,17 +113,18 @@ export async function signup(input: z.infer<typeof SignupSchema>) {
 
     const { email, password, fullName, organizationName } = result.data
     const supabase = await createClient()
-    
+
     // 2. Rate Limit (IP based is handled by Supabase Auth).
     // We can't do much here for IP since we don't have a reliable IP store yet.
     // We rely on Supabase Auth's built-in protections for now.
-    
+
     // 3. Sign Up
     // We store metadata for the Callback route to handle database creation
     const headersList = await headers()
-    // Prioritize NEXT_PUBLIC_APP_URL for consistent production behavior
-    const origin = process.env.NEXT_PUBLIC_APP_URL || headersList.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space'
-    
+    // Prioritize NEXT_PUBLIC_APP_URL for consistent production behavior AND ensure https
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space';
+    const origin = appUrl.startsWith('http') ? appUrl : `https://${appUrl}`;
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -156,16 +157,17 @@ import { detectOTPRisk } from '@/lib/risk-engine'
 export async function otpLogin(input: z.infer<typeof OtpLoginSchema>) {
   const result = OtpLoginSchema.safeParse(input)
   if (!result.success) return { success: false, error: result.error.issues[0].message }
-  
+
   const headersList = await headers()
   const ip = headersList.get('x-forwarded-for') || 'unknown'
-  
+
   // Risk Check
   const riskCheck = await detectOTPRisk(result.data.email, ip) // Using email as identifier for now since we don't have phone
   if (riskCheck.blocked) return { success: false, error: 'Too many login attempts. Please try again later.' }
 
   const supabase = await createClient()
-  const origin = (await headers()).get('origin')
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space';
+  const origin = appUrl.startsWith('http') ? appUrl : `https://${appUrl}`;
 
   const { error } = await supabase.auth.signInWithOtp({
     email: result.data.email,
@@ -201,7 +203,7 @@ export async function resetPassword(input: z.infer<typeof ResetPasswordSchema>) 
   if (!result.success) return { success: false, error: result.error.issues[0].message }
 
   const supabase = await createClient()
-  
+
   const { error } = await supabase.auth.updateUser({
     password: result.data.password
   })
@@ -235,13 +237,13 @@ export async function phoneLogin(input: z.infer<typeof PhoneLoginSchema>) {
 
   // 2. Find Profile by Phone
   const supabaseAdmin = createServiceClient()
-  
+
   const { data } = await supabaseAdmin
     .from('profiles')
     .select('*')
     .eq('phone', phoneNumber)
     .single()
-    
+
   const profile = data as Profile | null
 
   if (profile) {
@@ -249,13 +251,16 @@ export async function phoneLogin(input: z.infer<typeof PhoneLoginSchema>) {
     const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
       type: 'magiclink',
       email: profile.email,
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://sangathan.space'}/dashboard`
+      }
     })
-    
+
     if (linkError) return { success: false, error: 'Failed to generate session' }
-    
+
     return { success: true, redirectUrl: linkData.properties.action_link }
   }
-  
+
   // User not found -> Link Flow
   return { success: false, code: 'LINK_REQUIRED', phoneNumber }
 }
@@ -264,15 +269,15 @@ export async function linkPhoneToAccount(input: z.infer<typeof LoginSchema> & { 
   // 1. Verify Credentials (Login)
   const result = LoginSchema.safeParse(input)
   if (!result.success) return { success: false, error: result.error.issues[0].message }
-  
+
   const supabase = await createClient()
   const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
     email: result.data.email,
     password: result.data.password
   })
-  
+
   if (authError || !authData.user) return { success: false, error: 'Invalid credentials' }
-  
+
   // 2. Verify Firebase Token
   let decodedToken
   try {
@@ -281,13 +286,13 @@ export async function linkPhoneToAccount(input: z.infer<typeof LoginSchema> & { 
     console.error('Firebase Admin Verify Error:', err)
     return { success: false, error: 'Invalid phone verification' }
   }
-  
+
   const phoneNumber = decodedToken.phone_number
   if (!phoneNumber) return { success: false, error: 'No phone number in token' }
-  
+
   // 3. Update Profile
   const supabaseAdmin = createServiceClient()
-  
+
   // Check if phone already used
   const { data: existing } = await supabaseAdmin
     .from('profiles')
@@ -297,7 +302,7 @@ export async function linkPhoneToAccount(input: z.infer<typeof LoginSchema> & { 
     .single()
 
   if (existing) return { success: false, error: 'Phone number already linked to another account' }
-  
+
   await supabaseAdmin
     .from('profiles')
     .update({
@@ -306,7 +311,7 @@ export async function linkPhoneToAccount(input: z.infer<typeof LoginSchema> & { 
       firebase_uid: decodedToken.uid,
     } as never)
     .eq('id', authData.user.id)
-    
+
   redirect('/dashboard')
 }
 
@@ -347,7 +352,7 @@ export async function finalizeSignup(input: { idToken: string }) {
     .select('id')
     .eq('phone', phoneNumber)
     .maybeSingle()
-  
+
   if (existingPhone) {
     return { success: false, error: 'This phone number is already registered as an admin.' }
   }
@@ -393,7 +398,7 @@ export async function finalizeSignup(input: { idToken: string }) {
 
   // 7. Send Welcome Email (Fire and forget)
   const dashboardUrl = process.env.NEXT_PUBLIC_APP_URL ? `${process.env.NEXT_PUBLIC_APP_URL}/dashboard` : 'https://sangathan.space/dashboard'
-  
+
   // We don't await this to speed up the response, but we log errors in the background
   sendEmail({
     to: user.email,

@@ -17,7 +17,7 @@ export async function createNetwork(input: z.infer<typeof NetworkSchema>) {
   try {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    
+
     if (!user) return { success: false, error: 'Unauthorized' }
 
     // Check permissions (must be org admin with federation_mode)
@@ -30,11 +30,11 @@ export async function createNetwork(input: z.infer<typeof NetworkSchema>) {
     if (profileError || !profile || profile.role !== 'admin') {
       return { success: false, error: 'Permission denied' }
     }
-    
-    const org = profile.organisations as Database['public']['Tables']['organisations']['Row'] | null
+
+    const org = profile.organisations as { capabilities?: Record<string, unknown> } | null
     const capabilities = org?.capabilities as { federation_mode?: boolean } | null
     if (!capabilities?.federation_mode) {
-        return { success: false, error: 'Federation Mode not enabled for your organisation.' }
+      return { success: false, error: 'Federation Mode not enabled for your organisation.' }
     }
 
     const supabaseAdmin = createServiceClient()
@@ -53,9 +53,9 @@ export async function createNetwork(input: z.infer<typeof NetworkSchema>) {
 
     // Add Creator as Admin
     await supabaseAdmin.from('network_admins').insert({
-        network_id: network.id,
-        user_id: user.id,
-        role: 'coordinator'
+      network_id: network.id,
+      user_id: user.id,
+      role: 'coordinator'
     })
 
     await supabaseAdmin
@@ -75,23 +75,23 @@ export async function createNetwork(input: z.infer<typeof NetworkSchema>) {
 }
 
 export async function joinNetwork(networkId: string) {
-    console.log('Join network requested for:', networkId)
-    // Similar logic: check federation_mode, insert pending membership
+  console.log('Join network requested for:', networkId)
+  // Similar logic: check federation_mode, insert pending membership
 }
 
 export async function getNetworkDetails(slug: string) {
-    const supabase = createServiceClient()
-    
-    const { data: network } = await supabase
-        .from('networks')
-        .select(`
+  const supabase = createServiceClient()
+
+  const { data: network } = await supabase
+    .from('networks')
+    .select(`
             *,
             members:network_memberships(
                 organisation:organisations(id, name, slug)
             )
         `)
-        .eq('slug', slug)
-        .single()
-        
-    return network
+    .eq('slug', slug)
+    .single()
+
+  return network
 }

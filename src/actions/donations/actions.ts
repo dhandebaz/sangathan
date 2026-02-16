@@ -50,7 +50,7 @@ export const logDonation = createSafeAction(
         .eq('organisation_id', context.organizationId)
         .eq('upi_reference', input.upi_reference)
         .single()
-      
+
       if (existing) {
         throw new Error('This UPI reference has already been recorded.')
       }
@@ -74,11 +74,11 @@ export const logDonation = createSafeAction(
         verified_by: context.user.id,
       } as never)
       .select('id')
-      .single()) as { data: DonationRow | null, error: { message: string } | null }
+      .single()) as { data: DonationRow | null, error: { message: string, code?: string } | null }
 
     if (error || !donation) {
-       if (error?.code === '23505') throw new Error('Duplicate entry.')
-       throw new Error(error?.message || 'Failed to log donation')
+      if (error?.code === '23505') throw new Error('Duplicate entry.')
+      throw new Error(error?.message || 'Failed to log donation')
     }
 
     await logAction({
@@ -161,12 +161,12 @@ export async function submitPublicDonation(input: z.infer<typeof PublicDonationS
   const supabase = createServiceClient()
 
   // 2. Resolve Organisation from Slug
-  const { data: organisation, error: orgError } = await supabase
+  const { data: organisation, error: orgError } = (await supabase
     .from('organisations')
     .select('id, is_suspended')
     .eq('slug', input.orgSlug)
-    .single()
-  
+    .single()) as { data: { id: string; is_suspended: boolean } | null, error: any }
+
   if (orgError || !organisation) {
     return { success: false, error: 'Organisation not found' }
   }
@@ -183,7 +183,7 @@ export async function submitPublicDonation(input: z.infer<typeof PublicDonationS
     .eq('organisation_id', organisation.id)
     .eq('upi_reference', input.upi_reference)
     .single()
-  
+
   if (existing) {
     return { success: false, error: 'This UPI reference has already been submitted.' }
   }

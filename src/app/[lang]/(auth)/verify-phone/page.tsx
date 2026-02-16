@@ -10,7 +10,7 @@ import { Loader2, Phone, CheckCircle, AlertCircle, ArrowRight } from 'lucide-rea
 export default function VerifyPhonePage(props: { params: Promise<{ lang: string }> }) {
   const params = use(props.params)
   const router = useRouter()
-  
+
   const [step, setStep] = useState<'phone' | 'otp'>('phone')
   const [phoneNumber, setPhoneNumber] = useState('') // E.164 format
   const [otp, setOtp] = useState('')
@@ -24,7 +24,7 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
     // Only initialize once per component mount
     if (window.recaptchaVerifier) {
       window.recaptchaVerifier.clear()
-      window.recaptchaVerifier = undefined
+      window.recaptchaVerifier = undefined as any
     }
 
     const auth = firebaseAuth
@@ -53,7 +53,7 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
       // Cleanup on unmount
       if (window.recaptchaVerifier) {
         window.recaptchaVerifier.clear()
-        window.recaptchaVerifier = undefined
+        window.recaptchaVerifier = undefined as any
       }
     }
   }, [])
@@ -81,44 +81,44 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
           window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
             'size': 'invisible',
             'callback': () => {
-          // reCAPTCHA solved
+              // reCAPTCHA solved
+            }
+          })
+        } catch (e) {
+          console.error('Recaptcha init failed:', e)
+          throw new Error('Security check failed. Please refresh the page.')
         }
-      })
-    } catch (e) {
-      console.error('Recaptcha init failed:', e)
-      throw new Error('Security check failed. Please refresh the page.')
-    }
-  }
+      }
 
-  const appVerifier = window.recaptchaVerifier
-  if (!appVerifier) {
-    throw new Error('ReCAPTCHA not initialized.')
-  }
+      const appVerifier = window.recaptchaVerifier
+      if (!appVerifier) {
+        throw new Error('ReCAPTCHA not initialized.')
+      }
 
-  // Format phone: E.164 standard
-  const cleaned = phoneNumber.replace(/[^\d+]/g, '') // Keep only digits and plus
-  const formattedPhone = cleaned.startsWith('+') ? cleaned : `+91${cleaned}`
-  
-  console.log('Sending OTP to:', formattedPhone)
+      // Format phone: E.164 standard
+      const cleaned = phoneNumber.replace(/[^\d+]/g, '') // Keep only digits and plus
+      const formattedPhone = cleaned.startsWith('+') ? cleaned : `+91${cleaned}`
 
-  const confirmation = await signInWithPhoneNumber(auth, formattedPhone, appVerifier)
-  setConfirmationResult(confirmation)
-  setStep('otp')
-} catch (err) {
-  const error = err as { code?: string; message?: string }
-  console.error('OTP Error:', error)
-  if (error.code === 'auth/operation-not-allowed') {
-    setError('Phone authentication is not enabled in the database configuration. Please contact support.')
-  } else if (error.code === 'auth/argument-error') {
-    setError('Invalid phone number format or security check failed.')
-  } else {
-    setError(error.message || 'Failed to send OTP. Try again.')
-  }
-      
+      console.log('Sending OTP to:', formattedPhone)
+
+      const confirmation = await signInWithPhoneNumber(auth, formattedPhone, appVerifier)
+      setConfirmationResult(confirmation)
+      setStep('otp')
+    } catch (err) {
+      const error = err as { code?: string; message?: string }
+      console.error('OTP Error:', error)
+      if (error.code === 'auth/operation-not-allowed') {
+        setError('Phone authentication is not enabled in the database configuration. Please contact support.')
+      } else if (error.code === 'auth/argument-error') {
+        setError('Invalid phone number format or security check failed.')
+      } else {
+        setError(error.message || 'Failed to send OTP. Try again.')
+      }
+
       // Reset captcha if needed
       if (window.recaptchaVerifier) {
         window.recaptchaVerifier.clear()
-        window.recaptchaVerifier = undefined 
+        window.recaptchaVerifier = undefined as any
       }
     } finally {
       setLoading(false)
@@ -128,7 +128,7 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!confirmationResult) return
-    
+
     setLoading(true)
     setError('')
 
@@ -153,7 +153,7 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
     } catch (err) {
       const error = err as { code?: string; message?: string }
       console.error('Verification Error:', error)
-      
+
       // Distinguish between Firebase errors and Server errors
       if (error.code === 'auth/invalid-verification-code') {
         setError('The verification code is incorrect. Please check and try again.')
@@ -235,21 +235,21 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
           </form>
         ) : (
           <form onSubmit={handleVerifyOtp} className="space-y-6">
-             <div className="text-center mb-6">
-                <p className="text-sm text-gray-600">
-                  Enter the code sent to <span className="font-semibold">{phoneNumber}</span>
-                </p>
-                <button 
-                  type="button" 
-                  onClick={() => setStep('phone')}
-                  className="text-xs text-orange-600 hover:underline mt-1"
-                >
-                  Change Number
-                </button>
-             </div>
+            <div className="text-center mb-6">
+              <p className="text-sm text-gray-600">
+                Enter the code sent to <span className="font-semibold">{phoneNumber}</span>
+              </p>
+              <button
+                type="button"
+                onClick={() => setStep('phone')}
+                className="text-xs text-orange-600 hover:underline mt-1"
+              >
+                Change Number
+              </button>
+            </div>
 
-             <div>
-               <input
+            <div>
+              <input
                 type="text"
                 placeholder="123456"
                 value={otp}
@@ -258,9 +258,9 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
                 maxLength={6}
                 required
               />
-             </div>
+            </div>
 
-             <button
+            <button
               type="submit"
               disabled={loading || otp.length !== 6}
               className="w-full bg-orange-600 text-white py-3 rounded-xl font-medium hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
@@ -276,6 +276,6 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
 
 declare global {
   interface Window {
-    recaptchaVerifier: RecaptchaVerifier | undefined;
+    recaptchaVerifier: RecaptchaVerifier;
   }
 }

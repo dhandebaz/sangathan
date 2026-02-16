@@ -1,0 +1,32 @@
+{
+  "mcpServers": {
+    "shadcn-ui": {
+      "command": "npx",
+      "args": [
+        "shadcn@latest",
+        "mcp"
+      ],
+      "env": {}
+    },
+    "File Context Server": {
+      "command": "npx",
+      "args": [
+        "--yes",
+        "file-context-server"
+      ],
+      "env": {
+        "CACHE_TTL": "3600000",
+        "MAX_CACHE_SIZE": "1000",
+        "MAX_FILE_SIZE": "1048576"
+      }
+    },
+    "Puppeteer": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-puppeteer"
+      ],
+      "env": {}
+    }
+  }
+}

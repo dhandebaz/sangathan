@@ -61,10 +61,10 @@ export const createForm = createSafeAction(
         fields: input.fields,
         is_active: true,
         created_by: context.user.id,
-      } as never)
+      })
       .select('id')
       .single()
-    
+
     const form = data
 
     if (error || !form) throw new Error(error?.message || 'Failed to create form')
@@ -96,7 +96,7 @@ export const updateForm = createSafeAction(
         description: input.description,
         fields: input.fields,
         updated_at: new Date().toISOString(),
-      } as never)
+      })
       .eq('id', input.formId)
       .eq('organisation_id', context.organizationId)
 
@@ -125,7 +125,7 @@ export const toggleFormStatus = createSafeAction(
 
     const { error } = await supabase
       .from('forms')
-      .update({ is_active: input.isActive } as never)
+      .update({ is_active: input.isActive })
       .eq('id', input.formId)
       .eq('organisation_id', context.organizationId)
 
@@ -182,12 +182,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
     return { success: false, error: 'Spam detected' }
   }
 
-  // 2. Fetch Form Definition (using Service Client to bypass RLS for public read if needed, or anon if policy allows)
-  // Actually, 'forms' table should be readable by public? No, "Public form must not expose organisation_id".
-  // But we need to know the organisation_id to insert the submission correctly.
-  // The 'forms' table policy says: "View forms in organisation" -> requires Auth.
-  // So for public access, we MUST use Service Client to fetch the form details and validate.
-  
+  // 2. Fetch Form Definition
   const supabase = createServiceClient()
 
   const { data, error: formError } = await supabase
@@ -195,7 +190,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
     .select('id, organisation_id, fields, is_active')
     .eq('id', input.formId)
     .single()
-  
+
   const form = data
 
   if (formError || !form) {
@@ -212,11 +207,11 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
 
   fields.forEach(field => {
     const value = input.data[field.id]
-    
+
     if (field.required && (value === undefined || value === '' || value === null)) {
       errors[field.id] = `${field.label} is required`
     }
-    
+
     // Basic Type Checks
     if (value) {
       if (field.type === 'number' && isNaN(Number(value))) {
@@ -237,41 +232,34 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
     const headerStore = await headers()
     const ip = headerStore.get('x-forwarded-for') || 'unknown'
     const key = `submission:${input.formId}:${ip}`
-    
-    // Check limit: Max 5 submissions per hour per IP for this form
-    // We access 'rate_limits' which might not exist if migration hasn't run.
+
     const { count, error: rateError } = await supabase.from('rate_limits')
       .select('*', { count: 'exact', head: true })
       .eq('key', key)
       .gt('created_at', new Date(Date.now() - 3600 * 1000).toISOString())
-    
+
     if (!rateError && count !== null && count >= 5) {
       return { success: false, error: 'Too many submissions. Please try again later.' }
     }
-    
+
     // Record attempt
     if (!rateError) {
       await supabase.from('rate_limits').insert({ key })
     }
   } catch (err) {
-    // Fail open - log error but allow submission if rate limit system is down/missing
+    // Fail open
     console.warn('Rate limit check failed:', err)
   }
-  
+
   // 5. Insert Submission
-  // We use Service Client because 'form_submissions' insert policy is "Public can submit forms" (TRUE).
-  // BUT we need to set 'organisation_id'. The client doesn't send it. We derived it from the form.
-  // The RLS policy "with check (true)" allows insert, but we need to ensure the `organisation_id` is correct.
-  // If we rely on Anon client, we can't force `organisation_id` easily without exposing it in the payload.
-  // So using Service Client here is SAFER to enforce the correct org ID.
-  
   const { error: submissionError } = await supabase
     .from('form_submissions')
     .insert({
       form_id: form.id,
       organisation_id: form.organisation_id,
+      user_id: null, // Public submissions are anonymous or we don't force auth here
       data: input.data,
-    } as never)
+    })
 
   if (submissionError) {
     console.error('Submission Error:', submissionError)

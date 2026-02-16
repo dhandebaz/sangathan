@@ -18,9 +18,9 @@ export default async function AnnouncementsPage(props: { params: Promise<{ lang:
   // We need to fetch announcements AND check if viewed
   // This is tricky with simple Supabase queries. 
   // We'll fetch announcements and user's view records separately or use a join if possible.
-  
+
   const { data: profileData } = await supabase.from('profiles').select('organization_id, role').eq('id', user.id).single()
-  
+
   const profile = profileData as { organization_id: string; role: string } | null
 
   if (!profile || !profile.organization_id) return <div>No Organisation Found</div>
@@ -58,9 +58,9 @@ export default async function AnnouncementsPage(props: { params: Promise<{ lang:
           // Filter logic should ideally be server-side but RLS handles security.
           // UI filtering for expired?
           if (a.expires_at && new Date(a.expires_at) < new Date()) return null
-          
+
           return (
-            <AnnouncementCard key={a.id} announcement={a} isRead={isRead} />
+            <AnnouncementCard key={a.id} announcement={a} isRead={isRead ?? false} />
           )
         })}
 

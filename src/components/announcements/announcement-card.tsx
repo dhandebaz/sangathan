@@ -8,7 +8,7 @@ import { useState } from 'react'
 import { DashboardAnnouncement } from '@/types/dashboard'
 
 interface Announcement extends DashboardAnnouncement {
-  visibility_level: string;
+  visibility_level?: string;
   email_sent_at?: string;
   view_count?: number;
 }
@@ -41,17 +41,17 @@ export function AnnouncementCard({ announcement, isRead, onRead }: { announcemen
         <div className="prose prose-sm max-w-none text-gray-600 whitespace-pre-wrap">
           {announcement.content}
         </div>
-        
+
         <div className="mt-4 pt-4 border-t flex justify-between items-center text-xs text-gray-400">
           <div className="flex gap-2">
-             <Badge variant="outline" className="capitalize">{announcement.visibility_level}</Badge>
-             {announcement.email_sent_at && <Badge variant="secondary">Emailed</Badge>}
+            <Badge variant="outline" className="capitalize">{announcement.visibility_level}</Badge>
+            {announcement.email_sent_at && <Badge variant="secondary">Emailed</Badge>}
           </div>
           {/* Admin Stats View - Only visible if data provided */}
           {announcement.view_count !== undefined && (
-             <div className="flex items-center gap-1" title="Views">
-               <Eye className="w-3 h-3" /> {announcement.view_count}
-             </div>
+            <div className="flex items-center gap-1" title="Views">
+              <Eye className="w-3 h-3" /> {announcement.view_count}
+            </div>
           )}
         </div>
       </CardContent>

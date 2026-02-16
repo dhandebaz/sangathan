@@ -66,9 +66,9 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
       <div className="max-w-4xl mx-auto py-20 px-4 text-center">
         <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-8">
           <div className="flex justify-center mb-4">
-             <div className="bg-yellow-100 p-3 rounded-full">
-               <Users className="w-8 h-8 text-yellow-600" />
-             </div>
+            <div className="bg-yellow-100 p-3 rounded-full">
+              <Users className="w-8 h-8 text-yellow-600" />
+            </div>
           </div>
           <h1 className="text-2xl font-bold text-yellow-800 mb-2">Membership Pending</h1>
           <p className="text-yellow-700 max-w-lg mx-auto">
@@ -136,7 +136,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
 
   // Try to unlock capabilities if admin visits dashboard
   if (isAdmin) {
-     await unlockCapabilities(profile.organization_id)
+    await unlockCapabilities(profile.organization_id)
   }
 
   if (isAdmin) {
@@ -150,16 +150,16 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     ])
 
     const totalDonations = (donationsRes.data || []).reduce((sum: number, d) => sum + (Number(d.amount) || 0), 0)
-    
+
     // Transform audit logs to recent activity format
     const recentActivity = (activityRes.data || []).map((log) => ({
       title: log.action.replace(/_/g, ' '),
       type: 'audit',
-      time: new Date(log.created_at).toLocaleDateString()
+      created_at: new Date(log.created_at).toLocaleDateString()
     }))
 
     return (
-      <AdminDashboard 
+      <AdminDashboard
         stats={{
           members: membersRes.count || 0,
           events: eventsRes.count || 0,
@@ -185,7 +185,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     .filter(Boolean)
 
   return (
-    <MemberDashboard 
+    <MemberDashboard
       events={(eventsRes.data || []) as unknown as DashboardEvent[]}
       tasks={myTasks}
       announcements={(announcementsRes.data || []) as unknown as DashboardAnnouncement[]}
