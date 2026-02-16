@@ -8,7 +8,7 @@ import { logAction } from '@/lib/audit/log'
 
 // --- Schemas ---
 
-export const CreateMeetingSchema = z.object({
+const CreateMeetingSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 chars"),
   description: z.string().optional(),
   date: z.string().datetime(),
@@ -16,13 +16,13 @@ export const CreateMeetingSchema = z.object({
   attendee_ids: z.array(z.string().uuid()).optional(),
 })
 
-export const MarkAttendanceSchema = z.object({
+const MarkAttendanceSchema = z.object({
   meetingId: z.string().uuid(),
   memberId: z.string().uuid(),
   status: z.enum(['present', 'absent', 'excused'])
 })
 
-export const DeleteMeetingSchema = z.object({
+const DeleteMeetingSchema = z.object({
   meetingId: z.string().uuid()
 })
 

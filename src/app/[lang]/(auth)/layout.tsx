@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { ShieldCheck, Lock, EyeOff } from 'lucide-react'
 
 export default async function AuthLayout({
@@ -11,8 +12,15 @@ export default async function AuthLayout({
       {/* Left Panel - Trust & Branding */}
       <div className="hidden lg:flex flex-col justify-between p-12 bg-black text-white relative overflow-hidden">
         <div className="relative z-10">
-          <Link href="/" className="text-3xl font-bold tracking-tight">
-            Sangathan
+          <Link href="/" className="inline-block" aria-label="Sangathan Home">
+            <Image
+              src="/logo/whitesangathanlogo.png"
+              alt="Sangathan"
+              width={140}
+              height={40}
+              className="h-10 w-auto"
+              priority
+            />
           </Link>
           <div className="mt-20">
              <h1 className="text-5xl font-bold mb-6 leading-tight">
@@ -63,10 +71,16 @@ export default async function AuthLayout({
       {/* Right Panel - Form */}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12 lg:p-24">
         <div className="w-full max-w-md space-y-8">
-           {/* Mobile Header */}
            <div className="lg:hidden text-center mb-8">
-              <Link href="/" className="text-3xl font-bold tracking-tight mb-2 block">
-                Sangathan
+              <Link href="/" className="inline-block mb-2" aria-label="Sangathan Home">
+                <Image
+                  src="/logo/blacksangathanlogo.png"
+                  alt="Sangathan"
+                  width={140}
+                  height={40}
+                  className="h-10 w-auto mx-auto"
+                  priority
+                />
               </Link>
               <p className="text-gray-500">Secure infrastructure for community work.</p>
            </div>

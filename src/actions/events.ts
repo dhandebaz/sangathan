@@ -7,7 +7,7 @@ import { z } from 'zod'
 
 // --- Schemas ---
 
-export const EventSchema = z.object({
+const EventSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 chars"),
   description: z.string().optional(),
   start_time: z.string().datetime(),
@@ -18,22 +18,22 @@ export const EventSchema = z.object({
   capacity: z.number().optional(),
 })
 
-export const CreateEventSchema = EventSchema.extend({
+const CreateEventSchema = EventSchema.extend({
   organisation_id: z.string().uuid(),
   collaborating_org_ids: z.array(z.string().uuid()).optional(),
 })
 
-export const UpdateEventSchema = EventSchema.partial().extend({
+const UpdateEventSchema = EventSchema.partial().extend({
   id: z.string().uuid(),
 })
 
-export const RSVPSchema = z.object({
+const RSVPSchema = z.object({
   event_id: z.string().uuid(),
   guest_name: z.string().optional(),
   guest_email: z.string().email().optional(),
 })
 
-export const CheckInSchema = z.object({
+const CheckInSchema = z.object({
   event_id: z.string().uuid(),
   token: z.string(), // Signed token containing user_id/rsvp_id
 })

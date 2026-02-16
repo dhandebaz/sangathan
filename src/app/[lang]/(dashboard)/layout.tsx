@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { LayoutDashboard, Users, Settings, LogOut, Megaphone, Calendar, CheckSquare, BarChart, Vote, Scale, Globe } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/server'
@@ -48,11 +49,25 @@ export default async function DashboardLayout(props: {
       {/* Sidebar (Desktop) */}
       <aside className="fixed inset-y-0 left-0 z-50 w-64 border-r border-slate-200 bg-white hidden md:flex flex-col shadow-sm">
         <div className="h-16 flex items-center px-6 border-b border-slate-100">
-          <Link href={`/${lang}/dashboard`} className="flex items-center gap-2 group">
-            <div className="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center text-white font-bold text-xl group-hover:scale-105 transition-transform">
-              S
-            </div>
-            <span className="font-bold text-xl tracking-tight text-slate-900">Sangathan</span>
+          <Link href={`/${lang}/dashboard`} className="flex items-center gap-2 group" aria-label="Sangathan Dashboard">
+            <Image
+              src="/logo/whitesangathanlogo.png"
+              alt=""
+              width={128}
+              height={32}
+              className="h-8 w-auto group-hover:scale-105 transition-transform logo-mark-light"
+              aria-hidden="true"
+              priority
+            />
+            <Image
+              src="/logo/blacksangathanlogo.png"
+              alt=""
+              width={128}
+              height={32}
+              className="h-8 w-auto group-hover:scale-105 transition-transform logo-mark-dark"
+              aria-hidden="true"
+              priority
+            />
           </Link>
         </div>
         
@@ -111,8 +126,24 @@ export default async function DashboardLayout(props: {
         {/* Header */}
         <header className="sticky top-0 z-40 h-16 border-b border-slate-200 bg-white/80 backdrop-blur-md px-8 flex items-center justify-between">
            <div className="flex items-center gap-4 md:hidden">
-             <div className="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center text-white font-bold">S</div>
-             <span className="font-bold text-lg text-slate-900">Sangathan</span>
+             <Image
+               src="/logo/whitesangathanlogo.png"
+               alt=""
+               width={120}
+               height={32}
+               className="h-8 w-auto logo-mark-light"
+               aria-hidden="true"
+               priority
+             />
+             <Image
+               src="/logo/blacksangathanlogo.png"
+               alt=""
+               width={120}
+               height={32}
+               className="h-8 w-auto logo-mark-dark"
+               aria-hidden="true"
+               priority
+             />
            </div>
            
            <div className="ml-auto flex items-center gap-4">

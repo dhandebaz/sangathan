@@ -8,20 +8,20 @@ import { sendEmail } from '@/lib/email/sender'
 import { newMemberRequestEmail, membershipApprovedEmail, membershipRejectedEmail } from '@/lib/email/templates'
 
 // --- Schemas ---
-export const UpdatePolicySchema = z.object({
+const UpdatePolicySchema = z.object({
   orgId: z.string().uuid(),
   policy: z.enum(['open_auto', 'admin_approval', 'invite_only']),
 })
 
-export const RequestJoinSchema = z.object({
+const RequestJoinSchema = z.object({
   orgId: z.string().uuid(),
 })
 
-export const ManageMemberSchema = z.object({
+const ManageMemberSchema = z.object({
   memberId: z.string().uuid(),
 })
 
-export const UpdateTransparencySchema = z.object({
+const UpdateTransparencySchema = z.object({
   orgId: z.string().uuid(),
   enabled: z.boolean(),
 })

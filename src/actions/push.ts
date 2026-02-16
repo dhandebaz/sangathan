@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 
-export const SubscriptionSchema = z.object({
+const SubscriptionSchema = z.object({
   endpoint: z.string(),
   keys: z.object({
     p256dh: z.string(),

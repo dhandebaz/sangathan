@@ -8,7 +8,7 @@ import { createHmac } from 'crypto'
 
 // --- Schemas ---
 
-export const PollSchema = z.object({
+const PollSchema = z.object({
   title: z.string().min(3),
   description: z.string().optional(),
   type: z.enum(['informal', 'formal']),
@@ -20,11 +20,11 @@ export const PollSchema = z.object({
   is_public: z.boolean().default(false)
 })
 
-export const CreatePollSchema = PollSchema.extend({
+const CreatePollSchema = PollSchema.extend({
   organisation_id: z.string().uuid(),
 })
 
-export const VoteSchema = z.object({
+const VoteSchema = z.object({
   poll_id: z.string().uuid(),
   option_id: z.string().uuid(),
 })

@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
-export const AppealSchema = z.object({
+const AppealSchema = z.object({
   reason: z.string().min(10, "Reason must be detailed"),
   supporting_docs_url: z.string().url().optional().or(z.literal('')),
 })

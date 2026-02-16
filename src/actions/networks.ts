@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import type { Database } from '@/types/database'
 
-export const NetworkSchema = z.object({
+const NetworkSchema = z.object({
   name: z.string().min(3),
   description: z.string().optional(),
   slug: z.string().min(3).regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric"),

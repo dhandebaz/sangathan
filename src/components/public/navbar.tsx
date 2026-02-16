@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Menu, X, LayoutDashboard } from 'lucide-react'
 import { useState, useEffect } from 'react'
@@ -54,16 +55,33 @@ export function Navbar({ lang }: { lang: string }) {
       aria-label="Main Navigation"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-           {/* 1. Left: Logo */}
+          <div className="flex justify-between h-16 items-center">
            <div className="flex-shrink-0 flex items-center">
-             <Link 
-               href={`/${lang}`} 
-               className="text-2xl font-bold tracking-tight text-[var(--text-primary)] hover:opacity-90 transition-opacity"
-               aria-label="Sangathan Home"
-             >
-               Sangathan
-             </Link>
+            <Link 
+              href={`/${lang}`} 
+              className="flex items-center"
+              aria-label="Sangathan Home"
+            >
+              <span className="sr-only">Sangathan</span>
+              <Image
+                src="/logo/whitesangathanlogo.png"
+                alt=""
+                width={128}
+                height={32}
+                className="h-8 w-auto logo-mark-light"
+                aria-hidden="true"
+                priority
+              />
+              <Image
+                src="/logo/blacksangathanlogo.png"
+                alt=""
+                width={128}
+                height={32}
+                className="h-8 w-auto logo-mark-dark"
+                aria-hidden="true"
+                priority
+              />
+            </Link>
            </div>
 
            {/* 2. Center: Nav Links (Desktop) */}

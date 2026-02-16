@@ -7,11 +7,11 @@ import { z } from 'zod'
 
 // --- Schemas ---
 
-export const LinkRequestSchema = z.object({
+const LinkRequestSchema = z.object({
   target_org_id: z.string().uuid(),
 })
 
-export const LinkResponseSchema = z.object({
+const LinkResponseSchema = z.object({
   link_id: z.string().uuid(),
   status: z.enum(['active', 'rejected']),
 })

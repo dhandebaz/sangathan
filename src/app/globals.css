@@ -193,6 +193,22 @@ body {
   background-color: var(--neutral-50);
 }
 
+.logo-mark-light {
+  display: inline-block;
+}
+
+.logo-mark-dark {
+  display: none;
+}
+
+[data-theme="light"] .logo-mark-light {
+  display: none;
+}
+
+[data-theme="light"] .logo-mark-dark {
+  display: inline-block;
+}
+
 ::selection {
   background-color: var(--brand-200);
   color: var(--brand-900);

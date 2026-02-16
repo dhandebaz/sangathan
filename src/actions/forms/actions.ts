@@ -10,9 +10,9 @@ import { headers } from 'next/headers'
 
 // --- Types & Schemas ---
 
-export const FieldTypeSchema = z.enum(['text', 'number', 'phone', 'textarea', 'dropdown'])
+const FieldTypeSchema = z.enum(['text', 'number', 'phone', 'textarea', 'dropdown'])
 
-export const FormFieldSchema = z.object({
+const FormFieldSchema = z.object({
   id: z.string(),
   label: z.string().min(1),
   type: FieldTypeSchema,
@@ -20,26 +20,26 @@ export const FormFieldSchema = z.object({
   options: z.array(z.string()).optional(), // For dropdowns
 })
 
-export const CreateFormSchema = z.object({
+const CreateFormSchema = z.object({
   title: z.string().min(3, "Title is required"),
   description: z.string().optional(),
   fields: z.array(FormFieldSchema).min(1, "At least one field is required"),
 })
 
-export const UpdateFormSchema = CreateFormSchema.partial().extend({
+const UpdateFormSchema = CreateFormSchema.partial().extend({
   formId: z.string().uuid(),
 })
 
-export const ToggleFormStatusSchema = z.object({
+const ToggleFormStatusSchema = z.object({
   formId: z.string().uuid(),
   isActive: z.boolean(),
 })
 
-export const DeleteFormSchema = z.object({
+const DeleteFormSchema = z.object({
   formId: z.string().uuid(),
 })
 
-export const SubmitFormSchema = z.object({
+const SubmitFormSchema = z.object({
   formId: z.string().uuid(),
   data: z.record(z.string(), z.any()), // Field ID -> Value
   honeypot: z.string().optional(), // Spam protection

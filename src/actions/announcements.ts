@@ -9,7 +9,7 @@ import { checkBroadcastLimit } from '@/lib/risk-engine'
 
 // --- Schemas ---
 
-export const AnnouncementSchema = z.object({
+const AnnouncementSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 chars"),
   content: z.string().min(10, "Content must be at least 10 chars"),
   visibility_level: z.enum(['public', 'members', 'volunteer', 'core', 'executive']),
@@ -19,11 +19,11 @@ export const AnnouncementSchema = z.object({
   expires_at: z.string().datetime().optional().nullable(),
 })
 
-export const CreateAnnouncementSchema = AnnouncementSchema.extend({
+const CreateAnnouncementSchema = AnnouncementSchema.extend({
   organisation_id: z.string().uuid(),
 })
 
-export const UpdateAnnouncementSchema = AnnouncementSchema.partial().extend({
+const UpdateAnnouncementSchema = AnnouncementSchema.partial().extend({
   id: z.string().uuid(),
 })
 

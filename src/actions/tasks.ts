@@ -7,7 +7,7 @@ import { z } from 'zod'
 
 // --- Schemas ---
 
-export const TaskSchema = z.object({
+const TaskSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 chars"),
   description: z.string().optional(),
   priority: z.enum(['low', 'medium', 'high']),
@@ -15,17 +15,17 @@ export const TaskSchema = z.object({
   due_date: z.string().datetime().optional().nullable(),
 })
 
-export const CreateTaskSchema = TaskSchema.extend({
+const CreateTaskSchema = TaskSchema.extend({
   organisation_id: z.string().uuid(),
   assignee_ids: z.array(z.string().uuid()).optional(),
 })
 
-export const UpdateTaskSchema = TaskSchema.partial().extend({
+const UpdateTaskSchema = TaskSchema.partial().extend({
   id: z.string().uuid(),
   status: z.enum(['open', 'in_progress', 'completed', 'archived']).optional(),
 })
 
-export const LogHoursSchema = z.object({
+const LogHoursSchema = z.object({
   task_id: z.string().uuid(),
   hours: z.number().min(0.1),
   note: z.string().optional(),
