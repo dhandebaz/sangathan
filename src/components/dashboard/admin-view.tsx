@@ -34,13 +34,13 @@ export function AdminDashboard({
 
       <div className="grid grid-cols-2 gap-4 md:hidden">
         <Button asChild variant="outline" className="h-24 flex flex-col gap-2 bg-white shadow-sm hover:shadow-md border-primary/10">
-          <Link href={`/${lang}/announcements`}>
+          <Link href={`/${lang}/dashboard/announcements`}>
             <Megaphone className="w-6 h-6 text-primary" />
             <span className="font-medium">Post Update</span>
           </Link>
         </Button>
         <Button asChild variant="outline" className="h-24 flex flex-col gap-2 bg-white shadow-sm hover:shadow-md border-primary/10">
-          <Link href={`/${lang}/events/new`}>
+          <Link href={`/${lang}/dashboard/events/new`}>
             <Calendar className="w-6 h-6 text-primary" />
             <span className="font-medium">New Event</span>
           </Link>
@@ -55,7 +55,7 @@ export function AdminDashboard({
           <CardContent className="flex items-center justify-between px-6 pb-4">
             <div className="text-3xl font-bold">{membershipRequests}</div>
             <Button asChild variant="outline" size="sm">
-              <Link href={`/${lang}/membership-requests`}>Review</Link>
+              <Link href={`/${lang}/dashboard/membership-requests`}>Review</Link>
             </Button>
           </CardContent>
         </Card>
@@ -66,7 +66,7 @@ export function AdminDashboard({
           <CardContent className="flex items-center justify-between px-6 pb-4">
             <div className="text-3xl font-bold">{openAppeals}</div>
             <Button asChild variant="outline" size="sm">
-              <Link href={`/${lang}/settings`}>Manage</Link>
+              <Link href={`/${lang}/dashboard/settings`}>Manage</Link>
             </Button>
           </CardContent>
         </Card>
@@ -82,7 +82,7 @@ export function AdminDashboard({
               <div className="p-6 text-center text-gray-500 text-sm">No upcoming events scheduled.</div>
             ) : (
               upcomingEvents.map((event) => (
-                <Link key={event.id} href={`/${lang}/events/${event.id}`} className="flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors">
+                <Link key={event.id} href={`/${lang}/dashboard/events/${event.id}`} className="flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors">
                   <div>
                     <p className="font-medium text-sm">{event.title}</p>
                     <p className="text-xs text-gray-500">

@@ -51,7 +51,7 @@ export function MemberDashboard({
             <Calendar className="w-5 h-5 text-blue-500" />
             Upcoming Events
           </h2>
-          <Link href={`/${lang}/events`} className="text-sm text-blue-600 font-medium">View All</Link>
+          <Link href={`/${lang}/dashboard/events`} className="text-sm text-blue-600 font-medium">View All</Link>
         </div>
         <div className="space-y-3">
           {events.length === 0 ? (
@@ -60,7 +60,7 @@ export function MemberDashboard({
             </div>
           ) : (
             events.map((event) => (
-              <Link href={`/${lang}/events/${event.id}`} key={event.id} className="block">
+              <Link href={`/${lang}/dashboard/events/${event.id}`} key={event.id} className="block">
                 <Card className="hover:shadow-md transition-shadow border-l-4 border-l-blue-500">
                   <CardContent className="p-4 flex justify-between items-center">
                     <div>
@@ -84,7 +84,7 @@ export function MemberDashboard({
             <CheckSquare className="w-5 h-5 text-green-500" />
             My Tasks
           </h2>
-          <Link href={`/${lang}/tasks`} className="text-sm text-blue-600 font-medium">View All</Link>
+          <Link href={`/${lang}/dashboard/tasks`} className="text-sm text-blue-600 font-medium">View All</Link>
         </div>
         <div className="space-y-3">
           {tasks.length === 0 ? (
@@ -103,7 +103,7 @@ export function MemberDashboard({
                   </span>
                 </div>
                 <Button size="sm" variant="outline" asChild>
-                   <Link href={`/${lang}/tasks`}>View</Link>
+                   <Link href={`/${lang}/dashboard/tasks`}>View</Link>
                 </Button>
               </div>
             ))

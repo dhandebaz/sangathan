@@ -73,8 +73,8 @@ export default async function DashboardLayout(props: {
             <h3 className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Main Menu</h3>
             <nav className="space-y-1">
                <SidebarLink href={`/${lang}/dashboard`} icon={LayoutDashboard} label="Overview" />
-               <SidebarLink href={`/${lang}/announcements`} icon={Megaphone} label="Announcements" />
-               <SidebarLink href={`/${lang}/events`} icon={Calendar} label="Events" />
+               <SidebarLink href={`/${lang}/dashboard/announcements`} icon={Megaphone} label="Announcements" />
+               <SidebarLink href={`/${lang}/dashboard/events`} icon={Calendar} label="Events" />
             </nav>
           </div>
 
@@ -82,15 +82,15 @@ export default async function DashboardLayout(props: {
             <h3 className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Operations</h3>
             <nav className="space-y-1">
                {capabilities.volunteer_engine && (
-                 <SidebarLink href={`/${lang}/tasks`} icon={CheckSquare} label="Tasks" />
+                 <SidebarLink href={`/${lang}/dashboard/tasks`} icon={CheckSquare} label="Tasks" />
                )}
                {capabilities.voting_engine && (
-                 <SidebarLink href={`/${lang}/polls`} icon={Vote} label="Decisions" />
+                 <SidebarLink href={`/${lang}/dashboard/polls`} icon={Vote} label="Decisions" />
                )}
                {capabilities.federation_mode && (
-                 <SidebarLink href={`/${lang}/networks`} icon={Globe} label="Networks" />
+                 <SidebarLink href={`/${lang}/dashboard/networks`} icon={Globe} label="Networks" />
                )}
-               <SidebarLink href={`/${lang}/members`} icon={Users} label="Members" />
+               <SidebarLink href={`/${lang}/dashboard/members`} icon={Users} label="Members" />
             </nav>
           </div>
 
@@ -98,10 +98,10 @@ export default async function DashboardLayout(props: {
             <h3 className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">System</h3>
             <nav className="space-y-1">
                {capabilities.advanced_analytics && isAdmin && (
-                 <SidebarLink href={`/${lang}/analytics`} icon={BarChart} label="Analytics" />
+                 <SidebarLink href={`/${lang}/dashboard/analytics`} icon={BarChart} label="Analytics" />
                )}
                {isAdmin && (
-                 <SidebarLink href={`/${lang}/settings`} icon={Settings} label="Settings" />
+                 <SidebarLink href={`/${lang}/dashboard/settings`} icon={Settings} label="Settings" />
                )}
             </nav>
           </div>
@@ -146,7 +146,7 @@ export default async function DashboardLayout(props: {
                 <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">{role || 'Member'}</span>
              </div>
              <Link
-               href={`/${lang}/settings`}
+               href={`/${lang}/dashboard/settings`}
                className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 font-bold hover:bg-slate-200 transition-colors cursor-pointer shadow-sm"
                aria-label="Open organisation settings"
              >

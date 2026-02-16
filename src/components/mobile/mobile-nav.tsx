@@ -21,31 +21,31 @@ export function MobileNav({ lang, capabilities }: MobileNavProps) {
       show: true
     },
     {
-      href: `/${lang}/events`,
+      href: `/${lang}/dashboard/events`,
       icon: Calendar,
       label: 'Events',
       show: true
     },
     {
-      href: `/${lang}/tasks`,
+      href: `/${lang}/dashboard/tasks`,
       icon: CheckSquare,
       label: 'Tasks',
       show: capabilities.volunteer_engine
     },
     {
-      href: `/${lang}/polls`,
+      href: `/${lang}/dashboard/polls`,
       icon: Vote,
       label: 'Vote',
       show: capabilities.voting_engine
     },
     {
-      href: `/${lang}/networks`,
+      href: `/${lang}/dashboard/networks`,
       icon: Globe,
       label: 'Network',
       show: capabilities.federation_mode
     },
     {
-      href: `/${lang}/settings`, // Pointing to settings as the 'More' equivalent for now
+      href: `/${lang}/dashboard/settings`, // Pointing to settings as the 'More' equivalent for now
       icon: Menu,
       label: 'Menu',
       show: true

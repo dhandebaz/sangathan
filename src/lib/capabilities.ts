@@ -100,7 +100,8 @@ export async function checkCapability(orgId: string, capability: OrgCapability):
     
   if (!data || !data.capabilities) return DEFAULT_CAPABILITIES[capability] || false
   
-  const capabilities = data.capabilities as Record<string, boolean>
+  const stored = data.capabilities as Record<string, boolean>
+  const capabilities = { ...DEFAULT_CAPABILITIES, ...stored }
   return !!capabilities[capability]
 }
 

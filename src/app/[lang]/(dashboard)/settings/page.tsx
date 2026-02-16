@@ -74,7 +74,7 @@ export default async function SettingsPage(props: { params: Promise<{ lang: stri
             Raise policy or moderation issues with the platform team.
           </p>
           <Button asChild variant="outline">
-            <Link href={`/${lang}/appeals`}>Open Appeals</Link>
+            <Link href={`/${lang}/dashboard/appeals`}>Open Appeals</Link>
           </Button>
         </section>
       </div>

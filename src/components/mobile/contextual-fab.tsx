@@ -20,33 +20,33 @@ export function ContextualFAB({ lang, role, capabilities }: ContextualFABProps) 
 
   let action = null
 
-  if (pathname.endsWith('/members') && isAdmin) {
+  if (pathname.endsWith('/dashboard/members') && isAdmin) {
     action = {
-      href: `/${lang}/members/new`, // Assuming we have this
+      href: `/${lang}/dashboard/members/new`, // Assuming we have this
       icon: UserPlus,
       label: 'Add Member'
     }
-  } else if (pathname.endsWith('/events') && isAdmin) {
+  } else if (pathname.endsWith('/dashboard/events') && isAdmin) {
     action = {
-      href: `/${lang}/events/new`,
+      href: `/${lang}/dashboard/events/new`,
       icon: Plus,
       label: 'Create Event'
     }
-  } else if (pathname.endsWith('/tasks') && isAdmin && capabilities.volunteer_engine) {
+  } else if (pathname.endsWith('/dashboard/tasks') && isAdmin && capabilities.volunteer_engine) {
     action = {
-      href: `/${lang}/tasks/new`,
+      href: `/${lang}/dashboard/tasks/new`,
       icon: CheckCircle,
       label: 'New Task'
     }
-  } else if (pathname.endsWith('/polls') && isAdmin && capabilities.voting_engine) {
+  } else if (pathname.endsWith('/dashboard/polls') && isAdmin && capabilities.voting_engine) {
     action = {
-      href: `/${lang}/polls/new`,
+      href: `/${lang}/dashboard/polls/new`,
       icon: Vote,
       label: 'New Poll'
     }
-  } else if (pathname.endsWith('/announcements') && isAdmin) {
+  } else if (pathname.endsWith('/dashboard/announcements') && isAdmin) {
     action = {
-      href: `/${lang}/announcements/new`,
+      href: `/${lang}/dashboard/announcements/new`,
       icon: Megaphone,
       label: 'Post'
     }
