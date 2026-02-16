@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic'
 interface Profile {
   status: 'active' | 'pending' | 'rejected' | 'inactive';
   role: string;
-  organization_id: string;
+  organisation_id: string;
 }
 
 interface Organisation {
@@ -30,7 +30,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
   // Check Membership Status
   const { data: profileData, error: profileError } = await supabase
     .from('profiles')
-    .select('status, role, organization_id')
+    .select('status, role, organisation_id')
     .eq('id', user.id)
     .single()
 
@@ -93,7 +93,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     )
   }
 
-  if (!profile.organization_id) {
+  if (!profile.organisation_id) {
     return (
       <div className="max-w-4xl mx-auto py-20 px-4 text-center">
         <h1 className="text-2xl font-bold mb-4">No Organisation Found</h1>
@@ -114,7 +114,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
   const { data: orgData } = await supabase
     .from('organisations')
     .select('status')
-    .eq('id', profile.organization_id)
+    .eq('id', profile.organisation_id)
     .single()
 
   const org = orgData as unknown as Organisation | null
@@ -136,17 +136,17 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
 
   // Try to unlock capabilities if admin visits dashboard
   if (isAdmin) {
-    await unlockCapabilities(profile.organization_id)
+    await unlockCapabilities(profile.organisation_id)
   }
 
   if (isAdmin) {
     // Admin Data Fetching
     const [membersRes, eventsRes, tasksRes, donationsRes, activityRes] = await Promise.all([
-      supabase.from('members').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organization_id),
-      supabase.from('events').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organization_id),
-      supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organization_id).eq('status', 'open'),
-      supabase.from('donations').select('amount').eq('organisation_id', profile.organization_id),
-      supabase.from('audit_logs').select('action, created_at, details').eq('organisation_id', profile.organization_id).order('created_at', { ascending: false }).limit(5)
+      supabase.from('members').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organisation_id),
+      supabase.from('events').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organisation_id),
+      supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organisation_id).eq('status', 'open'),
+      supabase.from('donations').select('amount').eq('organisation_id', profile.organisation_id),
+      supabase.from('audit_logs').select('action, created_at, details').eq('organisation_id', profile.organisation_id).order('created_at', { ascending: false }).limit(5)
     ])
 
     const totalDonations = (donationsRes.data || []).reduce((sum: number, d) => sum + (Number(d.amount) || 0), 0)
@@ -174,9 +174,9 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
 
   // Member Data Fetching
   const [eventsRes, tasksRes, announcementsRes] = await Promise.all([
-    supabase.from('events').select('*').eq('organisation_id', profile.organization_id).gte('start_time', new Date().toISOString()).order('start_time', { ascending: true }).limit(3),
+    supabase.from('events').select('*').eq('organisation_id', profile.organisation_id).gte('start_time', new Date().toISOString()).order('start_time', { ascending: true }).limit(3),
     supabase.from('task_assignments').select('task:tasks(*)').eq('member_id', user.id).limit(3),
-    supabase.from('announcements').select('*').eq('organisation_id', profile.organization_id).order('created_at', { ascending: false }).limit(3)
+    supabase.from('announcements').select('*').eq('organisation_id', profile.organisation_id).order('created_at', { ascending: false }).limit(3)
   ])
 
   // Filter tasks correctly
