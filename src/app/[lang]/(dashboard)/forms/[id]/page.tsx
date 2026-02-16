@@ -8,13 +8,13 @@ import { deleteForm } from '@/actions/forms/actions'
 import { DashboardForm, DashboardFormField } from '@/types/dashboard'
 
 interface PageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ lang: string; id: string }>
 }
 
 export const dynamic = 'force-dynamic'
 
 export default async function FormDetailsPage({ params }: PageProps) {
-  const { id } = await params
+  const { lang, id } = await params
   const supabase = await createClient()
 
   // Fetch form details
@@ -42,7 +42,7 @@ export default async function FormDetailsPage({ params }: PageProps) {
   return (
     <div>
       <div className="flex items-center gap-4 mb-6">
-         <Link href="/dashboard/forms" className="text-gray-500 hover:text-black">
+         <Link href={`/${lang}/dashboard/forms`} className="text-gray-500 hover:text-black">
             <ArrowLeft size={20} />
          </Link>
          <div>

@@ -6,7 +6,8 @@ import { DashboardForm } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
-export default async function FormsPage() {
+export default async function FormsPage(props: { params: Promise<{ lang: string }> }) {
+  const { lang } = await props.params
   const supabase = await createClient()
 
   const { data, error } = await supabase
@@ -28,7 +29,7 @@ export default async function FormsPage() {
            <p className="text-gray-500 mt-1">Collect data from public or internal users.</p>
         </div>
         <Link 
-            href="/dashboard/forms/new" 
+            href={`/${lang}/dashboard/forms/new`} 
             className="bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:opacity-90"
         >
             <Plus size={16} />
@@ -54,7 +55,7 @@ export default async function FormsPage() {
                    <span>{form.form_submissions?.[0]?.count || 0} Submissions</span>
                 </div>
                 <div className="flex gap-2">
-                   <Link href={`/dashboard/forms/${form.id}`} className="hover:text-black" title="View Submissions">
+                   <Link href={`/${lang}/dashboard/forms/${form.id}`} className="hover:text-black" title="View Submissions">
                       <Eye size={18} />
                    </Link>
                    <Link href={`/f/${form.id}`} target="_blank" className="hover:text-black" title="Open Public Link">

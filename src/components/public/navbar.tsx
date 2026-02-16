@@ -131,7 +131,7 @@ export function Navbar({ lang }: { lang: string }) {
               <div className="pl-2">
                  {user ? (
                    <Link 
-                     href="/dashboard" 
+                     href={`/${lang}/dashboard`} 
                      className="bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[var(--bg-secondary)] flex items-center gap-2 transition-all"
                    >
                      <LayoutDashboard size={16} className="text-[var(--accent)]" />
@@ -221,7 +221,7 @@ export function Navbar({ lang }: { lang: string }) {
                   {/* Mobile Auth */}
                   {user ? (
                     <Link 
-                      href="/dashboard" 
+                      href={`/${lang}/dashboard`} 
                       className="flex w-full items-center justify-center gap-2 bg-[var(--accent)] text-white px-4 py-3 rounded-lg text-lg font-bold hover:opacity-90 transition-opacity"
                     >
                       <LayoutDashboard size={20} />

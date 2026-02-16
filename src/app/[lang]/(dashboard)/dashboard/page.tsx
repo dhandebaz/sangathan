@@ -156,18 +156,71 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
   }
 
   if (isAdmin) {
-    // Admin Data Fetching
-    const [membersRes, eventsRes, tasksRes, donationsRes, activityRes] = await Promise.all([
-      supabase.from('members').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organisation_id),
-      supabase.from('events').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organisation_id),
-      supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('organisation_id', profile.organisation_id).eq('status', 'open'),
-      supabase.from('donations').select('amount').eq('organisation_id', profile.organisation_id),
-      supabase.from('audit_logs').select('action, created_at, details').eq('organisation_id', profile.organisation_id).order('created_at', { ascending: false }).limit(5)
+    const now = new Date()
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+
+    const [
+      membersRes,
+      activeMembersRes,
+      upcomingEventsRes,
+      openTasksRes,
+      donationsRes,
+      activityRes,
+      membershipRequestsRes,
+      appealsRes
+    ] = await Promise.all([
+      supabase
+        .from('members')
+        .select('*', { count: 'exact', head: true })
+        .eq('organisation_id', profile.organisation_id),
+      supabase
+        .from('members')
+        .select('*', { count: 'exact', head: true })
+        .eq('organisation_id', profile.organisation_id)
+        .eq('status', 'active'),
+      supabase
+        .from('events')
+        .select('*')
+        .eq('organisation_id', profile.organisation_id)
+        .gte('start_time', now.toISOString())
+        .order('start_time', { ascending: true })
+        .limit(5),
+      supabase
+        .from('tasks')
+        .select('*', { count: 'exact', head: true })
+        .eq('organisation_id', profile.organisation_id)
+        .eq('status', 'open'),
+      supabase
+        .from('donations')
+        .select('amount, created_at')
+        .eq('organisation_id', profile.organisation_id)
+        .gte('created_at', thirtyDaysAgo.toISOString()),
+      supabase
+        .from('audit_logs')
+        .select('action, created_at, details')
+        .eq('organisation_id', profile.organisation_id)
+        .order('created_at', { ascending: false })
+        .limit(5),
+      supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
+        .eq('organisation_id', profile.organisation_id)
+        .eq('status', 'pending'),
+      supabase
+        .from('appeals')
+        .select('*', { count: 'exact', head: true })
+        .eq('organisation_id', profile.organisation_id)
     ])
+
+    const totalMembers = membersRes.count || 0
+    const activeMembers = activeMembersRes.count || 0
+    const openTasks = openTasksRes.count || 0
+    const upcomingEvents = (upcomingEventsRes.data || []) as unknown as DashboardEvent[]
+    const membershipRequests = membershipRequestsRes.count || 0
+    const openAppeals = appealsRes.count || 0
 
     const totalDonations = (donationsRes.data || []).reduce((sum: number, d) => sum + (Number(d.amount) || 0), 0)
 
-    // Transform audit logs to recent activity format
     const recentActivity = (activityRes.data || []).map((log) => ({
       title: log.action.replace(/_/g, ' '),
       type: 'audit',
@@ -177,12 +230,15 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     return (
       <AdminDashboard
         stats={{
-          members: membersRes.count || 0,
-          events: eventsRes.count || 0,
-          tasks: tasksRes.count || 0,
+          members: activeMembers || totalMembers,
+          events: upcomingEvents.length,
+          tasks: openTasks || 0,
           donations: totalDonations
         }}
         recentActivity={recentActivity}
+        upcomingEvents={upcomingEvents}
+        membershipRequests={membershipRequests || 0}
+        openAppeals={openAppeals || 0}
         lang={lang}
       />
     )

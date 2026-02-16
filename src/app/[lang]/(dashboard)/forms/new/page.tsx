@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import { Plus, Trash2, ArrowLeft } from 'lucide-react'
 import { createForm } from '@/actions/forms/actions'
 import Link from 'next/link'
@@ -18,6 +18,8 @@ interface FormField {
 
 export default function NewFormPage() {
   const router = useRouter()
+  const params = useParams() as { lang?: string }
+  const lang = params.lang || 'en'
   const [loading, setLoading] = useState(false)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -54,7 +56,7 @@ export default function NewFormPage() {
     })
 
     if (result.success) {
-      router.push('/dashboard/forms')
+      router.push(`/${lang}/dashboard/forms`)
     } else {
       alert(result.error)
       setLoading(false)
@@ -64,7 +66,7 @@ export default function NewFormPage() {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="flex items-center gap-4 mb-6">
-         <Link href="/dashboard/forms" className="text-gray-500 hover:text-black">
+         <Link href={`/${lang}/dashboard/forms`} className="text-gray-500 hover:text-black">
             <ArrowLeft size={20} />
          </Link>
          <h1 className="text-2xl font-bold">Create New Form</h1>

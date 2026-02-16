@@ -5,7 +5,8 @@ import { Meeting } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
-export default async function MeetingsPage() {
+export default async function MeetingsPage(props: { params: Promise<{ lang: string }> }) {
+  const { lang } = await props.params
   const supabase = await createClient()
 
   // Fetch meetings with attendance count
@@ -28,7 +29,7 @@ export default async function MeetingsPage() {
            <p className="text-gray-500 mt-1">Schedule and track organisational gatherings.</p>
         </div>
         <Link 
-            href="/dashboard/meetings/new" 
+            href={`/${lang}/dashboard/meetings/new`} 
             className="bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:opacity-90"
         >
             <Plus size={16} />
@@ -61,7 +62,7 @@ export default async function MeetingsPage() {
                 </div>
                 
                 <Link 
-                   href={`/dashboard/meetings/${meeting.id}`} 
+                   href={`/${lang}/dashboard/meetings/${meeting.id}`} 
                    className="bg-gray-100 text-gray-900 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 flex items-center gap-2"
                 >
                    View Details

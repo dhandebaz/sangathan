@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { LayoutDashboard, Users, Settings, LogOut, Megaphone, Calendar, CheckSquare, BarChart, Vote, Scale, Globe } from 'lucide-react'
+import { LayoutDashboard, Users, Settings, LogOut, Megaphone, Calendar, CheckSquare, BarChart, Vote, Globe } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/server'
 import { getOrgCapabilities } from '@/lib/capabilities'
@@ -40,7 +40,6 @@ export default async function DashboardLayout(props: {
   }
 
   const isAdmin = ['admin', 'executive'].includes(role)
-  const isEditor = isAdmin || role === 'editor'
 
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] text-foreground pb-16 md:pb-0 font-sans">

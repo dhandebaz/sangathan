@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import { ArrowLeft, Users } from 'lucide-react'
 import { createMeeting } from '@/actions/meetings'
 import Link from 'next/link'
@@ -13,6 +13,8 @@ interface Member {
 
 export function CreateMeetingForm({ members }: { members: Member[] }) {
   const router = useRouter()
+  const params = useParams() as { lang?: string }
+  const lang = params.lang || 'en'
   const [loading, setLoading] = useState(false)
   const [selectedMembers, setSelectedMembers] = useState<Set<string>>(new Set())
   
@@ -35,7 +37,7 @@ export function CreateMeetingForm({ members }: { members: Member[] }) {
     })
 
     if (result.success) {
-       router.push(`/dashboard/meetings/${result.data?.meetingId}`)
+       router.push(`/${lang}/dashboard/meetings/${result.data?.meetingId}`)
     } else {
        alert(result.error)
        setLoading(false)
@@ -45,7 +47,7 @@ export function CreateMeetingForm({ members }: { members: Member[] }) {
   return (
     <form action={handleSubmit} className="max-w-4xl mx-auto">
       <div className="flex items-center gap-4 mb-6">
-         <Link href="/dashboard/meetings" className="text-gray-500 hover:text-black">
+         <Link href={`/${lang}/dashboard/meetings`} className="text-gray-500 hover:text-black">
             <ArrowLeft size={20} />
          </Link>
          <h1 className="text-2xl font-bold">Schedule New Meeting</h1>

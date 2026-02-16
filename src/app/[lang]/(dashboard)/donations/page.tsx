@@ -7,6 +7,7 @@ import { Donation } from '@/types/dashboard'
 export const dynamic = 'force-dynamic'
 
 interface PageProps {
+  params: Promise<{ lang: string }>
   searchParams: Promise<{
     q?: string
     status?: string
@@ -14,8 +15,9 @@ interface PageProps {
   }>
 }
 
-export default async function DonationsPage({ searchParams }: PageProps) {
-  const params = await searchParams
+export default async function DonationsPage(props: PageProps) {
+  const { lang } = await props.params
+  const params = await props.searchParams
   const query = params.q || ''
   const status = params.status || 'all'
   
@@ -57,7 +59,7 @@ export default async function DonationsPage({ searchParams }: PageProps) {
         </div>
         <div className="flex gap-2">
             <a 
-               href="/dashboard/donations/print" 
+               href={`/${lang}/dashboard/donations/print`} 
                target="_blank"
                className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-50"
             >

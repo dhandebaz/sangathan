@@ -15,11 +15,36 @@ export function MemberDashboard({
   tasks: DashboardTask[], 
   announcements: DashboardAnnouncement[] 
 }) {
+  const nextEvent = events[0]
+  const taskCount = tasks.length
+
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold tracking-tight">Welcome Back!</h1>
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Welcome Back</h1>
+          <p className="text-sm text-gray-500 mt-1">Here is what needs your attention.</p>
+        </div>
+        <div className="grid grid-cols-2 gap-3 md:w-auto">
+          <Card>
+            <CardContent className="py-3 px-4">
+              <div className="text-[11px] text-gray-500 mb-1 font-medium uppercase tracking-wide">My Tasks</div>
+              <div className="text-xl font-bold">{taskCount}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="py-3 px-4">
+              <div className="text-[11px] text-gray-500 mb-1 font-medium uppercase tracking-wide">Next Event</div>
+              <div className="text-xs text-gray-700">
+                {nextEvent
+                  ? `${new Date(nextEvent.start_time).toLocaleDateString()} • ${nextEvent.title}`
+                  : 'No upcoming events'}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
       
-      {/* Upcoming Events */}
       <section>
         <div className="flex justify-between items-center mb-3">
           <h2 className="text-lg font-semibold flex items-center gap-2">
@@ -53,7 +78,6 @@ export function MemberDashboard({
         </div>
       </section>
 
-      {/* Assigned Tasks */}
       <section>
         <div className="flex justify-between items-center mb-3">
           <h2 className="text-lg font-semibold flex items-center gap-2">
@@ -87,7 +111,6 @@ export function MemberDashboard({
         </div>
       </section>
 
-      {/* Latest Announcements */}
       <section>
         <h2 className="text-lg font-semibold flex items-center gap-2 mb-3">
           <Megaphone className="w-5 h-5 text-orange-500" />

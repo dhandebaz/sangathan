@@ -7,13 +7,13 @@ import { deleteMeeting } from '@/actions/meetings'
 import { Meeting, MeetingAttendance } from '@/types/dashboard'
 
 interface PageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ lang: string; id: string }>
 }
 
 export const dynamic = 'force-dynamic'
 
 export default async function MeetingDetailsPage({ params }: PageProps) {
-  const { id } = await params
+  const { lang, id } = await params
   const supabase = await createClient()
 
   // Fetch meeting details
@@ -39,8 +39,8 @@ export default async function MeetingDetailsPage({ params }: PageProps) {
   return (
     <div>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-         <div className="flex items-center gap-4">
-            <Link href="/dashboard/meetings" className="text-gray-500 hover:text-black">
+        <div className="flex items-center gap-4">
+            <Link href={`/${lang}/dashboard/meetings`} className="text-gray-500 hover:text-black">
                <ArrowLeft size={20} />
             </Link>
             <div>
@@ -62,7 +62,7 @@ export default async function MeetingDetailsPage({ params }: PageProps) {
 
          <div className="flex gap-2">
             <a 
-               href={`/dashboard/meetings/${id}/print`} 
+               href={`/${lang}/dashboard/meetings/${id}/print`} 
                target="_blank"
                className="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg flex items-center gap-2 text-sm hover:bg-gray-50"
             >
