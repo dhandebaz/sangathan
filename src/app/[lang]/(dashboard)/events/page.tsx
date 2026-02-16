@@ -16,12 +16,12 @@ export default async function EventsPage(props: { params: Promise<{ lang: string
 
   const { data: profileData } = await supabase
     .from('profiles')
-    .select('organization_id')
+    .select('organisation_id')
     .eq('id', user.id)
     .single()
 
-  const profile = profileData as { organization_id: string } | null
-  const orgId = profile?.organization_id
+  const profile = profileData as { organisation_id: string | null } | null
+  const orgId = profile?.organisation_id
 
   if (!orgId) {
     return (

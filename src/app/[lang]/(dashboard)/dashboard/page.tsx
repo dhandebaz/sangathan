@@ -10,16 +10,6 @@ import { DashboardEvent, DashboardTask, DashboardAnnouncement } from '@/types/da
 
 export const dynamic = 'force-dynamic'
 
-interface Profile {
-  status: 'active' | 'pending' | 'rejected' | 'inactive';
-  role: string;
-  organisation_id: string;
-}
-
-interface Organisation {
-  status: string;
-}
-
 export default async function DashboardPage(props: { params: Promise<{ lang: string }> }) {
   const { lang } = await props.params
   const supabase = await createClient()
@@ -27,10 +17,10 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
 
   if (!user) redirect(`/${lang}/login`)
 
-  // Check Membership Status
+  // Check Membership / Onboarding Status
   const { data: profileData, error: profileError } = await supabase
     .from('profiles')
-    .select('status, role, organisation_id')
+    .select('status, role, organisation_id, phone_verified')
     .eq('id', user.id)
     .single()
 
@@ -59,7 +49,33 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     )
   }
 
-  const profile = profileData as unknown as Profile
+  const profile = profileData as { status: 'active' | 'pending' | 'rejected' | 'removed'; role: string; organisation_id: string | null; phone_verified: boolean }
+
+  const onboardingIncomplete = !profile.organisation_id || !profile.phone_verified
+
+  if (onboardingIncomplete) {
+    return (
+      <div className="max-w-4xl mx-auto py-20 px-4 text-center">
+        <div className="bg-white border border-gray-200 shadow-sm rounded-xl p-8 md:p-12">
+          <div className="w-16 h-16 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Users className="w-8 h-8" />
+          </div>
+          <h1 className="text-2xl font-bold mb-4">Finish setting up your organisation</h1>
+          <p className="text-gray-600 mb-8 max-w-md mx-auto">
+            Complete onboarding to unlock your dashboard and start using Sangathan.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Button asChild className="px-8">
+              <Link href={`/${lang}/onboarding`}>Continue Onboarding</Link>
+            </Button>
+            <Button asChild variant="outline" className="px-8">
+              <Link href={`/${lang}/docs`}>View Guide</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   if (profile.status === 'pending') {
     return (
@@ -117,7 +133,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     .eq('id', profile.organisation_id)
     .single()
 
-  const org = orgData as unknown as Organisation | null
+  const org = orgData as { status: string } | null
 
   if (org?.status === 'suspended') {
     return (

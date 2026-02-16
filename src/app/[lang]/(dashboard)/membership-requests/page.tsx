@@ -12,20 +12,20 @@ export default async function RequestsPage(props: { params: Promise<{ lang: stri
 
   const { data: profileData } = await supabase
     .from('profiles')
-    .select('organization_id, role')
+    .select('organisation_id, role')
     .eq('id', user.id)
     .single()
 
-  const profile = profileData as { organization_id: string; role: string } | null
+  const profile = profileData as { organisation_id: string | null; role: string } | null
 
-  if (!profile || !profile.organization_id || profile.role !== 'admin') {
+  if (!profile || !profile.organisation_id || profile.role !== 'admin') {
       return <AccessDenied lang={lang} />
   }
 
   const { data: requests } = await supabase
     .from('profiles')
     .select('*')
-    .eq('organization_id', profile.organization_id)
+    .eq('organisation_id', profile.organisation_id)
     .eq('status', 'pending')
     .order('created_at', { ascending: false })
 

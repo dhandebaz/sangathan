@@ -15,18 +15,18 @@ export default async function PollsPage(props: { params: Promise<{ lang: string 
 
   if (!user) return <div>Please login</div>
 
-  const { data: profileData } = await supabase.from('profiles').select('organization_id, role').eq('id', user.id).single()
-  const profile = profileData as { organization_id: string; role: string } | null
+  const { data: profileData } = await supabase.from('profiles').select('organisation_id, role').eq('id', user.id).single()
+  const profile = profileData as { organisation_id: string | null; role: string } | null
   
-  if (!profile?.organization_id) return <div>No Organisation</div>
+  if (!profile?.organisation_id) return <div>No Organisation</div>
 
-  const canVote = await checkCapability(profile.organization_id, 'voting_engine')
+  const canVote = await checkCapability(profile.organisation_id, 'voting_engine')
   if (!canVote) return <div className="p-8 text-center text-gray-500">This feature is not enabled for your organisation.</div>
 
   const { data: polls } = await supabase
     .from('polls')
     .select('*')
-    .eq('organisation_id', profile.organization_id)
+    .eq('organisation_id', profile.organisation_id)
     .neq('status', 'archived')
     .order('created_at', { ascending: false }) as { data: Poll[] | null }
 

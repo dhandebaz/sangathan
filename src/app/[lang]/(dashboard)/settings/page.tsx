@@ -15,20 +15,20 @@ export default async function SettingsPage(props: { params: Promise<{ lang: stri
 
   const { data: profileData } = await supabase
     .from('profiles')
-    .select('organization_id, role')
+    .select('organisation_id, role')
     .eq('id', user.id)
     .single()
 
-  const profile = profileData as { organization_id: string; role: string } | null
+  const profile = profileData as { organisation_id: string | null; role: string } | null
 
-  if (!profile || !profile.organization_id || profile.role !== 'admin') {
+  if (!profile || !profile.organisation_id || profile.role !== 'admin') {
       return <AccessDenied lang={lang} />
   }
 
   const { data: orgData } = await supabase
     .from('organisations')
     .select('*')
-    .eq('id', profile.organization_id)
+    .eq('id', profile.organisation_id)
     .single()
 
   const org = orgData as { id: string; membership_policy: string; public_transparency_enabled: boolean } | null

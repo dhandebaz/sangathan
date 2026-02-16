@@ -15,19 +15,19 @@ export default async function NetworksPage(props: { params: Promise<{ lang: stri
 
   if (!user) return <div>Please login</div>
 
-  const { data: profileData } = await supabase.from('profiles').select('organization_id, role').eq('id', user.id).single()
-  const profile = profileData as { organization_id: string; role: string } | null
-  
-  if (!profile?.organization_id) return <div>No Organisation</div>
+  const { data: profileData } = await supabase.from('profiles').select('organisation_id, role').eq('id', user.id).single()
+  const profile = profileData as { organisation_id: string | null; role: string } | null
 
-  const canFederate = await checkCapability(profile.organization_id, 'federation_mode')
+  if (!profile?.organisation_id) return <div>No Organisation</div>
+
+  const canFederate = await checkCapability(profile.organisation_id, 'federation_mode')
   if (!canFederate) return <div className="p-8 text-center text-gray-500">Federation Mode is not enabled for your organisation.</div>
 
   // Fetch Networks where Org is a Member
   const { data: memberships } = await supabase
     .from('network_memberships')
     .select('network:networks(*)')
-    .eq('organisation_id', profile.organization_id)
+    .eq('organisation_id', profile.organisation_id)
     .eq('status', 'active') as { data: { network: Network }[] | null }
 
   const networks = memberships?.map((m) => m.network) || []

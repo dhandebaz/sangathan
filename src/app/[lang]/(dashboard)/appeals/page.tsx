@@ -17,13 +17,13 @@ export default async function AppealsPage(props: { params: Promise<{ lang: strin
 
   const { data: profileData } = await supabase
     .from('profiles')
-    .select('organization_id, role')
+    .select('organisation_id, role')
     .eq('id', user.id)
     .single()
 
-  const profile = profileData as { organization_id: string; role: string } | null
+  const profile = profileData as { organisation_id: string | null; role: string } | null
 
-  if (!profile || !profile.organization_id || !['admin', 'executive', 'editor'].includes(profile.role)) {
+  if (!profile || !profile.organisation_id || !['admin', 'executive', 'editor'].includes(profile.role)) {
     return <AccessDenied lang={lang} />
   }
 
@@ -31,7 +31,7 @@ export default async function AppealsPage(props: { params: Promise<{ lang: strin
   const { data: appealsData } = await supabase
     .from('appeals')
     .select('*')
-    .eq('organisation_id', profile.organization_id)
+    .eq('organisation_id', profile.organisation_id)
     .order('created_at', { ascending: false })
 
   const appeals = appealsData as unknown as Appeal[] | null
@@ -46,7 +46,7 @@ export default async function AppealsPage(props: { params: Promise<{ lang: strin
       <div className="grid gap-8 md:grid-cols-2">
         <div>
           <h2 className="text-lg font-semibold mb-4">Submit New Appeal</h2>
-          <AppealForm orgId={profile.organization_id} />
+          <AppealForm orgId={profile.organisation_id} />
         </div>
 
         <div>

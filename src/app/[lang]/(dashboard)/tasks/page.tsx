@@ -14,18 +14,18 @@ export default async function TasksPage(props: { params: Promise<{ lang: string 
 
   if (!user) return <div>Please login</div>
 
-  const { data: profileData } = await supabase.from('profiles').select('organization_id, role').eq('id', user.id).single()
-  const profile = profileData as { organization_id: string; role: string } | null
+  const { data: profileData } = await supabase.from('profiles').select('organisation_id, role').eq('id', user.id).single()
+  const profile = profileData as { organisation_id: string | null; role: string } | null
   
-  if (!profile || !profile.organization_id) return <div>No Organisation</div>
+  if (!profile || !profile.organisation_id) return <div>No Organisation</div>
 
-  const canTasks = await checkCapability(profile.organization_id, 'volunteer_engine')
+  const canTasks = await checkCapability(profile.organisation_id, 'volunteer_engine')
   if (!canTasks) return <div className="p-8 text-center text-gray-500">This feature is not enabled for your organisation.</div>
 
   const { data: tasks } = await supabase
     .from('tasks')
     .select('*, task_assignments(member_id, accepted)')
-    .eq('organisation_id', profile.organization_id)
+    .eq('organisation_id', profile.organisation_id)
     .neq('status', 'archived')
     .order('created_at', { ascending: false })
 

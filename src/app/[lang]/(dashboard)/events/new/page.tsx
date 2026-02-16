@@ -15,17 +15,17 @@ export default async function NewEventPage(props: { params: Promise<{ lang: stri
 
   const { data: profileData } = await supabase
     .from('profiles')
-    .select('organization_id, role')
+    .select('organisation_id, role')
     .eq('id', user.id)
     .single()
 
-  const profile = profileData as { organization_id: string; role: string } | null
+  const profile = profileData as { organisation_id: string | null; role: string } | null
 
-  if (!profile || !profile.organization_id || !['admin', 'editor', 'executive'].includes(profile.role)) {
+  if (!profile || !profile.organisation_id || !['admin', 'editor', 'executive'].includes(profile.role)) {
     return <AccessDenied lang={lang} />
   }
 
-  const partners = await getCollaboratingOrgs(profile.organization_id)
+  const partners = await getCollaboratingOrgs(profile.organisation_id)
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
@@ -36,7 +36,7 @@ export default async function NewEventPage(props: { params: Promise<{ lang: stri
         </Link>
         <h1 className="text-2xl font-bold">Create New Event</h1>
       </div>
-      <EventForm orgId={profile.organization_id} partners={partners} />
+      <EventForm orgId={profile.organisation_id} partners={partners} />
     </div>
   )
 }

@@ -59,15 +59,15 @@ export default async function PollPage(props: { params: Promise<{ lang: string, 
   }
 
   // 4. Check Eligibility
-  const { data: profileData } = await supabaseAdmin
+  const { data: profileData } = await supabase
     .from('profiles')
-    .select('role, organization_id, status')
+    .select('role, organisation_id, status')
     .eq('id', user.id)
     .single()
 
-  const profile = profileData as { role: string; organization_id: string; status: string } | null
+  const profile = profileData as { role: string; organisation_id: string | null; status: string } | null
 
-  const isEligible = profile?.organization_id === poll.organisation_id && profile?.status === 'active' 
+  const isEligible = profile?.organisation_id === poll.organisation_id && profile?.status === 'active' 
     // Add role check if needed, simplified here (VotingInterface handles it via Action check too)
 
   // 5. Get Live Results (if allowed)

@@ -17,17 +17,17 @@ export default async function AnalyticsPage(props: { params: Promise<{ lang: str
   // Check Permission
   const { data: profileData } = await supabase
     .from('profiles')
-    .select('organization_id, role')
+    .select('organisation_id, role')
     .eq('id', user.id)
     .single()
 
-  const profile = profileData as { organization_id: string; role: string } | null
+  const profile = profileData as { organisation_id: string | null; role: string } | null
 
-  if (!profile || !profile.organization_id || !['admin', 'executive'].includes(profile.role)) {
+  if (!profile || !profile.organisation_id || !['admin', 'executive'].includes(profile.role)) {
     return <AccessDenied lang={lang} />
   }
 
-  const orgId = profile.organization_id
+  const orgId = profile.organisation_id
 
   const canAnalytics = await checkCapability(orgId, 'advanced_analytics')
   if (!canAnalytics) return <div className="p-8 text-center text-gray-500">Advanced Analytics is not enabled for your organisation.</div>
