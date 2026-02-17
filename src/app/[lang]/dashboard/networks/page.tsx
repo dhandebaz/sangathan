@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button'
 import { Plus, Globe } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
-import { checkCapability } from '@/lib/capabilities'
 import { Network } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
@@ -20,9 +19,6 @@ export default async function NetworksPage(props: { params: Promise<{ lang: stri
 
   if (!profile?.organisation_id) return <div>No Organisation</div>
 
-  const canFederate = await checkCapability(profile.organisation_id, 'federation_mode')
-  if (!canFederate) return <div className="p-8 text-center text-gray-500">Federation Mode is not enabled for your organisation.</div>
-
   const { data: memberships } = await supabase
     .from('network_memberships')
     .select('network:networks(*)')
@@ -30,6 +26,7 @@ export default async function NetworksPage(props: { params: Promise<{ lang: stri
     .eq('status', 'active') as { data: { network: Network }[] | null }
 
   const networks = memberships?.map((m) => m.network) || []
+  const isAdmin = ['admin', 'executive'].includes(profile.role)
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto py-6">
@@ -67,11 +64,20 @@ export default async function NetworksPage(props: { params: Promise<{ lang: stri
 
         {networks.length === 0 && (
           <div className="col-span-full text-center py-12 bg-gray-50 rounded-xl border border-dashed">
-            <p className="text-gray-500">Your organisation is not part of any networks.</p>
+            <p className="text-gray-500 mb-4">
+              Your organisation is not part of any networks yet.
+            </p>
+            {isAdmin && (
+              <Button asChild>
+                <Link href={`/${lang}/dashboard/networks/new`}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create your first network
+                </Link>
+              </Button>
+            )}
           </div>
         )}
       </div>
     </div>
   )
 }
-

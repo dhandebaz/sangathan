@@ -52,7 +52,10 @@ export const createMeeting = createSafeAction(
       .select('id')
       .single()
 
-    if (error || !meetingData) throw new Error(error?.message || 'Failed to create meeting')
+    if (error || !meetingData) {
+      const err = error as { message?: string } | null
+      return { success: false, error: err?.message || 'Failed to create meeting' }
+    }
 
     const meeting = meetingData
 
@@ -81,7 +84,7 @@ export const createMeeting = createSafeAction(
     })
 
     revalidatePath('/dashboard/meetings')
-    return { meetingId: meeting.id }
+    return { success: true, meetingId: meeting.id }
   },
   { allowedRoles: ['admin', 'editor'] }
 )
@@ -102,7 +105,10 @@ export const markAttendance = createSafeAction(
         { onConflict: 'meeting_id, member_id' },
       )
 
-    if (error) throw new Error(error.message)
+    if (error) {
+      const err = error as { message?: string }
+      return { error: err.message || 'Failed to mark attendance' }
+    }
 
     revalidatePath(`/dashboard/meetings/${input.meetingId}`)
     return { success: true }
@@ -121,7 +127,9 @@ export const deleteMeeting = createSafeAction(
       .eq('id', input.meetingId)
       .eq('organisation_id', context.organizationId)
 
-    if (error) throw new Error(error.message)
+    if (error) {
+      return { error: error.message }
+    }
 
     await logAction({
       organisation_id: context.organizationId,

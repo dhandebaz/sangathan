@@ -58,10 +58,10 @@ export const addMember = createSafeAction(
     const member = data
 
     if (error || !member) {
-      if (error?.code === '23505') { // Unique violation
-        throw new Error('Phone number already exists in this organisation.')
+      if ((error as { code?: string })?.code === '23505') {
+        return { error: 'Phone number already exists in this organisation.' }
       }
-      throw new Error(error?.message || 'Failed to add member')
+      return { error: (error as { message?: string })?.message || 'Failed to add member' }
     }
 
     await logAction({
@@ -73,8 +73,8 @@ export const addMember = createSafeAction(
       details: { full_name: input.full_name, role: input.role }
     })
 
-    revalidatePath('/members')
-    return { memberId: member.id }
+    revalidatePath('/dashboard/members')
+    return { success: true, memberId: member.id }
   },
   { allowedRoles: ['admin', 'editor'] } // Editor can create too
 )
@@ -101,10 +101,11 @@ export const updateMember = createSafeAction(
       .eq('organisation_id', context.organizationId)
 
     if (error) {
-       if (error.code === '23505') {
-        throw new Error('Phone number already exists.')
+      const err = error as { code?: string; message?: string }
+      if (err.code === '23505') {
+        return { error: 'Phone number already exists.' }
       }
-      throw new Error(error.message)
+      return { error: err.message || 'Failed to update member' }
     }
 
     await logAction({
@@ -116,7 +117,7 @@ export const updateMember = createSafeAction(
       details: { changes: input }
     })
 
-    revalidatePath('/members')
+    revalidatePath('/dashboard/members')
     return { success: true }
   },
   { allowedRoles: ['admin', 'editor'] }
@@ -134,7 +135,8 @@ export const changeMemberStatus = createSafeAction(
       .eq('organisation_id', context.organizationId)
 
     if (error) {
-      throw new Error(error.message)
+      const err = error as { message?: string }
+      return { error: err.message || 'Failed to update member status' }
     }
     
     await logAction({
@@ -146,7 +148,7 @@ export const changeMemberStatus = createSafeAction(
       details: { status: input.status }
     })
 
-    revalidatePath('/members')
+    revalidatePath('/dashboard/members')
     return { success: true }
   },
   { allowedRoles: ['admin', 'editor'] }

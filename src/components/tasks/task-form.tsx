@@ -6,11 +6,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createTask } from '@/actions/tasks'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 
 export function TaskForm({ orgId }: { orgId: string }) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const params = useParams() as { lang?: string }
+  const lang = params.lang || 'en'
   
   const [formData, setFormData] = useState({
     title: '',
@@ -35,7 +37,7 @@ export function TaskForm({ orgId }: { orgId: string }) {
 
     setLoading(false)
     if (res.success) {
-      router.push('/dashboard/tasks')
+      router.push(`/${lang}/dashboard/tasks`)
     } else {
       alert(res.error)
     }

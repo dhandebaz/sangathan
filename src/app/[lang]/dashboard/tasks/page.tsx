@@ -3,7 +3,6 @@ import { TaskCard } from '@/components/tasks/task-card'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
-import { checkCapability } from '@/lib/capabilities'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,9 +17,6 @@ export default async function TasksPage(props: { params: Promise<{ lang: string 
   const profile = profileData as { organisation_id: string | null; role: string } | null
   
   if (!profile || !profile.organisation_id) return <div>No Organisation</div>
-
-  const canTasks = await checkCapability(profile.organisation_id, 'volunteer_engine')
-  if (!canTasks) return <div className="p-8 text-center text-gray-500">This feature is not enabled for your organisation.</div>
 
   const { data: tasks } = await supabase
     .from('tasks')
@@ -55,7 +51,17 @@ export default async function TasksPage(props: { params: Promise<{ lang: string 
 
         {(!tasks || tasks.length === 0) && (
           <div className="col-span-full text-center py-12 bg-gray-50 rounded-xl border border-dashed">
-            <p className="text-gray-500">No active tasks.</p>
+            <p className="text-gray-500 mb-4">
+              No active tasks yet.
+            </p>
+            {canManage && (
+              <Button asChild>
+                <Link href={`/${lang}/dashboard/tasks/new`}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create your first task
+                </Link>
+              </Button>
+            )}
           </div>
         )}
       </div>

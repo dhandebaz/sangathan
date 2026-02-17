@@ -90,12 +90,8 @@ export default async function DashboardLayout(props: {
           <div>
             <h3 className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Operations</h3>
             <nav className="space-y-1">
-               {capabilities.volunteer_engine && (
-                 <SidebarLink href={`/${lang}/dashboard/tasks`} icon={CheckSquare} label="Tasks" />
-               )}
-               {capabilities.voting_engine && (
-                 <SidebarLink href={`/${lang}/dashboard/polls`} icon={Vote} label="Decisions" />
-               )}
+               <SidebarLink href={`/${lang}/dashboard/tasks`} icon={CheckSquare} label="Tasks" />
+               <SidebarLink href={`/${lang}/dashboard/polls`} icon={Vote} label="Decisions" />
                {capabilities.federation_mode && (
                  <SidebarLink href={`/${lang}/dashboard/networks`} icon={Globe} label="Networks" />
                )}

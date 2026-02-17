@@ -6,11 +6,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createNetwork } from '@/actions/networks'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 
 export function NetworkForm() {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const params = useParams() as { lang?: string }
+  const lang = params.lang || 'en'
   
   const [formData, setFormData] = useState({
     name: '',
@@ -32,7 +34,7 @@ export function NetworkForm() {
 
     setLoading(false)
     if (res.success) {
-      router.push('/dashboard/networks')
+      router.push(`/${lang}/dashboard/networks`)
     } else {
       alert(res.error)
     }

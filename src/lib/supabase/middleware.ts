@@ -114,7 +114,7 @@ export async function updateSession(request: NextRequest) {
   // If user is logged in and tries to access auth pages, redirect to dashboard
   if (user && isAuthRoute) {
     const url = request.nextUrl.clone()
-    url.pathname = '/dashboard'
+    url.pathname = '/en/dashboard'
     return NextResponse.redirect(url)
   }
 
@@ -162,7 +162,7 @@ export async function updateSession(request: NextRequest) {
   // If user is accessing protected routes (Dashboard), enforce verification.
   // We check if it's a dashboard route AND not the verification page itself.
   // CRITICAL FIX: Add explicit dashboard route check without locale
-  const isDashboardRoute = locales.some(loc => pathname.startsWith(`/${loc}/dashboard`)) || pathname.startsWith('/dashboard')
+  const isDashboardRoute = locales.some(loc => pathname.startsWith(`/${loc}/dashboard`))
   const isVerificationPage = locales.some(loc => pathname.startsWith(`/${loc}/verify-phone`)) || pathname === '/verify-phone'
 
   if (user && isDashboardRoute && !isVerificationPage) {
@@ -223,7 +223,7 @@ export async function updateSession(request: NextRequest) {
 
      if (profile && (profile.role !== 'admin' || profile.phone_verified)) {
         const url = request.nextUrl.clone()
-        url.pathname = '/dashboard'
+        url.pathname = '/en/dashboard'
         return NextResponse.redirect(url)
      }
   }

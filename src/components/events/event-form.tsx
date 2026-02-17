@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createEvent } from '@/actions/events'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 
 import { EventType } from '@/types/events'
 
@@ -18,6 +18,8 @@ interface Partner {
 export function EventForm({ orgId, partners = [] }: { orgId: string, partners?: Partner[] }) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const params = useParams() as { lang?: string }
+  const lang = params.lang || 'en'
   
   const [formData, setFormData] = useState({
     title: '',
@@ -62,7 +64,7 @@ export function EventForm({ orgId, partners = [] }: { orgId: string, partners?: 
 
     setLoading(false)
     if (res.success) {
-      router.push('/dashboard/events')
+      router.push(`/${lang}/dashboard/events`)
     } else {
       alert(res.error)
     }

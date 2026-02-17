@@ -98,7 +98,12 @@ export async function login(input: z.infer<typeof LoginSchema>) {
     return { success: false, error: err instanceof Error ? err.message : 'Failed to login' }
   }
 
-  redirect('/dashboard')
+  const headersList = await headers()
+  const referer = headersList.get('referer') || ''
+  const match = referer.match(/\/(en|hi)\//)
+  const lang = match?.[1] || 'en'
+
+  redirect(`/${lang}/dashboard`)
 }
 
 import { checkRateLimit } from '@/lib/rate-limit/db-limiter'
@@ -210,7 +215,12 @@ export async function resetPassword(input: z.infer<typeof ResetPasswordSchema>) 
 
   if (error) return { success: false, error: error.message }
 
-  redirect('/dashboard')
+  const headersList = await headers()
+  const referer = headersList.get('referer') || ''
+  const match = referer.match(/\/(en|hi)\//)
+  const lang = match?.[1] || 'en'
+
+  redirect(`/${lang}/dashboard`)
 }
 
 import { firebaseAdminAuth } from '@/lib/firebase/admin'
@@ -252,7 +262,7 @@ export async function phoneLogin(input: z.infer<typeof PhoneLoginSchema>) {
       type: 'magiclink',
       email: profile.email,
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://sangathan.space'}/dashboard`
+        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://sangathan.space'}/en/dashboard`
       }
     })
 
@@ -312,7 +322,12 @@ export async function linkPhoneToAccount(input: z.infer<typeof LoginSchema> & { 
     } as never)
     .eq('id', authData.user.id)
 
-  redirect('/dashboard')
+  const headersList = await headers()
+  const referer = headersList.get('referer') || ''
+  const match = referer.match(/\/(en|hi)\//)
+  const lang = match?.[1] || 'en'
+
+  redirect(`/${lang}/dashboard`)
 }
 
 import { sendEmail } from '@/lib/email/sender'
@@ -397,7 +412,7 @@ export async function finalizeSignup(input: { idToken: string }) {
   }
 
   // 7. Send Welcome Email (Fire and forget)
-  const dashboardUrl = process.env.NEXT_PUBLIC_APP_URL ? `${process.env.NEXT_PUBLIC_APP_URL}/dashboard` : 'https://sangathan.space/dashboard'
+  const dashboardUrl = process.env.NEXT_PUBLIC_APP_URL ? `${process.env.NEXT_PUBLIC_APP_URL}/en/dashboard` : 'https://sangathan.space/en/dashboard'
 
   // We don't await this to speed up the response, but we log errors in the background
   sendEmail({

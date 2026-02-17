@@ -6,12 +6,14 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createPoll } from '@/actions/polls'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import { Plus, Trash } from 'lucide-react'
 
 export function PollForm({ orgId }: { orgId: string }) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const params = useParams() as { lang?: string }
+  const lang = params.lang || 'en'
   
   const [formData, setFormData] = useState({
     title: '',
@@ -50,7 +52,7 @@ export function PollForm({ orgId }: { orgId: string }) {
 
     setLoading(false)
     if (res.success) {
-      router.push('/dashboard/polls')
+      router.push(`/${lang}/dashboard/polls`)
     } else {
       alert(res.error)
     }

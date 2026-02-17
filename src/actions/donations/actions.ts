@@ -44,15 +44,19 @@ export const logDonation = createSafeAction(
 
     // 1. Check uniqueness of UPI reference if provided
     if (input.upi_reference) {
-      const { data: existing } = await supabase
+      const { data: existing, error: uniqueError } = await supabase
         .from('donations')
         .select('id')
         .eq('organisation_id', context.organizationId)
         .eq('upi_reference', input.upi_reference)
-        .single()
+        .maybeSingle()
+
+      if (uniqueError) {
+        return { error: uniqueError.message }
+      }
 
       if (existing) {
-        throw new Error('This UPI reference has already been recorded.')
+        return { error: 'This UPI reference has already been recorded.' }
       }
     }
 
@@ -77,8 +81,10 @@ export const logDonation = createSafeAction(
       .single()) as { data: DonationRow | null, error: { message: string, code?: string } | null }
 
     if (error || !donation) {
-      if (error?.code === '23505') throw new Error('Duplicate entry.')
-      throw new Error(error?.message || 'Failed to log donation')
+      if (error?.code === '23505') {
+        return { error: 'Duplicate entry.' }
+      }
+      return { error: error?.message || 'Failed to log donation' }
     }
 
     await logAction({
@@ -91,7 +97,7 @@ export const logDonation = createSafeAction(
     })
 
     revalidatePath('/dashboard/donations')
-    return { donationId: donation.id }
+    return { success: true, donationId: donation.id }
   },
   { allowedRoles: ['admin', 'editor'] }
 )
@@ -107,7 +113,9 @@ export const verifyDonation = createSafeAction(
       .eq('id', input.donationId)
       .eq('organisation_id', context.organizationId)
 
-    if (error) throw new Error(error.message)
+    if (error) {
+      return { error: error.message }
+    }
 
     await logAction({
       organisation_id: context.organizationId,
@@ -134,7 +142,9 @@ export const deleteDonation = createSafeAction(
       .eq('id', input.donationId)
       .eq('organisation_id', context.organizationId)
 
-    if (error) throw new Error(error.message)
+    if (error) {
+      return { error: error.message }
+    }
 
     await logAction({
       organisation_id: context.organizationId,

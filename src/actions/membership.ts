@@ -170,7 +170,7 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
         .eq('organisation_id', input.orgId)
         .eq('role', 'admin')
       
-      const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/membership-requests`
+    const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/en/dashboard/membership-requests`
       
       if (admins) {
         for (const admin of admins) {
@@ -187,7 +187,7 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
        // reuse existing welcome email or new one?
        // The existing welcomeAdminEmail is specific to "Workspace ready".
        // Let's use membershipApprovedEmail for consistency even if auto-approved.
-       const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`
+      const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/en/dashboard`
        await sendEmail({
          to: email,
          subject: `Welcome to ${org.name}`,
@@ -253,7 +253,7 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
     if (updateError) throw updateError
 
     // Notify
-    const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`
+    const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/en/dashboard`
     await sendEmail({
         to: member.email,
         subject: `Membership Approved: ${org?.name}`,
@@ -315,7 +315,7 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
     if (updateError) throw updateError
 
     // Notify
-    const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`
+    const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/en/dashboard`
     await sendEmail({
         to: member.email,
         subject: `Membership Update: ${org?.name}`,

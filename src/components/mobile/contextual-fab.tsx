@@ -32,13 +32,13 @@ export function ContextualFAB({ lang, role, capabilities }: ContextualFABProps) 
       icon: Plus,
       label: 'Create Event'
     }
-  } else if (pathname.endsWith('/dashboard/tasks') && isAdmin && capabilities.volunteer_engine) {
+  } else if (pathname.endsWith('/dashboard/tasks') && isAdmin) {
     action = {
       href: `/${lang}/dashboard/tasks/new`,
       icon: CheckCircle,
       label: 'New Task'
     }
-  } else if (pathname.endsWith('/dashboard/polls') && isAdmin && capabilities.voting_engine) {
+  } else if (pathname.endsWith('/dashboard/polls') && isAdmin) {
     action = {
       href: `/${lang}/dashboard/polls/new`,
       icon: Vote,

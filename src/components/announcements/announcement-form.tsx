@@ -6,12 +6,14 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createAnnouncement } from '@/actions/announcements'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
 
 export function AnnouncementForm({ orgId }: { orgId: string }) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const params = useParams() as { lang?: string }
+  const lang = params.lang || 'en'
   
   const [formData, setFormData] = useState<{
     title: string;
@@ -48,7 +50,7 @@ export function AnnouncementForm({ orgId }: { orgId: string }) {
 
     setLoading(false)
     if (res.success) {
-      router.push('/dashboard/announcements')
+      router.push(`/${lang}/dashboard/announcements`)
       router.refresh()
     } else {
       alert(res.error)

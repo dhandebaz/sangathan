@@ -2,7 +2,6 @@ import { createClient } from '@/lib/supabase/server'
 import { MetricCard } from '@/components/analytics/metric-card'
 import { Users, Calendar, CheckSquare, DollarSign, Megaphone } from 'lucide-react'
 import { redirect } from 'next/navigation'
-import { checkCapability } from '@/lib/capabilities'
 import { AccessDenied } from '@/components/dashboard/access-denied'
 
 export const dynamic = 'force-dynamic'
@@ -27,9 +26,6 @@ export default async function AnalyticsPage(props: { params: Promise<{ lang: str
   }
 
   const orgId = profile.organisation_id
-
-  const canAnalytics = await checkCapability(orgId, 'advanced_analytics')
-  if (!canAnalytics) return <div className="p-8 text-center text-gray-500">Advanced Analytics is not enabled for your organisation.</div>
 
   const results = await Promise.allSettled([
     supabase.from('members').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId),

@@ -3,7 +3,6 @@ import { NetworkForm } from '@/components/networks/network-form'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
-import { checkCapability } from '@/lib/capabilities'
 
 export default async function NewNetworkPage(props: { params: Promise<{ lang: string }> }) {
   const { lang } = await props.params
@@ -24,9 +23,6 @@ export default async function NewNetworkPage(props: { params: Promise<{ lang: st
     return <div>Access Denied</div>
   }
 
-  const canFederate = await checkCapability(profile.organisation_id, 'federation_mode')
-  if (!canFederate) return <div>Federation Mode not enabled for your organisation.</div>
-
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
       <div className="mb-6">
@@ -40,4 +36,3 @@ export default async function NewNetworkPage(props: { params: Promise<{ lang: st
     </div>
   )
 }
-

@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button'
 import { Plus, BarChart2 } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
-import { checkCapability } from '@/lib/capabilities'
 import { Poll } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
@@ -19,9 +18,6 @@ export default async function PollsPage(props: { params: Promise<{ lang: string 
   const profile = profileData as { organisation_id: string | null; role: string } | null
   
   if (!profile?.organisation_id) return <div>No Organisation</div>
-
-  const canVote = await checkCapability(profile.organisation_id, 'voting_engine')
-  if (!canVote) return <div className="p-8 text-center text-gray-500">This feature is not enabled for your organisation.</div>
 
   const { data: polls } = await supabase
     .from('polls')
@@ -77,7 +73,17 @@ export default async function PollsPage(props: { params: Promise<{ lang: string 
 
         {(!polls || polls.length === 0) && (
           <div className="text-center py-12 bg-gray-50 rounded-xl border border-dashed">
-            <p className="text-gray-500">No active polls.</p>
+            <p className="text-gray-500 mb-4">
+              No active polls yet.
+            </p>
+            {canManage && (
+              <Button asChild>
+                <Link href={`/${lang}/dashboard/polls/new`}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create your first poll
+                </Link>
+              </Button>
+            )}
           </div>
         )}
       </div>
