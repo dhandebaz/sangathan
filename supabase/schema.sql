@@ -68,7 +68,10 @@ create table public.meetings (
   title text not null,
   description text,
   date timestamptz not null,
+  end_time timestamptz,
   location text,
+  visibility text not null default 'members' check (visibility in ('public', 'members', 'private')),
+  meeting_link text,
   created_by uuid references public.profiles(id) on delete set null,
   created_at timestamptz default now()
 );

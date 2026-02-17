@@ -24,7 +24,7 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
     // Only initialize once per component mount
     if (window.recaptchaVerifier) {
       window.recaptchaVerifier.clear()
-      window.recaptchaVerifier = undefined as any
+      window.recaptchaVerifier = undefined as unknown as RecaptchaVerifier
     }
 
     const auth = firebaseAuth
@@ -53,7 +53,7 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
       // Cleanup on unmount
       if (window.recaptchaVerifier) {
         window.recaptchaVerifier.clear()
-        window.recaptchaVerifier = undefined as any
+        window.recaptchaVerifier = undefined as unknown as RecaptchaVerifier
       }
     }
   }, [])
@@ -90,7 +90,7 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
         }
       }
 
-      const appVerifier = window.recaptchaVerifier
+      const appVerifier: RecaptchaVerifier | null = window.recaptchaVerifier ?? null
       if (!appVerifier) {
         throw new Error('ReCAPTCHA not initialized.')
       }
@@ -118,7 +118,7 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
       // Reset captcha if needed
       if (window.recaptchaVerifier) {
         window.recaptchaVerifier.clear()
-        window.recaptchaVerifier = undefined as any
+        window.recaptchaVerifier = undefined as unknown as RecaptchaVerifier
       }
     } finally {
       setLoading(false)

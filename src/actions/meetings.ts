@@ -12,7 +12,10 @@ const CreateMeetingSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 chars"),
   description: z.string().optional(),
   date: z.string().datetime(),
+  end_time: z.string().datetime().optional(),
   location: z.string().optional(),
+  visibility: z.enum(['public', 'members', 'private']).default('members'),
+  meeting_link: z.string().url().optional(),
   attendee_ids: z.array(z.string().uuid()).optional(),
 })
 
@@ -40,7 +43,10 @@ export const createMeeting = createSafeAction(
         title: input.title,
         description: input.description,
         date: input.date,
+        end_time: input.end_time,
         location: input.location,
+        visibility: input.visibility,
+        meeting_link: input.meeting_link,
         created_by: context.user.id,
       } as never)
       .select('id')

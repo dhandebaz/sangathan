@@ -2,15 +2,14 @@
 
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { LayoutDashboard, Calendar, CheckSquare, Vote, Menu, Globe } from 'lucide-react'
+import { LayoutDashboard, Calendar, Users, Video, Settings as SettingsIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface MobileNavProps {
   lang: string
-  capabilities: Record<string, boolean>
 }
 
-export function MobileNav({ lang, capabilities }: MobileNavProps) {
+export function MobileNav({ lang }: MobileNavProps) {
   const pathname = usePathname()
 
   const navItems = [
@@ -21,33 +20,27 @@ export function MobileNav({ lang, capabilities }: MobileNavProps) {
       show: true
     },
     {
+      href: `/${lang}/dashboard/members`,
+      icon: Users,
+      label: 'Members',
+      show: true
+    },
+    {
       href: `/${lang}/dashboard/events`,
       icon: Calendar,
       label: 'Events',
       show: true
     },
     {
-      href: `/${lang}/dashboard/tasks`,
-      icon: CheckSquare,
-      label: 'Tasks',
-      show: capabilities.volunteer_engine
+      href: `/${lang}/dashboard/meetings`,
+      icon: Video,
+      label: 'Meetings',
+      show: true
     },
     {
-      href: `/${lang}/dashboard/polls`,
-      icon: Vote,
-      label: 'Vote',
-      show: capabilities.voting_engine
-    },
-    {
-      href: `/${lang}/dashboard/networks`,
-      icon: Globe,
-      label: 'Network',
-      show: capabilities.federation_mode
-    },
-    {
-      href: `/${lang}/dashboard/settings`, // Pointing to settings as the 'More' equivalent for now
-      icon: Menu,
-      label: 'Menu',
+      href: `/${lang}/dashboard/settings`,
+      icon: SettingsIcon,
+      label: 'Settings',
       show: true
     }
   ]

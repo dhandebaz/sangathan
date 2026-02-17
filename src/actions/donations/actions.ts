@@ -165,7 +165,10 @@ export async function submitPublicDonation(input: z.infer<typeof PublicDonationS
     .from('organisations')
     .select('id, is_suspended')
     .eq('slug', input.orgSlug)
-    .single()) as { data: { id: string; is_suspended: boolean } | null, error: any }
+    .single()) as {
+      data: { id: string; is_suspended: boolean } | null
+      error: { message: string } | null
+    }
 
   if (orgError || !organisation) {
     return { success: false, error: 'Organisation not found' }

@@ -4,8 +4,8 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { JoinButton } from '@/components/org/join-button'
 import { getCollaboratingOrgs } from '@/actions/collaboration'
 import Link from 'next/link'
-import { Calendar, MapPin } from 'lucide-react'
-import { Organisation, DashboardEvent, DashboardAnnouncement } from '@/types/dashboard'
+import { Calendar, MapPin, Video } from 'lucide-react'
+import { Organisation, DashboardEvent, DashboardAnnouncement, Meeting } from '@/types/dashboard'
 
 export default async function OrgPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
@@ -64,6 +64,16 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
   const jointEvents = (jointMappings as unknown as { event: DashboardEvent }[])?.map(j => j.event).filter(e => e.event_type === 'public' && new Date(e.start_time) >= new Date()) || []
   
   const allEvents = [...(ownedEvents as DashboardEvent[] || []), ...jointEvents].sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime())
+
+  const { data: publicMeetingsData } = await supabaseAdmin
+    .from('meetings')
+    .select('id, organisation_id, title, description, date, end_time, location, visibility, meeting_link')
+    .eq('organisation_id', org.id)
+    .eq('visibility', 'public')
+    .gte('date', new Date().toISOString())
+    .order('date', { ascending: true })
+
+  const publicMeetings = (publicMeetingsData as Meeting[] | null) || []
 
   // Fetch Partners
   const partners = await getCollaboratingOrgs(org.id) as (Organisation & { id: string })[]
@@ -207,6 +217,54 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
                  </div>
                ))}
              </div>
+          </section>
+        )}
+
+        {publicMeetings.length > 0 && (
+          <section>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Upcoming Public Meetings</h2>
+            <div className="space-y-4">
+              {publicMeetings.map((m) => {
+                const start = new Date(m.date)
+                const end = m.end_time ? new Date(m.end_time) : null
+                const jitsiLink = `https://meet.jit.si/sangathan-${m.organisation_id}-${m.id}`
+                const meetingLink = m.meeting_link || jitsiLink
+                return (
+                  <div key={m.id} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+                    <h3 className="font-bold text-lg mb-1">{m.title}</h3>
+                    <div className="space-y-1 text-sm text-gray-600 mb-3">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4" />
+                        <span>
+                          {start.toLocaleString()}
+                          {end && (
+                            <>
+                              {' – '}
+                              {end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </>
+                          )}
+                        </span>
+                      </div>
+                      {m.location && (
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4" />
+                          {m.location}
+                        </div>
+                      )}
+                    </div>
+                    <a
+                      href={meetingLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:underline"
+                    >
+                      <Video className="w-4 h-4" />
+                      Join Meeting
+                    </a>
+                  </div>
+                )
+              })}
+            </div>
           </section>
         )}
 

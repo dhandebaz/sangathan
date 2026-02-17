@@ -169,7 +169,10 @@ export interface Database {
           title: string
           description: string | null
           date: string
+          end_time: string | null
           location: string | null
+          visibility: 'public' | 'members' | 'private'
+          meeting_link: string | null
           created_by: string
           created_at: string
           updated_at: string
@@ -181,7 +184,10 @@ export interface Database {
           title: string
           description?: string | null
           date: string
+          end_time?: string | null
           location?: string | null
+          visibility?: 'public' | 'members' | 'private'
+          meeting_link?: string | null
           created_by: string
           created_at?: string
           updated_at?: string
@@ -193,7 +199,10 @@ export interface Database {
           title?: string
           description?: string | null
           date?: string
+          end_time?: string | null
           location?: string | null
+          visibility?: 'public' | 'members' | 'private'
+          meeting_link?: string | null
           created_by?: string
           created_at?: string
           updated_at?: string

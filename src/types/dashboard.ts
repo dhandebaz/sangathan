@@ -131,9 +131,12 @@ export interface Meeting {
   id: string;
   title: string;
   date: string;
+  end_time?: string;
   description?: string;
   location?: string | null;
   organisation_id?: string;
+  visibility?: 'public' | 'members' | 'private';
+  meeting_link?: string | null;
   meeting_attendance?: { count: number }[];
 }
 
