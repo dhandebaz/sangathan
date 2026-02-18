@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight, Check, ShieldCheck, Video, Banknote, Activity, Globe, Vote, Megaphone, Lock, Users } from 'lucide-react'
 import { Metadata } from 'next'
+import { NeutralInfrastructureFeatures } from '@/components/public/neutral-infrastructure'
 
 export const dynamic = 'force-dynamic'
 
@@ -172,7 +173,6 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
          </div>
       </section>
 
-      {/* 4. GOVERNANCE & TRUST - Subtle Contrast */}
       <section className="py-24 bg-[var(--bg-secondary)] border-y border-[var(--border-subtle)]">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
@@ -183,31 +183,42 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                        ? 'संगठन एक मंच है, प्रकाशक नहीं। हम संरचना प्रदान करते हैं, विचारधारा नहीं।' 
                        : 'Sangathan is a platform, not a publisher. We provide the structure, you provide the ideology.'}
                   </p>
-                  <ul className="space-y-4">
-                     {[
-                       'Cryptographic Data Isolation',
-                       'Immutable Audit Logging',
-                       'Granular Role Permissions',
-                       'Automated Risk Detection',
-                       'Transparent Appeals System'
-                     ].map((item, i) => (
-                       <li key={i} className="flex gap-3 items-center text-[var(--text-primary)]">
-                          <ShieldCheck size={20} className="text-[var(--accent)]" />
-                          {item}
-                       </li>
-                     ))}
-                  </ul>
+                  <NeutralInfrastructureFeatures />
                </div>
-               <div className="bg-[var(--surface)] p-8 rounded-2xl border border-[var(--border-subtle)]">
-                  <h3 className="font-bold text-xl mb-4 text-[var(--text-primary)]">Privacy First</h3>
-                  <p className="text-[var(--text-secondary)] mb-6 leading-relaxed">
+               <div className="relative bg-[var(--surface)] p-8 rounded-2xl border border-[var(--border-subtle)] overflow-hidden">
+                  <div className="pointer-events-none absolute inset-0 opacity-10">
+                     <div
+                        className="absolute -inset-24 rounded-full bg-[var(--success)] blur-3xl animate-pulse"
+                        style={{ animationDuration: '8s' }}
+                     />
+                  </div>
+                  <h3 className="relative font-bold text-xl mb-4 text-[var(--text-primary)]">Privacy First</h3>
+                  <p className="relative text-[var(--text-secondary)] mb-6 leading-relaxed">
                      {isHindi 
                        ? 'हम डेटा नहीं बेचते हैं। हम विज्ञापन नहीं चलाते हैं। आपका सदस्य डेटा आपका है।' 
                        : 'We do not sell data. We do not run ads. Your member data belongs to you, and only you.'}
                   </p>
-                  <div className="flex items-center gap-4 pt-6 border-t border-[var(--border-subtle)]">
+                  <div className="relative flex items-center gap-4 pt-6 border-t border-[var(--border-subtle)]">
                      <Lock className="text-[var(--success)]" size={24} />
                      <span className="text-sm font-medium text-[var(--text-secondary)]">End-to-End Logic Isolation</span>
+                  </div>
+                  <div className="relative mt-6 grid grid-cols-2 gap-3 text-xs text-[var(--text-secondary)]">
+                     <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[var(--success)] animate-ping" />
+                        <span>{isHindi ? 'कोई विज्ञापन प्रोफाइलिंग नहीं' : 'No ad profiling'}</span>
+                     </div>
+                     <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-ping" />
+                        <span>{isHindi ? 'न्यूनतम डेटा प्रतिधारण' : 'Minimal data retention'}</span>
+                     </div>
+                     <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[var(--success)] animate-ping" />
+                        <span>{isHindi ? 'एन्क्रिप्टेड परिवहन' : 'Encrypted in transit'}</span>
+                     </div>
+                     <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-ping" />
+                        <span>{isHindi ? 'संरचनात्मक लॉगिंग' : 'Structural logging only'}</span>
+                     </div>
                   </div>
                </div>
             </div>
