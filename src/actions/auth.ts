@@ -333,6 +333,12 @@ export async function linkPhoneToAccount(input: z.infer<typeof LoginSchema> & { 
 import { sendEmail } from '@/lib/email/sender'
 import { welcomeAdminEmail } from '@/lib/email/templates'
 
+type CreateOrganisationAndAdminResult = {
+  success: boolean
+  organisation_id: string
+  profile_id: string
+}
+
 export async function finalizeSignup(input: { idToken: string }) {
   // 1. Verify Firebase Token
   let decodedToken
@@ -386,7 +392,10 @@ export async function finalizeSignup(input: { idToken: string }) {
   const baseSlug = orgName.toLowerCase().replace(/[^a-z0-9]+/g, '-')
   const uniqueSlug = `${baseSlug}-${Math.random().toString(36).substring(2, 7)}`
 
-  const { error: rpcError } = await supabaseAdmin.rpc('create_organisation_and_admin', {
+  const {
+    data: rpcData,
+    error: rpcError,
+  } = await supabaseAdmin.rpc('create_organisation_and_admin', {
     p_org_name: orgName,
     p_org_slug: uniqueSlug,
     p_user_id: user.id,
@@ -396,7 +405,7 @@ export async function finalizeSignup(input: { idToken: string }) {
     p_firebase_uid: firebaseUid,
   } as never)
 
-  if (!rpcError) {
+  if (!rpcError && rpcData) {
     await supabaseAdmin
       .from('profiles')
       .update({
@@ -406,7 +415,7 @@ export async function finalizeSignup(input: { idToken: string }) {
       .eq('id', user.id)
   }
 
-  if (rpcError) {
+  if (rpcError || !rpcData) {
     console.error('Signup RPC Error:', rpcError)
     return { success: false, error: `Database Registration Failed: ${rpcError.message} (Code: ${rpcError.code})` }
   }
@@ -422,7 +431,9 @@ export async function finalizeSignup(input: { idToken: string }) {
     tags: ['welcome', 'signup']
   }).catch(err => console.error('Failed to send welcome email:', err))
 
-  return { success: true }
+  const result = rpcData as CreateOrganisationAndAdminResult
+
+  return { success: true, orgId: result.organisation_id }
 }
 
 export async function updateOnboardingMetadata(input: { fullName: string; organizationName: string }) {

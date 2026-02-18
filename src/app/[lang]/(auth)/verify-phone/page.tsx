@@ -144,8 +144,13 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
 
       if (response.success) {
         setVerified(true)
+        const target =
+          response.orgId
+            ? `/bootstrap-org?org=${encodeURIComponent(response.orgId)}`
+            : `/${params.lang}/dashboard`
+
         setTimeout(() => {
-          router.push(`/${params.lang}/dashboard`)
+          router.push(target)
         }, 2000)
       } else {
         throw new Error(response.error || 'Server verification failed')
