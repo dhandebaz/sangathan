@@ -35,8 +35,8 @@ export function Footer({ lang }: { lang: string }) {
       title: isHindi ? 'संपर्क' : 'Contact',
       links: [
         { label: 'Email', href: 'mailto:hello@sangathan.space' },
-        { label: 'Twitter / X', href: 'https://twitter.com/sangathan_app' },
-        { label: 'GitHub', href: 'https://github.com/bahujan-queer/sangathan' },
+        { label: 'Twitter / X', href: 'https://twitter.com/areynetaji' },
+        { label: 'Instagram', href: 'https://instagram.com/areynetaji' },
         { label: isHindi ? 'मदद चाहिए?' : 'Need Help?', href: `/${lang}/contact` },
       ]
     }
