@@ -205,7 +205,37 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
         {error && (
           <div className="mb-6 p-4 bg-red-50 text-red-700 text-sm rounded-xl flex items-start gap-2">
             <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-            <p>{error}</p>
+            <div>
+              <p>{error}</p>
+              {error.includes('already registered as an admin') && (
+                <div className="mt-3 space-y-2 text-xs text-red-800">
+                  <p>
+                    This phone number is linked to an existing admin account. If you already created an organisation,
+                    login instead or use a different phone number.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <button
+                      type="button"
+                      onClick={() => router.push(`/${params.lang}/login`)}
+                      className="inline-flex items-center justify-center px-3 py-2 rounded-lg bg-black text-white font-medium hover:bg-gray-900 transition-colors"
+                    >
+                      Go to Login
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setStep('phone')
+                        setOtp('')
+                        setError('')
+                      }}
+                      className="inline-flex items-center justify-center px-3 py-2 rounded-lg border border-red-300 text-red-800 font-medium bg-white hover:bg-red-50 transition-colors"
+                    >
+                      Use Different Number
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
