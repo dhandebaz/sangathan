@@ -149,15 +149,15 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
           return
         }
 
-        setVerified(true)
         const target =
           (response as { orgId?: string }).orgId
             ? `/bootstrap-org?org=${encodeURIComponent((response as { orgId: string }).orgId)}`
             : `/${params.lang}/dashboard`
 
-        setTimeout(() => {
-          router.push(target)
-        }, 2000)
+        // Use full-page navigation so that Supabase auth cookies and middleware
+        // see the updated session immediately, even across different hosts.
+        setVerified(true)
+        window.location.href = target
       } else {
         throw new Error(response.error || 'Server verification failed')
       }
