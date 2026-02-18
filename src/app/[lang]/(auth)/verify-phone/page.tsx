@@ -149,10 +149,7 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
           return
         }
 
-        const target =
-          (response as { orgId?: string }).orgId
-            ? `/bootstrap-org?org=${encodeURIComponent((response as { orgId: string }).orgId)}`
-            : `/${params.lang}/dashboard`
+        const target = `/${params.lang}/dashboard`
 
         // Use full-page navigation so that Supabase auth cookies and middleware
         // see the updated session immediately, even across different hosts.
