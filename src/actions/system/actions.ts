@@ -2,6 +2,7 @@
 
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
+import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { logAction } from '@/lib/audit/log'
 import { requirePlatformAdmin } from '@/lib/auth/context'
@@ -10,13 +11,21 @@ const OrgActionSchema = z.object({
   organisationId: z.string().uuid(),
 })
 
-// --- Actions ---
-
 export const suspendOrganisation = async (input: z.infer<typeof OrgActionSchema>) => {
-  const { user } = await requirePlatformAdmin()
+  await requirePlatformAdmin()
+
+  const authClient = await createClient()
+  const {
+    data: { user },
+    error: authError,
+  } = await authClient.auth.getUser()
+
+  if (authError || !user) {
+    throw new Error('Unauthorized')
+  }
+
   const supabase = createServiceClient()
 
-  // 1. Update Org Status
   const { error } = await supabase
     .from('organisations')
     .update({ is_suspended: true } as never)
@@ -24,13 +33,12 @@ export const suspendOrganisation = async (input: z.infer<typeof OrgActionSchema>
 
   if (error) throw new Error(error.message)
 
-  // 2. Log Action
   await logAction({
     organisation_id: input.organisationId,
     user_id: user.id,
     action: 'ORG_SUSPENDED',
     resource_table: 'organisations',
-    resource_id: input.organisationId
+    resource_id: input.organisationId,
   })
 
   revalidatePath('/admin/organisations')
@@ -39,7 +47,18 @@ export const suspendOrganisation = async (input: z.infer<typeof OrgActionSchema>
 }
 
 export const reactivateOrganisation = async (input: z.infer<typeof OrgActionSchema>) => {
-  const { user } = await requirePlatformAdmin()
+  await requirePlatformAdmin()
+
+  const authClient = await createClient()
+  const {
+    data: { user },
+    error: authError,
+  } = await authClient.auth.getUser()
+
+  if (authError || !user) {
+    throw new Error('Unauthorized')
+  }
+
   const supabase = createServiceClient()
 
   const { error } = await supabase
@@ -54,7 +73,7 @@ export const reactivateOrganisation = async (input: z.infer<typeof OrgActionSche
     user_id: user.id,
     action: 'ORG_REACTIVATED',
     resource_table: 'organisations',
-    resource_id: input.organisationId
+    resource_id: input.organisationId,
   })
 
   revalidatePath('/admin/organisations')

@@ -15,7 +15,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { lang, slug } = await params
   const isHindi = lang === 'hi'
   
-  // Basic title mapping for metadata (can be moved to a shared config if needed)
   const titles: Record<string, string> = {
     'getting-started': 'Getting Started',
     'members': 'Members',
@@ -25,7 +24,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     'supporter-plan': 'Supporter Plan',
     'security-governance': 'Security & Governance',
     'admin-responsibilities': 'Admin Responsibilities',
-    'system-admin': 'System Admin',
     'data-lifecycle': 'Data Lifecycle',
     'troubleshooting': 'Troubleshooting',
     'faq': 'FAQ',

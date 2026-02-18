@@ -1,25 +1,51 @@
-import { createServiceClient } from '@/lib/supabase/service'
+import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { ArrowLeft, ShieldAlert } from 'lucide-react'
-import { SystemAdminOrganisation } from '@/types/dashboard'
 import { requirePlatformAdmin } from '@/lib/auth/context'
 
 export const dynamic = 'force-dynamic'
 
+type OrganisationRow = {
+  id: string
+  name: string
+  slug: string
+  membership_policy: string | null
+  public_transparency_enabled: boolean | null
+  status: string | null
+  created_at: string
+  members?: { count: number }[]
+}
+
 export default async function OrganisationsPage() {
   await requirePlatformAdmin()
 
-  const supabase = createServiceClient()
+  let orgs: OrganisationRow[] = []
+  let errorMessage: string | null = null
 
-  const { data: orgs, error } = await supabase
-    .from('organisations')
-    .select('id, name, slug, is_suspended, status, membership_policy, created_at, members(count)')
-    .order('created_at', { ascending: false }) as {
-      data: (SystemAdminOrganisation & { members?: { count: number }[] })[] | null
-      error: { message: string } | null
+  try {
+    const supabase = await createClient()
+
+    const { data, error } = await supabase
+      .from('organisations')
+      .select(
+        'id, name, slug, membership_policy, public_transparency_enabled, status, created_at, members(count)',
+      )
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      console.error(error)
+      errorMessage = error.message
+    } else {
+      orgs = (data || []) as OrganisationRow[]
     }
+  } catch (err) {
+    console.error(err)
+    errorMessage = String(err)
+  }
 
-  if (error) return <div className="p-8">Error loading organisations</div>
+  if (errorMessage) {
+    return <div>Error loading organisations: {errorMessage}</div>
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 text-black">
@@ -51,7 +77,7 @@ export default async function OrganisationsPage() {
                   </tr>
                </thead>
                <tbody className="divide-y">
-                  {orgs?.map((org) => {
+                  {orgs.map((org) => {
                     const memberCount = org.members?.[0]?.count || 0
                      return (
                         <tr key={org.id} className="hover:bg-gray-50">

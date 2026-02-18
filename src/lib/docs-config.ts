@@ -33,7 +33,6 @@ export const docsConfig: DocSection[] = [
       { title: { en: 'Security Overview', hi: 'सुरक्षा अवलोकन' }, slug: 'security-governance' },
       { title: { en: 'Data Lifecycle', hi: 'डेटा जीवनचक्र' }, slug: 'data-lifecycle' },
       { title: { en: 'Admin Responsibilities', hi: 'प्रशासक जिम्मेदारियां' }, slug: 'admin-responsibilities' },
-      { title: { en: 'System Admin', hi: 'सिस्टम एडमिन' }, slug: 'system-admin' },
     ]
   },
   {

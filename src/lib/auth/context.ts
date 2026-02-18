@@ -1,7 +1,6 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { createServiceClient } from '@/lib/supabase/service'
 import { MembershipContext, Role, UserContext } from '@/types/auth'
 
 const ORG_COOKIE_NAME = 'sangathan_org_id'
@@ -177,7 +176,7 @@ export function validateOrganization(context: UserContext, resourceOrgId: string
   }
 }
 
-export async function requirePlatformAdmin() {
+export async function requirePlatformAdmin(): Promise<void> {
   const supabase = await createClient()
 
   const {
@@ -185,67 +184,21 @@ export async function requirePlatformAdmin() {
     error: authError,
   } = await supabase.auth.getUser()
 
-  if (authError || !user || !user.email) {
+  if (authError || !user) {
     throw new Error('Unauthorized: No valid session')
   }
 
-  const superAdmins = process.env.SUPER_ADMIN_EMAILS?.split(',') || []
-  const isEmailSuperAdmin = superAdmins.includes(user.email)
-
-  const serviceClient = createServiceClient()
-
-  const { data: profile, error: profileError } = await (serviceClient as unknown as {
-    from: (table: string) => {
-      select: (columns: string) => {
-        eq: (column: string, value: string) => Promise<{
-          data: {
-            id: string
-            email: string
-            is_platform_admin?: boolean | null
-          } | null
-          error: { message?: string } | null
-        }>
-      }
-    }
-  })
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
-    .select('id, email, is_platform_admin')
+    .select('is_platform_admin')
     .eq('id', user.id)
+    .single()
 
-  if (profileError || !profile) {
-    throw new Error('Unauthorized: Profile not found')
+  if (profileError) {
+    throw new Error(profileError.message)
   }
 
-  const isPlatformAdmin = Boolean((profile as { is_platform_admin?: boolean | null }).is_platform_admin)
-
-  if (!isPlatformAdmin && !isEmailSuperAdmin) {
+  if (!profile || profile.is_platform_admin !== true) {
     throw new Error('Forbidden: Platform admin only')
-  }
-
-  if (isEmailSuperAdmin && !isPlatformAdmin) {
-    await (serviceClient as unknown as {
-      from: (table: string) => {
-        update: (values: Record<string, unknown>) => {
-          eq: (column: string, value: string) => Promise<{
-            error: { message?: string } | null
-          }>
-        }
-      }
-    })
-      .from('profiles')
-      .update({ is_platform_admin: true })
-      .eq('id', user.id)
-  }
-
-  return {
-    user: {
-      id: user.id,
-      email: user.email,
-    },
-    profile: {
-      id: profile.id,
-      email: profile.email,
-      is_platform_admin: true,
-    },
   }
 }

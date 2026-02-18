@@ -16,7 +16,6 @@ export function getDocContent(slug: string): string | null {
       'supporter-plan': 'Section 6: Supporter Plan',
       'security-governance': 'Section 7: Security & Governance',
       'admin-responsibilities': 'Section 8: Admin Responsibilities',
-      'system-admin': 'Section 9: System Admin Documentation',
       'data-lifecycle': 'Section 10: Data Lifecycle',
       'troubleshooting': 'Section 11: Troubleshooting',
       'faq': 'Section 12: Frequently Asked Operational Questions',
