@@ -23,25 +23,23 @@ const CreateEventSchema = EventSchema.extend({
   collaborating_org_ids: z.array(z.string().uuid()).optional(),
 })
 
-const UpdateEventSchema = EventSchema.partial().extend({
-  id: z.string().uuid(),
-})
-
 const RSVPSchema = z.object({
   event_id: z.string().uuid(),
   guest_name: z.string().optional(),
   guest_email: z.string().email().optional(),
 })
 
-const CheckInSchema = z.object({
-  event_id: z.string().uuid(),
-  token: z.string(), // Signed token containing user_id/rsvp_id
-})
-
 // --- Actions ---
 
 export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
   try {
+    const result = CreateEventSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid event data' }
+    }
+
+    const data = result.data
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -56,19 +54,19 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
 
     const profile = profileData
 
-    if (!profile || profile.organisation_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role)) {
+    if (!profile || profile.organisation_id !== data.organisation_id || !['admin', 'editor'].includes(profile.role)) {
       return { success: false, error: 'Permission denied' }
     }
 
     // Verify collaborations if any
-    if (input.collaborating_org_ids && input.collaborating_org_ids.length > 0) {
+    if (data.collaborating_org_ids && data.collaborating_org_ids.length > 0) {
       const { count } = await supabase
         .from('organisation_links')
         .select('*', { count: 'exact', head: true })
-        .or(`and(requester_org_id.eq.${profile.organisation_id},responder_org_id.in.(${input.collaborating_org_ids.join(',')})),and(requester_org_id.in.(${input.collaborating_org_ids.join(',')}),responder_org_id.eq.${profile.organisation_id})`)
+        .or(`and(requester_org_id.eq.${profile.organisation_id},responder_org_id.in.(${data.collaborating_org_ids.join(',')})),and(requester_org_id.in.(${data.collaborating_org_ids.join(',')}),responder_org_id.eq.${profile.organisation_id})`)
         .eq('status', 'active')
 
-      if ((count || 0) < input.collaborating_org_ids.length) {
+      if ((count || 0) < data.collaborating_org_ids.length) {
         return { success: false, error: 'One or more selected organizations are not active partners.' }
       }
     }
@@ -76,15 +74,15 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
     const { data: event, error } = await supabase
       .from('events')
       .insert({
-        organisation_id: input.organisation_id,
-        title: input.title,
-        description: input.description,
-        start_time: input.start_time,
-        end_time: input.end_time,
-        location: input.location,
-        event_type: input.event_type,
-        rsvp_enabled: input.rsvp_enabled,
-        capacity: input.capacity,
+        organisation_id: data.organisation_id,
+        title: data.title,
+        description: data.description,
+        start_time: data.start_time,
+        end_time: data.end_time,
+        location: data.location,
+        event_type: data.event_type,
+        rsvp_enabled: data.rsvp_enabled,
+        capacity: data.capacity,
         created_by: user.id,
       })
       .select()
@@ -97,8 +95,8 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
     }
 
     // Insert Joint Events
-    if (input.collaborating_org_ids && input.collaborating_org_ids.length > 0) {
-      const jointEvents = input.collaborating_org_ids.map((orgId) => ({
+    if (data.collaborating_org_ids && data.collaborating_org_ids.length > 0) {
+      const jointEvents = data.collaborating_org_ids.map((orgId) => ({
         event_id: event.id,
         organisation_id: orgId,
       }))
@@ -123,6 +121,13 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
 
 export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
   try {
+    const result = RSVPSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid RSVP data' }
+    }
+
+    const data = result.data
+
     const supabase = await createClient()
     const supabaseAdmin = createServiceClient() // Use admin for public inserts/checks if needed
 
@@ -130,7 +135,7 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
     const { data: event, error: eventError } = await supabaseAdmin
       .from('events')
       .select('*')
-      .eq('id', input.event_id)
+      .eq('id', data.event_id)
       .single()
 
     if (eventError || !event) return { success: false, error: 'Event not found' }
@@ -142,7 +147,7 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
       const { count } = await supabaseAdmin
         .from('event_rsvps')
         .select('*', { count: 'exact', head: true })
-        .eq('event_id', input.event_id)
+        .eq('event_id', data.event_id)
         .eq('status', 'registered')
 
       if ((count || 0) >= event.capacity) {
@@ -153,8 +158,8 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
     // 2. Determine User
     const { data: { user } } = await supabase.auth.getUser()
     const userId = user?.id
-    const guestName = input.guest_name
-    const guestEmail = input.guest_email
+    const guestName = data.guest_name
+    const guestEmail = data.guest_email
 
     // 3. Check Permissions based on Event Type
     if (event.event_type !== 'public') {
@@ -200,7 +205,6 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
         return { success: false, error: `This event is restricted to ${requiredRole} members.` }
       }
     } else {
-      // Public Event
       if (!userId && (!guestEmail || !guestName)) {
         return { success: false, error: 'Name and Email are required for guests' }
       }
@@ -212,17 +216,17 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
       const { data: existing } = await supabaseAdmin
         .from('event_rsvps')
         .select('id')
-        .eq('event_id', input.event_id)
+        .eq('event_id', data.event_id)
         .eq('user_id', userId)
         .single()
 
       if (existing) return { success: false, error: 'Already registered' }
-    } else if (input.guest_email) {
+    } else if (data.guest_email) {
       const { data: existing } = await supabaseAdmin
         .from('event_rsvps')
         .select('id')
-        .eq('event_id', input.event_id)
-        .eq('guest_email', input.guest_email)
+        .eq('event_id', data.event_id)
+        .eq('guest_email', data.guest_email)
         .single()
 
       if (existing) return { success: false, error: 'Email already registered' }
@@ -231,16 +235,16 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
     const { error: insertError } = await supabaseAdmin
       .from('event_rsvps')
       .insert({
-        event_id: input.event_id,
+        event_id: data.event_id,
         user_id: userId || null,
-        guest_name: userId ? null : input.guest_name,
-        guest_email: userId ? null : input.guest_email,
+        guest_name: userId ? null : data.guest_name,
+        guest_email: userId ? null : data.guest_email,
         status: 'registered'
       })
 
     if (insertError) throw insertError
 
-    revalidatePath(`/events/${input.event_id}`)
+    revalidatePath(`/events/${data.event_id}`)
     return { success: true }
 
   } catch (error) {

@@ -4,7 +4,6 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
-import type { Database } from '@/types/database'
 
 const NetworkSchema = z.object({
   name: z.string().min(3),
@@ -15,6 +14,13 @@ const NetworkSchema = z.object({
 
 export async function createNetwork(input: z.infer<typeof NetworkSchema>) {
   try {
+    const result = NetworkSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid network data' }
+    }
+
+    const data = result.data
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -39,11 +45,10 @@ export async function createNetwork(input: z.infer<typeof NetworkSchema>) {
 
     const supabaseAdmin = createServiceClient()
 
-    // Create Network
     const { data: network, error } = await supabaseAdmin
       .from('networks')
       .insert({
-        ...input,
+        ...data,
         created_by: user.id
       })
       .select()

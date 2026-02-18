@@ -11,6 +11,13 @@ const AppealSchema = z.object({
 
 export async function submitAppeal(orgId: string, input: z.infer<typeof AppealSchema>) {
   try {
+    const result = AppealSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid appeal data' }
+    }
+
+    const data = result.data
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -41,8 +48,8 @@ export async function submitAppeal(orgId: string, input: z.infer<typeof AppealSc
       .from('appeals')
       .insert({
         organisation_id: orgId,
-        reason: input.reason,
-        supporting_docs_url: input.supporting_docs_url || null,
+        reason: data.reason,
+        supporting_docs_url: data.supporting_docs_url || null,
         created_by: user.id,
         type: 'standard',
       } as never)

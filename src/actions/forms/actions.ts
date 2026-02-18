@@ -177,8 +177,14 @@ export const deleteForm = createSafeAction(
 // NOTE: This does NOT use createSafeAction because it's public (no auth context)
 
 export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>) {
-  // 1. Spam Check
-  if (input.honeypot && input.honeypot.length > 0) {
+  const result = SubmitFormSchema.safeParse(input)
+  if (!result.success) {
+    return { success: false, error: result.error.issues[0]?.message || 'Invalid form submission' }
+  }
+
+  const safeInput = result.data
+
+  if (safeInput.honeypot && safeInput.honeypot.length > 0) {
     return { success: false, error: 'Spam detected' }
   }
 
@@ -188,7 +194,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
   const { data, error: formError } = await supabase
     .from('forms')
     .select('id, organisation_id, fields, is_active')
-    .eq('id', input.formId)
+    .eq('id', safeInput.formId)
     .single()
 
   const form = data
@@ -206,7 +212,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
   const errors: Record<string, string> = {}
 
   fields.forEach(field => {
-    const value = input.data[field.id]
+    const value = safeInput.data[field.id]
 
     if (field.required && (value === undefined || value === '' || value === null)) {
       errors[field.id] = `${field.label} is required`
@@ -231,7 +237,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
   try {
     const headerStore = await headers()
     const ip = headerStore.get('x-forwarded-for') || 'unknown'
-    const key = `submission:${input.formId}:${ip}`
+    const key = `submission:${safeInput.formId}:${ip}`
 
     const { count, error: rateError } = await supabase.from('rate_limits')
       .select('*', { count: 'exact', head: true })
@@ -257,8 +263,8 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
     .insert({
       form_id: form.id,
       organisation_id: form.organisation_id,
-      user_id: null, // Public submissions are anonymous or we don't force auth here
-      data: input.data,
+      user_id: null,
+      data: safeInput.data,
     })
 
   if (submissionError) {

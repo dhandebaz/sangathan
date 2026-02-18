@@ -124,8 +124,6 @@ export async function signup(input: z.infer<typeof SignupSchema>) {
     // We rely on Supabase Auth's built-in protections for now.
 
     // 3. Sign Up
-    // We store metadata for the Callback route to handle database creation
-    const headersList = await headers()
     // Prioritize NEXT_PUBLIC_APP_URL for consistent production behavior AND ensure https
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space';
     const origin = appUrl.startsWith('http') ? appUrl : `https://${appUrl}`;

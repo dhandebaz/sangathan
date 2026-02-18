@@ -57,9 +57,7 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  const pathname = request.nextUrl.pathname // Declare pathname early for use below
-
-  const isSystemAdmin = user?.email && (process.env.SUPER_ADMIN_EMAILS?.split(',') || []).includes(user.email)
+  const pathname = request.nextUrl.pathname
   
   const locales = ['en', 'hi']
   

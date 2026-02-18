@@ -30,6 +30,13 @@ const UpdateTransparencySchema = z.object({
 
 export async function updateTransparency(input: z.infer<typeof UpdateTransparencySchema>) {
   try {
+    const result = UpdateTransparencySchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid transparency update' }
+    }
+
+    const data = result.data
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     
@@ -43,14 +50,14 @@ export async function updateTransparency(input: z.infer<typeof UpdateTransparenc
 
     const profile = profileData
 
-    if (!profile || profile.organisation_id !== input.orgId || profile.role !== 'admin') {
+    if (!profile || profile.organisation_id !== data.orgId || profile.role !== 'admin') {
       return { success: false, error: 'Permission denied' }
     }
 
     const { error } = await supabase
       .from('organisations')
-      .update({ public_transparency_enabled: input.enabled } as never)
-      .eq('id', input.orgId)
+      .update({ public_transparency_enabled: data.enabled } as never)
+      .eq('id', data.orgId)
 
     if (error) throw error
 
@@ -66,6 +73,13 @@ export async function updateTransparency(input: z.infer<typeof UpdateTransparenc
 
 export async function updateMembershipPolicy(input: z.infer<typeof UpdatePolicySchema>) {
   try {
+    const result = UpdatePolicySchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid membership policy' }
+    }
+
+    const data = result.data
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     
@@ -78,14 +92,14 @@ export async function updateMembershipPolicy(input: z.infer<typeof UpdatePolicyS
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.organisation_id !== input.orgId || profile.role !== 'admin') {
+    if (!profile || profile.organisation_id !== data.orgId || profile.role !== 'admin') {
       return { success: false, error: 'Permission denied' }
     }
 
     const { error } = await supabase
       .from('organisations')
-      .update({ membership_policy: input.policy } as never)
-      .eq('id', input.orgId)
+      .update({ membership_policy: data.policy } as never)
+      .eq('id', data.orgId)
 
     if (error) throw error
 
@@ -100,6 +114,13 @@ export async function updateMembershipPolicy(input: z.infer<typeof UpdatePolicyS
 
 export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinSchema>) {
   try {
+    const result = RequestJoinSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid join request' }
+    }
+
+    const data = result.data
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     
@@ -114,7 +135,7 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
     const { data: org, error: orgError } = await supabaseAdmin
       .from('organisations')
       .select('name, membership_policy, slug')
-      .eq('id', input.orgId)
+      .eq('id', data.orgId)
       .single()
 
     if (orgError || !org) return { success: false, error: 'Organisation not found' }
@@ -151,7 +172,7 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
       .from('profiles')
       .insert({
         id: user.id,
-        organisation_id: input.orgId,
+        organisation_id: data.orgId,
         email: email,
         full_name: fullName,
         role: 'member', // Default role
@@ -167,7 +188,7 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
       const { data: admins } = await supabaseAdmin
         .from('profiles')
         .select('email, full_name')
-        .eq('organisation_id', input.orgId)
+        .eq('organisation_id', data.orgId)
         .eq('role', 'admin')
       
     const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/en/dashboard/membership-requests`
@@ -207,6 +228,13 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
 
 export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
   try {
+    const result = ManageMemberSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid member action' }
+    }
+
+    const data = result.data
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { success: false, error: 'Unauthorized' }
@@ -228,7 +256,7 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
     const { data: member, error: memberError } = await supabaseAdmin
       .from('profiles')
       .select('email, full_name, organisation_id')
-      .eq('id', input.memberId)
+      .eq('id', data.memberId)
       .single()
 
     if (memberError || !member || member.organisation_id !== adminProfile.organisation_id) {
@@ -248,7 +276,7 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
         status: 'active',
         approved_at: new Date().toISOString()
       })
-      .eq('id', input.memberId)
+      .eq('id', data.memberId)
 
     if (updateError) throw updateError
 
@@ -271,6 +299,13 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
 
 export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
   try {
+    const result = ManageMemberSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid member action' }
+    }
+
+    const data = result.data
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { success: false, error: 'Unauthorized' }
@@ -291,7 +326,7 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
     const { data: member, error: memberError } = await supabaseAdmin
       .from('profiles')
       .select('email, full_name, organisation_id')
-      .eq('id', input.memberId)
+      .eq('id', data.memberId)
       .single()
       
     if (memberError || !member || member.organisation_id !== adminProfile.organisation_id) {
@@ -310,7 +345,7 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
       .update({ 
         status: 'rejected'
       })
-      .eq('id', input.memberId)
+      .eq('id', data.memberId)
 
     if (updateError) throw updateError
 

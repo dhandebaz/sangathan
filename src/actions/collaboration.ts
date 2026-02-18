@@ -3,20 +3,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
-import { z } from 'zod'
-
-// --- Schemas ---
-
-const LinkRequestSchema = z.object({
-  target_org_id: z.string().uuid(),
-})
-
-const LinkResponseSchema = z.object({
-  link_id: z.string().uuid(),
-  status: z.enum(['active', 'rejected']),
-})
-
-// --- Actions ---
 
 export async function createCollaborationRequest(targetOrgId: string) {
   try {

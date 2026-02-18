@@ -23,14 +23,17 @@ const CreateAnnouncementSchema = AnnouncementSchema.extend({
   organisation_id: z.string().uuid(),
 })
 
-const UpdateAnnouncementSchema = AnnouncementSchema.partial().extend({
-  id: z.string().uuid(),
-})
-
 // --- Actions ---
 
 export async function createAnnouncement(input: z.infer<typeof CreateAnnouncementSchema>) {
   try {
+    const result = CreateAnnouncementSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid announcement data' }
+    }
+
+    const data = result.data
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     
@@ -42,13 +45,13 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
       .eq('id', user.id)
       .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
 
-    if (!profile || profile.organisation_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role || '')) {
+    if (!profile || profile.organisation_id !== data.organisation_id || !['admin', 'editor'].includes(profile.role || '')) {
       return { success: false, error: 'Permission denied' }
     }
     
     // Risk Check: Broadcast Limit
-    if (input.send_email) {
-       const limitCheck = await checkBroadcastLimit(input.organisation_id)
+    if (data.send_email) {
+       const limitCheck = await checkBroadcastLimit(data.organisation_id)
        if (!limitCheck.allowed) {
           return { success: false, error: `Broadcast blocked: ${limitCheck.reason}` }
        }
@@ -57,7 +60,7 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
     const { data: announcement, error } = await supabase
       .from('announcements')
       .insert({
-        ...input,
+        ...data,
         created_by: user.id,
       } as never)
       .select()
@@ -65,33 +68,22 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
 
     if (error || !announcement) throw new Error(error?.message || 'Failed to create announcement')
 
-    // Handle Email Broadcasting
-    if (input.send_email) {
-      // We do this asynchronously to avoid blocking the UI response
-      // But we need to ensure it runs.
-      // In Vercel serverless, background tasks can be cut off.
-      // Ideally we enqueue a "broadcast" job. 
-      // For now, we'll enqueue individual emails if the list is small, or fail gracefully.
-      
+    if (data.send_email) {
       const supabaseAdmin = createServiceClient()
       
-      // Fetch eligible members
-      // Logic for eligibility based on visibility_level
       let query = supabaseAdmin
         .from('profiles')
         .select('email, full_name')
-        .eq('organisation_id', input.organisation_id)
+        .eq('organisation_id', data.organisation_id)
         .eq('status', 'active')
 
-      // Filter by role if restricted
-      if (input.visibility_level === 'executive') {
+      if (data.visibility_level === 'executive') {
         query = query.in('role', ['executive', 'admin', 'editor'])
-      } else if (input.visibility_level === 'core') {
+      } else if (data.visibility_level === 'core') {
         query = query.in('role', ['core', 'executive', 'admin', 'editor'])
-      } else if (input.visibility_level === 'volunteer') {
+      } else if (data.visibility_level === 'volunteer') {
         query = query.in('role', ['volunteer', 'core', 'executive', 'admin', 'editor'])
       }
-      // 'members' and 'public' go to all active members
 
       const { data: members } = (await query) as {
         data: { email: string; full_name: string | null }[] | null
@@ -101,19 +93,15 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
       if (members) {
         let sentCount = 0
         const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`
-        
-        // Simple HTML template for announcement
-        // We can't import baseLayout easily if it's not exported properly or if we want custom style.
-        // Let's assume we construct a simple body.
-        
+
         for (const member of members) {
            await enqueueJob('send_email', {
              to: member.email,
-             subject: `New Announcement: ${input.title}`,
+             subject: `New Announcement: ${data.title}`,
              html: `
                <div style="font-family: sans-serif; padding: 20px;">
-                 <h2>${input.title}</h2>
-                 <div style="margin: 20px 0; white-space: pre-wrap;">${input.content}</div>
+                 <h2>${data.title}</h2>
+                 <div style="margin: 20px 0; white-space: pre-wrap;">${data.content}</div>
                  <hr/>
                  <p><a href="${dashboardUrl}">View in Dashboard</a></p>
                </div>

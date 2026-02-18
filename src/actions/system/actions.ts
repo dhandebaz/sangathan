@@ -12,6 +12,11 @@ const OrgActionSchema = z.object({
 })
 
 export const suspendOrganisation = async (input: z.infer<typeof OrgActionSchema>) => {
+  const result = OrgActionSchema.safeParse(input)
+  if (!result.success) {
+    return { success: false, error: result.error.issues[0]?.message || 'Invalid organisation payload' }
+  }
+
   await requirePlatformAdmin()
 
   const authClient = await createClient()
@@ -29,24 +34,29 @@ export const suspendOrganisation = async (input: z.infer<typeof OrgActionSchema>
   const { error } = await supabase
     .from('organisations')
     .update({ is_suspended: true } as never)
-    .eq('id', input.organisationId)
+    .eq('id', result.data.organisationId)
 
   if (error) throw new Error(error.message)
 
   await logAction({
-    organisation_id: input.organisationId,
+    organisation_id: result.data.organisationId,
     user_id: user.id,
     action: 'ORG_SUSPENDED',
     resource_table: 'organisations',
-    resource_id: input.organisationId,
+    resource_id: result.data.organisationId,
   })
 
   revalidatePath('/admin/organisations')
-  revalidatePath(`/admin/organisations/${input.organisationId}`)
+  revalidatePath(`/admin/organisations/${result.data.organisationId}`)
   return { success: true }
 }
 
 export const reactivateOrganisation = async (input: z.infer<typeof OrgActionSchema>) => {
+  const result = OrgActionSchema.safeParse(input)
+  if (!result.success) {
+    return { success: false, error: result.error.issues[0]?.message || 'Invalid organisation payload' }
+  }
+
   await requirePlatformAdmin()
 
   const authClient = await createClient()
@@ -64,19 +74,19 @@ export const reactivateOrganisation = async (input: z.infer<typeof OrgActionSche
   const { error } = await supabase
     .from('organisations')
     .update({ is_suspended: false } as never)
-    .eq('id', input.organisationId)
+    .eq('id', result.data.organisationId)
 
   if (error) throw new Error(error.message)
 
   await logAction({
-    organisation_id: input.organisationId,
+    organisation_id: result.data.organisationId,
     user_id: user.id,
     action: 'ORG_REACTIVATED',
     resource_table: 'organisations',
-    resource_id: input.organisationId,
+    resource_id: result.data.organisationId,
   })
 
   revalidatePath('/admin/organisations')
-  revalidatePath(`/admin/organisations/${input.organisationId}`)
+  revalidatePath(`/admin/organisations/${result.data.organisationId}`)
   return { success: true }
 }

@@ -33,6 +33,13 @@ const VoteSchema = z.object({
 
 export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
   try {
+    const result = CreatePollSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid poll data' }
+    }
+
+    const data = result.data
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     
@@ -45,7 +52,7 @@ export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.organisation_id !== input.organisation_id || !['admin', 'editor'].includes(profile.role)) {
+    if (!profile || profile.organisation_id !== data.organisation_id || !['admin', 'editor'].includes(profile.role)) {
       return { success: false, error: 'Permission denied' }
     }
 
@@ -53,17 +60,17 @@ export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
     const { data: poll, error } = await supabase
       .from('polls')
       .insert({
-        organisation_id: input.organisation_id,
-        title: input.title,
-        description: input.description,
-        type: input.type,
-        visibility_level: input.visibility_level,
-        voting_method: input.voting_method,
-        quorum_percentage: input.quorum_percentage,
-        end_time: input.end_time,
+        organisation_id: data.organisation_id,
+        title: data.title,
+        description: data.description,
+        type: data.type,
+        visibility_level: data.visibility_level,
+        voting_method: data.voting_method,
+        quorum_percentage: data.quorum_percentage,
+        end_time: data.end_time,
         status: 'active',
         created_by: user.id,
-        is_public: input.is_public,
+        is_public: data.is_public,
       } as never)
       .select()
       .single()
@@ -71,7 +78,7 @@ export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
     if (error || !poll) throw new Error(error?.message || 'Failed to create poll')
 
     // Create Options
-    const options = input.options.map((label, idx) => ({
+    const options = data.options.map((label, idx) => ({
       poll_id: poll.id,
       label,
       display_order: idx,
@@ -92,6 +99,13 @@ export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
 
 export async function castVote(input: z.infer<typeof VoteSchema>) {
   try {
+    const result = VoteSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid vote data' }
+    }
+
+    const data = result.data
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     
@@ -103,7 +117,7 @@ export async function castVote(input: z.infer<typeof VoteSchema>) {
     const { data: poll, error: pollError } = await supabaseAdmin
       .from('polls')
       .select('*')
-      .eq('id', input.poll_id)
+      .eq('id', data.poll_id)
       .single()
 
     if (pollError || !poll) return { success: false, error: 'Poll not found' }
@@ -130,7 +144,7 @@ export async function castVote(input: z.infer<typeof VoteSchema>) {
 
     // 3. Prepare Vote Record
     const secret = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'fallback'
-    const raw = `${input.poll_id}:${user.id}:${secret}`
+    const raw = `${data.poll_id}:${user.id}:${secret}`
     const ip_hash = createHmac('sha256', secret).update(raw).digest('hex')
 
     type VoteRecord = {
@@ -141,8 +155,8 @@ export async function castVote(input: z.infer<typeof VoteSchema>) {
     }
 
     const voteRecord: VoteRecord = {
-      poll_id: input.poll_id,
-      option_id: input.option_id,
+      poll_id: data.poll_id,
+      option_id: data.option_id,
       ip_hash: ip_hash,
       user_id: null
     }
@@ -152,7 +166,7 @@ export async function castVote(input: z.infer<typeof VoteSchema>) {
        const { data: existing } = await supabaseAdmin
          .from('poll_votes')
          .select('id')
-         .eq('poll_id', input.poll_id)
+         .eq('poll_id', data.poll_id)
          .eq('ip_hash', ip_hash)
          .single()
        
@@ -165,7 +179,7 @@ export async function castVote(input: z.infer<typeof VoteSchema>) {
        const { data: existing } = await supabaseAdmin
          .from('poll_votes')
          .select('id')
-         .eq('poll_id', input.poll_id)
+         .eq('poll_id', data.poll_id)
          .eq('user_id', user.id)
          .single()
          
@@ -175,7 +189,7 @@ export async function castVote(input: z.infer<typeof VoteSchema>) {
     const { error } = await supabaseAdmin.from('poll_votes').insert(voteRecord)
     if (error) throw error
 
-    revalidatePath(`/dashboard/polls/${input.poll_id}`)
+    revalidatePath(`/dashboard/polls/${data.poll_id}`)
     return { success: true }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'

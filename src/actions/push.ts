@@ -13,6 +13,13 @@ const SubscriptionSchema = z.object({
 
 export async function subscribeToPush(input: z.infer<typeof SubscriptionSchema>) {
   try {
+    const result = SubscriptionSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid subscription' }
+    }
+
+    const data = result.data
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     
@@ -24,9 +31,9 @@ export async function subscribeToPush(input: z.infer<typeof SubscriptionSchema>)
       .upsert(
         {
           user_id: user.id,
-          endpoint: input.endpoint,
-          p256dh: input.keys.p256dh,
-          auth: input.keys.auth,
+          endpoint: data.endpoint,
+          p256dh: data.keys.p256dh,
+          auth: data.keys.auth,
           updated_at: new Date().toISOString(),
         } as never,
         { onConflict: 'user_id, endpoint' },
