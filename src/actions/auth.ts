@@ -228,10 +228,10 @@ const PhoneLoginSchema = z.object({
 })
 
 export async function phoneLogin(input: z.infer<typeof PhoneLoginSchema>) {
-  // 1. Verify Firebase Token
   const result = PhoneLoginSchema.safeParse(input)
   if (!result.success) return { success: false, error: result.error.issues[0].message }
 
+  // 1. Verify Firebase Token from Firebase (phone ownership)
   let decodedToken
   try {
     decodedToken = await firebaseAdminAuth.verifyIdToken(input.idToken)
@@ -243,7 +243,7 @@ export async function phoneLogin(input: z.infer<typeof PhoneLoginSchema>) {
   const phoneNumber = decodedToken.phone_number
   if (!phoneNumber) return { success: false, error: 'No phone number in token' }
 
-  // 2. Find Profile by Phone
+  // 2. Find Profile by Phone using service role (bypassing RLS)
   const supabaseAdmin = createServiceClient()
 
   const { data } = await supabaseAdmin
@@ -255,12 +255,21 @@ export async function phoneLogin(input: z.infer<typeof PhoneLoginSchema>) {
   const profile = data as Profile | null
 
   if (profile) {
-    // User exists. Generate magic link session.
+    // 3. User exists. Generate a magic link session and redirect to the SAME origin
+    //    the user is currently on. This avoids issues where NEXT_PUBLIC_APP_URL
+    //    does not match the deployed host (common cause of "logged out on redirect").
+    const headersList = await headers()
+    const originHeader = headersList.get('origin')
+
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space'
+    const fallbackOrigin = appUrl.startsWith('http') ? appUrl : `https://${appUrl}`
+    const origin = originHeader || fallbackOrigin
+
     const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
       type: 'magiclink',
       email: profile.email,
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://sangathan.space'}/en/dashboard`
+        redirectTo: `${origin}/en/dashboard`,
       }
     })
 
@@ -338,7 +347,7 @@ type CreateOrganisationAndAdminResult = {
 }
 
 export async function finalizeSignup(input: { idToken: string }) {
-  // 1. Verify Firebase Token
+  // 1. Verify Firebase Token (phone ownership)
   let decodedToken
   try {
     decodedToken = await firebaseAdminAuth.verifyIdToken(input.idToken)
@@ -377,8 +386,14 @@ export async function finalizeSignup(input: { idToken: string }) {
       return { success: false, error: 'This phone number is already registered as an admin. Please login instead.' }
     }
 
+    // Use current request origin when available so the session is created on the
+    // same host the user is interacting with (fixes loops on previews/custom domains).
+    const headersList = await headers()
+    const originHeader = headersList.get('origin')
+
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space'
-    const origin = appUrl.startsWith('http') ? appUrl : `https://${appUrl}`
+    const fallbackOrigin = appUrl.startsWith('http') ? appUrl : `https://${appUrl}`
+    const origin = originHeader || fallbackOrigin
 
     const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
       type: 'magiclink',
