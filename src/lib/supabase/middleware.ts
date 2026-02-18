@@ -148,6 +148,9 @@ export async function updateSession(request: NextRequest) {
       pathname.startsWith(`/${loc}/community-guidelines`) ||
       pathname.startsWith(`/${loc}/data-practices`) ||
       pathname.startsWith(`/${loc}/admin-accountability`) ||
+      pathname.startsWith(`/${loc}/cookies`) ||
+      pathname.startsWith(`/${loc}/data-rights`) ||
+      pathname.startsWith(`/${loc}/reports`) ||
       pathname.startsWith(`/${loc}/org/`) // Public Organization Pages
     )
 
