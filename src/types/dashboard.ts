@@ -175,9 +175,8 @@ export interface Donation {
 export interface Appeal {
   id: string;
   organisation_id: string;
-  status: 'pending' | 'accepted' | 'rejected';
+  status: 'pending' | 'under_review' | 'approved' | 'rejected';
   reason: string;
-  resolution_note?: string;
   created_at: string;
 }
 
@@ -211,8 +210,9 @@ export interface SystemAdminOrganisation {
   slug: string;
   is_suspended: boolean;
   created_at: string;
-  profiles?: { count: number }[];
-  supporter_subscriptions?: { status: string }[];
+  status: 'active' | 'warning' | 'suspended' | 'under_review';
+  membership_policy: 'open_auto' | 'admin_approval' | 'invite_only';
+  members?: { count: number }[];
 }
 
 export interface DataRequest {

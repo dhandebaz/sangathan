@@ -1,31 +1,23 @@
 import { createServiceClient } from '@/lib/supabase/service'
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ShieldAlert } from 'lucide-react'
 import { SystemAdminOrganisation } from '@/types/dashboard'
+import { requirePlatformAdmin } from '@/lib/auth/context'
 
 export const dynamic = 'force-dynamic'
 
-async function checkSuperAdmin() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user || !user.email) return false
-  const superAdmins = process.env.SUPER_ADMIN_EMAILS?.split(',') || []
-  return superAdmins.includes(user.email)
-}
-
 export default async function OrganisationsPage() {
-  const isSuperAdmin = await checkSuperAdmin()
-  if (!isSuperAdmin) redirect('/')
+  await requirePlatformAdmin()
 
   const supabase = createServiceClient()
 
-  // Fetch Organisations
   const { data: orgs, error } = await supabase
     .from('organisations')
-    .select('*, profiles(count), supporter_subscriptions(status)')
-    .order('created_at', { ascending: false }) as { data: SystemAdminOrganisation[] | null, error: { message: string } | null }
+    .select('id, name, slug, is_suspended, status, membership_policy, created_at, members(count)')
+    .order('created_at', { ascending: false }) as {
+      data: (SystemAdminOrganisation & { members?: { count: number }[] })[] | null
+      error: { message: string } | null
+    }
 
   if (error) return <div className="p-8">Error loading organisations</div>
 
@@ -50,36 +42,58 @@ export default async function OrganisationsPage() {
                   <tr>
                      <th className="py-3 px-6 font-medium text-gray-500">Name</th>
                      <th className="py-3 px-6 font-medium text-gray-500">Slug</th>
-                     <th className="py-3 px-6 font-medium text-gray-500">Users</th>
-                     <th className="py-3 px-6 font-medium text-gray-500">Plan</th>
+                     <th className="py-3 px-6 font-medium text-gray-500">Status</th>
+                     <th className="py-3 px-6 font-medium text-gray-500">Membership policy</th>
+                     <th className="py-3 px-6 font-medium text-gray-500">Created</th>
+                     <th className="py-3 px-6 font-medium text-gray-500">Total members</th>
                      <th className="py-3 px-6 font-medium text-gray-500">Status</th>
                      <th className="py-3 px-6 font-medium text-gray-500 text-right">Actions</th>
                   </tr>
                </thead>
                <tbody className="divide-y">
                   {orgs?.map((org) => {
-                     const isActiveSupporter = org.supporter_subscriptions?.some((s) => s.status === 'active')
+                    const memberCount = org.members?.[0]?.count || 0
                      return (
                         <tr key={org.id} className="hover:bg-gray-50">
                            <td className="py-3 px-6 font-medium">{org.name}</td>
                            <td className="py-3 px-6 font-mono text-xs">{org.slug}</td>
-                           <td className="py-3 px-6">{org.profiles?.[0]?.count || 0}</td>
                            <td className="py-3 px-6">
-                              {isActiveSupporter 
-                                ? <span className="text-green-600 font-bold text-xs bg-green-50 px-2 py-1 rounded">SUPPORTER</span> 
-                                : <span className="text-gray-500 text-xs">Free</span>
-                              }
+                             <span className="inline-flex items-center px-2 py-1 rounded text-xs font-semibold bg-gray-100 text-gray-800">
+                               {org.status.toUpperCase()}
+                             </span>
                            </td>
                            <td className="py-3 px-6">
-                              {org.is_suspended 
-                                ? <span className="text-red-600 font-bold text-xs bg-red-50 px-2 py-1 rounded">SUSPENDED</span>
-                                : <span className="text-green-600 text-xs">Active</span>
-                              }
+                             <span className="text-xs text-gray-700 font-mono">
+                               {org.membership_policy}
+                             </span>
+                           </td>
+                           <td className="py-3 px-6 text-xs text-gray-600 whitespace-nowrap">
+                             {new Date(org.created_at).toLocaleString()}
+                           </td>
+                           <td className="py-3 px-6">
+                             {memberCount}
                            </td>
                            <td className="py-3 px-6 text-right">
-                              <Link href={`/admin/organisations/${org.id}`} className="text-blue-600 hover:underline">
+                             <div className="flex items-center justify-end gap-3">
+                               <Link
+                                 href={`/admin/organisations/${org.id}`}
+                                 className="text-blue-600 hover:underline text-xs font-medium"
+                               >
                                  Manage
-                              </Link>
+                               </Link>
+                               <Link
+                                 href={`/admin/organisations/${org.id}?view=members`}
+                                 className="text-gray-700 hover:underline text-xs"
+                               >
+                                 View members
+                               </Link>
+                               <Link
+                                 href={`/admin/logs?organisation_id=${org.id}`}
+                                 className="text-gray-700 hover:underline text-xs"
+                               >
+                                 View logs
+                               </Link>
+                             </div>
                            </td>
                         </tr>
                      )

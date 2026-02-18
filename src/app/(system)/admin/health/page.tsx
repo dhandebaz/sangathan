@@ -23,19 +23,40 @@ export default async function SystemHealthPage() {
 
   const admin = createServiceClient()
 
-  // 1. Fetch High Level Stats
-  const [orgs, risks, otpAttempts, emails] = await Promise.all([
+  const [orgs, logs, otpAttempts, emails] = await Promise.all([
     admin.from('organisations').select('status', { count: 'exact', head: true }),
-    admin.from('risk_events').select('*').order('detected_at', { ascending: false }).limit(20),
+    admin
+      .from('system_logs')
+      .select('*')
+      .eq('source', 'risk_engine')
+      .order('created_at', { ascending: false })
+      .limit(20),
     admin.from('otp_attempts').select('*', { count: 'exact', head: true }),
-    admin.from('announcements').select('*', { count: 'exact', head: true }).eq('send_email', true)
+    admin.from('announcements').select('*', { count: 'exact', head: true }).eq('send_email', true),
   ])
 
   const totalOrgs = orgs.count || 0
-  const totalRisks = risks.data?.length || 0 // Total fetched
-  const highSeverityRisks = risks.data?.filter((r: RiskEvent) => r.severity === 'high').length || 0
-  
-  const riskEvents = (risks.data as unknown as RiskEvent[]) || []
+
+  const riskEvents: RiskEvent[] =
+    (logs.data || []).map((log: { id: string; created_at: string; metadata: unknown }) => {
+      const meta = (log.metadata || {}) as {
+        entity_id?: string
+        risk_type?: string
+        severity?: RiskEvent['severity']
+        metadata?: Record<string, unknown> | null
+      }
+      return {
+        id: log.id,
+        entity_id: meta.entity_id || '',
+        risk_type: meta.risk_type || 'unknown',
+        severity: meta.severity || 'low',
+        detected_at: log.created_at,
+        metadata: meta.metadata || null,
+      }
+    }) || []
+
+  const totalRisks = riskEvents.length
+  const highSeverityRisks = riskEvents.filter((r) => r.severity === 'high').length
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">

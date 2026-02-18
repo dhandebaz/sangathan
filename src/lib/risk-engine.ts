@@ -106,15 +106,20 @@ interface RiskEvent {
 
 export async function logRiskEvent(event: RiskEvent) {
   const supabase = createServiceClient()
-  
-  await supabase.from('risk_events').insert({
-      entity_type: event.entity_type,
-      entity_id: event.entity_id,
-      risk_type: event.risk_type,
-      severity: event.severity,
-      metadata: (event.metadata ?? {}) as Json,
-      detected_at: new Date().toISOString()
-    })
+  const payload = {
+    entity_type: event.entity_type,
+    entity_id: event.entity_id,
+    risk_type: event.risk_type,
+    severity: event.severity,
+    metadata: event.metadata ?? {},
+  }
+
+  await supabase.from('system_logs').insert({
+    level: 'security',
+    source: 'risk_engine',
+    message: `Risk event: ${event.risk_type}`,
+    metadata: payload as Json,
+  } as never)
 
   // Take action based on severity
   if (event.severity === 'high' && event.entity_type === 'org') {
@@ -134,7 +139,7 @@ export async function restrictOrg(event: { entity_id: string }) {
     
     // Log the platform action
     await supabase.from('platform_actions').insert({
-        action_type: 'broadcast_restriction',
+        action_type: 'restriction',
         target_org_id: event.entity_id,
         severity: 'medium',
         reason: 'Automated broadcast limit enforcement',

@@ -3,22 +3,8 @@
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { createServiceClient } from '@/lib/supabase/service'
-import { createClient } from '@/lib/supabase/server'
 import { logAction } from '@/lib/audit/log'
-
-// --- Middleware/Auth Helper for System Admin ---
-async function checkSuperAdmin() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user || !user.email) throw new Error('Unauthorized')
-
-  const superAdmins = process.env.SUPER_ADMIN_EMAILS?.split(',') || []
-  if (!superAdmins.includes(user.email)) throw new Error('Unauthorized: System Admin only')
-
-  return user
-}
-
-// --- Schemas ---
+import { requirePlatformAdmin } from '@/lib/auth/context'
 
 const OrgActionSchema = z.object({
   organisationId: z.string().uuid(),
@@ -27,7 +13,7 @@ const OrgActionSchema = z.object({
 // --- Actions ---
 
 export const suspendOrganisation = async (input: z.infer<typeof OrgActionSchema>) => {
-  const user = await checkSuperAdmin()
+  const { user } = await requirePlatformAdmin()
   const supabase = createServiceClient()
 
   // 1. Update Org Status
@@ -53,7 +39,7 @@ export const suspendOrganisation = async (input: z.infer<typeof OrgActionSchema>
 }
 
 export const reactivateOrganisation = async (input: z.infer<typeof OrgActionSchema>) => {
-  const user = await checkSuperAdmin()
+  const { user } = await requirePlatformAdmin()
   const supabase = createServiceClient()
 
   const { error } = await supabase

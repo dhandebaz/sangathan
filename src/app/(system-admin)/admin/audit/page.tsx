@@ -1,24 +1,13 @@
 import { createServiceClient } from '@/lib/supabase/service'
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ShieldAlert } from 'lucide-react'
 import { AuditLog } from '@/types/dashboard'
+import { requirePlatformAdmin } from '@/lib/auth/context'
 
 export const dynamic = 'force-dynamic'
 
-async function checkSuperAdmin() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user || !user.email) return false
-  const superAdmins = process.env.SUPER_ADMIN_EMAILS?.split(',') || []
-  return superAdmins.includes(user.email)
-}
-
 export default async function GlobalAuditPage() {
-  const isSuperAdmin = await checkSuperAdmin()
-  if (!isSuperAdmin) redirect('/')
-
+  await requirePlatformAdmin()
   const supabase = createServiceClient()
 
   // Fetch Global Logs

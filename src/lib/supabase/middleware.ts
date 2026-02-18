@@ -61,42 +61,6 @@ export async function updateSession(request: NextRequest) {
 
   const isSystemAdmin = user?.email && (process.env.SUPER_ADMIN_EMAILS?.split(',') || []).includes(user.email)
   
-  const isMaintenanceExempt = 
-    isSystemAdmin || 
-    pathname.includes('/maintenance') || 
-    pathname.includes('/login') || 
-    pathname.startsWith('/api') ||
-    pathname.startsWith('/_next') ||
-    pathname.includes('.') // Static files
-
-  if (!isMaintenanceExempt) {
-     try {
-       // Re-using the supabase client created for auth
-       const maintenanceClient = createServerClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          { cookies: { getAll() { return request.cookies.getAll() }, setAll() {} } }
-       )
-       
-       const { data: maintenance, error: maintenanceError } = await maintenanceClient
-          .from('system_settings')
-          .select('value')
-          .eq('key', 'maintenance_mode')
-          .maybeSingle()
-       
-       if (!maintenanceError && maintenance) {
-         const settings = maintenance.value as { enabled: boolean } | null
-         if (settings?.enabled) {
-            const url = request.nextUrl.clone()
-            url.pathname = '/maintenance'
-            return NextResponse.redirect(url)
-         }
-       }
-     } catch (err) {
-       // Fail open if maintenance check fails
-       console.error('Maintenance check failed:', err)
-     }
-  }
   const locales = ['en', 'hi']
   
   // Helper to check if path starts with locale

@@ -57,10 +57,7 @@ export default function RunbookPage() {
               <AccordionItem value="m-1">
                 <AccordionTrigger>Enabling Maintenance Mode</AccordionTrigger>
                 <AccordionContent className="text-sm">
-                  Run SQL: 
-                  <pre className="bg-gray-100 p-2 rounded mt-2 text-xs">
-                    {`UPDATE system_settings SET value = '{"enabled": true, "message": "Upgrading DB"}' WHERE key = 'maintenance_mode';`}
-                  </pre>
+                  Use the System Admin panel or deployment configuration to enable maintenance mode.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="m-2">
