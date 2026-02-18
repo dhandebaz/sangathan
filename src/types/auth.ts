@@ -1,4 +1,14 @@
-export type Role = 'admin' | 'editor' | 'viewer'
+export type Role =
+  | 'viewer'
+  | 'member'
+  | 'general'
+  | 'volunteer'
+  | 'core'
+  | 'executive'
+  | 'editor'
+  | 'admin'
+
+export type MembershipStatus = 'active' | 'inactive' | 'pending' | 'rejected' | 'removed'
 
 export interface Organization {
   id: string
@@ -9,13 +19,18 @@ export interface Organization {
 }
 
 export interface Profile {
-  id: string // references auth.users.id
+  id: string
   email: string
   full_name: string | null
-  organization_id: string
-  role: Role
   created_at: string
   updated_at: string
+}
+
+export interface MembershipContext {
+  id: string
+  organisationId: string
+  role: Role
+  status: MembershipStatus
 }
 
 export interface UserContext {
@@ -25,6 +40,7 @@ export interface UserContext {
   }
   organizationId: string
   role: Role
+  memberships: MembershipContext[]
 }
 
 export type ActionResponse<T = null> = {

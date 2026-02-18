@@ -1,5 +1,5 @@
 import { UserContext, ActionResponse, Role } from '@/types/auth'
-import { getUserContext, requireRole } from '@/lib/auth/context'
+import { getSelectedOrganisationId, getUserContext, requireRole } from '@/lib/auth/context'
 import { ZodSchema } from 'zod'
 
 /**
@@ -19,7 +19,6 @@ export function createSafeAction<TInput, TOutput>(
 ) {
   return async (input: TInput): Promise<ActionResponse<TOutput>> => {
     try {
-      // 1. Validate Input
       const validation = schema.safeParse(input)
       if (!validation.success) {
         return {
@@ -28,21 +27,18 @@ export function createSafeAction<TInput, TOutput>(
         }
       }
 
-      // 2. Auth & Context
       let context: UserContext
       try {
         if (options.allowedRoles) {
           context = await requireRole(options.allowedRoles)
         } else {
-          context = await getUserContext()
+          const organisationId = await getSelectedOrganisationId()
+          context = await getUserContext(organisationId)
         }
       } catch (authError) {
-        // Return a generic error to avoid leaking details, or specific if needed.
-        // For production, "Unauthorized" is enough.
         return { success: false, error: (authError as Error).message }
       }
 
-      // 3. Execute Logic with Safe Context
       const data = await handler(validation.data, context)
 
       return { success: true, data }

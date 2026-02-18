@@ -1,13 +1,121 @@
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { Role, UserContext } from '@/types/auth'
+import { MembershipContext, Role, UserContext } from '@/types/auth'
 
-/**
- * Retrieves the current authenticated user context, including organization and role.
- * This function is the single source of truth for authorization.
- *
- * @throws {Error} If user is not authenticated or lacks a profile/organization.
- */
-export async function getUserContext(): Promise<UserContext> {
+const ORG_COOKIE_NAME = 'sangathan_org_id'
+
+export async function getUserMemberships(userId: string): Promise<MembershipContext[]> {
+  const supabase = await createClient()
+
+  const {
+    data: membershipRows,
+    error: membershipError,
+  } = await (supabase as unknown as {
+    from: (table: string) => {
+      select: (columns: string) => {
+        eq: (column: string, value: string) => Promise<{
+          data: unknown
+          error: { message?: string } | null
+        }>
+      }
+    }
+  })
+    .from('members')
+    .select('id, organisation_id, role, status, deleted_at, user_id')
+    .eq('user_id', userId)
+
+  if (membershipError) {
+    throw new Error('Unauthorized: Failed to load memberships')
+  }
+
+  const memberships: MembershipContext[] = ((membershipRows || []) as {
+    id: string
+    organisation_id: string
+    role: string
+    status: MembershipContext['status']
+    deleted_at: string | null
+  }[])
+    .filter((m) => !m.deleted_at)
+    .map((m) => ({
+      id: m.id,
+      organisationId: m.organisation_id,
+      role: m.role as Role,
+      status: m.status,
+    }))
+
+  return memberships
+}
+
+export async function getMembershipForOrg(userId: string, organisationId: string): Promise<MembershipContext> {
+  if (!organisationId) {
+    throw new Error('Unauthorized: Missing organisation')
+  }
+
+  const memberships = await getUserMemberships(userId)
+
+  const membership = memberships.find(
+    (m) => m.organisationId === organisationId && m.status === 'active',
+  )
+
+  if (!membership) {
+    throw new Error('Unauthorized: No active membership for this organisation')
+  }
+
+  return membership
+}
+
+export async function getSelectedOrganisationId(): Promise<string> {
+  const cookieStore = await cookies()
+  const cookie = cookieStore.get(ORG_COOKIE_NAME)
+  if (cookie?.value) {
+    return cookie.value
+  }
+
+  const supabase = await createClient()
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser()
+
+  if (authError || !user || !user.id) {
+    throw new Error('Unauthorized: No valid session')
+  }
+
+  const memberships = await getUserMemberships(user.id)
+  const activeMemberships = memberships.filter((m) => m.status === 'active')
+
+  if (activeMemberships.length === 1) {
+    const organisationId = activeMemberships[0].organisationId
+    redirect(`/bootstrap-org?org=${encodeURIComponent(organisationId)}`)
+  }
+
+  if (activeMemberships.length === 0) {
+    redirect('/onboarding')
+  }
+
+  redirect('/select-organisation')
+}
+
+export async function setSelectedOrganisationId(organisationId: string): Promise<void> {
+  const cookieStore = await cookies()
+  cookieStore.set(ORG_COOKIE_NAME, organisationId, {
+    httpOnly: true,
+    sameSite: 'lax',
+    path: '/',
+  })
+}
+
+export async function clearSelectedOrganisationId(): Promise<void> {
+  const cookieStore = await cookies()
+  cookieStore.delete(ORG_COOKIE_NAME)
+}
+
+export async function getUserContext(organisationId: string): Promise<UserContext> {
+  if (!organisationId) {
+    throw new Error('Unauthorized: Missing organisation')
+  }
+
   const supabase = await createClient()
 
   const {
@@ -16,39 +124,29 @@ export async function getUserContext(): Promise<UserContext> {
   } = await supabase.auth.getUser()
 
   if (authError || !user || !user.email) {
-    // In server actions, we should throw or redirect.
-    // Throwing allows the caller to catch and return a proper error object.
     throw new Error('Unauthorized: No valid session')
   }
 
-  // Fetch Profile with Organization ID and Role
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('organisation_id, role, full_name')
-    .eq('id', user.id)
-    .single()
+  const memberships = await getUserMemberships(user.id)
 
-  if (profileError || !profile || !profile.organisation_id) {
-    // Edge case: User is authenticated but has no profile.
-    // This could happen if signup failed halfway or data was corrupted.
-    // We treat this as an unauthorized state for business logic.
-    console.error('Profile fetch error:', profileError)
-    throw new Error('Unauthorized: User has no profile or organization linked')
+  const activeMembership = memberships.find(
+    (m) => m.organisationId === organisationId && m.status === 'active',
+  )
+
+  if (!activeMembership) {
+    throw new Error('Unauthorized: No active membership for this organisation')
   }
 
-  // Ensure role is a valid Role type
-  const role = profile.role as Role
-  if (!['admin', 'editor', 'viewer'].includes(role)) {
-     throw new Error('Unauthorized: Invalid role detected')
-  }
+  const role = activeMembership.role
 
   return {
     user: {
       id: user.id,
       email: user.email,
     },
-    organizationId: profile.organisation_id,
-    role: role,
+    organizationId: activeMembership.organisationId,
+    role,
+    memberships,
   }
 }
 
@@ -57,7 +155,8 @@ export async function getUserContext(): Promise<UserContext> {
  * Returns the context if valid, otherwise throws.
  */
 export async function requireRole(allowedRoles: Role[]): Promise<UserContext> {
-  const context = await getUserContext()
+  const organisationId = await getSelectedOrganisationId()
+  const context = await getUserContext(organisationId)
 
   if (!allowedRoles.includes(context.role)) {
     throw new Error(`Forbidden: User role '${context.role}' is not authorized`)

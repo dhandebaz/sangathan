@@ -7,6 +7,7 @@ import { getOrgCapabilities } from '@/lib/capabilities'
 import { MobileNav } from '@/components/mobile/mobile-nav'
 import { ContextualFAB } from '@/components/mobile/contextual-fab'
 import { DashboardTopBar } from '@/components/dashboard/dashboard-topbar'
+import { getSelectedOrganisationId } from '@/lib/auth/context'
 
 export default async function DashboardLayout(props: {
   children: React.ReactNode
@@ -22,30 +23,29 @@ export default async function DashboardLayout(props: {
   let orgName: string | null = null
   
   if (user) {
-    const { data: profileData, error: profileError } = await supabase
-      .from('profiles')
-      .select('organisation_id, role')
-      .eq('id', user.id)
-      .single()
-    
-    if (profileError || !profileData) {
-      capabilities = { basic_governance: false }
-    } else {
-      const profile = profileData as { organisation_id: string | null; role: string }
-      if (profile.organisation_id) {
-        capabilities = await getOrgCapabilities(profile.organisation_id)
-        role = profile.role
-        const { data: orgData } = await supabase
-          .from('organisations')
-          .select('name')
-          .eq('id', profile.organisation_id)
-          .single()
-        if (orgData && 'name' in orgData) {
-          orgName = (orgData as { name: string }).name
-        }
-      } else {
-        capabilities = { basic_governance: false }
+    try {
+      const selectedOrgId = await getSelectedOrganisationId()
+      capabilities = await getOrgCapabilities(selectedOrgId)
+      const { data: orgData } = await supabase
+        .from('organisations')
+        .select('name')
+        .eq('id', selectedOrgId)
+        .single()
+      if (orgData && 'name' in orgData) {
+        orgName = (orgData as { name: string }).name
       }
+      const { data: membership } = await supabase
+        .from('members')
+        .select('role')
+        .eq('user_id', user.id)
+        .eq('organisation_id', selectedOrgId)
+        .eq('status', 'active')
+        .maybeSingle()
+      if (membership && 'role' in membership) {
+        role = (membership as { role: string }).role
+      }
+    } catch {
+      capabilities = { basic_governance: false }
     }
   }
 

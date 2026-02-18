@@ -82,7 +82,7 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
         start_time: input.start_time,
         end_time: input.end_time,
         location: input.location,
-        event_type: input.event_type as 'public' | 'private' | 'member_only',
+        event_type: input.event_type,
         rsvp_enabled: input.rsvp_enabled,
         capacity: input.capacity,
         created_by: user.id,
@@ -90,7 +90,11 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
       .select()
       .single()
 
-    if (error || !event) throw error || new Error('Failed to create event')
+    if (error || !event) {
+      const message =
+        (error as { message?: string } | null)?.message || 'Failed to create event'
+      return { success: false, error: message }
+    }
 
     // Insert Joint Events
     if (input.collaborating_org_ids && input.collaborating_org_ids.length > 0) {
@@ -106,10 +110,14 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
       if (jointError) console.error('Joint Event Error:', jointError)
     }
 
-    revalidatePath('/dashboard/events')
+    revalidatePath('/[lang]/dashboard/events')
     return { success: true }
   } catch (error: unknown) {
-    return { success: false, error: error instanceof Error ? error.message : 'An unexpected error occurred' }
+    const message =
+      typeof error === 'object' && error !== null && 'message' in error
+        ? (error as { message?: string }).message || 'An unexpected error occurred'
+        : 'An unexpected error occurred'
+    return { success: false, error: message }
   }
 }
 
