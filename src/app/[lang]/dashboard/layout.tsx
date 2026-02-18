@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { LayoutDashboard, Users, Settings, LogOut, Megaphone, Calendar, CheckSquare, BarChart, Vote, Globe } from 'lucide-react'
+import { LayoutDashboard, Users, Settings, LogOut, Megaphone, Calendar, CheckSquare, BarChart, Vote, Globe, AlertTriangle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/server'
 import { getOrgCapabilities } from '@/lib/capabilities'
@@ -17,11 +17,12 @@ export default async function DashboardLayout(props: {
   const { children } = props
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  
+
   let capabilities: Record<string, boolean> = { basic_governance: true }
   let role = ''
   let orgName: string | null = null
-  
+  let maintenanceMessage: string | null = null
+
   if (user) {
     try {
       const selectedOrgId = await getSelectedOrganisationId()
@@ -47,6 +48,23 @@ export default async function DashboardLayout(props: {
     } catch {
       capabilities = { basic_governance: false }
     }
+  }
+
+  try {
+    const { data: setting } = await supabase
+      .from('system_settings')
+      .select('value')
+      .eq('key', 'maintenance_mode')
+      .maybeSingle()
+
+    if (setting && setting.value && typeof setting.value === 'object') {
+      const value = setting.value as { enabled?: boolean; message?: string }
+      if (value.enabled) {
+        maintenanceMessage = value.message || 'The platform is currently under maintenance.'
+      }
+    }
+  } catch {
+    maintenanceMessage = null
   }
 
   const isAdmin = ['admin', 'executive'].includes(role)
@@ -76,38 +94,38 @@ export default async function DashboardLayout(props: {
             />
           </Link>
         </div>
-        
+
         <div className="flex-1 py-6 px-4 space-y-8 overflow-y-auto">
           <div>
             <h3 className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Main Menu</h3>
             <nav className="space-y-1">
-               <SidebarLink href={`/${lang}/dashboard`} icon={LayoutDashboard} label="Overview" />
-               <SidebarLink href={`/${lang}/dashboard/announcements`} icon={Megaphone} label="Announcements" />
-               <SidebarLink href={`/${lang}/dashboard/events`} icon={Calendar} label="Events" />
+              <SidebarLink href={`/${lang}/dashboard`} icon={LayoutDashboard} label="Overview" />
+              <SidebarLink href={`/${lang}/dashboard/announcements`} icon={Megaphone} label="Announcements" />
+              <SidebarLink href={`/${lang}/dashboard/events`} icon={Calendar} label="Events" />
             </nav>
           </div>
 
           <div>
             <h3 className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Operations</h3>
             <nav className="space-y-1">
-               <SidebarLink href={`/${lang}/dashboard/tasks`} icon={CheckSquare} label="Tasks" />
-               <SidebarLink href={`/${lang}/dashboard/polls`} icon={Vote} label="Decisions" />
-               {capabilities.federation_mode && (
-                 <SidebarLink href={`/${lang}/dashboard/networks`} icon={Globe} label="Networks" />
-               )}
-               <SidebarLink href={`/${lang}/dashboard/members`} icon={Users} label="Members" />
+              <SidebarLink href={`/${lang}/dashboard/tasks`} icon={CheckSquare} label="Tasks" />
+              <SidebarLink href={`/${lang}/dashboard/polls`} icon={Vote} label="Decisions" />
+              {capabilities.federation_mode && (
+                <SidebarLink href={`/${lang}/dashboard/networks`} icon={Globe} label="Networks" />
+              )}
+              <SidebarLink href={`/${lang}/dashboard/members`} icon={Users} label="Members" />
             </nav>
           </div>
 
           <div>
             <h3 className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">System</h3>
             <nav className="space-y-1">
-               {capabilities.advanced_analytics && isAdmin && (
-                 <SidebarLink href={`/${lang}/dashboard/analytics`} icon={BarChart} label="Analytics" />
-               )}
-               {isAdmin && (
-                 <SidebarLink href={`/${lang}/dashboard/settings`} icon={Settings} label="Settings" />
-               )}
+              {capabilities.advanced_analytics && isAdmin && (
+                <SidebarLink href={`/${lang}/dashboard/analytics`} icon={BarChart} label="Analytics" />
+              )}
+              {isAdmin && (
+                <SidebarLink href={`/${lang}/dashboard/settings`} icon={Settings} label="Settings" />
+              )}
             </nav>
           </div>
         </div>
@@ -121,8 +139,15 @@ export default async function DashboardLayout(props: {
       </aside>
 
       <div className="flex-1 flex flex-col md:pl-64 transition-all duration-300">
+        {maintenanceMessage && (
+          <div className="px-8 py-2 bg-amber-50 border-b border-amber-200 text-amber-900 text-sm flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4" />
+            <span className="font-semibold">Maintenance mode</span>
+            <span className="text-amber-900/80">{maintenanceMessage}</span>
+          </div>
+        )}
         <header className="sticky top-0 z-40 h-16 border-b border-slate-200 bg-white/80 backdrop-blur-md px-8 flex items-center justify-between">
-           <DashboardTopBar lang={lang} userEmail={user?.email ?? null} role={role} orgName={orgName} />
+          <DashboardTopBar lang={lang} userEmail={user?.email ?? null} role={role} orgName={orgName} />
         </header>
 
         <main className="flex-1 p-6 lg:p-10 max-w-7xl mx-auto w-full animate-fade-in pb-24 md:pb-10">
@@ -138,8 +163,8 @@ export default async function DashboardLayout(props: {
 
 function SidebarLink({ href, icon: Icon, label }: { href: string; icon: React.ElementType; label: string }) {
   return (
-    <Link 
-      href={href} 
+    <Link
+      href={href}
       className="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-lg text-slate-600 hover:bg-slate-50 hover:text-brand-600 transition-all group"
     >
       <Icon className="w-5 h-5 text-slate-400 group-hover:text-brand-500 transition-colors" />

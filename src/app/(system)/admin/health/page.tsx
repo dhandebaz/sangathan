@@ -4,41 +4,112 @@ import { MetricCard } from '@/components/analytics/metric-card'
 import { AlertTriangle, ShieldCheck, Activity, Users, Mail, Phone, Flag } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { RiskEvent } from '@/types/dashboard'
+import { requirePlatformAdmin } from '@/lib/auth/context'
 
 export const dynamic = 'force-dynamic'
 
 export default async function SystemHealthPage() {
+  await requirePlatformAdmin()
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  
-  // Super Admin Check (hardcoded email or specific role for now)
-  // In production, use a dedicated 'system_admin' role in a system org.
-  const isSuperAdmin = user?.email === 'admin@sangathan.space' // Replace with env var or proper RBAC
-  
-  if (!isSuperAdmin) {
-    // Check if they have a special system role if email check fails
-    // For demo/MVP, we'll stick to email or just block if not authorized.
-    // return <div>Access Denied: System Admin Only</div>
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <p className="text-sm text-gray-600">Unauthorized: No active session</p>
+      </div>
+    )
   }
 
   const admin = createServiceClient()
 
-  const [orgs, logs, otpAttempts, emails] = await Promise.all([
-    admin.from('organisations').select('status', { count: 'exact', head: true }),
-    admin
-      .from('system_logs')
-      .select('*')
-      .eq('source', 'risk_engine')
-      .order('created_at', { ascending: false })
-      .limit(20),
-    admin.from('otp_attempts').select('*', { count: 'exact', head: true }),
-    admin.from('announcements').select('*', { count: 'exact', head: true }).eq('send_email', true),
-  ])
+  let orgsResult:
+    | {
+        count: number | null
+      }
+    | undefined
+  let logsResult:
+    | {
+        data: { id: string; created_at: string; metadata: unknown }[] | null
+      }
+    | undefined
+  let otpAttemptsResult:
+    | {
+        count: number | null
+      }
+    | undefined
+  let emailsResult:
+    | {
+        count: number | null
+      }
+    | undefined
+  let flaggedOrgsResult:
+    | {
+        data: {
+          id: string
+          name: string
+          slug: string
+          status: string
+          is_suspended: boolean | null
+        }[] | null
+      }
+    | undefined
+  let hasError = false
 
-  const totalOrgs = orgs.count || 0
+  try {
+    const [orgs, logs, otpAttempts, emails, flaggedOrgs] = await Promise.all([
+      admin.from('organisations').select('status', { count: 'exact', head: true }),
+      admin
+        .from('system_logs')
+        .select('*')
+        .eq('source', 'risk_engine')
+        .order('created_at', { ascending: false })
+        .limit(20),
+      admin.from('otp_attempts').select('*', { count: 'exact', head: true }),
+      admin.from('announcements').select('*', { count: 'exact', head: true }).eq('send_email', true),
+      admin
+        .from('organisations')
+        .select('id, name, slug, status, is_suspended')
+        .in('status', ['warning', 'suspended', 'under_review'])
+        .order('created_at', { ascending: false })
+        .limit(10),
+    ])
+
+    orgsResult = orgs
+    logsResult = logs as {
+      data: { id: string; created_at: string; metadata: unknown }[] | null
+    }
+    otpAttemptsResult = otpAttempts
+    emailsResult = emails
+    flaggedOrgsResult = flaggedOrgs as {
+      data: {
+        id: string
+        name: string
+        slug: string
+        status: string
+        is_suspended: boolean | null
+      }[] | null
+    }
+  } catch {
+    hasError = true
+  }
+
+  if (hasError || !orgsResult || !logsResult || !otpAttemptsResult || !emailsResult || !flaggedOrgsResult) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="max-w-md mx-auto text-center space-y-2">
+          <h2 className="text-xl font-bold text-red-600">Error loading system health</h2>
+          <p className="text-sm text-gray-600">Check service role configuration and database connectivity.</p>
+        </div>
+      </div>
+    )
+  }
+
+  const totalOrgs = orgsResult.count || 0
 
   const riskEvents: RiskEvent[] =
-    (logs.data || []).map((log: { id: string; created_at: string; metadata: unknown }) => {
+    (logsResult.data || []).map((log) => {
       const meta = (log.metadata || {}) as {
         entity_id?: string
         risk_type?: string
@@ -52,11 +123,19 @@ export default async function SystemHealthPage() {
         severity: meta.severity || 'low',
         detected_at: log.created_at,
         metadata: meta.metadata || null,
-      }
+      } as RiskEvent
     }) || []
 
   const totalRisks = riskEvents.length
   const highSeverityRisks = riskEvents.filter((r) => r.severity === 'high').length
+
+  const flagged = (flaggedOrgsResult.data || []) as {
+    id: string
+    name: string
+    slug: string
+    status: string
+    is_suspended: boolean | null
+  }[]
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -72,15 +151,13 @@ export default async function SystemHealthPage() {
           </div>
         </div>
 
-        {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <MetricCard title="Total Organisations" value={totalOrgs} icon={Users} />
           <MetricCard title="Active Risk Events" value={totalRisks} icon={AlertTriangle} trend={highSeverityRisks > 0 ? 'down' : 'neutral'} />
-          <MetricCard title="OTP Attempts (1h)" value={otpAttempts.count || 0} icon={Phone} />
-          <MetricCard title="Broadcasts (24h)" value={emails.count || 0} icon={Mail} />
+          <MetricCard title="OTP Attempts (1h)" value={otpAttemptsResult.count || 0} icon={Phone} />
+          <MetricCard title="Broadcasts (24h)" value={emailsResult.count || 0} icon={Mail} />
         </div>
 
-        {/* Risk Feed */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
             <Card>
@@ -99,11 +176,15 @@ export default async function SystemHealthPage() {
                       <div key={event.id} className="flex items-start justify-between p-4 border rounded-lg bg-white hover:bg-gray-50 transition-colors">
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
-                            <span className={`px-2 py-0.5 rounded text-xs font-bold uppercase ${
-                              event.severity === 'high' ? 'bg-red-100 text-red-700' :
-                              event.severity === 'medium' ? 'bg-orange-100 text-orange-700' :
-                              'bg-yellow-100 text-yellow-700'
-                            }`}>
+                            <span
+                              className={`px-2 py-0.5 rounded text-xs font-bold uppercase ${
+                                event.severity === 'high'
+                                  ? 'bg-red-100 text-red-700'
+                                  : event.severity === 'medium'
+                                  ? 'bg-orange-100 text-orange-700'
+                                  : 'bg-yellow-100 text-yellow-700'
+                              }`}
+                            >
                               {event.severity}
                             </span>
                             <span className="font-medium text-gray-900 capitalize">{event.risk_type.replace('_', ' ')}</span>
@@ -133,13 +214,36 @@ export default async function SystemHealthPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                   <Flag className="w-5 h-5 text-orange-600" />
-                   Flagged Organisations
+                  <Flag className="w-5 h-5 text-orange-600" />
+                  Flagged Organisations
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {/* Fetch flagged orgs */}
-                <p className="text-sm text-gray-500 italic">No organisations currently suspended or under review.</p>
+                {flagged.length === 0 ? (
+                  <p className="text-sm text-gray-500 italic">No organisations currently suspended or under review.</p>
+                ) : (
+                  <ul className="space-y-3">
+                    {flagged.map((org) => (
+                      <li key={org.id} className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium text-sm text-gray-900">{org.name}</p>
+                          <p className="text-xs text-gray-500 font-mono">{org.slug}</p>
+                        </div>
+                          <span
+                            className={`text-xs font-semibold px-2 py-1 rounded ${
+                              org.status === 'suspended'
+                                ? 'bg-red-50 text-red-700'
+                                : org.status === 'under_review'
+                                ? 'bg-yellow-50 text-yellow-700'
+                                : 'bg-orange-50 text-orange-700'
+                            }`}
+                          >
+                            {org.status.replace('_', ' ').toUpperCase()}
+                          </span>
+                        </li>
+                      ))}
+                  </ul>
+                )}
               </CardContent>
             </Card>
 
@@ -149,16 +253,16 @@ export default async function SystemHealthPage() {
               </CardHeader>
               <CardContent className="space-y-2 text-sm text-blue-700">
                 <div className="flex justify-between">
-                   <span>Database Load</span>
-                   <span className="font-bold">Normal</span>
+                  <span>Database Load</span>
+                  <span className="font-bold">Normal</span>
                 </div>
                 <div className="flex justify-between">
-                   <span>Email Queue</span>
-                   <span className="font-bold">Clear</span>
+                  <span>Email Queue</span>
+                  <span className="font-bold">Clear</span>
                 </div>
                 <div className="flex justify-between">
-                   <span>OTP Gateway</span>
-                   <span className="font-bold">Active</span>
+                  <span>OTP Gateway</span>
+                  <span className="font-bold">Active</span>
                 </div>
               </CardContent>
             </Card>

@@ -429,6 +429,9 @@ export async function finalizeSignup(input: { idToken: string }) {
       .update({
         status: 'active',
         approved_at: new Date().toISOString(),
+        phone: phoneNumber,
+        phone_verified: true,
+        firebase_uid: firebaseUid,
       } as never)
       .eq('id', user.id)
   }
