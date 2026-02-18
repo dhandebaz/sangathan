@@ -368,12 +368,32 @@ export async function finalizeSignup(input: { idToken: string }) {
   const supabaseAdmin = createServiceClient()
   const { data: existingPhone } = await supabaseAdmin
     .from('profiles')
-    .select('id')
+    .select('id, email')
     .eq('phone', phoneNumber)
     .maybeSingle()
 
   if (existingPhone) {
-    return { success: false, error: 'This phone number is already registered as an admin.' }
+    if (!existingPhone.email) {
+      return { success: false, error: 'This phone number is already registered as an admin. Please login instead.' }
+    }
+
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space'
+    const origin = appUrl.startsWith('http') ? appUrl : `https://${appUrl}`
+
+    const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
+      type: 'magiclink',
+      email: existingPhone.email,
+      options: {
+        redirectTo: `${origin}/en/dashboard`,
+      },
+    })
+
+    if (linkError || !linkData?.properties?.action_link) {
+      console.error('Existing admin magic link error:', linkError)
+      return { success: false, error: 'This phone number is already registered as an admin. Please login from the login page.' }
+    }
+
+    return { success: true, existingAdminRedirectUrl: linkData.properties.action_link }
   }
 
   // 5. Retrieve Metadata

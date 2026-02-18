@@ -143,10 +143,16 @@ export default function VerifyPhonePage(props: { params: Promise<{ lang: string 
       const response = await finalizeSignup({ idToken })
 
       if (response.success) {
+        if ((response as { existingAdminRedirectUrl?: string }).existingAdminRedirectUrl) {
+          const redirectUrl = (response as { existingAdminRedirectUrl: string }).existingAdminRedirectUrl
+          window.location.href = redirectUrl
+          return
+        }
+
         setVerified(true)
         const target =
-          response.orgId
-            ? `/bootstrap-org?org=${encodeURIComponent(response.orgId)}`
+          (response as { orgId?: string }).orgId
+            ? `/bootstrap-org?org=${encodeURIComponent((response as { orgId: string }).orgId)}`
             : `/${params.lang}/dashboard`
 
         setTimeout(() => {

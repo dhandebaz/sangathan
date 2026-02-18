@@ -73,11 +73,31 @@ export async function updateSession(request: NextRequest) {
     locales.some(loc => pathname === `/${loc}${route}`)
   )
 
-  // If user is logged in and tries to access auth pages, redirect to dashboard
   if (user && isAuthRoute) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/en/dashboard'
-    return NextResponse.redirect(url)
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() { return request.cookies.getAll() },
+          setAll() {},
+        },
+      },
+    )
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role, phone_verified')
+      .eq('id', user.id)
+      .maybeSingle()
+
+    if (!profile || (profile.role === 'admin' && !profile.phone_verified)) {
+      // Allow access to auth screens so the user can login or escape
+    } else {
+      const url = request.nextUrl.clone()
+      url.pathname = '/en/dashboard'
+      return NextResponse.redirect(url)
+    }
   }
 
   // Define strictly public paths (no auth required)
