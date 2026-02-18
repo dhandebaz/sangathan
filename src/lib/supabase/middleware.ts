@@ -233,12 +233,13 @@ export async function updateSession(request: NextRequest) {
 
   // i18n Redirection Logic
   // Check if path is missing locale
-  // We exclude api, _next, static, f, auth, and certain system routes
+  // We exclude api, _next, static, f, auth, admin, and certain system routes
   const shouldHandleLocale = 
     !pathname.startsWith('/api') &&
     !pathname.startsWith('/_next') &&
     !pathname.startsWith('/f/') &&
     !pathname.startsWith('/auth') &&
+    !pathname.startsWith('/admin') &&
     !pathname.startsWith('/bootstrap-org') &&
     !pathname.includes('.') &&
     !hasLocale
