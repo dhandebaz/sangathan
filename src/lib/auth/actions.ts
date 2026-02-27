@@ -1,6 +1,7 @@
 import { UserContext, ActionResponse, Role } from '@/types/auth'
 import { getSelectedOrganisationId, getUserContext, requireRole } from '@/lib/auth/context'
 import { ZodSchema } from 'zod'
+import { logger } from '@/lib/logger'
 
 /**
  * Generic Safe Server Action Wrapper.
@@ -10,14 +11,16 @@ import { ZodSchema } from 'zod'
  * 2. Fetches the authenticated user context (User + Org + Role).
  * 3. Enforces Role requirements if specified.
  * 4. Passes the context to the handler, ensuring no Org ID is ever accepted from the client.
- * 5. Handles errors consistently.
+ * 5. Handles errors consistently with observability.
  */
 export function createSafeAction<TInput, TOutput>(
   schema: ZodSchema<TInput>,
   handler: (input: TInput, context: UserContext) => Promise<TOutput>,
-  options: { allowedRoles?: Role[] } = {}
+  options: { allowedRoles?: Role[], actionName?: string } = {}
 ) {
   return async (input: TInput): Promise<ActionResponse<TOutput>> => {
+    let context: UserContext | undefined;
+
     try {
       const validation = schema.safeParse(input)
       if (!validation.success) {
@@ -27,7 +30,6 @@ export function createSafeAction<TInput, TOutput>(
         }
       }
 
-      let context: UserContext
       try {
         if (options.allowedRoles) {
           context = await requireRole(options.allowedRoles)
@@ -36,18 +38,37 @@ export function createSafeAction<TInput, TOutput>(
           context = await getUserContext(organisationId)
         }
       } catch (authError) {
+        // Auth errors are expected flow control, not system errors
         return { success: false, error: (authError as Error).message }
+      }
+      
+      if (!context) {
+          return { success: false, error: 'Unauthorized: Context initialization failed' }
       }
 
       const data = await handler(validation.data, context)
 
       return { success: true, data }
     } catch (error) {
-      // Log error internally (e.g. Sentry) but return generic message
-      // console.error('Action Error:', error) // Removed for production logic per requirement
+      const actionName = options.actionName || 'unknown_action'
+      
+      // Extract safe context for logging (exclude PII)
+      const logContext = context ? {
+        userId: context.user.id,
+        orgId: context.organizationId,
+        role: context.role
+      } : { note: 'Context not initialized' }
+
+      // Log error with stack trace
+      await logger.error('server_action', `Action failed: ${actionName}`, {
+        error: error instanceof Error ? error.stack : String(error),
+        action: actionName,
+        context: logContext
+      })
+
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Something went wrong',
+        error: 'An unexpected error occurred. Please try again later.',
       }
     }
   }

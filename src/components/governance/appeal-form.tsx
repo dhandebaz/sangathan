@@ -1,68 +1,107 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { submitAppeal } from '@/actions/governance'
-import { useRouter } from 'next/navigation'
-import { AlertCircle } from 'lucide-react'
+import { submitAppeal } from '@/actions/appeals'
+import { AlertCircle, Send } from 'lucide-react'
 
-export function AppealForm({ orgId }: { orgId: string }) {
+export function AppealForm({ organisationId }: { organisationId: string }) {
   const [loading, setLoading] = useState(false)
-  const [reason, setReason] = useState('')
-  const [url, setUrl] = useState('')
-  const router = useRouter()
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
+    setError('')
+
+    const formData = new FormData(e.currentTarget)
     
-    const res = await submitAppeal(orgId, { reason, supporting_docs_url: url })
-    
-    setLoading(false)
-    if (res.success) {
-      router.refresh()
+    const result = await submitAppeal({
+      organisationId,
+      type: formData.get('type') as 'suspension' | 'restriction' | 'other',
+      reason: formData.get('reason') as string,
+      contactEmail: formData.get('contactEmail') as string,
+      evidenceLink: (formData.get('evidenceLink') as string) || undefined,
+    })
+
+    if (result.success) {
+      setSuccess(true)
     } else {
-      alert(res.error)
+      setError(result.error || 'Failed to submit appeal')
     }
+    setLoading(false)
+  }
+
+  if (success) {
+    return (
+      <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+        <div className="text-green-700 font-bold mb-2">Appeal Submitted</div>
+        <p className="text-sm text-green-600">
+          Your appeal has been securely transmitted to the Governance Board. 
+          You will receive an update at your contact email within 48 hours.
+        </p>
+      </div>
+    )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-xl border shadow-sm">
-      <div className="bg-blue-50 text-blue-800 p-4 rounded-lg flex gap-3 text-sm">
-        <AlertCircle className="w-5 h-5 flex-shrink-0" />
-        <p>
-          Appeals are reviewed by the platform governance team. Please provide a detailed explanation 
-          of why you believe the suspension or restriction was applied in error.
-        </p>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {error && (
+        <div className="bg-red-50 text-red-600 p-3 rounded text-sm flex items-center gap-2">
+          <AlertCircle size={16} />
+          {error}
+        </div>
+      )}
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Appeal Type</label>
+        <select name="type" required className="w-full p-2 border rounded-md bg-white">
+          <option value="suspension">Suspension Appeal</option>
+          <option value="restriction">Feature Restriction</option>
+          <option value="other">Other Governance Issue</option>
+        </select>
       </div>
 
-      <div className="space-y-2">
-        <Label>Reason for Appeal</Label>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Reason for Appeal</label>
         <textarea 
-          className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-          required
-          value={reason} 
-          onChange={e => setReason(e.target.value)} 
-          placeholder="Explain the context..."
+          name="reason" 
+          required 
+          rows={4}
+          minLength={20}
+          className="w-full p-2 border rounded-md"
+          placeholder="Please explain why the suspension was in error or how the issue has been resolved..."
         />
       </div>
 
-      <div className="space-y-2">
-        <Label>Supporting Document URL (Optional)</Label>
-        <Input 
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Evidence URL (Optional)</label>
+        <input 
           type="url" 
-          value={url} 
-          onChange={e => setUrl(e.target.value)} 
-          placeholder="https://drive.google.com/..." 
+          name="evidenceLink" 
+          className="w-full p-2 border rounded-md"
+          placeholder="https://..."
         />
-        <p className="text-xs text-gray-500">Link to a public folder or document.</p>
       </div>
 
-      <Button type="submit" disabled={loading || reason.length < 10} className="w-full">
-        {loading ? 'Submitting...' : 'Submit Appeal'}
-      </Button>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Contact Email</label>
+        <input 
+          type="email" 
+          name="contactEmail" 
+          required 
+          className="w-full p-2 border rounded-md"
+          placeholder="admin@example.com"
+        />
+      </div>
+
+      <button 
+        type="submit" 
+        disabled={loading}
+        className="w-full bg-black text-white py-2 rounded-md font-medium hover:opacity-90 flex items-center justify-center gap-2"
+      >
+        {loading ? 'Submitting...' : <><Send size={16} /> Submit to Governance Board</>}
+      </button>
     </form>
   )
 }

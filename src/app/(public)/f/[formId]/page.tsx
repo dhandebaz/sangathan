@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { PublicForm } from '@/components/forms/public-form'
 import { z } from 'zod'
 import { FormFieldSchema } from '@/actions/forms/actions'
+import { createSignedCookie } from '@/lib/auth/cookie'
 
 interface PageProps {
   params: Promise<{ formId: string }>
@@ -43,6 +44,9 @@ export default async function PublicFormPage({ params }: PageProps) {
     .eq('id', form.organisation_id)
     .single() as { data: { name: string } | null, error: { message: string } | null }
 
+  // Generate CSRF Token (Signed timestamp)
+  const csrfToken = await createSignedCookie({ formId, ts: Date.now() })
+
   return (
     <div className="min-h-screen bg-orange-50/30 py-12 px-4 sm:px-6">
       <div className="max-w-xl mx-auto">
@@ -57,7 +61,7 @@ export default async function PublicFormPage({ params }: PageProps) {
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8">
-           <PublicForm form={form} />
+           <PublicForm form={form} csrfToken={csrfToken} />
         </div>
         
         <div className="mt-8 text-center text-xs text-gray-400">

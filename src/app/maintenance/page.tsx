@@ -1,25 +1,30 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import Link from 'next/link'
 import { AlertTriangle } from 'lucide-react'
+
+export const dynamic = 'force-static'
 
 export default function MaintenancePage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <Card className="w-full max-w-md border-orange-200">
-        <CardHeader className="text-center pb-2">
-          <div className="mx-auto w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-4">
-            <AlertTriangle className="w-6 h-6 text-orange-600" />
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4 text-center">
+       <div className="bg-white p-8 rounded-2xl shadow-sm max-w-lg w-full border border-gray-100">
+          <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
+             <AlertTriangle className="text-orange-600 w-8 h-8" />
           </div>
-          <CardTitle className="text-2xl font-bold">Under Maintenance</CardTitle>
-        </CardHeader>
-        <CardContent className="text-center text-muted-foreground">
-          <p className="mb-4">
-            Sangathan is currently undergoing scheduled maintenance to improve our services.
+          
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Under Maintenance</h1>
+          <p className="text-gray-600 mb-8">
+             We are currently upgrading the Sangathan platform to serve you better. 
+             Please check back in a few minutes.
           </p>
-          <p>
-            We apologize for the inconvenience and will be back shortly.
-          </p>
-        </CardContent>
-      </Card>
+          
+          <div className="text-sm text-gray-400">
+             Expected downtime: &lt; 15 minutes
+          </div>
+       </div>
+       
+       <div className="mt-8 text-xs text-gray-400">
+          Admin Access? Use your bypass key or cookie.
+       </div>
     </div>
   )
 }

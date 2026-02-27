@@ -18,8 +18,18 @@ export function Navbar({ lang }: { lang: string }) {
 
   useEffect(() => {
     const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
+      try {
+        const { data, error } = await supabase.auth.getUser()
+        if (error) {
+           console.warn('Auth check failed:', error.message)
+           return
+        }
+        if (data?.user) {
+          setUser(data.user)
+        }
+      } catch (err) {
+        console.error('Navbar Auth Exception:', err)
+      }
     }
     getUser()
   }, [supabase.auth])
@@ -101,151 +111,100 @@ export function Navbar({ lang }: { lang: string }) {
               ))}
            </div>
 
-           {/* 3. Right: Utility Controls (Desktop) */}
-           <div className="hidden md:flex items-center gap-6">
-              {/* Language Switcher */}
-              <div className="flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)]">
-                 <Link 
-                   href={getPathForLang('en')} 
-                   className={`transition-colors hover:text-[var(--text-primary)] ${lang === 'en' ? 'text-[var(--text-primary)] font-bold' : ''}`}
-                   aria-label="Switch to English"
-                 >
-                   EN
-                 </Link>
-                 <span className="opacity-30">/</span>
-                 <Link 
-                   href={getPathForLang('hi')} 
-                   className={`transition-colors hover:text-[var(--text-primary)] ${lang === 'hi' ? 'text-[var(--text-primary)] font-bold' : ''}`}
-                   aria-label="Switch to Hindi"
-                 >
-                   HI
-                 </Link>
+           {/* 3. Right: Auth & Theme (Desktop) */}
+           <div className="hidden md:flex items-center gap-4">
+              <div className="flex items-center gap-2 border-r border-[var(--border-subtle)] pr-4">
+                 <Link href={getPathForLang('en')} className={`text-sm font-bold ${lang === 'en' ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}>EN</Link>
+                 <span className="text-[var(--border-subtle)]">/</span>
+                 <Link href={getPathForLang('hi')} className={`text-sm font-bold ${lang === 'hi' ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}>HI</Link>
               </div>
 
-              <div className="h-4 w-px bg-[var(--border-subtle)]"></div>
-
-              {/* Theme Toggle */}
               <ThemeToggle />
 
-              {/* Auth Action */}
-              <div className="pl-2">
-                 {user ? (
-                   <Link 
-                     href={`/${lang}/dashboard`} 
-                     className="bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[var(--bg-secondary)] flex items-center gap-2 transition-all"
-                   >
-                     <LayoutDashboard size={16} className="text-[var(--accent)]" />
-                     {isHindi ? 'डैशबोर्ड' : 'Dashboard'}
-                   </Link>
-                 ) : (
-                   <div className="flex items-center gap-4">
-                     <Link 
+              {user ? (
+                 <Link 
+                    href={`/${lang}/dashboard`}
+                    className="bg-[var(--surface)] text-[var(--text-primary)] px-4 py-2 rounded-lg font-medium text-sm border border-[var(--border-subtle)] hover:bg-[var(--bg-secondary)] flex items-center gap-2 transition-all"
+                 >
+                    <LayoutDashboard size={16} />
+                    {isHindi ? 'डैशबोर्ड' : 'Dashboard'}
+                 </Link>
+              ) : (
+                 <div className="flex items-center gap-3">
+                    <Link 
                        href="/login" 
-                       className="text-sm font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-                     >
+                       className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                    >
                        {isHindi ? 'लॉग इन' : 'Login'}
-                     </Link>
-                     <Link 
+                    </Link>
+                    <Link 
                        href="/signup" 
-                       className="bg-[var(--text-primary)] text-[var(--bg-primary)] px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition-opacity"
-                     >
-                       {isHindi ? 'शुरू करें' : 'Start Free'}
-                     </Link>
-                   </div>
-                 )}
-              </div>
+                       className="bg-[var(--text-primary)] text-[var(--bg-primary)] px-4 py-2 rounded-lg font-medium text-sm hover:opacity-90 transition-all shadow-sm"
+                    >
+                       {isHindi ? 'साइन अप' : 'Sign Up'}
+                    </Link>
+                 </div>
+              )}
            </div>
 
-           {/* Mobile Menu Button */}
-           <div className="flex items-center md:hidden gap-4">
-              <button 
-                onClick={() => setIsOpen(!isOpen)} 
-                className="text-[var(--text-primary)] p-3 -mr-2 hover:bg-[var(--bg-secondary)] rounded-md transition-colors min-h-[48px] min-w-[48px] flex items-center justify-center"
-                aria-expanded={isOpen}
-                aria-label="Toggle Navigation Menu"
+           {/* Mobile menu button */}
+           <div className="flex items-center gap-4 md:hidden">
+              <ThemeToggle />
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="text-[var(--text-primary)] p-2 rounded-md hover:bg-[var(--bg-secondary)]"
+                aria-label="Toggle menu"
               >
-                 {isOpen ? <X size={24} /> : <Menu size={24} />}
+                {isOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
            </div>
-        </div>
+          </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu */}
       {isOpen && (
-         <div className="md:hidden bg-[var(--bg-primary)] border-b border-[var(--border-subtle)] shadow-xl animate-fade-in absolute w-full left-0 top-16 h-[calc(100vh-4rem)] overflow-y-auto">
-            <div className="px-4 pt-4 pb-8 space-y-6">
-               {/* Mobile Nav Links */}
-               <div className="space-y-1">
-                  {navLinks.map((link) => (
-                    <Link 
-                      key={link.href}
-                      href={link.href} 
-                      className={`block px-4 py-3 rounded-lg text-lg font-medium transition-colors ${
-                        pathname === link.href
-                          ? 'bg-[var(--bg-secondary)] text-[var(--accent)]'
-                          : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-               </div>
-
-               <div className="h-px bg-[var(--border-subtle)] my-4"></div>
-
-               {/* Mobile Utilities */}
-               <div className="space-y-6 px-4">
-                  {/* Theme & Language Row */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4 bg-[var(--bg-secondary)] rounded-full p-1 border border-[var(--border-subtle)]">
-                       <Link 
-                         href={getPathForLang('en')} 
-                         className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-                           lang === 'en' ? 'bg-[var(--surface)] text-[var(--text-primary)] shadow-sm' : 'text-[var(--text-secondary)]'
-                         }`}
-                       >
-                         English
-                       </Link>
-                       <Link 
-                         href={getPathForLang('hi')} 
-                         className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-                           lang === 'hi' ? 'bg-[var(--surface)] text-[var(--text-primary)] shadow-sm' : 'text-[var(--text-secondary)]'
-                         }`}
-                       >
-                         हिंदी
-                       </Link>
-                    </div>
-                    <ThemeToggle />
-                  </div>
-
-                  {/* Mobile Auth */}
-                  {user ? (
-                    <Link 
-                      href={`/${lang}/dashboard`} 
-                      className="flex w-full items-center justify-center gap-2 bg-[var(--accent)] text-white px-4 py-3 rounded-lg text-lg font-bold hover:opacity-90 transition-opacity"
-                    >
-                      <LayoutDashboard size={20} />
-                      {isHindi ? 'डैशबोर्ड खोलें' : 'Open Dashboard'}
-                    </Link>
-                  ) : (
-                    <div className="grid grid-cols-2 gap-4">
-                      <Link 
-                        href="/login" 
-                        className="flex items-center justify-center px-4 py-3 border border-[var(--border-subtle)] rounded-lg text-base font-semibold text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]"
-                      >
-                        {isHindi ? 'लॉग इन' : 'Login'}
-                      </Link>
-                      <Link 
-                        href="/signup" 
-                        className="flex items-center justify-center px-4 py-3 bg-[var(--text-primary)] text-[var(--bg-primary)] rounded-lg text-base font-bold hover:opacity-90"
-                      >
-                        {isHindi ? 'शुरू करें' : 'Start Free'}
-                      </Link>
-                    </div>
-                  )}
-               </div>
-            </div>
-         </div>
+        <div className="md:hidden bg-[var(--bg-primary)] border-b border-[var(--border-subtle)]">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+             {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]"
+                >
+                  {link.label}
+                </Link>
+             ))}
+             <div className="border-t border-[var(--border-subtle)] my-2 pt-2">
+                <div className="flex gap-4 px-3 py-2">
+                   <Link href={getPathForLang('en')} className={`text-sm font-bold ${lang === 'en' ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)]'}`}>English</Link>
+                   <Link href={getPathForLang('hi')} className={`text-sm font-bold ${lang === 'hi' ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)]'}`}>हिंदी</Link>
+                </div>
+             </div>
+             {user ? (
+                <Link
+                  href={`/${lang}/dashboard`}
+                  className="block w-full text-center mt-4 bg-[var(--surface)] text-[var(--text-primary)] px-4 py-3 rounded-lg font-medium border border-[var(--border-subtle)]"
+                >
+                  {isHindi ? 'डैशबोर्ड पर जाएं' : 'Go to Dashboard'}
+                </Link>
+             ) : (
+                <div className="grid grid-cols-2 gap-3 px-3 mt-4 pb-2">
+                   <Link
+                      href="/login"
+                      className="text-center py-2 rounded-lg border border-[var(--border-subtle)] text-[var(--text-primary)] font-medium"
+                   >
+                      {isHindi ? 'लॉग इन' : 'Login'}
+                   </Link>
+                   <Link
+                      href="/signup"
+                      className="text-center py-2 rounded-lg bg-[var(--text-primary)] text-[var(--bg-primary)] font-medium"
+                   >
+                      {isHindi ? 'साइन अप' : 'Sign Up'}
+                   </Link>
+                </div>
+             )}
+          </div>
+        </div>
       )}
     </nav>
   )

@@ -28,13 +28,23 @@ export function OrgSwitcher({ currentOrgId, organisations }: OrgSwitcherProps) {
     if (!orgId || orgId === currentOrgId) return
 
     startTransition(async () => {
+      // 1. Clear any sensitive client-side state/cache if any (e.g. Apollo/SWR, though we use RSC)
+      // Since we primarily rely on Next.js Cache and Server Actions, router.refresh() handles most.
+      // However, we explicitly clear the cookie via RPC or Server Action to be safe.
+      // Here we use the RPC which sets the cookie on server side.
+      
       const { error } = await supabase.rpc('set_selected_organisation', {
         p_organisation_id: orgId,
       } as never)
 
       if (!error) {
         setOpen(false)
-        router.refresh()
+        
+        // 2. Force hard refresh to clear Router Cache and re-validate user role
+        // router.refresh() might keep some client cache.
+        // We use window.location.href to force a full document reload for security
+        // to prevent "Ghost Access" where old org data might linger in React state.
+        window.location.href = window.location.href
       }
     })
   }
@@ -80,4 +90,3 @@ export function OrgSwitcher({ currentOrgId, organisations }: OrgSwitcherProps) {
     </div>
   )
 }
-

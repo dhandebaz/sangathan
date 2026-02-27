@@ -10,7 +10,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Configuration or Signature missing' }, { status: 401 })
   }
 
-  const body = await request.text()
+  let body: string
+  try {
+    body = await request.text()
+  } catch (err) {
+    return NextResponse.json({ error: 'Failed to read request body' }, { status: 400 })
+  }
   
   // 1. Verify Signature
   const expectedSignature = crypto
@@ -22,7 +27,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
   }
   
-  const event = JSON.parse(body)
+  let event: any
+  try {
+    event = JSON.parse(body)
+  } catch (err) {
+    console.error('JSON Parse Error:', err)
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+  }
+
   const supabase = createServiceClient()
   
   // 2. Process Event
@@ -44,17 +56,25 @@ export async function POST(request: NextRequest) {
     
     else if (event.event === 'subscription.charged') {
        // Extend validity
-       const nextCharge = event.payload.subscription.entity.charge_at_timestamp 
-       // Razorpay sends unix timestamp (seconds)
-       const currentPeriodEnd = nextCharge ? new Date(nextCharge * 1000).toISOString() : new Date(Date.now() + 30*24*60*60*1000).toISOString()
+       const entity = event.payload.subscription.entity
+       // Use charge_at (next charge date) or current_end as the validity period
+       const nextCharge = entity.charge_at_timestamp || entity.current_end
+       
+       if (nextCharge) {
+         // Razorpay sends unix timestamp (seconds)
+         const currentPeriodEnd = new Date(nextCharge * 1000).toISOString()
 
-       await supabase.from('supporter_subscriptions')
-         .update({
-           status: 'active',
-           current_period_end: currentPeriodEnd,
-           updated_at: new Date().toISOString()
-         })
-         .eq('razorpay_subscription_id', subId)
+         await supabase.from('supporter_subscriptions')
+           .update({
+             status: 'active',
+             current_period_end: currentPeriodEnd,
+             updated_at: new Date().toISOString()
+           })
+           .eq('razorpay_subscription_id', subId)
+       } else {
+           console.warn(`Webhook ${event.id}: Missing charge_at/current_end for subscription ${subId}. Skipping update to prevent incorrect date fallback.`)
+           // Removed hardcoded 30-day fallback to prevent incorrect plan intervals.
+       }
     }
     
     else if (event.event === 'subscription.cancelled' || event.event === 'subscription.halted') {

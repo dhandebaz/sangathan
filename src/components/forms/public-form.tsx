@@ -18,7 +18,7 @@ interface Form {
   fields: FormField[] // JSONB
 }
 
-export function PublicForm({ form }: { form: Form }) {
+export function PublicForm({ form, csrfToken }: { form: Form; csrfToken: string }) {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
@@ -44,7 +44,8 @@ export function PublicForm({ form }: { form: Form }) {
     const result = await submitFormResponse({
        formId: form.id,
        data,
-       honeypot
+       honeypot,
+       csrfToken
     })
 
     if (result.success) {

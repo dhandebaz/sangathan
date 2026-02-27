@@ -1,6 +1,30 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
-// import { Database } from '@/types/database'
+import { withCircuitBreaker } from '@/lib/circuit-breaker'
+
+// Custom fetch with Circuit Breaker to prevent hanging on latent DB
+const resilientFetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+  return withCircuitBreaker('supabase', async () => {
+    // Add 15s timeout to prevent hanging
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 15000)
+    
+    try {
+      const response = await fetch(input, {
+        ...init,
+        signal: controller.signal
+      })
+      
+      if (response.status >= 500) {
+         // Treat 5xx as failure for circuit breaker
+         throw new Error(`Supabase Service Error: ${response.status}`)
+      }
+      return response
+    } finally {
+      clearTimeout(timeoutId)
+    }
+  })
+}
 
 export async function createClient() {
   const cookieStore = await cookies()
@@ -28,6 +52,9 @@ export async function createClient() {
             // user sessions.
           }
         },
+      },
+      global: {
+        fetch: resilientFetch,
       },
     }
   )

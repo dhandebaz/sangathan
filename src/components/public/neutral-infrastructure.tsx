@@ -48,17 +48,17 @@ const features: Feature[] = [
   },
   {
     key: 'risk',
-    title: 'Automated Risk Detection',
-    subtitle: 'The system watches for abusive patterns.',
+    title: 'Automated Integrity Checks',
+    subtitle: 'The system protects institutional stability.',
     description:
-      'Behind the scenes, risk signals such as suspicious OTP patterns, unusual broadcast volume, or rapid role escalations can be surfaced to administrators. This reduces response time for abuse while keeping day-to-day operations smooth for legitimate organisers.',
+      'Behind the scenes, integrity signals such as unusual access patterns or rapid escalation are monitored to ensure platform stability. This protects the collective from internal disruption while maintaining operational continuity for legitimate stewards.',
   },
   {
     key: 'appeals',
-    title: 'Transparent Appeals System',
-    subtitle: 'Interventions are reviewable and reversible.',
+    title: 'Governance Appeals',
+    subtitle: 'Decisions are reviewable by the Foundation.',
     description:
-      'When platform-level interventions are required, they are tied to explicit reasons and logged actions. Organisations have space to contest decisions, and administrators can review the same audit trail that automated systems used to flag the issue.',
+      'When interventions are required, they are tied to explicit policy violations. Collectives have a direct route to the Governance Board to contest decisions, ensuring that no single administrator holds unchecked authority over your digital existence.',
   },
 ]
 

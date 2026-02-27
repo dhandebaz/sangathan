@@ -1,4 +1,6 @@
 import { createServiceClient } from '@/lib/supabase/service'
+import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
 
 type Json =
   | string
@@ -82,13 +84,20 @@ export async function unlockCapabilities(orgId: string) {
   }
 }
 
-
-export async function checkCapability(orgId: string, capability: OrgCapability): Promise<boolean> {
+/**
+ * Checks if an organisation has a specific capability.
+ * 
+ * @param orgId The Organisation ID
+ * @param capability The capability key to check
+ * @param shouldThrow If true, throws an error on failure (Server Action mode) or redirects (Page mode)
+ */
+export async function checkCapability(orgId: string, capability: OrgCapability, shouldThrow: boolean = false): Promise<boolean> {
   let supabase
   try {
     supabase = createServiceClient()
   } catch (error) {
     console.error('Capability check fallback: service client not configured', error)
+    if (shouldThrow) throw new Error('System Configuration Error')
     return DEFAULT_CAPABILITIES[capability] || false
   }
   
@@ -98,11 +107,28 @@ export async function checkCapability(orgId: string, capability: OrgCapability):
     .eq('id', orgId)
     .single()
     
-  if (!data || !data.capabilities) return DEFAULT_CAPABILITIES[capability] || false
+  if (!data || !data.capabilities) {
+      if (shouldThrow && !DEFAULT_CAPABILITIES[capability]) {
+          throw new Error(`Access Denied: Capability '${capability}' is not enabled for this organisation.`)
+      }
+      return DEFAULT_CAPABILITIES[capability] || false
+  }
   
   const stored = data.capabilities as Record<string, boolean>
-  const capabilities = { ...DEFAULT_CAPABILITIES, ...stored }
-  return !!capabilities[capability]
+  const hasCap = !!stored[capability] || !!DEFAULT_CAPABILITIES[capability]
+  
+  if (!hasCap && shouldThrow) {
+      // If we are in a server action, throw error.
+      // If we are in a server component (page), we might want to redirect.
+      // We detect context roughly or just throw since standard error handling catches it.
+      throw new Error(`Access Denied: Capability '${capability}' is locked.`)
+  }
+  
+  return hasCap
+}
+
+export async function requireCapability(orgId: string, capability: OrgCapability) {
+    return checkCapability(orgId, capability, true)
 }
 
 export async function getOrgCapabilities(orgId: string): Promise<Record<string, boolean>> {

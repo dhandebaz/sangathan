@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { logAction } from '@/lib/audit/log'
 import { headers } from 'next/headers'
+import { verifySignedCookie } from '@/lib/auth/cookie'
 
 // --- Types & Schemas ---
 
@@ -43,6 +44,7 @@ const SubmitFormSchema = z.object({
   formId: z.string().uuid(),
   data: z.record(z.string(), z.any()), // Field ID -> Value
   honeypot: z.string().optional(), // Spam protection
+  csrfToken: z.string().optional(),
 })
 
 // --- Dashboard Actions ---
@@ -186,6 +188,25 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
 
   if (safeInput.honeypot && safeInput.honeypot.length > 0) {
     return { success: false, error: 'Spam detected' }
+  }
+
+  // CSRF / Token Verification
+  if (!safeInput.csrfToken) {
+      return { success: false, error: 'Missing security token' }
+  }
+
+  const tokenData = await verifySignedCookie(safeInput.csrfToken)
+  if (!tokenData || tokenData.formId !== safeInput.formId) {
+      return { success: false, error: 'Invalid security token' }
+  }
+
+  const now = Date.now()
+  if (now - tokenData.ts < 2000) { // 2 seconds minimum
+      return { success: false, error: 'Submission too fast' }
+  }
+
+  if (now - tokenData.ts > 3600 * 1000) { // 1 hour expiry
+      return { success: false, error: 'Form session expired. Please refresh.' }
   }
 
   // 2. Fetch Form Definition

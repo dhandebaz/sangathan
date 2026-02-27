@@ -1,7 +1,23 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { i18n } from '@/lib/i18n/config'
+import { createSignedCookie, verifySignedCookie } from '@/lib/auth/cookie'
+import { isMaintenanceMode } from '@/lib/maintenance'
 
 export async function updateSession(request: NextRequest) {
+  // --- MAINTENANCE MODE CHECK (Zero DB Overhead) ---
+  if (isMaintenanceMode(request)) {
+     // Allow access to maintenance page and static assets
+     const pathname = request.nextUrl.pathname
+     if (!pathname.startsWith('/maintenance') && 
+         !pathname.startsWith('/_next') && 
+         !pathname.startsWith('/static')) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/maintenance'
+        return NextResponse.redirect(url)
+     }
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   })
@@ -50,8 +66,8 @@ export async function updateSession(request: NextRequest) {
     }
     
     // Strict Whitelist Check
-    const superAdmins = process.env.SUPER_ADMIN_EMAILS?.split(',') || []
-    if (!superAdmins.includes(user.email)) {
+    const superAdmins = process.env.SUPER_ADMIN_EMAILS?.split(',')
+    if (!superAdmins || superAdmins.length === 0 || !superAdmins.includes(user.email)) {
        // Return 404 to hide admin existence or 403
        return NextResponse.json({ error: 'Not Found' }, { status: 404 })
     }
@@ -59,10 +75,8 @@ export async function updateSession(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname
   
-  const locales = ['en', 'hi']
-  
   // Helper to check if path starts with locale
-  const hasLocale = locales.some(
+  const hasLocale = i18n.locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   )
 
@@ -70,33 +84,51 @@ export async function updateSession(request: NextRequest) {
   const authRoutes = ['/login', '/signup', '/forgot-password', '/reset-password', '/verify-email']
   const isAuthRoute = authRoutes.some(route => 
     pathname === route || 
-    locales.some(loc => pathname === `/${loc}${route}`)
+    i18n.locales.some(loc => pathname === `/${loc}${route}`)
   )
 
   if (user && isAuthRoute) {
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() { return request.cookies.getAll() },
-          setAll() {},
-        },
-      },
-    )
+    const cookieName = 'user-metadata'
+    const cached = request.cookies.get(cookieName)?.value
+    let profile = cached ? await verifySignedCookie(cached) : null
 
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role, phone_verified')
-      .eq('id', user.id)
-      .maybeSingle()
+    if (!profile) {
+        const supabase = createServerClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          {
+            cookies: {
+              getAll() { return request.cookies.getAll() },
+              setAll() {},
+            },
+          },
+        )
+
+        const { data: fetchedProfile } = await supabase
+          .from('profiles')
+          .select('role, phone_verified')
+          .eq('id', user.id)
+          .maybeSingle()
+        
+        profile = fetchedProfile
+    }
 
     if (!profile || (profile.role === 'admin' && !profile.phone_verified)) {
       // Allow access to auth screens so the user can login or escape
     } else {
       const url = request.nextUrl.clone()
       url.pathname = '/en/dashboard'
-      return NextResponse.redirect(url)
+      const response = NextResponse.redirect(url)
+      
+      if (profile && !cached) {
+          const signedValue = await createSignedCookie(profile)
+          response.cookies.set(cookieName, signedValue, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 60 * 10
+          })
+      }
+      return response
     }
   }
 
@@ -108,8 +140,8 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith('/f/') || // Public Forms
     pathname.startsWith('/donate') || // Public Donation
     pathname.startsWith('/auth') || // Auth Callback
-    authRoutes.some(route => pathname === route || locales.some(loc => pathname.startsWith(`/${loc}${route}`))) || // Auth pages
-    locales.some(loc => 
+    authRoutes.some(route => pathname === route || i18n.locales.some(loc => pathname.startsWith(`/${loc}${route}`))) || // Auth pages
+    i18n.locales.some(loc => 
       pathname === `/${loc}` || 
       pathname.startsWith(`/${loc}/docs`) || 
       pathname.startsWith(`/${loc}/contact`) || 
@@ -144,40 +176,59 @@ export async function updateSession(request: NextRequest) {
   }
 
   // --- PHONE VERIFICATION ENFORCEMENT ---
-  // If user is accessing protected routes (Dashboard), enforce verification.
-  // We check if it's a dashboard route AND not the verification page itself.
-  // CRITICAL FIX: Add explicit dashboard route check without locale
-  const isDashboardRoute = locales.some(loc => pathname.startsWith(`/${loc}/dashboard`))
-  const isVerificationPage = locales.some(loc => pathname.startsWith(`/${loc}/verify-phone`)) || pathname === '/verify-phone'
+  const isDashboardRoute = i18n.locales.some(loc => pathname.startsWith(`/${loc}/dashboard`))
+  const isVerificationPage = i18n.locales.some(loc => pathname.startsWith(`/${loc}/verify-phone`)) || pathname === '/verify-phone'
 
   if (user && isDashboardRoute && !isVerificationPage) {
-     // Cache Strategy: In a real app, check a signed cookie first.
-     // For now, we optimize by selecting minimal fields.
+     const cookieName = 'user-metadata'
+     const cached = request.cookies.get(cookieName)?.value
+     let profile = cached ? await verifySignedCookie(cached) : null
      
-     const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
-          cookies: {
-            getAll() { return request.cookies.getAll() },
-            setAll() {}
-          }
-        }
-      )
-
-     // Use RPC for potentially faster lookup if function exists, or fallback to direct select
-     // Direct select on ID is extremely fast (primary key lookup)
-     const { data: profile } = await supabase
-       .from('profiles')
-       .select('role, phone_verified')
-       .eq('id', user.id)
-       .single()
+     if (!profile) {
+         const supabase = createServerClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            {
+              cookies: {
+                getAll() { return request.cookies.getAll() },
+                setAll() {}
+              }
+            }
+          )
+         
+         const { data: fetchedProfile } = await supabase
+           .from('profiles')
+           .select('role, phone_verified')
+           .eq('id', user.id)
+           .single()
+         
+         profile = fetchedProfile
+         
+         if (profile) {
+             const signedValue = await createSignedCookie(profile)
+             supabaseResponse.cookies.set(cookieName, signedValue, {
+                 httpOnly: true,
+                 secure: process.env.NODE_ENV === 'production',
+                 maxAge: 60 * 10
+             })
+         }
+     }
      
      if (!profile || (profile.role === 'admin' && !profile.phone_verified)) {
-        const locale = hasLocale ? pathname.split('/')[1] : 'en'
+        const locale = hasLocale ? pathname.split('/')[1] : i18n.defaultLocale
         const url = request.nextUrl.clone()
         url.pathname = `/${locale}/verify-phone`
-        return NextResponse.redirect(url)
+        const response = NextResponse.redirect(url)
+        
+        if (profile) {
+             const signedValue = await createSignedCookie(profile)
+             response.cookies.set(cookieName, signedValue, {
+                 httpOnly: true,
+                 secure: process.env.NODE_ENV === 'production',
+                 maxAge: 60 * 10
+             })
+        }
+        return response
      }
   }
 
@@ -188,34 +239,58 @@ export async function updateSession(request: NextRequest) {
   
   // If user is verified and tries to access verify-phone, redirect to dashboard
   if (user && isVerificationPage) {
-      // Check if actually verified
-     const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
-          cookies: {
-            getAll() { return request.cookies.getAll() },
-            setAll() {}
-          }
-        }
-      )
+      const cookieName = 'user-metadata'
+      const cached = request.cookies.get(cookieName)?.value
+      let profile = cached ? await verifySignedCookie(cached) : null
 
-     const { data: profile } = await supabase
-       .from('profiles')
-       .select('role, phone_verified')
-       .eq('id', user.id)
-       .single()
+     if (!profile) {
+         const supabase = createServerClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            {
+              cookies: {
+                getAll() { return request.cookies.getAll() },
+                setAll() {}
+              }
+            }
+          )
+
+         const { data: fetchedProfile } = await supabase
+           .from('profiles')
+           .select('role, phone_verified')
+           .eq('id', user.id)
+           .single()
+         
+         profile = fetchedProfile
+         
+         if (profile) {
+             const signedValue = await createSignedCookie(profile)
+             supabaseResponse.cookies.set(cookieName, signedValue, {
+                 httpOnly: true,
+                 secure: process.env.NODE_ENV === 'production',
+                 maxAge: 60 * 10
+             })
+         }
+     }
 
      if (profile && (profile.role !== 'admin' || profile.phone_verified)) {
         const url = request.nextUrl.clone()
         url.pathname = '/en/dashboard'
-        return NextResponse.redirect(url)
+        const response = NextResponse.redirect(url)
+        
+        if (!cached && profile) {
+            const signedValue = await createSignedCookie(profile)
+            response.cookies.set(cookieName, signedValue, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                maxAge: 60 * 10
+            })
+        }
+        return response
      }
   }
 
   // i18n Redirection Logic
-  // Check if path is missing locale
-  // We exclude api, _next, static, f, auth, admin, and certain system routes
   const shouldHandleLocale = 
     !pathname.startsWith('/api') &&
     !pathname.startsWith('/_next') &&
@@ -223,11 +298,12 @@ export async function updateSession(request: NextRequest) {
     !pathname.startsWith('/auth') &&
     !pathname.startsWith('/admin') &&
     !pathname.startsWith('/bootstrap-org') &&
+    !pathname.startsWith('/maintenance') && // Exclude maintenance
     !pathname.includes('.') &&
     !hasLocale
 
   if (shouldHandleLocale) {
-      const locale = 'en' // Default
+      const locale = i18n.defaultLocale
       return NextResponse.redirect(
         new URL(`/${locale}${pathname.startsWith('/') ? '' : '/'}${pathname}`, request.url)
       )
