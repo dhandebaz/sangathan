@@ -4,7 +4,7 @@ import { createSafeAction } from '@/lib/auth/actions'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { razorpay } from '@/lib/razorpay'
+import { getRazorpayClient } from '@/lib/razorpay'
 import { logAction } from '@/lib/audit/log'
 
 // --- Schemas ---
@@ -44,6 +44,8 @@ export const createSubscription = createSafeAction(
        console.error('RAZORPAY_PLAN_ID is missing in environment variables')
        throw new Error('Subscription configuration error. Please contact support.')
     }
+
+    const razorpay = getRazorpayClient()
 
     const sub = await razorpay.subscriptions.create({
       plan_id: planId,

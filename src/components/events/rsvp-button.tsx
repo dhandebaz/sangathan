@@ -9,7 +9,7 @@ import { rsvpToEvent } from '@/actions/events'
 import { useRouter } from 'next/navigation'
 import { Event } from '@/types/events'
 
-export function RSVPButton({ event, isAuthenticated }: { event: Event, isAuthenticated: boolean }) {
+export function RSVPButton({ event, isAuthenticated, lang }: { event: Event, isAuthenticated: boolean, lang: string }) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [guestName, setGuestName] = useState('')
@@ -35,7 +35,7 @@ export function RSVPButton({ event, isAuthenticated }: { event: Event, isAuthent
 
   if (!isAuthenticated && event.event_type !== 'public') {
     return (
-      <Button onClick={() => router.push(`/login?next=${window.location.pathname}`)}>
+      <Button onClick={() => router.push(`/${lang}/login?next=${window.location.pathname}`)}>
         Login to RSVP
       </Button>
     )

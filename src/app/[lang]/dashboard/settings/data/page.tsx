@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Download, Shield, FileJson } from 'lucide-react'
+import { Download, Shield } from 'lucide-react'
 import { exportData } from '@/actions/data-export'
 import { toast } from 'sonner'
 
@@ -42,7 +42,7 @@ export default function DataExportPage() {
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight text-gray-900">Data Sovereignty</h1>
         <p className="text-gray-500 mt-1">
-          Export your organisation's data at any time. No lock-in, ever.
+          Export your organisation&apos;s data at any time. No lock-in, ever.
         </p>
       </div>
 
@@ -54,7 +54,7 @@ export default function DataExportPage() {
            <div className="flex-1">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Full Data Export</h3>
               <p className="text-gray-600 text-sm mb-6 leading-relaxed">
-                 Download a complete JSON archive of your organisation's members, forms, financial logs, and audit trails. 
+                 Download a complete JSON archive of your organisation&apos;s members, forms, financial logs, and audit trails. 
                  This file adheres to the Open Civic Data standard (where applicable) and allows you to migrate to other systems 
                  or maintain offline backups.
               </p>

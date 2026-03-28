@@ -7,34 +7,38 @@ import Link from 'next/link'
 import { Calendar, MapPin, Video } from 'lucide-react'
 import { Organisation, DashboardEvent, DashboardAnnouncement, Meeting } from '@/types/dashboard'
 
-export default async function OrgPage(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
-  const { slug } = params
+export default async function OrgPage(props: { params: Promise<{ slug: string; lang: string }> }) {
+  const { slug, lang } = await props.params
   const supabaseAdmin = createServiceClient()
-  
+
   const { data: orgData } = await supabaseAdmin
     .from('organisations')
     .select('id, name, membership_policy, created_at, slug, public_transparency_enabled')
     .eq('slug', slug)
     .single()
 
-  const org = orgData as Organisation & { membership_policy: string; created_at: string; public_transparency_enabled: boolean } | null
+  const org = orgData as Organisation & {
+    membership_policy: string
+    created_at: string
+    public_transparency_enabled: boolean
+  } | null
 
   if (!org) notFound()
 
-  // Check User Status
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  
-  let memberStatus = null
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  let memberStatus: string | null = null
   if (user) {
     const { data: profileData } = await supabaseAdmin
       .from('profiles')
       .select('status')
       .eq('id', user.id)
-      .eq('organization_id', org.id)
+      .eq('organisation_id', org.id)
       .single()
-    
+
     const profile = profileData as { status: string } | null
     if (profile) memberStatus = profile.status
   }
@@ -48,22 +52,26 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
     .order('created_at', { ascending: false })
     .limit(5)
 
-  // Fetch Events (Owned + Joint)
   const { data: ownedEvents } = await supabaseAdmin
     .from('events')
     .select('*')
     .eq('organisation_id', org.id)
     .eq('event_type', 'public')
     .gte('start_time', new Date().toISOString())
-  
+
   const { data: jointMappings } = await supabaseAdmin
     .from('joint_events')
     .select('event:events(*)')
     .eq('organisation_id', org.id)
-  
-  const jointEvents = (jointMappings as unknown as { event: DashboardEvent }[])?.map(j => j.event).filter(e => e.event_type === 'public' && new Date(e.start_time) >= new Date()) || []
-  
-  const allEvents = [...(ownedEvents as DashboardEvent[] || []), ...jointEvents].sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime())
+
+  const jointEvents =
+    (jointMappings as unknown as { event: DashboardEvent }[])
+      ?.map((mapping) => mapping.event)
+      .filter((event) => event.event_type === 'public' && new Date(event.start_time) >= new Date()) || []
+
+  const allEvents = [...((ownedEvents as DashboardEvent[]) || []), ...jointEvents].sort(
+    (a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
+  )
 
   const { data: publicMeetingsData } = await supabaseAdmin
     .from('meetings')
@@ -75,25 +83,36 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
 
   const publicMeetings = (publicMeetingsData as Meeting[] | null) || []
 
-  // Fetch Partners
-  const partners = await getCollaboratingOrgs(org.id) as (Organisation & { id: string })[]
+  const partners = (await getCollaboratingOrgs(org.id)) as (Organisation & { id: string })[]
 
-  // Transparency Metrics (if enabled)
-  let metrics = null
-  
+  let metrics: { members: number; events: number; hours: number } | null = null
+
   if (org.public_transparency_enabled) {
     const [members, events, hours] = await Promise.all([
-      supabaseAdmin.from('profiles').select('*', { count: 'exact', head: true }).eq('organization_id', org.id),
-      supabaseAdmin.from('events').select('*', { count: 'exact', head: true }).eq('organisation_id', org.id),
-      supabaseAdmin.from('task_logs').select('hours_logged, task:tasks!inner(organisation_id)').eq('task.organisation_id', org.id)
+      supabaseAdmin
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
+        .eq('organisation_id', org.id)
+        .eq('status', 'active'),
+      supabaseAdmin
+        .from('events')
+        .select('*', { count: 'exact', head: true })
+        .eq('organisation_id', org.id),
+      supabaseAdmin
+        .from('task_logs')
+        .select('hours_logged, task:tasks!inner(organisation_id)')
+        .eq('task.organisation_id', org.id),
     ])
-    
-    const totalHours = (hours.data as { hours_logged: number }[] || []).reduce((sum: number, log) => sum + (Number(log.hours_logged) || 0), 0)
-    
+
+    const totalHours = ((hours.data as { hours_logged: number }[] | null) || []).reduce(
+      (sum, log) => sum + (Number(log.hours_logged) || 0),
+      0
+    )
+
     metrics = {
       members: members.count || 0,
       events: events.count || 0,
-      hours: Math.round(totalHours)
+      hours: Math.round(totalHours),
     }
   }
 
@@ -105,17 +124,17 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
             <h1 className="text-3xl font-bold mb-2 tracking-tight">{org.name}</h1>
             <p className="text-gray-500 text-sm">Established {new Date(org.created_at).toLocaleDateString()}</p>
             {partners.length > 0 && (
-               <div className="mt-2 text-sm text-gray-600">
-                 Part of a coalition with: 
-                 {partners.map((p, i) => (
-                   <span key={p.id}>
-                     {i > 0 && ', '}
-                     <Link href={`/${slug.split('/')[0] || 'en'}/org/${p.slug}`} className="text-blue-600 hover:underline ml-1">
-                       {p.name}
-                     </Link>
-                   </span>
-                 ))}
-               </div>
+              <div className="mt-2 text-sm text-gray-600">
+                Part of a coalition with:
+                {partners.map((partner, index) => (
+                  <span key={partner.id}>
+                    {index > 0 && ', '}
+                    <Link href={`/${lang}/org/${partner.slug}`} className="text-blue-600 hover:underline ml-1">
+                      {partner.name}
+                    </Link>
+                  </span>
+                ))}
+              </div>
             )}
           </div>
           {org.public_transparency_enabled && (
@@ -123,14 +142,13 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
               <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide border border-blue-100">
                 Verified Transparent
               </div>
-              <Link href="/governance/platform-charter" className="text-xs text-gray-400 hover:underline">
+              <Link href={`/${lang}/governance/platform-charter`} className="text-xs text-gray-400 hover:underline">
                 Platform Charter Adherent
               </Link>
             </div>
           )}
         </div>
 
-        {/* Transparency Stats */}
         {metrics && (
           <div className="grid grid-cols-3 gap-4 mb-8 border-b pb-8">
             <div className="text-center">
@@ -147,76 +165,75 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
             </div>
           </div>
         )}
-        
+
         {memberStatus === 'active' ? (
-           <div className="bg-green-50 text-green-700 p-4 rounded-lg mb-6 border border-green-200 font-medium flex items-center gap-2">
-             <span className="w-2 h-2 rounded-full bg-green-600"></span>
-             You are a member of this organisation.
-           </div>
+          <div className="bg-green-50 text-green-700 p-4 rounded-lg mb-6 border border-green-200 font-medium flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-green-600"></span>
+            You are a member of this organisation.
+          </div>
         ) : memberStatus === 'pending' ? (
-           <div className="bg-yellow-50 text-yellow-700 p-4 rounded-lg mb-6 border border-yellow-200 font-medium flex items-center gap-2">
-             <span className="w-2 h-2 rounded-full bg-yellow-600 animate-pulse"></span>
-             Your membership request is pending approval.
-           </div>
+          <div className="bg-yellow-50 text-yellow-700 p-4 rounded-lg mb-6 border border-yellow-200 font-medium flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-yellow-600 animate-pulse"></span>
+            Your membership request is pending approval.
+          </div>
         ) : memberStatus === 'rejected' ? (
-           <div className="bg-red-50 text-red-700 p-4 rounded-lg mb-6 border border-red-200 font-medium flex items-center gap-2">
-             <span className="w-2 h-2 rounded-full bg-red-600"></span>
-             Your membership request was rejected.
-           </div>
+          <div className="bg-red-50 text-red-700 p-4 rounded-lg mb-6 border border-red-200 font-medium flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-red-600"></span>
+            Your membership request was rejected.
+          </div>
         ) : (
-           <div className="flex flex-col gap-4">
-             {org.membership_policy === 'invite_only' ? (
-               <div className="bg-gray-50 text-gray-600 p-4 rounded-lg border border-gray-200 font-medium text-center">
-                 Membership to this organisation is by invitation only.
-               </div>
-             ) : (
-               <div className="flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-6 rounded-xl border border-gray-200 gap-4">
-                 <div>
-                   <h3 className="font-semibold text-lg text-gray-900">Become a Member</h3>
-                   <p className="text-gray-600 text-sm mt-1">Join our community to access resources and participate.</p>
-                 </div>
-                 <JoinButton orgId={org.id} policy={org.membership_policy} isAuthenticated={!!user} />
-               </div>
-             )}
-           </div>
+          <div className="flex flex-col gap-4">
+            {org.membership_policy === 'invite_only' ? (
+              <div className="bg-gray-50 text-gray-600 p-4 rounded-lg border border-gray-200 font-medium text-center">
+                Membership to this organisation is by invitation only.
+              </div>
+            ) : (
+              <div className="flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-6 rounded-xl border border-gray-200 gap-4">
+                <div>
+                  <h3 className="font-semibold text-lg text-gray-900">Become a Member</h3>
+                  <p className="text-gray-600 text-sm mt-1">Join our community to access resources and participate.</p>
+                </div>
+                <JoinButton orgId={org.id} policy={org.membership_policy} isAuthenticated={!!user} lang={lang} />
+              </div>
+            )}
+          </div>
         )}
       </div>
 
       <div className="space-y-12">
-        {/* Events Section */}
         {allEvents.length > 0 && (
           <section>
-             <h2 className="text-xl font-bold text-gray-900 mb-4">Upcoming Events</h2>
-             <div className="grid gap-4 md:grid-cols-2">
-               {allEvents.map((e) => (
-                 <div key={e.id} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                   <div className="flex justify-between items-start mb-2">
-                     <span className="text-sm font-semibold text-orange-600 uppercase tracking-wide">
-                        {e.organisation_id !== org.id ? 'Co-Hosted Event' : 'Event'}
-                     </span>
-                     <span className="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded">
-                       {e.event_type}
-                     </span>
-                   </div>
-                   <h3 className="font-bold text-lg mb-2">{e.title}</h3>
-                   <div className="space-y-1 text-sm text-gray-600 mb-4">
-                     <div className="flex items-center gap-2">
-                       <Calendar className="w-4 h-4" />
-                       {new Date(e.start_time).toLocaleDateString()}
-                     </div>
-                     {e.location && (
-                       <div className="flex items-center gap-2">
-                         <MapPin className="w-4 h-4" />
-                         {e.location}
-                       </div>
-                     )}
-                   </div>
-                   <Link href={`/${slug.split('/')[0] || 'en'}/org/${slug}/events/${e.id}`} className="text-blue-600 font-medium hover:underline text-sm">
-                     View Details & RSVP &rarr;
-                   </Link>
-                 </div>
-               ))}
-             </div>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Upcoming Events</h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              {allEvents.map((event) => (
+                <div key={event.id} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="text-sm font-semibold text-orange-600 uppercase tracking-wide">
+                      {event.organisation_id !== org.id ? 'Co-Hosted Event' : 'Event'}
+                    </span>
+                    <span className="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded">
+                      {event.event_type}
+                    </span>
+                  </div>
+                  <h3 className="font-bold text-lg mb-2">{event.title}</h3>
+                  <div className="space-y-1 text-sm text-gray-600 mb-4">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4" />
+                      {new Date(event.start_time).toLocaleDateString()}
+                    </div>
+                    {event.location && (
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4" />
+                        {event.location}
+                      </div>
+                    )}
+                  </div>
+                  <Link href={`/${lang}/org/${slug}/events/${event.id}`} className="text-blue-600 font-medium hover:underline text-sm">
+                    View Details and RSVP
+                  </Link>
+                </div>
+              ))}
+            </div>
           </section>
         )}
 
@@ -224,14 +241,14 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
           <section>
             <h2 className="text-xl font-bold text-gray-900 mb-4">Upcoming Public Meetings</h2>
             <div className="space-y-4">
-              {publicMeetings.map((m) => {
-                const start = new Date(m.date)
-                const end = m.end_time ? new Date(m.end_time) : null
-                const jitsiLink = `https://meet.jit.si/sangathan-${m.organisation_id}-${m.id}`
-                const meetingLink = m.meeting_link || jitsiLink
+              {publicMeetings.map((meeting) => {
+                const start = new Date(meeting.date)
+                const end = meeting.end_time ? new Date(meeting.end_time) : null
+                const jitsiLink = `https://meet.jit.si/sangathan-${meeting.organisation_id}-${meeting.id}`
+                const meetingLink = meeting.meeting_link || jitsiLink
                 return (
-                  <div key={m.id} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                    <h3 className="font-bold text-lg mb-1">{m.title}</h3>
+                  <div key={meeting.id} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+                    <h3 className="font-bold text-lg mb-1">{meeting.title}</h3>
                     <div className="space-y-1 text-sm text-gray-600 mb-3">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
@@ -239,16 +256,16 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
                           {start.toLocaleString()}
                           {end && (
                             <>
-                              {' – '}
+                              {' - '}
                               {end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </>
                           )}
                         </span>
                       </div>
-                      {m.location && (
+                      {meeting.location && (
                         <div className="flex items-center gap-2">
                           <MapPin className="w-4 h-4" />
-                          {m.location}
+                          {meeting.location}
                         </div>
                       )}
                     </div>
@@ -272,14 +289,14 @@ export default async function OrgPage(props: { params: Promise<{ slug: string }>
           <section>
             <h2 className="text-xl font-bold text-gray-900 mb-4">Public Announcements</h2>
             <div className="space-y-4">
-              {(announcements as unknown as DashboardAnnouncement[]).map((a) => (
-                <div key={a.id} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+              {(announcements as unknown as DashboardAnnouncement[]).map((announcement) => (
+                <div key={announcement.id} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
                   <div className="flex items-center gap-2 mb-2">
-                    {a.is_pinned && <span className="text-orange-500 font-bold text-xs uppercase tracking-wide">Pinned</span>}
-                    <span className="text-xs text-gray-400">{new Date(a.created_at).toLocaleDateString()}</span>
+                    {announcement.is_pinned && <span className="text-orange-500 font-bold text-xs uppercase tracking-wide">Pinned</span>}
+                    <span className="text-xs text-gray-400">{new Date(announcement.created_at).toLocaleDateString()}</span>
                   </div>
-                  <h3 className="font-bold text-lg mb-2">{a.title}</h3>
-                  <p className="text-gray-600 whitespace-pre-wrap">{a.content}</p>
+                  <h3 className="font-bold text-lg mb-2">{announcement.title}</h3>
+                  <p className="text-gray-600 whitespace-pre-wrap">{announcement.content}</p>
                 </div>
               ))}
             </div>

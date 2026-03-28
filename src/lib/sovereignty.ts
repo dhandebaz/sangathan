@@ -3,20 +3,19 @@ import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { logger } from '@/lib/logger'
 
 export type OrganisationData = {
-  organisation: any
-  members: any[]
-  forms: any[]
-  form_submissions: any[]
-  meetings: any[]
-  donations: any[]
-  audit_logs: any[]
+  organisation: Record<string, unknown> | null
+  members: Record<string, unknown>[]
+  forms: Record<string, unknown>[]
+  form_submissions: Record<string, unknown>[]
+  meetings: Record<string, unknown>[]
+  donations: Record<string, unknown>[]
+  audit_logs: Record<string, unknown>[]
   exported_at: string
 }
 
 export async function exportOrganisationData(): Promise<OrganisationData | null> {
   const supabase = await createClient()
-  
-  // Enforce auth context
+
   let orgId: string
   try {
     orgId = await getSelectedOrganisationId()
@@ -25,7 +24,6 @@ export async function exportOrganisationData(): Promise<OrganisationData | null>
     return null
   }
 
-  // Fetch all related data in parallel (RLS ensures data isolation)
   const [
     orgRes,
     membersRes,
@@ -33,7 +31,7 @@ export async function exportOrganisationData(): Promise<OrganisationData | null>
     submissionsRes,
     meetingsRes,
     donationsRes,
-    auditRes
+    auditRes,
   ] = await Promise.all([
     supabase.from('organisations').select('*').eq('id', orgId).single(),
     supabase.from('members').select('*').eq('organisation_id', orgId),
@@ -41,7 +39,7 @@ export async function exportOrganisationData(): Promise<OrganisationData | null>
     supabase.from('form_submissions').select('*').eq('organisation_id', orgId),
     supabase.from('meetings').select('*').eq('organisation_id', orgId),
     supabase.from('donations').select('*').eq('organisation_id', orgId),
-    supabase.from('audit_logs').select('*').eq('organisation_id', orgId)
+    supabase.from('audit_logs').select('*').eq('organisation_id', orgId),
   ])
 
   if (orgRes.error) {
@@ -49,22 +47,20 @@ export async function exportOrganisationData(): Promise<OrganisationData | null>
     throw new Error('Export failed')
   }
 
-  // Construct the sovereignty package
   const packageData: OrganisationData = {
-    organisation: orgRes.data,
-    members: membersRes.data || [],
-    forms: formsRes.data || [],
-    form_submissions: submissionsRes.data || [],
-    meetings: meetingsRes.data || [],
-    donations: donationsRes.data || [],
-    audit_logs: auditRes.data || [],
-    exported_at: new Date().toISOString()
+    organisation: (orgRes.data as Record<string, unknown> | null) || null,
+    members: (membersRes.data as Record<string, unknown>[] | null) || [],
+    forms: (formsRes.data as Record<string, unknown>[] | null) || [],
+    form_submissions: (submissionsRes.data as Record<string, unknown>[] | null) || [],
+    meetings: (meetingsRes.data as Record<string, unknown>[] | null) || [],
+    donations: (donationsRes.data as Record<string, unknown>[] | null) || [],
+    audit_logs: (auditRes.data as Record<string, unknown>[] | null) || [],
+    exported_at: new Date().toISOString(),
   }
 
-  // Log the sovereignty event
   await logger.info('sovereignty', `Data export generated for org ${orgId}`, {
     member_count: packageData.members.length,
-    form_count: packageData.forms.length
+    form_count: packageData.forms.length,
   })
 
   return packageData

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { useRouter } from 'next/navigation'
 import { ChevronDown } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
@@ -19,7 +18,6 @@ interface OrgSwitcherProps {
 export function OrgSwitcher({ currentOrgId, organisations }: OrgSwitcherProps) {
   const [open, setOpen] = useState(false)
   const [pending, startTransition] = useTransition()
-  const router = useRouter()
   const supabase = createClient()
 
   const activeOrg = organisations.find((o) => o.id === currentOrgId) || organisations[0]

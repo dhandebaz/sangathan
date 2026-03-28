@@ -7,8 +7,8 @@ import { generateQRData } from '@/actions/events'
 import { Calendar, MapPin, Users } from 'lucide-react'
 import { Event, Organisation, RSVP } from '@/types/events'
 
-export default async function EventPage(props: { params: Promise<{ slug: string, eventId: string }> }) {
-  const { slug, eventId } = await props.params
+export default async function EventPage(props: { params: Promise<{ slug: string, eventId: string, lang: string }> }) {
+  const { slug, eventId, lang } = await props.params
   const supabaseAdmin = createServiceClient()
   
   // 1. Fetch Event
@@ -131,7 +131,7 @@ export default async function EventPage(props: { params: Promise<{ slug: string,
                    remainingSpots === 0 ? (
                      <div className="bg-gray-100 p-3 rounded text-gray-500 font-medium">Event Full</div>
                    ) : (
-                     <RSVPButton event={event} isAuthenticated={!!user} />
+                     <RSVPButton event={event} isAuthenticated={!!user} lang={lang} />
                    )
                 ) : (
                    <div className="bg-gray-100 p-3 rounded text-gray-500 font-medium">RSVP Closed</div>

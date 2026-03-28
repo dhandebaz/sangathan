@@ -5,13 +5,13 @@ import { Button } from '@/components/ui/button'
 import { requestJoinOrganisation } from '@/actions/membership'
 import { useRouter } from 'next/navigation'
 
-export function JoinButton({ orgId, policy, isAuthenticated }: { orgId: string, policy: string, isAuthenticated: boolean }) {
+export function JoinButton({ orgId, policy, isAuthenticated, lang }: { orgId: string, policy: string, isAuthenticated: boolean, lang: string }) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   const handleJoin = async () => {
     if (!isAuthenticated) {
-      router.push(`/login?next=${window.location.pathname}`)
+      router.push(`/${lang}/login?next=${window.location.pathname}`)
       return
     }
 

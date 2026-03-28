@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import { createHmac } from 'crypto'
 
 // --- Schemas ---
 
@@ -253,11 +254,18 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
   }
 }
 
-// Helper to sign QR data
-import { createHmac } from 'crypto'
+function getQrSigningSecret() {
+  const secret = process.env.QR_TOKEN_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY
+
+  if (!secret) {
+    throw new Error('QR token signing secret is not configured')
+  }
+
+  return secret
+}
 
 export async function generateQRData(eventId: string, userId?: string, rsvpId?: string) {
-  const secret = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'fallback-secret'
+  const secret = getQrSigningSecret()
   const payload = JSON.stringify({ e: eventId, u: userId, r: rsvpId, t: Date.now() })
   const signature = createHmac('sha256', secret).update(payload).digest('hex')
   return `${payload}.${signature}`
@@ -269,7 +277,7 @@ export async function verifyAndCheckIn(input: { qrData: string, scannedByUserId:
     if (!payloadStr || !signature) return { success: false, error: 'Invalid QR Format' }
 
     // Verify Signature
-    const secret = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'fallback-secret'
+    const secret = getQrSigningSecret()
     const expectedSig = createHmac('sha256', secret).update(payloadStr).digest('hex')
 
     if (signature !== expectedSig) return { success: false, error: 'Invalid Signature' }
@@ -278,6 +286,26 @@ export async function verifyAndCheckIn(input: { qrData: string, scannedByUserId:
     const { e: eventId, u: userId, r: rsvpId } = payload
 
     const supabaseAdmin = createServiceClient()
+
+    const { data: scannerProfile } = await supabaseAdmin
+      .from('profiles')
+      .select('organisation_id, role, status')
+      .eq('id', input.scannedByUserId)
+      .single()
+
+    const { data: event } = await supabaseAdmin
+      .from('events')
+      .select('organisation_id')
+      .eq('id', eventId)
+      .single()
+
+    if (!scannerProfile || !event || scannerProfile.organisation_id !== event.organisation_id) {
+      return { success: false, error: 'You are not allowed to check in attendees for this event' }
+    }
+
+    if (scannerProfile.status !== 'active' || !['admin', 'editor', 'executive'].includes(scannerProfile.role)) {
+      return { success: false, error: 'Insufficient permissions for event check-in' }
+    }
 
     // Find RSVP
     let query = supabaseAdmin.from('event_rsvps').select('id, status').eq('event_id', eventId)

@@ -76,11 +76,12 @@ export interface RecentActivityItem {
 }
 
 export interface NetworkMember {
+  status: 'pending' | 'active' | 'suspended';
   organisation: {
     id: string;
     name: string;
     slug: string;
-    member_count: { count: number }[];
+    member_count?: number;
   };
 }
 

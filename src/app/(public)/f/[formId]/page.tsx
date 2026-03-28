@@ -44,8 +44,7 @@ export default async function PublicFormPage({ params }: PageProps) {
     .eq('id', form.organisation_id)
     .single() as { data: { name: string } | null, error: { message: string } | null }
 
-  // Generate CSRF Token (Signed timestamp)
-  const csrfToken = await createSignedCookie({ formId, ts: Date.now() })
+  const csrfToken = await createSignedCookie({ formId })
 
   return (
     <div className="min-h-screen bg-orange-50/30 py-12 px-4 sm:px-6">

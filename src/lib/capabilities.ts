@@ -1,6 +1,4 @@
 import { createServiceClient } from '@/lib/supabase/service'
-import { headers } from 'next/headers'
-import { redirect } from 'next/navigation'
 
 type Json =
   | string

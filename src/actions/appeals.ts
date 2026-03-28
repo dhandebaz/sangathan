@@ -1,9 +1,7 @@
 'use server'
 
-import { createSafeAction } from '@/lib/auth/actions'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
-import { logAction } from '@/lib/audit/log'
 
 const SubmitAppealSchema = z.object({
   organisationId: z.string().uuid(),
