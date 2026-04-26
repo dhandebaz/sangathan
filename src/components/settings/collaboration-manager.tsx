@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import { Loader2, X, Check, Search } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { toast } from 'sonner'
 
 interface Partner {
   id: string
@@ -53,9 +54,10 @@ export function CollaborationManager({
     if (res.success) {
       setSearchQuery('')
       setSearchResults([])
+      toast.success('Collaboration request sent')
       router.refresh()
     } else {
-      alert(res.error)
+      toast.error(res.error || 'Failed to send collaboration request')
     }
   }
 
@@ -64,9 +66,10 @@ export function CollaborationManager({
     const res = await respondToCollaborationRequest(linkId, status)
     setLoading(false)
     if (res.success) {
+      toast.success(status === 'active' ? 'Collaboration request accepted' : 'Collaboration request declined')
       router.refresh()
     } else {
-      alert(res.error)
+      toast.error(res.error || 'Failed to update collaboration request')
     }
   }
 

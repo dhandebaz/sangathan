@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label'
 import { rsvpToEvent } from '@/actions/events'
 import { useRouter } from 'next/navigation'
 import { Event } from '@/types/events'
+import { toast } from 'sonner'
 
 export function RSVPButton({ event, isAuthenticated, lang }: { event: Event, isAuthenticated: boolean, lang: string }) {
   const [open, setOpen] = useState(false)
@@ -27,9 +28,10 @@ export function RSVPButton({ event, isAuthenticated, lang }: { event: Event, isA
 
     if (res.success) {
       setOpen(false)
+      toast.success('RSVP confirmed')
       router.refresh()
     } else {
-      alert(res.error)
+      toast.error(res.error || 'Failed to RSVP')
     }
   }
 

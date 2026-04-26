@@ -9,6 +9,7 @@ import { createEvent } from '@/actions/events'
 import { useRouter, useParams } from 'next/navigation'
 
 import { EventType } from '@/types/events'
+import { toast } from 'sonner'
 
 interface Partner {
   id: string
@@ -66,7 +67,7 @@ export function EventForm({ orgId, partners = [] }: { orgId: string, partners?: 
     if (res.success) {
       router.push(`/${lang}/dashboard/events`)
     } else {
-      alert(res.error)
+      toast.error(res.error || 'Failed to create event')
     }
   }
 

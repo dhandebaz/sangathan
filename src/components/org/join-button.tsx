@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { requestJoinOrganisation } from '@/actions/membership'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 export function JoinButton({ orgId, policy, isAuthenticated, lang }: { orgId: string, policy: string, isAuthenticated: boolean, lang: string }) {
   const [loading, setLoading] = useState(false)
@@ -20,9 +21,10 @@ export function JoinButton({ orgId, policy, isAuthenticated, lang }: { orgId: st
     setLoading(false)
 
     if (res.success) {
+      toast.success(policy === 'admin_approval' ? 'Join request submitted' : 'You joined the organisation')
       router.refresh()
     } else {
-      alert(res.error)
+      toast.error(res.error || 'Failed to join organisation')
     }
   }
 

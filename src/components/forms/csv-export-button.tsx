@@ -2,6 +2,7 @@
 
 import { Download } from 'lucide-react'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 interface CsvExportButtonProps {
   data: Record<string, unknown>[]
@@ -16,7 +17,7 @@ export function CsvExportButton({ data, filename = 'export.csv' }: CsvExportButt
       setIsExporting(true)
       
       if (!data || data.length === 0) {
-        alert('No data to export')
+        toast.error('No data to export')
         return
       }
 
@@ -66,10 +67,12 @@ export function CsvExportButton({ data, filename = 'export.csv' }: CsvExportButt
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
+        URL.revokeObjectURL(url)
+        toast.success('CSV export started')
       }
     } catch (error) {
       console.error('Export failed:', error)
-      alert('Failed to export CSV')
+      toast.error('Failed to export CSV')
     } finally {
       setIsExporting(false)
     }

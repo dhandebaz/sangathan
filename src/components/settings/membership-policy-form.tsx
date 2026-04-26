@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { updateMembershipPolicy, updateTransparency } from '@/actions/membership'
 import { Label } from '@/components/ui/label'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 export function MembershipPolicyForm({ orgId, currentPolicy }: { orgId: string, currentPolicy: string }) {
   const [policy, setPolicy] = useState(currentPolicy)
@@ -20,10 +21,10 @@ export function MembershipPolicyForm({ orgId, currentPolicy }: { orgId: string, 
     })
     setLoading(false)
     if (res.success) {
-      alert('Policy updated')
+      toast.success('Membership policy updated')
       router.refresh()
     } else {
-      alert(res.error)
+      toast.error(res.error || 'Failed to update membership policy')
     }
   }
 
@@ -79,9 +80,10 @@ export function TransparencyToggle({ orgId, enabled }: { orgId: string, enabled:
            setLoading(false)
            if (res.success) {
              setActive(!active)
+             toast.success(!active ? 'Public transparency enabled' : 'Public transparency disabled')
              router.refresh()
            } else {
-             alert(res.error)
+             toast.error(res.error || 'Failed to update transparency settings')
            }
         }}
         disabled={loading}

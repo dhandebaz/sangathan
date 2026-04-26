@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createTask } from '@/actions/tasks'
 import { useRouter, useParams } from 'next/navigation'
+import { toast } from 'sonner'
 
 export function TaskForm({ orgId }: { orgId: string }) {
   const [loading, setLoading] = useState(false)
@@ -39,7 +40,7 @@ export function TaskForm({ orgId }: { orgId: string }) {
     if (res.success) {
       router.push(`/${lang}/dashboard/tasks`)
     } else {
-      alert(res.error)
+      toast.error(res.error || 'Failed to create task')
     }
   }
 

@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation'
 import { ArrowLeft, Users, Globe2, Lock } from 'lucide-react'
 import { createMeeting } from '@/actions/meetings'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 interface Member {
   id: string
@@ -45,7 +46,7 @@ export function CreateMeetingForm({ members }: { members: Member[] }) {
     if (result.success) {
        router.push(`/${lang}/dashboard/meetings/${result.data?.meetingId}`)
     } else {
-       alert(result.error)
+       toast.error(result.error || 'Failed to schedule meeting')
        setLoading(false)
     }
   }

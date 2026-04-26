@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { createPoll } from '@/actions/polls'
 import { useRouter, useParams } from 'next/navigation'
 import { Plus, Trash } from 'lucide-react'
+import { toast } from 'sonner'
 
 export function PollForm({ orgId }: { orgId: string }) {
   const [loading, setLoading] = useState(false)
@@ -54,7 +55,7 @@ export function PollForm({ orgId }: { orgId: string }) {
     if (res.success) {
       router.push(`/${lang}/dashboard/polls`)
     } else {
-      alert(res.error)
+      toast.error(res.error || 'Failed to launch poll')
     }
   }
 

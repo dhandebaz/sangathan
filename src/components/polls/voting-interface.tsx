@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { castVote } from '@/actions/polls'
 import { useRouter } from 'next/navigation'
 import { CheckCircle, Lock } from 'lucide-react'
+import { toast } from 'sonner'
 
 import { Poll, PollOption, PollResults } from '@/types/dashboard'
 
@@ -36,7 +37,7 @@ export function VotingInterface({
     if (res.success) {
       router.refresh()
     } else {
-      alert(res.error)
+      toast.error(res.error || 'Failed to cast vote')
     }
   }
 

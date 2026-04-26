@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation'
 import { Plus, Trash2, ArrowLeft } from 'lucide-react'
 import { createForm } from '@/actions/forms/actions'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 type FieldType = 'text' | 'number' | 'phone' | 'textarea' | 'dropdown'
 
@@ -58,7 +59,7 @@ export default function NewFormPage() {
     if (result.success) {
       router.push(`/${lang}/dashboard/forms`)
     } else {
-      alert(result.error)
+      toast.error(result.error || 'Failed to create form')
       setLoading(false)
     }
   }

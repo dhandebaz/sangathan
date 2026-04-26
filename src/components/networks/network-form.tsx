@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createNetwork } from '@/actions/networks'
 import { useRouter, useParams } from 'next/navigation'
+import { toast } from 'sonner'
 
 export function NetworkForm() {
   const [loading, setLoading] = useState(false)
@@ -36,7 +37,7 @@ export function NetworkForm() {
     if (res.success) {
       router.push(`/${lang}/dashboard/networks`)
     } else {
-      alert(res.error)
+      toast.error(res.error || 'Failed to create network')
     }
   }
 

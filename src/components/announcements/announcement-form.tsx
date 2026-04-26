@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { createAnnouncement } from '@/actions/announcements'
 import { useRouter, useParams } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 
 export function AnnouncementForm({ orgId }: { orgId: string }) {
   const [loading, setLoading] = useState(false)
@@ -53,7 +54,7 @@ export function AnnouncementForm({ orgId }: { orgId: string }) {
       router.push(`/${lang}/dashboard/announcements`)
       router.refresh()
     } else {
-      alert(res.error)
+      toast.error(res.error || 'Failed to post announcement')
     }
   }
 

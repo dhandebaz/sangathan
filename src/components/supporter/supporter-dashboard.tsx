@@ -1,8 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { createSubscription, toggleBranding } from '@/actions/supporter/actions'
 import { Check, Star, ShieldCheck, Zap } from 'lucide-react'
+import { toast } from 'sonner'
 
 interface Subscription {
   status: string
@@ -16,31 +18,46 @@ interface Organisation {
 export function SupporterDashboard({ subscription, organisation }: { subscription: Subscription | null, organisation: Organisation }) {
   const [loading, setLoading] = useState(false)
   const [toggleLoading, setToggleLoading] = useState(false)
+  const router = useRouter()
 
   const handleSubscribe = async () => {
     setLoading(true)
+
     try {
       const result = await createSubscription({})
+
       if (result.success && result.data?.shortUrl) {
         window.location.href = result.data.shortUrl
+        return
       }
+
+      toast.error(result.error || 'Subscription failed')
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Subscription failed'
-      alert(errorMessage)
+      toast.error(errorMessage)
+    } finally {
       setLoading(false)
     }
   }
 
   const handleToggleBranding = async () => {
     setToggleLoading(true)
+
     try {
-      await toggleBranding({ removeBranding: !organisation.remove_branding })
-      // Optimistic or refresh needed? Server action revalidates.
+      const result = await toggleBranding({ removeBranding: !organisation.remove_branding })
+
+      if (result.success) {
+        toast.success(organisation.remove_branding ? 'Branding restored' : 'Branding removed')
+        router.refresh()
+      } else {
+        toast.error(result.error || 'Failed to toggle branding')
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to toggle branding'
-      alert(errorMessage)
+      toast.error(errorMessage)
+    } finally {
+      setToggleLoading(false)
     }
-    setToggleLoading(false)
   }
 
   const isActive = subscription?.status === 'active'
@@ -56,7 +73,7 @@ export function SupporterDashboard({ subscription, organisation }: { subscriptio
          {/* Status Card */}
          <div className="content-card rounded-xl p-8 flex flex-col items-center text-center border-2 border-orange-100 bg-orange-50/30">
             <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 ${isActive ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-400'}`}>
-               <Star size={40} fill={isActive ? "currentColor" : "none"} />
+               <Star size={40} fill={isActive ? 'currentColor' : 'none'} />
             </div>
             
             <h2 className="text-2xl font-bold mb-2">
@@ -64,7 +81,7 @@ export function SupporterDashboard({ subscription, organisation }: { subscriptio
             </h2>
             
             <p className="text-gray-600 mb-8 max-w-xs">
-               {isActive 
+               {isActive
                  ? `Thank you for your support! Your subscription is active until ${new Date(subscription.current_period_end).toLocaleDateString()}.`
                  : 'Upgrade to remove branding and support the development of Sangathan.'
                }
@@ -75,12 +92,12 @@ export function SupporterDashboard({ subscription, organisation }: { subscriptio
                   Subscription Active
                </button>
             ) : (
-               <button 
-                  onClick={handleSubscribe} 
+               <button
+                  onClick={handleSubscribe}
                   disabled={loading}
                   className="bg-orange-600 text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-orange-700 transition-colors shadow-lg shadow-orange-200"
                >
-                  {loading ? 'Processing...' : 'Become a Supporter (₹99/mo)'}
+                  {loading ? 'Processing...' : 'Become a Supporter (INR 99/mo)'}
                </button>
             )}
             
@@ -124,7 +141,7 @@ export function SupporterDashboard({ subscription, organisation }: { subscriptio
                         <div className="font-medium text-sm">Remove Branding</div>
                         <div className="text-xs text-gray-500">Hide platform logo on public pages</div>
                      </div>
-                     <button 
+                     <button
                         onClick={handleToggleBranding}
                         disabled={toggleLoading}
                         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${organisation.remove_branding ? 'bg-orange-600' : 'bg-gray-200'}`}
