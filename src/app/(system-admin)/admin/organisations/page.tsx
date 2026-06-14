@@ -85,7 +85,7 @@ export default async function OrganisationsPage() {
                            <td className="py-3 px-6 font-mono text-xs">{org.slug}</td>
                            <td className="py-3 px-6">
                              <span className="inline-flex items-center px-2 py-1 rounded text-xs font-semibold bg-gray-100 text-gray-800">
-                               {org.status.toUpperCase()}
+                               {(org.status || 'active').toUpperCase()}
                              </span>
                            </td>
                            <td className="py-3 px-6">

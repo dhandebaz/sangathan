@@ -40,7 +40,7 @@ export default async function DonationsPage(props: PageProps) {
 
   const { data, error } = await dbQuery
   
-  const donations = data as Donation[] | null
+  const donations = data as any[] | null
 
   if (error) {
     return <div className="p-4 text-red-500">Error loading donations</div>

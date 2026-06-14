@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { LayoutDashboard, Users, Settings, LogOut, Megaphone, Calendar, CheckSquare, BarChart, Vote, Globe, AlertTriangle } from 'lucide-react'
+import { LayoutDashboard, Users, Settings, LogOut, Megaphone, Calendar, CheckSquare, BarChart, Vote, Globe, AlertTriangle, Flag, Badge, HeartHandshake, Scale, AlertCircle, Wrench, Gift } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/server'
 import { getOrgCapabilities } from '@/lib/capabilities'
@@ -110,10 +110,31 @@ export default async function DashboardLayout(props: {
             <nav className="space-y-1">
               <SidebarLink href={`/${lang}/dashboard/tasks`} icon={CheckSquare} label="Tasks" />
               <SidebarLink href={`/${lang}/dashboard/polls`} icon={Vote} label="Decisions" />
+              {capabilities.campaigns && (
+                <SidebarLink href={`/${lang}/dashboard/campaigns`} icon={Flag} label="Campaigns" />
+              )}
+              {capabilities.grievances && (
+                <SidebarLink href={`/${lang}/dashboard/grievances`} icon={Scale} label="Grievances" />
+              )}
+              {capabilities.complaints && (
+                <SidebarLink href={`/${lang}/dashboard/complaints`} icon={AlertCircle} label="Complaints" />
+              )}
+              {capabilities.maintenance && (
+                <SidebarLink href={`/${lang}/dashboard/maintenance`} icon={Wrench} label="Maintenance" />
+              )}
+              {capabilities.donations && (
+                <SidebarLink href={`/${lang}/dashboard/donations`} icon={Gift} label="Donations" />
+              )}
               {capabilities.federation_mode && (
                 <SidebarLink href={`/${lang}/dashboard/networks`} icon={Globe} label="Networks" />
               )}
               <SidebarLink href={`/${lang}/dashboard/members`} icon={Users} label="Members" />
+              {capabilities.volunteers && (
+                <SidebarLink href={`/${lang}/dashboard/volunteers`} icon={HeartHandshake} label="Volunteers" />
+              )}
+              {capabilities.student_ids && (
+                <SidebarLink href={`/${lang}/dashboard/student-ids`} icon={Badge} label="Student IDs" />
+              )}
             </nav>
           </div>
 

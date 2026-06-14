@@ -57,9 +57,9 @@ export default async function SettingsPage(props: PageProps) {
     .select('id, status, requester:requester_org_id(id, name, slug), responder:responder_org_id(id, name, slug)')
     .or(`requester_org_id.eq.${orgId},responder_org_id.eq.${orgId}`)
 
-  const partners = (partnersData || []).filter((link) => link.status === 'active')
+  const partners = ((partnersData as any) || []).filter((link: any) => link.status === 'active')
 
-  const activePartners = partners.map((link) => {
+  const activePartners = partners.map((link: any) => {
     const other =
       link.requester?.id === orgId
         ? link.responder
@@ -67,18 +67,18 @@ export default async function SettingsPage(props: PageProps) {
     return other
   }).filter(Boolean) as { id: string; name: string; slug: string }[]
 
-  const pendingIncoming = (partnersData || [])
-    .filter((link) => link.status === 'pending' && link.responder?.id === orgId)
-    .map((link) => ({
+  const pendingIncoming = ((partnersData as any) || [])
+    .filter((link: any) => link.status === 'pending' && link.responder?.id === orgId)
+    .map((link: any) => ({
       id: link.id as string,
       requester: link.requester as { id: string; name: string; slug: string },
       responder: link.responder as { id: string; name: string; slug: string },
       created_at: link.created_at as string,
     }))
 
-  const pendingOutgoing = (partnersData || [])
-    .filter((link) => link.status === 'pending' && link.requester?.id === orgId)
-    .map((link) => ({
+  const pendingOutgoing = ((partnersData as any) || [])
+    .filter((link: any) => link.status === 'pending' && link.requester?.id === orgId)
+    .map((link: any) => ({
       id: link.id as string,
       requester: link.requester as { id: string; name: string; slug: string },
       responder: link.responder as { id: string; name: string; slug: string },

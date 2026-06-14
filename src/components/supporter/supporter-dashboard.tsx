@@ -18,16 +18,25 @@ interface Organisation {
 export function SupporterDashboard({ subscription, organisation }: { subscription: Subscription | null, organisation: Organisation }) {
   const [loading, setLoading] = useState(false)
   const [toggleLoading, setToggleLoading] = useState(false)
+  const [utr, setUtr] = useState('')
   const router = useRouter()
 
   const handleSubscribe = async () => {
     setLoading(true)
 
-    try {
-      const result = await createSubscription({})
+    if (!utr || utr.length < 6) {
+      toast.error('Please enter a valid UTR / Reference Number')
+      setLoading(false)
+      return
+    }
 
-      if (result.success && result.data?.shortUrl) {
-        window.location.href = result.data.shortUrl
+    try {
+      const result = await createSubscription({ utr })
+
+      if (result.success) {
+        toast.success('Payment submitted! Awaiting verification.')
+        setUtr('')
+        router.refresh()
         return
       }
 
@@ -92,17 +101,36 @@ export function SupporterDashboard({ subscription, organisation }: { subscriptio
                   Subscription Active
                </button>
             ) : (
-               <button
-                  onClick={handleSubscribe}
-                  disabled={loading}
-                  className="bg-orange-600 text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-orange-700 transition-colors shadow-lg shadow-orange-200"
-               >
-                  {loading ? 'Processing...' : 'Become a Supporter (INR 99/mo)'}
-               </button>
+               <div className="w-full space-y-3">
+                  <div className="text-left">
+                     <p className="text-sm font-medium mb-1">1. Scan & Pay INR 99/mo</p>
+                     <p className="text-xs text-gray-500 mb-2">UPI ID: platform@upi</p>
+                  </div>
+                  <div className="text-left">
+                     <p className="text-sm font-medium mb-1">2. Enter UTR / Reference No.</p>
+                     <input
+                        type="text"
+                        value={utr}
+                        onChange={(e) => setUtr(e.target.value)}
+                        placeholder="e.g. 123456789012"
+                        className="w-full p-2 border rounded-md text-sm mb-3"
+                     />
+                  </div>
+                  <button
+                     onClick={handleSubscribe}
+                     disabled={loading || utr.length < 6}
+                     className="w-full bg-orange-600 text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-orange-700 transition-colors shadow-lg shadow-orange-200 disabled:opacity-50"
+                  >
+                     {loading ? 'Processing...' : 'Submit for Verification'}
+                  </button>
+               </div>
             )}
             
-            {!isActive && (
-               <p className="text-xs text-gray-400 mt-4">Secured by Razorpay. Cancel anytime.</p>
+            {!isActive && subscription?.status === 'pending' && (
+               <p className="text-sm text-orange-600 mt-4 font-medium">Your payment is being verified.</p>
+            )}
+            {!isActive && subscription?.status !== 'pending' && (
+               <p className="text-xs text-gray-400 mt-4">100% of proceeds go to platform maintenance.</p>
             )}
          </div>
 

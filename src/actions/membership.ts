@@ -4,8 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
-import { sendEmail } from '@/lib/email/sender'
-import { newMemberRequestEmail, membershipApprovedEmail, membershipRejectedEmail } from '@/lib/email/templates'
+// Removed custom email dependencies
 
 // --- Schemas ---
 const UpdatePolicySchema = z.object({
@@ -190,31 +189,11 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
         .select('email, full_name')
         .eq('organisation_id', data.orgId)
         .eq('role', 'admin')
-      
-    const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/en/dashboard/membership-requests`
-      
       if (admins) {
-        for (const admin of admins) {
-           await sendEmail({
-             to: admin.email,
-             subject: `New Membership Request: ${fullName}`,
-             html: newMemberRequestEmail(admin.full_name || 'Admin', fullName, org.name, dashboardUrl),
-             tags: ['membership', 'request']
-           })
-        }
+        // Notifications can be handled by in-app system or Supabase webhooks in the future
       }
     } else {
-      // Notify User (Welcome)
-       // reuse existing welcome email or new one?
-       // The existing welcomeAdminEmail is specific to "Workspace ready".
-       // Let's use membershipApprovedEmail for consistency even if auto-approved.
-      const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/en/dashboard`
-       await sendEmail({
-         to: email,
-         subject: `Welcome to ${org.name}`,
-         html: membershipApprovedEmail(fullName, org.name, dashboardUrl),
-         tags: ['welcome', 'joined']
-       })
+      // Welcome notifications can be handled by in-app system
     }
 
     revalidatePath('/dashboard')
@@ -281,13 +260,7 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
     if (updateError) throw updateError
 
     // Notify
-    const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/en/dashboard`
-    await sendEmail({
-        to: member.email,
-        subject: `Membership Approved: ${org?.name}`,
-        html: membershipApprovedEmail(member.full_name || 'Member', org?.name || 'Organisation', dashboardUrl),
-        tags: ['membership', 'approved']
-    })
+    // In-app notifications or Supabase triggers could go here
 
     revalidatePath('/dashboard/membership-requests')
     return { success: true }
@@ -350,13 +323,7 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
     if (updateError) throw updateError
 
     // Notify
-    const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/en/dashboard`
-    await sendEmail({
-        to: member.email,
-        subject: `Membership Update: ${org?.name}`,
-        html: membershipRejectedEmail(member.full_name || 'Member', org?.name || 'Organisation', dashboardUrl),
-        tags: ['membership', 'rejected']
-    })
+    // In-app notifications or Supabase triggers could go here
 
     revalidatePath('/dashboard/membership-requests')
     return { success: true }

@@ -128,7 +128,7 @@ export default async function MeetingDetailsPage({ params }: PageProps) {
                   {attendance?.filter(a => a.status === 'present').length || 0} / {attendance?.length || 0} Present
                </span>
             </div>
-            <AttendanceList meetingId={id} attendees={attendance || []} />
+            <AttendanceList meetingId={id} attendees={(attendance as any) || []} />
          </div>
       </div>
     </div>

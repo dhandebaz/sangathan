@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
-import { sendEmail } from '@/lib/email/sender'
+// Removed custom email dependencies
 
 const NetworkSchema = z.object({
   name: z.string().min(3),
@@ -158,18 +158,9 @@ export async function joinNetwork(networkId: string) {
 
       if (coordinators) {
         const reviewUrl = `${process.env.NEXT_PUBLIC_APP_URL || ''}/network/${network.slug}`
-        for (const coordinator of coordinators as { user: { email: string; full_name?: string | null } | null }[]) {
+        for (const coordinator of coordinators as unknown as { user: { email: string; full_name?: string | null } | null }[]) {
           if (!coordinator.user?.email) continue
-          await sendEmail({
-            to: coordinator.user.email,
-            subject: `Network join request: ${organisation.name || 'An organisation'}`,
-            html: `
-              <p>Hello ${coordinator.user.full_name || 'Coordinator'},</p>
-              <p><strong>${organisation.name || 'An organisation'}</strong> requested to join <strong>${network.name}</strong>.</p>
-              <p>You can review the network here: <a href="${reviewUrl}">${reviewUrl}</a></p>
-            `,
-            tags: ['network', 'join-request'],
-          })
+          // Notifications can be handled by in-app system or Supabase triggers
         }
       }
     }

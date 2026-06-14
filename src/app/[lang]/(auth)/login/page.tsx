@@ -5,10 +5,8 @@ import Link from 'next/link'
 import { login, otpLogin } from '@/actions/auth'
 import { Loader2, Mail, Lock, ArrowRight, ShieldAlert } from 'lucide-react'
 
-import { PhoneAuth } from '@/components/auth/phone-verification'
-
 export default function LoginPage() {
-  const [authMethod, setAuthMethod] = useState<'password' | 'email-otp' | 'phone'>('password')
+  const [authMethod, setAuthMethod] = useState<'password' | 'email-otp'>('password')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
@@ -41,14 +39,12 @@ export default function LoginPage() {
     <div className="w-full">
       <div className="mb-8 text-center lg:text-left">
         <h2 className="text-2xl font-bold text-gray-900">
-          {authMethod === 'phone' ? 'Mobile Login' : authMethod === 'email-otp' ? 'Login with Code' : 'Welcome back'}
+          {authMethod === 'email-otp' ? 'Login with Code' : 'Welcome back'}
         </h2>
         <p className="text-gray-500 mt-2">
-          {authMethod === 'phone'
-            ? 'We will send a 6-digit OTP to your number.'
-            : authMethod === 'email-otp' 
-              ? 'We will send a magic link to your email.' 
-              : 'Enter your credentials to access your dashboard.'}
+          {authMethod === 'email-otp' 
+            ? 'We will send a magic link to your email.' 
+            : 'Enter your credentials to access your dashboard.'}
         </p>
       </div>
 
@@ -66,18 +62,9 @@ export default function LoginPage() {
         >
           Email Code
         </button>
-        <button 
-          onClick={() => setAuthMethod('phone')}
-          className={`flex-1 pb-3 text-sm font-medium transition-colors ${authMethod === 'phone' ? 'border-b-2 border-black text-black' : 'text-gray-500 hover:text-gray-700'}`}
-        >
-          Mobile
-        </button>
       </div>
 
-      {authMethod === 'phone' ? (
-        <PhoneAuth mode="login" />
-      ) : (
-        <form action={handleSubmit} className="space-y-5">
+      <form action={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
             <div className="relative">
@@ -136,7 +123,6 @@ export default function LoginPage() {
             {!loading && <ArrowRight size={18} />}
           </button>
         </form>
-      )}
 
       <div className="mt-6 space-y-4">
         <p className="text-center text-sm text-gray-500">

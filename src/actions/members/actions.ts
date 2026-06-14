@@ -51,7 +51,7 @@ export const addMember = createSafeAction(
         status: input.status,
         notes: input.notes,
         role: input.role,
-      } as never)
+      })
       .select('id')
       .single()
 
@@ -96,7 +96,7 @@ export const updateMember = createSafeAction(
         status: input.status,
         notes: input.notes,
         role: input.role,
-      } as never)
+      })
       .eq('id', input.memberId)
       .eq('organisation_id', context.organizationId)
 
@@ -130,7 +130,7 @@ export const changeMemberStatus = createSafeAction(
 
     const { error } = await supabase
       .from('members')
-      .update({ status: input.status } as never)
+      .update({ status: input.status })
       .eq('id', input.memberId)
       .eq('organisation_id', context.organizationId)
 

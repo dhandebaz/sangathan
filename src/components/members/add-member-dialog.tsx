@@ -18,7 +18,15 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 
-export function AddMemberDialog() {
+interface AddMemberDialogProps {
+  triggerLabel?: string
+  triggerIcon?: React.ReactNode
+}
+
+export function AddMemberDialog({
+  triggerLabel = 'Add Member',
+  triggerIcon = <Plus className="w-4 h-4" />
+}: AddMemberDialogProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -55,8 +63,8 @@ export function AddMemberDialog() {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button className="gap-2">
-          <Plus className="w-4 h-4" />
-          Add Member
+          {triggerIcon}
+          {triggerLabel}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

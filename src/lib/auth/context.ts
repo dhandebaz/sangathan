@@ -9,8 +9,8 @@ export async function getUserMemberships(userId: string): Promise<MembershipCont
   const supabase = await createClient()
 
   const {
-    data: membershipRows,
-    error: membershipError,
+    data: profileRows,
+    error: profileError,
   } = await (supabase as unknown as {
     from: (table: string) => {
       select: (columns: string) => {
@@ -21,15 +21,15 @@ export async function getUserMemberships(userId: string): Promise<MembershipCont
       }
     }
   })
-    .from('members')
-    .select('id, organisation_id, role, status, deleted_at, user_id')
-    .eq('user_id', userId)
+    .from('profiles')
+    .select('id, organisation_id, role, status, deleted_at')
+    .eq('id', userId)
 
-  if (membershipError) {
+  if (profileError) {
     throw new Error('Unauthorized: Failed to load memberships')
   }
 
-  const memberships: MembershipContext[] = ((membershipRows || []) as {
+  const memberships: MembershipContext[] = ((profileRows || []) as {
     id: string
     organisation_id: string
     role: string
@@ -111,8 +111,9 @@ export async function clearSelectedOrganisationId(): Promise<void> {
   cookieStore.delete(ORG_COOKIE_NAME)
 }
 
-export async function getUserContext(organisationId: string): Promise<UserContext> {
-  if (!organisationId) {
+export async function getUserContext(organisationId?: string): Promise<UserContext> {
+  const resolvedOrgId = organisationId || await getSelectedOrganisationId()
+  if (!resolvedOrgId) {
     throw new Error('Unauthorized: Missing organisation')
   }
 
@@ -130,7 +131,7 @@ export async function getUserContext(organisationId: string): Promise<UserContex
   const memberships = await getUserMemberships(user.id)
 
   const activeMembership = memberships.find(
-    (m) => m.organisationId === organisationId && m.status === 'active',
+    (m) => m.organisationId === resolvedOrgId && m.status === 'active',
   )
 
   if (!activeMembership) {

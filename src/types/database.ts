@@ -65,6 +65,7 @@ export interface Database {
           id: string
           name: string
           slug: string
+          org_type: string
           is_suspended: boolean
           remove_branding: boolean
           public_transparency_enabled: boolean
@@ -84,6 +85,7 @@ export interface Database {
           id?: string
           name: string
           slug: string
+          org_type?: string
           is_suspended?: boolean
           remove_branding?: boolean
           public_transparency_enabled?: boolean
@@ -103,6 +105,7 @@ export interface Database {
           id?: string
           name?: string
           slug?: string
+          org_type?: string
           is_suspended?: boolean
           remove_branding?: boolean
           public_transparency_enabled?: boolean
@@ -411,6 +414,78 @@ export interface Database {
         }
         Relationships: []
       }
+      tickets: {
+        Row: {
+          id: string
+          organisation_id: string
+          created_by: string | null
+          type: 'grievance' | 'complaint' | 'maintenance'
+          title: string
+          description: string
+          status: 'open' | 'in_progress' | 'resolved'
+          priority: 'low' | 'medium' | 'high'
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          organisation_id: string
+          created_by?: string | null
+          type: 'grievance' | 'complaint' | 'maintenance'
+          title: string
+          description: string
+          status?: 'open' | 'in_progress' | 'resolved'
+          priority?: 'low' | 'medium' | 'high'
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          organisation_id?: string
+          created_by?: string | null
+          type?: 'grievance' | 'complaint' | 'maintenance'
+          title?: string
+          description?: string
+          status?: 'open' | 'in_progress' | 'resolved'
+          priority?: 'low' | 'medium' | 'high'
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      campaigns: {
+        Row: {
+          id: string
+          organisation_id: string
+          created_by: string | null
+          title: string
+          goal_description: string
+          status: 'draft' | 'active' | 'completed'
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          organisation_id: string
+          created_by?: string | null
+          title: string
+          goal_description: string
+          status?: 'draft' | 'active' | 'completed'
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          organisation_id?: string
+          created_by?: string | null
+          title?: string
+          goal_description?: string
+          status?: 'draft' | 'active' | 'completed'
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       webhook_events: {
         Row: {
           id: string
@@ -707,6 +782,7 @@ export interface Database {
           }
         ]
       }
+      audit_logs: {
         Row: {
           id: string
           organisation_id: string
@@ -1185,11 +1261,16 @@ export interface Database {
           email: string | null
           phone: string | null
           membership_number: string | null
-          status: 'active' | 'inactive' | 'pending'
+          status: 'active' | 'inactive'
           metadata: Json | null
           created_at: string
           updated_at: string
           deleted_at: string | null
+          designation: string | null
+          area: string | null
+          joining_date: string
+          notes: string | null
+          role: 'admin' | 'editor' | 'viewer' | 'member'
         }
         Insert: {
           id?: string
@@ -1198,11 +1279,16 @@ export interface Database {
           email?: string | null
           phone?: string | null
           membership_number?: string | null
-          status?: 'active' | 'inactive' | 'pending'
+          status?: 'active' | 'inactive'
           metadata?: Json | null
           created_at?: string
           updated_at?: string
           deleted_at?: string | null
+          designation?: string | null
+          area?: string | null
+          joining_date?: string
+          notes?: string | null
+          role?: 'admin' | 'editor' | 'viewer' | 'member'
         }
         Update: {
           id?: string
@@ -1211,11 +1297,16 @@ export interface Database {
           email?: string | null
           phone?: string | null
           membership_number?: string | null
-          status?: 'active' | 'inactive' | 'pending'
+          status?: 'active' | 'inactive'
           metadata?: Json | null
           created_at?: string
           updated_at?: string
           deleted_at?: string | null
+          designation?: string | null
+          area?: string | null
+          joining_date?: string
+          notes?: string | null
+          role?: 'admin' | 'editor' | 'viewer' | 'member'
         }
         Relationships: []
       }
@@ -1436,6 +1527,7 @@ export interface Database {
         Args: {
           p_org_name: string
           p_org_slug: string
+          p_org_type: string
           p_user_id: string
           p_full_name: string
           p_email: string

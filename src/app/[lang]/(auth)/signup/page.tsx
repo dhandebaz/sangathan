@@ -16,14 +16,13 @@ export default function SignupPage() {
     setError(null)
 
     const fullName = formData.get('fullName') as string
-    const organizationName = formData.get('organizationName') as string
     const email = formData.get('email') as string
     const password = formData.get('password') as string
     const confirmPassword = formData.get('confirmPassword') as string
     const terms = formData.get('terms') === 'on'
 
     try {
-      const res = await signup({ fullName, organizationName, email, password, confirmPassword, terms })
+      const res = await signup({ fullName, email, password, confirmPassword, terms })
       if (!res.success) throw new Error(res.error)
       
       router.push(`/verify-email?email=${encodeURIComponent(email)}`)
@@ -44,20 +43,6 @@ export default function SignupPage() {
       </div>
 
       <form action={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Organisation Name</label>
-          <div className="relative">
-             <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-             <input 
-               name="organizationName" 
-               type="text" 
-               required 
-               className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
-               placeholder="Bahujan Student Front"
-             />
-          </div>
-        </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Your Full Name</label>
           <div className="relative">

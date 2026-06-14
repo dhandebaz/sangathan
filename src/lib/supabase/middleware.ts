@@ -106,7 +106,7 @@ export async function updateSession(request: NextRequest) {
 
         const { data: fetchedProfile } = await supabase
           .from('profiles')
-          .select('role, phone_verified')
+          .select('role, phone_verified, organisations(capabilities)')
           .eq('id', user.id)
           .maybeSingle()
         
@@ -198,7 +198,7 @@ export async function updateSession(request: NextRequest) {
          
          const { data: fetchedProfile } = await supabase
            .from('profiles')
-           .select('role, phone_verified')
+           .select('role, phone_verified, organisations(capabilities)')
            .eq('id', user.id)
            .single()
          
@@ -243,8 +243,8 @@ export async function updateSession(request: NextRequest) {
       const cached = request.cookies.get(cookieName)?.value
       let profile = cached ? await verifySignedCookie(cached) : null
 
-     if (!profile) {
-         const supabase = createServerClient(
+      if (!profile) {
+          const supabase = createServerClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL!,
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
             {
@@ -257,7 +257,7 @@ export async function updateSession(request: NextRequest) {
 
          const { data: fetchedProfile } = await supabase
            .from('profiles')
-           .select('role, phone_verified')
+           .select('role, phone_verified, organisations(capabilities)')
            .eq('id', user.id)
            .single()
          
@@ -289,6 +289,44 @@ export async function updateSession(request: NextRequest) {
         return response
      }
   }
+
+   // --- CAPABILITIES (ORG TYPE) ENFORCEMENT ---
+   if (user && isDashboardRoute) {
+     const cookieName = 'user-metadata'
+     const cached = request.cookies.get(cookieName)?.value
+     const profile = cached ? await verifySignedCookie(cached) as any : null
+
+     if (profile && profile.organisations && profile.organisations.capabilities) {
+       const caps = profile.organisations.capabilities
+       const p = pathname
+
+       // Restrict access based on capabilities
+       if (p.includes('/dashboard/donations') && !caps.donations) {
+         return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
+       }
+       if (p.includes('/dashboard/networks') && !caps.federation_mode) {
+         return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
+       }
+       if (p.includes('/dashboard/campaigns') && !caps.campaigns) {
+         return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
+       }
+       if (p.includes('/dashboard/grievances') && !caps.grievances) {
+         return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
+       }
+       if (p.includes('/dashboard/complaints') && !caps.complaints) {
+         return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
+       }
+       if (p.includes('/dashboard/maintenance') && !caps.maintenance) {
+         return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
+       }
+       if (p.includes('/dashboard/volunteers') && !caps.volunteers) {
+         return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
+       }
+       if (p.includes('/dashboard/student-ids') && !caps.student_ids) {
+         return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
+       }
+     }
+   }
 
   // i18n Redirection Logic
   const shouldHandleLocale = 

@@ -247,7 +247,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
 
   return (
     <MemberDashboard
-      upcomingEvents={(eventsRes.data || []) as unknown as DashboardEvent[]}
+      events={(eventsRes.data || []) as unknown as DashboardEvent[]}
       tasks={myTasks}
       announcements={(announcementsRes.data || []) as unknown as DashboardAnnouncement[]}
       lang={lang}

@@ -19,7 +19,6 @@ const LoginSchema = z.object({
 
 const SignupSchema = z.object({
   fullName: z.string().min(2, "Full Name is required"),
-  organizationName: z.string().min(3, "Organisation Name must be at least 3 chars"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   confirmPassword: z.string().min(8, "Confirm Password is required"),
@@ -116,7 +115,7 @@ export async function signup(input: z.infer<typeof SignupSchema>) {
       return { success: false, error: result.error.issues[0].message }
     }
 
-    const { email, password, fullName, organizationName } = result.data
+    const { email, password, fullName } = result.data
     const supabase = await createClient()
 
     // 2. Rate Limit (IP based is handled by Supabase Auth).
@@ -134,7 +133,6 @@ export async function signup(input: z.infer<typeof SignupSchema>) {
       options: {
         data: {
           full_name: fullName,
-          organization_name: organizationName,
         },
         emailRedirectTo: `${origin}/auth/callback`,
       },
@@ -221,124 +219,8 @@ export async function resetPassword(input: z.infer<typeof ResetPasswordSchema>) 
   redirect(`/${lang}/dashboard`)
 }
 
-import { firebaseAdminAuth } from '@/lib/firebase/admin'
-
-const PhoneLoginSchema = z.object({
-  idToken: z.string().min(1, "Firebase ID Token required"),
-})
-
-export async function phoneLogin(input: z.infer<typeof PhoneLoginSchema>) {
-  const result = PhoneLoginSchema.safeParse(input)
-  if (!result.success) return { success: false, error: result.error.issues[0].message }
-
-  // 1. Verify Firebase Token from Firebase (phone ownership)
-  let decodedToken
-  try {
-    decodedToken = await firebaseAdminAuth.verifyIdToken(input.idToken)
-  } catch (error: unknown) {
-    console.error('Firebase Admin Verify Error (Login):', JSON.stringify(error, Object.getOwnPropertyNames(error)))
-    return { success: false, error: `Invalid phone verification: ${error instanceof Error ? error.message : 'Unknown error'}` }
-  }
-
-  const phoneNumber = decodedToken.phone_number
-  if (!phoneNumber) return { success: false, error: 'No phone number in token' }
-
-  // 2. Find Profile by Phone using service role (bypassing RLS)
-  const supabaseAdmin = createServiceClient()
-
-  const { data } = await supabaseAdmin
-    .from('profiles')
-    .select('*')
-    .eq('phone', phoneNumber)
-    .single()
-
-  const profile = data as Profile | null
-
-  if (profile) {
-    // 3. User exists. Generate a magic link session and redirect to the SAME origin
-    //    the user is currently on. This avoids issues where NEXT_PUBLIC_APP_URL
-    //    does not match the deployed host (common cause of "logged out on redirect").
-    const headersList = await headers()
-    const originHeader = headersList.get('origin')
-
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space'
-    const fallbackOrigin = appUrl.startsWith('http') ? appUrl : `https://${appUrl}`
-    const origin = originHeader || fallbackOrigin
-
-    const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
-      type: 'magiclink',
-      email: profile.email,
-      options: {
-        redirectTo: `${origin}/en/dashboard`,
-      }
-    })
-
-    if (linkError) return { success: false, error: 'Failed to generate session' }
-
-    return { success: true, redirectUrl: linkData.properties.action_link }
-  }
-
-  // User not found -> Link Flow
-  return { success: false, code: 'LINK_REQUIRED', phoneNumber }
-}
-
-export async function linkPhoneToAccount(input: z.infer<typeof LoginSchema> & { idToken: string }) {
-  // 1. Verify Credentials (Login)
-  const result = LoginSchema.safeParse(input)
-  if (!result.success) return { success: false, error: result.error.issues[0].message }
-
-  const supabase = await createClient()
-  const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-    email: result.data.email,
-    password: result.data.password
-  })
-
-  if (authError || !authData.user) return { success: false, error: 'Invalid credentials' }
-
-  // 2. Verify Firebase Token
-  let decodedToken
-  try {
-    decodedToken = await firebaseAdminAuth.verifyIdToken(input.idToken)
-  } catch (err) {
-    console.error('Firebase Admin Verify Error:', err)
-    return { success: false, error: 'Invalid phone verification' }
-  }
-
-  const phoneNumber = decodedToken.phone_number
-  if (!phoneNumber) return { success: false, error: 'No phone number in token' }
-
-  // 3. Update Profile
-  const supabaseAdmin = createServiceClient()
-
-  // Check if phone already used
-  const { data: existing } = await supabaseAdmin
-    .from('profiles')
-    .select('id')
-    .eq('phone', phoneNumber)
-    .neq('id', authData.user.id) // Allow re-linking to self
-    .single()
-
-  if (existing) return { success: false, error: 'Phone number already linked to another account' }
-
-  await supabaseAdmin
-    .from('profiles')
-    .update({
-      phone: phoneNumber,
-      phone_verified: true,
-      firebase_uid: decodedToken.uid,
-    } as never)
-    .eq('id', authData.user.id)
-
-  const headersList = await headers()
-  const referer = headersList.get('referer') || ''
-  const match = referer.match(/\/(en|hi)\//)
-  const lang = match?.[1] || 'en'
-
-  redirect(`/${lang}/dashboard`)
-}
-
-import { sendEmail } from '@/lib/email/sender'
-import { welcomeAdminEmail } from '@/lib/email/templates'
+// Removed Phone Auth logic
+// Removed custom email dependencies
 
 type CreateOrganisationAndAdminResult = {
   success: boolean
@@ -346,19 +228,9 @@ type CreateOrganisationAndAdminResult = {
   profile_id: string
 }
 
-export async function finalizeSignup(input: { idToken: string }) {
-  // 1. Verify Firebase Token (phone ownership)
-  let decodedToken
-  try {
-    decodedToken = await firebaseAdminAuth.verifyIdToken(input.idToken)
-  } catch (error: unknown) {
-    console.error('Firebase Admin Verify Error:', JSON.stringify(error, Object.getOwnPropertyNames(error)))
-    return { success: false, error: `Phone verification failed: ${error instanceof Error ? error.message : 'Unknown error'}` }
-  }
-
-  const phoneNumber = decodedToken.phone_number
-  if (!phoneNumber) return { success: false, error: 'No phone number in token' }
-  const firebaseUid = decodedToken.uid
+export async function finalizeSignup(input: { organizationName: string; organizationType: string }) {
+  const phoneNumber = null
+  const firebaseUid = null
 
   // 2. Get Authenticated User
   const supabase = await createClient()
@@ -411,15 +283,13 @@ export async function finalizeSignup(input: { idToken: string }) {
     return { success: true, existingAdminRedirectUrl: linkData.properties.action_link }
   }
 
-  // 5. Retrieve Metadata
-  const metadata = user.user_metadata
-  const orgName = metadata.organization_name
+  const orgName = input.organizationName
+  const orgType = input.organizationType
+  const metadata = user.user_metadata || {}
   const fullName = metadata.full_name
 
-  if (!orgName || !fullName) {
-    // Edge case: Metadata lost or direct access
-    // We could prompt user to re-enter details, but for now error out.
-    return { success: false, error: 'Registration details not found. Please sign up again.' }
+  if (!orgName || !fullName || !orgType) {
+    return { success: false, error: 'Incomplete registration details. Please provide all required fields.' }
   }
 
   const baseSlug = orgName.toLowerCase().replace(/[^a-z0-9]+/g, '-')
@@ -436,6 +306,7 @@ export async function finalizeSignup(input: { idToken: string }) {
     p_email: user.email,
     p_phone: phoneNumber,
     p_firebase_uid: firebaseUid,
+    p_org_type: orgType,
   } as never)
 
   if (!rpcError && rpcData) {
@@ -453,44 +324,15 @@ export async function finalizeSignup(input: { idToken: string }) {
 
   if (rpcError || !rpcData) {
     console.error('Signup RPC Error:', rpcError)
-    return { success: false, error: `Database Registration Failed: ${rpcError.message} (Code: ${rpcError.code})` }
+    return { success: false, error: `Database Registration Failed: ${rpcError?.message || 'Unknown Error'} (Code: ${rpcError?.code || 'UNKNOWN'})` }
   }
 
-  // 7. Send Welcome Email (Fire and forget)
-  const dashboardUrl = process.env.NEXT_PUBLIC_APP_URL ? `${process.env.NEXT_PUBLIC_APP_URL}/en/dashboard` : 'https://sangathan.space/en/dashboard'
-
-  // We don't await this to speed up the response, but we log errors in the background
-  sendEmail({
-    to: user.email,
-    subject: `Welcome to Sangathan, ${fullName}`,
-    html: welcomeAdminEmail(fullName, orgName, dashboardUrl),
-    tags: ['welcome', 'signup']
-  }).catch(err => console.error('Failed to send welcome email:', err))
+  // 7. Send Welcome Email
+  // Emails are now fully handled by Supabase natively.
 
   const result = rpcData as CreateOrganisationAndAdminResult
 
   return { success: true, orgId: result.organisation_id }
 }
 
-export async function updateOnboardingMetadata(input: { fullName: string; organizationName: string }) {
-  try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
 
-    if (!user) return { success: false, error: 'Not authenticated' }
-
-    const { error } = await supabase.auth.updateUser({
-      data: {
-        full_name: input.fullName,
-        organization_name: input.organizationName,
-      }
-    })
-
-    if (error) throw error
-
-    return { success: true }
-  } catch (err: unknown) {
-    console.error('Update Metadata Error:', err)
-    return { success: false, error: err instanceof Error ? err.message : 'Failed to update details' }
-  }
-}

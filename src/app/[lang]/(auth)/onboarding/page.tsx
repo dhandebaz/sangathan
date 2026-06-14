@@ -2,12 +2,13 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { updateOnboardingMetadata } from '@/actions/auth'
+import { finalizeSignup } from '@/actions/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Building2, User, Loader2, ArrowRight } from 'lucide-react'
+import { Building2, User, Loader2, ArrowRight, ShieldCheck } from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { use } from 'react'
 
 export default function OnboardingPage({ params }: { params: Promise<{ lang: string }> }) {
@@ -22,13 +23,13 @@ export default function OnboardingPage({ params }: { params: Promise<{ lang: str
     setError(null)
 
     const formData = new FormData(event.currentTarget)
-    const fullName = formData.get('fullName') as string
     const organizationName = formData.get('organizationName') as string
+    const organizationType = formData.get('organizationType') as string
 
-    const result = await updateOnboardingMetadata({ fullName, organizationName })
+    const result = await finalizeSignup({ organizationName, organizationType })
 
     if (result.success) {
-      router.push(`/${lang}/verify-phone`)
+      router.push(`/${lang}/dashboard`)
     } else {
       setError(result.error || 'Something went wrong')
       setLoading(false)
@@ -47,8 +48,8 @@ export default function OnboardingPage({ params }: { params: Promise<{ lang: str
           </CardTitle>
           <CardDescription>
             {lang === 'hi' 
-              ? 'आप बस एक कदम दूर हैं! शुरू करने के लिए हमें अपने समूह के बारे में थोड़ा और बताएं।' 
-              : "You're almost there! Tell us a bit more about your group to get started."}
+              ? 'अंतिम चरण! हमें अपने संगठन के प्रकार और नाम के बारे में बताएं ताकि हम आपके डैशबोर्ड को अनुकूलित कर सकें।' 
+              : "Final step! Tell us your organization's name and type so we can customize your secure dashboard."}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -60,18 +61,18 @@ export default function OnboardingPage({ params }: { params: Promise<{ lang: str
             )}
             
             <div className="space-y-2">
-              <Label htmlFor="fullName">{lang === 'hi' ? 'आपका पूरा नाम' : 'Your Full Name'}</Label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
-                <Input
-                  id="fullName"
-                  name="fullName"
-                  placeholder={lang === 'hi' ? 'उदा. राहुल कुमार' : 'e.g. Rahul Kumar'}
-                  className="pl-10"
-                  required
-                  disabled={loading}
-                />
-              </div>
+              <Label htmlFor="organizationType">{lang === 'hi' ? 'संगठन का प्रकार' : 'Organization Type'}</Label>
+              <Select name="organizationType" required disabled={loading} defaultValue="ngo">
+                <SelectTrigger className="w-full h-11">
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ngo">NGO / Non-Profit</SelectItem>
+                  <SelectItem value="student_union">Student Union</SelectItem>
+                  <SelectItem value="workers_union">Workers Union</SelectItem>
+                  <SelectItem value="rwa">Resident Welfare Association</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
@@ -102,7 +103,7 @@ export default function OnboardingPage({ params }: { params: Promise<{ lang: str
                 </>
               ) : (
                 <>
-                  {lang === 'hi' ? 'फोन सत्यापन के लिए आगे बढ़ें' : 'Continue to Phone Verification'}
+                  {lang === 'hi' ? 'डैशबोर्ड पर जाएं' : 'Complete Setup & Go to Dashboard'}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </>
               )}

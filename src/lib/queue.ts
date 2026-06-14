@@ -1,6 +1,5 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import { logger } from '@/lib/logger'
-import { sendEmail, type EmailPayload } from '@/lib/email/sender'
 import type { Json } from '@/types/database'
 
 export type JobType = 'send_email' | 'process_webhook' | 'audit_log_batch' | 'export_data'
@@ -46,11 +45,7 @@ export async function processNextJob() {
     // --- JOB HANDLERS ---
     switch (job.type) {
       case 'send_email':
-        const emailPayload = job.payload as unknown as EmailPayload
-        const result = await sendEmail(emailPayload)
-        if (!result.success) {
-          throw new Error(`Email failed: ${result.error}`)
-        }
+        // Emails are now fully handled by Supabase Auth / Triggers directly
         break
       case 'process_webhook':
         // await processWebhook(job.payload)

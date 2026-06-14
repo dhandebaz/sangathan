@@ -16,6 +16,15 @@ export type OrgCapability =
   | 'volunteer_engine' 
   | 'transparency_mode' 
   | 'coalition_tools'
+  | 'campaigns'
+  | 'grievances'
+  | 'complaints'
+  | 'maintenance'
+  | 'donations'
+  | 'volunteers'
+  | 'student_ids'
+  | 'events'
+  | 'memberships'
 
 export const DEFAULT_CAPABILITIES: Record<OrgCapability, boolean> = {
   basic_governance: true,
@@ -24,7 +33,16 @@ export const DEFAULT_CAPABILITIES: Record<OrgCapability, boolean> = {
   voting_engine: true,
   volunteer_engine: true,
   transparency_mode: false,
-  coalition_tools: false
+  coalition_tools: false,
+  campaigns: false,
+  grievances: false,
+  complaints: false,
+  maintenance: false,
+  donations: false,
+  volunteers: false,
+  student_ids: false,
+  events: false,
+  memberships: false
 }
 
 // Logic to unlock capabilities based on org maturity

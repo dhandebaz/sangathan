@@ -2,7 +2,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { notFound } from 'next/navigation'
 import { PublicForm } from '@/components/forms/public-form'
 import { z } from 'zod'
-import { FormFieldSchema } from '@/actions/forms/actions'
+import { FormFieldSchema } from '@/types/forms'
 import { createSignedCookie } from '@/lib/auth/cookie'
 
 interface PageProps {

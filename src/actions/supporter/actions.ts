@@ -4,12 +4,13 @@ import { createSafeAction } from '@/lib/auth/actions'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { getRazorpayClient } from '@/lib/razorpay'
 import { logAction } from '@/lib/audit/log'
 
 // --- Schemas ---
 
-const CreateSubscriptionSchema = z.object({}) // No input needed, fixed plan
+const CreateSubscriptionSchema = z.object({
+  utr: z.string().min(6, "UTR/Reference number must be at least 6 characters")
+})
 
 const ToggleBrandingSchema = z.object({
   removeBranding: z.boolean(),
@@ -38,33 +39,16 @@ export const createSubscription = createSafeAction(
       throw new Error('Subscription is already active.')
     }
 
-    // 2. Create Razorpay Subscription
-    const planId = process.env.RAZORPAY_PLAN_ID
-    if (!planId) {
-       console.error('RAZORPAY_PLAN_ID is missing in environment variables')
-       throw new Error('Subscription configuration error. Please contact support.')
-    }
-
-    const razorpay = getRazorpayClient()
-
-    const sub = await razorpay.subscriptions.create({
-      plan_id: planId,
-      total_count: 120, // 10 years max
-      quantity: 1,
-      customer_notify: 1,
-      notes: {
-        organisation_id: context.organizationId,
-        user_id: context.user.id
-      }
-    })
+    // 2. Create Pending Manual Subscription
+    const subId = `manual_upi_${context.organizationId}_${Date.now()}`
 
     const { error } = await supabase
       .from('supporter_subscriptions')
       .insert({
         organisation_id: context.organizationId,
-        razorpay_subscription_id: sub.id,
-        razorpay_plan_id: sub.plan_id,
-        status: 'created',
+        razorpay_subscription_id: input.utr, // Storing UTR here to avoid schema migration
+        razorpay_plan_id: 'manual_upi',
+        status: 'pending',
         amount: 99.0,
       } as never)
 
@@ -75,10 +59,10 @@ export const createSubscription = createSafeAction(
       user_id: context.user.id,
       action: 'SUBSCRIPTION_INITIATED',
       resource_table: 'supporter_subscriptions',
-      resource_id: sub.id
+      resource_id: subId
     })
 
-    return { subscriptionId: sub.id, shortUrl: sub.short_url }
+    return { subscriptionId: subId, shortUrl: null }
   },
   { allowedRoles: ['admin'] }
 )

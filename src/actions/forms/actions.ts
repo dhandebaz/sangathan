@@ -9,17 +9,7 @@ import { logAction } from '@/lib/audit/log'
 import { headers } from 'next/headers'
 import { verifySignedCookie } from '@/lib/auth/cookie'
 
-// --- Types & Schemas ---
-
-const FieldTypeSchema = z.enum(['text', 'number', 'phone', 'textarea', 'dropdown'])
-
-const FormFieldSchema = z.object({
-  id: z.string(),
-  label: z.string().min(1),
-  type: FieldTypeSchema,
-  required: z.boolean(),
-  options: z.array(z.string()).optional(), // For dropdowns
-})
+import { FormFieldSchema } from '@/types/forms'
 
 const CreateFormSchema = z.object({
   title: z.string().min(3, "Title is required"),
@@ -195,7 +185,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
       return { success: false, error: 'Missing security token' }
   }
 
-  const tokenData = await verifySignedCookie(safeInput.csrfToken)
+  const tokenData = await verifySignedCookie(safeInput.csrfToken) as { formId: string; ts: number } | null
   if (!tokenData || tokenData.formId !== safeInput.formId) {
       return { success: false, error: 'Invalid security token' }
   }

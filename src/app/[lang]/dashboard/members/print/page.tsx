@@ -46,7 +46,7 @@ export default async function PrintMembersPage() {
               <td>{member.phone}</td>
               <td>{member.designation || '-'}</td>
               <td>{member.area || '-'}</td>
-              <td>{new Date(member.joining_date).toLocaleDateString()}</td>
+              <td>{member.joining_date ? new Date(member.joining_date).toLocaleDateString() : '-'}</td>
             </tr>
           ))}
         </tbody>

@@ -14,6 +14,7 @@ import { toast } from 'sonner'
 interface Partner {
   id: string
   name: string
+  slug?: string
 }
 
 export function EventForm({ orgId, partners = [] }: { orgId: string, partners?: Partner[] }) {

@@ -1,0 +1,161 @@
+'use server'
+
+import { createSafeAction } from '@/lib/auth/actions'
+import { z } from 'zod'
+import { revalidatePath } from 'next/cache'
+import { createClient } from '@/lib/supabase/server'
+import { logAction } from '@/lib/audit/log'
+
+// --- Schemas ---
+
+export const CreateTicketSchema = z.object({
+  title: z.string().min(3, "Title must be at least 3 characters"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  type: z.enum(['grievance', 'complaint', 'maintenance']),
+  priority: z.enum(['low', 'medium', 'high']),
+})
+
+export const UpdateTicketSchema = z.object({
+  ticketId: z.string().uuid("Invalid ticket ID"),
+  status: z.enum(['open', 'in_progress', 'resolved']),
+})
+
+export const DeleteTicketSchema = z.object({
+  ticketId: z.string().uuid("Invalid ticket ID"),
+})
+
+// --- Actions ---
+
+export const createTicket = createSafeAction(
+  CreateTicketSchema,
+  async (input, context) => {
+    const supabase = await createClient()
+
+    const { data, error } = await supabase
+      .from('tickets')
+      .insert({
+        organisation_id: context.organizationId,
+        created_by: context.user.id,
+        title: input.title,
+        description: input.description,
+        type: input.type,
+        priority: input.priority,
+        status: 'open',
+      })
+      .select('id')
+      .single()
+
+    if (error || !data) {
+      return { error: error?.message || 'Failed to create ticket' }
+    }
+
+    await logAction({
+      organisation_id: context.organizationId,
+      user_id: context.user.id,
+      action: 'TICKET_CREATED',
+      resource_table: 'tickets',
+      resource_id: data.id,
+      details: { title: input.title, type: input.type }
+    })
+
+    if (input.type === 'complaint') {
+      revalidatePath('/dashboard/complaints')
+    } else if (input.type === 'grievance') {
+      revalidatePath('/dashboard/grievances')
+    } else if (input.type === 'maintenance') {
+      revalidatePath('/dashboard/maintenance')
+    }
+
+    return { success: true, ticketId: data.id }
+  },
+  { actionName: 'createTicket' }
+)
+
+export const updateTicketStatus = createSafeAction(
+  UpdateTicketSchema,
+  async (input, context) => {
+    const supabase = await createClient()
+
+    const { data: ticket } = await supabase
+      .from('tickets')
+      .select('type')
+      .eq('id', input.ticketId)
+      .single()
+
+    const { error } = await supabase
+      .from('tickets')
+      .update({ status: input.status })
+      .eq('id', input.ticketId)
+      .eq('organisation_id', context.organizationId)
+
+    if (error) {
+      return { error: error.message }
+    }
+
+    if (ticket) {
+      if (ticket.type === 'complaint') {
+        revalidatePath('/dashboard/complaints')
+      } else if (ticket.type === 'grievance') {
+        revalidatePath('/dashboard/grievances')
+      } else if (ticket.type === 'maintenance') {
+        revalidatePath('/dashboard/maintenance')
+      }
+    }
+
+    await logAction({
+      organisation_id: context.organizationId,
+      user_id: context.user.id,
+      action: 'TICKET_STATUS_UPDATED',
+      resource_table: 'tickets',
+      resource_id: input.ticketId,
+      details: { status: input.status }
+    })
+
+    return { success: true }
+  },
+  { allowedRoles: ['admin', 'editor'], actionName: 'updateTicketStatus' }
+)
+
+export const deleteTicket = createSafeAction(
+  DeleteTicketSchema,
+  async (input, context) => {
+    const supabase = await createClient()
+
+    const { data: ticket } = await supabase
+      .from('tickets')
+      .select('type')
+      .eq('id', input.ticketId)
+      .single()
+
+    const { error } = await supabase
+      .from('tickets')
+      .delete()
+      .eq('id', input.ticketId)
+      .eq('organisation_id', context.organizationId)
+
+    if (error) {
+      return { error: error.message }
+    }
+
+    if (ticket) {
+      if (ticket.type === 'complaint') {
+        revalidatePath('/dashboard/complaints')
+      } else if (ticket.type === 'grievance') {
+        revalidatePath('/dashboard/grievances')
+      } else if (ticket.type === 'maintenance') {
+        revalidatePath('/dashboard/maintenance')
+      }
+    }
+
+    await logAction({
+      organisation_id: context.organizationId,
+      user_id: context.user.id,
+      action: 'TICKET_DELETED',
+      resource_table: 'tickets',
+      resource_id: input.ticketId
+    })
+
+    return { success: true }
+  },
+  { allowedRoles: ['admin', 'editor'], actionName: 'deleteTicket' }
+)

@@ -22,6 +22,7 @@ export async function hardDelete(table: string, id: string) {
 export async function restoreRecord(table: string, id: string) {
   const supabase = createServiceClient()
   const { error } = await supabase
+    .from(table)
     .update({ 
       deleted_at: null 
     })

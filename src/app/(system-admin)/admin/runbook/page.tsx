@@ -32,13 +32,13 @@ export default function RunbookPage() {
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-2">
-                <AccordionTrigger>OTP Provider Failure (Firebase)</AccordionTrigger>
+                <AccordionTrigger>Email Provider Failure (Supabase Auth)</AccordionTrigger>
                 <AccordionContent className="prose text-sm text-gray-600">
                   <ol>
-                    <li>Verify failure via <code>/api/health</code> logs or Firebase Console.</li>
-                    <li><strong>Action:</strong> Enable Degraded Mode: <code>disable_otp_signup</code>.</li>
-                    <li>Users logged in can continue working. New signups will be paused.</li>
-                    <li>Monitor Firebase status for resolution.</li>
+                    <li>Verify failure via Supabase Dashboard Auth Logs.</li>
+                    <li><strong>Action:</strong> Check custom SMTP settings if configured.</li>
+                    <li>Users logged in can continue working. New signups and magic links will be delayed.</li>
+                    <li>Monitor Supabase status for resolution.</li>
                   </ol>
                 </AccordionContent>
               </AccordionItem>
