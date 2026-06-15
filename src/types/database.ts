@@ -253,6 +253,7 @@ export interface Database {
           created_at: string
           updated_at: string
           deleted_at: string | null
+          visibility: 'public' | 'members' | 'private'
         }
         Insert: {
           id?: string
@@ -266,6 +267,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
           deleted_at?: string | null
+          visibility?: 'public' | 'members' | 'private'
         }
         Update: {
           id?: string
@@ -279,6 +281,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
           deleted_at?: string | null
+          visibility?: 'public' | 'members' | 'private'
         }
         Relationships: []
       }

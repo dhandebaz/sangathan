@@ -7,6 +7,14 @@ import { CollaborationManager } from '@/components/settings/collaboration-manage
 import { deleteOrganisation } from '@/actions/compliance/actions'
 import { Button } from '@/components/ui/button'
 
+interface OrgLink {
+  id: string
+  status: string
+  requester: { id: string; name: string; slug: string } | null
+  responder: { id: string; name: string; slug: string } | null
+  created_at?: string
+}
+
 interface PageProps {
   params: Promise<{ lang: string }>
 }
@@ -57,9 +65,11 @@ export default async function SettingsPage(props: PageProps) {
     .select('id, status, requester:requester_org_id(id, name, slug), responder:responder_org_id(id, name, slug)')
     .or(`requester_org_id.eq.${orgId},responder_org_id.eq.${orgId}`)
 
-  const partners = ((partnersData as any) || []).filter((link: any) => link.status === 'active')
+  const partnersDataTyped = partnersData as unknown as OrgLink[] | null
 
-  const activePartners = partners.map((link: any) => {
+  const partners = (partnersDataTyped || []).filter((link) => link.status === 'active')
+
+  const activePartners = partners.map((link) => {
     const other =
       link.requester?.id === orgId
         ? link.responder
@@ -67,22 +77,22 @@ export default async function SettingsPage(props: PageProps) {
     return other
   }).filter(Boolean) as { id: string; name: string; slug: string }[]
 
-  const pendingIncoming = ((partnersData as any) || [])
-    .filter((link: any) => link.status === 'pending' && link.responder?.id === orgId)
-    .map((link: any) => ({
-      id: link.id as string,
+  const pendingIncoming = (partnersDataTyped || [])
+    .filter((link) => link.status === 'pending' && link.responder?.id === orgId)
+    .map((link) => ({
+      id: link.id,
       requester: link.requester as { id: string; name: string; slug: string },
       responder: link.responder as { id: string; name: string; slug: string },
-      created_at: link.created_at as string,
+      created_at: link.created_at || '',
     }))
 
-  const pendingOutgoing = ((partnersData as any) || [])
-    .filter((link: any) => link.status === 'pending' && link.requester?.id === orgId)
-    .map((link: any) => ({
-      id: link.id as string,
+  const pendingOutgoing = (partnersDataTyped || [])
+    .filter((link) => link.status === 'pending' && link.requester?.id === orgId)
+    .map((link) => ({
+      id: link.id,
       requester: link.requester as { id: string; name: string; slug: string },
       responder: link.responder as { id: string; name: string; slug: string },
-      created_at: link.created_at as string,
+      created_at: link.created_at || '',
     }))
 
   async function handleDelete(formData: FormData) {

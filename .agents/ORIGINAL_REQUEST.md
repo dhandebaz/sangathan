@@ -30,3 +30,39 @@ Remove any existing development bypasses or hardcoded data flows in the newly bu
 - [ ] The script must programmatically insert records into `tickets` and `campaigns` tables, verifying that data persists to the actual Supabase database.
 - [ ] The script must pass successfully, proving that no fake data or bypasses are used in the core data pathways.
 - [ ] `npm run build` must complete successfully with 0 type errors after all frontend code is polished.
+
+## 2026-06-15T06:01:42Z
+
+# Teamwork Project Prompt — Draft
+
+> Status: Launched
+> Goal: Craft prompt → get user approval → delegate to teamwork_preview
+
+Implement a Dynamic Form Builder and Public Survey system that allows organizations to create custom data collection forms and securely receive submissions from the public or members.
+
+Working directory: c:\Users\hudav\Documents\trae_projects\sangathan
+
+Integrity mode: demo
+
+## Requirements
+
+### R1. Advanced Form Builder Interface
+The dashboard must include a visual form builder allowing organization admins to construct forms with complex fields (text, file uploads, date pickers) and define conditional logic.
+
+### R2. Configurable Form Access & Submissions
+The system must allow forms to be configured as either fully public or restricted to logged-in members. It must provide a secure URL for users to submit data and a dashboard view for admins to review submissions.
+
+### R3. Data Integrity & Storage
+All form definitions and submissions must persist securely to the database with appropriate Row Level Security enforcing the public vs private access controls.
+
+## Acceptance Criteria
+
+### Programmatic Verification
+- [ ] A verification script (`verify_forms.js`) must be written and executed successfully.
+- [ ] The script must programmatically create a form definition with multiple field types and conditional logic.
+- [ ] The script must test access controls by attempting to submit data to a private form without auth (which must fail) and with auth (which must succeed).
+- [ ] The script must verify that the submitted data accurately persists to the database.
+
+### Build Verification
+- [ ] `npm run build` must complete with zero errors.
+- [ ] TypeScript compiler (`npx tsc --noEmit`) must complete with zero errors.

@@ -294,7 +294,7 @@ export async function updateSession(request: NextRequest) {
    if (user && isDashboardRoute) {
      const cookieName = 'user-metadata'
      const cached = request.cookies.get(cookieName)?.value
-     const profile = cached ? await verifySignedCookie(cached) as any : null
+     const profile = cached ? await verifySignedCookie(cached) as unknown as { organisations?: { capabilities?: Record<string, boolean> } } : null
 
      if (profile && profile.organisations && profile.organisations.capabilities) {
        const caps = profile.organisations.capabilities

@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { Plus, Eye, Copy, FileText } from 'lucide-react'
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { AccessDenied } from '@/components/dashboard/access-denied'
 import { FormStatusToggle } from '@/components/forms/form-status-toggle'
 import { DashboardForm } from '@/types/dashboard'
 
@@ -9,10 +11,28 @@ export const dynamic = 'force-dynamic'
 export default async function FormsPage(props: { params: Promise<{ lang: string }> }) {
   const { lang } = await props.params
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) redirect(`/${lang}/login`)
+
+  const { data: profileData } = await supabase
+    .from('profiles')
+    .select('organisation_id, role')
+    .eq('id', user.id)
+    .single()
+
+  const profile = profileData as { organisation_id: string | null; role: string } | null
+
+  if (!profile || !profile.organisation_id || !['admin', 'editor', 'executive'].includes(profile.role)) {
+    return <AccessDenied lang={lang} />
+  }
+
+  const orgId = profile.organisation_id
 
   const { data, error } = await supabase
     .from('forms')
     .select('id, title, description, is_active, created_at, form_submissions(count)')
+    .eq('organisation_id', orgId)
     .order('created_at', { ascending: false })
   
   const forms = data as DashboardForm[] | null

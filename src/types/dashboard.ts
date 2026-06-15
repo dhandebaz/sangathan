@@ -51,6 +51,7 @@ export interface DashboardForm {
   description?: string;
   is_active: boolean;
   created_at: string;
+  visibility?: 'public' | 'members' | 'private' | null;
   form_submissions?: { count: number }[];
   fields?: DashboardFormField[];
 }

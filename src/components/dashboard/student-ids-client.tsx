@@ -85,7 +85,7 @@ export function StudentIdCard({ student, orgName }: { student: Student; orgName:
       <div className="px-4 pb-3 flex justify-between items-end text-[8px] text-gray-500 font-medium">
         <div className="flex flex-col items-center">
           <div className="w-20 border-b border-gray-300 h-5"></div>
-          <span className="mt-1">Holder's Signature</span>
+          <span className="mt-1">Holder&apos;s Signature</span>
         </div>
         <div className="flex flex-col items-center">
           <div className="w-20 border-b border-gray-300 h-5 flex items-end justify-center font-serif italic text-indigo-800 text-[9px] select-none font-bold">

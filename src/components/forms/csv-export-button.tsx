@@ -30,7 +30,7 @@ export function CsvExportButton({ data, filename = 'export.csv' }: CsvExportButt
         const itemData = (item.data as Record<string, unknown>) || {}
         const flat: Record<string, unknown> = {
           id: item.id,
-          submitted_at: item.submitted_at ? new Date(item.submitted_at as string).toISOString() : '',
+          created_at: item.created_at ? new Date(item.created_at as string).toISOString() : '',
           ...itemData // Spread the form data
         }
         Object.keys(flat).forEach(k => headers.add(k))

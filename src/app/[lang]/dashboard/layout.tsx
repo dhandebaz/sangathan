@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { LayoutDashboard, Users, Settings, LogOut, Megaphone, Calendar, CheckSquare, BarChart, Vote, Globe, AlertTriangle, Flag, Badge, HeartHandshake, Scale, AlertCircle, Wrench, Gift } from 'lucide-react'
+import { LayoutDashboard, Users, Settings, LogOut, Megaphone, Calendar, CheckSquare, BarChart, Vote, Globe, AlertTriangle, Flag, Badge, HeartHandshake, Scale, AlertCircle, Wrench, Gift, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/server'
 import { getOrgCapabilities } from '@/lib/capabilities'
@@ -143,6 +143,9 @@ export default async function DashboardLayout(props: {
             <nav className="space-y-1">
               {capabilities.advanced_analytics && isAdmin && (
                 <SidebarLink href={`/${lang}/dashboard/analytics`} icon={BarChart} label="Analytics" />
+              )}
+              {isAdmin && (
+                <SidebarLink href={`/${lang}/dashboard/forms`} icon={FileText} label="Forms" />
               )}
               {isAdmin && (
                 <SidebarLink href={`/${lang}/dashboard/settings`} icon={Settings} label="Settings" />

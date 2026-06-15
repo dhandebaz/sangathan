@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { ArrowLeft, Trash2 } from 'lucide-react'
 import Link from 'next/link'
+import { AccessDenied } from '@/components/dashboard/access-denied'
 import { CsvExportButton } from '@/components/forms/csv-export-button'
 import { FormStatusToggle } from '@/components/forms/form-status-toggle'
 import { deleteForm } from '@/actions/forms/actions'
@@ -16,11 +17,29 @@ export const dynamic = 'force-dynamic'
 export default async function FormDetailsPage({ params }: PageProps) {
   const { lang, id } = await params
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) redirect(`/${lang}/login`)
+
+  const { data: profileData } = await supabase
+    .from('profiles')
+    .select('organisation_id, role')
+    .eq('id', user.id)
+    .single()
+
+  const profile = profileData as { organisation_id: string | null; role: string } | null
+
+  if (!profile || !profile.organisation_id || !['admin', 'editor', 'executive'].includes(profile.role)) {
+    return <AccessDenied lang={lang} />
+  }
+
+  const orgId = profile.organisation_id
 
   const { data, error } = await supabase
     .from('forms')
     .select('*')
     .eq('id', id)
+    .eq('organisation_id', orgId)
     .single()
   
   const form = data as DashboardForm | null
@@ -31,9 +50,9 @@ export default async function FormDetailsPage({ params }: PageProps) {
     .from('form_submissions')
     .select('*')
     .eq('form_id', id)
-    .order('submitted_at', { ascending: false })
+    .order('created_at', { ascending: false })
   
-  const submissions = subData as { id: string; submitted_at: string; data: Record<string, unknown> }[] | null
+  const submissions = subData as { id: string; created_at: string; data: Record<string, unknown> }[] | null
 
   const fields = (form.fields || []) as DashboardFormField[]
 
@@ -118,7 +137,7 @@ export default async function FormDetailsPage({ params }: PageProps) {
                         submissions?.map(sub => (
                            <tr key={sub.id} className="hover:bg-gray-50">
                               <td className="py-3 px-4 text-gray-500 whitespace-nowrap">
-                                 {new Date(sub.submitted_at).toLocaleDateString()}
+                                 {new Date(sub.created_at).toLocaleDateString()}
                               </td>
                               {fields.slice(0, 3).map(f => (
                                  <td key={f.id} className="py-3 px-4 max-w-xs truncate">

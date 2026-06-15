@@ -1,29 +1,38 @@
-# Project: Sangathan Feature Completion and Polish
+# Project: Dynamic Form Builder and Public Survey System
 
 ## Architecture
-- **Tenant Isolation**: Row-Level Security (RLS) policies based on `public.profiles(id)` linking to `auth.users(id)` and matching `organisation_id`.
-- **Specialized Org Modules**: Gated via `org_capabilities` in the `public.organisations` table.
-  - **NGO**: Donations, Volunteers, Events
-  - **Student Union**: Campaigns, Student IDs, Events
-  - **Workers Union**: Grievances, Memberships
-  - **RWA**: Complaints, Maintenance
-- **Backend Services**: Next.js Server Actions using Supabase JS client client-side authentication.
+- **Tenant Isolation**: Forms and submissions must link to `organisation_id` or `profile_id` and enforce RLS policies based on auth user and organisation roles.
+- **Form Schema & Submissions**:
+  - `forms` table: `id`, `organisation_id`, `title`, `description`, `fields` (JSONB representing fields like type, label, choices, required, conditional logic rules), `is_active` (boolean), `visibility` (text check in `'public', 'members', 'private'`), `created_by` (uuid), `created_at` (timestamptz), `updated_at` (timestamptz), `deleted_at` (timestamptz).
+  - `form_submissions` table: `id`, `organisation_id`, `form_id`, `user_id` (uuid references auth.users), `data` (JSONB of answers), `created_at` (timestamptz).
+- **Public & Private Access controls**:
+  - Public forms: Allow anonymous reading and anonymous insertion.
+  - Member forms: Require authenticated session, check if member of the organisation.
+  - Private forms: Require organisation staff (Admins, Editors, Executives) role.
+  - Viewing submissions: Admin / Editor / Executive role of organization only.
+
+## Code Layout
+- **Dashboard Navigation Layout**: `src/app/[lang]/dashboard/layout.tsx` (links sidebar for admins)
+- **Mobile Action Button**: `src/components/mobile/contextual-fab.tsx` (exposes create forms button)
+- **Form Builder UI**: `src/app/[lang]/dashboard/forms/new/page.tsx` (visual builder interface for admins)
+- **Submissions Detail UI**: `src/app/[lang]/dashboard/forms/[id]/page.tsx` (review list of submissions, CSV export)
+- **Forms List UI**: `src/app/[lang]/dashboard/forms/page.tsx` (admin list of custom forms)
+- **Public Form Render Page**: `src/app/(public)/f/[formId]/page.tsx` (public answering page with CSRF/honeypot)
+- **Server Actions**: `src/actions/forms/actions.ts` (actions for CRUD and submissions)
+- **Database Migrations**: `supabase/migrations/`
+- **Types**: `src/types/dashboard.ts` and `src/types/database.ts`
 
 ## Milestones
 
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
-| 1 | DB Schema & Security Fixes | Add missing columns to `public.members`; fix RLS policies for `tickets` and `campaigns`; remove `as never` in member actions. | None | DONE |
-| 2 | Tickets CRUD | Implement server actions for tickets; update `TicketManager` component with a functional creation form/modal and edit capability. | M1 | DONE |
-| 3 | Campaigns CRUD | Implement server actions for campaigns; update Campaigns page with a creation form/modal and management features. | M1 | DONE |
-| 4 | UI Polish & Feature Polish | Polish frontend layouts, error handling, and loading states. Ensure Volunteers, Student IDs, and Donations page function end-to-end. | M2, M3 | DONE |
-| 5 | E2E Testing & Build Verification | Create programmatic verification script `scripts/verify_features.js`; run verification, check linters, and ensure `npm run build` compiles with 0 errors. | M4 | IN_PROGRESS |
+| 1 | DB Schema & RLS Policies | Create SQL migration to add `visibility` and `deleted_at` to `forms`, and `user_id` and rename `submitted_at` to `created_at` in `form_submissions`. Recreate RLS policies for granular access. | None | PLANNED |
+| 2 | Admin Navigation & Gating | Integrate forms into dashboard sidebar navigation (`layout.tsx`) and mobile FAB (`contextual-fab.tsx`). Implement server-side role gating on admin forms page routes. | M1 | PLANNED |
+| 3 | Access Controls & Submissions | Update builder page (`new/page.tsx`) to support choosing visibility. Update public page (`f/[formId]/page.tsx`) to enforce visibility checks on standard client. Update server action `submitFormResponse` to record authenticated submitter `user_id` and respect visibility constraints. | M2 | PLANNED |
+| 4 | Verification & Build Validation | Write programmatic E2E testing script `scripts/verify_forms.js`. Validate types via `npx tsc --noEmit` and build project using `npm run build`. | M3 | PLANNED |
 
 ## Interface Contracts
-### Tickets Actions
-- `createTicket(input: { title: string, description: string, type: 'grievance' | 'complaint' | 'maintenance', priority: 'low' | 'medium' | 'high' })`
-- `updateTicketStatus(input: { ticketId: string, status: 'open' | 'in_progress' | 'resolved' })`
-
-### Campaigns Actions
-- `createCampaign(input: { title: string, goal_description: string })`
-- `updateCampaignStatus(input: { campaignId: string, status: 'draft' | 'active' | 'completed' })`
+### Forms Actions (`src/actions/forms/actions.ts`)
+- `createForm(input: { title: string, description?: string, visibility: 'public' | 'members' | 'private', fields: FormField[] })`
+- `updateForm(input: { formId: string, title?: string, description?: string, visibility?: 'public' | 'members' | 'private', fields?: FormField[] })`
+- `submitFormResponse(input: { formId: string, data: Record<string, any>, honeypot?: string, csrfToken?: string })`

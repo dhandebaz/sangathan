@@ -15,10 +15,12 @@ const CreateFormSchema = z.object({
   title: z.string().min(3, "Title is required"),
   description: z.string().optional(),
   fields: z.array(FormFieldSchema).min(1, "At least one field is required"),
+  visibility: z.enum(['public', 'members', 'private']).default('public'),
 })
 
 const UpdateFormSchema = CreateFormSchema.partial().extend({
   formId: z.string().uuid(),
+  visibility: z.enum(['public', 'members', 'private']).optional(),
 })
 
 const ToggleFormStatusSchema = z.object({
@@ -50,6 +52,7 @@ export const createForm = createSafeAction(
         organisation_id: context.organizationId,
         title: input.title,
         description: input.description,
+        visibility: input.visibility,
         fields: input.fields,
         is_active: true,
         created_by: context.user.id,
@@ -73,7 +76,7 @@ export const createForm = createSafeAction(
     revalidatePath('/dashboard/forms')
     return { formId: form.id }
   },
-  { allowedRoles: ['admin', 'editor'] }
+  { allowedRoles: ['admin', 'editor', 'executive'] }
 )
 
 export const updateForm = createSafeAction(
@@ -86,6 +89,7 @@ export const updateForm = createSafeAction(
       .update({
         title: input.title,
         description: input.description,
+        visibility: input.visibility,
         fields: input.fields,
         updated_at: new Date().toISOString(),
       })
@@ -107,7 +111,7 @@ export const updateForm = createSafeAction(
     revalidatePath('/dashboard/forms')
     return { success: true }
   },
-  { allowedRoles: ['admin', 'editor'] }
+  { allowedRoles: ['admin', 'editor', 'executive'] }
 )
 
 export const toggleFormStatus = createSafeAction(
@@ -135,7 +139,7 @@ export const toggleFormStatus = createSafeAction(
     revalidatePath('/dashboard/forms')
     return { success: true }
   },
-  { allowedRoles: ['admin', 'editor'] }
+  { allowedRoles: ['admin', 'editor', 'executive'] }
 )
 
 export const deleteForm = createSafeAction(
@@ -162,7 +166,7 @@ export const deleteForm = createSafeAction(
     revalidatePath('/dashboard/forms')
     return { success: true }
   },
-  { allowedRoles: ['admin', 'editor'] }
+  { allowedRoles: ['admin', 'editor', 'executive'] }
 )
 
 // --- Public Submission Action ---
@@ -204,18 +208,56 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
 
   const { data, error: formError } = await supabase
     .from('forms')
-    .select('id, organisation_id, fields, is_active')
+    .select('id, organisation_id, fields, is_active, visibility, deleted_at')
     .eq('id', safeInput.formId)
     .single()
 
   const form = data
 
-  if (formError || !form) {
+  if (formError || !form || form.deleted_at !== null) {
     return { success: false, error: 'Form not found' }
   }
 
   if (!form.is_active) {
     return { success: false, error: 'Form is no longer active' }
+  }
+
+  // Auth context and Visibility check
+  const userClient = await createClient()
+  const { data: { user } } = await userClient.auth.getUser()
+
+  if (form.visibility === 'members') {
+    if (!user) {
+      return { success: false, error: 'Authentication required. Please log in to fill this form.' }
+    }
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('id, organisation_id, status, role')
+      .eq('id', user.id)
+      .maybeSingle()
+
+    if (profileError || !profile || profile.status !== 'active' || profile.organisation_id !== form.organisation_id) {
+      return { success: false, error: 'Only active members of this organization can fill this form.' }
+    }
+  } else if (form.visibility === 'private') {
+    if (!user) {
+      return { success: false, error: 'Access denied. You must be logged in.' }
+    }
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('id, organisation_id, status, role')
+      .eq('id', user.id)
+      .maybeSingle()
+
+    if (
+      profileError ||
+      !profile ||
+      profile.status !== 'active' ||
+      profile.organisation_id !== form.organisation_id ||
+      !['admin', 'editor', 'executive'].includes(profile.role)
+    ) {
+      return { success: false, error: 'Access denied. Only staff can submit responses to this form.' }
+    }
   }
 
   // 3. Dynamic Validation
@@ -274,7 +316,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
     .insert({
       form_id: form.id,
       organisation_id: form.organisation_id,
-      user_id: null,
+      user_id: user?.id || null,
       data: safeInput.data,
     })
 

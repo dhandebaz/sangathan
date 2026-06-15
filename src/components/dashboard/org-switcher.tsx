@@ -31,7 +31,7 @@ export function OrgSwitcher({ currentOrgId, organisations }: OrgSwitcherProps) {
       // However, we explicitly clear the cookie via RPC or Server Action to be safe.
       // Here we use the RPC which sets the cookie on server side.
       
-      const { error } = await (supabase as any).rpc('set_selected_organisation', {
+      const { error } = await (supabase as unknown as { rpc: (name: string, args: Record<string, unknown>) => Promise<{ error: { message: string } | null }> }).rpc('set_selected_organisation', {
         p_organisation_id: orgId,
       })
 

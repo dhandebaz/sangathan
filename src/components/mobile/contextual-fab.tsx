@@ -50,6 +50,12 @@ export function ContextualFAB({ lang, role, capabilities }: ContextualFABProps) 
       icon: Megaphone,
       label: 'Post'
     }
+  } else if (pathname.endsWith('/dashboard/forms') && isAdmin) {
+    action = {
+      href: `/${lang}/dashboard/forms/new`,
+      icon: Plus,
+      label: 'Create Form'
+    }
   }
 
   if (!action) return null
