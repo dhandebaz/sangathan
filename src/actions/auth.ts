@@ -87,7 +87,7 @@ export async function login(input: z.infer<typeof LoginSchema>) {
 
       const org = orgData as Organisation | null
 
-      if (org && org.is_suspended) {
+      if (org && org.status === 'suspended') {
         await supabase.auth.signOut()
         return { success: false, error: 'Your organisation has been suspended. Please contact support.' }
       }

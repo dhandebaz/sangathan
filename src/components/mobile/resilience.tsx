@@ -34,14 +34,29 @@ export function useResilientMembers(orgId: string) {
       try {
         const { data, error } = await supabase
           .from('members')
-          .select('id, full_name, phone, status, role')
+          .select(`
+            id,
+            status,
+            role,
+            profiles (
+              full_name,
+              phone
+            )
+          `)
           .eq('organisation_id', orgId)
           .limit(100)
 
         if (error) throw error
 
         if (data) {
-          setMembers(data)
+          const mappedData = data.map((m: any) => ({
+            id: m.id,
+            status: m.status,
+            role: m.role,
+            full_name: m.profiles?.full_name || 'Unknown',
+            phone: m.profiles?.phone || null
+          }))
+          setMembers(mappedData)
           localStorage.setItem(
             cacheKey,
             JSON.stringify({

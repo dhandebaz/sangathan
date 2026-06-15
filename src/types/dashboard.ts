@@ -168,9 +168,9 @@ export interface Donation {
   donor_name: string;
   date: string;
   payment_method: string;
-  upi_reference?: string;
-  notes?: string;
-  verified_by?: string | null;
+  upi_reference: string | null;
+  notes: string | null;
+  verified_by: string | null;
   organisation_id: string;
 }
 
