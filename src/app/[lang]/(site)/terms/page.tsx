@@ -85,15 +85,15 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold text-black mb-3">8. Supporter Subscription &amp; Payments</h2>
+          <h2 className="text-xl font-semibold text-black mb-3">8. Voluntary Contributions</h2>
           <p>
-            <strong>Optional Subscription:</strong> The core functionality of Sangathan is free. Users may optionally purchase a &quot;Supporter Subscription&quot; to support the Platform&apos;s maintenance.
+            <strong>Optional Support:</strong> The core functionality of Sangathan is completely free. Users may optionally make a "Voluntary Contribution" to support the Platform&apos;s infrastructure maintenance costs.
           </p>
           <p>
-            <strong>Payment Processing:</strong> Supporter Subscriptions are activated by submitting a UPI payment UTR/reference number through the Platform. Sangathan does not store your credit card or banking information.
+            <strong>Payment Processing:</strong> Voluntary contributions are made via direct UPI transfers. Sangathan does not store your banking information, and there are no recurring subscriptions on the Platform.
           </p>
           <p>
-            <strong>Refunds:</strong> Subscriptions are non-refundable except where required by law or explicitly stated in our Refund Policy.
+            <strong>Refunds:</strong> All voluntary contributions are strictly non-refundable once transferred, as they go directly towards paying for hard infrastructure costs.
           </p>
         </section>
 

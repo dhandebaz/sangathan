@@ -32,8 +32,8 @@ export default async function FAQPage({ params }: { params: Promise<{ lang: stri
            <AccordionTrigger className="text-lg font-medium">{isHindi ? 'क्या संगठन पूरी तरह से मुफ़्त है?' : 'Is Sangathan completely free?'}</AccordionTrigger>
            <AccordionContent className="text-gray-600 leading-relaxed">
               {isHindi
-                ? 'हाँ। मुख्य बुनियादी ढांचा- सदस्यों, फॉर्म, बैठकों का प्रबंधन और दान लॉगिंग- सभी संगठनों के लिए मुफ़्त है। हम प्रति उपयोगकर्ता शुल्क नहीं लेते हैं। हम उन संगठनों से वैकल्पिक "समर्थक सदस्यता" के माध्यम से प्लेटफ़ॉर्म को बनाए रखते हैं जो योगदान दे सकते हैं।'
-                : 'Yes. The core infrastructure—managing members, forms, meetings, and logging donations—is free for all organisations. We do not charge per user. We sustain the platform through optional "Supporter Subscriptions" from organisations that can afford to contribute.'}
+                ? 'हाँ। मुख्य बुनियादी ढांचा- सदस्यों, फॉर्म, बैठकों का प्रबंधन और दान लॉगिंग- सभी संगठनों के लिए मुफ़्त है। हम प्रति उपयोगकर्ता शुल्क नहीं लेते हैं। हम उन संगठनों के स्वैच्छिक दान के माध्यम से प्लेटफ़ॉर्म को बनाए रखते हैं जो बुनियादी ढांचे की लागत का समर्थन कर सकते हैं।'
+                : 'Yes. The core infrastructure—managing members, forms, meetings, and logging donations—is completely free for all organisations. We do not charge per user. We sustain the platform entirely through voluntary donations from organisations that wish to support our infrastructure costs.'}
            </AccordionContent>
         </AccordionItem>
 

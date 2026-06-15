@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { LayoutDashboard, Users, Settings, LogOut, Megaphone, Calendar, CheckSquare, BarChart, Vote, Globe, AlertTriangle, Flag, Badge, HeartHandshake, Scale, AlertCircle, Wrench, Gift, FileText } from 'lucide-react'
+import { LayoutDashboard, Users, Settings, LogOut, Megaphone, Calendar, CheckSquare, BarChart, Vote, Globe, AlertTriangle, Flag, Badge, HeartHandshake, Scale, AlertCircle, Wrench, Gift, FileText, Heart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/server'
 import { getOrgCapabilities } from '@/lib/capabilities'
@@ -145,7 +145,23 @@ export default async function DashboardLayout(props: {
           </div>
         </div>
 
-        <div className="border-t border-slate-100 bg-slate-50/70 p-4">
+        <div className="mt-4 px-4 pb-4">
+          <Link href={`/${lang}/dashboard/support`} className="group relative block overflow-hidden rounded-xl bg-slate-900 p-4 text-left shadow-lg transition-transform hover:-translate-y-1 hover:shadow-xl">
+            <div className="absolute inset-0 bg-gradient-to-br from-brand-600/30 to-purple-600/30 opacity-50 transition-opacity group-hover:opacity-100" />
+            <div className="absolute -right-4 -top-4 h-16 w-16 rounded-full bg-brand-500/20 blur-xl" />
+            <div className="relative z-10 flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/10 backdrop-blur-sm">
+                <Heart className="h-5 w-5 text-brand-400 fill-brand-400/20" />
+              </div>
+              <div>
+                <h4 className="font-bold text-white text-sm">Support Us</h4>
+                <p className="text-xs text-slate-300 mt-0.5 line-clamp-1">Keep Sangathan online</p>
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        <div className="border-t border-slate-100 bg-slate-50/70 p-4 mt-auto">
           <Button variant="ghost" className="w-full justify-start gap-3 text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors">
             <LogOut className="w-4 h-4" />
             <span className="font-medium">Sign Out</span>

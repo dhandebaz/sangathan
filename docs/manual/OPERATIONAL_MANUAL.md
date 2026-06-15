@@ -130,117 +130,235 @@ The Donations module is a **Ledger**, not a payment processor. It tracks offline
 
 ---
 
-## Section 6: Supporter Plan
+## Section 6: Membership Requests
 
-### 6.1 Overview
-The Supporter Plan is an optional, voluntary subscription (₹99/month) to support the platform's infrastructure costs. It does **not** unlock core governance features, which remain free.
+### 6.1 Reviewing Requests
+1.  Navigate to **Membership Requests**.
+2.  Review incoming applications for membership from the public portal.
+3.  Click **Approve** to officially induct them into the registry, or **Reject** if the application is invalid.
 
-### 6.2 Benefits
-*   **Supporter Badge:** Displayed on your organisation profile.
-*   **Branding Removal:** Option to hide "Powered by Sangathan" on public forms.
-
-### 6.3 Management
-*   **Subscribe:** Go to **Settings > Billing** and checkout via Razorpay.
-*   **Cancel:** You may cancel at any time. Benefits persist until the end of the billing cycle.
-*   **Refunds:** A 7-day money-back guarantee applies to the first month's payment.
+### 6.2 Application Forms
+*   Organisations can customize the questions asked during the public membership request flow by updating their onboarding preferences.
 
 ---
 
-## Section 7: Security & Governance
+## Section 7: Announcements & Communication
 
-### 7.1 Data Isolation
+### 7.1 Creating Announcements
+1.  Navigate to **Announcements > New**.
+2.  Enter the message content, priority level, and target audience (e.g., All Members, Specific Roles).
+3.  Announcements are pushed securely to the member dashboards.
+
+### 7.2 Read Receipts
+*   Admins can track which members have read critical announcements to ensure governance compliance and awareness.
+
+---
+
+## Section 8: Events & Campaigns
+
+### 8.1 Scheduling Events
+1.  Navigate to **Events > New Event**.
+2.  Define the event date, location, and maximum capacity.
+3.  Members can RSVP through their portal.
+
+### 8.2 Managing Campaigns
+1.  Navigate to **Campaigns**.
+2.  Create structured initiatives (e.g., Blood Donation Drive, Rally).
+3.  Track campaign progress, assigned budgets, and participant metrics.
+
+---
+
+## Section 9: Tasks & Volunteers
+
+### 9.1 Task Assignments
+1.  Navigate to **Tasks > New Task**.
+2.  Assign specific operational duties to members with deadlines and priority levels.
+3.  Track completion status in the Kanban or List view.
+
+### 9.2 Managing Volunteers
+*   The **Volunteers** module allows you to track members who have opted-in for active fieldwork.
+*   You can bulk-assign tasks to volunteer groups based on their availability and skills.
+
+---
+
+## Section 10: Appeals & Polls
+
+### 10.1 Handling Appeals
+1.  Navigate to **Appeals**.
+2.  Review formal requests or objections submitted by members (e.g., disciplinary reviews).
+3.  Update the status to "Under Review", "Resolved", or "Rejected" with official remarks.
+
+### 10.2 Democratic Polls
+1.  Navigate to **Polls > Create Poll**.
+2.  Define the question and options. Set a strict voting window.
+3.  Members vote securely. Results are immutable and auditable.
+
+---
+
+## Section 11: Grievances & Complaints
+
+### 11.1 Internal Grievances
+*   Members can file internal grievances against organisation processes or other members.
+*   Admins manage these securely in the **Grievances** module, maintaining strict confidentiality.
+
+### 11.2 Public Complaints (RWAs/Unions)
+*   The **Complaints** module allows tracking of external or infrastructure issues (e.g., broken streetlights, campus issues).
+*   Assign tickets to specific operators and track resolution SLAs.
+
+---
+
+## Section 12: Maintenance
+
+### 12.1 Facility Management
+1.  Navigate to **Maintenance**.
+2.  Log maintenance requests for physical assets or infrastructure.
+3.  Track vendor assignments, costs, and resolution dates.
+*   *Note:* Highly recommended for Resident Welfare Associations (RWAs) and Campus Unions.
+
+---
+
+## Section 13: Student IDs
+
+### 13.1 Generating Identity Cards
+1.  Navigate to **Student IDs**.
+2.  Select members and generate official digital ID cards.
+3.  The system assigns a unique verification QR code to each ID to prevent forgery.
+
+### 13.2 Verification
+*   Anyone scanning the QR code will be directed to a public Sangathan verification page confirming the ID's validity in real-time.
+
+---
+
+## Section 14: Networks & Coalitions
+
+### 14.1 Federated Governance
+1.  Navigate to **Networks**.
+2.  Organisations can form coalitions or umbrella networks with other Sangathan organisations.
+3.  Share announcements, combined campaigns, and member metrics securely without violating data isolation.
+
+---
+
+## Section 15: Analytics & Audit Logs
+
+### 15.1 Real-time Analytics
+*   Navigate to **Analytics** to view automated visual reports on membership growth, donation trends, and engagement metrics.
+
+### 15.2 Immutable Audit Trail
+*   Navigate to **Audit**.
+*   Every critical action (edits, deletions, role changes) is logged permanently with Actor ID, timestamp, and IP address.
+*   These logs cannot be deleted, ensuring absolute platform integrity.
+
+---
+
+## Section 16: Supporter Plan
+
+### 1. The True Cost of Independence
+Sangathan provides advanced digital infrastructure (hosting, database, anonymity tools) completely free and ad-free. This independence costs real money to maintain:
+* **Hosting & Servers ($100/mo):** Ensuring high availability and no downtime.
+* **Database & Backend ($70/mo):** Securely storing all organisational data.
+* **Anonymity & Security ($150/mo):** Keeping grievance and voting systems uncompromised.
+
+### 2. Supporting the Movement
+Instead of mandatory subscriptions or hiding features behind paywalls, we rely entirely on voluntary contributions from organisations that find value in the platform.
+* 100% of your contributions go directly toward infrastructure bills.
+* Support is entirely optional and never restricts platform capabilities.
+
+### 3. How to Contribute
+You can support Sangathan at any time via the **Support Us** card in your dashboard sidebar.
+* **Accepted Method:** Any UPI app (PhonePe, GPay, Paytm).
+* **UPI IDs:** `areynetaji@ybl`, `areynetaji@ibl`, `areynetaji@axl`.
+* **Account Name:** Sheikh Arsalan Ullah Chishti.
+
+*We appreciate every contribution that helps us keep Sangathan free for all organisations.*
+
+---
+
+## Section 17: Security & Governance
+
+### 17.1 Data Isolation
 Sangathan uses **Row-Level Security (RLS)**. This means the database engine physically prevents any user from accessing data belonging to another organisation ID.
 
-### 7.2 Audit Logging
-Every critical action is logged in the **Audit Trail**.
-*   **Who:** The user (Actor ID).
-*   **What:** The action (e.g., "Deleted Member").
-*   **When:** Exact timestamp.
-*   **IP Address:** Origin of the request.
-*   *Note:* Audit logs cannot be deleted by Admins.
-
-### 7.3 Compliance
+### 17.2 Compliance & Standards
 *   **Soft Deletion:** Deleted data remains in a recovery bin for 14 days before permanent erasure.
 *   **Legal Hold:** In compliance with Indian law, data may be frozen (prevented from deletion) if a valid legal order is received.
 
 ---
 
-## Section 8: Admin Responsibilities
+## Section 18: Admin Responsibilities
 
-### 8.1 Accountability
+### 18.1 Accountability
 As an Admin, you are the legal custodian of your organisation's data. You are responsible for:
 *   Ensuring data accuracy.
 *   Complying with the **Acceptable Use Policy**.
 *   Protecting member privacy.
 
-### 8.2 Security Practices
+### 18.2 Security Practices
 *   Use a strong, unique password.
 *   Never share your login credentials.
 *   Revoke access immediately for editors who leave the organisation.
 
 ---
 
-## Section 9: System Admin Documentation
+## Section 19: System Admin Documentation
 
-### 9.1 Role Definition
+### 19.1 Role Definition
 System Admins are platform operators responsible for infrastructure health and legal compliance. They do **not** participate in the internal governance of user organisations.
 
-### 9.2 Suspension Process
+### 19.2 Suspension Process
 1.  Identify violation (e.g., fraud, hate speech).
 2.  Navigate to **SysAdmin > Organisations**.
 3.  Toggle **Suspend Status**.
 4.  Enter the reason for suspension (visible to the organisation admin).
 
-### 9.3 Incident Review
-System Admins monitor:
-*   **Rate Limits:** Spikes in traffic indicating attacks.
-*   **Error Logs:** System-wide failures.
-*   **Abuse Reports:** Flags raised by users.
-
 ---
 
-## Section 10: Data Lifecycle
+## Section 20: Data Lifecycle
 
-### 10.1 Lifecycle Stages
+### 20.1 Lifecycle Stages
 1.  **Creation:** Data enters the system via Admin input or Form submission.
 2.  **Active:** Data is encrypted and stored in PostgreSQL.
 3.  **Modification:** Updates are tracked in Audit Logs.
 4.  **Soft Delete:** Data is marked `deleted_at` but remains recoverable for 14 days.
 5.  **Hard Delete:** Data is permanently wiped from the database.
 
-### 10.2 Retention Policy
+### 20.2 Retention Policy
 *   Active accounts: Indefinite retention.
 *   Cancelled accounts: Data preserved for 30 days, then soft-deleted.
 *   Legal Hold: Data retained until the hold is lifted.
 
 ---
 
-## Section 11: Troubleshooting
+## Section 21: Troubleshooting
 
-### 11.1 Common Issues
+### 21.1 Login & Access Issues
+*   **"Unauthorized Access":** Ensure you are logging in with the exact email address used for signup. If you are a member, verify the admin has granted you access.
+*   **Missing Organisation:** You may have been removed by an admin, or the organisation was deleted. Contact your organization's owner.
+
+### 21.2 Data & Operational Errors
 *   **Duplicate Member Error:** The member already exists in your registry. Search for the member and edit their record instead of adding a new one.
 *   **Export Failed:** Large datasets may take time. Check your email for a download link if the browser download times out.
+*   **Form Submissions Not Appearing:** Verify that your form's status is set to "Published" and not "Draft".
 
-### 11.2 Degraded Mode
+### 21.3 Degraded Mode
 If the dashboard shows **"Degraded Mode"**, it means a non-essential service (e.g., Email) is experiencing downtime.
 *   **Impact:** New signups may be paused.
 *   **Action:** Core features (Members, Ledger) remain operational. Continue working as normal.
 
 ---
 
-## Section 12: Frequently Asked Operational Questions
+## Section 22: Frequently Asked Operational Questions
 
-### 12.1 Can multiple admins exist?
+### 22.1 Can multiple admins exist?
 Yes. The creator is the **Owner**, but they can promote other members to **Admin** status.
 
-### 12.2 What happens if an admin leaves?
+### 22.2 What happens if an admin leaves?
 The Owner should transfer ownership to a new Admin before leaving. If the Owner is unreachable, contact Support with proof of authorization to recover the account.
 
-### 12.3 Can we change our organisation name?
+### 22.3 Can we change our organisation name?
 Yes. Go to **Settings > General**. Note that changing your **Slug** will break existing form links.
 
-### 12.4 How do we handle sensitive data?
+### 22.4 How do we handle sensitive data?
 Sangathan is secure, but we recommend **not** storing highly sensitive personal identifiers (like Aadhaar or PAN numbers) unless absolutely necessary. Use the "Notes" field with caution.
 
-### 12.5 What if the platform shuts down?
+### 22.5 What if the platform shuts down?
 We are committed to a **90-day shutdown notice**. You will have ample time to export all your data (CSV/JSON) and migrate to another system.
