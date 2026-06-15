@@ -1532,7 +1532,6 @@ export interface Database {
           p_full_name: string
           p_email: string
           p_phone: string | null
-          p_firebase_uid: string | null
         }
         Returns: Json
       }

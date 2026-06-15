@@ -48,7 +48,7 @@ export default function PrivacyPage() {
           <p>We use your information strictly for the following purposes:</p>
           <ul className="list-disc pl-5 space-y-2">
             <li>To provide, maintain, and improve the Platform&apos;s infrastructure.</li>
-            <li>To verify the identity of Organisation Admins (via phone OTP).</li>
+            <li>To verify the identity of Organisation Admins.</li>
             <li>To enforce our Terms of Service and prevent abuse (spam, fraud, illegal activities).</li>
             <li>To comply with legal obligations and law enforcement requests under Indian law.</li>
             <li>To communicate with you regarding security updates, technical issues, or policy changes.</li>
@@ -75,9 +75,7 @@ export default function PrivacyPage() {
           <h2 className="text-xl font-semibold text-black mb-3">6. Data Sharing & Third Parties</h2>
           <p>We do not sell your data. We share data only with the following infrastructure sub-processors required to operate the Platform:</p>
           <ul className="list-disc pl-5 space-y-2">
-            <li><strong>Supabase:</strong> Database hosting and authentication services.</li>
-            <li><strong>Firebase (Google):</strong> SMS delivery and phone number verification.</li>
-            <li><strong>Razorpay:</strong> Processing optional &quot;Supporter Subscription&quot; payments. (We do not store card details).</li>
+            <li><strong>Supabase:</strong> Database hosting, authentication services, and SMS delivery for phone number verification.</li>
             <li><strong>Vercel:</strong> Web hosting and edge network services.</li>
           </ul>
           <p className="mt-2">

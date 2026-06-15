@@ -90,7 +90,7 @@ export default function TermsPage() {
             <strong>Optional Subscription:</strong> The core functionality of Sangathan is free. Users may optionally purchase a &quot;Supporter Subscription&quot; to support the Platform&apos;s maintenance.
           </p>
           <p>
-            <strong>Payment Processing:</strong> All subscription payments are processed by third-party payment gateways (e.g., Razorpay). Sangathan does not store your credit card or banking information. By subscribing, you agree to the terms and conditions of the respective payment processor.
+            <strong>Payment Processing:</strong> Supporter Subscriptions are activated by submitting a UPI payment UTR/reference number through the Platform. Sangathan does not store your credit card or banking information.
           </p>
           <p>
             <strong>Refunds:</strong> Subscriptions are non-refundable except where required by law or explicitly stated in our Refund Policy.

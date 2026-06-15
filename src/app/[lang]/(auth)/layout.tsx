@@ -14,7 +14,7 @@ export default async function AuthLayout({
         <div>
           <Link href="/" className="inline-block" aria-label="Sangathan Home">
             <Image
-              src="/logo/blacksangathanlogo.png"
+              src="/logo/logo.png"
               alt="Sangathan"
               width={140}
               height={40}
@@ -72,7 +72,7 @@ export default async function AuthLayout({
            <div className="lg:hidden text-center mb-8">
               <Link href="/" className="inline-block mb-2" aria-label="Sangathan Home">
                 <Image
-                  src="/logo/blacksangathanlogo.png"
+                  src="/logo/logo.png"
                   alt="Sangathan"
                   width={140}
                   height={40}

@@ -19,11 +19,7 @@ To start using Sangathan, you must create an organisation workspace.
 4.  Enter your **Organisation Name** and **Slug** (a unique URL identifier).
 
 ### 1.4 Admin Verification
-To prevent abuse and ensure accountability, all Organisation Administrators must verify their identity.
-1.  After email verification, you will be prompted to enter your **Mobile Number**.
-2.  An OTP (One-Time Password) will be sent via SMS.
-3.  Enter the OTP to complete verification.
-*   *Note:* This number is stored securely and used only for account recovery and security verification. It is never sold or used for marketing.
+To prevent abuse and ensure accountability, all Organisation Administrators must verify their identity through email verification. Once your email is verified, you can proceed to set up your organisation.
 
 ### 1.5 First Login & Dashboard
 Upon logging in, you will see the **Admin Dashboard**. This is your command center.
@@ -179,7 +175,7 @@ As an Admin, you are the legal custodian of your organisation's data. You are re
 
 ### 8.2 Security Practices
 *   Use a strong, unique password.
-*   Never share your OTP or login credentials.
+*   Never share your login credentials.
 *   Revoke access immediately for editors who leave the organisation.
 
 ---
@@ -222,12 +218,11 @@ System Admins monitor:
 ## Section 11: Troubleshooting
 
 ### 11.1 Common Issues
-*   **OTP Not Received:** Check network signal. Wait 60 seconds and retry. If persistent, contact support.
-*   **Duplicate Member Error:** The phone number already exists in your registry. Search for the member and edit their record instead of adding a new one.
+*   **Duplicate Member Error:** The member already exists in your registry. Search for the member and edit their record instead of adding a new one.
 *   **Export Failed:** Large datasets may take time. Check your email for a download link if the browser download times out.
 
 ### 11.2 Degraded Mode
-If the dashboard shows **"Degraded Mode"**, it means a non-essential service (e.g., Email or SMS) is experiencing downtime.
+If the dashboard shows **"Degraded Mode"**, it means a non-essential service (e.g., Email) is experiencing downtime.
 *   **Impact:** New signups may be paused.
 *   **Action:** Core features (Members, Ledger) remain operational. Continue working as normal.
 

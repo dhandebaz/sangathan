@@ -41,7 +41,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
             >
               <span className="sr-only">Sangathan</span>
               <Image
-                src="/logo/blacksangathanlogo.png"
+                src="/logo/logo.png"
                 alt=""
                 width={128}
                 height={32}

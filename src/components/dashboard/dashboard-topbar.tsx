@@ -76,7 +76,7 @@ export function DashboardTopBar({ lang, userEmail, role, orgName }: DashboardTop
           aria-label="Sangathan Dashboard"
         >
           <Image
-            src="/logo/blacksangathanlogo.png"
+            src="/logo/logo.png"
             alt=""
             width={128}
             height={32}

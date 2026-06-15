@@ -47,10 +47,10 @@ export default function RefundPolicyPage() {
             <strong>Billing Cycle:</strong> The subscription is billed on a monthly basis, starting from the date of activation.
           </p>
           <p>
-            <strong>Payment Processor:</strong> All payments are processed securely via <strong>Razorpay</strong>. Sangathan does not store your credit card, debit card, or banking information.
+            <strong>Payment Processor:</strong> All subscription payments are processed via manual UPI transfers. Sangathan does not store your credit card, debit card, or banking information.
           </p>
           <p>
-            <strong>Third-Party Terms:</strong> By making a payment, you are also subject to Razorpay&apos;s terms of service and privacy policy. We are not responsible for payment failures caused by the banking network or payment gateway.
+            <strong>Payment Confirmation:</strong> After making a UPI payment, you submit the UTR/reference number through the platform to activate your subscription. We are not responsible for payment failures or delays in UPI settlement.
           </p>
         </section>
 
@@ -88,9 +88,9 @@ export default function RefundPolicyPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold text-black mb-3">7. Failed Payments</h2>
+          <h2 className="text-xl font-semibold text-black mb-3">7. Subscription Expiry</h2>
           <p>
-            If a scheduled payment fails (e.g., due to card expiry or insufficient funds), Razorpay may attempt to retry the transaction. If payment cannot be collected, your subscription will be automatically paused or cancelled, and Supporter benefits will be revoked.
+            Supporter Subscriptions are active for one month from the date of activation. To maintain continuous support, you need to submit a new UPI payment and UTR number each month. If you do not renew, your subscription will expire at the end of the billing period, and Supporter benefits will be revoked.
           </p>
         </section>
 

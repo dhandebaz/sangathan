@@ -106,12 +106,12 @@ create table public.donations (
   constraint unique_upi_per_org unique (organisation_id, upi_reference)
 );
 
--- 9. Supporter Subscriptions Table (Razorpay)
+-- 9. Supporter Subscriptions Table
 create table public.supporter_subscriptions (
   id uuid primary key default gen_random_uuid(),
   organisation_id uuid not null references public.organisations(id) on delete cascade,
-  razorpay_subscription_id text unique not null,
-  razorpay_plan_id text not null,
+  subscription_id text unique not null,
+  plan_id text not null,
   status text not null,
   amount numeric(10, 2) not null,
   current_period_start timestamptz,
