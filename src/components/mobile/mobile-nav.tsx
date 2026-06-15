@@ -49,8 +49,8 @@ export function MobileNav({ lang }: MobileNavProps) {
   const visibleItems = navItems.filter(item => item.show).slice(0, 5)
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 pb-safe md:hidden shadow-[0_-1px_3px_rgba(0,0,0,0.05)]">
-      <div className="flex justify-around items-center h-16">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_16px_rgba(15,23,42,0.06)] md:hidden" aria-label="Dashboard navigation">
+      <div className="flex h-16 items-center justify-around">
         {visibleItems.map((item) => {
           const isActive = pathname === item.href
           return (
@@ -58,9 +58,10 @@ export function MobileNav({ lang }: MobileNavProps) {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors",
+                "flex h-full min-w-0 flex-1 flex-col items-center justify-center gap-1 px-1 transition-colors",
                 isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
               )}
+              aria-current={isActive ? 'page' : undefined}
             >
               <item.icon className={cn("w-5 h-5", isActive && "fill-current/20")} />
               <span className="text-[10px] font-medium">{item.label}</span>

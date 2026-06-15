@@ -4,45 +4,12 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Menu, X, LayoutDashboard } from 'lucide-react'
-import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import { User } from '@supabase/supabase-js'
-import { ThemeToggle } from '@/components/site/theme-toggle'
+import { useState } from 'react'
 
-export function Navbar({ lang }: { lang: string }) {
+export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticated: boolean }) {
   const [isOpen, setIsOpen] = useState(false)
-  const [user, setUser] = useState<User | null>(null)
   const pathname = usePathname()
-  const supabase = createClient()
   const isHindi = lang === 'hi'
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const { data, error } = await supabase.auth.getUser()
-        if (error) {
-           console.warn('Auth check failed:', error.message)
-           return
-        }
-        if (data?.user) {
-          setUser(data.user)
-        }
-      } catch (err) {
-        console.error('Navbar Auth Exception:', err)
-      }
-    }
-    getUser()
-  }, [supabase.auth])
-
-  // Close mobile menu on route change
-  useEffect(() => {
-    // Use a microtask to avoid synchronous setState in effect
-    Promise.resolve().then(() => {
-      if (isOpen) {
-        setIsOpen(false)
-      }
-    })
-  }, [pathname, isOpen])
 
   const getPathForLang = (targetLang: string) => {
     if (!pathname) return `/${targetLang}`
@@ -61,11 +28,11 @@ export function Navbar({ lang }: { lang: string }) {
 
   return (
     <nav 
-      className="fixed top-0 w-full z-50 bg-[var(--bg-primary)]/90 backdrop-blur-md border-b border-[var(--border-subtle)] transition-all duration-300"
-      aria-label="Main Navigation"
+      className="fixed top-0 z-50 w-full border-b border-[var(--border-subtle)] bg-white"
+      aria-label="Main navigation"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
+          <div className="flex h-16 items-center justify-between">
            <div className="flex-shrink-0 flex items-center">
             <Link 
               href={`/${lang}`} 
@@ -74,20 +41,11 @@ export function Navbar({ lang }: { lang: string }) {
             >
               <span className="sr-only">Sangathan</span>
               <Image
-                src="/logo/whitesangathanlogo.png"
-                alt=""
-                width={128}
-                height={32}
-                className="h-8 w-auto logo-mark-light"
-                aria-hidden="true"
-                priority
-              />
-              <Image
                 src="/logo/blacksangathanlogo.png"
                 alt=""
                 width={128}
                 height={32}
-                className="h-8 w-auto logo-mark-dark"
+                className="h-8 w-auto"
                 aria-hidden="true"
                 priority
               />
@@ -102,7 +60,7 @@ export function Navbar({ lang }: { lang: string }) {
                   href={link.href} 
                   className={`text-sm font-medium transition-colors duration-200 ${
                     pathname === link.href 
-                      ? 'text-[var(--accent)]' 
+                      ? 'text-[var(--brand-accent)]' 
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                   }`}
                 >
@@ -111,7 +69,7 @@ export function Navbar({ lang }: { lang: string }) {
               ))}
            </div>
 
-           {/* 3. Right: Auth & Theme (Desktop) */}
+           {/* 3. Right: Language and account actions */}
            <div className="hidden md:flex items-center gap-4">
               <div className="flex items-center gap-2 border-r border-[var(--border-subtle)] pr-4">
                  <Link href={getPathForLang('en')} className={`text-sm font-bold ${lang === 'en' ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}>EN</Link>
@@ -119,12 +77,10 @@ export function Navbar({ lang }: { lang: string }) {
                  <Link href={getPathForLang('hi')} className={`text-sm font-bold ${lang === 'hi' ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}>HI</Link>
               </div>
 
-              <ThemeToggle />
-
-              {user ? (
+              {isAuthenticated ? (
                  <Link 
                     href={`/${lang}/dashboard`}
-                    className="bg-[var(--surface)] text-[var(--text-primary)] px-4 py-2 rounded-lg font-medium text-sm border border-[var(--border-subtle)] hover:bg-[var(--bg-secondary)] flex items-center gap-2 transition-all"
+                    className="flex min-h-11 items-center gap-2 rounded-lg border border-[var(--border-subtle)] bg-white px-4 py-2 text-sm font-semibold text-[var(--text-primary)] transition-colors hover:bg-[var(--bg-secondary)]"
                  >
                     <LayoutDashboard size={16} />
                     {isHindi ? 'डैशबोर्ड' : 'Dashboard'}
@@ -132,14 +88,14 @@ export function Navbar({ lang }: { lang: string }) {
               ) : (
                  <div className="flex items-center gap-3">
                     <Link 
-                       href="/login" 
-                       className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                       href={`/${lang}/login`}
+                       className="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
                     >
                        {isHindi ? 'लॉग इन' : 'Login'}
                     </Link>
                     <Link 
-                       href="/signup" 
-                       className="bg-[var(--text-primary)] text-[var(--bg-primary)] px-4 py-2 rounded-lg font-medium text-sm hover:opacity-90 transition-all shadow-sm"
+                       href={`/${lang}/signup`}
+                       className="inline-flex min-h-11 items-center rounded-lg bg-[var(--brand-accent)] px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[var(--brand-accent-hover)]"
                     >
                        {isHindi ? 'साइन अप' : 'Sign Up'}
                     </Link>
@@ -148,12 +104,13 @@ export function Navbar({ lang }: { lang: string }) {
            </div>
 
            {/* Mobile menu button */}
-           <div className="flex items-center gap-4 md:hidden">
-              <ThemeToggle />
+           <div className="flex items-center md:hidden">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-[var(--text-primary)] p-2 rounded-md hover:bg-[var(--bg-secondary)]"
-                aria-label="Toggle menu"
+                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]"
+                aria-label={isOpen ? 'Close menu' : 'Open menu'}
+                aria-controls="mobile-navigation"
+                aria-expanded={isOpen}
               >
                 {isOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
@@ -163,13 +120,14 @@ export function Navbar({ lang }: { lang: string }) {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-[var(--bg-primary)] border-b border-[var(--border-subtle)]">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div id="mobile-navigation" className="border-b border-[var(--border-subtle)] bg-white shadow-lg md:hidden">
+          <div className="space-y-1 px-3 pb-4 pt-3">
              {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]"
+                  onClick={() => setIsOpen(false)}
+                  className="flex min-h-11 items-center rounded-lg px-3 py-2 text-base font-semibold text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]"
                 >
                   {link.label}
                 </Link>
@@ -180,24 +138,27 @@ export function Navbar({ lang }: { lang: string }) {
                    <Link href={getPathForLang('hi')} className={`text-sm font-bold ${lang === 'hi' ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)]'}`}>हिंदी</Link>
                 </div>
              </div>
-             {user ? (
+             {isAuthenticated ? (
                 <Link
                   href={`/${lang}/dashboard`}
-                  className="block w-full text-center mt-4 bg-[var(--surface)] text-[var(--text-primary)] px-4 py-3 rounded-lg font-medium border border-[var(--border-subtle)]"
+                  onClick={() => setIsOpen(false)}
+                  className="mt-4 flex min-h-12 w-full items-center justify-center rounded-lg border border-[var(--border-subtle)] bg-white px-4 py-3 text-center font-semibold text-[var(--text-primary)]"
                 >
                   {isHindi ? 'डैशबोर्ड पर जाएं' : 'Go to Dashboard'}
                 </Link>
              ) : (
                 <div className="grid grid-cols-2 gap-3 px-3 mt-4 pb-2">
                    <Link
-                      href="/login"
-                      className="text-center py-2 rounded-lg border border-[var(--border-subtle)] text-[var(--text-primary)] font-medium"
+                      href={`/${lang}/login`}
+                      onClick={() => setIsOpen(false)}
+                      className="flex min-h-12 items-center justify-center rounded-lg border border-[var(--border-subtle)] py-2 text-center font-semibold text-[var(--text-primary)]"
                    >
                       {isHindi ? 'लॉग इन' : 'Login'}
                    </Link>
                    <Link
-                      href="/signup"
-                      className="text-center py-2 rounded-lg bg-[var(--text-primary)] text-[var(--bg-primary)] font-medium"
+                      href={`/${lang}/signup`}
+                      onClick={() => setIsOpen(false)}
+                      className="flex min-h-12 items-center justify-center rounded-lg bg-[var(--brand-accent)] py-2 text-center font-semibold text-white"
                    >
                       {isHindi ? 'साइन अप' : 'Sign Up'}
                    </Link>

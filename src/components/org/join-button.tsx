@@ -31,7 +31,7 @@ export function JoinButton({ orgId, policy, isAuthenticated, lang }: { orgId: st
   if (policy === 'invite_only') return null
 
   return (
-    <Button onClick={handleJoin} disabled={loading} className="w-full sm:w-auto bg-black text-white hover:bg-gray-800">
+    <Button onClick={handleJoin} disabled={loading} className="w-full sm:w-auto">
       {loading ? 'Processing...' : policy === 'admin_approval' ? 'Request to Join' : 'Join Organisation'}
     </Button>
   )

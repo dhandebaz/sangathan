@@ -32,19 +32,15 @@ export default async function SystemAdminDashboard() {
       const recentOrgs = recentOrgsRes.data || []
 
       return (
-         <div className="min-h-screen bg-gray-50 text-black">
-            <header className="bg-black text-white p-4">
-               <div className="max-w-7xl mx-auto flex justify-between items-center">
-                  <h1 className="text-xl font-bold flex items-center gap-2">
-                     <ShieldAlert size={20} className="text-red-500" />
-                     Sangathan System Admin
-                  </h1>
-                  <div className="text-sm text-gray-400">Restricted Access</div>
-               </div>
-            </header>
-
-            <main className="max-w-7xl mx-auto p-6 space-y-8">
-               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+         <div className="space-y-8">
+            <div>
+               <h1 className="page-title flex items-center gap-3">
+                  <ShieldAlert className="text-red-600" />
+                  Platform overview
+               </h1>
+               <p className="mt-2 text-sm text-slate-600">Monitor organisations, access, moderation, and platform integrity.</p>
+            </div>
+               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                   <Link href="/admin/organisations" className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:border-orange-500 transition-colors block">
                      <div className="flex items-center gap-2 text-gray-500 mb-2 text-sm font-bold uppercase">
                         <Building size={16} /> Organisations
@@ -71,7 +67,7 @@ export default async function SystemAdminDashboard() {
                   </Link>
                </div>
 
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+               <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                   <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                      <div className="flex items-center gap-2 text-gray-500 mb-2 text-sm font-bold uppercase">
                         <ShieldAlert size={16} /> Suspended Organisations
@@ -141,7 +137,6 @@ export default async function SystemAdminDashboard() {
                      </table>
                   </div>
                </div>
-            </main>
          </div>
       )
    } catch (error: unknown) {

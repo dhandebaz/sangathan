@@ -138,7 +138,7 @@ export function PublicForm({ form, csrfToken }: { form: Form; csrfToken: string 
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-black text-white py-3 rounded-lg font-bold text-lg hover:opacity-90 disabled:opacity-50 transition-opacity"
+        className="min-h-12 w-full rounded-lg bg-primary py-3 text-lg font-bold text-primary-foreground transition-colors hover:bg-brand-700 disabled:opacity-50"
       >
         {loading ? 'Submitting...' : 'Submit'}
       </button>

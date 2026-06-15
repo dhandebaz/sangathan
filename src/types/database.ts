@@ -18,7 +18,6 @@ export interface Database {
           role: string
           phone: string | null
           phone_verified: boolean
-          firebase_uid: string | null
           created_at: string
           updated_at: string
           deleted_at: string | null
@@ -34,7 +33,6 @@ export interface Database {
           role?: string
           phone?: string | null
           phone_verified?: boolean
-          firebase_uid?: string | null
           created_at?: string
           updated_at?: string
           deleted_at?: string | null
@@ -50,7 +48,6 @@ export interface Database {
           role?: string
           phone?: string | null
           phone_verified?: boolean
-          firebase_uid?: string | null
           created_at?: string
           updated_at?: string
           deleted_at?: string | null
@@ -1494,8 +1491,8 @@ export interface Database {
         Row: {
           id: string
           organisation_id: string
-          razorpay_subscription_id: string
-          razorpay_plan_id: string
+          subscription_id: string
+          plan_id: string
           status: string
           amount: number
           created_at: string
@@ -1504,8 +1501,8 @@ export interface Database {
         Insert: {
           id?: string
           organisation_id: string
-          razorpay_subscription_id: string
-          razorpay_plan_id: string
+          subscription_id: string
+          plan_id: string
           status?: string
           amount: number
           created_at?: string
@@ -1514,8 +1511,8 @@ export interface Database {
         Update: {
           id?: string
           organisation_id?: string
-          razorpay_subscription_id?: string
-          razorpay_plan_id?: string
+          subscription_id?: string
+          plan_id?: string
           status?: string
           amount?: number
           created_at?: string
@@ -1534,8 +1531,8 @@ export interface Database {
           p_user_id: string
           p_full_name: string
           p_email: string
-          p_phone: string
-          p_firebase_uid: string
+          p_phone: string | null
+          p_firebase_uid: string | null
         }
         Returns: Json
       }

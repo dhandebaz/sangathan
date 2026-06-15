@@ -86,7 +86,7 @@ export default async function SystemLogsPage({ searchParams }: PageProps) {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">System Logs</h1>
         <div className="text-sm text-gray-500">
@@ -94,13 +94,13 @@ export default async function SystemLogsPage({ searchParams }: PageProps) {
         </div>
       </div>
 
-      <form className="bg-white rounded-md border shadow-sm p-4 flex flex-wrap gap-4 text-sm">
-        <div className="flex flex-col">
+      <form className="section-card grid gap-4 p-4 text-sm sm:grid-cols-2 xl:grid-cols-5">
+        <div className="flex min-w-0 flex-col">
           <label className="text-xs text-gray-500 mb-1">Level</label>
           <select
             name="level"
             defaultValue={level}
-            className="border rounded px-2 py-1 text-sm"
+            className="min-h-11 rounded-lg border border-input bg-white px-3 py-2 text-sm"
           >
             <option value="">All</option>
             <option value="info">info</option>
@@ -110,44 +110,44 @@ export default async function SystemLogsPage({ searchParams }: PageProps) {
             <option value="critical">critical</option>
           </select>
         </div>
-        <div className="flex flex-col">
+        <div className="flex min-w-0 flex-col">
           <label className="text-xs text-gray-500 mb-1">Organisation ID</label>
           <input
             name="organisation_id"
             defaultValue={organisationId}
-            className="border rounded px-2 py-1 text-sm w-64 font-mono"
+            className="min-h-11 w-full rounded-lg border border-input bg-white px-3 py-2 text-sm font-mono"
             placeholder="UUID"
           />
         </div>
-        <div className="flex flex-col">
+        <div className="flex min-w-0 flex-col">
           <label className="text-xs text-gray-500 mb-1">From</label>
           <input
             type="datetime-local"
             name="from"
             defaultValue={from}
-            className="border rounded px-2 py-1 text-sm"
+            className="min-h-11 rounded-lg border border-input bg-white px-3 py-2 text-sm"
           />
         </div>
-        <div className="flex flex-col">
+        <div className="flex min-w-0 flex-col">
           <label className="text-xs text-gray-500 mb-1">To</label>
           <input
             type="datetime-local"
             name="to"
             defaultValue={to}
-            className="border rounded px-2 py-1 text-sm"
+            className="min-h-11 rounded-lg border border-input bg-white px-3 py-2 text-sm"
           />
         </div>
         <div className="flex items-end">
           <button
             type="submit"
-            className="px-3 py-1.5 bg-black text-white rounded text-xs font-semibold"
+            className="min-h-11 w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-brand-700"
           >
             Apply
           </button>
         </div>
       </form>
 
-      <div className="bg-white rounded-md border shadow-sm">
+      <div className="section-card overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>

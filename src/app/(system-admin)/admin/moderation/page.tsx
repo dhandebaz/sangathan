@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { Gavel, Scale } from 'lucide-react'
 import { createServiceClient } from '@/lib/supabase/service'
@@ -53,22 +52,14 @@ export default async function ModerationDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-black">
-      <header className="bg-black text-white p-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/admin" className="text-gray-400 hover:text-white text-sm">
-              Back
-            </Link>
-            <h1 className="text-xl font-bold flex items-center gap-2">
-              <Gavel size={20} className="text-red-500" />
-              Moderation Dashboard
-            </h1>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto p-6 space-y-8">
+    <div className="space-y-8">
+      <div>
+        <h1 className="page-title flex items-center gap-3">
+          <Gavel className="text-red-600" />
+          Moderation dashboard
+        </h1>
+        <p className="mt-2 text-sm text-slate-600">Review platform actions and organisation appeals.</p>
+      </div>
         <section className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           <div className="p-4 border-b flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -178,8 +169,6 @@ export default async function ModerationDashboardPage() {
             </table>
           </div>
         </section>
-      </main>
     </div>
   )
 }
-

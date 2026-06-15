@@ -210,7 +210,7 @@ export function CreateMeetingForm({ members }: { members: Member[] }) {
             <button 
                type="submit"
                disabled={loading}
-               className="w-full bg-black text-white py-3 rounded-lg font-medium hover:opacity-90 disabled:opacity-50"
+               className="min-h-12 w-full rounded-lg bg-primary py-3 font-semibold text-primary-foreground hover:bg-brand-700 disabled:opacity-50"
             >
                {loading ? 'Scheduling...' : 'Schedule Meeting'}
             </button>

@@ -97,7 +97,7 @@ export function SupporterDashboard({ subscription, organisation }: { subscriptio
             </p>
 
             {isActive ? (
-               <button className="bg-gray-900 text-white px-6 py-3 rounded-lg font-medium opacity-80 cursor-default">
+               <button className="cursor-default rounded-lg border border-slate-300 bg-slate-100 px-6 py-3 font-medium text-slate-700">
                   Subscription Active
                </button>
             ) : (

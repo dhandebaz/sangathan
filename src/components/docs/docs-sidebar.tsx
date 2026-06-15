@@ -21,15 +21,21 @@ export function DocsSidebar({ lang }: { lang: string }) {
     return initialState
   })
 
-  // Close mobile drawer on route change
   useEffect(() => {
-    // Use a microtask to avoid synchronous setState in effect
-    Promise.resolve().then(() => {
-      if (isOpen) {
-        setIsOpen(false)
-      }
-    })
-  }, [pathname, isOpen])
+    if (!isOpen) return
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsOpen(false)
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
 
   const toggleSection = (title: string) => {
     setExpandedSections(prev => ({
@@ -50,7 +56,9 @@ export function DocsSidebar({ lang }: { lang: string }) {
       <div className="lg:hidden mb-6">
         <button
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2 w-full px-4 py-3 bg-[var(--surface)] border border-[var(--border-subtle)] rounded-lg text-[var(--text-primary)] font-medium"
+          className="flex min-h-12 w-full items-center gap-2 rounded-lg border border-[var(--border-subtle)] bg-white px-4 py-3 font-semibold text-[var(--text-primary)]"
+          aria-expanded={isOpen}
+          aria-controls="docs-navigation"
         >
           <Menu size={20} />
           {isHindi ? 'मेनू' : 'Menu'}
@@ -59,8 +67,10 @@ export function DocsSidebar({ lang }: { lang: string }) {
 
       {/* Sidebar Container */}
       <aside 
+        id="docs-navigation"
+        aria-label="Documentation navigation"
         className={`
-          fixed inset-0 z-40 bg-[var(--bg-primary)] lg:static lg:block lg:w-64 lg:flex-shrink-0 lg:border-r lg:border-[var(--border-subtle)] lg:pr-8 lg:bg-transparent
+          fixed inset-y-0 left-0 z-40 w-[min(88vw,22rem)] bg-white shadow-xl lg:static lg:block lg:w-64 lg:flex-shrink-0 lg:border-r lg:border-[var(--border-subtle)] lg:bg-transparent lg:pr-8 lg:shadow-none
           transition-transform duration-300 ease-in-out
           ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}
@@ -73,7 +83,8 @@ export function DocsSidebar({ lang }: { lang: string }) {
             </span>
             <button 
               onClick={() => setIsOpen(false)}
-              className="p-2 text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] rounded-md"
+              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]"
+              aria-label="Close documentation menu"
             >
               <X size={24} />
             </button>
@@ -103,6 +114,7 @@ export function DocsSidebar({ lang }: { lang: string }) {
                       <li key={item.slug}>
                         <Link
                           href={`/${lang}/docs/${item.slug}`}
+                          onClick={() => setIsOpen(false)}
                           className={`
                             block py-1.5 text-sm transition-colors border-l-2 -ml-[17px] pl-4
                             ${isActive(item.slug) 
@@ -125,7 +137,7 @@ export function DocsSidebar({ lang }: { lang: string }) {
       {/* Overlay for mobile */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-30 lg:hidden backdrop-blur-sm"
+          className="fixed inset-0 z-30 bg-slate-950/40 lg:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}

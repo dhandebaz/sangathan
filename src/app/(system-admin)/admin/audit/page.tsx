@@ -1,6 +1,5 @@
 import { createServiceClient } from '@/lib/supabase/service'
-import Link from 'next/link'
-import { ArrowLeft, ShieldAlert } from 'lucide-react'
+import { ShieldAlert } from 'lucide-react'
 import { AuditLog } from '@/types/dashboard'
 import { requirePlatformAdmin } from '@/lib/auth/context'
 
@@ -22,21 +21,16 @@ export default async function GlobalAuditPage() {
   if (error) return <div className="p-8">Error loading logs</div>
 
   return (
-    <div className="min-h-screen bg-gray-50 text-black">
-       <header className="bg-black text-white p-4">
-        <div className="max-w-7xl mx-auto flex items-center gap-4">
-           <Link href="/admin" className="text-gray-400 hover:text-white">
-              <ArrowLeft size={20} />
-           </Link>
-           <h1 className="text-xl font-bold flex items-center gap-2">
-             <ShieldAlert size={20} className="text-red-500" />
-             Global Audit Logs
-           </h1>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto p-6">
-         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div className="space-y-6">
+      <div>
+        <h1 className="page-title flex items-center gap-3">
+          <ShieldAlert className="text-red-600" />
+          Global audit logs
+        </h1>
+        <p className="mt-2 text-sm text-slate-600">Review high-level actions across every organisation.</p>
+      </div>
+         <div className="data-table-wrap">
+            <div className="min-w-[760px]">
             <table className="w-full text-left text-sm">
                <thead className="bg-gray-50 border-b">
                   <tr>
@@ -71,8 +65,8 @@ export default async function GlobalAuditPage() {
                   ))}
                </tbody>
             </table>
+            </div>
          </div>
-      </main>
     </div>
   )
 }

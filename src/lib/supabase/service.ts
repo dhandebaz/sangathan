@@ -11,7 +11,7 @@ export function createServiceClient() {
 
   // Use the service role key to bypass RLS.
   // This client should ONLY be used in:
-  // 1. Webhooks (e.g. Stripe, Razorpay)
+  // 1. Webhooks
   // 2. Cron jobs
   // 3. Admin-specific server actions that need to bypass normal RLS rules
   return createSupabaseClient(supabaseUrl, supabaseServiceRoleKey, {

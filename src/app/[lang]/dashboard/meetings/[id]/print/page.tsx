@@ -133,7 +133,7 @@ export default async function PrintMeetingPage({ params }: PageProps) {
       <div className="fixed top-4 right-4 no-print flex gap-2">
          <button 
             onClick={() => window.print()} 
-            className="bg-black text-white px-4 py-2 rounded shadow hover:bg-gray-800 font-bold"
+            className="min-h-11 rounded-lg bg-primary px-4 py-2 font-bold text-primary-foreground shadow-sm hover:bg-brand-700"
          >
             Print Record
          </button>

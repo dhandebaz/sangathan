@@ -72,24 +72,15 @@ export function DashboardTopBar({ lang, userEmail, role, orgName }: DashboardTop
       <div className="flex items-center gap-4 min-w-0">
         <Link
           href={`/${lang}/dashboard`}
-          className="flex items-center gap-2 group"
+          className="flex items-center gap-2 md:hidden"
           aria-label="Sangathan Dashboard"
         >
-          <Image
-            src="/logo/whitesangathanlogo.png"
-            alt=""
-            width={128}
-            height={32}
-            className="h-8 w-auto logo-mark-light"
-            aria-hidden="true"
-            priority
-          />
           <Image
             src="/logo/blacksangathanlogo.png"
             alt=""
             width={128}
             height={32}
-            className="h-8 w-auto logo-mark-dark"
+            className="h-7 w-auto"
             aria-hidden="true"
             priority
           />
@@ -115,7 +106,7 @@ export function DashboardTopBar({ lang, userEmail, role, orgName }: DashboardTop
       <div className="flex items-center gap-3">
         <button
           type="button"
-          className="relative inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900"
+          className="relative inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           aria-label="Notifications"
         >
           <Bell className="w-5 h-5" />
@@ -126,7 +117,7 @@ export function DashboardTopBar({ lang, userEmail, role, orgName }: DashboardTop
             type="button"
             className={cn(
               'flex items-center gap-2 rounded-full border border-slate-200 bg-white px-2 py-1.5 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900',
-              'min-h-[40px] min-w-[40px]'
+              'min-h-11 min-w-11'
             )}
             aria-haspopup="menu"
             aria-expanded={open}
@@ -194,4 +185,3 @@ export function DashboardTopBar({ lang, userEmail, role, orgName }: DashboardTop
     </div>
   )
 }
-

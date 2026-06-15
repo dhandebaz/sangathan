@@ -86,7 +86,7 @@ export default async function DonationsPage(props: PageProps) {
       </div>
 
       <div className="content-card rounded-lg p-0 overflow-hidden">
-         <DonationList donations={(donations as any) || []} />
+         <DonationList donations={donations || []} />
       </div>
     </div>
   )

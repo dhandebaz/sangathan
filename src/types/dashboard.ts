@@ -244,8 +244,8 @@ export interface RiskEvent {
 export interface SupporterSubscription {
   id: string;
   organisation_id: string;
-  razorpay_subscription_id: string;
-  razorpay_plan_id: string;
+  subscription_id: string;
+  plan_id: string;
   status: 'created' | 'active' | 'cancelled' | 'expired';
   amount: number;
   created_at: string;

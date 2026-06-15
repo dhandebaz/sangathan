@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { Metadata } from 'next'
+import { ArrowRight, BookOpen, CheckCircle2, CircleHelp, ClipboardList, ShieldCheck, Users } from 'lucide-react'
 import { docsConfig } from '@/lib/docs-config'
+import { DocsSearch } from '@/components/docs/docs-search'
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
@@ -8,158 +10,164 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   return {
     title: isHindi ? 'दस्तावेज़ | संगठन' : 'Documentation | Sangathan',
     description: isHindi
-      ? 'संगठन प्लेटफॉर्म पर संगठनों को सेटअप, चलाने और सुरक्षित रूप से स्केल करने के लिए पूर्ण मार्गदर्शिका।'
+      ? 'संगठन को स्थापित करने, चलाने और सुरक्षित रूप से बढ़ाने के लिए पूर्ण मार्गदर्शिका।'
       : 'Complete handbook for setting up, running, and safely scaling organisations on Sangathan.',
   }
 }
 
+const rolePaths = [
+  {
+    title: 'Organisation administrator',
+    description: 'Set up the organisation, roles, security, and governance.',
+    href: 'getting-started',
+    icon: ShieldCheck,
+  },
+  {
+    title: 'Coordinator or operator',
+    description: 'Run members, forms, meetings, donations, and everyday work.',
+    href: 'members',
+    icon: ClipboardList,
+  },
+  {
+    title: 'Member or volunteer',
+    description: 'Understand participation, meetings, access, and common questions.',
+    href: 'faq',
+    icon: Users,
+  },
+]
+
+const commonTasks = [
+  { label: 'Create and verify an organisation', href: 'getting-started' },
+  { label: 'Add, approve, or update members', href: 'members' },
+  { label: 'Build and publish a form', href: 'forms' },
+  { label: 'Record meetings and minutes', href: 'meetings' },
+  { label: 'Record and review donations', href: 'donations' },
+  { label: 'Fix login, permission, or data issues', href: 'troubleshooting' },
+]
+
 export default async function DocsIndex({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
-  const isHindi = lang === 'hi'
+  const searchItems = docsConfig.flatMap((category) =>
+    category.items.map((item) => ({
+      title: item.title.en,
+      category: category.title.en,
+      slug: item.slug,
+    })),
+  )
 
   return (
-    <div className="max-w-4xl">
-      <div className="mb-12">
-        <h1 className="text-4xl font-bold mb-4 text-[var(--text-primary)]">
-          {isHindi ? 'दस्तावेज़' : 'Documentation'}
-        </h1>
-        <p className="text-xl text-[var(--text-secondary)] leading-relaxed">
-          {isHindi 
-            ? 'यह पेज किसी भी संगठन, समूह या नेटवर्क के लिए एक ही जगह पर मार्गदर्शन देता है ताकि आप बिना मदद मांगे प्लेटफॉर्म का उपयोग कर सकें।'
-            : 'This page is a single place for organisations, collectives, and networks to learn how to use Sangathan without needing to contact us.'}
-        </p>
-        <div className="mt-6 grid gap-4 md:grid-cols-2 text-[var(--text-secondary)] text-sm">
-          <div className="space-y-1">
-            <h2 className="font-semibold text-[var(--text-primary)]">
-              {isHindi ? 'यदि आप नए हैं' : 'If you are new'}
-            </h2>
-            <p>
-              {isHindi
-                ? 'पहले "Getting Started" पढ़ें, फिर सदस्य, फॉर्म और बैठकों के सेक्शन देखें।'
-                : 'Start with "Getting Started", then move to Members, Forms, and Meetings sections.'}
-            </p>
-          </div>
-          <div className="space-y-1">
-            <h2 className="font-semibold text-[var(--text-primary)]">
-              {isHindi ? 'यदि आपका संगठन पहले से चल रहा है' : 'If your organisation is already running'}
-            </h2>
-            <p>
-              {isHindi
-                ? 'फाइनेंस, सुरक्षा, गवर्नेंस और सामान्य समस्याओं के समाधान के लिए नीचे सभी मॉड्यूल देखें।'
-                : 'Use the modules below for finance, security, governance, and day‑to‑day troubleshooting.'}
-            </p>
-          </div>
+    <div className="max-w-5xl">
+      <section className="border-b border-slate-200 pb-10">
+        <div className="max-w-3xl">
+          <p className="mb-3 text-sm font-bold uppercase tracking-[0.16em] text-orange-700">Sangathan handbook</p>
+          <h1 className="text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">Find an answer and keep moving.</h1>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+            Practical guidance for setting up, operating, governing, and troubleshooting Sangathan without waiting for customer support.
+          </p>
         </div>
-      </div>
+        <div className="mt-8 max-w-3xl">
+          <DocsSearch lang={lang} items={searchItems} />
+          <p className="mt-3 text-sm text-slate-600">Search by task, feature, role, or problem.</p>
+        </div>
+      </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {docsConfig.map((category, idx) => (
-          <div key={idx} className="bg-[var(--surface)] p-6 rounded-xl border border-[var(--border-subtle)] hover:border-[var(--accent)] transition-colors group">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-[var(--bg-secondary)] rounded-lg text-[var(--accent)]">
-                {category.icon && <category.icon size={24} />}
+      <section className="py-10" aria-labelledby="quick-start-heading">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 id="quick-start-heading" className="text-2xl font-bold text-slate-950">New to Sangathan?</h2>
+            <p className="mt-2 text-slate-600">Use this order to reach a working organisation quickly.</p>
+          </div>
+          <Link href={`/${lang}/docs/getting-started`} className="inline-flex min-h-11 items-center gap-2 font-semibold text-orange-700 hover:text-orange-800">
+            Open quickstart <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+        <ol className="mt-6 grid gap-0 overflow-hidden rounded-xl border border-slate-200 bg-white md:grid-cols-3">
+          {[
+            ['1', 'Create and verify', 'Create the account, verify access, and select your organisation.'],
+            ['2', 'Set roles and members', 'Define responsibilities before importing or inviting people.'],
+            ['3', 'Run one real workflow', 'Publish a form, record a meeting, or create your first member process.'],
+          ].map(([number, title, description], index) => (
+            <li key={number} className={`p-5 ${index > 0 ? 'border-t border-slate-200 md:border-l md:border-t-0' : ''}`}>
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-50 text-sm font-bold text-orange-800">{number}</span>
+              <h3 className="mt-4 font-bold text-slate-950">{title}</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="border-t border-slate-200 py-10" aria-labelledby="role-heading">
+        <h2 id="role-heading" className="text-2xl font-bold text-slate-950">Start from your role</h2>
+        <p className="mt-2 text-slate-600">Go directly to the material that matches your responsibilities.</p>
+        <div className="mt-6 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+          {rolePaths.map(({ title, description, href, icon: Icon }) => (
+            <Link key={title} href={`/${lang}/docs/${href}`} className="group flex min-h-20 items-center gap-4 px-4 py-4 hover:bg-orange-50 sm:px-5">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-700 group-hover:bg-orange-100 group-hover:text-orange-800">
+                <Icon className="h-5 w-5" />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block font-bold text-slate-950">{title}</span>
+                <span className="mt-1 block text-sm text-slate-600">{description}</span>
+              </span>
+              <ArrowRight className="h-5 w-5 shrink-0 text-slate-400 group-hover:text-orange-700" />
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="grid gap-8 border-t border-slate-200 py-10 lg:grid-cols-[0.9fr_1.1fr]">
+        <div>
+          <h2 className="text-2xl font-bold text-slate-950">Common tasks</h2>
+          <p className="mt-2 text-slate-600">Direct instructions for the work people do most often.</p>
+          <ul className="mt-5 space-y-2">
+            {commonTasks.map((task) => (
+              <li key={task.href}>
+                <Link href={`/${lang}/docs/${task.href}`} className="flex min-h-11 items-center gap-3 rounded-lg px-2 font-semibold text-slate-700 hover:bg-orange-50 hover:text-orange-800">
+                  <CheckCircle2 className="h-5 w-5 shrink-0 text-orange-700" />
+                  {task.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-bold text-slate-950">Browse every module</h2>
+          <p className="mt-2 text-slate-600">The complete operating manual, grouped by responsibility.</p>
+          <div className="mt-5 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+            {docsConfig.map((category) => (
+              <div key={category.title.en} className="p-5">
+                <div className="flex items-center gap-3">
+                  {category.icon ? <category.icon className="h-5 w-5 text-orange-700" /> : <BookOpen className="h-5 w-5 text-orange-700" />}
+                  <h3 className="font-bold text-slate-950">{category.title.en}</h3>
+                </div>
+                <ul className="mt-3 grid gap-1 sm:grid-cols-2">
+                  {category.items.map((item) => (
+                    <li key={item.slug}>
+                      <Link href={`/${lang}/docs/${item.slug}`} className="flex min-h-10 items-center rounded-md px-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-orange-800">
+                        {item.title.en}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <h2 className="text-xl font-bold text-[var(--text-primary)]">{isHindi ? category.title.hi : category.title.en}</h2>
-            </div>
-            <ul className="space-y-3">
-              {category.items.map((item, itemIdx) => (
-                <li key={itemIdx}>
-                  <Link 
-                    href={`/${lang}/docs/${item.slug}`}
-                    className="flex items-center text-[var(--text-secondary)] hover:text-[var(--accent)] group-hover:text-[var(--text-primary)] transition-colors"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--border-subtle)] mr-3 group-hover:bg-[var(--accent)] transition-colors"></span>
-                    {isHindi ? item.title.hi : item.title.en}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-16 p-8 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-subtle)]">
-        <h3 className="text-lg font-bold text-[var(--text-primary)] mb-4">
-          {isHindi ? 'किस विषय से शुरू करें?' : 'Where should you start?'}
-        </h3>
-        <div className="grid gap-6 md:grid-cols-2 text-sm text-[var(--text-secondary)]">
-          <div className="space-y-2">
-            <h4 className="font-semibold text-[var(--text-primary)]">
-              {isHindi ? 'सेटअप और रोज़मर्रा का काम' : 'Setup and everyday work'}
-            </h4>
-            <ul className="list-disc pl-5 space-y-1">
-              <li>
-                <Link href={`/${lang}/docs/getting-started`} className="text-[var(--accent)] hover:underline">
-                  {isHindi ? 'Getting Started' : 'Getting Started'}
-                </Link>
-                {' '}
-                {isHindi ? '– नया संगठन बनाना और पहली लॉगिन.' : '– creating your org and first login.'}
-              </li>
-              <li>
-                <Link href={`/${lang}/docs/members`} className="text-[var(--accent)] hover:underline">
-                  {isHindi ? 'Members' : 'Members'}
-                </Link>
-                {', '}
-                <Link href={`/${lang}/docs/forms`} className="text-[var(--accent)] hover:underline">
-                  {isHindi ? 'Forms' : 'Forms'}
-                </Link>
-                {', '}
-                <Link href={`/${lang}/docs/meetings`} className="text-[var(--accent)] hover:underline">
-                  {isHindi ? 'Meetings' : 'Meetings'}
-                </Link>
-                {' – '}
-                {isHindi ? 'सदस्य डेटा, रजिस्ट्रेशन और बैठकों का रिकॉर्ड।' : 'member data, registrations, and meeting records.'}
-              </li>
-              <li>
-                <Link href={`/${lang}/docs/donations`} className="text-[var(--accent)] hover:underline">
-                  {isHindi ? 'Donations' : 'Donations'}
-                </Link>
-                {' – '}
-                {isHindi ? 'दान के एंट्री और पारदर्शी रिकॉर्ड।' : 'recording donations and keeping a transparent ledger.'}
-              </li>
-            </ul>
-          </div>
-          <div className="space-y-2">
-            <h4 className="font-semibold text-[var(--text-primary)]">
-              {isHindi ? 'सुरक्षा, नीति और समस्या निवारण' : 'Security, policy, and troubleshooting'}
-            </h4>
-            <ul className="list-disc pl-5 space-y-1">
-              <li>
-                <Link href={`/${lang}/docs/security-governance`} className="text-[var(--accent)] hover:underline">
-                  {isHindi ? 'Security & Governance' : 'Security & Governance'}
-                </Link>
-                {' – '}
-                {isHindi ? 'डेटा सुरक्षा और शक्ति संतुलन कैसे काम करता है।' : 'how security, roles, and power-balancing work.'}
-              </li>
-              <li>
-                <Link href={`/${lang}/docs/data-lifecycle`} className="text-[var(--accent)] hover:underline">
-                  {isHindi ? 'Data Lifecycle' : 'Data Lifecycle'}
-                </Link>
-                {' – '}
-                {isHindi ? 'डेटा कैसे बनता, स्टोर होता और हटाया जाता है।' : 'how data is created, stored, and deleted.'}
-              </li>
-              <li>
-                <Link href={`/${lang}/docs/admin-responsibilities`} className="text-[var(--accent)] hover:underline">
-                  {isHindi ? 'Admin Responsibilities' : 'Admin Responsibilities'}
-                </Link>
-                {' – '}
-                {isHindi ? 'आपकी कानूनी और नैतिक जिम्मेदारियां।' : 'your legal and ethical responsibilities as an admin.'}
-              </li>
-              <li>
-                <Link href={`/${lang}/docs/troubleshooting`} className="text-[var(--accent)] hover:underline">
-                  {isHindi ? 'Troubleshooting' : 'Troubleshooting'}
-                </Link>
-                {' / '}
-                <Link href={`/${lang}/docs/faq`} className="text-[var(--accent)] hover:underline">
-                  {isHindi ? 'FAQ' : 'FAQ'}
-                </Link>
-                {' – '}
-                {isHindi ? 'अधिकांश आम समस्याओं के तुरंत समाधान।' : 'immediate answers to most common issues.'}
-              </li>
-            </ul>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
+
+      <section className="mb-4 flex flex-col gap-5 rounded-xl border border-orange-200 bg-orange-50 p-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex gap-4">
+          <CircleHelp className="mt-0.5 h-6 w-6 shrink-0 text-orange-800" />
+          <div>
+            <h2 className="text-lg font-bold text-slate-950">Something is not working?</h2>
+            <p className="mt-1 text-sm leading-6 text-slate-700">The troubleshooting guide covers login, permissions, missing data, forms, and common operational errors.</p>
+          </div>
+        </div>
+        <Link href={`/${lang}/docs/troubleshooting`} className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-orange-700 px-4 font-semibold text-white hover:bg-orange-800">
+          Troubleshoot <ArrowRight className="h-4 w-4" />
+        </Link>
+      </section>
     </div>
   )
 }

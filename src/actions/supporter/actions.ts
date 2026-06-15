@@ -39,15 +39,15 @@ export const createSubscription = createSafeAction(
       throw new Error('Subscription is already active.')
     }
 
-    // 2. Create Pending Manual Subscription
+    // Create Pending Manual Subscription
     const subId = `manual_upi_${context.organizationId}_${Date.now()}`
 
     const { error } = await supabase
       .from('supporter_subscriptions')
       .insert({
         organisation_id: context.organizationId,
-        razorpay_subscription_id: input.utr, // Storing UTR here to avoid schema migration
-        razorpay_plan_id: 'manual_upi',
+        subscription_id: input.utr,
+        plan_id: 'manual_upi',
         status: 'pending',
         amount: 99.0,
       } as never)

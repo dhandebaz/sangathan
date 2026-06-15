@@ -71,7 +71,7 @@ export default function ForgotPasswordPage() {
 
         <button 
           disabled={loading}
-          className="w-full bg-black text-white py-3 rounded-lg font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-50"
+          className="flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-primary py-3 font-bold text-primary-foreground transition-colors hover:bg-brand-700 disabled:opacity-50"
         >
           {loading && <Loader2 size={18} className="animate-spin" />}
           Send Reset Link

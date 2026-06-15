@@ -98,7 +98,7 @@ export function AppealForm({ organisationId }: { organisationId: string }) {
       <button 
         type="submit" 
         disabled={loading}
-        className="w-full bg-black text-white py-2 rounded-md font-medium hover:opacity-90 flex items-center justify-center gap-2"
+        className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary py-2 font-semibold text-primary-foreground hover:bg-brand-700"
       >
         {loading ? 'Submitting...' : <><Send size={16} /> Submit to Governance Board</>}
       </button>

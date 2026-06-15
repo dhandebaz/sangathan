@@ -17,7 +17,7 @@ export function TableOfContents({ lang }: { lang: string }) {
   useEffect(() => {
     // Small delay to ensure ReactMarkdown has rendered
     const timer = setTimeout(() => {
-      const elements = Array.from(document.querySelectorAll('h2, h3'))
+      const elements = Array.from(document.querySelectorAll('.docs-content h2, .docs-content h3'))
       const headingData = elements.map((elem) => ({
         id: elem.id,
         text: (elem as HTMLElement).innerText,

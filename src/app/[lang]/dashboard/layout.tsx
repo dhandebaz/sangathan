@@ -70,25 +70,16 @@ export default async function DashboardLayout(props: {
   const isAdmin = ['admin', 'executive'].includes(role)
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC] text-foreground pb-16 md:pb-0 font-sans">
-      <aside className="fixed inset-y-0 left-0 z-50 w-64 border-r border-slate-200 bg-white hidden md:flex flex-col shadow-sm">
+    <div className="flex min-h-screen bg-background pb-16 font-sans text-foreground md:pb-0">
+      <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 flex-col border-r border-slate-200 bg-white md:flex">
         <div className="h-16 flex items-center px-6 border-b border-slate-100">
           <Link href={`/${lang}/dashboard`} className="flex items-center gap-2 group" aria-label="Sangathan Dashboard">
-            <Image
-              src="/logo/whitesangathanlogo.png"
-              alt=""
-              width={128}
-              height={32}
-              className="h-8 w-auto group-hover:scale-105 transition-transform logo-mark-light"
-              aria-hidden="true"
-              priority
-            />
             <Image
               src="/logo/blacksangathanlogo.png"
               alt=""
               width={128}
               height={32}
-              className="h-8 w-auto group-hover:scale-105 transition-transform logo-mark-dark"
+              className="h-8 w-auto"
               aria-hidden="true"
               priority
             />
@@ -154,7 +145,7 @@ export default async function DashboardLayout(props: {
           </div>
         </div>
 
-        <div className="p-4 border-t border-slate-100 bg-slate-50/50">
+        <div className="border-t border-slate-100 bg-slate-50/70 p-4">
           <Button variant="ghost" className="w-full justify-start gap-3 text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors">
             <LogOut className="w-4 h-4" />
             <span className="font-medium">Sign Out</span>
@@ -162,19 +153,19 @@ export default async function DashboardLayout(props: {
         </div>
       </aside>
 
-      <div className="flex-1 flex flex-col md:pl-64 transition-all duration-300">
+      <div className="flex min-w-0 flex-1 flex-col md:pl-64">
         {maintenanceMessage && (
-          <div className="px-8 py-2 bg-amber-50 border-b border-amber-200 text-amber-900 text-sm flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 border-b border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900 sm:px-6 lg:px-8">
             <AlertTriangle className="w-4 h-4" />
             <span className="font-semibold">Maintenance mode</span>
             <span className="text-amber-900/80">{maintenanceMessage}</span>
           </div>
         )}
-        <header className="sticky top-0 z-40 h-16 border-b border-slate-200 bg-white/80 backdrop-blur-md px-8 flex items-center justify-between">
+        <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 sm:px-6 lg:px-8">
           <DashboardTopBar lang={lang} userEmail={user?.email ?? null} role={role} orgName={orgName} />
         </header>
 
-        <main className="flex-1 p-6 lg:p-10 max-w-7xl mx-auto w-full animate-fade-in pb-24 md:pb-10">
+        <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-7xl flex-1 animate-fade-in px-4 pb-24 pt-6 sm:px-6 lg:px-8 lg:pb-10 lg:pt-8">
           {children}
         </main>
       </div>
@@ -189,7 +180,7 @@ function SidebarLink({ href, icon: Icon, label }: { href: string; icon: React.El
   return (
     <Link
       href={href}
-      className="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-lg text-slate-600 hover:bg-slate-50 hover:text-brand-600 transition-all group"
+      className="group flex min-h-11 items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:bg-brand-50 hover:text-brand-700"
     >
       <Icon className="w-5 h-5 text-slate-400 group-hover:text-brand-500 transition-colors" />
       {label}

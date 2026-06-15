@@ -179,7 +179,7 @@ export function NewFormClient({ lang }: NewFormClientProps) {
            <button 
               type="submit"
               disabled={loading}
-              className="bg-black text-white px-8 py-3 rounded-lg font-medium hover:opacity-90 disabled:opacity-50"
+              className="min-h-12 rounded-lg bg-primary px-6 py-3 font-semibold text-primary-foreground hover:bg-brand-700 disabled:opacity-50"
            >
               {loading ? 'Creating...' : 'Create Form'}
            </button>

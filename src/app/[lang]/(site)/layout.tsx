@@ -1,6 +1,7 @@
 import { Navbar } from '@/components/public/navbar'
 import { Footer } from '@/components/public/footer'
 import { Metadata } from 'next'
+import { createClient } from '@/lib/supabase/server'
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
@@ -36,24 +37,13 @@ export default async function SiteLayout({
   params: Promise<{ lang: string }>
 }) {
   const { lang } = await params
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
   
   return (
-    <div className="flex flex-col min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] font-sans selection:bg-[var(--accent)] selection:text-white">
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function() {
-              try {
-                var stored = localStorage.getItem('theme');
-                var theme = stored || 'dark';
-                document.documentElement.setAttribute('data-theme', theme);
-              } catch (e) {}
-            })();
-          `,
-        }}
-      />
-      <Navbar lang={lang} />
-      <main className="flex-grow pt-16">
+    <div className="flex min-h-screen flex-col bg-[var(--bg-primary)] font-sans text-[var(--text-primary)] selection:bg-brand-200 selection:text-brand-900">
+      <Navbar lang={lang} isAuthenticated={Boolean(user)} />
+      <main id="main-content" className="flex-grow pt-16" tabIndex={-1}>
         {children}
       </main>
       <Footer lang={lang} />

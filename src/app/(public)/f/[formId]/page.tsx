@@ -82,7 +82,7 @@ export default async function PublicFormPage({ params }: PageProps) {
               </div>
               <h2 className="text-xl font-bold text-gray-900 mb-2">Access Denied</h2>
               <p className="text-gray-500 mb-6">Only active members of this organization can fill this form.</p>
-              <a href={`/en/login?redirect=/f/${formId}`} className="inline-flex justify-center w-full px-4 py-2.5 text-sm font-medium text-white bg-black rounded-md hover:bg-black/90 transition-colors">
+              <a href={`/en/login?redirect=/f/${formId}`} className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-700">
                 Sign In with a different account
               </a>
             </div>
@@ -133,7 +133,7 @@ export default async function PublicFormPage({ params }: PageProps) {
               </div>
               <h2 className="text-xl font-bold text-gray-900 mb-2">Access Denied</h2>
               <p className="text-gray-500 mb-6">Access denied. Only staff can submit responses to this form.</p>
-              <a href={`/en/login?redirect=/f/${formId}`} className="inline-flex justify-center w-full px-4 py-2.5 text-sm font-medium text-white bg-black rounded-md hover:bg-black/90 transition-colors">
+              <a href={`/en/login?redirect=/f/${formId}`} className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-700">
                 Sign In with a different account
               </a>
             </div>

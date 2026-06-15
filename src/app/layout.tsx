@@ -34,8 +34,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body className="antialiased">
+        <a
+          href="#main-content"
+          className="sr-only fixed left-4 top-4 z-[100] rounded-lg bg-white px-4 py-3 font-semibold text-slate-900 shadow-lg focus:not-sr-only"
+        >
+          Skip to main content
+        </a>
         {children}
         <Toaster position="top-right" richColors />
       </body>

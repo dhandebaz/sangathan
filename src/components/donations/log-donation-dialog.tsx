@@ -37,7 +37,7 @@ export function LogDonationDialog() {
     return (
       <button 
         onClick={() => setIsOpen(true)}
-        className="bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:opacity-90"
+        className="flex min-h-11 items-center gap-2 rounded-lg bg-primary px-4 py-2 font-semibold text-primary-foreground hover:bg-brand-700"
       >
         <Plus size={16} />
         Log Donation
@@ -96,7 +96,7 @@ export function LogDonationDialog() {
            <button 
               type="submit" 
               disabled={loading}
-              className="w-full bg-black text-white py-2 rounded-lg font-medium hover:opacity-90 disabled:opacity-50"
+              className="min-h-11 w-full rounded-lg bg-primary py-2 font-semibold text-primary-foreground hover:bg-brand-700 disabled:opacity-50"
            >
               {loading ? 'Saving...' : 'Save Record'}
            </button>

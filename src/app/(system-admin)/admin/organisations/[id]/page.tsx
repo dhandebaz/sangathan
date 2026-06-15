@@ -1,6 +1,5 @@
 import { createServiceClient } from '@/lib/supabase/service'
-import Link from 'next/link'
-import { ArrowLeft, ShieldAlert, AlertTriangle } from 'lucide-react'
+import { ShieldAlert, AlertTriangle } from 'lucide-react'
 import { suspendOrganisation, reactivateOrganisation } from '@/actions/system/actions'
 import { SystemAdminOrganisation } from '@/types/dashboard'
 import { requirePlatformAdmin } from '@/lib/auth/context'
@@ -47,23 +46,17 @@ export default async function OrganisationDetailsPage({ params }: PageProps) {
     .limit(20)
 
   return (
-    <div className="min-h-screen bg-gray-50 text-black">
-       <header className="bg-black text-white p-4">
-        <div className="max-w-7xl mx-auto flex items-center gap-4">
-           <Link href="/admin/organisations" className="text-gray-400 hover:text-white">
-              <ArrowLeft size={20} />
-           </Link>
-           <h1 className="text-xl font-bold flex items-center gap-2">
-             <ShieldAlert size={20} className="text-red-500" />
-             {org.name}
-           </h1>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto p-6 space-y-6">
+    <div className="space-y-6">
+      <div>
+        <h1 className="page-title flex items-center gap-3">
+          <ShieldAlert className="text-red-600" />
+          {org.name}
+        </h1>
+        <p className="mt-2 text-sm text-slate-600">Organisation details, safety state, members, logs, and platform actions.</p>
+      </div>
          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <h2 className="font-bold mb-4">Status & Actions</h2>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                <div>
                   <div className="text-sm text-gray-500 uppercase font-bold">Current Status</div>
                   <div className={`text-xl font-bold ${org.is_suspended ? 'text-red-600' : 'text-green-600'}`}>
@@ -77,7 +70,7 @@ export default async function OrganisationDetailsPage({ params }: PageProps) {
                         'use server'
                         await reactivateOrganisation({ organisationId: org.id })
                      }}>
-                        <button className="bg-green-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-green-700">
+                        <button className="min-h-11 rounded-lg bg-green-700 px-4 py-2 font-bold text-white hover:bg-green-800">
                            Reactivate Organisation
                         </button>
                      </form>
@@ -86,7 +79,7 @@ export default async function OrganisationDetailsPage({ params }: PageProps) {
                         'use server'
                         await suspendOrganisation({ organisationId: org.id })
                      }}>
-                        <button className="bg-red-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-700 flex items-center gap-2">
+                        <button className="flex min-h-11 items-center gap-2 rounded-lg bg-red-700 px-4 py-2 font-bold text-white hover:bg-red-800">
                            <AlertTriangle size={18} />
                            Suspend Organisation
                         </button>
@@ -177,7 +170,6 @@ export default async function OrganisationDetailsPage({ params }: PageProps) {
              </div>
            </div>
          </div>
-      </main>
     </div>
   )
 }

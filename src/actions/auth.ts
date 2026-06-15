@@ -219,9 +219,6 @@ export async function resetPassword(input: z.infer<typeof ResetPasswordSchema>) 
   redirect(`/${lang}/dashboard`)
 }
 
-// Removed Phone Auth logic
-// Removed custom email dependencies
-
 type CreateOrganisationAndAdminResult = {
   success: boolean
   organisation_id: string
@@ -229,10 +226,7 @@ type CreateOrganisationAndAdminResult = {
 }
 
 export async function finalizeSignup(input: { organizationName: string; organizationType: string }) {
-  const phoneNumber = null
-  const firebaseUid = null
-
-  // 2. Get Authenticated User
+  // Get Authenticated User
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -240,48 +234,10 @@ export async function finalizeSignup(input: { organizationName: string; organiza
     return { success: false, error: 'Session expired. Please login again.' }
   }
 
-  // 3. Check Rate Limit (Org Creation)
+  // Check Rate Limit (Org Creation)
   // Max 2 orgs per user per 24h
   const rateLimit = await checkRateLimit('create_org', user.id, 2, 86400)
   if (!rateLimit.allowed) return { success: false, error: rateLimit.error }
-
-  // 4. Check Phone Uniqueness (Global Check)
-  const supabaseAdmin = createServiceClient()
-  const { data: existingPhone } = await supabaseAdmin
-    .from('profiles')
-    .select('id, email')
-    .eq('phone', phoneNumber)
-    .maybeSingle()
-
-  if (existingPhone) {
-    if (!existingPhone.email) {
-      return { success: false, error: 'This phone number is already registered as an admin. Please login instead.' }
-    }
-
-    // Use current request origin when available so the session is created on the
-    // same host the user is interacting with (fixes loops on previews/custom domains).
-    const headersList = await headers()
-    const originHeader = headersList.get('origin')
-
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space'
-    const fallbackOrigin = appUrl.startsWith('http') ? appUrl : `https://${appUrl}`
-    const origin = originHeader || fallbackOrigin
-
-    const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
-      type: 'magiclink',
-      email: existingPhone.email,
-      options: {
-        redirectTo: `${origin}/en/dashboard`,
-      },
-    })
-
-    if (linkError || !linkData?.properties?.action_link) {
-      console.error('Existing admin magic link error:', linkError)
-      return { success: false, error: 'This phone number is already registered as an admin. Please login from the login page.' }
-    }
-
-    return { success: true, existingAdminRedirectUrl: linkData.properties.action_link }
-  }
 
   const orgName = input.organizationName
   const orgType = input.organizationType
@@ -295,6 +251,7 @@ export async function finalizeSignup(input: { organizationName: string; organiza
   const baseSlug = orgName.toLowerCase().replace(/[^a-z0-9]+/g, '-')
   const uniqueSlug = `${baseSlug}-${Math.random().toString(36).substring(2, 7)}`
 
+  const supabaseAdmin = createServiceClient()
   const {
     data: rpcData,
     error: rpcError,
@@ -304,8 +261,7 @@ export async function finalizeSignup(input: { organizationName: string; organiza
     p_user_id: user.id,
     p_full_name: fullName,
     p_email: user.email,
-    p_phone: phoneNumber,
-    p_firebase_uid: firebaseUid,
+    p_phone: null,
     p_org_type: orgType,
   } as never)
 
@@ -315,9 +271,8 @@ export async function finalizeSignup(input: { organizationName: string; organiza
       .update({
         status: 'active',
         approved_at: new Date().toISOString(),
-        phone: phoneNumber,
-        phone_verified: true,
-        firebase_uid: firebaseUid,
+        phone: null,
+        phone_verified: false,
       } as never)
       .eq('id', user.id)
   }
@@ -326,9 +281,6 @@ export async function finalizeSignup(input: { organizationName: string; organiza
     console.error('Signup RPC Error:', rpcError)
     return { success: false, error: `Database Registration Failed: ${rpcError?.message || 'Unknown Error'} (Code: ${rpcError?.code || 'UNKNOWN'})` }
   }
-
-  // 7. Send Welcome Email
-  // Emails are now fully handled by Supabase natively.
 
   const result = rpcData as CreateOrganisationAndAdminResult
 

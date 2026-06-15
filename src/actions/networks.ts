@@ -157,7 +157,6 @@ export async function joinNetwork(networkId: string) {
         .eq('network_id', network.id)
 
       if (coordinators) {
-        const reviewUrl = `${process.env.NEXT_PUBLIC_APP_URL || ''}/network/${network.slug}`
         for (const coordinator of coordinators as unknown as { user: { email: string; full_name?: string | null } | null }[]) {
           if (!coordinator.user?.email) continue
           // Notifications can be handled by in-app system or Supabase triggers

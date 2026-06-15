@@ -10,8 +10,8 @@ export default async function DocsLayout({
   const { lang } = await params
   
   return (
-    <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-      <div className="lg:flex lg:gap-12">
+    <div className="mx-auto max-w-[1440px] px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
+      <div className="lg:flex lg:gap-10 xl:gap-12">
         {/* Left Column: Navigation */}
         <DocsSidebar lang={lang} />
         

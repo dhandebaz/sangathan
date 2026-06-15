@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Badge as BadgeIcon, Printer, Search, User, BadgeCheck, X } from 'lucide-react'
+import { Badge as BadgeIcon, Printer, Search, User, BadgeCheck } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import {

@@ -50,7 +50,7 @@ export default async function FormsPage(props: { params: Promise<{ lang: string 
         </div>
         <Link 
             href={`/${lang}/dashboard/forms/new`} 
-            className="bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:opacity-90"
+            className="flex min-h-11 items-center gap-2 rounded-lg bg-primary px-4 py-2 font-semibold text-primary-foreground hover:bg-brand-700"
         >
             <Plus size={16} />
             Create Form

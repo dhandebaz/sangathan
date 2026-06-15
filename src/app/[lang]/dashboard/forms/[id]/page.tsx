@@ -106,7 +106,7 @@ export default async function FormDetailsPage({ params }: PageProps) {
                   <a 
                     href={`/f/${form.id}`} 
                     target="_blank"
-                    className="block w-full text-center bg-gray-900 text-white py-2 rounded-lg text-sm font-medium hover:bg-black"
+                    className="flex min-h-11 w-full items-center justify-center rounded-lg bg-primary py-2 text-center text-sm font-semibold text-primary-foreground hover:bg-brand-700"
                   >
                     View Public Form
                   </a>
