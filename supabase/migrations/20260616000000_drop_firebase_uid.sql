@@ -39,7 +39,7 @@ BEGIN
   VALUES (p_org_name, p_org_slug, p_org_type, v_capabilities)
   RETURNING id INTO v_org_id;
 
-  -- 2. Create Profile
+  -- 2. Create or Update Profile
   INSERT INTO profiles (
     id,
     organisation_id,
@@ -58,13 +58,19 @@ BEGIN
     p_phone,
     TRUE
   )
-  RETURNING id INTO v_profile_id;
+  ON CONFLICT (id) DO UPDATE SET
+    organisation_id = EXCLUDED.organisation_id,
+    full_name = EXCLUDED.full_name,
+    email = EXCLUDED.email,
+    role = EXCLUDED.role,
+    phone = EXCLUDED.phone,
+    phone_verified = EXCLUDED.phone_verified;
 
   -- Return success object
   RETURN json_build_object(
     'success', true,
     'organisation_id', v_org_id,
-    'profile_id', v_profile_id
+    'profile_id', p_user_id
   );
 
 EXCEPTION WHEN OTHERS THEN
