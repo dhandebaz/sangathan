@@ -250,7 +250,7 @@ The Donations module is a **Ledger**, not a payment processor. It tracks offline
 
 ---
 
-## Section 16: Supporter Plan
+## Section 16: Support Sangathan
 
 ### 1. The True Cost of Independence
 Sangathan provides advanced digital infrastructure (hosting, database, anonymity tools) completely free and ad-free. This independence costs real money to maintain:

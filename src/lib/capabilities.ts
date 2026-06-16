@@ -25,6 +25,7 @@ export type OrgCapability =
   | 'student_ids'
   | 'events'
   | 'memberships'
+  | 'ai_features'
 
 export const DEFAULT_CAPABILITIES: Record<OrgCapability, boolean> = {
   basic_governance: true,
@@ -42,7 +43,8 @@ export const DEFAULT_CAPABILITIES: Record<OrgCapability, boolean> = {
   volunteers: false,
   student_ids: false,
   events: false,
-  memberships: false
+  memberships: false,
+  ai_features: false
 }
 
 // Logic to unlock capabilities based on org maturity

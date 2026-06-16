@@ -54,3 +54,5 @@ next-env.d.ts
 AGENT.md
 CLAUDE.md
 .agent-mem/
+
+.env*

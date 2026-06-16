@@ -5,7 +5,17 @@ import { MembershipContext, Role, UserContext } from '@/types/auth'
 
 const ORG_COOKIE_NAME = 'sangathan_org_id'
 
+import { redis } from '@/lib/redis'
+
 export async function getUserMemberships(userId: string): Promise<MembershipContext[]> {
+  const cacheKey = `user_memberships:${userId}`
+  try {
+    const cached = await redis.get(cacheKey)
+    if (cached) return cached as MembershipContext[]
+  } catch (e) {
+    console.warn('Redis cache miss/error', e)
+  }
+
   const supabase = await createClient()
 
   const {
@@ -43,6 +53,12 @@ export async function getUserMemberships(userId: string): Promise<MembershipCont
       role: m.role as Role,
       status: m.status,
     }))
+
+  try {
+    await redis.set(cacheKey, memberships, { ex: 3600 }) // Cache for 1 hour
+  } catch (e) {
+    // Ignore cache set failures
+  }
 
   return memberships
 }

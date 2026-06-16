@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
 import { Plus, Search, Filter, Trash2, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -57,6 +58,20 @@ export function TicketManager({
     t.title.toLowerCase().includes(search.toLowerCase()) || 
     t.description.toLowerCase().includes(search.toLowerCase())
   )
+
+  useEffect(() => {
+    const supabase = createClient()
+    const channel = supabase
+      .channel('public:tickets')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'tickets' }, () => {
+        router.refresh()
+      })
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [router])
 
   async function handleCreateTicket(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()

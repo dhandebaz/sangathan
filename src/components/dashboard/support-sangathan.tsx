@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { Server, Database, Shield, Heart, Copy, CheckCircle2 } from 'lucide-react'
 import { useState } from 'react'
+import { AiActivationForm } from './ai-activation-form'
 
 export function SupportSangathan({ lang }: { lang: string }) {
   const isHi = lang === 'hi'
@@ -158,6 +159,10 @@ export function SupportSangathan({ lang }: { lang: string }) {
             <p className="mt-6 text-center text-xs text-slate-400">
               {isHi ? 'आपका समर्थन 100% संगठनों को सुरक्षित और ऑनलाइन रखने में जाता है।' : '100% of your support goes directly to keeping Sangathan organizations secure and online.'}
             </p>
+          </div>
+
+          <div className="mt-8">
+            <AiActivationForm lang={lang} />
           </div>
         </div>
       </div>

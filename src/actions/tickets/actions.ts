@@ -5,14 +5,15 @@ import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { logAction } from '@/lib/audit/log'
+import { triageTicketContent } from '@/actions/ai/triage'
 
 // --- Schemas ---
 
 export const CreateTicketSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
-  type: z.enum(['grievance', 'complaint', 'maintenance']),
-  priority: z.enum(['low', 'medium', 'high']),
+  type: z.enum(['grievance', 'complaint', 'maintenance', 'ai_activation']),
+  priority: z.enum(['low', 'medium', 'high']).optional(), // Optional since triage can determine it
 })
 
 export const UpdateTicketSchema = z.object({
@@ -31,6 +32,10 @@ export const createTicket = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
+    // Triage ticket content to get tags and severity
+    const triageResult = await triageTicketContent(input.description, context.organizationId)
+    const finalPriority = input.priority || triageResult.severity
+
     const { data, error } = await supabase
       .from('tickets')
       .insert({
@@ -39,8 +44,9 @@ export const createTicket = createSafeAction(
         title: input.title,
         description: input.description,
         type: input.type,
-        priority: input.priority,
+        priority: finalPriority,
         status: 'open',
+        tags: triageResult.tags, // Save AI/fallback tags
       })
       .select('id')
       .single()
@@ -64,6 +70,8 @@ export const createTicket = createSafeAction(
       revalidatePath('/dashboard/grievances')
     } else if (input.type === 'maintenance') {
       revalidatePath('/dashboard/maintenance')
+    } else if (input.type === 'ai_activation') {
+      revalidatePath('/dashboard/support')
     }
 
     return { success: true, ticketId: data.id }

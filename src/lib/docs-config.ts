@@ -61,7 +61,7 @@ export const docsConfig: DocSection[] = [
     title: { en: 'Operations', hi: 'संचालन' },
     icon: Settings,
     items: [
-      { title: { en: 'Support Sangathan', hi: 'समर्थक योजना' }, slug: 'support-sangathan' },
+      { title: { en: 'Support Sangathan', hi: 'संगठन का समर्थन करें' }, slug: 'support-sangathan' },
       { title: { en: 'Troubleshooting', hi: 'समस्या निवारण' }, slug: 'troubleshooting' },
       { title: { en: 'Operational FAQ', hi: 'परिचालन अक्सर पूछे जाने वाले प्रश्न' }, slug: 'faq' },
     ]
