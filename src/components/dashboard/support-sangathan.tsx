@@ -5,7 +5,7 @@ import { Server, Database, Shield, Heart, Copy, CheckCircle2 } from 'lucide-reac
 import { useState } from 'react'
 import { AiActivationForm } from './ai-activation-form'
 
-export function SupportSangathan({ lang }: { lang: string }) {
+export function SupportSangathan({ lang, isPublic = false }: { lang: string, isPublic?: boolean }) {
   const isHi = lang === 'hi'
   const [copiedId, setCopiedId] = useState<string | null>(null)
 
@@ -161,9 +161,11 @@ export function SupportSangathan({ lang }: { lang: string }) {
             </p>
           </div>
 
-          <div className="mt-8">
-            <AiActivationForm lang={lang} />
-          </div>
+          {!isPublic && (
+            <div className="mt-8">
+              <AiActivationForm lang={lang} />
+            </div>
+          )}
         </div>
       </div>
     </div>

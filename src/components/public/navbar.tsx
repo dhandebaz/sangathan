@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { Menu, X, LayoutDashboard } from 'lucide-react'
+import { Menu, X, LayoutDashboard, Heart } from 'lucide-react'
 import { useState } from 'react'
 
 export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticated: boolean }) {
@@ -63,6 +63,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                       ? 'text-[var(--brand-accent)]' 
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                   }`}
+                  prefetch={true}
                 >
                   {link.label}
                 </Link>
@@ -81,6 +82,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                  <Link 
                     href={`/${lang}/dashboard`}
                     className="flex min-h-11 items-center gap-2 rounded-lg border border-[var(--border-subtle)] bg-white px-4 py-2 text-sm font-semibold text-[var(--text-primary)] transition-colors hover:bg-[var(--bg-secondary)]"
+                  prefetch={true}
                  >
                     <LayoutDashboard size={16} />
                     {isHindi ? 'डैशबोर्ड' : 'Dashboard'}
@@ -88,8 +90,17 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
               ) : (
                  <div className="flex items-center gap-3">
                     <Link 
+                       href={`/${lang}/support`}
+                       className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-[var(--border-subtle)] bg-brand-50 px-4 py-2 text-sm font-bold text-brand-700 shadow-sm transition-colors hover:bg-brand-100"
+                       prefetch={true}
+                    >
+                       <Heart size={16} className="fill-brand-500 text-brand-500" />
+                       {isHindi ? 'हमें समर्थन दें' : 'Support Us'}
+                    </Link>
+                    <Link 
                        href={`/${lang}/login`}
                        className="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
+                       prefetch={true}
                     >
                        {isHindi ? 'लॉग इन' : 'Login'}
                     </Link>
@@ -128,6 +139,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                   href={link.href}
                   onClick={() => setIsOpen(false)}
                   className="flex min-h-11 items-center rounded-lg px-3 py-2 text-base font-semibold text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]"
+                  prefetch={true}
                 >
                   {link.label}
                 </Link>
@@ -143,25 +155,39 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                   href={`/${lang}/dashboard`}
                   onClick={() => setIsOpen(false)}
                   className="mt-4 flex min-h-12 w-full items-center justify-center rounded-lg border border-[var(--border-subtle)] bg-white px-4 py-3 text-center font-semibold text-[var(--text-primary)]"
-                >
+                  prefetch={true}
+                 >
                   {isHindi ? 'डैशबोर्ड पर जाएं' : 'Go to Dashboard'}
                 </Link>
              ) : (
-                <div className="grid grid-cols-2 gap-3 px-3 mt-4 pb-2">
+                <div className="flex flex-col gap-3 px-3 mt-4 pb-2">
                    <Link
-                      href={`/${lang}/login`}
+                      href={`/${lang}/support`}
                       onClick={() => setIsOpen(false)}
-                      className="flex min-h-12 items-center justify-center rounded-lg border border-[var(--border-subtle)] py-2 text-center font-semibold text-[var(--text-primary)]"
+                      className="flex min-h-12 items-center justify-center gap-2 rounded-lg bg-brand-50 py-2 text-center font-bold text-brand-700 border border-brand-100"
+                      prefetch={true}
                    >
-                      {isHindi ? 'लॉग इन' : 'Login'}
+                      <Heart size={18} className="fill-brand-500 text-brand-500" />
+                      {isHindi ? 'हमें समर्थन दें' : 'Support Us'}
                    </Link>
-                   <Link
-                      href={`/${lang}/signup`}
-                      onClick={() => setIsOpen(false)}
-                      className="flex min-h-12 items-center justify-center rounded-lg bg-[var(--brand-accent)] py-2 text-center font-semibold text-white"
-                   >
-                      {isHindi ? 'साइन अप' : 'Sign Up'}
-                   </Link>
+                   <div className="grid grid-cols-2 gap-3">
+                     <Link
+                        href={`/${lang}/login`}
+                        onClick={() => setIsOpen(false)}
+                        className="flex min-h-12 items-center justify-center rounded-lg border border-[var(--border-subtle)] py-2 text-center font-semibold text-[var(--text-primary)]"
+                        prefetch={true}
+                     >
+                        {isHindi ? 'लॉग इन' : 'Login'}
+                     </Link>
+                     <Link
+                        href={`/${lang}/signup`}
+                        onClick={() => setIsOpen(false)}
+                        className="flex min-h-12 items-center justify-center rounded-lg bg-[var(--brand-accent)] py-2 text-center font-semibold text-white"
+                        prefetch={true}
+                     >
+                        {isHindi ? 'साइन अप' : 'Sign Up'}
+                     </Link>
+                   </div>
                 </div>
              )}
           </div>
