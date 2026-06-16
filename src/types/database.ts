@@ -195,9 +195,13 @@ export type Database = {
           created_at: string
           created_by: string
           deleted_at: string | null
+          email_sent_at: string | null
+          email_stats: Json | null
+          expires_at: string | null
           id: string
           is_pinned: boolean
           organisation_id: string
+          scheduled_at: string | null
           title: string
           updated_at: string
           visibility_level: string
@@ -207,9 +211,13 @@ export type Database = {
           created_at?: string
           created_by: string
           deleted_at?: string | null
+          email_sent_at?: string | null
+          email_stats?: Json | null
+          expires_at?: string | null
           id?: string
           is_pinned?: boolean
           organisation_id: string
+          scheduled_at?: string | null
           title: string
           updated_at?: string
           visibility_level: string
@@ -219,9 +227,13 @@ export type Database = {
           created_at?: string
           created_by?: string
           deleted_at?: string | null
+          email_sent_at?: string | null
+          email_stats?: Json | null
+          expires_at?: string | null
           id?: string
           is_pinned?: boolean
           organisation_id?: string
+          scheduled_at?: string | null
           title?: string
           updated_at?: string
           visibility_level?: string
@@ -231,7 +243,7 @@ export type Database = {
             foreignKeyName: "announcements_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
-            referencedRelation: "members"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -250,6 +262,61 @@ export type Database = {
           },
           {
             foreignKeyName: "announcements_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      appeals: {
+        Row: {
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          organisation_id: string
+          reason: string
+          status: string
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          organisation_id: string
+          reason: string
+          status?: string
+          type: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          organisation_id?: string
+          reason?: string
+          status?: string
+          type?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appeals_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "org_activity_summary"
+            referencedColumns: ["organisation_id"]
+          },
+          {
+            foreignKeyName: "appeals_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "org_dashboard_stats"
+            referencedColumns: ["organisation_id"]
+          },
+          {
+            foreignKeyName: "appeals_organisation_id_fkey"
             columns: ["organisation_id"]
             isOneToOne: false
             referencedRelation: "organisations"
@@ -293,7 +360,7 @@ export type Database = {
             foreignKeyName: "audit_logs_actor_member_id_fkey"
             columns: ["actor_member_id"]
             isOneToOne: false
-            referencedRelation: "members"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -428,7 +495,7 @@ export type Database = {
             foreignKeyName: "events_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
-            referencedRelation: "members"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -703,7 +770,7 @@ export type Database = {
             foreignKeyName: "join_requests_reviewed_by_fkey"
             columns: ["reviewed_by"]
             isOneToOne: false
-            referencedRelation: "members"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -711,6 +778,169 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      joint_events: {
+        Row: {
+          created_at: string | null
+          event_id: string
+          id: string
+          organisation_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          event_id: string
+          id?: string
+          organisation_id: string
+        }
+        Update: {
+          created_at?: string | null
+          event_id?: string
+          id?: string
+          organisation_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "joint_events_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "joint_events_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "org_activity_summary"
+            referencedColumns: ["organisation_id"]
+          },
+          {
+            foreignKeyName: "joint_events_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "org_dashboard_stats"
+            referencedColumns: ["organisation_id"]
+          },
+          {
+            foreignKeyName: "joint_events_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meeting_attendance: {
+        Row: {
+          created_at: string | null
+          meeting_id: string
+          member_id: string
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          meeting_id: string
+          member_id: string
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          meeting_id?: string
+          member_id?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meeting_attendance_meeting_id_fkey"
+            columns: ["meeting_id"]
+            isOneToOne: false
+            referencedRelation: "meetings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "meeting_attendance_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meetings: {
+        Row: {
+          created_at: string | null
+          created_by: string
+          date: string
+          description: string | null
+          end_time: string | null
+          id: string
+          location: string | null
+          meeting_link: string | null
+          organisation_id: string
+          title: string
+          updated_at: string | null
+          visibility: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by: string
+          date: string
+          description?: string | null
+          end_time?: string | null
+          id?: string
+          location?: string | null
+          meeting_link?: string | null
+          organisation_id: string
+          title: string
+          updated_at?: string | null
+          visibility?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string
+          date?: string
+          description?: string | null
+          end_time?: string | null
+          id?: string
+          location?: string | null
+          meeting_link?: string | null
+          organisation_id?: string
+          title?: string
+          updated_at?: string | null
+          visibility?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meetings_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "meetings_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "org_activity_summary"
+            referencedColumns: ["organisation_id"]
+          },
+          {
+            foreignKeyName: "meetings_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "org_dashboard_stats"
+            referencedColumns: ["organisation_id"]
+          },
+          {
+            foreignKeyName: "meetings_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
             referencedColumns: ["id"]
           },
         ]
@@ -919,7 +1149,7 @@ export type Database = {
             foreignKeyName: "notification_queue_member_id_fkey"
             columns: ["member_id"]
             isOneToOne: false
-            referencedRelation: "members"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -981,7 +1211,7 @@ export type Database = {
             foreignKeyName: "org_invites_invited_by_fkey"
             columns: ["invited_by"]
             isOneToOne: false
-            referencedRelation: "members"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -1007,45 +1237,149 @@ export type Database = {
           },
         ]
       }
+      organisation_links: {
+        Row: {
+          created_at: string | null
+          created_by: string
+          id: string
+          requester_org_id: string
+          responder_org_id: string
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by: string
+          id?: string
+          requester_org_id: string
+          responder_org_id: string
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string
+          id?: string
+          requester_org_id?: string
+          responder_org_id?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organisation_links_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organisation_links_requester_org_id_fkey"
+            columns: ["requester_org_id"]
+            isOneToOne: false
+            referencedRelation: "org_activity_summary"
+            referencedColumns: ["organisation_id"]
+          },
+          {
+            foreignKeyName: "organisation_links_requester_org_id_fkey"
+            columns: ["requester_org_id"]
+            isOneToOne: false
+            referencedRelation: "org_dashboard_stats"
+            referencedColumns: ["organisation_id"]
+          },
+          {
+            foreignKeyName: "organisation_links_requester_org_id_fkey"
+            columns: ["requester_org_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organisation_links_responder_org_id_fkey"
+            columns: ["responder_org_id"]
+            isOneToOne: false
+            referencedRelation: "org_activity_summary"
+            referencedColumns: ["organisation_id"]
+          },
+          {
+            foreignKeyName: "organisation_links_responder_org_id_fkey"
+            columns: ["responder_org_id"]
+            isOneToOne: false
+            referencedRelation: "org_dashboard_stats"
+            referencedColumns: ["organisation_id"]
+          },
+          {
+            foreignKeyName: "organisation_links_responder_org_id_fkey"
+            columns: ["responder_org_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organisations: {
         Row: {
+          address: string | null
           capabilities: Json | null
+          contact_email: string | null
+          contact_phone: string | null
+          cover_url: string | null
           created_at: string
           deleted_at: string | null
+          description: string | null
           id: string
+          logo_url: string | null
           membership_policy: string
           name: string
           org_type: string
           public_transparency_enabled: boolean
           slug: string
+          social_links: Json | null
           status: string
           updated_at: string
+          website: string | null
         }
         Insert: {
+          address?: string | null
           capabilities?: Json | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          cover_url?: string | null
           created_at?: string
           deleted_at?: string | null
+          description?: string | null
           id?: string
+          logo_url?: string | null
           membership_policy?: string
           name: string
           org_type?: string
           public_transparency_enabled?: boolean
           slug: string
+          social_links?: Json | null
           status?: string
           updated_at?: string
+          website?: string | null
         }
         Update: {
+          address?: string | null
           capabilities?: Json | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          cover_url?: string | null
           created_at?: string
           deleted_at?: string | null
+          description?: string | null
           id?: string
+          logo_url?: string | null
           membership_policy?: string
           name?: string
           org_type?: string
           public_transparency_enabled?: boolean
           slug?: string
+          social_links?: Json | null
           status?: string
           updated_at?: string
+          website?: string | null
         }
         Relationships: []
       }
@@ -1088,33 +1422,29 @@ export type Database = {
       poll_votes: {
         Row: {
           id: string
-          member_id: string
+          ip_hash: string | null
           option_id: string
           poll_id: string
+          user_id: string
           voted_at: string
         }
         Insert: {
           id?: string
-          member_id: string
+          ip_hash?: string | null
           option_id: string
           poll_id: string
+          user_id: string
           voted_at?: string
         }
         Update: {
           id?: string
-          member_id?: string
+          ip_hash?: string | null
           option_id?: string
           poll_id?: string
+          user_id?: string
           voted_at?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "poll_votes_member_id_fkey"
-            columns: ["member_id"]
-            isOneToOne: false
-            referencedRelation: "members"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "poll_votes_option_poll_fk"
             columns: ["option_id", "poll_id"]
@@ -1129,6 +1459,13 @@ export type Database = {
             referencedRelation: "polls"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "poll_votes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       polls: {
@@ -1137,12 +1474,17 @@ export type Database = {
           created_by: string
           description: string | null
           end_time: string | null
+          final_results: Json | null
           id: string
+          is_public: boolean | null
           organisation_id: string
+          quorum_percentage: number | null
           start_time: string | null
           status: string
           title: string
+          type: string | null
           updated_at: string
+          visibility_level: string | null
           voting_method: string
         }
         Insert: {
@@ -1150,12 +1492,17 @@ export type Database = {
           created_by: string
           description?: string | null
           end_time?: string | null
+          final_results?: Json | null
           id?: string
+          is_public?: boolean | null
           organisation_id: string
+          quorum_percentage?: number | null
           start_time?: string | null
           status: string
           title: string
+          type?: string | null
           updated_at?: string
+          visibility_level?: string | null
           voting_method: string
         }
         Update: {
@@ -1163,12 +1510,17 @@ export type Database = {
           created_by?: string
           description?: string | null
           end_time?: string | null
+          final_results?: Json | null
           id?: string
+          is_public?: boolean | null
           organisation_id?: string
+          quorum_percentage?: number | null
           start_time?: string | null
           status?: string
           title?: string
+          type?: string | null
           updated_at?: string
+          visibility_level?: string | null
           voting_method?: string
         }
         Relationships: [
@@ -1176,7 +1528,7 @@ export type Database = {
             foreignKeyName: "polls_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
-            referencedRelation: "members"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -1608,7 +1960,7 @@ export type Database = {
             foreignKeyName: "task_assignments_member_id_fkey"
             columns: ["member_id"]
             isOneToOne: false
-            referencedRelation: "members"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -1668,7 +2020,7 @@ export type Database = {
             foreignKeyName: "tasks_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
-            referencedRelation: "members"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -1818,51 +2170,30 @@ export type Database = {
         Returns: boolean
       }
       cleanup_orphan_users: { Args: never; Returns: undefined }
-      create_organisation_and_admin:
-        | {
-            Args: {
-              p_email: string
-              p_full_name: string
-              p_org_name: string
-              p_org_slug: string
-              p_phone: string
-              p_user_id: string
-            }
-            Returns: string
-          }
-        | {
-            Args: {
-              p_email: string
-              p_full_name: string
-              p_org_name: string
-              p_org_slug: string
-              p_phone: string
-              p_user_id: string
-            }
-            Returns: Json
-          }
-        | {
-            Args: {
-              p_email: string
-              p_full_name: string
-              p_org_name: string
-              p_org_slug: string
-              p_org_type?: string
-              p_phone: string
-              p_user_id: string
-            }
-            Returns: Json
-          }
+      create_organisation_and_admin: {
+        Args: {
+          p_email: string
+          p_full_name: string
+          p_org_name: string
+          p_org_slug: string
+          p_org_type?: string
+          p_phone: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
       create_organisation_with_admin: {
         Args: { org_name: string; org_slug: string }
         Returns: string
       }
+      get_my_organisation_id: { Args: never; Returns: string }
       get_verification_status: { Args: { user_id: string }; Returns: Json }
       has_visibility_access: {
         Args: { member_role: string; visibility: string }
         Returns: boolean
       }
       increment_rate_limit: { Args: { key_param: string }; Returns: undefined }
+      is_platform_admin: { Args: never; Returns: boolean }
       lock_next_job: { Args: never; Returns: Json }
       set_selected_organisation: {
         Args: { p_organisation_id: string }

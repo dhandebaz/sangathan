@@ -295,7 +295,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
     const { count, error: rateError } = await supabase.from('rate_limits')
       .select('*', { count: 'exact', head: true })
       .eq('key', key)
-      .gt('created_at', new Date(Date.now() - 3600 * 1000).toISOString())
+      .gt('window_start', new Date(Date.now() - 3600 * 1000).toISOString())
 
     if (!rateError && count !== null && count >= 5) {
       return { success: false, error: 'Too many submissions. Please try again later.' }
