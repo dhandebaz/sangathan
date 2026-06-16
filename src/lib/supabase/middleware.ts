@@ -113,7 +113,7 @@ export async function updateSession(request: NextRequest) {
         profile = fetchedProfile
     }
 
-    if (!profile || (profile.role === 'admin' && !profile.phone_verified)) {
+    if (!profile) {
       // Allow access to auth screens so the user can login or escape
     } else {
       const url = request.nextUrl.clone()
@@ -175,120 +175,13 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // --- PHONE VERIFICATION ENFORCEMENT ---
+  // --- Dashboard Route Check ---
   const isDashboardRoute = i18n.locales.some(loc => pathname.startsWith(`/${loc}/dashboard`))
-  const isVerificationPage = i18n.locales.some(loc => pathname.startsWith(`/${loc}/verify-phone`)) || pathname === '/verify-phone'
-
-  if (user && isDashboardRoute && !isVerificationPage) {
-     const cookieName = 'user-metadata'
-     const cached = request.cookies.get(cookieName)?.value
-     let profile = cached ? await verifySignedCookie(cached) : null
-     
-     if (!profile) {
-         const supabase = createServerClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            {
-              cookies: {
-                getAll() { return request.cookies.getAll() },
-                setAll() {}
-              }
-            }
-          )
-         
-         const { data: fetchedProfile } = await supabase
-           .from('profiles')
-           .select('role, phone_verified, organisations(capabilities)')
-           .eq('id', user.id)
-           .single()
-         
-         profile = fetchedProfile
-         
-         if (profile) {
-             const signedValue = await createSignedCookie(profile)
-             supabaseResponse.cookies.set(cookieName, signedValue, {
-                 httpOnly: true,
-                 secure: process.env.NODE_ENV === 'production',
-                 maxAge: 60 * 10
-             })
-         }
-     }
-     
-     if (!profile || (profile.role === 'admin' && !profile.phone_verified)) {
-        const locale = hasLocale ? pathname.split('/')[1] : i18n.defaultLocale
-        const url = request.nextUrl.clone()
-        url.pathname = `/${locale}/verify-phone`
-        const response = NextResponse.redirect(url)
-        
-        if (profile) {
-             const signedValue = await createSignedCookie(profile)
-             response.cookies.set(cookieName, signedValue, {
-                 httpOnly: true,
-                 secure: process.env.NODE_ENV === 'production',
-                 maxAge: 60 * 10
-             })
-        }
-        return response
-     }
-  }
 
   // Security Headers
   supabaseResponse.headers.set('X-Frame-Options', 'DENY')
   supabaseResponse.headers.set('X-Content-Type-Options', 'nosniff')
   supabaseResponse.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-  
-  // If user is verified and tries to access verify-phone, redirect to dashboard
-  if (user && isVerificationPage) {
-      const cookieName = 'user-metadata'
-      const cached = request.cookies.get(cookieName)?.value
-      let profile = cached ? await verifySignedCookie(cached) : null
-
-      if (!profile) {
-          const supabase = createServerClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            {
-              cookies: {
-                getAll() { return request.cookies.getAll() },
-                setAll() {}
-              }
-            }
-          )
-
-         const { data: fetchedProfile } = await supabase
-           .from('profiles')
-           .select('role, phone_verified, organisations(capabilities)')
-           .eq('id', user.id)
-           .single()
-         
-         profile = fetchedProfile
-         
-         if (profile) {
-             const signedValue = await createSignedCookie(profile)
-             supabaseResponse.cookies.set(cookieName, signedValue, {
-                 httpOnly: true,
-                 secure: process.env.NODE_ENV === 'production',
-                 maxAge: 60 * 10
-             })
-         }
-     }
-
-     if (profile && (profile.role !== 'admin' || profile.phone_verified)) {
-        const url = request.nextUrl.clone()
-        url.pathname = '/en/dashboard'
-        const response = NextResponse.redirect(url)
-        
-        if (!cached && profile) {
-            const signedValue = await createSignedCookie(profile)
-            response.cookies.set(cookieName, signedValue, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                maxAge: 60 * 10
-            })
-        }
-        return response
-     }
-  }
 
    // --- CAPABILITIES (ORG TYPE) ENFORCEMENT ---
    if (user && isDashboardRoute) {

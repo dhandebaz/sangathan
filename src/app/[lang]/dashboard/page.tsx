@@ -46,9 +46,9 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     )
   }
 
-  const profile = profileData as { status: 'active' | 'pending' | 'rejected' | 'removed'; role: string; organisation_id: string | null; phone_verified: boolean }
+  const profile = profileData as { status: 'active' | 'pending' | 'rejected' | 'removed'; role: string; organisation_id: string | null }
 
-  const onboardingIncomplete = !profile.organisation_id || !profile.phone_verified
+  const onboardingIncomplete = !profile.organisation_id
 
   if (onboardingIncomplete) {
     return (
