@@ -76,7 +76,7 @@ export async function createNetwork(input: z.infer<typeof NetworkSchema>) {
         status: 'active',
       } as never)
 
-    revalidatePath('/dashboard/networks')
+    revalidatePath('/', 'layout')
     return { success: true, id: network.id }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
@@ -164,8 +164,8 @@ export async function joinNetwork(networkId: string) {
       }
     }
 
-    revalidatePath('/dashboard/networks')
-    revalidatePath(`/network/${network.slug}`)
+    revalidatePath('/', 'layout')
+    revalidatePath('/', 'layout')
     return { success: true, status: membershipStatus }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'

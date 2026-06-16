@@ -56,8 +56,8 @@ export const suspendOrganisation = async (input: z.infer<typeof OrgActionSchema>
     resource_id: result.data.organisationId,
   })
 
-  revalidatePath('/admin/organisations')
-  revalidatePath(`/admin/organisations/${result.data.organisationId}`)
+  revalidatePath('/', 'layout')
+  revalidatePath('/', 'layout')
   return { success: true }
 }
 
@@ -105,7 +105,7 @@ export const reactivateOrganisation = async (input: z.infer<typeof OrgActionSche
     resource_id: result.data.organisationId,
   })
 
-  revalidatePath('/admin/organisations')
-  revalidatePath(`/admin/organisations/${result.data.organisationId}`)
+  revalidatePath('/', 'layout')
+  revalidatePath('/', 'layout')
   return { success: true }
 }

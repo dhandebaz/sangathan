@@ -56,7 +56,7 @@ export async function submitAppeal(orgId: string, input: z.infer<typeof AppealSc
 
     if (error) throw error
 
-    revalidatePath('/dashboard/appeals')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'An unexpected error occurred'

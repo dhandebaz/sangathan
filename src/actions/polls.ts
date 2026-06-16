@@ -89,7 +89,7 @@ export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
       .insert(options as never)
     if (optError) throw optError
 
-    revalidatePath('/dashboard/polls')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
@@ -189,7 +189,7 @@ export async function castVote(input: z.infer<typeof VoteSchema>) {
     const { error } = await supabaseAdmin.from('poll_votes').insert(voteRecord)
     if (error) throw error
 
-    revalidatePath(`/dashboard/polls/${data.poll_id}`)
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
@@ -248,7 +248,7 @@ export async function closePoll(pollId: string) {
       .update({ status: 'closed', final_results: finalData })
       .eq('id', pollId)
 
-    revalidatePath('/dashboard/polls')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'

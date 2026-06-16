@@ -96,7 +96,7 @@ export const logDonation = createSafeAction(
       details: { amount: input.amount, donor: input.donor_name }
     })
 
-    revalidatePath('/dashboard/donations')
+    revalidatePath('/', 'layout')
     return { success: true, donationId: donation.id }
   },
   { allowedRoles: ['admin', 'editor'] }
@@ -125,7 +125,7 @@ export const verifyDonation = createSafeAction(
       resource_id: input.donationId
     })
 
-    revalidatePath('/dashboard/donations')
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   { allowedRoles: ['admin', 'editor'] }
@@ -154,7 +154,7 @@ export const deleteDonation = createSafeAction(
       resource_id: input.donationId
     })
 
-    revalidatePath('/dashboard/donations')
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   { allowedRoles: ['admin'] } // Admin only

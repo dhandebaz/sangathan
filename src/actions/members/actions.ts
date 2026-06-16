@@ -73,7 +73,7 @@ export const addMember = createSafeAction(
       details: { full_name: input.full_name, role: input.role }
     })
 
-    revalidatePath('/dashboard/members')
+    revalidatePath('/', 'layout')
     return { success: true, memberId: member.id }
   },
   { allowedRoles: ['admin', 'editor'] } // Editor can create too
@@ -117,7 +117,7 @@ export const updateMember = createSafeAction(
       details: { changes: input }
     })
 
-    revalidatePath('/dashboard/members')
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   { allowedRoles: ['admin', 'editor'] }
@@ -148,7 +148,7 @@ export const changeMemberStatus = createSafeAction(
       details: { status: input.status }
     })
 
-    revalidatePath('/dashboard/members')
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   { allowedRoles: ['admin', 'editor'] }

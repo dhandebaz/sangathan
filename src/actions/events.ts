@@ -109,7 +109,7 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
       if (jointError) console.error('Joint Event Error:', jointError)
     }
 
-    revalidatePath('/[lang]/dashboard/events')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error: unknown) {
     const message =
@@ -245,7 +245,7 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
 
     if (insertError) throw insertError
 
-    revalidatePath(`/events/${data.event_id}`)
+    revalidatePath('/', 'layout')
     return { success: true }
 
   } catch (error) {

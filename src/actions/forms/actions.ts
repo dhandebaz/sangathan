@@ -73,7 +73,7 @@ export const createForm = createSafeAction(
       details: { title: input.title }
     })
 
-    revalidatePath('/dashboard/forms')
+    revalidatePath('/', 'layout')
     return { formId: form.id }
   },
   { allowedRoles: ['admin', 'editor', 'executive'] }
@@ -107,8 +107,8 @@ export const updateForm = createSafeAction(
       details: { changes: input }
     })
 
-    revalidatePath(`/dashboard/forms/${input.formId}`)
-    revalidatePath('/dashboard/forms')
+    revalidatePath('/', 'layout')
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   { allowedRoles: ['admin', 'editor', 'executive'] }
@@ -136,7 +136,7 @@ export const toggleFormStatus = createSafeAction(
       details: { is_active: input.isActive }
     })
 
-    revalidatePath('/dashboard/forms')
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   { allowedRoles: ['admin', 'editor', 'executive'] }
@@ -163,7 +163,7 @@ export const deleteForm = createSafeAction(
       resource_id: input.formId
     })
 
-    revalidatePath('/dashboard/forms')
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   { allowedRoles: ['admin', 'editor', 'executive'] }

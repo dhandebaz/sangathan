@@ -83,7 +83,7 @@ export const createMeeting = createSafeAction(
       details: { title: input.title }
     })
 
-    revalidatePath('/dashboard/meetings')
+    revalidatePath('/', 'layout')
     return { success: true, meetingId: meeting.id }
   },
   { allowedRoles: ['admin', 'editor'] }
@@ -110,7 +110,7 @@ export const markAttendance = createSafeAction(
       return { error: err.message || 'Failed to mark attendance' }
     }
 
-    revalidatePath(`/dashboard/meetings/${input.meetingId}`)
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   { allowedRoles: ['admin', 'editor'] }
@@ -140,7 +140,7 @@ export const deleteMeeting = createSafeAction(
       details: {}
     })
 
-    revalidatePath('/dashboard/meetings')
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   { allowedRoles: ['admin'] }

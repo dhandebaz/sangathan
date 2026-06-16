@@ -54,8 +54,7 @@ export async function updateOrganisationProfile(data: ProfileData) {
       throw new Error(error.message)
     }
 
-    revalidatePath('/[lang]/dashboard/settings', 'page')
-    revalidatePath('/[lang]/(site)/org/[slug]', 'page')
+    revalidatePath('/', 'layout')
     
     return { success: true }
   } catch (err: any) {
@@ -100,7 +99,7 @@ export async function updateOrganisationSlug(newSlug: string) {
 
     await logger.security('organisation', `Slug updated to ${newSlug} by user ${userId}`, { orgId })
 
-    revalidatePath('/[lang]/dashboard/settings', 'page')
+    revalidatePath('/', 'layout')
 
     return { success: true }
   } catch (err: any) {
@@ -125,8 +124,7 @@ export async function updateOrganisationImage(type: 'logo' | 'cover', url: strin
       throw new Error(error.message)
     }
 
-    revalidatePath('/[lang]/dashboard/settings', 'page')
-    revalidatePath('/[lang]/(site)/org/[slug]', 'page')
+    revalidatePath('/', 'layout')
     
     return { success: true }
   } catch (err: any) {

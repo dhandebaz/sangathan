@@ -57,7 +57,7 @@ export async function createCollaborationRequest(targetOrgId: string) {
 
     if (error) throw error
 
-    revalidatePath('/dashboard/settings')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'An unexpected error occurred'
@@ -117,7 +117,7 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
 
     if (error) throw error
 
-    revalidatePath('/dashboard/settings')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'An unexpected error occurred'

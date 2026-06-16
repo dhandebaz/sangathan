@@ -54,7 +54,7 @@ export const createCampaign = createSafeAction(
       details: { title: input.title }
     })
 
-    revalidatePath('/dashboard/campaigns')
+    revalidatePath('/', 'layout')
 
     return { success: true, campaignId: data.id }
   },
@@ -85,7 +85,7 @@ export const updateCampaignStatus = createSafeAction(
       details: { status: input.status }
     })
 
-    revalidatePath('/dashboard/campaigns')
+    revalidatePath('/', 'layout')
 
     return { success: true }
   },
@@ -115,7 +115,7 @@ export const deleteCampaign = createSafeAction(
       resource_id: input.campaignId
     })
 
-    revalidatePath('/dashboard/campaigns')
+    revalidatePath('/', 'layout')
 
     return { success: true }
   },

@@ -65,13 +65,13 @@ export const createTicket = createSafeAction(
     })
 
     if (input.type === 'complaint') {
-      revalidatePath('/dashboard/complaints')
+      revalidatePath('/', 'layout')
     } else if (input.type === 'grievance') {
-      revalidatePath('/dashboard/grievances')
+      revalidatePath('/', 'layout')
     } else if (input.type === 'maintenance') {
-      revalidatePath('/dashboard/maintenance')
+      revalidatePath('/', 'layout')
     } else if (input.type === 'ai_activation') {
-      revalidatePath('/dashboard/support')
+      revalidatePath('/', 'layout')
     }
 
     return { success: true, ticketId: data.id }
@@ -102,11 +102,11 @@ export const updateTicketStatus = createSafeAction(
 
     if (ticket) {
       if (ticket.type === 'complaint') {
-        revalidatePath('/dashboard/complaints')
+        revalidatePath('/', 'layout')
       } else if (ticket.type === 'grievance') {
-        revalidatePath('/dashboard/grievances')
+        revalidatePath('/', 'layout')
       } else if (ticket.type === 'maintenance') {
-        revalidatePath('/dashboard/maintenance')
+        revalidatePath('/', 'layout')
       }
     }
 
@@ -147,11 +147,11 @@ export const deleteTicket = createSafeAction(
 
     if (ticket) {
       if (ticket.type === 'complaint') {
-        revalidatePath('/dashboard/complaints')
+        revalidatePath('/', 'layout')
       } else if (ticket.type === 'grievance') {
-        revalidatePath('/dashboard/grievances')
+        revalidatePath('/', 'layout')
       } else if (ticket.type === 'maintenance') {
-        revalidatePath('/dashboard/maintenance')
+        revalidatePath('/', 'layout')
       }
     }
 

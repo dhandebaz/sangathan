@@ -121,7 +121,7 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
       }
     }
 
-    revalidatePath('/dashboard/announcements')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'An unexpected error occurred'
@@ -162,7 +162,7 @@ export async function deleteAnnouncement(id: string) {
     const { error } = await supabase.from('announcements').delete().eq('id', id)
     if (error) throw error
     
-    revalidatePath('/dashboard/announcements')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'An unexpected error occurred'

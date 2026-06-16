@@ -87,7 +87,7 @@ export async function createTask(input: z.infer<typeof CreateTaskSchema>) {
       if (assignError) console.error('Assignment Error:', assignError)
     }
 
-    revalidatePath('/dashboard/tasks')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
@@ -104,7 +104,7 @@ export async function updateTaskStatus(taskId: string, status: string) {
       .eq('id', taskId)
 
     if (error) throw error
-    revalidatePath('/dashboard/tasks')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
@@ -156,7 +156,7 @@ export async function logHours(input: z.infer<typeof LogHoursSchema>) {
         .eq('id', user.id)
     }
 
-    revalidatePath('/dashboard/tasks')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
@@ -178,7 +178,7 @@ export async function acceptAssignment(taskId: string) {
       .eq('member_id', user.id)
 
     if (error) throw error
-    revalidatePath('/dashboard/tasks')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'

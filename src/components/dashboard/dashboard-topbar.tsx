@@ -13,9 +13,10 @@ interface DashboardTopBarProps {
   userEmail?: string | null
   role?: string
   orgName?: string | null
+  orgLogoUrl?: string | null
 }
 
-export function DashboardTopBar({ lang, userEmail, role, orgName }: DashboardTopBarProps) {
+export function DashboardTopBar({ lang, userEmail, role, orgName, orgLogoUrl }: DashboardTopBarProps) {
   const [open, setOpen] = useState(false)
   const [isSigningOut, setIsSigningOut] = useState(false)
   const pathname = usePathname()
@@ -76,11 +77,11 @@ export function DashboardTopBar({ lang, userEmail, role, orgName }: DashboardTop
           aria-label="Sangathan Dashboard"
         >
           <Image
-            src="/logo/logo.png"
-            alt=""
+            src={orgLogoUrl || "/logo/logo.png"}
+            alt="Logo"
             width={128}
             height={32}
-            className="h-7 w-auto"
+            className="h-7 w-auto object-contain"
             aria-hidden="true"
             priority
           />

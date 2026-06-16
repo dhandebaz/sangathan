@@ -60,8 +60,8 @@ export async function updateTransparency(input: z.infer<typeof UpdateTransparenc
 
     if (error) throw error
 
-    revalidatePath('/dashboard/settings')
-    revalidatePath(`/org`) // This might not be specific enough for dynamic routes, but Next.js usually handles revalidation well.
+    revalidatePath('/', 'layout')
+    revalidatePath('/', 'layout') // This might not be specific enough for dynamic routes, but Next.js usually handles revalidation well.
     // Ideally we revalidate the specific org page if we knew the slug.
     return { success: true }
   } catch (error) {
@@ -102,7 +102,7 @@ export async function updateMembershipPolicy(input: z.infer<typeof UpdatePolicyS
 
     if (error) throw error
 
-    revalidatePath('/dashboard/settings')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
@@ -196,7 +196,7 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
       // Welcome notifications can be handled by in-app system
     }
 
-    revalidatePath('/dashboard')
+    revalidatePath('/', 'layout')
     return { success: true, status }
   } catch (error) {
     console.error('Join Error:', error)
@@ -262,7 +262,7 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
     // Notify
     // In-app notifications or Supabase triggers could go here
 
-    revalidatePath('/dashboard/membership-requests')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
@@ -325,7 +325,7 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
     // Notify
     // In-app notifications or Supabase triggers could go here
 
-    revalidatePath('/dashboard/membership-requests')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
