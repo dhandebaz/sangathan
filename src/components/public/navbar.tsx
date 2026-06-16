@@ -24,6 +24,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
     { href: `/${lang}/governance`, label: isHindi ? 'शासन' : 'Governance' },
     { href: `/${lang}/status`, label: isHindi ? 'स्थिति' : 'Status' },
     { href: `/${lang}/contact`, label: isHindi ? 'संपर्क' : 'Contact' },
+    { href: `/${lang}/support`, label: isHindi ? 'हमें समर्थन दें' : 'Support Us', highlight: true },
   ]
 
   return (
@@ -61,10 +62,13 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                   className={`text-sm font-medium transition-colors duration-200 ${
                     pathname === link.href 
                       ? 'text-[var(--brand-accent)]' 
-                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                      : link.highlight
+                        ? 'text-brand-600 hover:text-brand-700 flex items-center gap-1.5'
+                        : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                   }`}
                   prefetch={true}
                 >
+                  {link.highlight && <Heart size={14} className="fill-brand-500 text-brand-500" />}
                   {link.label}
                 </Link>
               ))}
@@ -88,15 +92,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                     {isHindi ? 'डैशबोर्ड' : 'Dashboard'}
                  </Link>
               ) : (
-                 <div className="flex items-center gap-3">
-                    <Link 
-                       href={`/${lang}/support`}
-                       className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-[var(--border-subtle)] bg-brand-50 px-4 py-2 text-sm font-bold text-brand-700 shadow-sm transition-colors hover:bg-brand-100"
-                       prefetch={true}
-                    >
-                       <Heart size={16} className="fill-brand-500 text-brand-500" />
-                       {isHindi ? 'हमें समर्थन दें' : 'Support Us'}
-                    </Link>
+                  <div className="flex items-center gap-3">
                     <Link 
                        href={`/${lang}/login`}
                        className="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
@@ -138,9 +134,14 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="flex min-h-11 items-center rounded-lg px-3 py-2 text-base font-semibold text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]"
+                  className={`flex min-h-11 items-center rounded-lg px-3 py-2 text-base font-semibold transition-colors ${
+                    link.highlight
+                      ? 'text-brand-700 bg-brand-50 hover:bg-brand-100'
+                      : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'
+                  }`}
                   prefetch={true}
                 >
+                  {link.highlight && <Heart size={16} className="fill-brand-500 text-brand-500 mr-2" />}
                   {link.label}
                 </Link>
              ))}
@@ -161,15 +162,6 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                 </Link>
              ) : (
                 <div className="flex flex-col gap-3 px-3 mt-4 pb-2">
-                   <Link
-                      href={`/${lang}/support`}
-                      onClick={() => setIsOpen(false)}
-                      className="flex min-h-12 items-center justify-center gap-2 rounded-lg bg-brand-50 py-2 text-center font-bold text-brand-700 border border-brand-100"
-                      prefetch={true}
-                   >
-                      <Heart size={18} className="fill-brand-500 text-brand-500" />
-                      {isHindi ? 'हमें समर्थन दें' : 'Support Us'}
-                   </Link>
                    <div className="grid grid-cols-2 gap-3">
                      <Link
                         href={`/${lang}/login`}

@@ -13,7 +13,7 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
 
   const { data: orgData } = await supabaseAdmin
     .from('organisations')
-    .select('id, name, membership_policy, created_at, slug, public_transparency_enabled')
+    .select('id, name, membership_policy, created_at, slug, public_transparency_enabled, description, logo_url, cover_url, contact_email, contact_phone, website, social_links, address')
     .eq('slug', slug)
     .single()
 
@@ -21,6 +21,14 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
     membership_policy: string
     created_at: string
     public_transparency_enabled: boolean
+    description: string | null
+    logo_url: string | null
+    cover_url: string | null
+    contact_email: string | null
+    contact_phone: string | null
+    website: string | null
+    social_links: Record<string, string> | null
+    address: string | null
   } | null
 
   if (!org) notFound()
@@ -117,12 +125,29 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-20 px-4 min-h-screen">
-      <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm mb-8">
-        <div className="flex justify-between items-start mb-6">
-          <div>
-            <h1 className="text-3xl font-bold mb-2 tracking-tight">{org.name}</h1>
-            <p className="text-gray-500 text-sm">Established {new Date(org.created_at).toLocaleDateString()}</p>
+    <div className="max-w-5xl mx-auto py-12 px-4 min-h-screen space-y-8">
+      <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        {org.cover_url ? (
+          <div className="w-full h-48 md:h-64 relative bg-gray-100">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={org.cover_url} alt={`${org.name} cover`} className="w-full h-full object-cover" />
+          </div>
+        ) : (
+          <div className="w-full h-32 bg-gradient-to-r from-blue-600 to-indigo-700" />
+        )}
+        
+        <div className="p-8 relative">
+          {org.logo_url && (
+            <div className="absolute -top-16 left-8 bg-white p-1 rounded-full shadow-md z-10">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={org.logo_url} alt={`${org.name} logo`} className="w-24 h-24 rounded-full object-cover" />
+            </div>
+          )}
+
+          <div className={`flex flex-col md:flex-row justify-between items-start gap-4 mb-6 ${org.logo_url ? 'mt-10' : ''}`}>
+            <div>
+              <h1 className="text-3xl font-bold mb-2 tracking-tight">{org.name}</h1>
+              <p className="text-gray-500 text-sm">Established {new Date(org.created_at).toLocaleDateString()}</p>
             {partners.length > 0 && (
               <div className="mt-2 text-sm text-gray-600">
                 Part of a coalition with:
@@ -198,110 +223,72 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
             )}
           </div>
         )}
-      </div>
 
-      <div className="space-y-12">
-        {allEvents.length > 0 && (
-          <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Upcoming Events</h2>
-            <div className="grid gap-4 md:grid-cols-2">
-              {allEvents.map((event) => (
-                <div key={event.id} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="text-sm font-semibold text-orange-600 uppercase tracking-wide">
-                      {event.organisation_id !== org.id ? 'Co-Hosted Event' : 'Event'}
-                    </span>
-                    <span className="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded">
-                      {event.event_type}
-                    </span>
+        {/* Sidebar Info */}
+        <div className="space-y-6">
+          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <h3 className="font-bold text-gray-900 mb-4">Contact Information</h3>
+            <div className="space-y-4 text-sm text-gray-700">
+              {org.contact_email && (
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
+                    📧
                   </div>
-                  <h3 className="font-bold text-lg mb-2">{event.title}</h3>
-                  <div className="space-y-1 text-sm text-gray-600 mb-4">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4" />
-                      {new Date(event.start_time).toLocaleDateString()}
-                    </div>
-                    {event.location && (
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4" />
-                        {event.location}
-                      </div>
-                    )}
-                  </div>
-                  <Link href={`/${lang}/org/${slug}/events/${event.id}`} className="text-blue-600 font-medium hover:underline text-sm">
-                    View Details and RSVP
-                  </Link>
+                  <a href={`mailto:${org.contact_email}`} className="hover:underline hover:text-blue-600 break-all">{org.contact_email}</a>
                 </div>
-              ))}
+              )}
+              {org.contact_phone && (
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center text-green-600 flex-shrink-0">
+                    📱
+                  </div>
+                  <span>{org.contact_phone}</span>
+                </div>
+              )}
+              {org.website && (
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center text-purple-600 flex-shrink-0">
+                    🌐
+                  </div>
+                  <a href={org.website} target="_blank" rel="noopener noreferrer" className="hover:underline hover:text-blue-600 break-all">
+                    {org.website.replace(/^https?:\/\//, '')}
+                  </a>
+                </div>
+              )}
+              {org.address && (
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center text-orange-600 flex-shrink-0 mt-0.5">
+                    📍
+                  </div>
+                  <span>{org.address}</span>
+                </div>
+              )}
+              {!org.contact_email && !org.contact_phone && !org.website && !org.address && (
+                <p className="text-gray-500 italic">No contact information provided.</p>
+              )}
             </div>
-          </section>
-        )}
 
-        {publicMeetings.length > 0 && (
-          <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Upcoming Public Meetings</h2>
-            <div className="space-y-4">
-              {publicMeetings.map((meeting) => {
-                const start = new Date(meeting.date)
-                const end = meeting.end_time ? new Date(meeting.end_time) : null
-                const jitsiLink = `https://meet.jit.si/sangathan-${meeting.organisation_id}-${meeting.id}`
-                const meetingLink = meeting.meeting_link || jitsiLink
-                return (
-                  <div key={meeting.id} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                    <h3 className="font-bold text-lg mb-1">{meeting.title}</h3>
-                    <div className="space-y-1 text-sm text-gray-600 mb-3">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4" />
-                        <span>
-                          {start.toLocaleString()}
-                          {end && (
-                            <>
-                              {' - '}
-                              {end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </>
-                          )}
-                        </span>
-                      </div>
-                      {meeting.location && (
-                        <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4" />
-                          {meeting.location}
-                        </div>
-                      )}
-                    </div>
-                    <a
-                      href={meetingLink}
-                      target="_blank"
+            {org.social_links && Object.keys(org.social_links).length > 0 && (
+              <div className="mt-6 pt-6 border-t border-gray-100">
+                <h4 className="font-semibold text-gray-900 mb-3 text-sm">Social Profiles</h4>
+                <div className="flex gap-3 flex-wrap">
+                  {Object.entries(org.social_links).map(([platform, url]) => (
+                    <a 
+                      key={platform} 
+                      href={url} 
+                      target="_blank" 
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:underline"
+                      className="px-3 py-1.5 bg-gray-50 hover:bg-gray-100 border rounded-md text-xs font-medium text-gray-700 capitalize transition-colors"
                     >
-                      <Video className="w-4 h-4" />
-                      Join Meeting
+                      {platform}
                     </a>
-                  </div>
-                )
-              })}
-            </div>
-          </section>
-        )}
-
-        {announcements && announcements.length > 0 && (
-          <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Public Announcements</h2>
-            <div className="space-y-4">
-              {(announcements as unknown as DashboardAnnouncement[]).map((announcement) => (
-                <div key={announcement.id} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                  <div className="flex items-center gap-2 mb-2">
-                    {announcement.is_pinned && <span className="text-orange-500 font-bold text-xs uppercase tracking-wide">Pinned</span>}
-                    <span className="text-xs text-gray-400">{new Date(announcement.created_at).toLocaleDateString()}</span>
-                  </div>
-                  <h3 className="font-bold text-lg mb-2">{announcement.title}</h3>
-                  <p className="text-gray-600 whitespace-pre-wrap">{announcement.content}</p>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </section>
-        )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
       </div>
     </div>
   )

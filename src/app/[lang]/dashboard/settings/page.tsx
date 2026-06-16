@@ -6,6 +6,9 @@ import { MembershipPolicyForm, TransparencyToggle } from '@/components/settings/
 import { CollaborationManager } from '@/components/settings/collaboration-manager'
 import { deleteOrganisation } from '@/actions/compliance/actions'
 import { Button } from '@/components/ui/button'
+import { OrgProfileForm } from '@/components/settings/org-profile-form'
+import { OrgSlugForm } from '@/components/settings/org-slug-form'
+import { ImageUpload } from '@/components/settings/image-upload'
 
 interface OrgLink {
   id: string
@@ -44,7 +47,7 @@ export default async function SettingsPage(props: PageProps) {
 
   const { data: orgData } = await supabase
     .from('organisations')
-    .select('id, name, slug, membership_policy, public_transparency_enabled')
+    .select('id, name, slug, membership_policy, public_transparency_enabled, description, logo_url, cover_url, contact_email, contact_phone, website, social_links, address')
     .eq('id', orgId)
     .single()
 
@@ -54,6 +57,14 @@ export default async function SettingsPage(props: PageProps) {
     slug: string
     membership_policy: 'open_auto' | 'admin_approval' | 'invite_only'
     public_transparency_enabled: boolean
+    description: string | null
+    logo_url: string | null
+    cover_url: string | null
+    contact_email: string | null
+    contact_phone: string | null
+    website: string | null
+    social_links: Record<string, string> | null
+    address: string | null
   } | null
 
   if (!organisation) {
@@ -123,24 +134,24 @@ export default async function SettingsPage(props: PageProps) {
 
       <section className="grid grid-cols-1 md:grid-cols-[2fr,minmax(0,1.3fr)] gap-6 items-start">
         <div className="space-y-6">
-          <div className="bg-white border rounded-lg shadow-sm p-6 space-y-4">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Organisation Identity</h2>
-            <div className="space-y-2">
+          <div className="bg-white border rounded-lg shadow-sm p-6 space-y-6">
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Organisation Identity & Branding</h2>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+              <ImageUpload type="logo" currentUrl={organisation.logo_url} orgId={organisation.id} />
+              <ImageUpload type="cover" currentUrl={organisation.cover_url} orgId={organisation.id} />
+            </div>
+
+            <div className="pt-4 border-t space-y-4">
               <div>
                 <div className="text-xs text-gray-500 mb-1">Organisation Name</div>
                 <div className="text-base font-medium">{organisation.name}</div>
-              </div>
-              <div>
-                <div className="text-xs text-gray-500 mb-1">Slug</div>
-                <div className="inline-flex items-center gap-2 rounded-md border px-2 py-1 text-xs font-mono text-gray-700 bg-gray-50">
-                  <span>@{organisation.slug}</span>
-                </div>
+                <p className="text-xs text-gray-500 mt-1">Name changes currently require support intervention to preserve audit history.</p>
               </div>
             </div>
-            <p className="text-xs text-gray-500">
-              Name and slug changes currently require support intervention to preserve links and audit history.
-            </p>
           </div>
+
+          <OrgProfileForm initialData={organisation} />
 
           <MembershipPolicyForm orgId={organisation.id} currentPolicy={organisation.membership_policy} />
 
@@ -148,6 +159,7 @@ export default async function SettingsPage(props: PageProps) {
         </div>
 
         <div className="space-y-6">
+          <OrgSlugForm currentSlug={organisation.slug} lang={lang} />
           <CollaborationManager 
             orgId={organisation.id} 
             activePartners={activePartners} 
