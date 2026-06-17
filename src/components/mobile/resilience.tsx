@@ -11,6 +11,16 @@ type ResilientMember = {
   role: string | null
 }
 
+interface SupabaseMember {
+  id: string
+  status: string | null
+  role: string | null
+  profiles: {
+    full_name: string | null
+    phone: string | null
+  } | null
+}
+
 export function useResilientMembers(orgId: string) {
   const [members, setMembers] = useState<ResilientMember[]>([])
   const [loading, setLoading] = useState(true)
@@ -49,19 +59,20 @@ export function useResilientMembers(orgId: string) {
         if (error) throw error
 
         if (data) {
-          const mappedData = data.map((m: { id: string; status: string; role: string; profiles: { full_name: string; phone: string | null } | null }) => ({
-            id: m.id,
+          const rawData = data as unknown as SupabaseMember[]
+          const mappedData: ResilientMember[] = rawData.map((m) => ({
+            id: String(m.id),
             status: m.status,
             role: m.role,
-            full_name: m.profiles?.full_name || 'Unknown',
-            phone: m.profiles?.phone || null
+            full_name: m.profiles?.full_name ?? 'Unknown',
+            phone: m.profiles?.phone ?? null
           }))
           setMembers(mappedData)
           localStorage.setItem(
             cacheKey,
             JSON.stringify({
               timestamp: Date.now(),
-              data,
+              data: mappedData,
             })
           )
         }
