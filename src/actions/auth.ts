@@ -257,10 +257,7 @@ export async function resetPassword(input: z.infer<typeof ResetPasswordSchema>) 
   // Revoke all other sessions by signing out everywhere
   if (user) {
     const serviceClient = createServiceClient()
-    await serviceClient.auth.admin.signOut({
-      user_id: user.id,
-      scope: 'others',
-    })
+    await serviceClient.auth.admin.revokeAllRefreshTokens(user.id)
     await logger.info('auth', 'Sessions revoked after password change', { userId: user.id })
   }
 
