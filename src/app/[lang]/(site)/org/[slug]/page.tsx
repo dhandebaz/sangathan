@@ -13,7 +13,7 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
 
   const { data: orgData } = await supabaseAdmin
     .from('organisations')
-    .select('id, name, membership_policy, created_at, slug, public_transparency_enabled, description, logo_url, cover_url, contact_email, contact_phone, website, social_links, address')
+    .select('id, name, membership_policy, created_at, slug, public_transparency_enabled, description, logo_url, cover_url, contact_email, contact_phone, website, social_links, address, registration_status, registration_number, incorporation_date')
     .eq('slug', slug)
     .single()
 
@@ -29,6 +29,9 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
     website: string | null
     social_links: Record<string, string> | null
     address: string | null
+    registration_status: string | null
+    registration_number: string | null
+    incorporation_date: string | null
   } | null
 
   if (!org) notFound()
@@ -146,7 +149,14 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
 
           <div className={`flex flex-col md:flex-row justify-between items-start gap-4 mb-6 ${org.logo_url ? 'mt-10' : ''}`}>
             <div>
-              <h1 className="text-3xl font-bold mb-2 tracking-tight">{org.name}</h1>
+              <div className="flex items-center gap-3 mb-2">
+                <h1 className="text-3xl font-bold tracking-tight">{org.name}</h1>
+                {org.registration_status === 'registered' && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200" title={`Reg No: ${org.registration_number || 'N/A'}`}>
+                    Registered
+                  </span>
+                )}
+              </div>
               <p className="text-gray-500 text-sm">Established {new Date(org.created_at).toLocaleDateString()}</p>
             {partners.length > 0 && (
               <div className="mt-2 text-sm text-gray-600">

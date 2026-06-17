@@ -24,6 +24,11 @@ const CreateEventSchema = EventSchema.extend({
   collaborating_org_ids: z.array(z.string().uuid()).optional(),
 })
 
+export const UpdateEventSchema = EventSchema.extend({
+  id: z.string().uuid(),
+  organisation_id: z.string().uuid(),
+  collaborating_org_ids: z.array(z.string().uuid()).optional(),
+})
 const RSVPSchema = z.object({
   event_id: z.string().uuid(),
   guest_name: z.string().optional(),
@@ -99,6 +104,90 @@ export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
     if (data.collaborating_org_ids && data.collaborating_org_ids.length > 0) {
       const jointEvents = data.collaborating_org_ids.map((orgId) => ({
         event_id: event.id,
+        organisation_id: orgId,
+      }))
+
+      const { error: jointError } = await supabase
+        .from('joint_events')
+        .insert(jointEvents)
+
+      if (jointError) console.error('Joint Event Error:', jointError)
+    }
+
+    revalidatePath('/', 'layout')
+    return { success: true }
+  } catch (error: unknown) {
+    const message =
+      typeof error === 'object' && error !== null && 'message' in error
+        ? (error as { message?: string }).message || 'An unexpected error occurred'
+        : 'An unexpected error occurred'
+    return { success: false, error: message }
+  }
+}
+
+export async function updateEvent(input: z.infer<typeof UpdateEventSchema>) {
+  try {
+    const result = UpdateEventSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid event data' }
+    }
+
+    const data = result.data
+
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) return { success: false, error: 'Unauthorized' }
+
+    // Check permissions
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role, organisation_id')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile || profile.organisation_id !== data.organisation_id || !['admin', 'editor'].includes(profile.role)) {
+      return { success: false, error: 'Permission denied' }
+    }
+
+    // Verify collaborations if any
+    if (data.collaborating_org_ids && data.collaborating_org_ids.length > 0) {
+      const { count } = await supabase
+        .from('organisation_links')
+        .select('*', { count: 'exact', head: true })
+        .or(`and(requester_org_id.eq.${profile.organisation_id},responder_org_id.in.(${data.collaborating_org_ids.join(',')})),and(requester_org_id.in.(${data.collaborating_org_ids.join(',')}),responder_org_id.eq.${profile.organisation_id})`)
+        .eq('status', 'active')
+
+      if ((count || 0) < data.collaborating_org_ids.length) {
+        return { success: false, error: 'One or more selected organizations are not active partners.' }
+      }
+    }
+
+    const { error } = await supabase
+      .from('events')
+      .update({
+        title: data.title,
+        description: data.description,
+        start_time: data.start_time,
+        end_time: data.end_time,
+        location: data.location,
+        event_type: data.event_type,
+        rsvp_enabled: data.rsvp_enabled,
+        capacity: data.capacity,
+      })
+      .eq('id', data.id)
+      .eq('organisation_id', data.organisation_id)
+
+    if (error) {
+      return { success: false, error: error.message || 'Failed to update event' }
+    }
+
+    // Update Joint Events (Delete all existing and insert new ones)
+    await supabase.from('joint_events').delete().eq('event_id', data.id)
+    
+    if (data.collaborating_org_ids && data.collaborating_org_ids.length > 0) {
+      const jointEvents = data.collaborating_org_ids.map((orgId) => ({
+        event_id: data.id,
         organisation_id: orgId,
       }))
 

@@ -4,8 +4,8 @@ import { useState } from 'react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, Clock, PlayCircle } from 'lucide-react'
-import { acceptAssignment, updateTaskStatus, logHours } from '@/actions/tasks'
+import { CheckCircle, Clock, PlayCircle, Edit } from 'lucide-react'
+import { acceptAssignment, updateTaskStatus, logHours, updateTask } from '@/actions/tasks'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -25,9 +25,20 @@ interface Task {
   task_assignments?: TaskAssignment[]
 }
 
-export function TaskCard({ task, userId }: { task: Task, userId: string }) {
+export function TaskCard({ task, userId, canManage }: { task: Task, userId: string, canManage?: boolean }) {
   const [loading, setLoading] = useState(false)
   const assignment = task.task_assignments?.find((a) => a.member_id === userId)
+  const [editOpen, setEditOpen] = useState(false)
+  const [editTitle, setEditTitle] = useState(task.title)
+  const [editDescription, setEditDescription] = useState(task.description || '')
+  const [editPriority, setEditPriority] = useState(task.priority)
+
+  const handleEdit = async () => {
+    setLoading(true)
+    await updateTask(task.id, { title: editTitle, description: editDescription, priority: editPriority })
+    setLoading(false)
+    setEditOpen(false)
+  }
   const [hours, setHours] = useState('')
   const [note, setNote] = useState('')
   const [logOpen, setLogOpen] = useState(false)
@@ -75,7 +86,46 @@ export function TaskCard({ task, userId }: { task: Task, userId: string }) {
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
           <div>
-            <h3 className="font-bold text-lg">{task.title}</h3>
+            <div className="flex items-center gap-2">
+              <h3 className="font-bold text-lg">{task.title}</h3>
+              {canManage && (
+                <Dialog open={editOpen} onOpenChange={setEditOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-6 w-6">
+                      <Edit className="h-3 w-3" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Edit Task</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                      <div className="space-y-2">
+                        <Label>Title</Label>
+                        <Input value={editTitle} onChange={e => setEditTitle(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Description</Label>
+                        <Input value={editDescription} onChange={e => setEditDescription(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Priority</Label>
+                        <select 
+                          className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" 
+                          value={editPriority} 
+                          onChange={e => setEditPriority(e.target.value)}
+                        >
+                          <option value="low">Low</option>
+                          <option value="medium">Medium</option>
+                          <option value="high">High</option>
+                        </select>
+                      </div>
+                      <Button onClick={handleEdit} disabled={loading} className="w-full">Save Changes</Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              )}
+            </div>
             <div className="flex gap-2 mt-1">
               <Badge variant="outline" className={statusColors[task.status as keyof typeof statusColors]}>
                 {task.status.replace('_', ' ')}

@@ -11,10 +11,14 @@ Sangathan is a multi-tenant civic organisation platform built with Next.js and S
 ## Scripts
 
 ```bash
-npm run dev
-npm run build
-npm run start
-npm run lint
+npm run dev           # Development server
+npm run build         # Production build
+npm run start         # Start production server
+npm run lint          # ESLint
+npm run audit         # Dependency vulnerability audit
+npm run secrets:scan  # Scan for leaked secrets in codebase
+npm run precommit     # Secrets scan + lint (for CI/local hooks)
+npm run ci            # Full CI pipeline locally
 ```
 
 ## Core Environment
@@ -37,6 +41,7 @@ PUSH_CONTACT_EMAIL=
 
 CRON_SECRET=
 SUPER_ADMIN_EMAILS=
+ALLOWED_SERVICE_IPS=       # Comma-separated IPs allowed to use service client
 
 NEXT_PUBLIC_MAINTENANCE_MODE=false
 MAINTENANCE_BYPASS_SECRET=
@@ -48,13 +53,20 @@ MAINTENANCE_BYPASS_SECRET=
 - Event QR tickets now use a server-side signing secret; set `QR_TOKEN_SECRET` for production.
 - Push delivery is real, not stubbed; it requires the VAPID keys and contact email above.
 
-## Verification
+## Git Hooks
 
-Current expected verification commands:
+Install pre-commit hooks to automatically scan for secrets:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+## Verification
 
 ```bash
 npm run lint
 npm run build
+npm run audit
 ```
 
-Both pass in the current repo state.
+All pass in the current repo state.

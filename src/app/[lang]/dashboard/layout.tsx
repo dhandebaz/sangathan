@@ -8,6 +8,7 @@ import { MobileNav } from '@/components/mobile/mobile-nav'
 import { ContextualFAB } from '@/components/mobile/contextual-fab'
 import { DashboardTopBar } from '@/components/dashboard/dashboard-topbar'
 import { getSelectedOrganisationId } from '@/lib/auth/context'
+import { SidebarNav } from '@/components/dashboard/sidebar-nav'
 
 export default async function DashboardLayout(props: {
   children: React.ReactNode
@@ -76,70 +77,17 @@ export default async function DashboardLayout(props: {
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 flex-col border-r border-slate-200 bg-white md:flex">
         <div className="h-16 flex items-center px-6 border-b border-slate-100">
           <Link href={`/${lang}/dashboard`} className="flex items-center gap-2 group" aria-label="Sangathan Dashboard">
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src={orgLogoUrl || "/logo/logo.png"}
               alt="Logo"
-              width={128}
-              height={32}
               className="h-8 w-auto object-contain"
               aria-hidden="true"
-              priority
             />
           </Link>
         </div>
 
-        <div className="flex-1 py-4 px-4 space-y-5 overflow-y-auto">
-          <div>
-            <h3 className="px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Main Menu</h3>
-            <nav className="space-y-0.5">
-              <SidebarLink href={`/${lang}/dashboard`} icon={LayoutDashboard} label="Overview" />
-              <SidebarLink href={`/${lang}/dashboard/announcements`} icon={Megaphone} label="Announcements" />
-              <SidebarLink href={`/${lang}/dashboard/events`} icon={Calendar} label="Events" />
-            </nav>
-          </div>
-
-          <div>
-            <h3 className="px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Operations</h3>
-            <nav className="space-y-0.5">
-              <SidebarLink href={`/${lang}/dashboard/tasks`} icon={CheckSquare} label="Tasks" />
-              <SidebarLink href={`/${lang}/dashboard/polls`} icon={Vote} label="Decisions" />
-              {capabilities.campaigns && (
-                <SidebarLink href={`/${lang}/dashboard/campaigns`} icon={Flag} label="Campaigns" />
-              )}
-              {capabilities.grievances && (
-                <SidebarLink href={`/${lang}/dashboard/grievances`} icon={Scale} label="Grievances" />
-              )}
-              {capabilities.complaints && (
-                <SidebarLink href={`/${lang}/dashboard/complaints`} icon={AlertCircle} label="Complaints" />
-              )}
-              {capabilities.maintenance && (
-                <SidebarLink href={`/${lang}/dashboard/maintenance`} icon={Wrench} label="Maintenance" />
-              )}
-              {capabilities.donations && (
-                <SidebarLink href={`/${lang}/dashboard/donations`} icon={Gift} label="Donations" />
-              )}
-              {capabilities.federation_mode && (
-                <SidebarLink href={`/${lang}/dashboard/networks`} icon={Globe} label="Networks" />
-              )}
-              <SidebarLink href={`/${lang}/dashboard/members`} icon={Users} label="Members" />
-              {capabilities.volunteers && (
-                <SidebarLink href={`/${lang}/dashboard/volunteers`} icon={HeartHandshake} label="Volunteers" />
-              )}
-              {capabilities.student_ids && (
-                <SidebarLink href={`/${lang}/dashboard/student-ids`} icon={Badge} label="Student IDs" />
-              )}
-              {capabilities.advanced_analytics && isAdmin && (
-                <SidebarLink href={`/${lang}/dashboard/analytics`} icon={BarChart} label="Analytics" />
-              )}
-              {isAdmin && (
-                <SidebarLink href={`/${lang}/dashboard/forms`} icon={FileText} label="Forms" />
-              )}
-              {isAdmin && (
-                <SidebarLink href={`/${lang}/dashboard/settings`} icon={Settings} label="Settings" />
-              )}
-            </nav>
-          </div>
-        </div>
+        <SidebarNav lang={lang} isAdmin={isAdmin} capabilities={capabilities} />
 
         <div className="px-4 pb-3">
           <Link href={`/${lang}/dashboard/support`} className="flex items-center justify-center gap-2 rounded-lg bg-slate-100 p-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-200">
@@ -179,14 +127,3 @@ export default async function DashboardLayout(props: {
   )
 }
 
-function SidebarLink({ href, icon: Icon, label }: { href: string; icon: React.ElementType; label: string }) {
-  return (
-    <Link
-      href={href}
-      className="group flex min-h-9 items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-semibold text-slate-600 transition-colors hover:bg-brand-50 hover:text-brand-700"
-    >
-      <Icon className="w-[18px] h-[18px] text-slate-400 group-hover:text-brand-500 transition-colors" />
-      {label}
-    </Link>
-  )
-}

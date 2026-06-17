@@ -55,4 +55,12 @@ AGENT.md
 CLAUDE.md
 .agent-mem/
 
-.env*
+# IDE config with possible secrets
+.mcp.json
+.vscode/mcp.json
+.trae/
+.codex/
+.agents/
+.brainsync/
+.kilo/
+.claude/

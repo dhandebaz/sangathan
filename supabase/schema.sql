@@ -214,15 +214,85 @@ create policy "Manage forms (Admin/Editor)"
   ));
 
 -- Form Submissions
-create policy "Public can submit forms"
+create policy "allow_public_insert_submissions"
   on public.form_submissions for insert
-  with check (true);
+  with check (
+    exists (
+      select 1 from public.forms
+      where forms.id = form_submissions.form_id
+        and forms.organisation_id = form_submissions.organisation_id
+        and forms.visibility = 'public'
+        and forms.is_active = true
+        and forms.deleted_at is null
+    )
+  );
 
-create policy "View submissions (Admin/Editor)"
+create policy "allow_members_insert_submissions"
+  on public.form_submissions for insert
+  with check (
+    exists (
+      select 1 from public.forms
+      where forms.id = form_submissions.form_id
+        and forms.organisation_id = form_submissions.organisation_id
+        and forms.visibility = 'members'
+        and forms.is_active = true
+        and forms.deleted_at is null
+    )
+    and exists (
+      select 1 from public.profiles
+      where profiles.organisation_id = form_submissions.organisation_id
+        and profiles.id = auth.uid()
+        and profiles.status = 'active'
+    )
+  );
+
+create policy "allow_staff_insert_submissions"
+  on public.form_submissions for insert
+  with check (
+    exists (
+      select 1 from public.forms
+      where forms.id = form_submissions.form_id
+        and forms.organisation_id = form_submissions.organisation_id
+        and forms.visibility = 'private'
+        and forms.is_active = true
+        and forms.deleted_at is null
+    )
+    and exists (
+      select 1 from public.profiles
+      where profiles.organisation_id = form_submissions.organisation_id
+        and profiles.id = auth.uid()
+        and profiles.role in ('admin', 'executive', 'editor')
+        and profiles.status = 'active'
+    )
+  );
+
+create policy "allow_staff_select_submissions"
   on public.form_submissions for select
-  using (organisation_id = public.get_auth_org_id() and exists (
-    select 1 from public.profiles where id = auth.uid() and role in ('admin', 'editor')
-  ));
+  using (
+    exists (
+      select 1 from public.profiles
+      where profiles.organisation_id = form_submissions.organisation_id
+        and profiles.id = auth.uid()
+        and profiles.role in ('admin', 'executive', 'editor')
+        and profiles.status = 'active'
+    )
+  );
+
+create policy "allow_users_select_own_submissions"
+  on public.form_submissions for select
+  using (user_id = auth.uid());
+
+create policy "allow_staff_delete_submissions"
+  on public.form_submissions for delete
+  using (
+    exists (
+      select 1 from public.profiles
+      where profiles.organisation_id = form_submissions.organisation_id
+        and profiles.id = auth.uid()
+        and profiles.role in ('admin', 'executive', 'editor')
+        and profiles.status = 'active'
+    )
+  );
 
 -- Meetings
 create policy "View meetings in organisation"

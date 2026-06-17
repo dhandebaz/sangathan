@@ -25,7 +25,7 @@ export default async function TasksPage(props: { params: Promise<{ lang: string 
     .neq('status', 'archived')
     .order('created_at', { ascending: false })
 
-  const canManage = ['admin', 'editor'].includes(profile.role)
+  const canManage = ['admin', 'executive', 'editor'].includes(profile.role)
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto py-6">
@@ -46,7 +46,7 @@ export default async function TasksPage(props: { params: Promise<{ lang: string 
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {tasks?.map((task) => (
-          <TaskCard key={task.id} task={task} userId={user.id} />
+          <TaskCard key={task.id} task={task} userId={user.id} canManage={canManage} />
         ))}
 
         {(!tasks || tasks.length === 0) && (

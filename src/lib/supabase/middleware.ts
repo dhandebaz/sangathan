@@ -4,6 +4,36 @@ import { i18n } from '@/lib/i18n/config'
 import { createSignedCookie, verifySignedCookie } from '@/lib/auth/cookie'
 import { isMaintenanceMode } from '@/lib/maintenance'
 
+function applySecurityHeaders(response: NextResponse): NextResponse {
+  response.headers.set('X-Frame-Options', 'DENY')
+  response.headers.set('X-Content-Type-Options', 'nosniff')
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  response.headers.set(
+    'Strict-Transport-Security',
+    'max-age=63072000; includeSubDomains; preload'
+  )
+  response.headers.set(
+    'Permissions-Policy',
+    'camera=(), microphone=(), geolocation=(), interest-cohort=()'
+  )
+  response.headers.set(
+    'Content-Security-Policy',
+    [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob: https:",
+      "font-src 'self' data:",
+      "connect-src 'self' https://*.supabase.co https://*.ingest.sentry.io https://*.upstash.io wss://*.supabase.co",
+      "frame-src 'none'",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join('; ')
+  )
+  return response
+}
+
 export async function updateSession(request: NextRequest) {
   // --- MAINTENANCE MODE CHECK (Zero DB Overhead) ---
   if (isMaintenanceMode(request)) {
@@ -12,9 +42,9 @@ export async function updateSession(request: NextRequest) {
      if (!pathname.startsWith('/maintenance') && 
          !pathname.startsWith('/_next') && 
          !pathname.startsWith('/static')) {
-        const url = request.nextUrl.clone()
-        url.pathname = '/maintenance'
-        return NextResponse.redirect(url)
+         const url = request.nextUrl.clone()
+         url.pathname = '/maintenance'
+         return applySecurityHeaders(NextResponse.redirect(url))
      }
   }
 
@@ -61,15 +91,15 @@ export async function updateSession(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/admin')) {
     if (!user || !user.email) {
        const url = request.nextUrl.clone()
-       url.pathname = '/login'
-       return NextResponse.redirect(url)
+        url.pathname = '/login'
+        return applySecurityHeaders(NextResponse.redirect(url))
     }
     
     // Strict Whitelist Check
     const superAdmins = process.env.SUPER_ADMIN_EMAILS?.split(',')
     if (!superAdmins || superAdmins.length === 0 || !superAdmins.includes(user.email)) {
        // Return 404 to hide admin existence or 403
-       return NextResponse.json({ error: 'Not Found' }, { status: 404 })
+       return applySecurityHeaders(NextResponse.json({ error: 'Not Found' }, { status: 404 }))
     }
   }
 
@@ -118,7 +148,7 @@ export async function updateSession(request: NextRequest) {
     } else {
       const url = request.nextUrl.clone()
       url.pathname = '/en/dashboard'
-      const response = NextResponse.redirect(url)
+      const response = applySecurityHeaders(NextResponse.redirect(url))
       
       if (profile && !cached) {
           const signedValue = await createSignedCookie(profile)
@@ -172,16 +202,13 @@ export async function updateSession(request: NextRequest) {
   if (!user && !isPublicPath) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
-    return NextResponse.redirect(url)
+    return applySecurityHeaders(NextResponse.redirect(url))
   }
 
   // --- Dashboard Route Check ---
   const isDashboardRoute = i18n.locales.some(loc => pathname.startsWith(`/${loc}/dashboard`))
 
-  // Security Headers
-  supabaseResponse.headers.set('X-Frame-Options', 'DENY')
-  supabaseResponse.headers.set('X-Content-Type-Options', 'nosniff')
-  supabaseResponse.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  applySecurityHeaders(supabaseResponse)
 
    // --- CAPABILITIES (ORG TYPE) ENFORCEMENT ---
    if (user && isDashboardRoute) {
@@ -194,30 +221,30 @@ export async function updateSession(request: NextRequest) {
        const p = pathname
 
        // Restrict access based on capabilities
-       if (p.includes('/dashboard/donations') && !caps.donations) {
-         return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
+        if (p.includes('/dashboard/donations') && !caps.donations) {
+          return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
        }
-       if (p.includes('/dashboard/networks') && !caps.federation_mode) {
-         return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
-       }
-       if (p.includes('/dashboard/campaigns') && !caps.campaigns) {
-         return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
-       }
-       if (p.includes('/dashboard/grievances') && !caps.grievances) {
-         return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
-       }
-       if (p.includes('/dashboard/complaints') && !caps.complaints) {
-         return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
-       }
-       if (p.includes('/dashboard/maintenance') && !caps.maintenance) {
-         return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
-       }
-       if (p.includes('/dashboard/volunteers') && !caps.volunteers) {
-         return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
-       }
-       if (p.includes('/dashboard/student-ids') && !caps.student_ids) {
-         return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
-       }
+        if (p.includes('/dashboard/networks') && !caps.federation_mode) {
+          return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+        }
+        if (p.includes('/dashboard/campaigns') && !caps.campaigns) {
+          return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+        }
+        if (p.includes('/dashboard/grievances') && !caps.grievances) {
+          return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+        }
+        if (p.includes('/dashboard/complaints') && !caps.complaints) {
+          return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+        }
+        if (p.includes('/dashboard/maintenance') && !caps.maintenance) {
+          return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+        }
+        if (p.includes('/dashboard/volunteers') && !caps.volunteers) {
+          return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+        }
+        if (p.includes('/dashboard/student-ids') && !caps.student_ids) {
+          return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+        }
      }
    }
 
@@ -235,9 +262,9 @@ export async function updateSession(request: NextRequest) {
 
   if (shouldHandleLocale) {
       const locale = i18n.defaultLocale
-      return NextResponse.redirect(
+      return applySecurityHeaders(NextResponse.redirect(
         new URL(`/${locale}${pathname.startsWith('/') ? '' : '/'}${pathname}`, request.url)
-      )
+      ))
   }
 
   return supabaseResponse

@@ -21,6 +21,20 @@ export default async function EventDetailsPage(props: { params: Promise<{ lang: 
 
   if (!event) notFound()
 
+  const { data: { user } } = await supabase.auth.getUser()
+  let canEdit = false
+
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+    if (profile && ['admin', 'editor'].includes(profile.role)) {
+      canEdit = true
+    }
+  }
+
   const { data: rsvpsData } = await supabase
     .from('event_rsvps')
     .select('*, user:user_id(full_name, email)')
@@ -49,6 +63,13 @@ export default async function EventDetailsPage(props: { params: Promise<{ lang: 
           </div>
         </div>
         <div className="flex gap-2">
+          {canEdit && (
+            <Button asChild variant="outline">
+              <Link href={`/${lang}/dashboard/events/${id}/edit`}>
+                Edit Event
+              </Link>
+            </Button>
+          )}
           <Button asChild variant="outline">
              <Link href={`/${lang}/dashboard/events/${id}/check-in`}>
                <QrCode className="mr-2 h-4 w-4" />

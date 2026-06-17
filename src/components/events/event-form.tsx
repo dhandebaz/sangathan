@@ -5,10 +5,11 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { createEvent } from '@/actions/events'
+import { createEvent, updateEvent } from '@/actions/events'
 import { useRouter, useParams } from 'next/navigation'
 
 import { EventType } from '@/types/events'
+import { DashboardEvent } from '@/types/dashboard'
 import { toast } from 'sonner'
 
 interface Partner {
@@ -17,22 +18,22 @@ interface Partner {
   slug?: string
 }
 
-export function EventForm({ orgId, partners = [] }: { orgId: string, partners?: Partner[] }) {
+export function EventForm({ orgId, partners = [], initialData }: { orgId: string, partners?: Partner[], initialData?: DashboardEvent }) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const params = useParams() as { lang?: string }
   const lang = params.lang || 'en'
   
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    start_time: '',
-    end_time: '',
-    location: '',
-    event_type: 'members' as EventType,
-    rsvp_enabled: true,
-    capacity: '',
-    collaborating_org_ids: [] as string[]
+    title: initialData?.title || '',
+    description: initialData?.description || '',
+    start_time: initialData?.start_time ? new Date(initialData.start_time).toISOString().slice(0, 16) : '',
+    end_time: initialData?.end_time ? new Date(initialData.end_time).toISOString().slice(0, 16) : '',
+    location: initialData?.location || '',
+    event_type: (initialData?.event_type || 'members') as EventType,
+    rsvp_enabled: initialData?.rsvp_enabled ?? true,
+    capacity: initialData?.capacity?.toString() || '',
+    collaborating_org_ids: [] as string[] // Ideally populated if needed, for now we will leave it empty unless we fetch it.
   })
 
   const handlePartnerToggle = (partnerId: string) => {
@@ -51,7 +52,7 @@ export function EventForm({ orgId, partners = [] }: { orgId: string, partners?: 
     e.preventDefault()
     setLoading(true)
     
-    const res = await createEvent({
+    const payload = {
       organisation_id: orgId,
       title: formData.title,
       description: formData.description,
@@ -62,13 +63,18 @@ export function EventForm({ orgId, partners = [] }: { orgId: string, partners?: 
       rsvp_enabled: formData.rsvp_enabled,
       capacity: formData.capacity ? parseInt(formData.capacity) : undefined,
       collaborating_org_ids: formData.collaborating_org_ids
-    })
+    }
+
+    const res = initialData 
+      ? await updateEvent({ id: initialData.id, ...payload })
+      : await createEvent(payload)
 
     setLoading(false)
     if (res.success) {
-      router.push(`/${lang}/dashboard/events`)
+      router.refresh()
+      router.push(`/${lang}/dashboard/events${initialData ? `/${initialData.id}` : ''}`)
     } else {
-      toast.error(res.error || 'Failed to create event')
+      toast.error(res.error || `Failed to ${initialData ? 'update' : 'create'} event`)
     }
   }
 
@@ -161,7 +167,7 @@ export function EventForm({ orgId, partners = [] }: { orgId: string, partners?: 
       </div>
 
       <Button type="submit" disabled={loading} className="w-full">
-        {loading ? 'Creating...' : 'Create Event'}
+        {loading ? (initialData ? 'Updating...' : 'Creating...') : (initialData ? 'Update Event' : 'Create Event')}
       </Button>
     </form>
   )

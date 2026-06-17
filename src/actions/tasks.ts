@@ -20,6 +20,11 @@ const CreateTaskSchema = TaskSchema.extend({
   assignee_ids: z.array(z.string().uuid()).optional(),
 })
 
+export const UpdateTaskSchema = TaskSchema.extend({
+  id: z.string().uuid(),
+  organisation_id: z.string().uuid(),
+})
+
 const LogHoursSchema = z.object({
   task_id: z.string().uuid(),
   hours: z.number().min(0.1),
@@ -95,10 +100,73 @@ export async function createTask(input: z.infer<typeof CreateTaskSchema>) {
   }
 }
 
+export async function updateTask(input: z.infer<typeof UpdateTaskSchema>) {
+  try {
+    const result = UpdateTaskSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid task data' }
+    }
+
+    const data = result.data
+
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) return { success: false, error: 'Unauthorized' }
+
+    // Check permissions
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role, organisation_id')
+      .eq('id', user.id)
+      .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
+
+    if (!profile || profile.organisation_id !== data.organisation_id || !['admin', 'editor'].includes(profile.role)) {
+      return { success: false, error: 'Permission denied' }
+    }
+
+    const { error } = await supabase
+      .from('tasks')
+      .update({
+        title: data.title,
+        description: data.description,
+        priority: data.priority,
+        visibility_level: data.visibility_level,
+        due_date: data.due_date,
+      } as never)
+      .eq('id', data.id)
+      .eq('organisation_id', data.organisation_id)
+
+    if (error) throw error
+
+    revalidatePath('/', 'layout')
+    return { success: true }
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    return { success: false, error: errorMessage }
+  }
+}
+
 export async function updateTaskStatus(taskId: string, status: string) {
   try {
     const supabase = await createClient()
-    const { error } = await supabase
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { success: false, error: 'Unauthorized' }
+
+    // Check if user is admin/editor OR assignee
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+    const { data: task } = await supabase.from('tasks').select('id, task_assignments(member_id)').eq('id', taskId).single()
+
+    const isAdmin = profile && ['admin', 'executive', 'editor'].includes(profile.role as string)
+    const isAssignee = task?.task_assignments?.some((a: any) => a.member_id === user.id)
+
+    if (!isAdmin && !isAssignee) {
+      return { success: false, error: 'Permission denied' }
+    }
+
+    // Use service client to bypass RLS since the user might be a volunteer (RLS blocks volunteer updates)
+    const supabaseAdmin = createServiceClient()
+    const { error } = await supabaseAdmin
       .from('tasks')
       .update({ status } as never)
       .eq('id', taskId)
@@ -127,12 +195,13 @@ export async function logHours(input: z.infer<typeof LogHoursSchema>) {
     if (!user) return { success: false, error: 'Unauthorized' }
 
     // Log Hours
-    const { error } = await supabase
+    const supabaseAdmin = createServiceClient()
+    const { error } = await supabaseAdmin
       .from('task_logs')
       .insert({
         task_id: data.task_id,
         member_id: user.id,
-        hours_logged: data.hours,
+        hours: data.hours,
         note: data.note,
       } as never)
 
@@ -140,8 +209,6 @@ export async function logHours(input: z.infer<typeof LogHoursSchema>) {
 
     // Update Score (Simplified: +1 per hour)
     // We use a database function or trigger ideally, but here manual update
-    const supabaseAdmin = createServiceClient()
-    
     // Fetch current score
     const { data: profile } = await supabaseAdmin
       .from('profiles')

@@ -1,14 +1,12 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
 import { processNextJob } from '@/lib/queue'
 import { logger } from '@/lib/logger'
 
-// This route should be called by a cron job (e.g. Vercel Cron or external)
-// Secure this with a secret header in production
-export async function GET() {
-  // const authHeader = request.headers.get('x-cron-secret')
-  // if (authHeader !== process.env.CRON_SECRET) {
-  //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  // }
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get('x-cron-secret')
+  if (authHeader !== process.env.CRON_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
 
   try {
     // Process one job per call, or loop for a few seconds

@@ -55,8 +55,16 @@ export async function checkRateLimit(key: string, configType: 'LOGIN' | 'SIGNUP'
     const { success } = await limiter.limit(key)
     return success
   } catch (err) {
-    console.error('Upstash rate limit error', err)
-    // Fail open if Redis is down to avoid blocking legitimate users
-    return true 
+    console.error('Upstash rate limit error — blocking request', err)
+    return false
+  }
+}
+
+export async function checkRateLimitWithGrace(key: string, configType: 'LOGIN' | 'SIGNUP' | 'API' | 'OTP'): Promise<{ allowed: boolean; degraded: boolean }> {
+  try {
+    const allowed = await checkRateLimit(key, configType)
+    return { allowed, degraded: false }
+  } catch {
+    return { allowed: true, degraded: true }
   }
 }

@@ -76,14 +76,12 @@ export function DashboardTopBar({ lang, userEmail, role, orgName, orgLogoUrl }: 
           className="flex items-center gap-2 md:hidden"
           aria-label="Sangathan Dashboard"
         >
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={orgLogoUrl || "/logo/logo.png"}
             alt="Logo"
-            width={128}
-            height={32}
             className="h-7 w-auto object-contain"
             aria-hidden="true"
-            priority
           />
         </Link>
         <div className="hidden md:flex flex-col min-w-0">

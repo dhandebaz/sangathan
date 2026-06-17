@@ -1,4 +1,5 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
+import { NextResponse } from 'next/server'
 // import { Database } from '@/types/database'
 
 export function createServiceClient() {
@@ -20,4 +21,37 @@ export function createServiceClient() {
       persistSession: false,
     },
   })
+}
+
+const ALLOWED_IPS = (process.env.ALLOWED_SERVICE_IPS || '').split(',').filter(Boolean)
+
+export function getCallerIp(request: Request): string {
+  return request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+    || request.headers.get('x-real-ip')?.trim()
+    || 'unknown'
+}
+
+export function checkServiceAccess(request: Request): { allowed: boolean; reason?: string } {
+  if (ALLOWED_IPS.length === 0) {
+    return { allowed: true, reason: 'No IP restrictions configured' }
+  }
+
+  const ip = getCallerIp(request)
+  if (ip === 'unknown') {
+    return { allowed: false, reason: 'Could not determine caller IP' }
+  }
+
+  if (!ALLOWED_IPS.includes(ip)) {
+    return { allowed: false, reason: `IP ${ip} not in whitelist` }
+  }
+
+  return { allowed: true }
+}
+
+export function serviceAccessGuard(request: Request): NextResponse | null {
+  const check = checkServiceAccess(request)
+  if (!check.allowed) {
+    return NextResponse.json({ error: 'Access denied' }, { status: 403 })
+  }
+  return null
 }

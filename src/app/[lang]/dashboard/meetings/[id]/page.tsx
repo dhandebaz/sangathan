@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { ArrowLeft, Calendar, MapPin, Printer, Trash2, Video, Globe2, Lock } from 'lucide-react'
 import Link from 'next/link'
 import { AttendanceList } from '@/components/meetings/attendance-list'
+import { JitsiEmbed } from '@/components/meetings/jitsi-embed'
 import { deleteMeeting } from '@/actions/meetings'
 import { Meeting, MeetingAttendance } from '@/types/dashboard'
 
@@ -36,6 +37,9 @@ export default async function MeetingDetailsPage({ params }: PageProps) {
 
   const start = new Date(meeting.date)
   const end = (meeting as Meeting & { end_time?: string | null }).end_time ? new Date((meeting as Meeting & { end_time?: string | null }).end_time as string) : null
+
+  const jitsiMatch = meetingLink.match(/meet\.jit\.si\/([^#?]+)/)
+  const roomName = jitsiMatch ? jitsiMatch[1] : null
 
   return (
     <div>
@@ -119,6 +123,15 @@ export default async function MeetingDetailsPage({ params }: PageProps) {
                   )}
                </div>
             </div>
+
+            {roomName && (
+               <div className="mt-8 space-y-4">
+                  <h3 className="font-bold text-gray-700 uppercase text-xs tracking-wide flex items-center gap-2">
+                     <Video className="w-4 h-4" /> Live Video Conference
+                  </h3>
+                  <JitsiEmbed roomName={roomName} height="600px" />
+               </div>
+            )}
          </div>
 
          <div className="content-card rounded-lg p-0 overflow-hidden h-fit">

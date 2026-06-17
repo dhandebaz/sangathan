@@ -6,9 +6,22 @@ import { redirect } from 'next/navigation'
 import { z } from 'zod'
 import { headers } from 'next/headers'
 import { Database } from '@/types/database'
+import { redis } from '@/lib/redis'
+import { logger } from '@/lib/logger'
 
 type Profile = Database['public']['Tables']['profiles']['Row']
 type Organisation = Database['public']['Tables']['organisations']['Row']
+
+// --- Password Validation ---
+
+const PASSWORD_MIN_LENGTH = 12
+const passwordSchema = z
+  .string()
+  .min(PASSWORD_MIN_LENGTH, `Password must be at least ${PASSWORD_MIN_LENGTH} characters`)
+  .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+  .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+  .regex(/[0-9]/, 'Password must contain at least one number')
+  .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character')
 
 // --- Input Schemas ---
 
@@ -20,8 +33,8 @@ const LoginSchema = z.object({
 const SignupSchema = z.object({
   fullName: z.string().min(2, "Full Name is required"),
   email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  confirmPassword: z.string().min(8, "Confirm Password is required"),
+  password: passwordSchema,
+  confirmPassword: z.string().min(1, "Confirm Password is required"),
   terms: z.boolean().refine(val => val === true, "You must accept the terms"),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
@@ -37,39 +50,68 @@ const ForgotPasswordSchema = z.object({
 })
 
 const ResetPasswordSchema = z.object({
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  confirmPassword: z.string().min(8, "Confirm Password is required"),
-  code: z.string().optional(), // If using PKCE code exchange manually
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
+  password: passwordSchema,
+  code: z.string().optional(),
 })
 
 // --- Actions ---
 
+const LOCKOUT_THRESHOLD = 5
+const LOCKOUT_DURATION = 15 * 60
+
+async function getLockoutKey(email: string): Promise<{ attempts: number; locked: boolean; remaining: number }> {
+  const key = `lockout:login:${email.toLowerCase()}`
+  const attempts = await redis.get<number>(key) || 0
+  const locked = attempts >= LOCKOUT_THRESHOLD
+  return { attempts, locked, remaining: LOCKOUT_DURATION }
+}
+
+async function incrementLockout(email: string): Promise<void> {
+  const key = `lockout:login:${email.toLowerCase()}`
+  const attempts = (await redis.get<number>(key)) || 0
+  await redis.set(key, attempts + 1)
+  await redis.expire(key, LOCKOUT_DURATION)
+}
+
+async function clearLockout(email: string): Promise<void> {
+  await redis.del(`lockout:login:${email.toLowerCase()}`)
+}
+
 export async function login(input: z.infer<typeof LoginSchema>) {
   try {
-    // 1. Validate Input
     const result = LoginSchema.safeParse(input)
     if (!result.success) {
       return { success: false, error: result.error.issues[0].message }
     }
 
-    const supabase = await createClient()
     const { email, password } = result.data
 
-    // 2. Sign In
+    const lockout = await getLockoutKey(email)
+    if (lockout.locked) {
+      return {
+        success: false,
+        error: `Account temporarily locked. Try again in ${Math.ceil(lockout.remaining / 60)} minutes.`,
+      }
+    }
+
+    const supabase = await createClient()
+
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
 
     if (error) {
+      await incrementLockout(email)
+      const remaining = LOCKOUT_THRESHOLD - (await getLockoutKey(email)).attempts
+      if (remaining <= 0) {
+        await logger.warn('auth', `Account locked due to failed attempts`, { email })
+      }
       return { success: false, error: error.message }
     }
 
-    // 3. Check Suspension
-    // We need to fetch the profile -> organisation
+    await clearLockout(email)
+
     const { data: profileData } = await supabase
       .from('profiles')
       .select('*')
@@ -204,12 +246,23 @@ export async function resetPassword(input: z.infer<typeof ResetPasswordSchema>) 
   if (!result.success) return { success: false, error: result.error.issues[0].message }
 
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
 
   const { error } = await supabase.auth.updateUser({
     password: result.data.password
   })
 
   if (error) return { success: false, error: error.message }
+
+  // Revoke all other sessions by signing out everywhere
+  if (user) {
+    const serviceClient = createServiceClient()
+    await serviceClient.auth.admin.signOut({
+      user_id: user.id,
+      scope: 'others',
+    })
+    await logger.info('auth', 'Sessions revoked after password change', { userId: user.id })
+  }
 
   const headersList = await headers()
   const referer = headersList.get('referer') || ''

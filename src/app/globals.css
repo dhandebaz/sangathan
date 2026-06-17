@@ -126,10 +126,56 @@
   --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 6px);
   --animate-fade-in: fade-in 0.2s ease-out;
+  --animate-slide-in-up: slide-in-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-in-down: slide-in-down 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-scale-in: scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-pulse-soft: pulse-soft 2s infinite;
 
   @keyframes fade-in {
     from { opacity: 0; }
     to { opacity: 1; }
+  }
+
+  @keyframes slide-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-in-down {
+    from {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes pulse-soft {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
   }
 }
 
@@ -141,6 +187,7 @@ html {
   background: var(--bg-primary);
   scroll-behavior: smooth;
   text-size-adjust: 100%;
+  overscroll-behavior: none;
 }
 
 body {
@@ -151,6 +198,8 @@ body {
   font-family: var(--font-geist-sans), Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-y: none;
+  touch-action: manipulation;
 }
 
 button,
@@ -163,11 +212,24 @@ textarea {
 button,
 a {
   -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+button:active,
+a:active {
+  transform: scale(0.98);
+}
+
+button,
+a,
+[role="button"] {
+  transition: transform 0.1s ease-out, background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 
 :focus-visible {
   outline: 3px solid color-mix(in srgb, var(--ring) 55%, transparent);
   outline-offset: 2px;
+  border-radius: 0.5rem;
 }
 
 ::selection {
@@ -194,6 +256,11 @@ a {
   border-radius: 0.875rem;
   background: var(--surface);
   box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.section-card:hover {
+  box-shadow: 0 4px 16px rgb(15 23 42 / 0.08);
 }
 
 .data-table-wrap {
@@ -226,11 +293,16 @@ a {
   background-color: var(--neutral-50);
 }
 
+.table-row-hover:active {
+  background-color: var(--neutral-100);
+}
+
 .deferred-section {
   content-visibility: auto;
   contain-intrinsic-size: 1px 720px;
 }
 
+/* Touch-optimized scrolling */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -251,6 +323,7 @@ a {
   background-color: var(--neutral-400);
 }
 
+/* Mobile-specific styles */
 @media (max-width: 639px) {
   .page-container {
     width: min(100% - 2rem, 80rem);
@@ -261,8 +334,25 @@ a {
     border-inline: 0;
     border-radius: 0;
   }
+
+  /* Larger touch targets on mobile */
+  button,
+  a,
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Prevent text selection on interactive elements */
+  button,
+  a,
+  [role="button"] {
+    user-select: none;
+    -webkit-user-select: none;
+  }
 }
 
+/* Reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -278,6 +368,7 @@ a {
   }
 }
 
+/* Print styles */
 @media print {
   body {
     background: #ffffff;
@@ -287,5 +378,12 @@ a {
   aside,
   .no-print {
     display: none !important;
+  }
+}
+
+/* Safe area insets for modern devices */
+@supports (padding-top: env(safe-area-inset-top)) {
+  body {
+    padding-top: env(safe-area-inset-top, 0);
   }
 }

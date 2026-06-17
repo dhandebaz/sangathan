@@ -61,10 +61,15 @@ export function ContextualFAB({ lang, role, capabilities }: ContextualFABProps) 
   if (!action) return null
 
   return (
-    <div className="fixed bottom-20 right-4 z-50 md:hidden animate-in zoom-in slide-in-from-bottom-4 duration-300">
-      <Button asChild size="icon" className="h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-shadow bg-primary text-primary-foreground">
+    <div className="fixed bottom-20 right-4 z-50 md:hidden">
+      <Button 
+        asChild 
+        size="icon" 
+        haptic="medium"
+        className="h-14 w-14 rounded-full shadow-xl hover:shadow-2xl transition-all bg-primary text-primary-foreground active:scale-90"
+      >
         <Link href={action.href}>
-          <action.icon className="h-6 w-6" />
+          <action.icon className="h-7 w-7" />
           <span className="sr-only">{action.label}</span>
         </Link>
       </Button>

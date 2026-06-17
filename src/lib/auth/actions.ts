@@ -2,6 +2,7 @@ import { UserContext, ActionResponse, Role } from '@/types/auth'
 import { getSelectedOrganisationId, getUserContext, requireRole } from '@/lib/auth/context'
 import { ZodSchema } from 'zod'
 import { logger } from '@/lib/logger'
+import { redis } from '@/lib/redis'
 
 /**
  * Generic Safe Server Action Wrapper.
@@ -45,6 +46,14 @@ export function createSafeAction<TInput, TOutput>(
       if (!context) {
           return { success: false, error: 'Unauthorized: Context initialization failed' }
       }
+
+      const rateLimitKey = `action_rate:${context.user.id}:${options.actionName || 'action'}`
+      const current = (await redis.get<number>(rateLimitKey)) || 0
+      if (current >= 60) {
+        return { success: false, error: 'Too many requests. Please slow down.' }
+      }
+      await redis.set(rateLimitKey, current + 1)
+      await redis.expire(rateLimitKey, 60)
 
       const data = await handler(validation.data, context)
 

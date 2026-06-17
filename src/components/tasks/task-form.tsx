@@ -5,42 +5,48 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { createTask } from '@/actions/tasks'
+import { createTask, updateTask } from '@/actions/tasks'
 import { useRouter, useParams } from 'next/navigation'
 import { toast } from 'sonner'
+import { Task } from '@/types/dashboard'
 
-export function TaskForm({ orgId }: { orgId: string }) {
+export function TaskForm({ orgId, initialData }: { orgId: string, initialData?: Task }) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const params = useParams() as { lang?: string }
   const lang = params.lang || 'en'
   
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    priority: 'medium',
-    visibility_level: 'volunteer',
-    due_date: ''
+    title: initialData?.title || '',
+    description: initialData?.description || '',
+    priority: initialData?.priority || 'medium',
+    visibility_level: initialData?.visibility_level || 'volunteer',
+    due_date: initialData?.due_date ? new Date(initialData.due_date).toISOString().slice(0, 16) : ''
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     
-    const res = await createTask({
+    const payload = {
       organisation_id: orgId,
       title: formData.title,
       description: formData.description,
       priority: formData.priority as 'low' | 'medium' | 'high',
       visibility_level: formData.visibility_level as 'members' | 'volunteer' | 'core' | 'executive',
       due_date: formData.due_date ? new Date(formData.due_date).toISOString() : undefined
-    })
+    }
+
+    const res = initialData
+      ? await updateTask({ id: initialData.id, ...payload })
+      : await createTask(payload)
 
     setLoading(false)
     if (res.success) {
-      router.push(`/${lang}/dashboard/tasks`)
+      router.refresh()
+      router.push(`/${lang}/dashboard/tasks${initialData ? `/${initialData.id}` : ''}`)
     } else {
-      toast.error(res.error || 'Failed to create task')
+      toast.error(res.error || `Failed to ${initialData ? 'update' : 'create'} task`)
     }
   }
 
@@ -98,7 +104,7 @@ export function TaskForm({ orgId }: { orgId: string }) {
       </div>
 
       <Button type="submit" disabled={loading} className="w-full">
-        {loading ? 'Creating...' : 'Create Task'}
+        {loading ? (initialData ? 'Updating...' : 'Creating...') : (initialData ? 'Update Task' : 'Create Task')}
       </Button>
     </form>
   )
