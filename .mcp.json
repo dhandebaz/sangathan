@@ -1,14 +1,12 @@
 {
-  "mcpServers": {  
+  "mcpServers": {
     "brainsync": {
       "command": "node",
       "args": [
         "c:\\Users\\hudav\\.antigravity-ide\\extensions\\dawoodahmad.brainsync-3.0.12-universal\\dist\\mcp-server.js"
       ],
       "env": {
-        "BRAINSYNC_ENV_FILE": "C:\\Users\\hudav\\.bsync_core\\sangathan\\mcp-secret-env.json",
-        "BRAINSYNC_LICENSE_KEY": "bs_free_2e933488c3844981",
-        "BRAINSYNC_LICENSE_TOKEN": "bs_free_2e933488c3844981"
+        "BRAINSYNC_ENV_FILE": "C:\\Users\\hudav\\.bsync_core\\sangathan\\mcp-secret-env.json"
       }
     }
   }
