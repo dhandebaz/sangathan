@@ -34,7 +34,7 @@ export default async function RolesPage(props: { params: Promise<{ lang: string 
     <div className="p-6 max-w-6xl mx-auto">
       <RoleManager 
         initialRoles={roles || []} 
-        organisationId={organisationId} 
+        organisationId={profile.organisation_id} 
         lang={lang} 
       />
     </div>
