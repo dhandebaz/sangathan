@@ -34,7 +34,7 @@ export default async function SubgroupDetailPage(
   const { data: allMembers } = await supabase
     .from('profiles')
     .select('id, full_name, email')
-    .eq('organisation_id', organisationId)
+    .eq('organisation_id', profile.organisation_id)
 
   const isAdmin = profile.role === 'admin' || profile.role === 'executive'
   const members = subgroup.org_subgroup_members || []

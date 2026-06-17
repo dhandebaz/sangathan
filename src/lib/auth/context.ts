@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { MembershipContext, Role, UserContext } from '@/types/auth'
+import { MembershipContext, MembershipStatus, Role, UserContext } from '@/types/auth'
 
 const ORG_COOKIE_NAME = 'sangathan_org_id'
 
@@ -18,16 +18,15 @@ export async function getUserMemberships(userId: string): Promise<MembershipCont
 
   const supabase = await createClient()
 
-  const {
-    data: profile,
-    error: profileError,
-  } = await (supabase as unknown as {
+  const profileRecord = await (supabase as unknown as {
     from: (table: string) => {
       select: (columns: string) => {
-        eq: (column: string, value: string) => Promise<{
-          data: unknown
-          error: { message?: string } | null
-        }>
+        eq: (column: string, value: string) => {
+          single: () => Promise<{
+            data: Record<string, unknown> | null
+            error: { message?: string } | null
+          }>
+        }
       }
     }
   })
@@ -35,6 +34,8 @@ export async function getUserMemberships(userId: string): Promise<MembershipCont
     .select('id, organisation_id, role, status, deleted_at')
     .eq('id', userId)
     .single()
+  const profile = profileRecord.data
+  const profileError = profileRecord.error
 
   if (profileError) {
     throw new Error('Unauthorized: Failed to load memberships')
@@ -43,10 +44,10 @@ export async function getUserMemberships(userId: string): Promise<MembershipCont
   const memberships: MembershipContext[] = []
   if (profile && !profile.deleted_at) {
     memberships.push({
-      id: profile.id,
-      organisationId: profile.organisation_id,
+      id: profile.id as string,
+      organisationId: profile.organisation_id as string,
       role: profile.role as Role,
-      status: profile.status,
+      status: profile.status as MembershipStatus,
     })
   }
 
