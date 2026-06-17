@@ -20,7 +20,7 @@ interface Task {
   title: string
   description: string | null
   status: string
-  priority: string
+  priority: 'low' | 'medium' | 'high'
   due_date?: string
   task_assignments?: TaskAssignment[]
 }
@@ -35,7 +35,7 @@ export function TaskCard({ task, userId, canManage }: { task: Task, userId: stri
 
   const handleEdit = async () => {
     setLoading(true)
-    await updateTask(task.id, { title: editTitle, description: editDescription, priority: editPriority })
+    await updateTask({ id: task.id, title: editTitle, description: editDescription, priority: editPriority })
     setLoading(false)
     setEditOpen(false)
   }
@@ -113,7 +113,7 @@ export function TaskCard({ task, userId, canManage }: { task: Task, userId: stri
                         <select 
                           className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" 
                           value={editPriority} 
-                          onChange={e => setEditPriority(e.target.value)}
+                          onChange={e => setEditPriority(e.target.value as 'low' | 'medium' | 'high')}
                         >
                           <option value="low">Low</option>
                           <option value="medium">Medium</option>

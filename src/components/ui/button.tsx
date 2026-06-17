@@ -3,37 +3,30 @@ import { Slot } from "@radix-ui/react-slot"
 import {cva, type VariantProps} from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
-// Haptic feedback helper
-interface NavigatorWithVibrate extends Navigator {
-  vibrate?: (pattern: number | number[]) => boolean
-}
-
 const triggerHaptic = (type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error' = 'light') => {
-  if (typeof window !== 'undefined') {
-    const nav = navigator as NavigatorWithVibrate
-    if (nav.vibrate) {
+  if (typeof window !== 'undefined' && 'vibrate' in navigator) {
       switch (type) {
         case 'light':
-          nav.vibrate(10)
+          navigator.vibrate(10)
           break
         case 'medium':
-          nav.vibrate(20)
+          navigator.vibrate(20)
           break
         case 'heavy':
-          nav.vibrate(30)
+          navigator.vibrate(30)
           break
         case 'success':
-          nav.vibrate([10, 50, 10])
+          navigator.vibrate([10, 50, 10])
           break
         case 'warning':
-          nav.vibrate([10, 50, 10, 50, 10])
+          navigator.vibrate([10, 50, 10, 50, 10])
           break
         case 'error':
-          nav.vibrate([10, 50, 10, 50, 10, 50, 10])
+          navigator.vibrate(50)
           break
-      }
-    }
   }
+}
+
 }
 
 const buttonVariants = cva(

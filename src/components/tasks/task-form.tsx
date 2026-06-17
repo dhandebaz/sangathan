@@ -8,15 +8,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { createTask, updateTask } from '@/actions/tasks'
 import { useRouter, useParams } from 'next/navigation'
 import { toast } from 'sonner'
-import { Task } from '@/types/dashboard'
+import { DashboardTask } from '@/types/dashboard'
 
-export function TaskForm({ orgId, initialData }: { orgId: string, initialData?: Task }) {
+interface TaskFormState {
+  title: string
+  description: string
+  priority: string
+  visibility_level: string
+  due_date: string
+}
+
+export function TaskForm({ orgId, initialData }: { orgId: string, initialData?: DashboardTask }) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const params = useParams() as { lang?: string }
   const lang = params.lang || 'en'
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<TaskFormState>({
     title: initialData?.title || '',
     description: initialData?.description || '',
     priority: initialData?.priority || 'medium',
@@ -70,7 +78,7 @@ export function TaskForm({ orgId, initialData }: { orgId: string, initialData?: 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <Label>Priority</Label>
-          <Select value={formData.priority} onValueChange={v => setFormData({...formData, priority: v})}>
+          <Select value={formData.priority} onValueChange={v => setFormData({...formData, priority: v as 'low' | 'medium' | 'high'})}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -84,7 +92,7 @@ export function TaskForm({ orgId, initialData }: { orgId: string, initialData?: 
 
         <div className="space-y-2">
           <Label>Visibility / Role Required</Label>
-          <Select value={formData.visibility_level} onValueChange={v => setFormData({...formData, visibility_level: v})}>
+          <Select value={formData.visibility_level} onValueChange={v => setFormData({...formData, visibility_level: v as 'members' | 'volunteer' | 'core' | 'executive'})}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>

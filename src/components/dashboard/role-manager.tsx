@@ -23,7 +23,9 @@ interface RoleManagerProps {
   lang: string
 }
 
-const defaultPermissions = {
+type Permissions = Record<string, boolean>
+
+const defaultPermissions: Permissions = {
   can_view_finances: false,
   can_manage_members: false,
   can_manage_polls: false,

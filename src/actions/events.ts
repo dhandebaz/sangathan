@@ -3,37 +3,15 @@
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
-import { z } from 'zod'
 import { createHmac } from 'crypto'
-
-// --- Schemas ---
-
-const EventSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 chars"),
-  description: z.string().optional(),
-  start_time: z.string().datetime(),
-  end_time: z.string().datetime().optional(),
-  location: z.string().optional(),
-  event_type: z.enum(['public', 'members', 'volunteer', 'core', 'executive']),
-  rsvp_enabled: z.boolean(),
-  capacity: z.number().optional(),
-})
-
-const CreateEventSchema = EventSchema.extend({
-  organisation_id: z.string().uuid(),
-  collaborating_org_ids: z.array(z.string().uuid()).optional(),
-})
-
-export const UpdateEventSchema = EventSchema.extend({
-  id: z.string().uuid(),
-  organisation_id: z.string().uuid(),
-  collaborating_org_ids: z.array(z.string().uuid()).optional(),
-})
-const RSVPSchema = z.object({
-  event_id: z.string().uuid(),
-  guest_name: z.string().optional(),
-  guest_email: z.string().email().optional(),
-})
+import { z } from 'zod'
+import {
+  EventSchema,
+  CreateEventSchema,
+  UpdateEventSchema,
+  RSVPSchema,
+  getQrSigningSecret,
+} from './events.shared'
 
 // --- Actions ---
 
@@ -184,7 +162,7 @@ export async function updateEvent(input: z.infer<typeof UpdateEventSchema>) {
 
     // Update Joint Events (Delete all existing and insert new ones)
     await supabase.from('joint_events').delete().eq('event_id', data.id)
-    
+
     if (data.collaborating_org_ids && data.collaborating_org_ids.length > 0) {
       const jointEvents = data.collaborating_org_ids.map((orgId) => ({
         event_id: data.id,
@@ -341,16 +319,6 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     return { success: false, error: message }
   }
-}
-
-function getQrSigningSecret() {
-  const secret = process.env.QR_TOKEN_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY
-
-  if (!secret) {
-    throw new Error('QR token signing secret is not configured')
-  }
-
-  return secret
 }
 
 export async function generateQRData(eventId: string, userId?: string, rsvpId?: string) {

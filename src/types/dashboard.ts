@@ -1,11 +1,14 @@
 export interface DashboardEvent {
   id: string;
   title: string;
+  description?: string | null;
   start_time: string;
+  end_time?: string | null;
   location?: string | null;
   organisation_id?: string;
   event_type?: string;
   capacity?: number | null;
+  rsvp_enabled?: boolean;
   event_rsvps?: { count: number }[];
 }
 
@@ -32,7 +35,10 @@ export interface Organisation {
 export interface DashboardTask {
   id: string;
   title: string;
+  description?: string | null;
   priority: 'low' | 'medium' | 'high';
+  visibility_level?: string;
+  due_date?: string | null;
 }
 
 export interface DashboardAnnouncement {

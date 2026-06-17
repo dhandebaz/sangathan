@@ -10,35 +10,27 @@ interface MobileNavProps {
   lang: string
 }
 
-// Haptic feedback helper
-interface NavigatorWithVibrate extends Navigator {
-  vibrate?: (pattern: number | number[]) => boolean
-}
-
 const triggerHaptic = (type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error' = 'light') => {
-  if (typeof window !== 'undefined') {
-    const nav = navigator as NavigatorWithVibrate
-    if (nav.vibrate) {
-      switch (type) {
-        case 'light':
-          nav.vibrate(10)
-          break
-        case 'medium':
-          nav.vibrate(20)
-          break
-        case 'heavy':
-          nav.vibrate(30)
-          break
-        case 'success':
-          nav.vibrate([10, 50, 10])
-          break
-        case 'warning':
-          nav.vibrate([10, 50, 10, 50, 10])
-          break
-        case 'error':
-          nav.vibrate([10, 50, 10, 50, 10, 50, 10])
-          break
-      }
+  if (typeof window !== 'undefined' && 'vibrate' in navigator) {
+    switch (type) {
+      case 'light':
+        navigator.vibrate(10)
+        break
+      case 'medium':
+        navigator.vibrate(20)
+        break
+      case 'heavy':
+        navigator.vibrate(30)
+        break
+      case 'success':
+        navigator.vibrate([10, 50, 10])
+        break
+      case 'warning':
+        navigator.vibrate([10, 50, 10, 50, 10])
+        break
+      case 'error':
+        navigator.vibrate([10, 50, 10, 50, 10, 50, 10])
+        break
     }
   }
 }

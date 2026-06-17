@@ -11,7 +11,7 @@ const TaskSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 chars"),
   description: z.string().optional(),
   priority: z.enum(['low', 'medium', 'high']),
-  visibility_level: z.enum(['members', 'volunteer', 'core', 'executive']),
+  visibility_level: z.enum(['members', 'volunteer', 'core', 'executive']).optional(),
   due_date: z.string().datetime().optional().nullable(),
 })
 
@@ -22,7 +22,7 @@ const CreateTaskSchema = TaskSchema.extend({
 
 export const UpdateTaskSchema = TaskSchema.extend({
   id: z.string().uuid(),
-  organisation_id: z.string().uuid(),
+  organisation_id: z.string().uuid().optional(),
 })
 
 const LogHoursSchema = z.object({
@@ -121,7 +121,11 @@ export async function updateTask(input: z.infer<typeof UpdateTaskSchema>) {
       .eq('id', user.id)
       .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
 
-    if (!profile || profile.organisation_id !== data.organisation_id || !['admin', 'editor'].includes(profile.role)) {
+    if (!profile || !['admin', 'editor'].includes(profile.role)) {
+      return { success: false, error: 'Permission denied' }
+    }
+    const orgId = data.organisation_id || profile.organisation_id
+    if (profile.organisation_id !== orgId) {
       return { success: false, error: 'Permission denied' }
     }
 
@@ -135,7 +139,7 @@ export async function updateTask(input: z.infer<typeof UpdateTaskSchema>) {
         due_date: data.due_date,
       } as never)
       .eq('id', data.id)
-      .eq('organisation_id', data.organisation_id)
+      .eq('organisation_id', orgId)
 
     if (error) throw error
 
