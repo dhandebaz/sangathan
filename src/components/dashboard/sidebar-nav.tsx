@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ChevronDown, LayoutDashboard, Users, Settings, Megaphone, Calendar, CheckSquare, BarChart, Vote, Globe, Scale, AlertCircle, Wrench, Gift, FileText, Flag, Badge, HeartHandshake, Network, Shield, Landmark } from 'lucide-react'
@@ -85,36 +85,30 @@ export function SidebarNav({ lang, isAdmin, capabilities }: SidebarNavProps) {
   ], [lang, isAdmin, capabilities])
 
   // Filter out empty groups and hidden items
-  const visibleGroups = groups.map(group => ({
+  const visibleGroups = useMemo(() => groups.map(group => ({
     ...group,
     items: group.items.filter(i => i.show)
-  })).filter(group => group.items.length > 0)
+  })).filter(group => group.items.length > 0), [groups])
 
-  // Auto-expand groups containing the current path
-  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
-    const initialState: Record<string, boolean> = {}
-    visibleGroups.forEach(g => {
-      initialState[g.id] = g.id === 'core' || g.id === 'governance' // Always open these by default
-    })
-    return initialState
-  })
+  // Track user toggled state
+  const [userToggledGroups, setUserToggledGroups] = useState<Record<string, boolean>>({})
 
-  // Open group if active route is inside it
-  useEffect(() => {
-    if (!pathname) return
-    let matchedId = ''
+  // Determine which groups are open: manually toggled OR contains active path
+  const openGroups = useMemo(() => {
+    const state: Record<string, boolean> = {}
     visibleGroups.forEach(g => {
-      if (g.items.some(item => pathname === item.href || pathname.startsWith(item.href + '/'))) {
-        matchedId = g.id
-      }
+      // Default open logic
+      const isAutoOpen = g.id === 'core' || g.id === 'governance' ||
+        g.items.some(item => pathname === item.href || pathname?.startsWith(item.href + '/'))
+
+      // Merge with user toggles (user preference wins if set)
+      state[g.id] = userToggledGroups[g.id] !== undefined ? userToggledGroups[g.id] : isAutoOpen
     })
-    if (matchedId) {
-      setOpenGroups(prev => ({ ...prev, [matchedId]: true }))
-    }
-  }, [pathname, visibleGroups])
+    return state
+  }, [visibleGroups, pathname, userToggledGroups])
 
   const toggleGroup = (id: string) => {
-    setOpenGroups(prev => ({ ...prev, [id]: !prev[id] }))
+    setUserToggledGroups(prev => ({ ...prev, [id]: !openGroups[id] }))
   }
 
   return (

@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { updateOrganisationImage } from '@/actions/organisation/settings'
 import { toast } from 'sonner'
 import Image from 'next/image'
-import { UploadCloud, Loader2, X } from 'lucide-react'
+import { UploadCloud, Loader2 } from 'lucide-react'
 
 interface ImageUploadProps {
   type: 'logo' | 'cover'
@@ -69,9 +69,10 @@ export function ImageUpload({ type, currentUrl, orgId }: ImageUploadProps) {
       toast.success('Image Updated', {
         description: `Your organisation ${type} has been successfully updated.`,
       })
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Something went wrong during upload.'
       toast.error('Upload failed', {
-        description: err.message || 'Something went wrong during upload.',
+        description: message,
       })
     } finally {
       setIsUploading(false)

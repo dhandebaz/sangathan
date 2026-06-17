@@ -49,7 +49,7 @@ export function useResilientMembers(orgId: string) {
         if (error) throw error
 
         if (data) {
-          const mappedData = data.map((m: any) => ({
+          const mappedData = data.map((m: { id: string; status: string; role: string; profiles: { full_name: string; phone: string | null } | null }) => ({
             id: m.id,
             status: m.status,
             role: m.role,
@@ -74,7 +74,7 @@ export function useResilientMembers(orgId: string) {
     }
 
     if (navigator.onLine) {
-      fetchMembers()
+      void fetchMembers()
     } else {
       setIsOffline(true)
       setLoading(false)

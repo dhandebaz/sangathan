@@ -87,7 +87,7 @@ export default function TermsPage() {
         <section>
           <h2 className="text-xl font-semibold text-black mb-3">8. Voluntary Contributions</h2>
           <p>
-            <strong>Optional Support:</strong> The core functionality of Sangathan is completely free. Users may optionally make a "Voluntary Contribution" to support the Platform&apos;s infrastructure maintenance costs.
+            <strong>Optional Support:</strong> The core functionality of Sangathan is completely free. Users may optionally make a &quot;Voluntary Contribution&quot; to support the Platform&apos;s infrastructure maintenance costs.
           </p>
           <p>
             <strong>Payment Processing:</strong> Voluntary contributions are made via direct UPI transfers. Sangathan does not store your banking information, and there are no recurring subscriptions on the Platform.

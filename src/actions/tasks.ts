@@ -162,7 +162,7 @@ export async function updateTaskStatus(taskId: string, status: string) {
     const { data: task } = await supabase.from('tasks').select('id, task_assignments(member_id)').eq('id', taskId).single()
 
     const isAdmin = profile && ['admin', 'executive', 'editor'].includes(profile.role as string)
-    const isAssignee = task?.task_assignments?.some((a: any) => a.member_id === user.id)
+    const isAssignee = task?.task_assignments?.some((a: unknown) => (a as { member_id: string }).member_id === user.id)
 
     if (!isAdmin && !isAssignee) {
       return { success: false, error: 'Permission denied' }

@@ -1,10 +1,19 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { addSubgroupMember, getSubgroup, updateSubgroupMemberRole, removeSubgroupMember } from '@/actions/subgroups'
-import { Network, ArrowLeft, UserPlus, Trash } from 'lucide-react'
+import { addSubgroupMember, getSubgroup } from '@/actions/subgroups'
+import { Network, ArrowLeft, UserPlus } from 'lucide-react'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+
+interface SubgroupMember {
+  profile_id: string
+  role: string
+  profiles: {
+    full_name: string | null
+    email: string
+  } | null
+}
 
 export default async function SubgroupDetailPage(
   props: { params: Promise<{ lang: string, subgroupId: string }> }
@@ -37,7 +46,7 @@ export default async function SubgroupDetailPage(
     .eq('organisation_id', profile.organisation_id)
 
   const isAdmin = profile.role === 'admin' || profile.role === 'executive'
-  const members = subgroup.org_subgroup_members || []
+  const members = (subgroup.org_subgroup_members || []) as unknown as SubgroupMember[]
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
@@ -70,7 +79,7 @@ export default async function SubgroupDetailPage(
 
           <Card>
             <CardContent className="p-0 divide-y">
-              {members.map((m: any) => (
+              {members.map((m) => (
                 <div key={m.profile_id} className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-slate-50 gap-4">
                   <div>
                     <div className="font-medium text-slate-900">{m.profiles?.full_name || 'Unknown'}</div>
@@ -111,7 +120,7 @@ export default async function SubgroupDetailPage(
                     <label className="block text-sm font-medium text-slate-700 mb-1">Select Member</label>
                     <select name="profileId" className="w-full border rounded-lg px-3 py-2 text-sm min-h-11" required>
                       <option value="">-- Choose Member --</option>
-                      {allMembers?.map((m: any) => (
+                      {allMembers?.map((m) => (
                         <option key={m.id} value={m.id}>{m.full_name || m.email}</option>
                       ))}
                     </select>

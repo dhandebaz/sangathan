@@ -42,8 +42,9 @@ export async function createProposal(input: z.infer<typeof ProposalSchema>) {
 
     revalidatePath('/dashboard/governance/proposals')
     return { success: true, data }
-  } catch (err: any) {
-    return { success: false, error: err.message }
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return { success: false, error: message }
   }
 }
 
@@ -63,8 +64,9 @@ export async function updateProposalStatus(proposalId: string, status: 'draft' |
     revalidatePath('/dashboard/governance/proposals')
     revalidatePath(`/dashboard/governance/proposals/${proposalId}`)
     return { success: true }
-  } catch (err: any) {
-    return { success: false, error: err.message }
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return { success: false, error: message }
   }
 }
 
@@ -89,7 +91,8 @@ export async function addProposalComment(input: z.infer<typeof CommentSchema>) {
 
     revalidatePath(`/dashboard/governance/proposals/${result.data.proposalId}`)
     return { success: true }
-  } catch (err: any) {
-    return { success: false, error: err.message }
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return { success: false, error: message }
   }
 }

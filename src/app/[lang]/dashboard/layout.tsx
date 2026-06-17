@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
-import { LayoutDashboard, Users, Settings, LogOut, Megaphone, Calendar, CheckSquare, BarChart, Vote, Globe, AlertTriangle, Flag, Badge, HeartHandshake, Scale, AlertCircle, Wrench, Gift, FileText, Heart } from 'lucide-react'
+import { LayoutDashboard, LogOut, Megaphone, Calendar, CheckSquare, Vote, Globe, AlertTriangle, Flag, Badge, HeartHandshake, Scale, AlertCircle, Wrench, Gift, FileText, Heart, Landmark } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/server'
 import { getOrgCapabilities } from '@/lib/capabilities'
@@ -9,6 +8,15 @@ import { ContextualFAB } from '@/components/mobile/contextual-fab'
 import { DashboardTopBar } from '@/components/dashboard/dashboard-topbar'
 import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { SidebarNav } from '@/components/dashboard/sidebar-nav'
+
+interface Organisation {
+  name: string
+  logo_url: string | null
+}
+
+interface Membership {
+  role: string
+}
 
 export default async function DashboardLayout(props: {
   children: React.ReactNode
@@ -35,20 +43,22 @@ export default async function DashboardLayout(props: {
         .eq('id', selectedOrgId)
         .single()
       if (orgData) {
-        if ('name' in orgData) orgName = (orgData as any).name
-        if ('logo_url' in orgData) orgLogoUrl = (orgData as any).logo_url
+        const org = orgData as unknown as Organisation
+        orgName = org.name
+        orgLogoUrl = org.logo_url
       }
-      const { data: membership } = await supabase
+      const { data: membershipData } = await supabase
         .from('members')
         .select('role')
         .eq('user_id', user.id)
         .eq('organisation_id', selectedOrgId)
         .eq('status', 'active')
         .maybeSingle()
-      if (membership && 'role' in membership) {
-        role = (membership as { role: string }).role
+      if (membershipData) {
+        const membership = membershipData as unknown as Membership
+        role = membership.role
       }
-    } catch {
+    } catch (_e) {
       capabilities = { basic_governance: false }
     }
   }
@@ -66,7 +76,7 @@ export default async function DashboardLayout(props: {
         maintenanceMessage = value.message || 'The platform is currently under maintenance.'
       }
     }
-  } catch {
+  } catch (_e) {
     maintenanceMessage = null
   }
 
@@ -126,4 +136,3 @@ export default async function DashboardLayout(props: {
     </div>
   )
 }
-

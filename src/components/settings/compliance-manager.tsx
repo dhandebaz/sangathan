@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { updateComplianceData } from '@/actions/organisation/compliance'
 import { Database } from '@/types/database'
-import { FileText, Upload, Trash2, CheckCircle2 } from 'lucide-react'
+import { Upload } from 'lucide-react'
 
 type Org = {
   id: string
@@ -17,7 +17,7 @@ type Org = {
   incorporation_date: string | null
   tax_id: string | null
   darpan_id: string | null
-  compliance_documents: any | null
+  compliance_documents: unknown
 }
 
 const complianceSchema = z.object({
@@ -57,7 +57,7 @@ export function ComplianceManager({ org }: { org: Org }) {
       } else {
         toast.error('Failed to update', { description: res.error })
       }
-    } catch (error) {
+    } catch (_error) {
       setIsLoading(false)
       toast.error('Error updating compliance details')
     }
