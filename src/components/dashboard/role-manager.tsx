@@ -19,7 +19,7 @@ interface Role {
 
 interface RoleManagerProps {
   initialRoles: Role[]
-  organizationId: string
+  organisationId: string
   lang: string
 }
 
@@ -31,7 +31,7 @@ const defaultPermissions = {
   can_manage_forms: false
 }
 
-export function RoleManager({ initialRoles, organizationId, lang }: RoleManagerProps) {
+export function RoleManager({ initialRoles, organisationId, lang }: RoleManagerProps) {
   const [roles, setRoles] = useState<Role[]>(initialRoles)
   const [editingRole, setEditingRole] = useState<Role | null>(null)
   const [showNewRole, setShowNewRole] = useState(false)
@@ -45,7 +45,7 @@ export function RoleManager({ initialRoles, organizationId, lang }: RoleManagerP
     e.preventDefault()
     try {
       const result = await createCustomRole({
-        organizationId,
+        organisationId,
         name: formData.name,
         description: formData.description,
         permissions: formData.permissions
@@ -69,7 +69,7 @@ export function RoleManager({ initialRoles, organizationId, lang }: RoleManagerP
     try {
       const result = await updateRole({
         id: editingRole.id,
-        organizationId,
+        organisationId,
         name: formData.name,
         description: formData.description,
         permissions: formData.permissions
@@ -89,7 +89,7 @@ export function RoleManager({ initialRoles, organizationId, lang }: RoleManagerP
   const handleDeleteRole = async (roleId: string) => {
     if (!confirm('Are you sure you want to delete this role?')) return
     try {
-      const result = await deleteRole(roleId, organizationId)
+      const result = await deleteRole(roleId, organisationId)
       if (result.success) {
         toast.success('Role deleted successfully')
         setRoles(roles.filter(r => r.id !== roleId))

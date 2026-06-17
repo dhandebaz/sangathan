@@ -16,7 +16,7 @@ export default function ResetPasswordPage() {
     const confirmPassword = formData.get('confirmPassword') as string
 
     try {
-      const res = await resetPassword({ password, confirmPassword })
+      const res = await resetPassword({ password })
       if (!res.success) throw new Error(res.error)
       // Action redirects to dashboard
     } catch (err) {
