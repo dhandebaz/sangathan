@@ -6,7 +6,6 @@ import { Network, Plus, Users } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { getSelectedOrganisationId } from '@/lib/auth/context'
 
 export default async function SubgroupsPage(props: { params: Promise<{ lang: string }> }) {
   const params = await props.params
@@ -18,15 +17,18 @@ export default async function SubgroupsPage(props: { params: Promise<{ lang: str
     redirect(`/${lang}/login`)
   }
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
     .single()
 
-  const organisationId = await getSelectedOrganisationId()
-  const { data: subgroups } = await getSubgroups(organisationId)
-  const isAdmin = profile?.role === 'admin' || profile?.role === 'executive'
+  if (profileError || !profile?.organisation_id) {
+    redirect(`/${lang}/onboarding`)
+  }
+
+  const { data: subgroups } = await getSubgroups(profile.organisation_id)
+  const isAdmin = profile.role === 'admin' || profile.role === 'executive'
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
@@ -45,7 +47,7 @@ export default async function SubgroupsPage(props: { params: Promise<{ lang: str
             const type = formData.get('type') as any
             if (name && type) {
               await createSubgroup({
-                organisationId,
+                organisationId: profile.organisation_id,
                 name,
                 type
               })

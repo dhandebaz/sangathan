@@ -19,7 +19,7 @@ export async function getUserMemberships(userId: string): Promise<MembershipCont
   const supabase = await createClient()
 
   const {
-    data: profileRows,
+    data: profile,
     error: profileError,
   } = await (supabase as unknown as {
     from: (table: string) => {
@@ -34,25 +34,21 @@ export async function getUserMemberships(userId: string): Promise<MembershipCont
     .from('profiles')
     .select('id, organisation_id, role, status, deleted_at')
     .eq('id', userId)
+    .single()
 
   if (profileError) {
     throw new Error('Unauthorized: Failed to load memberships')
   }
 
-  const memberships: MembershipContext[] = ((profileRows || []) as {
-    id: string
-    organisation_id: string
-    role: string
-    status: MembershipContext['status']
-    deleted_at: string | null
-  }[])
-    .filter((m) => !m.deleted_at)
-    .map((m) => ({
-      id: m.id,
-      organisationId: m.organisation_id,
-      role: m.role as Role,
-      status: m.status,
-    }))
+  const memberships: MembershipContext[] = []
+  if (profile && !profile.deleted_at) {
+    memberships.push({
+      id: profile.id,
+      organisationId: profile.organisation_id,
+      role: profile.role as Role,
+      status: profile.status,
+    })
+  }
 
   try {
     await redis.set(cacheKey, memberships, { ex: 3600 }) // Cache for 1 hour

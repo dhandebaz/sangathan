@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getRoles } from '@/actions/roles'
-import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { RoleManager } from '@/components/dashboard/role-manager'
 
 export default async function RolesPage(props: { params: Promise<{ lang: string }> }) {
@@ -14,19 +13,22 @@ export default async function RolesPage(props: { params: Promise<{ lang: string 
     redirect(`/${lang}/login`)
   }
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
     .single()
 
-  const organisationId = await getSelectedOrganisationId()
-  const isAdmin = profile?.role === 'admin' || profile?.role === 'executive'
+  if (profileError || !profile?.organisation_id) {
+    redirect(`/${lang}/onboarding`)
+  }
+
+  const isAdmin = profile.role === 'admin' || profile.role === 'executive'
   if (!isAdmin) {
     return <div className="p-6">You do not have permission to view this page.</div>
   }
 
-  const { data: roles } = await getRoles(organisationId)
+  const { data: roles } = await getRoles(profile.organisation_id)
 
   return (
     <div className="p-6 max-w-6xl mx-auto">

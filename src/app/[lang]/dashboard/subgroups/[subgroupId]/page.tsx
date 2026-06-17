@@ -5,7 +5,6 @@ import { Network, ArrowLeft, UserPlus, Trash } from 'lucide-react'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { getSelectedOrganisationId } from '@/lib/auth/context'
 
 export default async function SubgroupDetailPage(
   props: { params: Promise<{ lang: string, subgroupId: string }> }
@@ -17,16 +16,17 @@ export default async function SubgroupDetailPage(
 
   if (!user) redirect(`/${lang}/login`)
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
     .single()
 
-  if (!profile) return <div>Not found</div>
+  if (profileError || !profile?.organisation_id) {
+    redirect(`/${lang}/onboarding`)
+  }
 
-  const organisationId = await getSelectedOrganisationId()
-  const { data: subgroup } = await getSubgroup(subgroupId, organisationId)
+  const { data: subgroup } = await getSubgroup(subgroupId, profile.organisation_id)
 
   if (!subgroup) return <div>Subgroup not found</div>
 
