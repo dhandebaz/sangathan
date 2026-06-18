@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { getUserContext } from '@/lib/auth/context'
 import { Donation, Organisation } from '@/types/dashboard'
+import { PrintLayout } from '@/components/print/print-layout'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,17 +26,19 @@ export default async function PrintDonationLedger() {
 
   const totalAmount = donations?.reduce((sum, d) => sum + Number(d.amount), 0) || 0
 
-  return (
-    <div className="p-8 bg-white min-h-screen text-black">
-      <div className="mb-8 border-b pb-4">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-1">{org?.name}</h2>
-        <h1 className="text-3xl font-bold">Donation Ledger</h1>
-        <div className="flex gap-8 mt-2 text-sm">
-           <p><strong>Total Collected:</strong> ₹{totalAmount.toLocaleString()}</p>
-           <p><strong>Transactions:</strong> {donations?.length}</p>
-        </div>
-      </div>
+  const meta = (
+    <div className="flex gap-8 mt-2 text-sm">
+       <p><strong>Total Collected:</strong> ₹{totalAmount.toLocaleString()}</p>
+       <p><strong>Transactions:</strong> {donations?.length}</p>
+    </div>
+  )
 
+  return (
+    <PrintLayout
+      title="Donation Ledger"
+      orgName={org?.name || 'Organisation'}
+      meta={meta}
+    >
       <table className="w-full text-left text-sm border-collapse">
         <thead>
            <tr className="border-b border-black">
@@ -64,19 +67,6 @@ export default async function PrintDonationLedger() {
            ))}
         </tbody>
       </table>
-
-      <div className="mt-12 pt-4 border-t text-xs text-center text-gray-400">
-        Generated on {new Date().toLocaleDateString()} via Sangathan Platform
-      </div>
-
-      <style>{`
-        @media print {
-          @page { margin: 1cm; }
-          body { -webkit-print-color-adjust: exact; }
-        }
-      `}</style>
-      
-      <script dangerouslySetInnerHTML={{__html: `window.print();`}} />
-    </div>
+    </PrintLayout>
   )
 }
