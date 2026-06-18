@@ -21,10 +21,6 @@ const AddMemberSchema = z.object({
   role: z.enum(['admin', 'editor', 'viewer', 'member']).default('member'),
 })
 
-const UpdateMemberSchema = AddMemberSchema.partial().extend({
-  memberId: z.string().uuid(),
-})
-
 const ChangeStatusSchema = z.object({
   memberId: z.string().uuid(),
   status: z.enum(['active', 'inactive']),
@@ -77,50 +73,6 @@ export const addMember = createSafeAction(
     return { success: true, memberId: member.id }
   },
   { allowedRoles: ['admin', 'editor'] } // Editor can create too
-)
-
-export const updateMember = createSafeAction(
-  UpdateMemberSchema,
-  async (input, context) => {
-    const supabase = await createClient()
-    
-    const { error } = await supabase
-      .from('members')
-      .update({
-        full_name: input.full_name,
-        email: input.email || null,
-        phone: input.phone,
-        designation: input.designation,
-        area: input.area,
-        joining_date: input.joining_date,
-        status: input.status,
-        notes: input.notes,
-        role: input.role,
-      })
-      .eq('id', input.memberId)
-      .eq('organisation_id', context.organizationId)
-
-    if (error) {
-      const err = error as { code?: string; message?: string }
-      if (err.code === '23505') {
-        return { error: 'Phone number already exists.' }
-      }
-      return { error: err.message || 'Failed to update member' }
-    }
-
-    await logAction({
-      organisation_id: context.organizationId,
-      user_id: context.user.id,
-      action: 'MEMBER_UPDATED',
-      resource_table: 'members',
-      resource_id: input.memberId,
-      details: { changes: input }
-    })
-
-    revalidatePath('/', 'layout')
-    return { success: true }
-  },
-  { allowedRoles: ['admin', 'editor'] }
 )
 
 export const changeMemberStatus = createSafeAction(
