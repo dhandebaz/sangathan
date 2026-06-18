@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, Mock } from 'vitest'
 import { updateSession } from './middleware'
 import { createServerClient } from '@supabase/ssr'
-import { NextResponse } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 
 // Mock dependencies
 vi.mock('@supabase/ssr', () => ({
@@ -33,9 +33,31 @@ vi.mock('@/lib/maintenance', () => ({
   isMaintenanceMode: vi.fn(() => false),
 }))
 
+interface MockResponse {
+  cookies: {
+    set: Mock;
+  };
+  headers: {
+    set: Mock;
+  };
+}
+
+interface MockRequest {
+  cookies: {
+    getAll: Mock;
+    set: Mock;
+    get: Mock;
+  };
+  nextUrl: {
+    pathname: string;
+    clone: Mock;
+  };
+  url: string;
+}
+
 describe('middleware updateSession', () => {
-  let mockRequest: any
-  let mockResponse: any
+  let mockRequest: MockRequest
+  let mockResponse: MockResponse
 
   beforeEach(() => {
     vi.clearAllMocks()
@@ -61,18 +83,16 @@ describe('middleware updateSession', () => {
       },
       nextUrl: {
         pathname: '/',
-        clone: vi.fn(function() {
-            return {
-                pathname: this.pathname,
-                clone: vi.fn().mockReturnThis()
-            }
-        }),
+        clone: vi.fn(() => ({
+            pathname: mockRequest.nextUrl.pathname,
+            clone: vi.fn().mockReturnThis()
+        })),
       },
       url: 'https://example.com/',
     }
 
-    vi.mocked(NextResponse.next).mockReturnValue(mockResponse)
-    vi.mocked(NextResponse.redirect).mockReturnValue(mockResponse)
+    vi.mocked(NextResponse.next).mockReturnValue(mockResponse as unknown as NextResponse)
+    vi.mocked(NextResponse.redirect).mockReturnValue(mockResponse as unknown as NextResponse)
   })
 
   it('should handle auth error gracefully and proceed as unauthenticated', async () => {
@@ -84,9 +104,9 @@ describe('middleware updateSession', () => {
         getUser: vi.fn().mockRejectedValue(new Error('Auth failed')),
       },
       from: vi.fn(),
-    } as any)
+    } as unknown as ReturnType<typeof createServerClient>)
 
-    const result = await updateSession(mockRequest as any)
+    const result = await updateSession(mockRequest as unknown as NextRequest)
 
     expect(consoleSpy).toHaveBeenCalledWith('Middleware Auth Error:', expect.any(Error))
     expect(NextResponse.next).toHaveBeenCalled()
@@ -104,9 +124,9 @@ describe('middleware updateSession', () => {
       auth: {
         getUser: vi.fn().mockRejectedValue(new Error('Auth failed')),
       },
-    } as any)
+    } as unknown as ReturnType<typeof createServerClient>)
 
-    await updateSession(mockRequest as any)
+    await updateSession(mockRequest as unknown as NextRequest)
 
     expect(NextResponse.redirect).toHaveBeenCalledWith(expect.objectContaining({
         pathname: '/login'
