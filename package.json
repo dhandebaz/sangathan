@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "audit": "npm audit --audit-level=high",
+    "test": "tsx --test tests/*.test.ts",
     "secrets:scan": "node scripts/scan-secrets.mjs",
     "precommit": "npm run secrets:scan && npm run lint",
     "ci": "npm run lint && npm run build && npm run audit"
@@ -61,6 +62,7 @@
     "sharp": "^0.35.1",
     "supabase": "^2.84.4",
     "tailwindcss": "^4.2.2",
+    "tsx": "^4.22.4",
     "typescript": "^5"
   }
 }
