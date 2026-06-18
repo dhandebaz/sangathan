@@ -6,24 +6,38 @@ export type JobType = 'send_email' | 'process_webhook' | 'audit_log_batch' | 'ex
 
 export type JobPayload = Json
 
+export interface JobDefinition {
+  type: JobType
+  payload: JobPayload
+}
+
 export async function enqueueJob(type: JobType, payload: JobPayload) {
+  return enqueueJobs([{ type, payload }])
+}
+
+export async function enqueueJobs(jobs: JobDefinition[]) {
+  if (jobs.length === 0) return true
+
   const supabase = createServiceClient()
   
   try {
-    const { error } = await supabase.from('system_jobs').insert({
-      type,
-      payload,
-      status: 'pending',
-      attempts: 0
-    })
+    const { error } = await supabase.from('system_jobs').insert(
+      jobs.map(job => ({
+        type: job.type,
+        payload: job.payload,
+        status: 'pending',
+        attempts: 0
+      }))
+    )
 
     if (error) throw error
     
-    // If we want immediate processing in serverless, we could fire an async fetch here
-    // to a processing endpoint, but purely queuing is safer.
     return true
   } catch (err) {
-    logger.error('queue', `Failed to enqueue job ${type}`, { error: err as Record<string, unknown> })
+    logger.error('queue', `Failed to enqueue ${jobs.length} jobs`, {
+      error: err as Record<string, unknown>,
+      jobTypes: Array.from(new Set(jobs.map(j => j.type)))
+    })
     return false
   }
 }
@@ -32,7 +46,7 @@ export async function processNextJob() {
   const supabase = createServiceClient()
   
   // 1. Lock next job
-  // We need a custom RPC for "SELECT FOR UPDATE SKIP LOCKED" because Supabase JS doesn't support it directly
+  // We need a custom RPC for 'SELECT FOR UPDATE SKIP LOCKED' because Supabase JS doesn't support it directly
   // Fallback: Optimistic locking
   
   const { data: job, error } = await supabase.rpc('lock_next_job')

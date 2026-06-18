@@ -4,14 +4,14 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
-import { enqueueJob } from '@/lib/queue'
+import { enqueueJobs } from '@/lib/queue'
 import { checkBroadcastLimit } from '@/lib/risk-engine'
 
 // --- Schemas ---
 
 const AnnouncementSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 chars"),
-  content: z.string().min(10, "Content must be at least 10 chars"),
+  title: z.string().min(3, 'Title must be at least 3 chars'),
+  content: z.string().min(10, 'Content must be at least 10 chars'),
   visibility_level: z.enum(['public', 'members', 'volunteer', 'core', 'executive']),
   is_pinned: z.boolean().default(false),
   send_email: z.boolean().default(false),
@@ -91,31 +91,32 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
       }
       
       if (members) {
-        let sentCount = 0
         const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`
 
-        for (const member of members) {
-           await enqueueJob('send_email', {
-             to: member.email,
-             subject: `New Announcement: ${data.title}`,
-             html: `
-               <div style="font-family: sans-serif; padding: 20px;">
-                 <h2>${data.title}</h2>
-                 <div style="margin: 20px 0; white-space: pre-wrap;">${data.content}</div>
-                 <hr/>
-                 <p><a href="${dashboardUrl}">View in Dashboard</a></p>
-               </div>
-             `,
-             tags: ['announcement', 'broadcast']
-           })
-           sentCount++
-        }
+        const emailJobs = members.map(member => ({
+          type: 'send_email' as const,
+          payload: {
+            to: member.email,
+            subject: `New Announcement: ${data.title}`,
+            html: `
+              <div style="font-family: sans-serif; padding: 20px;">
+                <h2>${data.title}</h2>
+                <div style="margin: 20px 0; white-space: pre-wrap;">${data.content}</div>
+                <hr/>
+                <p><a href="${dashboardUrl}">View in Dashboard</a></p>
+              </div>
+            `,
+            tags: ['announcement', 'broadcast']
+          }
+        }))
+
+        await enqueueJobs(emailJobs)
 
         await supabaseAdmin
           .from('announcements')
           .update({
             email_sent_at: new Date().toISOString(),
-            email_stats: { recipient_count: sentCount },
+            email_stats: { recipient_count: emailJobs.length },
           } as never)
           .eq('id', (announcement as { id: string }).id)
       }
