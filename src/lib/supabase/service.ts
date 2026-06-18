@@ -1,6 +1,6 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
-// import { Database } from '@/types/database'
+import { Database } from '@/types/database'
 
 export function createServiceClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -15,7 +15,7 @@ export function createServiceClient() {
   // 1. Webhooks
   // 2. Cron jobs
   // 3. Admin-specific server actions that need to bypass normal RLS rules
-  return createSupabaseClient(supabaseUrl, supabaseServiceRoleKey, {
+  return createSupabaseClient<Database>(supabaseUrl, supabaseServiceRoleKey, {
     auth: {
       autoRefreshToken: false,
       persistSession: false,
