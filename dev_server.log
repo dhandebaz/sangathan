@@ -1,0 +1,36 @@
+
+> sangathan@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+✓ Ready in 643ms
+- Experiments (use with caution):
+  · clientTraceMetadata
+
+○ Compiling /[lang]/docs/[slug] ...
+⨯ Error: Missing Supabase Environment Variables
+    at createClient (src/lib/supabase/server.ts:33:11)
+    at async SiteLayout (src/app/[lang]/(site)/layout.tsx:40:20)
+  31 |
+  32 |   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+> 33 |     throw new Error('Missing Supabase Environment Variables')
+     |           ^
+  34 |   }
+  35 |
+  36 |   return createServerClient( {
+  digest: '1117591809'
+}
+ GET /en/docs/getting-started 500 in 9.9s (next.js: 8.7s, proxy.ts: 355ms, application-code: 848ms)
+[browser] Uncaught Error: Missing Supabase Environment Variables
+    at createClient (src/lib/supabase/server.ts:33:11)
+    at  SiteLayout (src/app/[lang]/(site)/layout.tsx:40:20)
+  31 |
+  32 |   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+> 33 |     throw new Error('Missing Supabase Environment Variables')
+     |           ^
+  34 |   }
+  35 |
+  36 |   return createServerClient(
+[?25h

@@ -67,3 +67,16 @@ export const docsConfig: DocSection[] = [
     ]
   }
 ]
+
+// Pre-computed lookup map for O(1) slug access
+export const docsBySlug = new Map(
+  docsConfig.flatMap(section =>
+    section.items.map(item => [item.slug.split('#')[0], item])
+  )
+)
+
+// Pre-computed flat list of unique docs for pagination
+export const flatDocs = Array.from(docsBySlug.values()).map(item => ({
+  slug: item.slug.split('#')[0],
+  title: item.title
+}))
