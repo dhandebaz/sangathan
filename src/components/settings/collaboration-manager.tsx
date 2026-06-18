@@ -49,7 +49,7 @@ export function CollaborationManager({
 
   const handleInvite = async (targetId: string) => {
     setLoading(true)
-    const res = await createCollaborationRequest(targetId)
+    const res = await createCollaborationRequest({ targetOrgId: targetId })
     setLoading(false)
     if (res.success) {
       setSearchQuery('')
@@ -63,7 +63,7 @@ export function CollaborationManager({
 
   const handleRespond = async (linkId: string, status: 'active' | 'rejected') => {
     setLoading(true)
-    const res = await respondToCollaborationRequest(linkId, status)
+    const res = await respondToCollaborationRequest({ linkId, status })
     setLoading(false)
     if (res.success) {
       toast.success(status === 'active' ? 'Collaboration request accepted' : 'Collaboration request declined')
