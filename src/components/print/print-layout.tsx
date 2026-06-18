@@ -1,4 +1,5 @@
 import { ReactNode } from 'react'
+import { PrintTrigger } from './print-trigger'
 
 interface PrintLayoutProps {
   title: string
@@ -41,7 +42,7 @@ export function PrintLayout({ title, orgName, meta, children }: PrintLayoutProps
         }
       `}</style>
       
-      <script dangerouslySetInnerHTML={{__html: `window.print();`}} />
+      <PrintTrigger />
     </div>
   )
 }

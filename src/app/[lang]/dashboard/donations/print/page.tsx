@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { getUserContext } from '@/lib/auth/context'
 import { Donation, Organisation } from '@/types/dashboard'
+import { PrintTrigger } from '@/components/print/print-trigger'
 
 export const dynamic = 'force-dynamic'
 
@@ -76,7 +77,7 @@ export default async function PrintDonationLedger() {
         }
       `}</style>
       
-      <script dangerouslySetInnerHTML={{__html: `window.print();`}} />
+      <PrintTrigger />
     </div>
   )
 }
