@@ -34,5 +34,6 @@ export function getQrSigningSecret() {
   if (!secret) {
     throw new Error('QR token signing secret is not configured')
   }
+
   return secret
 }

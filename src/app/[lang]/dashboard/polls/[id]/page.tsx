@@ -41,7 +41,10 @@ export default async function PollPage(props: { params: Promise<{ lang: string, 
        .single()
      if (vote) hasVoted = true
   } else {
-     const secret = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'fallback'
+     const secret = process.env.POLL_HMAC_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY
+     if (!secret) {
+       throw new Error('Missing POLL_HMAC_SECRET or SUPABASE_SERVICE_ROLE_KEY')
+     }
      const raw = `${id}:${user.id}:${secret}`
      const hash = createHmac('sha256', secret).update(raw).digest('hex')
      
@@ -67,12 +70,27 @@ export default async function PollPage(props: { params: Promise<{ lang: string, 
   let results: PollResults = poll.final_results || { counts: {}, total: 0 }
   
   if (poll.status === 'active' && poll.type === 'informal') {
-     const { data: votes } = await supabaseAdmin.from('poll_votes').select('option_id').eq('poll_id', id)
+     const { data: options } = await supabaseAdmin
+       .from('poll_options')
+       .select('id')
+       .eq('poll_id', id)
+
      const counts: Record<string, number> = {}
-     votes?.forEach((v: { option_id: string }) => {
-       counts[v.option_id] = (counts[v.option_id] || 0) + 1
-     })
-     results = { counts, total: votes?.length || 0 }
+     let total = 0
+
+     for (const option of options || []) {
+       const { count } = await supabaseAdmin
+         .from('poll_votes')
+         .select('id', { count: 'exact', head: true })
+         .eq('poll_id', id)
+         .eq('option_id', option.id)
+
+       const optionCount = typeof count === 'number' ? count : 0
+       counts[option.id] = optionCount
+       total += optionCount
+     }
+
+     results = { counts, total }
   }
 
   return (

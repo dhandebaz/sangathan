@@ -121,7 +121,10 @@ export const castVote = createSafeAction(
     if (userLevel < requiredLevel) throw new Error('Role not eligible')
 
     // 3. Prepare Vote Record
-    const secret = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'fallback'
+    const secret = process.env.POLL_HMAC_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!secret) {
+      throw new Error('Missing POLL_HMAC_SECRET or SUPABASE_SERVICE_ROLE_KEY')
+    }
     const raw = `${data.poll_id}:${context.user.id}:${secret}`
     const ip_hash = createHmac('sha256', secret).update(raw).digest('hex')
 
@@ -189,20 +192,27 @@ export const closePoll = createSafeAction(
     if (p.status !== 'active') throw new Error('Poll is already closed')
 
     // 2. Calculate Results
-    // Get Votes
-    const { data: votes } = await supabaseAdmin
-      .from('poll_votes')
-      .select('option_id')
+    const { data: options, error: optionsError } = await supabaseAdmin
+      .from('poll_options')
+      .select('id')
       .eq('poll_id', data.poll_id)
-      
-    // Aggregate
+
+    if (optionsError || !options) throw new Error('Failed to load poll options')
+
     const results: Record<string, number> = {}
-    const vList = votes as { option_id: string }[] | null
-    vList?.forEach((v) => {
-      results[v.option_id] = (results[v.option_id] || 0) + 1
-    })
-    
-    const totalVotes = vList?.length || 0
+    let totalVotes = 0
+
+    for (const option of options) {
+      const { count } = await supabaseAdmin
+        .from('poll_votes')
+        .select('id', { count: 'exact', head: true })
+        .eq('poll_id', data.poll_id)
+        .eq('option_id', option.id)
+
+      const optionCount = typeof count === 'number' ? count : 0
+      results[option.id] = optionCount
+      totalVotes += optionCount
+    }
     
     // Check Quorum if formal
     let passed = true

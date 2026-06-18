@@ -2,7 +2,6 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import { i18n } from '@/lib/i18n/config'
 import { createSignedCookie, verifySignedCookie } from '@/lib/auth/cookie'
-import { isMaintenanceMode } from '@/lib/maintenance'
 
 function applySecurityHeaders(response: NextResponse): NextResponse {
   response.headers.set('X-Frame-Options', 'DENY')
@@ -20,7 +19,7 @@ function applySecurityHeaders(response: NextResponse): NextResponse {
     'Content-Security-Policy',
     [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      "script-src 'self'",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https:",
       "font-src 'self' data:",
@@ -35,19 +34,6 @@ function applySecurityHeaders(response: NextResponse): NextResponse {
 }
 
 export async function updateSession(request: NextRequest) {
-  // --- MAINTENANCE MODE CHECK (Zero DB Overhead) ---
-  if (isMaintenanceMode(request)) {
-     // Allow access to maintenance page and static assets
-     const pathname = request.nextUrl.pathname
-     if (!pathname.startsWith('/maintenance') && 
-         !pathname.startsWith('/_next') && 
-         !pathname.startsWith('/static')) {
-         const url = request.nextUrl.clone()
-         url.pathname = '/maintenance'
-         return applySecurityHeaders(NextResponse.redirect(url))
-     }
-  }
-
   let supabaseResponse = NextResponse.next({
     request,
   })
