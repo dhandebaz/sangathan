@@ -11,7 +11,7 @@ export type PaginatedResult<T> = {
   prevCursor: string | null
 }
 
-interface SupabaseQuery {
+export interface SupabaseQuery {
   order(column: string, options: { ascending: boolean }): SupabaseQuery
   gt(column: string, value: string): SupabaseQuery
   lt(column: string, value: string): SupabaseQuery
