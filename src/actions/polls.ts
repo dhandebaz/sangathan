@@ -5,6 +5,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { createHmac } from 'crypto'
+import { createSafeAction } from '@/lib/auth/actions'
 
 // --- Schemas ---
 
@@ -21,7 +22,7 @@ const PollSchema = z.object({
 })
 
 const CreatePollSchema = PollSchema.extend({
-  organisation_id: z.string().uuid(),
+  organisation_id: z.string().uuid().optional(), // Allowed for backward compatibility in schema, but ignored in handler
 })
 
 const VoteSchema = z.object({
@@ -29,38 +30,31 @@ const VoteSchema = z.object({
   option_id: z.string().uuid(),
 })
 
+const ClosePollSchema = z.object({
+  poll_id: z.string().uuid(),
+})
+
+// --- Types ---
+
+interface VoteRecord {
+  poll_id: string
+  option_id: string
+  hashed_identifier?: string
+  member_id?: string
+}
+
 // --- Actions ---
 
-export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
-  try {
-    const result = CreatePollSchema.safeParse(input)
-    if (!result.success) {
-      return { success: false, error: result.error.issues[0]?.message || 'Invalid poll data' }
-    }
-
-    const data = result.data
-
+export const createPoll = createSafeAction(
+  CreatePollSchema,
+  async (data, context) => {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
     
-    if (!user) return { success: false, error: 'Unauthorized' }
-
-    // Check permissions
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role, organisation_id')
-      .eq('id', user.id)
-      .single()
-
-    if (!profile || profile.organisation_id !== data.organisation_id || !['admin', 'editor'].includes(profile.role)) {
-      return { success: false, error: 'Permission denied' }
-    }
-
     // Create Poll
     const { data: poll, error } = await supabase
       .from('polls')
       .insert({
-        organisation_id: data.organisation_id,
+        organisation_id: context.organizationId,
         title: data.title,
         description: data.description,
         type: data.type,
@@ -69,7 +63,7 @@ export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
         quorum_percentage: data.quorum_percentage,
         end_time: data.end_time,
         status: 'active',
-        created_by: user.id,
+        created_by: context.user.id,
         is_public: data.is_public,
       } as never)
       .select()
@@ -79,7 +73,7 @@ export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
 
     // Create Options
     const options = data.options.map((label, idx) => ({
-      poll_id: poll.id,
+      poll_id: (poll as { id: string }).id,
       label,
       display_order: idx,
     }))
@@ -90,27 +84,14 @@ export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
     if (optError) throw optError
 
     revalidatePath('/', 'layout')
-    return { success: true }
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error'
-    return { success: false, error: message }
-  }
-}
+    return { id: (poll as { id: string }).id }
+  },
+  { allowedRoles: ['admin', 'editor'], actionName: 'createPoll' }
+)
 
-export async function castVote(input: z.infer<typeof VoteSchema>) {
-  try {
-    const result = VoteSchema.safeParse(input)
-    if (!result.success) {
-      return { success: false, error: result.error.issues[0]?.message || 'Invalid vote data' }
-    }
-
-    const data = result.data
-
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    
-    if (!user) return { success: false, error: 'Unauthorized' }
-
+export const castVote = createSafeAction(
+  VoteSchema,
+  async (data, context) => {
     const supabaseAdmin = createServiceClient()
 
     // 1. Get Poll Details
@@ -120,120 +101,121 @@ export async function castVote(input: z.infer<typeof VoteSchema>) {
       .eq('id', data.poll_id)
       .single()
 
-    if (pollError || !poll) return { success: false, error: 'Poll not found' }
+    if (pollError || !poll) throw new Error('Poll not found')
 
-    if (poll.status !== 'active') return { success: false, error: 'Poll is not active' }
-    if (poll.end_time && new Date(poll.end_time) < new Date()) return { success: false, error: 'Poll has ended' }
+    const p = poll as { organisation_id: string; status: string; end_time: string | null; visibility_level: string; voting_method: string }
 
-    // 2. Check Permissions
-    const { data: profile } = await supabaseAdmin
-      .from('profiles')
-      .select('role, organisation_id, status')
-      .eq('id', user.id)
-      .single()
+    if (p.status !== 'active') throw new Error('Poll is not active')
+    if (p.end_time && new Date(p.end_time) < new Date()) throw new Error('Poll has ended')
 
-    if (!profile || profile.organisation_id !== poll.organisation_id || profile.status !== 'active') {
-      return { success: false, error: 'You are not authorized to vote in this poll' }
+    // 2. Check Permissions (Cross-org check is handled by createSafeAction's context,
+    // but we need to ensure the poll belongs to the user's org)
+    if (p.organisation_id !== context.organizationId) {
+      throw new Error('You are not authorized to vote in this poll')
     }
     
     const roleHierarchy = { 'viewer': 0, 'member': 1, 'general': 1, 'volunteer': 2, 'core': 3, 'executive': 4, 'editor': 5, 'admin': 6 }
-    const requiredLevel = roleHierarchy[poll.visibility_level as keyof typeof roleHierarchy] || 1
-    const userLevel = roleHierarchy[profile.role as keyof typeof roleHierarchy] || 0
+    const requiredLevel = roleHierarchy[p.visibility_level as keyof typeof roleHierarchy] || 1
+    const userLevel = roleHierarchy[context.role as keyof typeof roleHierarchy] || 0
     
-    if (userLevel < requiredLevel) return { success: false, error: 'Role not eligible' }
+    if (userLevel < requiredLevel) throw new Error('Role not eligible')
 
     // 3. Prepare Vote Record
     const secret = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'fallback'
-    const raw = `${data.poll_id}:${user.id}:${secret}`
+    const raw = `${data.poll_id}:${context.user.id}:${secret}`
     const ip_hash = createHmac('sha256', secret).update(raw).digest('hex')
-
-    type VoteRecord = {
-      poll_id: string
-      option_id: string
-      ip_hash: string
-      user_id: string | null
-    }
 
     const voteRecord: VoteRecord = {
       poll_id: data.poll_id,
       option_id: data.option_id,
-      ip_hash: ip_hash,
-      user_id: null
     }
 
-    if (poll.voting_method === 'anonymous') {
+    if (p.voting_method === 'anonymous') {
+       voteRecord.hashed_identifier = ip_hash
+
        // Check duplicate via hash
        const { data: existing } = await supabaseAdmin
          .from('poll_votes')
          .select('id')
          .eq('poll_id', data.poll_id)
-         .eq('ip_hash', ip_hash)
+         .eq('hashed_identifier', ip_hash)
          .single()
        
-       if (existing) return { success: false, error: 'Already voted' }
+       if (existing) throw new Error('Already voted')
        
     } else {
-       voteRecord.user_id = user.id
+       voteRecord.member_id = context.user.id
        
        // Check duplicate via ID
        const { data: existing } = await supabaseAdmin
          .from('poll_votes')
          .select('id')
          .eq('poll_id', data.poll_id)
-         .eq('user_id', user.id)
+         .eq('member_id', context.user.id)
          .single()
          
-       if (existing) return { success: false, error: 'Already voted' }
+       if (existing) throw new Error('Already voted')
     }
 
-    const { error } = await supabaseAdmin.from('poll_votes').insert(voteRecord)
+    const { error } = await supabaseAdmin.from('poll_votes').insert(voteRecord as never)
     if (error) throw error
 
     revalidatePath('/', 'layout')
     return { success: true }
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error'
-    return { success: false, error: message }
-  }
-}
+  },
+  { actionName: 'castVote' }
+)
 
-export async function closePoll(pollId: string) {
-  try {
-    // Permission check...
-    
-    // Calculate Results
+export const closePoll = createSafeAction(
+  ClosePollSchema,
+  async (data, context) => {
     const supabaseAdmin = createServiceClient()
-    
+
+    // 1. Get Poll & Permission Check
+    const { data: poll, error: pollError } = await supabaseAdmin
+      .from('polls')
+      .select('*')
+      .eq('id', data.poll_id)
+      .single()
+
+    if (pollError || !poll) throw new Error('Poll not found')
+
+    const p = poll as { organisation_id: string; status: string; type: string; quorum_percentage: number | null }
+
+    if (p.organisation_id !== context.organizationId) {
+      throw new Error('Permission denied')
+    }
+
+    if (p.status !== 'active') throw new Error('Poll is already closed')
+
+    // 2. Calculate Results
     // Get Votes
     const { data: votes } = await supabaseAdmin
       .from('poll_votes')
       .select('option_id')
-      .eq('poll_id', pollId)
+      .eq('poll_id', data.poll_id)
       
     // Aggregate
     const results: Record<string, number> = {}
-    votes?.forEach((v) => {
+    const vList = votes as { option_id: string }[] | null
+    vList?.forEach((v) => {
       results[v.option_id] = (results[v.option_id] || 0) + 1
     })
     
-    const totalVotes = votes?.length || 0
+    const totalVotes = vList?.length || 0
     
     // Check Quorum if formal
-    const { data: poll } = await supabaseAdmin.from('polls').select('*').eq('id', pollId).single()
     let passed = true
     
-    if (poll && poll.type === 'formal' && poll.quorum_percentage) {
-       // Get total eligible members count (Approximation)
-       // This is expensive for large orgs, better to cache "eligible_count" at poll creation or fetch now
+    if (p.type === 'formal' && p.quorum_percentage) {
        const { count: totalMembers } = await supabaseAdmin
          .from('profiles')
          .select('*', { count: 'exact', head: true })
-         .eq('organisation_id', poll.organisation_id)
+         .eq('organisation_id', p.organisation_id)
          .eq('status', 'active')
-         // Filter by role if needed... let's assume total active members for simplicity or apply role filter
        
        const participation = (totalVotes / (totalMembers || 1)) * 100
-       if (participation < poll.quorum_percentage) passed = false
+       if (participation < p.quorum_percentage) passed = false
     }
 
     // Save Final Results
@@ -243,15 +225,15 @@ export async function closePoll(pollId: string) {
       passed
     }
 
-    await supabaseAdmin
+    const { error: updateError } = await supabaseAdmin
       .from('polls')
-      .update({ status: 'closed', final_results: finalData })
-      .eq('id', pollId)
+      .update({ status: 'closed', final_results: finalData } as never)
+      .eq('id', data.poll_id)
+
+    if (updateError) throw updateError
 
     revalidatePath('/', 'layout')
     return { success: true }
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error'
-    return { success: false, error: message }
-  }
-}
+  },
+  { allowedRoles: ['admin', 'editor'], actionName: 'closePoll' }
+)
