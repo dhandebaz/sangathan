@@ -3,29 +3,21 @@
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
+import { createSafeAction } from '@/lib/auth/actions'
+import { z } from 'zod'
 
-export async function createCollaborationRequest(targetOrgId: string) {
-  try {
+const CreateCollaborationSchema = z.object({
+  targetOrgId: z.string(),
+})
+
+export const createCollaborationRequest = createSafeAction(
+  CreateCollaborationSchema,
+  async ({ targetOrgId }, context) => {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    
-    if (!user) return { success: false, error: 'Unauthorized' }
+    const { user, organizationId: requesterOrgId } = context
 
-    // Check permissions
-    const { data: profileData } = await supabase
-      .from('profiles')
-      .select('role, organisation_id')
-      .eq('id', user.id)
-      .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
-
-    const profile = profileData
-
-    if (!profile || !['admin', 'executive'].includes(profile.role)) {
-      return { success: false, error: 'Permission denied' }
-    }
-
-    if (profile.organisation_id === targetOrgId) {
-      return { success: false, error: 'Cannot collaborate with yourself' }
+    if (requesterOrgId === targetOrgId) {
+      throw new Error('Cannot collaborate with yourself')
     }
 
     type OrganisationLinkStatus = {
@@ -36,20 +28,19 @@ export async function createCollaborationRequest(targetOrgId: string) {
     const { data: existing } = (await supabase
       .from('organisation_links')
       .select('id, status')
-      .or(`and(requester_org_id.eq.${profile.organisation_id},responder_org_id.eq.${targetOrgId}),and(requester_org_id.eq.${targetOrgId},responder_org_id.eq.${profile.organisation_id})`)
+      .or(`and(requester_org_id.eq.${requesterOrgId},responder_org_id.eq.${targetOrgId}),and(requester_org_id.eq.${targetOrgId},responder_org_id.eq.${requesterOrgId})`)
       .single()) as { data: OrganisationLinkStatus | null }
 
     if (existing) {
-      if (existing.status === 'pending') return { success: false, error: 'Request already pending' }
-      if (existing.status === 'active') return { success: false, error: 'Already collaborated' }
-      // If rejected, maybe allow re-request? For now, block.
-      return { success: false, error: 'Previous request exists' }
+      if (existing.status === 'pending') throw new Error('Request already pending')
+      if (existing.status === 'active') throw new Error('Already collaborated')
+      throw new Error('Previous request exists')
     }
 
     const { error } = await supabase
       .from('organisation_links')
       .insert({
-        requester_org_id: profile.organisation_id as string,
+        requester_org_id: requesterOrgId,
         responder_org_id: targetOrgId,
         status: 'pending',
         created_by: user.id,
@@ -59,33 +50,21 @@ export async function createCollaborationRequest(targetOrgId: string) {
 
     revalidatePath('/', 'layout')
     return { success: true }
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'An unexpected error occurred'
-    return { success: false, error: message }
-  }
-}
+  },
+  { allowedRoles: ['admin', 'executive'], actionName: 'createCollaborationRequest' }
+)
 
-export async function respondToCollaborationRequest(linkId: string, status: 'active' | 'rejected') {
-  try {
+const RespondCollaborationSchema = z.object({
+  linkId: z.string(),
+  status: z.enum(['active', 'rejected']),
+})
+
+export const respondToCollaborationRequest = createSafeAction(
+  RespondCollaborationSchema,
+  async ({ linkId, status }, context) => {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    
-    if (!user) return { success: false, error: 'Unauthorized' }
+    const { organizationId: profileOrgId } = context
 
-    // Check permissions
-    const { data: profileData } = await supabase
-      .from('profiles')
-      .select('role, organisation_id')
-      .eq('id', user.id)
-      .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
-
-    const profile = profileData
-
-    if (!profile || !['admin', 'executive'].includes(profile.role)) {
-      return { success: false, error: 'Permission denied' }
-    }
-
-    // Verify ownership of the request (must be responder)
     type OrganisationLinkRow = {
       id: string
       requester_org_id: string
@@ -99,14 +78,14 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
       .eq('id', linkId)
       .single()) as { data: OrganisationLinkRow | null, error: { message: string } | null }
 
-    if (linkError || !link) return { success: false, error: 'Request not found' }
+    if (linkError || !link) throw new Error('Request not found')
 
-    if (link.responder_org_id !== profile.organisation_id) {
+    if (link.responder_org_id !== profileOrgId) {
        // Allow requester to cancel? Maybe only if pending.
-       if (link.requester_org_id === profile.organisation_id && status === 'rejected') {
+       if (link.requester_org_id === profileOrgId && status === 'rejected') {
           // requester cancelling
        } else {
-          return { success: false, error: 'Not authorized to respond' }
+          throw new Error('Not authorized to respond')
        }
     }
 
@@ -119,12 +98,9 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
 
     revalidatePath('/', 'layout')
     return { success: true }
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'An unexpected error occurred'
-    return { success: false, error: message }
-  }
-}
-
+  },
+  { allowedRoles: ['admin', 'executive'], actionName: 'respondToCollaborationRequest' }
+)
 
 export async function getCollaboratingOrgs(orgId: string) {
     const supabase = createServiceClient()
