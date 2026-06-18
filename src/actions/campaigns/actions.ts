@@ -8,17 +8,17 @@ import { logAction } from '@/lib/audit/log'
 
 // --- Schemas ---
 
-export const CreateCampaignSchema = z.object({
+const CreateCampaignSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
   goal_description: z.string().min(10, "Goal description must be at least 10 characters"),
 })
 
-export const UpdateCampaignStatusSchema = z.object({
+const UpdateCampaignStatusSchema = z.object({
   campaignId: z.string().uuid("Invalid campaign ID"),
   status: z.enum(['draft', 'active', 'completed']),
 })
 
-export const DeleteCampaignSchema = z.object({
+const DeleteCampaignSchema = z.object({
   campaignId: z.string().uuid("Invalid campaign ID"),
 })
 
