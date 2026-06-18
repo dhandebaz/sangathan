@@ -1,5 +1,4 @@
 import { createServerClient } from '@supabase/ssr'
-import { Database } from '@/types/database'
 import { cookies } from 'next/headers'
 import { withCircuitBreaker } from '@/lib/circuit-breaker'
 
@@ -34,7 +33,7 @@ export async function createClient() {
     throw new Error('Missing Supabase Environment Variables')
   }
 
-  return createServerClient<Database>(
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
