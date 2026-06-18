@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { AlertCircle, ArrowLeft, ChevronRight, Clock } from 'lucide-react'
 import { Metadata } from 'next'
 import { TableOfContents } from '@/components/docs/table-of-contents'
-import { docsConfig } from '@/lib/docs-config'
+import { docsBySlug, flatDocs } from '@/lib/docs-config'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,10 +13,8 @@ interface PageProps {
 }
 
 function getTitleForSlug(slug: string, lang: string): string {
-  for (const section of docsConfig) {
-    const item = section.items.find(i => i.slug.split('#')[0] === slug)
-    if (item) return lang === 'hi' ? item.title.hi : item.title.en
-  }
+  const item = docsBySlug.get(slug)
+  if (item) return lang === 'hi' ? item.title.hi : item.title.en
   return slug.replace(/-/g, ' ')
 }
 
@@ -67,20 +65,9 @@ export default async function DocPage({ params }: PageProps) {
   const title = getTitleForSlug(slug, lang)
   const readingTime = Math.max(2, Math.ceil(content.trim().split(/\s+/).length / (isHindi ? 180 : 220)))
   
-  const orderedDocs = Array.from(
-    new Map(
-      docsConfig.flatMap((section) =>
-        section.items.map((item) => {
-          const s = item.slug.split('#')[0]
-          return [s, { slug: s, title: isHindi ? item.title.hi : item.title.en }] as const
-        }),
-      ),
-    ).values(),
-  )
-
-  const currentIndex = orderedDocs.findIndex((item) => item.slug === slug)
-  const previousDoc = currentIndex > 0 ? orderedDocs[currentIndex - 1] : null
-  const nextDoc = currentIndex >= 0 && currentIndex < orderedDocs.length - 1 ? orderedDocs[currentIndex + 1] : null
+  const currentIndex = flatDocs.findIndex((item) => item.slug === slug)
+  const previousDoc = currentIndex > 0 ? flatDocs[currentIndex - 1] : null
+  const nextDoc = currentIndex >= 0 && currentIndex < flatDocs.length - 1 ? flatDocs[currentIndex + 1] : null
 
   const MarkdownComponents: Components = {
     h1: ({ children }) => {
@@ -169,13 +156,13 @@ export default async function DocPage({ params }: PageProps) {
           {previousDoc ? (
             <Link href={`/${lang}/docs/${previousDoc.slug}`} className="rounded-xl border border-slate-200 bg-white p-4 hover:border-orange-300 hover:bg-orange-50">
               <span className="block text-xs font-bold uppercase tracking-wide text-slate-500">{isHindi ? 'पिछला' : 'Previous'}</span>
-              <span className="mt-1 block font-bold text-slate-950">{previousDoc.title}</span>
+              <span className="mt-1 block font-bold text-slate-950">{isHindi ? previousDoc.title.hi : previousDoc.title.en}</span>
             </Link>
           ) : <span />}
           {nextDoc && (
             <Link href={`/${lang}/docs/${nextDoc.slug}`} className="rounded-xl border border-slate-200 bg-white p-4 hover:border-orange-300 hover:bg-orange-50 sm:text-right">
               <span className="block text-xs font-bold uppercase tracking-wide text-slate-500">{isHindi ? 'अगला' : 'Next'}</span>
-              <span className="mt-1 block font-bold text-slate-950">{nextDoc.title}</span>
+              <span className="mt-1 block font-bold text-slate-950">{isHindi ? nextDoc.title.hi : nextDoc.title.en}</span>
             </Link>
           )}
         </nav>
