@@ -46,6 +46,7 @@ describe('Forms Actions', () => {
       const result = await createForm({
         title: 'Test Form',
         fields: [{ id: 'f1', label: 'Name', type: 'text' as const, required: true }],
+        visibility: 'public' as const,
       })
 
       expect(result.success).toBe(false)
