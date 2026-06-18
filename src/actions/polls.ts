@@ -56,6 +56,28 @@ export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
       return { success: false, error: 'Permission denied' }
     }
 
+    // Calculate eligible members count
+    let eligibleRoles: string[] = []
+    if (data.visibility_level === 'volunteer') {
+      eligibleRoles = ['volunteer', 'core', 'executive', 'admin', 'editor']
+    } else if (data.visibility_level === 'core') {
+      eligibleRoles = ['core', 'executive', 'admin', 'editor']
+    } else if (data.visibility_level === 'executive') {
+      eligibleRoles = ['executive', 'admin', 'editor']
+    }
+
+    let query = supabase
+      .from('profiles')
+      .select('*', { count: 'exact', head: true })
+      .eq('organisation_id', data.organisation_id)
+      .eq('status', 'active')
+
+    if (eligibleRoles.length > 0) {
+      query = query.in('role', eligibleRoles)
+    }
+
+    const { count: eligibleCount } = await query
+
     // Create Poll
     const { data: poll, error } = await supabase
       .from('polls')
@@ -67,6 +89,7 @@ export async function createPoll(input: z.infer<typeof CreatePollSchema>) {
         visibility_level: data.visibility_level,
         voting_method: data.voting_method,
         quorum_percentage: data.quorum_percentage,
+        eligible_count: eligibleCount,
         end_time: data.end_time,
         status: 'active',
         created_by: user.id,
@@ -223,14 +246,8 @@ export async function closePoll(pollId: string) {
     let passed = true
     
     if (poll && poll.type === 'formal' && poll.quorum_percentage) {
-       // Get total eligible members count (Approximation)
-       // This is expensive for large orgs, better to cache "eligible_count" at poll creation or fetch now
-       const { count: totalMembers } = await supabaseAdmin
-         .from('profiles')
-         .select('*', { count: 'exact', head: true })
-         .eq('organisation_id', poll.organisation_id)
-         .eq('status', 'active')
-         // Filter by role if needed... let's assume total active members for simplicity or apply role filter
+       // Use cached eligible count for better performance
+       const totalMembers = (poll as unknown as { eligible_count: number | null }).eligible_count
        
        const participation = (totalVotes / (totalMembers || 1)) * 100
        if (participation < poll.quorum_percentage) passed = false
