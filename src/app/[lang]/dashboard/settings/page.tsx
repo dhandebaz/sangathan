@@ -73,7 +73,7 @@ export default async function SettingsPage(props: PageProps) {
     incorporation_date: string | null
     tax_id: string | null
     darpan_id: string | null
-    compliance_documents: any | null
+    compliance_documents: unknown
   } | null
 
   if (!organisation) {

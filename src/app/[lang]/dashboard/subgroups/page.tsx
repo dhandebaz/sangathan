@@ -7,6 +7,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
+interface Subgroup {
+  id: string
+  name: string
+  type: string
+  description: string | null
+  org_subgroup_members: { count: number }[]
+}
+
 export default async function SubgroupsPage(props: { params: Promise<{ lang: string }> }) {
   const params = await props.params
   const lang = params.lang
@@ -27,7 +35,8 @@ export default async function SubgroupsPage(props: { params: Promise<{ lang: str
     redirect(`/${lang}/onboarding`)
   }
 
-  const { data: subgroups } = await getSubgroups(profile.organisation_id)
+  const { data: subgroupsData } = await getSubgroups(profile.organisation_id)
+  const subgroups = (subgroupsData || []) as unknown as Subgroup[]
   const isAdmin = profile.role === 'admin' || profile.role === 'executive'
 
   return (
@@ -44,12 +53,12 @@ export default async function SubgroupsPage(props: { params: Promise<{ lang: str
           <form action={async (formData) => {
             'use server'
             const name = formData.get('name') as string
-            const type = formData.get('type') as any
-            if (name && type) {
+            const subgroupType = formData.get('type') as string
+            if (name && subgroupType) {
               await createSubgroup({
                 organisationId: profile.organisation_id,
                 name,
-                type
+                type: subgroupType as "department" | "committee" | "chapter" | "team"
               })
             }
           }} className="flex flex-wrap gap-2">
@@ -69,7 +78,7 @@ export default async function SubgroupsPage(props: { params: Promise<{ lang: str
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {subgroups?.map((subgroup: any) => (
+        {subgroups.map((subgroup) => (
           <Link href={`/${lang}/dashboard/subgroups/${subgroup.id}`} key={subgroup.id}>
             <Card className="hover:border-brand-300 hover:shadow-md transition cursor-pointer h-full group">
               <CardHeader>
@@ -92,7 +101,7 @@ export default async function SubgroupsPage(props: { params: Promise<{ lang: str
             </Card>
           </Link>
         ))}
-        {(!subgroups || subgroups.length === 0) && (
+        {subgroups.length === 0 && (
           <div className="col-span-full py-12 text-center bg-slate-50 rounded-xl border border-dashed">
             <Network className="w-12 h-12 text-slate-300 mx-auto mb-3" />
             <h3 className="text-lg font-medium text-slate-700">No teams yet</h3>

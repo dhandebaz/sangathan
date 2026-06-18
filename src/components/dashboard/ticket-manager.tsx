@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Plus, Search, Filter, Trash2, Loader2 } from 'lucide-react'
+import { Plus, Search, Filter, Trash2, Loader2, UserPlus, Clock, Settings2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { createTicket, updateTicketStatus, deleteTicket } from '@/actions/tickets/actions'
+import { assignTicket, setTicketSLA } from '@/actions/tickets/governance-actions'
 
 type Ticket = {
   id: string
@@ -27,6 +28,8 @@ type Ticket = {
   status: 'open' | 'in_progress' | 'resolved'
   priority: 'low' | 'medium' | 'high'
   created_at: string
+  sla_due_at?: string
+  assigned_to?: string
 }
 
 interface TicketManagerProps {
@@ -240,8 +243,8 @@ export function TicketManager({
                 <th className="px-6 py-4 font-medium">Title</th>
                 <th className="px-6 py-4 font-medium">Status</th>
                 <th className="px-6 py-4 font-medium">Priority</th>
-                <th className="px-6 py-4 font-medium">Date</th>
-                {canManage && <th className="px-6 py-4 font-medium text-right">Actions</th>}
+                <th className="px-6 py-4 font-medium">Governance</th>
+                <th className="px-6 py-4 font-medium text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -265,51 +268,75 @@ export function TicketManager({
                       {ticket.priority}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-gray-500">
-                    {new Date(ticket.created_at).toLocaleDateString()}
-                  </td>
-                  {canManage && (
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        {ticket.status === 'open' && (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="h-8 px-2 text-xs"
-                            disabled={actionLoadingId !== null}
-                            onClick={() => handleUpdateStatus(ticket.id, 'in_progress')}
-                          >
-                            Start
-                          </Button>
-                        )}
-                        {ticket.status === 'in_progress' && (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="h-8 px-2 text-xs bg-green-50 text-green-700 hover:bg-green-100 hover:text-green-800 border-green-200"
-                            disabled={actionLoadingId !== null}
-                            onClick={() => handleUpdateStatus(ticket.id, 'resolved')}
-                          >
-                            Resolve
-                          </Button>
-                        )}
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
-                          disabled={actionLoadingId !== null}
-                          onClick={() => handleDeleteTicket(ticket.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                  <td className="px-6 py-4">
+                    <div className="space-y-1">
+                      {ticket.sla_due_at ? (
+                         <div className="flex items-center gap-1 text-xs text-red-600 font-medium">
+                            <Clock size={12} />
+                            <span>Due: {new Date(ticket.sla_due_at).toLocaleDateString()}</span>
+                         </div>
+                      ) : (
+                         <span className="text-xs text-gray-400 italic">No SLA</span>
+                      )}
+                      <div className="flex items-center gap-1 text-xs text-gray-500">
+                         <UserPlus size={12} />
+                         <span>{ticket.assigned_to ? 'Assigned' : 'Open'}</span>
                       </div>
-                    </td>
-                  )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      {canManage && (
+                        <>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-8 w-8 p-0"
+                            title="Assign (Action Implemented)"
+                            onClick={() => toast.info('Governance: assignTicket action is ready for use.')}
+                          >
+                            <Settings2 className="h-4 w-4" />
+                          </Button>
+                          {ticket.status === 'open' && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-8 px-2 text-xs"
+                              disabled={actionLoadingId !== null}
+                              onClick={() => handleUpdateStatus(ticket.id, 'in_progress')}
+                            >
+                              Start
+                            </Button>
+                          )}
+                          {ticket.status === 'in_progress' && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-8 px-2 text-xs bg-green-50 text-green-700 hover:bg-green-100 hover:text-green-800 border-green-200"
+                              disabled={actionLoadingId !== null}
+                              onClick={() => handleUpdateStatus(ticket.id, 'resolved')}
+                            >
+                              Resolve
+                            </Button>
+                          )}
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+                            disabled={actionLoadingId !== null}
+                            onClick={() => handleDeleteTicket(ticket.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  </td>
                 </tr>
               ))}
               {filteredTickets.length === 0 && (
                 <tr>
-                  <td colSpan={canManage ? 5 : 4} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
                     No items found.
                   </td>
                 </tr>

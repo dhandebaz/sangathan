@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ChevronDown, LayoutDashboard, Users, Settings, Megaphone, Calendar, CheckSquare, BarChart, Vote, Globe, Scale, AlertCircle, Wrench, Gift, FileText, Flag, Badge, HeartHandshake, Network, Shield } from 'lucide-react'
+import { ChevronDown, LayoutDashboard, Users, Settings, Megaphone, Calendar, CheckSquare, BarChart, Vote, Globe, Scale, AlertCircle, Wrench, Gift, FileText, Flag, Badge, HeartHandshake, Network, Shield, Landmark } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface SidebarNavProps {
@@ -28,17 +28,26 @@ type NavGroup = {
 export function SidebarNav({ lang, isAdmin, capabilities }: SidebarNavProps) {
   const pathname = usePathname()
 
-  const groups: NavGroup[] = [
+  const groups: NavGroup[] = useMemo(() => [
     {
       id: 'core',
       title: 'Core',
       items: [
         { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Overview', show: true },
+        { href: `/${lang}/dashboard`, icon: Landmark, label: 'Governance 2.0', show: true },
         { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
         { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events', show: true },
         { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
         { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Decisions', show: true },
         { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!capabilities.campaigns },
+      ]
+    },
+    {
+      id: 'governance',
+      title: 'Democratic Process',
+      items: [
+        { href: `/${lang}/dashboard/governance/proposals`, icon: FileText, label: 'Proposals & Deliberation', show: true },
+        { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Voting & Resolutions', show: true },
       ]
     },
     {
@@ -56,6 +65,7 @@ export function SidebarNav({ lang, isAdmin, capabilities }: SidebarNavProps) {
       id: 'operations',
       title: 'Operations',
       items: [
+        { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financial Ledger', show: true },
         { href: `/${lang}/dashboard/grievances`, icon: Scale, label: 'Grievances', show: !!capabilities.grievances },
         { href: `/${lang}/dashboard/complaints`, icon: AlertCircle, label: 'Complaints', show: !!capabilities.complaints },
         { href: `/${lang}/dashboard/maintenance`, icon: Wrench, label: 'Maintenance', show: !!capabilities.maintenance },
@@ -72,39 +82,33 @@ export function SidebarNav({ lang, isAdmin, capabilities }: SidebarNavProps) {
         { href: `/${lang}/dashboard/settings`, icon: Settings, label: 'Settings', show: isAdmin },
       ]
     }
-  ]
+  ], [lang, isAdmin, capabilities])
 
   // Filter out empty groups and hidden items
-  const visibleGroups = groups.map(group => ({
+  const visibleGroups = useMemo(() => groups.map(group => ({
     ...group,
     items: group.items.filter(i => i.show)
-  })).filter(group => group.items.length > 0)
+  })).filter(group => group.items.length > 0), [groups])
 
-  // Auto-expand groups containing the current path
-  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
-    const initialState: Record<string, boolean> = {}
-    visibleGroups.forEach(g => {
-      initialState[g.id] = g.id === 'core' // Always open 'core' by default
-    })
-    return initialState
-  })
+  // Track user toggled state
+  const [userToggledGroups, setUserToggledGroups] = useState<Record<string, boolean>>({})
 
-  // Open group if active route is inside it
-  useEffect(() => {
-    if (!pathname) return
-    let matchedId = ''
+  // Determine which groups are open: manually toggled OR contains active path
+  const openGroups = useMemo(() => {
+    const state: Record<string, boolean> = {}
     visibleGroups.forEach(g => {
-      if (g.items.some(item => pathname === item.href || pathname.startsWith(item.href + '/'))) {
-        matchedId = g.id
-      }
+      // Default open logic
+      const isAutoOpen = g.id === 'core' || g.id === 'governance' ||
+        g.items.some(item => pathname === item.href || pathname?.startsWith(item.href + '/'))
+
+      // Merge with user toggles (user preference wins if set)
+      state[g.id] = userToggledGroups[g.id] !== undefined ? userToggledGroups[g.id] : isAutoOpen
     })
-    if (matchedId) {
-      setOpenGroups(prev => ({ ...prev, [matchedId]: true }))
-    }
-  }, [pathname])
+    return state
+  }, [visibleGroups, pathname, userToggledGroups])
 
   const toggleGroup = (id: string) => {
-    setOpenGroups(prev => ({ ...prev, [id]: !prev[id] }))
+    setUserToggledGroups(prev => ({ ...prev, [id]: !openGroups[id] }))
   }
 
   return (

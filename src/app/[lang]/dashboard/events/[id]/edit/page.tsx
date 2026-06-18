@@ -62,7 +62,7 @@ export default async function EditEventPage(props: { params: Promise<{ lang: str
         </Link>
         <h1 className="text-2xl font-bold">Edit Event</h1>
       </div>
-      <EventForm orgId={profile.organisation_id} partners={partners} initialData={eventWithCollabs as any} />
+      <EventForm orgId={profile.organisation_id} partners={partners} initialData={eventWithCollabs as unknown as DashboardEvent} />
     </div>
   )
 }

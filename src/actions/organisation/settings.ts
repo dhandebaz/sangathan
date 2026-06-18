@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { logger } from '@/lib/logger'
+import { SupabaseClient } from '@supabase/supabase-js'
 
 export type ProfileData = {
   description?: string
@@ -14,7 +15,7 @@ export type ProfileData = {
   social_links?: Record<string, string>
 }
 
-async function getAdminOrg(supabase: any) {
+async function getAdminOrg(supabase: SupabaseClient) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
 
@@ -57,8 +58,9 @@ export async function updateOrganisationProfile(data: ProfileData) {
     revalidatePath('/', 'layout')
     
     return { success: true }
-  } catch (err: any) {
-    return { success: false, error: err.message }
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return { success: false, error: message }
   }
 }
 
@@ -102,8 +104,9 @@ export async function updateOrganisationSlug(newSlug: string) {
     revalidatePath('/', 'layout')
 
     return { success: true }
-  } catch (err: any) {
-    return { success: false, error: err.message }
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return { success: false, error: message }
   }
 }
 
@@ -127,7 +130,8 @@ export async function updateOrganisationImage(type: 'logo' | 'cover', url: strin
     revalidatePath('/', 'layout')
     
     return { success: true }
-  } catch (err: any) {
-    return { success: false, error: err.message }
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return { success: false, error: message }
   }
 }

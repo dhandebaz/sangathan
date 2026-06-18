@@ -257,7 +257,7 @@ export async function resetPassword(input: z.infer<typeof ResetPasswordSchema>) 
   // Revoke all other sessions by signing out everywhere
   if (user) {
     const serviceClient = createServiceClient()
-    await (serviceClient.auth.admin as any).signOut(user.id)
+    await serviceClient.auth.admin.signOut(user.id)
     await logger.info('auth', 'Sessions revoked after password change', { userId: user.id })
   }
 
@@ -292,7 +292,7 @@ export async function finalizeSignup(input: { organizationName: string; organiza
   const orgName = input.organizationName
   const orgType = input.organizationType
   const metadata = user.user_metadata || {}
-  const fullName = metadata.full_name
+  const fullName = metadata.full_name as string
 
   if (!orgName || !fullName || !orgType) {
     return { success: false, error: 'Incomplete registration details. Please provide all required fields.' }
@@ -336,5 +336,3 @@ export async function finalizeSignup(input: { organizationName: string; organiza
 
   return { success: true, orgId: result.organisation_id }
 }
-
-

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Sparkles, Loader2, RefreshCw, BarChart2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -8,11 +8,9 @@ export function AiSummaryWidget({ orgId }: { orgId: string }) {
   const [summary, setSummary] = useState<string | null>(null)
   const [isAi, setIsAi] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
-  const generateSummary = async () => {
+  const generateSummary = useCallback(async () => {
     setLoading(true)
-    setError(null)
     try {
       const response = await fetch(`/api/ai/summary?orgId=${orgId}`)
       if (!response.ok) {
@@ -21,17 +19,17 @@ export function AiSummaryWidget({ orgId }: { orgId: string }) {
       const data = await response.json()
       setSummary(data.summary)
       setIsAi(data.isAi || false)
-    } catch (err: any) {
+    } catch (_err: unknown) {
       setSummary("Insights are currently unavailable. Check your network or try again later.")
       setIsAi(false)
     } finally {
       setLoading(false)
     }
-  }
+  }, [orgId])
 
   useEffect(() => {
-    generateSummary()
-  }, [orgId])
+    void generateSummary()
+  }, [generateSummary])
 
   return (
     <div className="bg-gradient-to-br from-indigo-50 to-white rounded-xl border border-indigo-100 p-6 shadow-sm relative overflow-hidden">
@@ -51,7 +49,7 @@ export function AiSummaryWidget({ orgId }: { orgId: string }) {
         <Button 
           variant="ghost" 
           size="icon" 
-          onClick={generateSummary} 
+          onClick={() => { void generateSummary() }}
           disabled={loading}
           className="text-indigo-400 hover:text-indigo-700 hover:bg-indigo-50"
         >
