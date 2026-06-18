@@ -1,5 +1,6 @@
-import { generateSecureString } from '@/lib/utils'
 'use server'
+
+import { generateSecureString } from '@/lib/utils'
 
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
