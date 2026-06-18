@@ -280,8 +280,8 @@ describe('collaboration actions', () => {
 
       expect(result.incoming).toHaveLength(1)
       expect(result.outgoing).toHaveLength(1)
-      expect(result.incoming[0].requester.id).toBe('org-2')
-      expect(result.outgoing[0].responder.id).toBe('org-3')
+      expect((result.incoming[0] as any).requester.id).toBe('org-2')
+      expect((result.outgoing[0] as any).responder.id).toBe('org-3')
     })
   })
 
