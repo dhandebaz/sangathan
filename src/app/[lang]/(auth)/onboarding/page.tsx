@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Building2, User, Loader2, ArrowRight, ShieldCheck } from 'lucide-react'
+import { Building2, Loader2, ArrowRight } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { use } from 'react'
 
@@ -25,8 +25,10 @@ export default function OnboardingPage({ params }: { params: Promise<{ lang: str
     const formData = new FormData(event.currentTarget)
     const organizationName = formData.get('organizationName') as string
     const organizationType = formData.get('organizationType') as string
+    const registrationStatus = formData.get('registrationStatus') as string
 
-    const result = await finalizeSignup({ organizationName, organizationType })
+    // Send it to the action (note: finalizeSignup needs to be updated to handle this if saving to db)
+    const result = await finalizeSignup({ organizationName, organizationType, registrationStatus })
 
     if (result.success) {
       router.push(`/${lang}/dashboard`)
@@ -49,7 +51,7 @@ export default function OnboardingPage({ params }: { params: Promise<{ lang: str
           <CardDescription>
             {lang === 'hi' 
               ? 'अंतिम चरण! हमें अपने संगठन के प्रकार और नाम के बारे में बताएं ताकि हम आपके डैशबोर्ड को अनुकूलित कर सकें।' 
-              : "Final step! Tell us your organization's name and type so we can customize your secure dashboard."}
+              : "Final step! Tell us your organization's details so we can customize your secure dashboard."}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -70,7 +72,23 @@ export default function OnboardingPage({ params }: { params: Promise<{ lang: str
                   <SelectItem value="ngo">NGO / Non-Profit</SelectItem>
                   <SelectItem value="student_union">Student Union</SelectItem>
                   <SelectItem value="workers_union">Workers Union</SelectItem>
-                  <SelectItem value="rwa">Resident Welfare Association</SelectItem>
+                  <SelectItem value="rwa">Resident Welfare Association (RWA)</SelectItem>
+                  <SelectItem value="community_group">Community Group</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="registrationStatus">{lang === 'hi' ? 'पंजीकरण स्थिति' : 'Registration Status'}</Label>
+              <Select name="registrationStatus" required disabled={loading} defaultValue="registered">
+                <SelectTrigger className="w-full h-11">
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="registered">Registered</SelectItem>
+                  <SelectItem value="in_progress">Registration In Progress</SelectItem>
+                  <SelectItem value="unregistered">Unregistered</SelectItem>
                 </SelectContent>
               </Select>
             </div>

@@ -275,7 +275,7 @@ type CreateOrganisationAndAdminResult = {
   profile_id: string
 }
 
-export async function finalizeSignup(input: { organizationName: string; organizationType: string }) {
+export async function finalizeSignup(input: { organizationName: string; organizationType: string; registrationStatus?: string }) {
   // Get Authenticated User
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -316,6 +316,9 @@ export async function finalizeSignup(input: { organizationName: string; organiza
   } as never)
 
   if (!rpcError && rpcData) {
+    const resultObj = rpcData as CreateOrganisationAndAdminResult;
+
+    // Update profile
     await supabaseAdmin
       .from('profiles')
       .update({
@@ -325,6 +328,16 @@ export async function finalizeSignup(input: { organizationName: string; organiza
         phone_verified: false,
       } as never)
       .eq('id', user.id)
+
+    // Update organisation with registration status if provided
+    if (input.registrationStatus) {
+      await supabaseAdmin
+        .from('organisations')
+        .update({
+          registration_status: input.registrationStatus,
+        } as never)
+        .eq('id', resultObj.organisation_id)
+    }
   }
 
   if (rpcError || !rpcData) {

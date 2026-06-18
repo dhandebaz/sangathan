@@ -140,43 +140,56 @@ export function DashboardTopBar({ lang, userEmail, role, orgName, orgLogoUrl }: 
             <div
               role="menu"
               aria-label="Profile menu"
-              className="absolute right-0 mt-2 w-52 rounded-lg border border-slate-200 bg-white shadow-lg py-1 z-50"
+              className="absolute right-0 mt-2 w-56 rounded-xl border border-slate-200 bg-white shadow-lg py-1 z-50 animate-in fade-in zoom-in-95 duration-200"
             >
-              <div className="px-3 py-2 border-b border-slate-100">
-                <div className="text-xs text-slate-500 truncate">{displayOrgName}</div>
-                <div className="text-sm font-semibold text-slate-900 truncate">{userEmail}</div>
+              <div className="px-4 py-3 border-b border-slate-100 flex items-center gap-3">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-orange-100 text-orange-700 font-bold shrink-0">
+                  {initials}
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-sm font-semibold text-slate-900 truncate">{displayOrgName}</span>
+                  <span className="text-xs text-slate-500 truncate">{userEmail}</span>
+                  <span className="text-[10px] uppercase font-bold text-slate-400 mt-0.5">{displayRole}</span>
+                </div>
               </div>
-              <button
-                type="button"
-                className="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:bg-slate-50"
-                role="menuitem"
-                onClick={() => {
-                  router.push(`/${lang}/profile`)
-                  setOpen(false)
-                }}
-              >
-                View Profile
-              </button>
-              <button
-                type="button"
-                className="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:bg-slate-50"
-                role="menuitem"
-                onClick={() => {
-                  router.push(`/${lang}/dashboard/settings`)
-                  setOpen(false)
-                }}
-              >
-                Organisation Settings
-              </button>
-              <button
-                type="button"
-                className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 focus-visible:outline-none focus-visible:bg-red-50"
-                role="menuitem"
-                onClick={handleSignOut}
-                disabled={isSigningOut}
-              >
-                {isSigningOut ? 'Signing out…' : 'Sign Out'}
-              </button>
+              <div className="p-1">
+                <button
+                  type="button"
+                  className="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-md transition-colors flex items-center gap-2"
+                  role="menuitem"
+                  onClick={() => {
+                    router.push(`/${lang}/profile`)
+                    setOpen(false)
+                  }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  View Profile
+                </button>
+                <button
+                  type="button"
+                  className="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-md transition-colors flex items-center gap-2"
+                  role="menuitem"
+                  onClick={() => {
+                    router.push(`/${lang}/dashboard/settings`)
+                    setOpen(false)
+                  }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Organisation Settings
+                </button>
+              </div>
+              <div className="p-1 border-t border-slate-100">
+                <button
+                  type="button"
+                  className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors flex items-center gap-2"
+                  role="menuitem"
+                  onClick={handleSignOut}
+                  disabled={isSigningOut}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                  {isSigningOut ? 'Signing out…' : 'Sign Out'}
+                </button>
+              </div>
             </div>
           )}
         </div>
