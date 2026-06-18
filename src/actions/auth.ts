@@ -1,4 +1,5 @@
 'use server'
+import { generateSecureString } from '@/lib/utils'
 
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
@@ -299,7 +300,7 @@ export async function finalizeSignup(input: { organizationName: string; organiza
   }
 
   const baseSlug = orgName.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-  const uniqueSlug = `${baseSlug}-${Math.random().toString(36).substring(2, 7)}`
+  const uniqueSlug = `${baseSlug}-${generateSecureString(5)}`
 
   const supabaseAdmin = createServiceClient()
   const {

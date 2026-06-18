@@ -1,4 +1,5 @@
 'use server'
+import { generateSecureString } from "@/lib/utils"
 
 import { createClient } from '@/lib/supabase/server'
 import { createSafeAction } from '@/lib/auth/actions'
@@ -46,7 +47,7 @@ export const createMeeting = createSafeAction(
         end_time: input.end_time,
         location: input.location,
         visibility: input.visibility,
-        meeting_link: input.meeting_link || `https://meet.jit.si/sangathan-${context.organizationId.substring(0,8)}-${Math.random().toString(36).substring(2,10)}`,
+        meeting_link: input.meeting_link || `https://meet.jit.si/sangathan-${context.organizationId.substring(0,8)}-${generateSecureString(8)}`,
         created_by: context.user.id,
       } as never)
       .select('id')
