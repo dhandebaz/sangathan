@@ -20,7 +20,7 @@ const CreateTaskSchema = TaskSchema.extend({
   assignee_ids: z.array(z.string().uuid()).optional(),
 })
 
-export const UpdateTaskSchema = TaskSchema.extend({
+const UpdateTaskSchema = TaskSchema.extend({
   id: z.string().uuid(),
   organisation_id: z.string().uuid().optional(),
 })
