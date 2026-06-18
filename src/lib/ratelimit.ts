@@ -56,7 +56,7 @@ export async function checkRateLimit(key: string, configType: 'LOGIN' | 'SIGNUP'
     return success
   } catch (err) {
     console.error('Upstash rate limit error — blocking request', err)
-    return false
+    throw err
   }
 }
 
