@@ -9,7 +9,7 @@ import { logAction } from '@/lib/audit/log'
 
 // --- Schemas ---
 
-export const LogDonationSchema = z.object({
+const LogDonationSchema = z.object({
   donor_name: z.string().min(2),
   amount: z.coerce.number().positive(), // Coerce handles string->number from forms
   date: z.string().datetime(),
@@ -18,11 +18,11 @@ export const LogDonationSchema = z.object({
   notes: z.string().optional(),
 })
 
-export const VerifyDonationSchema = z.object({
+const VerifyDonationSchema = z.object({
   donationId: z.string().uuid(),
 })
 
-export const DeleteDonationSchema = z.object({
+const DeleteDonationSchema = z.object({
   donationId: z.string().uuid(),
 })
 
