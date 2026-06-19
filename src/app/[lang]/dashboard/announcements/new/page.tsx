@@ -27,12 +27,12 @@ export default async function NewAnnouncementPage(props: { params: Promise<{ lan
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
       <div className="mb-6">
-        <Link href={`/${lang}/dashboard/announcements`} className="flex items-center text-sm text-gray-500 hover:text-black mb-2">
+        <Link href={`/${lang}/dashboard/announcements`} className="flex items-center text-sm text-muted-foreground hover:text-foreground mb-2">
           <ArrowLeft className="w-4 h-4 mr-1" />
           Back to Announcements
         </Link>
         <h1 className="text-2xl font-bold">New Announcement</h1>
-        <p className="text-gray-500 text-sm">Broadcast updates to your organisation members.</p>
+        <p className="text-muted-foreground text-sm">Broadcast updates to your organisation members.</p>
       </div>
       
       <AnnouncementForm orgId={profile.organisation_id} />

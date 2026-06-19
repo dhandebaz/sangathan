@@ -91,6 +91,19 @@ export function DocsSidebar({ lang }: { lang: string }) {
           </div>
 
           <nav className="space-y-8">
+            {/* Back to Docs Home */}
+            <Link
+              href={`/${lang}/docs`}
+              onClick={() => setIsOpen(false)}
+              className={`block py-2 text-sm font-bold transition-colors border-l-2 pl-4 mb-6 ${
+                pathname === `/${lang}/docs`
+                  ? 'border-[var(--accent)] text-[var(--accent)]'
+                  : 'border-transparent text-[var(--text-primary)] hover:border-[var(--text-secondary)] hover:text-[var(--accent)]'
+              }`}
+            >
+              {isHindi ? 'दस्तावेज़ीकरण होम' : 'Documentation Home'}
+            </Link>
+
             {docsConfig.map((section) => (
               <div key={section.title.en}>
                 <button 

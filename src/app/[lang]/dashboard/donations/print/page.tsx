@@ -52,12 +52,12 @@ export default async function PrintDonationLedger() {
         </thead>
         <tbody>
            {donations?.map((d, i) => (
-              <tr key={i} className="border-b border-gray-100">
+              <tr key={i} className="border-b border-border">
                  <td className="py-2 px-2 whitespace-nowrap">{new Date(d.date).toLocaleDateString()}</td>
                  <td className="py-2 px-2 font-medium">{d.donor_name}</td>
                  <td className="py-2 px-2 text-right">₹{d.amount.toLocaleString()}</td>
                  <td className="py-2 px-2 text-center uppercase text-xs">{d.payment_method}</td>
-                 <td className="py-2 px-2 text-xs font-mono text-gray-600 max-w-xs truncate">
+                 <td className="py-2 px-2 text-xs font-mono text-muted-foreground max-w-xs truncate">
                     {d.upi_reference} {d.notes ? `(${d.notes})` : ''}
                  </td>
                  <td className="py-2 px-2 text-center">

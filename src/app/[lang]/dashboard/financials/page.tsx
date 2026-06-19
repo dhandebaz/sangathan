@@ -60,7 +60,7 @@ export default async function FinancialsPage() {
         <CardContent>
           <div className="space-y-4">
             {transactions?.map((t) => (
-              <div key={t.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-slate-50 transition-colors">
+              <div key={t.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent transition-colors">
                 <div className="flex items-center gap-4">
                   <div className={`p-2 rounded-full ${t.type === 'income' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                     {t.type === 'income' ? <ArrowUpRight size={20} /> : <ArrowDownLeft size={20} />}

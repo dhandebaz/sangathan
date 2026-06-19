@@ -4,7 +4,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-center px-4">
       <h2 className="text-2xl font-bold text-red-600 mb-2">Error printing Student IDs</h2>
-      <p className="text-gray-600 mb-4">{error.message}</p>
+      <p className="text-muted-foreground mb-4">{error.message}</p>
       <button
         onClick={() => reset()}
         className="px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition-colors"

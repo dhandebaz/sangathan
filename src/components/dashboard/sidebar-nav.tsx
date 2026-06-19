@@ -1,15 +1,22 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ChevronDown, LayoutDashboard, Users, Settings, Megaphone, Calendar, CheckSquare, BarChart, Vote, Globe, Scale, AlertCircle, Wrench, Gift, FileText, Flag, Badge, HeartHandshake, Network, Shield, Landmark } from 'lucide-react'
+import {
+  ChevronDown, LayoutDashboard, Users, Settings, Megaphone,
+  Calendar, CheckSquare, BarChart, Vote, Globe, Scale,
+  AlertCircle, Wrench, Gift, FileText, Flag, Badge,
+  HeartHandshake, Network, Shield, Landmark, ScrollText,
+  GalleryVerticalEnd, Gavel, UserCog
+} from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface SidebarNavProps {
   lang: string
   isAdmin: boolean
   capabilities: Record<string, boolean>
+  orgType?: string
 }
 
 type NavItem = {
@@ -25,6 +32,18 @@ type NavGroup = {
   items: NavItem[]
 }
 
+function useActiveGroup(pathname: string | null, groups: NavGroup[]) {
+  return useMemo(() => {
+    const active: Record<string, boolean> = {}
+    for (const g of groups) {
+      active[g.id] = g.items.some(
+        item => pathname === item.href || pathname?.startsWith(item.href + '/')
+      )
+    }
+    return active
+  }, [pathname, groups])
+}
+
 export function SidebarNav({ lang, isAdmin, capabilities }: SidebarNavProps) {
   const pathname = usePathname()
 
@@ -34,7 +53,7 @@ export function SidebarNav({ lang, isAdmin, capabilities }: SidebarNavProps) {
       title: 'Core',
       items: [
         { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Overview', show: true },
-        { href: `/${lang}/dashboard`, icon: Landmark, label: 'Governance 2.0', show: true },
+        { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Governance', show: true },
         { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
         { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events', show: true },
         { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
@@ -44,9 +63,9 @@ export function SidebarNav({ lang, isAdmin, capabilities }: SidebarNavProps) {
     },
     {
       id: 'governance',
-      title: 'Democratic Process',
+      title: 'Governance',
       items: [
-        { href: `/${lang}/dashboard/governance/proposals`, icon: FileText, label: 'Proposals & Deliberation', show: true },
+        { href: `/${lang}/dashboard/governance/proposals`, icon: Gavel, label: 'Proposals', show: true },
         { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Voting & Resolutions', show: true },
       ]
     },
@@ -74,77 +93,112 @@ export function SidebarNav({ lang, isAdmin, capabilities }: SidebarNavProps) {
     },
     {
       id: 'admin',
-      title: 'Admin & System',
+      title: 'Admin',
       items: [
         { href: `/${lang}/dashboard/analytics`, icon: BarChart, label: 'Analytics', show: !!capabilities.advanced_analytics && isAdmin },
-        { href: `/${lang}/dashboard/forms`, icon: FileText, label: 'Forms', show: isAdmin },
-        { href: `/${lang}/dashboard/roles`, icon: Shield, label: 'Custom Roles', show: isAdmin },
+        { href: `/${lang}/dashboard/forms`, icon: GalleryVerticalEnd, label: 'Forms', show: isAdmin },
+        { href: `/${lang}/dashboard/roles`, icon: UserCog, label: 'Custom Roles', show: isAdmin },
         { href: `/${lang}/dashboard/settings`, icon: Settings, label: 'Settings', show: isAdmin },
       ]
     }
   ], [lang, isAdmin, capabilities])
 
-  // Filter out empty groups and hidden items
-  const visibleGroups = useMemo(() => groups.map(group => ({
-    ...group,
-    items: group.items.filter(i => i.show)
-  })).filter(group => group.items.length > 0), [groups])
+  const visibleGroups = useMemo(() =>
+    groups
+      .map(g => ({ ...g, items: g.items.filter(i => i.show) }))
+      .filter(g => g.items.length > 0),
+    [groups]
+  )
 
-  // Track user toggled state
-  const [userToggledGroups, setUserToggledGroups] = useState<Record<string, boolean>>({})
+  const hasActiveGroup = useActiveGroup(pathname, visibleGroups)
 
-  // Determine which groups are open: manually toggled OR contains active path
-  const openGroups = useMemo(() => {
-    const state: Record<string, boolean> = {}
-    visibleGroups.forEach(g => {
-      // Default open logic
-      const isAutoOpen = g.id === 'core' || g.id === 'governance' ||
-        g.items.some(item => pathname === item.href || pathname?.startsWith(item.href + '/'))
+  const [collapsed, setCollapsed] = useState<Record<string, boolean>>(() => {
+    const init: Record<string, boolean> = {}
+    for (const g of visibleGroups) {
+      init[g.id] = !(g.id === 'core')
+    }
+    return init
+  })
 
-      // Merge with user toggles (user preference wins if set)
-      state[g.id] = userToggledGroups[g.id] !== undefined ? userToggledGroups[g.id] : isAutoOpen
+  useEffect(() => {
+    setCollapsed(prev => {
+      const next = { ...prev }
+      for (const g of visibleGroups) {
+        const shouldBeOpen = g.id === 'core' || hasActiveGroup[g.id]
+        if (next[g.id] === shouldBeOpen) continue
+        next[g.id] = !shouldBeOpen
+      }
+      return next
     })
-    return state
-  }, [visibleGroups, pathname, userToggledGroups])
+  }, [hasActiveGroup, visibleGroups])
 
-  const toggleGroup = (id: string) => {
-    setUserToggledGroups(prev => ({ ...prev, [id]: !openGroups[id] }))
-  }
+  const toggleGroup = useCallback((id: string) => {
+    setCollapsed(prev => ({ ...prev, [id]: !prev[id] }))
+  }, [])
+
+  const isActive = useCallback((href: string) => {
+    return pathname === href || pathname?.startsWith(href + '/')
+  }, [pathname])
 
   return (
-    <div className="flex-1 py-5 px-4 overflow-y-auto native-scroll-y">
-      {visibleGroups.map((group) => (
-        <section key={group.id} className="mb-4 overflow-hidden rounded-3xl border border-slate-200 bg-card shadow-sm">
-          <button
-            onClick={() => toggleGroup(group.id)}
-            className="flex w-full items-center justify-between px-4 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-slate-500 transition-colors hover:bg-slate-50"
-          >
-            {group.title}
-            <ChevronDown className={cn("h-4 w-4 transition-transform", openGroups[group.id] ? "rotate-180" : "")} />
-          </button>
+    <nav className="flex-1 overflow-y-auto py-6 px-3 native-scroll-y" aria-label="Dashboard navigation">
+      {visibleGroups.map((group) => {
+        const isCollapsed = collapsed[group.id]
+        return (
+          <div key={group.id} className="mb-5">
+            <button
+              onClick={() => toggleGroup(group.id)}
+              className={cn(
+                "flex w-full items-center justify-between px-3 py-1.5 text-xs font-semibold tracking-wider",
+                "text-sidebar-fg/60 hover:text-sidebar-fg transition-colors"
+              )}
+              aria-expanded={!isCollapsed}
+            >
+              {group.title}
+              <ChevronDown className={cn(
+                "h-3.5 w-3.5 transition-transform duration-200",
+                !isCollapsed && "rotate-180"
+              )} />
+            </button>
 
-          <div className={cn("space-y-1 overflow-hidden transition-all duration-300", openGroups[group.id] ? "max-h-96 opacity-100" : "max-h-0 opacity-0")}>
-            {group.items.map((item) => {
-              const isActive = pathname === item.href || pathname?.startsWith(item.href + '/')
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "group flex min-h-11 items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-colors",
-                    isActive
-                      ? "bg-brand-50 text-brand-700 shadow-sm"
-                      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                  )}
-                >
-                  <item.icon className={cn("w-5 h-5 transition-colors", isActive ? "text-brand-600" : "text-slate-400 group-hover:text-slate-600")} />
-                  {item.label}
-                </Link>
-              )
-            })}
+            <div
+              className={cn(
+                "grid transition-all duration-250 ease-in-out",
+                isCollapsed ? "grid-rows-[0fr] opacity-0" : "grid-rows-[1fr] opacity-100"
+              )}
+            >
+              <div className="overflow-hidden">
+                <div className="mt-1 space-y-0.5">
+                  {group.items.map((item) => {
+                    const active = isActive(item.href)
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                          "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                          active
+                            ? "bg-sidebar-bg-active text-sidebar-fg-active"
+                            : "text-sidebar-fg hover:bg-accent hover:text-foreground"
+                        )}
+                      >
+                        {active && (
+                          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-brand-500 rounded-full" />
+                        )}
+                        <item.icon className={cn(
+                          "w-4.5 h-4.5 shrink-0 transition-colors",
+                          active ? "text-brand-600" : "text-sidebar-fg/60 group-hover:text-sidebar-fg"
+                        )} />
+                        <span className="truncate">{item.label}</span>
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
-        </section>
-      ))}
-    </div>
+        )
+      })}
+    </nav>
   )
 }

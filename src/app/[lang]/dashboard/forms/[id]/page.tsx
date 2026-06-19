@@ -59,13 +59,13 @@ export default async function FormDetailsPage({ params }: PageProps) {
   return (
     <div>
       <div className="flex items-center gap-4 mb-6">
-         <Link href={`/${lang}/dashboard/forms`} className="text-gray-500 hover:text-black">
+         <Link href={`/${lang}/dashboard/forms`} className="text-muted-foreground hover:text-foreground">
             <ArrowLeft size={20} />
          </Link>
          <div>
             <h1 className="text-2xl font-bold">{form.title}</h1>
-            <p className="text-sm text-gray-500">
-               <span className="font-mono bg-gray-100 px-1 rounded select-all">/f/{form.id}</span>
+            <p className="text-sm text-muted-foreground">
+               <span className="font-mono bg-muted px-1 rounded select-all">/f/{form.id}</span>
             </p>
          </div>
          <div className="ml-auto flex items-center gap-2">
@@ -86,17 +86,17 @@ export default async function FormDetailsPage({ params }: PageProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
          <div className="content-card rounded-lg lg:col-span-1 h-fit">
-            <h3 className="font-bold text-gray-500 uppercase text-xs mb-4">Overview</h3>
+            <h3 className="font-bold text-muted-foreground uppercase text-xs mb-4">Overview</h3>
             <div className="space-y-4">
                <div>
                   <div className="text-3xl font-bold">{submissions?.length || 0}</div>
-                  <div className="text-sm text-gray-500">Total Submissions</div>
+                  <div className="text-sm text-muted-foreground">Total Submissions</div>
                </div>
                <div>
                   <div className="text-sm font-medium">Fields</div>
                   <div className="flex flex-wrap gap-1 mt-1">
                      {fields.map(f => (
-                        <span key={f.id} className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">
+                        <span key={f.id} className="text-xs bg-muted px-2 py-1 rounded text-muted-foreground">
                            {f.label}
                         </span>
                      ))}
@@ -115,28 +115,28 @@ export default async function FormDetailsPage({ params }: PageProps) {
          </div>
 
          <div className="content-card rounded-lg lg:col-span-2 overflow-hidden p-0">
-            <div className="p-4 border-b bg-gray-50">
-               <h3 className="font-bold text-gray-700">Recent Submissions</h3>
+            <div className="p-4 border-b bg-muted">
+               <h3 className="font-bold text-foreground">Recent Submissions</h3>
             </div>
             <div className="overflow-x-auto">
                <table className="w-full text-left text-sm">
                   <thead>
                      <tr className="border-b">
-                        <th className="py-3 px-4 font-medium text-gray-500 w-32">Date</th>
+                        <th className="py-3 px-4 font-medium text-muted-foreground w-32">Date</th>
                         {fields.slice(0, 3).map(f => (
-                           <th key={f.id} className="py-3 px-4 font-medium text-gray-500">{f.label}</th>
+                           <th key={f.id} className="py-3 px-4 font-medium text-muted-foreground">{f.label}</th>
                         ))}
                      </tr>
                   </thead>
                   <tbody className="divide-y">
                      {submissions?.length === 0 ? (
                         <tr>
-                           <td colSpan={4} className="py-8 text-center text-gray-400">No submissions yet</td>
+                           <td colSpan={4} className="py-8 text-center text-muted-foreground">No submissions yet</td>
                         </tr>
                      ) : (
                         submissions?.map(sub => (
-                           <tr key={sub.id} className="hover:bg-gray-50">
-                              <td className="py-3 px-4 text-gray-500 whitespace-nowrap">
+                           <tr key={sub.id} className="hover:bg-accent">
+                              <td className="py-3 px-4 text-muted-foreground whitespace-nowrap">
                                  {new Date(sub.created_at).toLocaleDateString()}
                               </td>
                               {fields.slice(0, 3).map(f => (

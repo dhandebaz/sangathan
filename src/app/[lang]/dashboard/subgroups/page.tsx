@@ -43,11 +43,11 @@ export default async function SubgroupsPage(props: { params: Promise<{ lang: str
     <div className="p-6 max-w-5xl mx-auto space-y-6">
       <div className="flex flex-wrap justify-between items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
             <Network className="w-6 h-6 text-brand-600" />
             Teams & Committees
           </h1>
-          <p className="text-slate-500 mt-1">Manage departments, chapters, and committees</p>
+          <p className="text-muted-foreground mt-1">Manage departments, chapters, and committees</p>
         </div>
         {isAdmin && (
           <form action={async (formData) => {
@@ -63,7 +63,7 @@ export default async function SubgroupsPage(props: { params: Promise<{ lang: str
             }
           }} className="flex flex-wrap gap-2">
             <Input name="name" placeholder="New Team Name" className="max-w-xs" required />
-            <select name="type" className="border rounded-lg px-3 py-2 text-sm min-h-11 bg-white">
+            <select name="type" className="border rounded-lg px-3 py-2 text-sm min-h-11 bg-card">
               <option value="department">Department</option>
               <option value="committee">Committee</option>
               <option value="chapter">Chapter</option>
@@ -84,16 +84,16 @@ export default async function SubgroupsPage(props: { params: Promise<{ lang: str
               <CardHeader>
                 <div className="flex justify-between items-start">
                   <CardTitle className="text-lg group-hover:text-brand-700">{subgroup.name}</CardTitle>
-                  <span className="text-[10px] uppercase font-bold tracking-wider bg-slate-100 text-slate-600 px-2 py-1 rounded">
+                  <span className="text-[10px] uppercase font-bold tracking-wider bg-muted text-muted-foreground px-2 py-1 rounded">
                     {subgroup.type}
                   </span>
                 </div>
-                <p className="text-slate-500 text-sm line-clamp-2">
+                <p className="text-muted-foreground text-sm line-clamp-2">
                   {subgroup.description || 'No description provided.'}
                 </p>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center gap-2 text-sm text-slate-500">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Users className="w-4 h-4" />
                   <span>{subgroup.org_subgroup_members?.[0]?.count || 0} members</span>
                 </div>
@@ -102,10 +102,10 @@ export default async function SubgroupsPage(props: { params: Promise<{ lang: str
           </Link>
         ))}
         {subgroups.length === 0 && (
-          <div className="col-span-full py-12 text-center bg-slate-50 rounded-xl border border-dashed">
-            <Network className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-            <h3 className="text-lg font-medium text-slate-700">No teams yet</h3>
-            <p className="text-slate-500 text-sm mt-1">Create a team or committee to organize your members.</p>
+          <div className="col-span-full py-12 text-center bg-muted rounded-xl border border-dashed">
+            <Network className="w-12 h-12 text-muted-foreground/40 mx-auto mb-3" />
+            <h3 className="text-lg font-medium text-foreground">No teams yet</h3>
+            <p className="text-muted-foreground text-sm mt-1">Create a team or committee to organize your members.</p>
           </div>
         )}
       </div>

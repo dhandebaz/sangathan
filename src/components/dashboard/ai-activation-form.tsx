@@ -42,16 +42,16 @@ export function AiActivationForm({ lang }: { lang: string }) {
   }
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xl shadow-slate-200/50">
-      <div className="mb-6 flex items-center gap-4 border-b border-slate-100 pb-6">
+    <div className="rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-xl">
+      <div className="mb-6 flex items-center gap-4 border-b border-border pb-6">
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
           <Sparkles className="h-6 w-6" />
         </div>
         <div>
-          <h3 className="text-xl font-bold tracking-tight text-slate-900">
+          <h3 className="text-xl font-bold tracking-tight text-foreground">
             {isHi ? 'संगठन AI सक्रिय करें' : 'Activate Sangathan AI'}
           </h3>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-muted-foreground">
             {isHi ? 'वन-टाइम ₹5000 सेटअप शुल्क' : 'One-time ₹5000 setup fee'}
           </p>
         </div>
@@ -84,7 +84,7 @@ export function AiActivationForm({ lang }: { lang: string }) {
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="provider" className="mb-1.5 block text-sm font-semibold text-slate-700">
+            <label htmlFor="provider" className="mb-1.5 block text-sm font-semibold text-foreground">
               {isHi ? 'AI प्रदाता चुनें' : 'Select AI Provider'}
             </label>
             <div className="relative">
@@ -92,47 +92,47 @@ export function AiActivationForm({ lang }: { lang: string }) {
                 id="provider"
                 name="provider" 
                 required
-                className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                className="w-full appearance-none rounded-xl border border-border bg-muted px-4 py-3 text-sm text-foreground focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
               >
                 <option value="">{isHi ? 'प्रदाता चुनें...' : 'Choose a provider...'}</option>
                 <option value="gemini">Google Gemini</option>
                 <option value="openai">OpenAI</option>
                 <option value="anthropic">Anthropic (Claude)</option>
               </select>
-              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 h-4 w-4 pointer-events-none" />
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4 pointer-events-none" />
             </div>
           </div>
 
           <div>
-            <label htmlFor="apiKey" className="mb-1.5 block text-sm font-semibold text-slate-700">
+            <label htmlFor="apiKey" className="mb-1.5 block text-sm font-semibold text-foreground">
               {isHi ? 'आपकी API कुंजी' : 'Your API Key'}
             </label>
             <div className="relative">
-              <Key className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 h-4 w-4" />
+              <Key className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <input
                 id="apiKey"
                 name="apiKey"
                 type="password"
                 required
                 placeholder={isHi ? 'यहाँ पेस्ट करें' : 'Paste your API key here'}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm text-slate-900 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                className="w-full rounded-xl border border-border bg-muted py-3 pl-11 pr-4 text-sm text-foreground focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="txnId" className="mb-1.5 block text-sm font-semibold text-slate-700">
+            <label htmlFor="txnId" className="mb-1.5 block text-sm font-semibold text-foreground">
               {isHi ? 'UPI लेन-देन संदर्भ संख्या' : 'UPI Transaction Reference No.'}
             </label>
             <div className="relative">
-              <Hash className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 h-4 w-4" />
+              <Hash className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <input
                 id="txnId"
                 name="txnId"
                 type="text"
                 required
                 placeholder={isHi ? '₹5000 भुगतान के लिए 12 अंकों का संदर्भ' : '12-digit ref for the ₹5000 payment'}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm text-slate-900 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                className="w-full rounded-xl border border-border bg-muted py-3 pl-11 pr-4 text-sm text-foreground focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
               />
             </div>
           </div>
@@ -147,7 +147,7 @@ export function AiActivationForm({ lang }: { lang: string }) {
           <button
             type="submit"
             disabled={isPending}
-            className="mt-2 w-full rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white transition-all hover:bg-slate-800 disabled:opacity-70"
+            className="mt-2 w-full rounded-xl bg-foreground px-4 py-3.5 text-sm font-bold text-primary-foreground transition-all hover:bg-foreground/80 disabled:opacity-70"
           >
             {isPending 
               ? (isHi ? 'सबमिट किया जा रहा है...' : 'Submitting...') 

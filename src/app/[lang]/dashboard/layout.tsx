@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import { LayoutDashboard, LogOut, Megaphone, Calendar, CheckSquare, Vote, Globe, AlertTriangle, Flag, Badge, HeartHandshake, Scale, AlertCircle, Wrench, Gift, FileText, Heart, Landmark } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Heart } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { getOrgCapabilities } from '@/lib/capabilities'
 import { MobileNav } from '@/components/mobile/mobile-nav'
@@ -8,10 +7,12 @@ import { ContextualFAB } from '@/components/mobile/contextual-fab'
 import { DashboardTopBar } from '@/components/dashboard/dashboard-topbar'
 import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { SidebarNav } from '@/components/dashboard/sidebar-nav'
+import { SignOutButton } from '@/components/dashboard/sign-out-button'
 
 interface Organisation {
   name: string
   logo_url: string | null
+  org_type: string
 }
 
 interface Membership {
@@ -31,6 +32,7 @@ export default async function DashboardLayout(props: {
   let role = ''
   let orgName: string | null = null
   let orgLogoUrl: string | null = null
+  let orgType = 'ngo'
   let maintenanceMessage: string | null = null
 
   if (user) {
@@ -39,13 +41,14 @@ export default async function DashboardLayout(props: {
       capabilities = await getOrgCapabilities(selectedOrgId)
       const { data: orgData } = await supabase
         .from('organisations')
-        .select('name, logo_url')
+        .select('name, logo_url, org_type')
         .eq('id', selectedOrgId)
         .single()
       if (orgData) {
         const org = orgData as unknown as Organisation
         orgName = org.name
         orgLogoUrl = org.logo_url
+        orgType = org.org_type || 'ngo'
       }
       const { data: membershipData } = await supabase
         .from('members')
@@ -81,50 +84,61 @@ export default async function DashboardLayout(props: {
   }
 
   const isAdmin = ['admin', 'executive'].includes(role)
+  const orgInitials = (orgName || 'S')
+    .split(' ')
+    .map(w => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
 
   return (
-    <div className="flex min-h-screen bg-slate-50 text-slate-900 md:pb-0">
-      <aside className="fixed inset-y-0 left-0 z-50 hidden w-72 flex-col border-r border-slate-200 bg-slate-50 shadow-sm md:flex">
-        <div className="h-20 flex items-center px-6 border-b border-slate-200">
-          <Link href={`/${lang}/dashboard`} className="flex items-center gap-3" aria-label="Sangathan Dashboard">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={orgLogoUrl || "/logo/logo.png"}
-              alt="Logo"
-              className="h-10 w-auto object-contain"
-              aria-hidden="true"
-            />
-            <span className="text-sm font-semibold tracking-wide text-slate-900">{orgName ?? 'Sangathan'}</span>
+    <div className="flex min-h-screen bg-background text-foreground md:pb-0">
+      <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 flex-col border-r border-sidebar-border bg-sidebar md:flex">
+        <div className="flex h-16 items-center gap-3 border-b border-border px-4">
+          <Link href={`/${lang}/dashboard`} className="flex items-center gap-3 min-w-0" aria-label="Sangathan Dashboard">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-bold">
+              {orgInitials}
+            </div>
+            <div className="flex flex-col min-w-0">
+              <span className="text-sm font-semibold text-foreground truncate leading-tight">
+                {orgName ?? 'Sangathan'}
+              </span>
+              <span className="text-[10px] text-sidebar-fg uppercase tracking-wider font-medium">
+                {orgType === 'student_union' ? 'Student Union' :
+                 orgType === 'workers_union' ? 'Workers Union' :
+                 orgType === 'rwa' ? 'RWA' :
+                 orgType === 'ngo' ? 'NGO' : 'Organisation'}
+              </span>
+            </div>
           </Link>
         </div>
 
-        <SidebarNav lang={lang} isAdmin={isAdmin} capabilities={capabilities} />
+        <SidebarNav lang={lang} isAdmin={isAdmin} capabilities={capabilities} orgType={orgType} />
 
-        <div className="px-5 pb-4">
-          <Link href={`/${lang}/dashboard/support`} className="flex items-center justify-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-slate-800">
-            <Heart className="h-4 w-4 text-orange-300" />
+        <div className="px-3 pb-3">
+          <Link
+            href={`/${lang}/dashboard/support`}
+            className="flex items-center justify-center gap-2 rounded-lg bg-foreground px-3 py-2.5 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+          >
+            <Heart className="h-4 w-4 text-brand-300" />
             Support Sangathan
           </Link>
         </div>
 
-        <div className="border-t border-slate-200 bg-slate-50 p-5 mt-auto">
-          <Button variant="outline" className="w-full justify-start gap-3 rounded-2xl border-slate-200 bg-white text-slate-700 hover:bg-slate-50">
-            <LogOut className="w-4 h-4" />
-            <span className="font-medium">Sign Out</span>
-          </Button>
+        <div className="border-t border-border p-3">
+          <SignOutButton lang={lang} />
         </div>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col md:pl-72">
+      <div className="flex min-w-0 flex-1 flex-col md:pl-64">
         {maintenanceMessage && (
-          <div className="flex flex-wrap items-center gap-2 border-b border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 sm:px-6 lg:px-8">
-            <AlertTriangle className="w-4 h-4" />
+          <div className="flex flex-wrap items-center gap-2 border-b border-warning/30 bg-warning-bg px-4 py-3 text-sm text-warning-text sm:px-6 lg:px-8">
             <span className="font-semibold">Maintenance mode</span>
-            <span className="text-amber-900/80">{maintenanceMessage}</span>
+            <span className="opacity-80">{maintenanceMessage}</span>
           </div>
         )}
-        <header className="sticky top-0 z-40 flex h-20 items-center border-b border-slate-200 bg-white/95 px-4 shadow-sm backdrop-blur-sm sm:px-6 lg:px-8">
-          <DashboardTopBar lang={lang} userEmail={user?.email ?? null} role={role} orgName={orgName} orgLogoUrl={orgLogoUrl} />
+        <header className="sticky top-0 z-40 flex h-16 items-center border-b border-border bg-card/95 px-4 shadow-sm backdrop-blur-sm sm:px-6 lg:px-8">
+          <DashboardTopBar lang={lang} userEmail={user?.email ?? null} role={role} orgName={orgName} orgLogoUrl={orgLogoUrl} orgType={orgType} />
         </header>
 
         <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-8xl flex-1 animate-fade-in px-4 pb-24 pt-6 sm:px-6 lg:px-8 lg:pb-10 lg:pt-8">

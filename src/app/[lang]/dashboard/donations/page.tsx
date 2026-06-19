@@ -61,7 +61,7 @@ export default async function DonationsPage(props: PageProps) {
             <a 
                href={`/${lang}/dashboard/donations/print`} 
                target="_blank"
-               className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-50"
+               className="bg-card border border-border text-foreground px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-accent"
             >
                <Printer size={16} />
                Export Ledger

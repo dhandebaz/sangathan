@@ -54,7 +54,7 @@ export function OrgSwitcher({ currentOrgId, organisations }: OrgSwitcherProps) {
       <button
         type="button"
         className={cn(
-          'inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-card px-3 py-1.5 text-sm font-medium text-foreground shadow-sm hover:bg-accent',
+          'inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground shadow-sm hover:bg-accent',
           pending && 'opacity-75 cursor-wait',
         )}
         onClick={() => setOpen((v) => !v)}
@@ -63,21 +63,21 @@ export function OrgSwitcher({ currentOrgId, organisations }: OrgSwitcherProps) {
         aria-expanded={open}
       >
         <span className="truncate max-w-[160px]">{activeOrg.name}</span>
-        <ChevronDown className="h-4 w-4 text-slate-400" />
+        <ChevronDown className="h-4 w-4 text-muted-foreground" />
       </button>
       {open && (
         <div className="absolute mt-1 w-56 rounded-md bg-card shadow-lg ring-1 ring-black ring-opacity-5 z-50">
           <ul className="max-h-60 overflow-auto py-1 text-sm text-foreground">
             {organisations.map((org) => (
               <li key={org.id}>
-                <button
-                  type="button"
-                  className={cn(
-                    'flex w-full items-center px-3 py-1.5 text-left hover:bg-slate-50',
-                    org.id === activeOrg.id && 'bg-slate-50 font-semibold',
-                  )}
-                  onClick={() => handleSelect(org.id)}
-                >
+                  <button
+                    type="button"
+                    className={cn(
+                      'flex w-full items-center px-3 py-1.5 text-left hover:bg-accent',
+                      org.id === activeOrg.id && 'bg-accent font-semibold',
+                    )}
+                    onClick={() => handleSelect(org.id)}
+                  >
                   <span className="truncate">{org.name}</span>
                 </button>
               </li>

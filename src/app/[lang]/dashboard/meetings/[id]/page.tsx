@@ -45,19 +45,19 @@ export default async function MeetingDetailsPage({ params }: PageProps) {
     <div>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div className="flex items-center gap-4">
-            <Link href={`/${lang}/dashboard/meetings`} className="text-gray-500 hover:text-black">
+            <Link href={`/${lang}/dashboard/meetings`} className="text-muted-foreground hover:text-foreground">
                <ArrowLeft size={20} />
             </Link>
             <div>
                <div className="flex items-center gap-3">
                   <h1 className="text-2xl font-bold">{meeting.title}</h1>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium border bg-gray-50 text-gray-700">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium border bg-muted text-foreground">
                     {visibility === 'public' && <Globe2 className="w-3 h-3" />}
                     {visibility === 'private' && <Lock className="w-3 h-3" />}
                     {visibility.charAt(0).toUpperCase() + visibility.slice(1)} meeting
                   </span>
                </div>
-               <div className="flex items-center gap-4 text-sm text-gray-500 mt-2">
+                <div className="flex items-center gap-4 text-sm text-muted-foreground mt-2">
                   <div className="flex items-center gap-1">
                      <Calendar size={14} />
                      <span>
@@ -84,7 +84,7 @@ export default async function MeetingDetailsPage({ params }: PageProps) {
             <a 
                href={`/${lang}/dashboard/meetings/${id}/print`} 
                target="_blank"
-               className="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg flex items-center gap-2 text-sm hover:bg-gray-50"
+               className="bg-card border border-border text-foreground px-3 py-2 rounded-lg flex items-center gap-2 text-sm hover:bg-accent"
             >
                <Printer size={16} />
                Export Summary
@@ -114,19 +114,19 @@ export default async function MeetingDetailsPage({ params }: PageProps) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
          <div className="lg:col-span-2 space-y-6">
             <div className="content-card rounded-lg">
-               <h3 className="font-bold text-gray-700 mb-4 uppercase text-xs tracking-wide">Agenda & Notes</h3>
-               <div className="prose text-sm text-gray-600">
+               <h3 className="font-bold text-foreground mb-4 uppercase text-xs tracking-wide">Agenda & Notes</h3>
+               <div className="prose text-sm text-muted-foreground">
                   {meeting.description ? (
                      <p className="whitespace-pre-wrap">{meeting.description}</p>
                   ) : (
-                     <p className="italic text-gray-400">No agenda or notes added.</p>
+                      <p className="italic text-muted-foreground">No agenda or notes added.</p>
                   )}
                </div>
             </div>
 
             {roomName && (
                <div className="mt-8 space-y-4">
-                  <h3 className="font-bold text-gray-700 uppercase text-xs tracking-wide flex items-center gap-2">
+                   <h3 className="font-bold text-foreground uppercase text-xs tracking-wide flex items-center gap-2">
                      <Video className="w-4 h-4" /> Live Video Conference
                   </h3>
                   <JitsiEmbed roomName={roomName} height="600px" />
@@ -135,9 +135,9 @@ export default async function MeetingDetailsPage({ params }: PageProps) {
          </div>
 
          <div className="content-card rounded-lg p-0 overflow-hidden h-fit">
-            <div className="p-4 border-b bg-gray-50 flex justify-between items-center">
-               <h3 className="font-bold text-gray-700 uppercase text-xs tracking-wide">Attendance</h3>
-               <span className="text-xs bg-white border px-2 py-1 rounded text-gray-600">
+            <div className="p-4 border-b bg-muted flex justify-between items-center">
+               <h3 className="font-bold text-foreground uppercase text-xs tracking-wide">Attendance</h3>
+               <span className="text-xs bg-card border px-2 py-1 rounded text-muted-foreground">
                   {attendance?.filter(a => a.status === 'present').length || 0} / {attendance?.length || 0} Present
                </span>
             </div>

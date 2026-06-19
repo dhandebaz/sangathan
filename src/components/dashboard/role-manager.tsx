@@ -267,7 +267,7 @@ export function RoleManager({ initialRoles, organisationId, lang }: RoleManagerP
                   <CardTitle className="text-lg">{role.name}</CardTitle>
                   {role.description && <p className="text-sm text-muted-foreground mt-1">{role.description}</p>}
                 </div>
-                {role.is_system && <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded">System</span>}
+                {role.is_system && <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded">System</span>}
               </CardHeader>
               <CardContent>
                 <div className="mb-4">
@@ -299,8 +299,8 @@ export function RoleManager({ initialRoles, organisationId, lang }: RoleManagerP
       )}
 
       {roles.length === 0 && !showNewRole && (
-        <div className="text-center py-12 bg-gray-50 rounded-xl border border-dashed">
-          <p className="text-gray-500 mb-4">No custom roles defined yet.</p>
+        <div className="text-center py-12 bg-muted rounded-xl border border-dashed">
+          <p className="text-muted-foreground mb-4">No custom roles defined yet.</p>
           <Button onClick={() => setShowNewRole(true)}>
             <Plus className="mr-2 h-4 w-4" />
             Create your first role

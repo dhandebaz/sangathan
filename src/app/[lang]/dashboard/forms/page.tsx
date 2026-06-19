@@ -47,7 +47,7 @@ export default async function FormsPage(props: { params: Promise<{ lang: string 
       <div className="flex justify-between items-center mb-6">
         <div>
            <h1 className="text-3xl font-bold tracking-tight">Forms</h1>
-           <p className="text-gray-500 mt-1">Collect data from public or internal users.</p>
+           <p className="text-muted-foreground mt-1">Collect data from public or internal users.</p>
         </div>
         <Button asChild>
             <Link href={`/${lang}/dashboard/forms/new`}>
@@ -65,20 +65,20 @@ export default async function FormsPage(props: { params: Promise<{ lang: string 
                 <FormStatusToggle formId={form.id} isActive={form.is_active} />
              </div>
              
-             <p className="text-sm text-gray-500 mb-4 line-clamp-2 flex-grow">
+              <p className="text-sm text-muted-foreground mb-4 line-clamp-2 flex-grow">
                {form.description || 'No description provided.'}
              </p>
 
-             <div className="flex items-center justify-between text-sm text-gray-600 pt-4 border-t mt-auto">
+             <div className="flex items-center justify-between text-sm text-muted-foreground pt-4 border-t mt-auto">
                 <div className="flex items-center gap-1">
                    <FileText size={14} />
                    <span>{form.form_submissions?.[0]?.count || 0} Submissions</span>
                 </div>
                  <div className="flex gap-1">
-                   <Link href={`/${lang}/dashboard/forms/${form.id}`} className="flex items-center justify-center min-h-11 min-w-11 rounded-xl hover:bg-slate-100 transition-colors" title="View Submissions">
-                      <Eye size={18} />
-                   </Link>
-                   <Link href={`/f/${form.id}`} target="_blank" className="flex items-center justify-center min-h-11 min-w-11 rounded-xl hover:bg-slate-100 transition-colors" title="Open Public Link">
+                    <Link href={`/${lang}/dashboard/forms/${form.id}`} className="flex items-center justify-center min-h-11 min-w-11 rounded-xl hover:bg-accent transition-colors" title="View Submissions">
+                       <Eye size={18} />
+                    </Link>
+                    <Link href={`/f/${form.id}`} target="_blank" className="flex items-center justify-center min-h-11 min-w-11 rounded-xl hover:bg-accent transition-colors" title="Open Public Link">
                       <Copy size={18} />
                    </Link>
                  </div>
@@ -87,7 +87,7 @@ export default async function FormsPage(props: { params: Promise<{ lang: string 
         ))}
 
         {forms?.length === 0 && (
-            <div className="col-span-full text-center py-12 text-gray-500 border-2 border-dashed rounded-lg">
+            <div className="col-span-full text-center py-12 text-muted-foreground border-2 border-dashed rounded-lg">
                 <p>No forms created yet.</p>
             </div>
         )}

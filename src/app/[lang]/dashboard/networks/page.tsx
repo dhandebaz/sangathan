@@ -45,14 +45,14 @@ export default async function NetworksPage(props: { params: Promise<{ lang: stri
 
       <div className="grid gap-4 md:grid-cols-2">
         {networks.map((network) => (
-          <div key={network.id} className="bg-white p-6 rounded-xl border shadow-sm">
+          <div key={network.id} className="bg-card p-6 rounded-xl border shadow-sm">
              <div className="flex justify-between items-start mb-4">
                 <h3 className="text-xl font-bold">{network.name}</h3>
                 <Badge variant={network.visibility === 'public' ? 'default' : 'secondary'}>
                   {network.visibility || 'private'}
                 </Badge>
              </div>
-             <p className="text-gray-500 mb-6">{network.description}</p>
+              <p className="text-muted-foreground mb-6">{network.description}</p>
              <div className="flex justify-between items-center">
                 <Link href={`/${lang}/network/${network.slug}`} className="text-sm text-blue-600 hover:underline flex items-center gap-1">
                    <Globe className="w-4 h-4" />
@@ -63,8 +63,8 @@ export default async function NetworksPage(props: { params: Promise<{ lang: stri
         ))}
 
         {networks.length === 0 && (
-          <div className="col-span-full text-center py-12 bg-gray-50 rounded-xl border border-dashed">
-            <p className="text-gray-500 mb-4">
+          <div className="col-span-full text-center py-12 bg-muted rounded-xl border border-dashed">
+            <p className="text-muted-foreground mb-4">
               Your organisation is not part of any networks yet.
             </p>
             {isAdmin && (

@@ -36,7 +36,7 @@ export function StudentIdCard({ student, orgName }: { student: Student; orgName:
   })
 
   return (
-    <div className="w-[380px] h-[240px] border border-gray-300 rounded-xl overflow-hidden shadow-md bg-white relative flex flex-col font-sans text-black select-none print:shadow-none print:border-black mx-auto">
+    <div className="w-[380px] h-[240px] border border-border rounded-xl overflow-hidden shadow-md bg-card relative flex flex-col font-sans text-foreground select-none print:shadow-none print:border-black mx-auto">
       {/* Card Header */}
       <div className="bg-indigo-700 text-white px-4 py-2 flex items-center justify-between">
         <div>
@@ -49,32 +49,32 @@ export function StudentIdCard({ student, orgName }: { student: Student; orgName:
       {/* Card Body */}
       <div className="p-4 flex gap-4 flex-1">
         {/* Photo Box */}
-        <div className="w-20 h-24 bg-gray-100 border border-gray-200 rounded-lg flex flex-col items-center justify-center text-gray-400 shrink-0">
+        <div className="w-20 h-24 bg-muted border border-border rounded-lg flex flex-col items-center justify-center text-muted-foreground shrink-0">
           <User className="w-10 h-10" />
-          <span className="text-[7px] mt-1 uppercase tracking-widest font-semibold text-gray-500">PHOTO</span>
+          <span className="text-[7px] mt-1 uppercase tracking-widest font-semibold text-muted-foreground">PHOTO</span>
         </div>
 
         {/* Details Box */}
         <div className="flex-1 flex flex-col justify-between min-w-0">
           <div className="space-y-1">
             <div>
-              <span className="text-[8px] uppercase tracking-wider text-gray-500 block font-semibold">NAME</span>
-              <p className="text-xs font-bold text-gray-900 leading-tight truncate">{student.full_name}</p>
+              <span className="text-[8px] uppercase tracking-wider text-muted-foreground block font-semibold">NAME</span>
+              <p className="text-xs font-bold text-foreground leading-tight truncate">{student.full_name}</p>
             </div>
             <div>
-              <span className="text-[8px] uppercase tracking-wider text-gray-500 block font-semibold">MEMBERSHIP ID</span>
+              <span className="text-[8px] uppercase tracking-wider text-muted-foreground block font-semibold">MEMBERSHIP ID</span>
               <p className="text-xs font-mono font-bold text-indigo-600">{membershipId}</p>
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <span className="text-[8px] uppercase tracking-wider text-gray-500 block font-semibold">STATUS</span>
+                <span className="text-[8px] uppercase tracking-wider text-muted-foreground block font-semibold">STATUS</span>
                 <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-green-100 text-green-800">
                   ACTIVE
                 </span>
               </div>
               <div>
-                <span className="text-[8px] uppercase tracking-wider text-gray-500 block font-semibold">ISSUE DATE</span>
-                <p className="text-[9px] text-gray-700 font-semibold">{issueDate}</p>
+                <span className="text-[8px] uppercase tracking-wider text-muted-foreground block font-semibold">ISSUE DATE</span>
+                <p className="text-[9px] text-foreground font-semibold">{issueDate}</p>
               </div>
             </div>
           </div>
@@ -82,13 +82,13 @@ export function StudentIdCard({ student, orgName }: { student: Student; orgName:
       </div>
 
       {/* Card Footer */}
-      <div className="px-4 pb-3 flex justify-between items-end text-[8px] text-gray-500 font-medium">
+      <div className="px-4 pb-3 flex justify-between items-end text-[8px] text-muted-foreground font-medium">
         <div className="flex flex-col items-center">
-          <div className="w-20 border-b border-gray-300 h-5"></div>
+          <div className="w-20 border-b border-border h-5"></div>
           <span className="mt-1">Holder&apos;s Signature</span>
         </div>
         <div className="flex flex-col items-center">
-          <div className="w-20 border-b border-gray-300 h-5 flex items-end justify-center font-serif italic text-indigo-800 text-[9px] select-none font-bold">
+          <div className="w-20 border-b border-border h-5 flex items-end justify-center font-serif italic text-indigo-800 text-[9px] select-none font-bold">
             {orgName.substring(0, 3).toUpperCase()} Union
           </div>
           <span className="mt-1">Authorized Authority</span>
@@ -131,7 +131,7 @@ export function StudentIdsClient({ initialStudents, lang, orgName }: StudentIdsC
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Student Union IDs</h1>
-          <p className="text-gray-500 mt-1">Issue, manage, and print verifiable digital identity cards.</p>
+          <p className="text-muted-foreground mt-1">Issue, manage, and print verifiable digital identity cards.</p>
         </div>
         <div className="flex gap-2">
           <Button className="gap-2" onClick={handlePrintBatch}>
@@ -141,13 +141,13 @@ export function StudentIdsClient({ initialStudents, lang, orgName }: StudentIdsC
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm mb-6">
-        <div className="p-4 border-b border-gray-200 flex flex-col sm:flex-row gap-4 items-center justify-between bg-slate-50">
+      <div className="bg-card rounded-xl border border-border overflow-hidden shadow-sm mb-6">
+        <div className="p-4 border-b border-border flex flex-col sm:flex-row gap-4 items-center justify-between bg-muted">
           <div className="relative w-full sm:max-w-xs">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <Input
               placeholder="Search students by name or ID..."
-              className="pl-9 bg-white"
+              className="pl-9 bg-card"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -156,7 +156,7 @@ export function StudentIdsClient({ initialStudents, lang, orgName }: StudentIdsC
 
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
-            <thead className="text-xs text-gray-500 uppercase bg-slate-50 border-b border-gray-200">
+            <thead className="text-xs text-muted-foreground uppercase bg-muted border-b border-border">
               <tr>
                 <th className="px-6 py-4 font-medium">Student</th>
                 <th className="px-6 py-4 font-medium">Membership ID</th>
@@ -164,20 +164,20 @@ export function StudentIdsClient({ initialStudents, lang, orgName }: StudentIdsC
                 <th className="px-6 py-4 font-medium">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-border">
               {filteredStudents.map((student) => {
                 const membershipId = student.membership_number || `STU-${student.id.split('-')[0].toUpperCase()}`
                 return (
-                  <tr key={student.id} className="hover:bg-slate-50/50 transition-colors">
+                  <tr key={student.id} className="hover:bg-accent/50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
                           <BadgeIcon size={18} />
                         </div>
-                        <div className="font-medium text-gray-900">{student.full_name}</div>
+                        <div className="font-medium text-foreground">{student.full_name}</div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 font-mono text-gray-600">
+                    <td className="px-6 py-4 font-mono text-muted-foreground">
                       {membershipId}
                     </td>
                     <td className="px-6 py-4">
@@ -198,7 +198,7 @@ export function StudentIdsClient({ initialStudents, lang, orgName }: StudentIdsC
               })}
               {filteredStudents.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={4} className="px-6 py-8 text-center text-muted-foreground">
                     No students found. Add members to issue IDs.
                   </td>
                 </tr>
@@ -216,7 +216,7 @@ export function StudentIdsClient({ initialStudents, lang, orgName }: StudentIdsC
               Verify the details on the student card. Click Print Card to open printable view.
             </DialogDescription>
           </DialogHeader>
-          <div className="py-6 flex justify-center bg-slate-50 border border-dashed border-gray-200 rounded-lg">
+          <div className="py-6 flex justify-center bg-muted border border-dashed border-border rounded-lg">
             {selectedStudent && (
               <StudentIdCard student={selectedStudent} orgName={orgName} />
             )}

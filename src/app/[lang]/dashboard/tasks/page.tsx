@@ -50,8 +50,8 @@ export default async function TasksPage(props: { params: Promise<{ lang: string 
         ))}
 
         {(!tasks || tasks.length === 0) && (
-          <div className="col-span-full text-center py-16 bg-slate-50 rounded-xl border border-dashed border-slate-200">
-            <p className="text-slate-500 mb-6">
+          <div className="col-span-full text-center py-16 bg-muted rounded-xl border border-dashed border-border">
+            <p className="text-muted-foreground mb-6">
               No active tasks yet. Create your first task to get started.
             </p>
             {canManage && (

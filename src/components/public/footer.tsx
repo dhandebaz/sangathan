@@ -7,6 +7,7 @@ export function Footer({ lang }: { lang: string }) {
     product: {
       title: isHindi ? 'उत्पाद' : 'Product',
       links: [
+        { label: isHindi ? 'दस्तावेज़ीकरण' : 'Documentation', href: `/${lang}/docs` },
         { label: isHindi ? 'विशेषताएं' : 'Features', href: `/${lang}/#features` },
         { label: isHindi ? 'रोडमैप' : 'Roadmap', href: `/${lang}/roadmap` },
         { label: isHindi ? 'परिवर्तन लॉग' : 'Changelog', href: `/${lang}/changelog` },

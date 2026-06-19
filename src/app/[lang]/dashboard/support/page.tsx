@@ -12,10 +12,10 @@ export default async function SupportPage(props: { params: Promise<{ lang: strin
   return (
     <div className="mx-auto max-w-5xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">
           {lang === 'hi' ? 'संगठन का समर्थन करें' : 'Support Sangathan'}
         </h1>
-        <p className="mt-2 text-lg text-slate-600">
+        <p className="mt-2 text-lg text-muted-foreground">
           {lang === 'hi'
             ? 'मंच को चालू रखने के लिए हमारे बुनियादी ढांचे की लागतों को कवर करने में हमारी सहायता करें।'
             : 'Help us cover our infrastructure costs to keep the platform running.'}

@@ -25,7 +25,7 @@ export default async function MeetingsPage(props: { params: Promise<{ lang: stri
       <div className="flex justify-between items-center mb-6">
         <div>
            <h1 className="text-3xl font-bold tracking-tight">Meetings</h1>
-           <p className="text-gray-500 mt-1">Schedule and track organisational gatherings.</p>
+           <p className="text-muted-foreground mt-1">Schedule and track organisational gatherings.</p>
         </div>
         <Link 
             href={`/${lang}/dashboard/meetings/new`} 
@@ -42,7 +42,7 @@ export default async function MeetingsPage(props: { params: Promise<{ lang: stri
              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                    <h3 className="text-xl font-bold mb-1">{meeting.title}</h3>
-                   <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+                   <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
                          <Calendar size={14} />
                          <span>{new Date(meeting.date).toLocaleString()}</span>
@@ -62,7 +62,7 @@ export default async function MeetingsPage(props: { params: Promise<{ lang: stri
                 
                 <Link 
                    href={`/${lang}/dashboard/meetings/${meeting.id}`} 
-                   className="bg-gray-100 text-gray-900 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 flex items-center gap-2"
+                    className="bg-muted text-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-accent flex items-center gap-2"
                 >
                    View Details
                    <ArrowRight size={16} />
@@ -72,7 +72,7 @@ export default async function MeetingsPage(props: { params: Promise<{ lang: stri
         ))}
 
         {meetings?.length === 0 && (
-            <div className="text-center py-12 text-gray-500 border-2 border-dashed rounded-lg">
+            <div className="text-center py-12 text-muted-foreground border-2 border-dashed rounded-lg">
                 <p>No meetings scheduled yet.</p>
             </div>
         )}

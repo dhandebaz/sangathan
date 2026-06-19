@@ -96,7 +96,7 @@ export default async function PollPage(props: { params: Promise<{ lang: string, 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
       <div className="mb-6">
-        <Link href={`/${lang}/dashboard/polls`} className="flex items-center text-sm text-gray-500 hover:text-black mb-2">
+        <Link href={`/${lang}/dashboard/polls`} className="flex items-center text-sm text-muted-foreground hover:text-foreground mb-2">
           <ArrowLeft className="w-4 h-4 mr-1" />
           Back to Polls
         </Link>

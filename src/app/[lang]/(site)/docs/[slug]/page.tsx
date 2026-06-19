@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { AlertCircle, ArrowLeft, ChevronRight, Clock } from 'lucide-react'
 import { Metadata } from 'next'
 import { TableOfContents } from '@/components/docs/table-of-contents'
+import { ScrollToAnchor } from '@/components/docs/scroll-to-anchor'
 import { docsBySlug, flatDocs } from '@/lib/docs-config'
 
 export const dynamic = 'force-dynamic'
@@ -31,6 +32,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 function slugify(text: string): string {
   return text
     .toLowerCase()
+    // Remove leading numbers like "1.1 " or "1. " at the start
+    .replace(/^\d+(\.\d+)*\s+/, '')
     .replace(/\s+/g, '-')
     .replace(/[^\w-]+/g, '')
     .replace(/--+/g, '-')
@@ -129,6 +132,7 @@ export default async function DocPage({ params }: PageProps) {
 
   return (
     <div className="flex w-full flex-col gap-10 xl:flex-row xl:gap-12">
+      <ScrollToAnchor />
       <article className="min-w-0 max-w-3xl flex-1">
         <header className="mb-8 border-b border-[var(--border-subtle)] pb-8">
           <div className="mb-4 flex flex-wrap items-center gap-2 text-sm text-[var(--text-secondary)]">

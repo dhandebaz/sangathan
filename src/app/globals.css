@@ -137,6 +137,13 @@
   --color-brand-500: var(--brand-500);
   --color-brand-600: var(--brand-600);
   --color-brand-700: var(--brand-700);
+  --color-success: var(--success-text);
+  --color-danger-bg: var(--danger-bg);
+  --color-danger-text: var(--danger-text);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-text: var(--warning-text);
+  --color-info-bg: var(--info-bg);
+  --color-info-text: var(--info-text);
   --radius-sm: var(--radius-xs);
   --radius-md: var(--radius-sm);
   --radius-lg: var(--radius);
@@ -150,6 +157,10 @@
   --animate-slide-up: slide-up 0.4s var(--spring-snappy);
   --animate-slide-down: slide-down 0.4s var(--spring-snappy);
   --animate-bounce-in: bounce-in 0.5s var(--spring-bouncy);
+  --duration-250: 250ms;
+  --width-4\.5: 1.125rem;
+  --height-4\.5: 1.125rem;
+  --max-width-8xl: 90rem;
 
   @keyframes fade-in {
     from { opacity: 0; }

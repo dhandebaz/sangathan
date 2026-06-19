@@ -25,12 +25,12 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
   if (profileError || !profileData) {
     return (
       <div className="max-w-4xl mx-auto py-20 px-4 text-center">
-        <div className="bg-white border border-gray-200 shadow-sm rounded-xl p-8 md:p-12">
+        <div className="bg-card border border-border shadow-sm rounded-xl p-8 md:p-12">
           <div className="w-16 h-16 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-6">
             <Users className="w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-bold mb-4">Complete Your Profile</h1>
-          <p className="text-gray-600 mb-8 max-w-md mx-auto">
+          <h1 className="text-2xl font-bold text-foreground mb-4">Complete Your Profile</h1>
+          <p className="text-muted-foreground mb-8 max-w-md mx-auto">
             We couldn&apos;t find your organisation profile. This usually happens if your account setup wasn&apos;t completed.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -53,12 +53,12 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
   if (onboardingIncomplete) {
     return (
       <div className="max-w-4xl mx-auto py-20 px-4 text-center">
-        <div className="bg-white border border-gray-200 shadow-sm rounded-xl p-8 md:p-12">
+        <div className="bg-card border border-border shadow-sm rounded-xl p-8 md:p-12">
           <div className="w-16 h-16 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-6">
             <Users className="w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-bold mb-4">Finish setting up your organisation</h1>
-          <p className="text-gray-600 mb-8 max-w-md mx-auto">
+          <h1 className="text-2xl font-bold text-foreground mb-4">Finish setting up your organisation</h1>
+          <p className="text-muted-foreground mb-8 max-w-md mx-auto">
             Complete onboarding to unlock your dashboard and start using Sangathan.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -77,14 +77,14 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
   if (profile.status === 'pending') {
     return (
       <div className="max-w-4xl mx-auto py-20 px-4 text-center">
-        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-8">
+        <div className="bg-warning-bg border border-[var(--warning-text)]/20 rounded-xl p-8">
           <div className="flex justify-center mb-4">
-            <div className="bg-yellow-100 p-3 rounded-full">
-              <Users className="w-8 h-8 text-yellow-600" />
+            <div className="bg-[var(--warning-bg)] p-3 rounded-full border border-[var(--warning-text)]/10">
+              <Users className="w-8 h-8 text-warning-text" />
             </div>
           </div>
-          <h1 className="text-2xl font-bold text-yellow-800 mb-2">Membership Pending</h1>
-          <p className="text-yellow-700 max-w-lg mx-auto">
+          <h1 className="text-2xl font-bold text-warning-text mb-2">Membership Pending</h1>
+          <p className="text-warning-text/80 max-w-lg mx-auto">
             Your request to join this organisation is currently pending approval by an administrator.
             You will be notified via email once your request is processed.
           </p>
@@ -96,9 +96,9 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
   if (profile.status === 'rejected') {
     return (
       <div className="max-w-4xl mx-auto py-20 px-4 text-center">
-        <div className="bg-red-50 border border-red-200 rounded-xl p-8">
-          <h1 className="text-2xl font-bold text-red-800 mb-2">Membership Rejected</h1>
-          <p className="text-red-700">
+        <div className="bg-danger-bg border border-danger-text/20 rounded-xl p-8">
+          <h1 className="text-2xl font-bold text-danger-text mb-2">Membership Rejected</h1>
+          <p className="text-danger-text/80">
             Your request to join this organisation was not approved.
           </p>
         </div>
@@ -109,8 +109,8 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
   if (!profile.organisation_id) {
     return (
       <div className="max-w-4xl mx-auto py-20 px-4 text-center">
-        <h1 className="text-2xl font-bold mb-4">No Organisation Found</h1>
-        <p className="text-gray-600 mb-8">You are not currently a member of any organisation.</p>
+        <h1 className="text-2xl font-bold text-foreground mb-4">No Organisation Found</h1>
+        <p className="text-muted-foreground mb-8">You are not currently a member of any organisation.</p>
         <div className="flex justify-center gap-4">
           <Button asChild>
             <Link href={`/${lang}/onboarding`}>Create New Organisation</Link>
@@ -125,18 +125,18 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
 
   const { data: orgData } = await supabase
     .from('organisations')
-    .select('status')
+    .select('status, org_type')
     .eq('id', profile.organisation_id)
     .single()
 
-  const org = orgData as { status: string } | null
+  const org = orgData as { status: string; org_type?: string } | null
 
   if (org?.status === 'suspended') {
     return (
       <div className="max-w-4xl mx-auto py-20 px-4 text-center">
-        <div className="bg-red-50 border border-red-200 rounded-xl p-8">
-          <h1 className="text-2xl font-bold text-red-800 mb-2">Organisation Suspended</h1>
-          <p className="text-red-700">
+        <div className="bg-danger-bg border border-danger-text/20 rounded-xl p-8">
+          <h1 className="text-2xl font-bold text-danger-text mb-2">Organisation Suspended</h1>
+          <p className="text-danger-text/80">
             This organisation has been suspended due to policy violations. Please contact platform support.
           </p>
         </div>
@@ -231,6 +231,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
         membershipRequests={membershipRequests || 0}
         openAppeals={openAppeals || 0}
         lang={lang}
+        orgType={org?.org_type || 'ngo'}
       />
     )
   }
@@ -251,6 +252,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
       tasks={myTasks}
       announcements={(announcementsRes.data || []) as unknown as DashboardAnnouncement[]}
       lang={lang}
+      orgType={org?.org_type || 'ngo'}
     />
   )
 }

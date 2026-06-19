@@ -61,11 +61,11 @@ export default async function SubgroupDetailPage(
             <div>
               <div className="flex items-center gap-2">
                 <CardTitle className="text-2xl">{subgroup.name}</CardTitle>
-                <span className="text-xs uppercase font-bold tracking-wider bg-slate-100 text-slate-600 px-2 py-1 rounded">
+                <span className="text-xs uppercase font-bold tracking-wider bg-muted text-muted-foreground px-2 py-1 rounded">
                   {subgroup.type}
                 </span>
               </div>
-              <p className="text-slate-600 text-sm mt-1">{subgroup.description || 'No description'}</p>
+              <p className="text-muted-foreground text-sm mt-1">{subgroup.description || 'No description'}</p>
             </div>
           </div>
         </CardHeader>
@@ -74,20 +74,20 @@ export default async function SubgroupDetailPage(
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-lg font-semibold text-slate-900">Members ({members.length})</h2>
+            <h2 className="text-lg font-semibold text-foreground">Members ({members.length})</h2>
           </div>
 
           <Card>
             <CardContent className="p-0 divide-y">
               {members.map((m) => (
-                <div key={m.profile_id} className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-slate-50 gap-4">
+                <div key={m.profile_id} className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-accent gap-4">
                   <div>
-                    <div className="font-medium text-slate-900">{m.profiles?.full_name || 'Unknown'}</div>
-                    <div className="text-sm text-slate-500">{m.profiles?.email}</div>
+                    <div className="font-medium text-foreground">{m.profiles?.full_name || 'Unknown'}</div>
+                    <div className="text-sm text-muted-foreground">{m.profiles?.email}</div>
                   </div>
                   <div className="flex items-center gap-3">
                     {!isAdmin && (
-                      <span className={`text-xs font-semibold px-2 py-1 rounded ${m.role === 'lead' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'}`}>
+                      <span className={`text-xs font-semibold px-2 py-1 rounded ${m.role === 'lead' ? 'bg-amber-100 text-amber-700' : 'bg-muted text-muted-foreground'}`}>
                         {m.role}
                       </span>
                     )}
@@ -95,7 +95,7 @@ export default async function SubgroupDetailPage(
                 </div>
               ))}
               {members.length === 0 && (
-                <div className="p-8 text-center text-slate-500">
+                <div className="p-8 text-center text-muted-foreground">
                   No members in this team yet.
                 </div>
               )}
@@ -105,7 +105,7 @@ export default async function SubgroupDetailPage(
 
         {isAdmin && (
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-slate-900">Add Member</h2>
+            <h2 className="text-lg font-semibold text-foreground">Add Member</h2>
             <Card>
               <CardContent className="p-4 space-y-4">
                 <form action={async (formData) => {
@@ -117,7 +117,7 @@ export default async function SubgroupDetailPage(
                   }
                 }} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Select Member</label>
+                    <label className="block text-sm font-medium text-foreground mb-1">Select Member</label>
                     <select name="profileId" className="w-full border rounded-lg px-3 py-2 text-sm min-h-11" required>
                       <option value="">-- Choose Member --</option>
                       {allMembers?.map((m) => (
@@ -126,7 +126,7 @@ export default async function SubgroupDetailPage(
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Role in Team</label>
+                    <label className="block text-sm font-medium text-foreground mb-1">Role in Team</label>
                     <select name="role" className="w-full border rounded-lg px-3 py-2 text-sm min-h-11" required>
                       <option value="member">Member</option>
                       <option value="lead">Lead</option>

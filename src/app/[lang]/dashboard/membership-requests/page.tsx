@@ -34,7 +34,7 @@ export default async function RequestsPage(props: { params: Promise<{ lang: stri
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Membership Requests</h1>
-          <p className="text-gray-500 text-sm mt-1">Review and approve new members.</p>
+          <p className="text-muted-foreground text-sm mt-1">Review and approve new members.</p>
         </div>
         <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
           {requests?.length || 0} Pending

@@ -50,7 +50,7 @@ export default async function StudentIdsPrintPage(props: PrintPageProps) {
         ))}
       </div>
       {typedStudents.length === 0 && (
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-12 text-muted-foreground">
           No active students found to print.
         </div>
       )}

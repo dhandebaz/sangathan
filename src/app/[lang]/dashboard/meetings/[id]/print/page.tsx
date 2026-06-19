@@ -53,11 +53,11 @@ export default async function PrintMeetingPage({ params }: PageProps) {
   const verificationHash = crypto.createHash('sha256').update(dataToHash).digest('hex').substring(0, 16).toUpperCase()
 
   return (
-    <div className="p-8 bg-white min-h-screen text-black print-container">
+    <div className="p-8 bg-card min-h-screen text-black print-container">
       {/* Header */}
       <div className="mb-8 border-b-2 border-black pb-4 flex justify-between items-end">
         <div>
-            <h2 className="text-sm font-bold uppercase tracking-wider text-gray-600 mb-1">{org?.name}</h2>
+            <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-1">{org?.name}</h2>
             <h1 className="text-3xl font-bold">{meeting.title}</h1>
         </div>
         <div className="text-right text-sm">
@@ -68,7 +68,7 @@ export default async function PrintMeetingPage({ params }: PageProps) {
 
       {/* Agenda */}
       <div className="mb-8">
-         <h3 className="font-bold uppercase text-xs mb-2 border-b border-gray-300 pb-1 w-full">Agenda / Notes</h3>
+         <h3 className="font-bold uppercase text-xs mb-2 border-b border-border pb-1 w-full">Agenda / Notes</h3>
          <div className="text-sm whitespace-pre-wrap leading-relaxed">
             {meeting.description || 'No notes recorded.'}
          </div>
@@ -76,7 +76,7 @@ export default async function PrintMeetingPage({ params }: PageProps) {
 
       {/* Attendance Table */}
       <div>
-         <h3 className="font-bold uppercase text-xs mb-4 border-b border-gray-300 pb-1 w-full">Attendance Record</h3>
+         <h3 className="font-bold uppercase text-xs mb-4 border-b border-border pb-1 w-full">Attendance Record</h3>
          <table className="w-full text-left text-sm border-collapse">
             <thead>
                <tr className="border-b-2 border-black">
@@ -87,15 +87,15 @@ export default async function PrintMeetingPage({ params }: PageProps) {
             </thead>
             <tbody>
                {attendance?.map((row, i) => (
-                  <tr key={i} className="border-b border-gray-200">
+                  <tr key={i} className="border-b border-border">
                      <td className="py-3 px-2">{row.members.full_name}</td>
                      <td className="py-3 px-2 capitalize text-right">{row.status}</td>
-                     <td className="py-3 px-2 border-l border-dashed border-gray-300"></td>
+                     <td className="py-3 px-2 border-l border-dashed border-border"></td>
                   </tr>
                ))}
                {(!attendance || attendance.length === 0) && (
                    <tr>
-                       <td colSpan={3} className="py-4 text-center text-gray-500 italic">No attendance records found.</td>
+                       <td colSpan={3} className="py-4 text-center text-muted-foreground italic">No attendance records found.</td>
                    </tr>
                )}
             </tbody>
@@ -104,14 +104,14 @@ export default async function PrintMeetingPage({ params }: PageProps) {
 
       {/* Footer with Verification Hash */}
       <div className="fixed bottom-0 left-0 w-full p-8 print:p-0 print:relative print:mt-12">
-          <div className="border-t-2 border-black pt-2 flex justify-between items-end text-[10px] font-mono text-gray-600">
+          <div className="border-t-2 border-black pt-2 flex justify-between items-end text-[10px] font-mono text-muted-foreground">
             <div>
                 <p>Generated via Sangathan Platform</p>
                 <p>Date: {new Date().toLocaleString()}</p>
             </div>
             <div className="text-right">
                 <p className="font-bold text-black">SYSTEM VERIFICATION HASH</p>
-                <p className="tracking-widest bg-gray-100 px-2 py-1 mt-1 inline-block border border-gray-300">
+                <p className="tracking-widest bg-muted px-2 py-1 mt-1 inline-block border border-border">
                     {verificationHash}
                 </p>
             </div>

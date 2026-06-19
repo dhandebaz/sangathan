@@ -82,7 +82,7 @@ export function MobileNav({ lang }: MobileNavProps) {
   const visibleItems = navItems.filter(item => item.show).slice(0, 5)
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/95 backdrop-blur-sm pb-[max(env(safe-area-inset-bottom),8px)] shadow-[0_-4px_24px_rgba(15,23,42,0.08)] md:hidden select-none" aria-label="Dashboard navigation">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-sm pb-[max(env(safe-area-inset-bottom),8px)] shadow-[0_-4px_24px_rgba(15,23,42,0.08)] md:hidden select-none" aria-label="Dashboard navigation">
       <div className="flex h-16 items-center justify-around">
         {visibleItems.map((item) => {
           const isActive = pathname === item.href
@@ -101,7 +101,7 @@ export function MobileNav({ lang }: MobileNavProps) {
             >
               <div className={cn(
                 "relative flex items-center justify-center rounded-xl px-3 py-1.5 transition-all",
-                isActive ? "bg-brand-50 scale-110" : "active:bg-slate-100 active:scale-95"
+                isActive ? "bg-accent scale-110" : "active:bg-muted active:scale-95"
               )}>
                 <item.icon className={cn(
                   "w-6 h-6 transition-all duration-200",

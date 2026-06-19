@@ -6,7 +6,9 @@ import { ArrowRight, Search } from 'lucide-react'
 
 type SearchItem = {
   title: string
+  altTitle?: string
   category: string
+  altCategory?: string
   slug: string
 }
 
@@ -17,7 +19,11 @@ export function DocsSearch({ lang, items }: { lang: string; items: SearchItem[] 
   const results = useMemo(() => {
     if (!normalizedQuery) return []
     return items
-      .filter((item) => `${item.title} ${item.category}`.toLowerCase().includes(normalizedQuery))
+      .filter((item) => {
+        const primary = `${item.title} ${item.category}`.toLowerCase()
+        const secondary = item.altTitle || item.altCategory ? `${item.altTitle} ${item.altCategory}`.toLowerCase() : ''
+        return primary.includes(normalizedQuery) || secondary.includes(normalizedQuery)
+      })
       .slice(0, 7)
   }, [items, normalizedQuery])
 

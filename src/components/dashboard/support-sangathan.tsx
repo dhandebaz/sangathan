@@ -50,18 +50,18 @@ export function SupportSangathan({ lang, isPublic = false }: { lang: string, isP
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Hero Section */}
-      <div className="relative overflow-hidden rounded-3xl bg-slate-900 px-6 py-12 shadow-2xl sm:px-12 sm:py-16">
+      <div className="relative overflow-hidden rounded-3xl bg-foreground px-6 py-12 shadow-2xl sm:px-12 sm:py-16">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-600/20 to-purple-600/20" />
         <div className="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-brand-500/10 blur-3xl" />
         
         <div className="relative z-10 flex flex-col items-center text-center">
-          <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20">
+          <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-card/10 backdrop-blur-xl border border-card/20">
             <Heart className="h-8 w-8 text-brand-400 fill-brand-400/20" />
           </div>
-          <h2 className="mb-4 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+          <h2 className="mb-4 text-3xl font-bold tracking-tight text-primary-foreground sm:text-4xl lg:text-5xl">
             {isHi ? 'हमारा आंदोलन शक्तिहीन नहीं है' : 'Empower the Movement'}
           </h2>
-          <p className="max-w-2xl text-lg text-slate-300">
+          <p className="max-w-2xl text-lg text-muted-foreground/40">
             {isHi 
               ? 'संगठन हमेशा मुफ़्त और विज्ञापन-मुक्त रहेगा। हालाँकि, हमारे कड़े सुरक्षा मानकों को बनाए रखने में वास्तविक धन खर्च होता है। अपनी स्वेच्छा से योगदान करें।' 
               : 'Sangathan is completely free and ad-free. However, maintaining our strict security and high-speed infrastructure costs real money. Support us if you can.'}
@@ -73,17 +73,17 @@ export function SupportSangathan({ lang, isPublic = false }: { lang: string, isP
         {/* Costs Infographic */}
         <div className="lg:col-span-7 space-y-6">
           <div className="flex items-center gap-3 mb-2">
-            <h3 className="text-xl font-bold text-slate-900">
+            <h3 className="text-xl font-bold text-foreground">
               {isHi ? 'हमारा मासिक खर्च' : 'Where Your Money Goes'}
             </h3>
-            <div className="h-px flex-1 bg-slate-200" />
+            <div className="h-px flex-1 bg-border" />
           </div>
 
           <div className="grid gap-4">
             {costs.map((cost, idx) => (
               <div key={idx} className={`relative overflow-hidden rounded-2xl border p-5 sm:p-6 transition-all hover:shadow-md ${cost.color}`}>
                 <div className="flex items-start sm:items-center gap-4 sm:gap-6">
-                  <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/60 backdrop-blur-sm shadow-sm ${cost.iconColor}`}>
+                  <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-card/60 backdrop-blur-sm shadow-sm ${cost.iconColor}`}>
                     <cost.icon className="h-6 w-6" />
                   </div>
                   <div className="flex-1">
@@ -102,17 +102,17 @@ export function SupportSangathan({ lang, isPublic = false }: { lang: string, isP
 
         {/* UPI Payment Box */}
         <div className="lg:col-span-5">
-          <div className="sticky top-24 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xl shadow-slate-200/50">
+          <div className="sticky top-24 rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-xl">
             <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold tracking-tight text-slate-900 mb-2">
+              <h3 className="text-2xl font-bold tracking-tight text-foreground mb-2">
                 {isHi ? 'स्कैन करें और भुगतान करें' : 'Scan & Support'}
               </h3>
-              <p className="text-slate-500 text-sm">
+              <p className="text-muted-foreground text-sm">
                 {isHi ? 'किसी भी UPI ऐप का उपयोग करें' : 'Use any UPI app to contribute securely'}
               </p>
             </div>
 
-            <div className="mx-auto w-full max-w-[240px] aspect-square rounded-2xl border-2 border-slate-100 bg-slate-50 p-2 shadow-inner mb-8 relative group overflow-hidden">
+            <div className="mx-auto w-full max-w-[240px] aspect-square rounded-2xl border-2 border-border bg-muted p-2 shadow-inner mb-8 relative group overflow-hidden">
               <Image
                 src="/UPIqrBQP.jpg"
                 alt="Support Sangathan UPI QR Code"
@@ -120,43 +120,43 @@ export function SupportSangathan({ lang, isPublic = false }: { lang: string, isP
                 className="object-contain rounded-xl p-2"
                 priority
               />
-              <div className="absolute inset-0 bg-slate-900/5 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                <span className="bg-white/90 text-slate-900 font-bold px-3 py-1.5 rounded-full text-xs shadow-sm">
+              <div className="absolute inset-0 bg-foreground/5 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                <span className="bg-card/90 text-foreground font-bold px-3 py-1.5 rounded-full text-xs shadow-sm">
                   {isHi ? 'स्कैन करें' : 'Scan Me'}
                 </span>
               </div>
             </div>
 
             <div className="space-y-4">
-              <div className="rounded-xl bg-slate-50 p-4 border border-slate-100">
-                <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
+              <div className="rounded-xl bg-muted p-4 border border-border">
+                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
                   {isHi ? 'खाता नाम' : 'Account Name'}
                 </div>
-                <div className="font-bold text-slate-900">Sheikh Arsalan Ullah Chishti</div>
+                <div className="font-bold text-foreground">Sheikh Arsalan Ullah Chishti</div>
               </div>
 
               <div className="space-y-2">
-                <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">
+                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider ml-1">
                   {isHi ? 'उपलब्ध UPI आईडी' : 'Supported UPI IDs'}
                 </div>
                 {upiIds.map((id) => (
                   <button
                     key={id}
                     onClick={() => copyToClipboard(id)}
-                    className="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white p-3 hover:border-brand-300 hover:bg-brand-50 transition-colors group"
+                    className="flex w-full items-center justify-between rounded-xl border border-border bg-card p-3 hover:border-brand-300 hover:bg-brand-50 transition-colors group"
                   >
-                    <span className="font-medium text-slate-700 font-mono text-sm">{id}</span>
+                    <span className="font-medium text-foreground font-mono text-sm">{id}</span>
                     {copiedId === id ? (
                       <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                     ) : (
-                      <Copy className="h-4 w-4 text-slate-400 group-hover:text-brand-500 transition-colors" />
+                      <Copy className="h-4 w-4 text-muted-foreground group-hover:text-brand-500 transition-colors" />
                     )}
                   </button>
                 ))}
               </div>
             </div>
             
-            <p className="mt-6 text-center text-xs text-slate-400">
+            <p className="mt-6 text-center text-xs text-muted-foreground">
               {isHi ? 'आपका समर्थन 100% संगठनों को सुरक्षित और ऑनलाइन रखने में जाता है।' : '100% of your support goes directly to keeping Sangathan organizations secure and online.'}
             </p>
           </div>

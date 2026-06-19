@@ -12,8 +12,6 @@ export const docsConfig: DocSection[] = [
     icon: Book,
     items: [
       { title: { en: 'Quickstart Guide', hi: 'त्वरित आरंभ गाइड' }, slug: 'getting-started' },
-      { title: { en: 'Account Verification', hi: 'खाता सत्यापन' }, slug: 'getting-started#verification' },
-      { title: { en: 'Dashboard Overview', hi: 'डैशबोर्ड अवलोकन' }, slug: 'getting-started#dashboard' },
     ]
   },
   {
@@ -58,6 +56,13 @@ export const docsConfig: DocSection[] = [
     ]
   },
   {
+    title: { en: 'System Administration', hi: 'सिस्टम प्रशासन' },
+    icon: Shield,
+    items: [
+      { title: { en: 'System Admin Guide', hi: 'सिस्टम एडमिन गाइड' }, slug: 'system-admin' },
+    ]
+  },
+  {
     title: { en: 'Operations', hi: 'संचालन' },
     icon: Settings,
     items: [
@@ -75,8 +80,16 @@ export const docsBySlug = new Map(
   )
 )
 
-// Pre-computed flat list of unique docs for pagination
-export const flatDocs = Array.from(docsBySlug.values()).map(item => ({
-  slug: item.slug.split('#')[0],
-  title: item.title
-}))
+// Pre-computed flat list of unique docs for pagination (deduplicated by slug)
+const seenSlugs = new Set<string>()
+export const flatDocs = Array.from(docsBySlug.values())
+  .filter(item => {
+    const base = item.slug.split('#')[0]
+    if (seenSlugs.has(base)) return false
+    seenSlugs.add(base)
+    return true
+  })
+  .map(item => ({
+    slug: item.slug.split('#')[0],
+    title: item.title
+  }))

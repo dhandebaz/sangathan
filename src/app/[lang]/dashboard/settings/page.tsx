@@ -129,12 +129,12 @@ export default async function SettingsPage(props: PageProps) {
     <div className="max-w-5xl mx-auto py-8 px-4 space-y-8">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Link href={`/${lang}/dashboard`} className="text-gray-500 hover:text-black">
+          <Link href={`/${lang}/dashboard`} className="text-muted-foreground hover:text-foreground">
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Organisation Settings</h1>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted-foreground">
               Manage your organisation identity, compliance, transparency, and collaborations.
             </p>
           </div>
@@ -150,8 +150,8 @@ export default async function SettingsPage(props: PageProps) {
         </TabsList>
 
         <TabsContent value="general" className="space-y-6">
-          <div className="bg-white border rounded-lg shadow-sm p-6 space-y-6">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Organisation Identity & Branding</h2>
+          <div className="bg-card border rounded-lg shadow-sm p-6 space-y-6">
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Organisation Identity & Branding</h2>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <ImageUpload type="logo" currentUrl={organisation.logo_url} orgId={organisation.id} />
@@ -160,7 +160,7 @@ export default async function SettingsPage(props: PageProps) {
 
             <div className="pt-4 border-t space-y-4">
               <div>
-                <div className="text-xs text-gray-500 mb-1">Organisation Name</div>
+                <div className="text-xs text-muted-foreground mb-1">Organisation Name</div>
                 <div className="text-base font-medium flex items-center gap-2">
                   {organisation.name}
                   {organisation.registration_status === 'registered' ? (
@@ -173,7 +173,7 @@ export default async function SettingsPage(props: PageProps) {
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-gray-500 mt-1">Name changes currently require support intervention to preserve audit history.</p>
+                <p className="text-xs text-muted-foreground mt-1">Name changes currently require support intervention to preserve audit history.</p>
               </div>
             </div>
           </div>
