@@ -28,11 +28,11 @@ export default async function TasksPage(props: { params: Promise<{ lang: string 
   const canManage = ['admin', 'executive', 'editor'].includes(profile.role)
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto py-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-8 max-w-6xl mx-auto py-8">
+      <div className="flex justify-between items-start gap-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Volunteer Tasks</h1>
-          <p className="text-muted-foreground mt-1">Manage and track volunteer activities.</p>
+          <h1 className="text-4xl font-bold text-slate-900 tracking-tight">Volunteer Tasks</h1>
+          <p className="text-slate-500 mt-2">Manage and track volunteer activities and assignments.</p>
         </div>
         {canManage && (
           <Button asChild>
@@ -50,9 +50,9 @@ export default async function TasksPage(props: { params: Promise<{ lang: string 
         ))}
 
         {(!tasks || tasks.length === 0) && (
-          <div className="col-span-full text-center py-12 bg-gray-50 rounded-xl border border-dashed">
-            <p className="text-gray-500 mb-4">
-              No active tasks yet.
+          <div className="col-span-full text-center py-16 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+            <p className="text-slate-500 mb-6">
+              No active tasks yet. Create your first task to get started.
             </p>
             {canManage && (
               <Button asChild>

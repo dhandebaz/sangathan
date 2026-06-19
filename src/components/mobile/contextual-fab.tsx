@@ -66,7 +66,7 @@ export function ContextualFAB({ lang, role, capabilities }: ContextualFABProps) 
         asChild 
         size="icon" 
         haptic="medium"
-        className="h-14 w-14 rounded-full shadow-xl hover:shadow-2xl transition-all bg-primary text-primary-foreground active:scale-90"
+        className="h-14 w-14 rounded-full shadow-xl hover:shadow-2xl bg-primary text-primary-foreground"
       >
         <Link href={action.href}>
           <action.icon className="h-7 w-7" />

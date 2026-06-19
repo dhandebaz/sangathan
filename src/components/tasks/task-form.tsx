@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createTask, updateTask } from '@/actions/tasks'
 import { useRouter, useParams } from 'next/navigation'
@@ -59,16 +60,15 @@ export function TaskForm({ orgId, initialData }: { orgId: string, initialData?: 
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-xl border shadow-sm max-w-2xl mx-auto">
-      <div className="space-y-2">
+    <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-xl border border-slate-200 shadow-sm max-w-2xl mx-auto">
+      <div className="space-y-3">
         <Label>Task Title</Label>
         <Input required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} placeholder="e.g. Organize Welcome Kit" />
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-3">
         <Label>Description</Label>
-        <textarea 
-          className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        <Textarea 
           value={formData.description} 
           onChange={e => setFormData({...formData, description: e.target.value})} 
           placeholder="Details about the task..."
@@ -76,7 +76,7 @@ export function TaskForm({ orgId, initialData }: { orgId: string, initialData?: 
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
+        <div className="space-y-3">
           <Label>Priority</Label>
           <Select value={formData.priority} onValueChange={v => setFormData({...formData, priority: v as 'low' | 'medium' | 'high'})}>
             <SelectTrigger>
@@ -90,7 +90,7 @@ export function TaskForm({ orgId, initialData }: { orgId: string, initialData?: 
           </Select>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-3">
           <Label>Visibility / Role Required</Label>
           <Select value={formData.visibility_level} onValueChange={v => setFormData({...formData, visibility_level: v as 'members' | 'volunteer' | 'core' | 'executive'})}>
             <SelectTrigger>
@@ -106,14 +106,16 @@ export function TaskForm({ orgId, initialData }: { orgId: string, initialData?: 
         </div>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-3">
         <Label>Due Date (Optional)</Label>
         <Input type="datetime-local" value={formData.due_date} onChange={e => setFormData({...formData, due_date: e.target.value})} />
       </div>
 
-      <Button type="submit" disabled={loading} className="w-full">
-        {loading ? (initialData ? 'Updating...' : 'Creating...') : (initialData ? 'Update Task' : 'Create Task')}
-      </Button>
+      <div className="pt-4">
+        <Button type="submit" disabled={loading} className="w-full">
+          {loading ? (initialData ? 'Updating...' : 'Creating...') : (initialData ? 'Update Task' : 'Create Task')}
+        </Button>
+      </div>
     </form>
   )
 }

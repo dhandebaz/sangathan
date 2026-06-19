@@ -39,7 +39,6 @@ export function MobileNav({ lang }: MobileNavProps) {
   const pathname = usePathname()
   const prevPathnameRef = useRef(pathname)
 
-  // Trigger haptic feedback when navigating
   useEffect(() => {
     if (prevPathnameRef.current !== pathname) {
       triggerHaptic('light')
@@ -80,15 +79,10 @@ export function MobileNav({ lang }: MobileNavProps) {
     }
   ]
 
-  // Filter and limit to 5 items for bottom nav constraint
   const visibleItems = navItems.filter(item => item.show).slice(0, 5)
 
-  const handleLinkClick = () => {
-    triggerHaptic('light')
-  }
-
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/95 backdrop-blur-sm pb-[max(env(safe-area-inset-bottom),8px)] shadow-[0_-4px_24px_rgba(15,23,42,0.08)] md:hidden" aria-label="Dashboard navigation">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/95 backdrop-blur-sm pb-[max(env(safe-area-inset-bottom),8px)] shadow-[0_-4px_24px_rgba(15,23,42,0.08)] md:hidden select-none" aria-label="Dashboard navigation">
       <div className="flex h-16 items-center justify-around">
         {visibleItems.map((item) => {
           const isActive = pathname === item.href
@@ -96,30 +90,27 @@ export function MobileNav({ lang }: MobileNavProps) {
             <Link
               key={item.href}
               href={item.href}
-              onClick={handleLinkClick}
               className={cn(
-                "relative flex h-full min-w-0 flex-1 flex-col items-center justify-center gap-1 px-1 transition-all duration-200",
+                "relative flex h-full min-w-0 flex-1 flex-col items-center justify-center gap-0.5 px-1",
+                "transition-all duration-150",
                 isActive 
                   ? "text-primary" 
-                  : "text-muted-foreground hover:text-foreground active:scale-95"
+                  : "text-muted-foreground hover:text-foreground"
               )}
               aria-current={isActive ? 'page' : undefined}
             >
               <div className={cn(
-                "relative flex items-center justify-center transition-all duration-300",
-                isActive ? "scale-110" : ""
+                "relative flex items-center justify-center rounded-xl px-3 py-1.5 transition-all",
+                isActive ? "bg-brand-50 scale-110" : "active:bg-slate-100 active:scale-95"
               )}>
                 <item.icon className={cn(
                   "w-6 h-6 transition-all duration-200",
-                  isActive && "fill-current/20"
+                  isActive && "text-brand-600"
                 )} />
-                {isActive && (
-                  <span className="absolute -bottom-1 h-1 w-6 bg-primary rounded-full" />
-                )}
               </div>
               <span className={cn(
-                "text-xs font-medium transition-all duration-200",
-                isActive ? "font-semibold" : ""
+                "text-[11px] font-medium leading-tight transition-all duration-150",
+                isActive ? "text-brand-600 font-semibold" : "text-muted-foreground"
               )}>{item.label}</span>
             </Link>
           )

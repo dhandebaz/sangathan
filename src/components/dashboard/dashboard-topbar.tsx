@@ -69,7 +69,7 @@ export function DashboardTopBar({ lang, userEmail, role, orgName, orgLogoUrl }: 
   }
 
   return (
-    <div className="flex items-center justify-between w-full">
+    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between w-full">
       <div className="flex items-center gap-4 min-w-0">
         <Link
           href={`/${lang}/dashboard`}
@@ -85,7 +85,7 @@ export function DashboardTopBar({ lang, userEmail, role, orgName, orgLogoUrl }: 
           />
         </Link>
         <div className="hidden md:flex flex-col min-w-0">
-          <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">
+          <span className="text-[11px] uppercase tracking-[0.2em] text-slate-500 font-semibold">
             Organisation
           </span>
           <span className="text-sm font-semibold text-slate-900 truncate">
@@ -94,9 +94,9 @@ export function DashboardTopBar({ lang, userEmail, role, orgName, orgLogoUrl }: 
         </div>
       </div>
 
-      <div className="flex-1 hidden md:flex justify-center px-8">
+      <div className="flex-1 hidden md:flex justify-center px-4">
         {breadcrumb && (
-          <div className="inline-flex items-center text-sm text-slate-500 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-200">
+          <div className="inline-flex items-center text-sm text-slate-600 bg-slate-100 px-4 py-2 rounded-full border border-slate-200 shadow-sm">
             {breadcrumb}
           </div>
         )}
@@ -105,7 +105,7 @@ export function DashboardTopBar({ lang, userEmail, role, orgName, orgLogoUrl }: 
       <div className="flex items-center gap-3">
         <button
           type="button"
-          className="relative inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="relative inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           aria-label="Notifications"
         >
           <Bell className="w-5 h-5" />
@@ -115,22 +115,22 @@ export function DashboardTopBar({ lang, userEmail, role, orgName, orgLogoUrl }: 
           <button
             type="button"
             className={cn(
-              'flex items-center gap-2 rounded-full border border-slate-200 bg-white px-2 py-1.5 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900',
-              'min-h-11 min-w-11'
+              'flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 shadow-sm hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900',
+              'min-h-11'
             )}
             aria-haspopup="menu"
             aria-expanded={open}
             onClick={() => setOpen((prev) => !prev)}
           >
-            <div className="hidden sm:flex flex-col items-end mr-1">
+            <div className="hidden sm:flex flex-col items-end mr-2">
               <span className="text-xs font-semibold text-slate-900 leading-tight">
                 {username}
               </span>
-              <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider leading-tight">
+              <span className="text-[10px] text-slate-500 uppercase tracking-wider leading-tight">
                 {displayRole}
               </span>
             </div>
-            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-sm font-bold">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-sm font-bold">
               {initials}
             </div>
             <ChevronDown className="w-4 h-4 text-slate-400" />
@@ -140,22 +140,22 @@ export function DashboardTopBar({ lang, userEmail, role, orgName, orgLogoUrl }: 
             <div
               role="menu"
               aria-label="Profile menu"
-              className="absolute right-0 mt-2 w-56 rounded-xl border border-slate-200 bg-white shadow-lg py-1 z-50 animate-in fade-in zoom-in-95 duration-200"
+              className="absolute right-0 mt-2 w-60 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl py-2 z-50 animate-in fade-in zoom-in-95 duration-200"
             >
-              <div className="px-4 py-3 border-b border-slate-100 flex items-center gap-3">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-orange-100 text-orange-700 font-bold shrink-0">
+              <div className="px-4 py-4 border-b border-slate-100 flex items-center gap-3">
+                <div className="flex items-center justify-center w-11 h-11 rounded-full bg-orange-100 text-orange-700 font-semibold shrink-0">
                   {initials}
                 </div>
                 <div className="flex flex-col min-w-0">
                   <span className="text-sm font-semibold text-slate-900 truncate">{displayOrgName}</span>
                   <span className="text-xs text-slate-500 truncate">{userEmail}</span>
-                  <span className="text-[10px] uppercase font-bold text-slate-400 mt-0.5">{displayRole}</span>
+                  <span className="text-[10px] uppercase font-semibold text-slate-400 mt-0.5">{displayRole}</span>
                 </div>
               </div>
-              <div className="p-1">
+              <div className="p-2">
                 <button
                   type="button"
-                  className="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-md transition-colors flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 rounded-2xl transition-colors flex items-center gap-2"
                   role="menuitem"
                   onClick={() => {
                     router.push(`/${lang}/profile`)
@@ -167,7 +167,7 @@ export function DashboardTopBar({ lang, userEmail, role, orgName, orgLogoUrl }: 
                 </button>
                 <button
                   type="button"
-                  className="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-md transition-colors flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 rounded-2xl transition-colors flex items-center gap-2"
                   role="menuitem"
                   onClick={() => {
                     router.push(`/${lang}/dashboard/settings`)
@@ -178,10 +178,10 @@ export function DashboardTopBar({ lang, userEmail, role, orgName, orgLogoUrl }: 
                   Organisation Settings
                 </button>
               </div>
-              <div className="p-1 border-t border-slate-100">
+              <div className="p-2 border-t border-slate-100">
                 <button
                   type="button"
-                  className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-2xl transition-colors flex items-center gap-2"
                   role="menuitem"
                   onClick={handleSignOut}
                   disabled={isSigningOut}

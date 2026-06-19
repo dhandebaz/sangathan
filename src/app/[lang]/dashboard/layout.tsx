@@ -83,50 +83,51 @@ export default async function DashboardLayout(props: {
   const isAdmin = ['admin', 'executive'].includes(role)
 
   return (
-    <div className="flex min-h-screen bg-background pb-16 font-sans text-foreground md:pb-0">
-      <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 flex-col border-r border-slate-200 bg-white md:flex">
-        <div className="h-16 flex items-center px-6 border-b border-slate-100">
-          <Link href={`/${lang}/dashboard`} className="flex items-center gap-2 group" aria-label="Sangathan Dashboard">
+    <div className="flex min-h-screen bg-slate-50 text-slate-900 md:pb-0">
+      <aside className="fixed inset-y-0 left-0 z-50 hidden w-72 flex-col border-r border-slate-200 bg-slate-50 shadow-sm md:flex">
+        <div className="h-20 flex items-center px-6 border-b border-slate-200">
+          <Link href={`/${lang}/dashboard`} className="flex items-center gap-3" aria-label="Sangathan Dashboard">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={orgLogoUrl || "/logo/logo.png"}
               alt="Logo"
-              className="h-8 w-auto object-contain"
+              className="h-10 w-auto object-contain"
               aria-hidden="true"
             />
+            <span className="text-sm font-semibold tracking-wide text-slate-900">{orgName ?? 'Sangathan'}</span>
           </Link>
         </div>
 
         <SidebarNav lang={lang} isAdmin={isAdmin} capabilities={capabilities} />
 
-        <div className="px-4 pb-3">
-          <Link href={`/${lang}/dashboard/support`} className="flex items-center justify-center gap-2 rounded-lg bg-slate-100 p-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-200">
-            <Heart className="h-4 w-4 text-brand-500 fill-brand-500/20" />
+        <div className="px-5 pb-4">
+          <Link href={`/${lang}/dashboard/support`} className="flex items-center justify-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-slate-800">
+            <Heart className="h-4 w-4 text-orange-300" />
             Support Sangathan
           </Link>
         </div>
 
-        <div className="border-t border-slate-100 bg-slate-50/70 p-4 mt-auto">
-          <Button variant="ghost" className="w-full justify-start gap-3 text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors">
+        <div className="border-t border-slate-200 bg-slate-50 p-5 mt-auto">
+          <Button variant="outline" className="w-full justify-start gap-3 rounded-2xl border-slate-200 bg-white text-slate-700 hover:bg-slate-50">
             <LogOut className="w-4 h-4" />
             <span className="font-medium">Sign Out</span>
           </Button>
         </div>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col md:pl-64">
+      <div className="flex min-w-0 flex-1 flex-col md:pl-72">
         {maintenanceMessage && (
-          <div className="flex flex-wrap items-center gap-2 border-b border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-center gap-2 border-b border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 sm:px-6 lg:px-8">
             <AlertTriangle className="w-4 h-4" />
             <span className="font-semibold">Maintenance mode</span>
             <span className="text-amber-900/80">{maintenanceMessage}</span>
           </div>
         )}
-        <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 sm:px-6 lg:px-8">
+        <header className="sticky top-0 z-40 flex h-20 items-center border-b border-slate-200 bg-white/95 px-4 shadow-sm backdrop-blur-sm sm:px-6 lg:px-8">
           <DashboardTopBar lang={lang} userEmail={user?.email ?? null} role={role} orgName={orgName} orgLogoUrl={orgLogoUrl} />
         </header>
 
-        <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-7xl flex-1 animate-fade-in px-4 pb-24 pt-6 sm:px-6 lg:px-8 lg:pb-10 lg:pt-8">
+        <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-8xl flex-1 animate-fade-in px-4 pb-24 pt-6 sm:px-6 lg:px-8 lg:pb-10 lg:pt-8">
           {children}
         </main>
       </div>
