@@ -62,8 +62,8 @@ export default async function AnnouncementsPage(props: { params: Promise<{ lang:
         })}
 
         {(!announcements || announcements.length === 0) && (
-          <div className="text-center py-12 bg-gray-50 rounded-xl border border-dashed">
-            <p className="text-gray-500">No announcements yet.</p>
+          <div className="text-center py-12 bg-muted rounded-xl border border-dashed">
+            <p className="text-muted-foreground">No announcements yet.</p>
           </div>
         )}
       </div>

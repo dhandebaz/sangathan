@@ -24,7 +24,7 @@ export function AdminDashboard({
 }) {
   return (
     <div className="space-y-6 pb-20 md:pb-0">
-      <h1 className="text-2xl font-bold tracking-tight">Admin Overview</h1>
+      <h1 className="text-3xl font-bold tracking-tight">Admin Overview</h1>
       
       {/* Metrics Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -35,13 +35,13 @@ export function AdminDashboard({
       </div>
 
       <div className="grid grid-cols-2 gap-4 md:hidden">
-        <Button asChild variant="outline" className="h-24 flex flex-col gap-2 bg-white shadow-sm hover:shadow-md border-primary/10">
+        <Button asChild variant="outline" className="h-24 flex flex-col gap-2 bg-card shadow-sm hover:shadow-md border-primary/10">
           <Link href={`/${lang}/dashboard/announcements`}>
             <Megaphone className="w-6 h-6 text-primary" />
             <span className="font-medium">Post Update</span>
           </Link>
         </Button>
-        <Button asChild variant="outline" className="h-24 flex flex-col gap-2 bg-white shadow-sm hover:shadow-md border-primary/10">
+        <Button asChild variant="outline" className="h-24 flex flex-col gap-2 bg-card shadow-sm hover:shadow-md border-primary/10">
           <Link href={`/${lang}/dashboard/events/new`}>
             <Calendar className="w-6 h-6 text-primary" />
             <span className="font-medium">New Event</span>

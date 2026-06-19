@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { Plus, Calendar, MapPin, Users } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import { DashboardEvent } from '@/types/dashboard'
 import { redirect } from 'next/navigation'
 
@@ -25,7 +26,7 @@ export default async function EventsPage(props: { params: Promise<{ lang: string
 
   if (!orgId) {
     return (
-      <div className="p-8 text-center text-gray-500">
+      <div className="p-8 text-center text-muted-foreground">
         You are not currently a member of any organisation.
       </div>
     )
@@ -56,50 +57,52 @@ export default async function EventsPage(props: { params: Promise<{ lang: string
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-stagger">
         {allEvents?.map((event) => (
           <Link href={`/${lang}/dashboard/events/${event.id}`} key={event.id} className="group block">
-            <div className="bg-white border rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col">
-              <div className="flex justify-between items-start mb-4">
-                <div className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${
-                  event.organisation_id === orgId ? 'bg-orange-50 text-orange-700' : 'bg-purple-50 text-purple-700'
-                }`}>
-                  {event.organisation_id === orgId ? event.event_type : 'Co-Hosted'}
-                </div>
-                {new Date(event.start_time) < new Date() && (
-                  <span className="text-gray-400 text-xs font-medium">Past</span>
-                )}
-              </div>
-              
-              <h3 className="text-xl font-bold mb-2 group-hover:text-orange-600 transition-colors">{event.title}</h3>
-              
-              <div className="space-y-2 text-sm text-gray-500 flex-1">
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  <span>{new Date(event.start_time).toLocaleDateString()}</span>
-                </div>
-                {event.location && (
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4" />
-                    <span className="truncate">{event.location}</span>
+            <Card className="h-full flex flex-col group-hover:shadow-md transition-shadow duration-200">
+              <CardContent className="p-6 flex flex-col h-full">
+                <div className="flex justify-between items-start mb-4">
+                  <div className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${
+                    event.organisation_id === orgId ? 'bg-orange-50 text-orange-700' : 'bg-purple-50 text-purple-700'
+                  }`}>
+                    {event.organisation_id === orgId ? event.event_type : 'Co-Hosted'}
                   </div>
-                )}
-              </div>
-
-              <div className="mt-6 pt-4 border-t flex justify-between items-center text-sm">
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Users className="w-4 h-4" />
-                  <span>{event.event_rsvps?.[0]?.count || 0} / {event.capacity || '∞'}</span>
+                  {new Date(event.start_time) < new Date() && (
+                    <span className="text-muted-foreground text-xs font-medium">Past</span>
+                  )}
                 </div>
-                <span className="text-blue-600 font-medium group-hover:underline">Manage</span>
-              </div>
-            </div>
+                
+                <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{event.title}</h3>
+                
+                <div className="space-y-2 text-sm text-muted-foreground flex-1">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4" />
+                    <span>{new Date(event.start_time).toLocaleDateString()}</span>
+                  </div>
+                  {event.location && (
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4" />
+                      <span className="truncate">{event.location}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-6 pt-4 border-t flex justify-between items-center text-sm">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Users className="w-4 h-4" />
+                    <span>{event.event_rsvps?.[0]?.count || 0} / {event.capacity || '∞'}</span>
+                  </div>
+                  <span className="text-primary font-medium group-hover:underline">Manage</span>
+                </div>
+              </CardContent>
+            </Card>
           </Link>
         ))}
         
         {(!allEvents || allEvents.length === 0) && (
-          <div className="col-span-full text-center py-12 bg-gray-50 border border-dashed rounded-xl">
-            <p className="text-gray-500">No events found. Create your first event to get started.</p>
+          <div className="col-span-full text-center py-12 bg-muted border border-dashed rounded-xl">
+            <p className="text-muted-foreground">No events found. Create your first event to get started.</p>
           </div>
         )}
       </div>

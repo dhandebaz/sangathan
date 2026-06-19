@@ -44,7 +44,7 @@ export function MemberFilters({ initialQuery, initialStatus }: MemberFiltersProp
     const search = current.toString()
     const queryStr = search ? `?${search}` : ''
     
-    router.push(`/${lang}/members${queryStr}`)
+    router.push(`/${lang}/dashboard/members${queryStr}`)
   }, [debouncedQuery, status, router, lang, searchParams])
 
   return (

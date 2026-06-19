@@ -72,11 +72,11 @@ export function TaskCard({ task, userId, canManage }: { task: Task, userId: stri
     'open': 'bg-blue-100 text-blue-800',
     'in_progress': 'bg-yellow-100 text-yellow-800',
     'completed': 'bg-green-100 text-green-800',
-    'archived': 'bg-gray-100 text-gray-800'
+    'archived': 'bg-muted text-muted-foreground'
   }
 
   const priorityColors = {
-    'low': 'bg-gray-100 text-gray-800',
+    'low': 'bg-muted text-muted-foreground',
     'medium': 'bg-blue-50 text-blue-700',
     'high': 'bg-red-50 text-red-700'
   }
@@ -91,8 +91,8 @@ export function TaskCard({ task, userId, canManage }: { task: Task, userId: stri
               {canManage && (
                 <Dialog open={editOpen} onOpenChange={setEditOpen}>
                   <DialogTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-6 w-6">
-                      <Edit className="h-3 w-3" />
+                    <Button variant="ghost" size="icon" className="h-9 w-9">
+                      <Edit className="h-4 w-4" />
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
@@ -136,14 +136,14 @@ export function TaskCard({ task, userId, canManage }: { task: Task, userId: stri
             </div>
           </div>
           {task.due_date && (
-            <span className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded">
+            <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">
               Due {new Date(task.due_date).toLocaleDateString()}
             </span>
           )}
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-gray-600 mb-4">{task.description}</p>
+        <p className="text-sm text-muted-foreground mb-4">{task.description}</p>
         
         {assignment && !assignment.accepted && task.status === 'open' && (
           <Button size="sm" onClick={handleAccept} disabled={loading} className="w-full">

@@ -140,7 +140,7 @@ export function DashboardTopBar({ lang, userEmail, role, orgName, orgLogoUrl }: 
             <div
               role="menu"
               aria-label="Profile menu"
-              className="absolute right-0 mt-2 w-60 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl py-2 z-50 animate-in fade-in zoom-in-95 duration-200"
+              className="absolute right-0 mt-2 w-60 overflow-hidden rounded-3xl border border-slate-200 bg-card shadow-2xl py-2 z-50 animate-in fade-in zoom-in-95 duration-200"
             >
               <div className="px-4 py-4 border-b border-slate-100 flex items-center gap-3">
                 <div className="flex items-center justify-center w-11 h-11 rounded-full bg-orange-100 text-orange-700 font-semibold shrink-0">

@@ -70,7 +70,7 @@ export function MemberTable({ members }: { members: Member[] }) {
                     size="sm"
                     disabled={isUpdating}
                     onClick={() => handleStatusToggle(member)}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
                   >
                     {member.status === 'active' ? 'Deactivate' : 'Activate'}
                   </Button>

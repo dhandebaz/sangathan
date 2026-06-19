@@ -31,8 +31,8 @@ export default async function TasksPage(props: { params: Promise<{ lang: string 
     <div className="space-y-8 max-w-6xl mx-auto py-8">
       <div className="flex justify-between items-start gap-6">
         <div>
-          <h1 className="text-4xl font-bold text-slate-900 tracking-tight">Volunteer Tasks</h1>
-          <p className="text-slate-500 mt-2">Manage and track volunteer activities and assignments.</p>
+          <h1 className="text-3xl font-bold tracking-tight">Volunteer Tasks</h1>
+          <p className="text-muted-foreground mt-1">Manage and track volunteer activities and assignments.</p>
         </div>
         {canManage && (
           <Button asChild>
@@ -44,7 +44,7 @@ export default async function TasksPage(props: { params: Promise<{ lang: string 
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-stagger">
         {tasks?.map((task) => (
           <TaskCard key={task.id} task={task} userId={user.id} canManage={canManage} />
         ))}

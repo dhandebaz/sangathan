@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { Plus, Eye, Copy, FileText } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { AccessDenied } from '@/components/dashboard/access-denied'
 import { FormStatusToggle } from '@/components/forms/form-status-toggle'
 import { DashboardForm } from '@/types/dashboard'
@@ -48,16 +49,15 @@ export default async function FormsPage(props: { params: Promise<{ lang: string 
            <h1 className="text-3xl font-bold tracking-tight">Forms</h1>
            <p className="text-gray-500 mt-1">Collect data from public or internal users.</p>
         </div>
-        <Link 
-            href={`/${lang}/dashboard/forms/new`} 
-            className="flex min-h-11 items-center gap-2 rounded-lg bg-primary px-4 py-2 font-semibold text-primary-foreground hover:bg-brand-700"
-        >
-            <Plus size={16} />
-            Create Form
-        </Link>
+        <Button asChild>
+            <Link href={`/${lang}/dashboard/forms/new`}>
+                <Plus className="mr-2 h-4 w-4" />
+                Create Form
+            </Link>
+        </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-stagger">
         {forms?.map((form) => (
           <div key={form.id} className="content-card rounded-lg flex flex-col h-full relative group">
              <div className="flex justify-between items-start mb-2">
@@ -74,14 +74,14 @@ export default async function FormsPage(props: { params: Promise<{ lang: string 
                    <FileText size={14} />
                    <span>{form.form_submissions?.[0]?.count || 0} Submissions</span>
                 </div>
-                <div className="flex gap-2">
-                   <Link href={`/${lang}/dashboard/forms/${form.id}`} className="hover:text-black" title="View Submissions">
+                 <div className="flex gap-1">
+                   <Link href={`/${lang}/dashboard/forms/${form.id}`} className="flex items-center justify-center min-h-11 min-w-11 rounded-xl hover:bg-slate-100 transition-colors" title="View Submissions">
                       <Eye size={18} />
                    </Link>
-                   <Link href={`/f/${form.id}`} target="_blank" className="hover:text-black" title="Open Public Link">
+                   <Link href={`/f/${form.id}`} target="_blank" className="flex items-center justify-center min-h-11 min-w-11 rounded-xl hover:bg-slate-100 transition-colors" title="Open Public Link">
                       <Copy size={18} />
                    </Link>
-                </div>
+                 </div>
              </div>
           </div>
         ))}

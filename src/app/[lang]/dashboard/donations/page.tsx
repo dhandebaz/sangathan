@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { LogDonationDialog } from '@/components/donations/log-donation-dialog'
 import { DonationList } from '@/components/donations/donation-list'
 import { Printer } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import { Donation } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
@@ -53,7 +55,7 @@ export default async function DonationsPage(props: PageProps) {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
            <h1 className="text-3xl font-bold tracking-tight">Donations</h1>
-           <p className="text-gray-500 mt-1">Track manual payments and contributions.</p>
+            <p className="text-muted-foreground mt-1">Track manual payments and contributions.</p>
         </div>
         <div className="flex gap-2">
             <a 
@@ -69,20 +71,26 @@ export default async function DonationsPage(props: PageProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-         <div className="content-card rounded-lg p-4 bg-orange-50 border-orange-100">
-            <div className="text-sm text-orange-800 font-medium uppercase tracking-wide">Total Collected</div>
-            <div className="text-3xl font-bold text-orange-900 mt-1">₹{totalAmount.toLocaleString()}</div>
-         </div>
-         <div className="content-card rounded-lg p-4">
-            <div className="text-sm text-gray-500 font-medium uppercase tracking-wide">Total Transactions</div>
-            <div className="text-3xl font-bold text-gray-900 mt-1">{donations?.length || 0}</div>
-         </div>
-         <div className="content-card rounded-lg p-4">
-            <div className="text-sm text-gray-500 font-medium uppercase tracking-wide">Pending Verification</div>
-            <div className="text-3xl font-bold text-gray-900 mt-1">
+         <Card className="bg-primary/5 border-primary/10">
+           <CardContent className="p-5">
+             <div className="text-sm text-primary font-medium uppercase tracking-wide">Total Collected</div>
+             <div className="text-3xl font-bold text-primary mt-1">₹{totalAmount.toLocaleString()}</div>
+           </CardContent>
+         </Card>
+         <Card>
+           <CardContent className="p-5">
+             <div className="text-sm text-muted-foreground font-medium uppercase tracking-wide">Total Transactions</div>
+             <div className="text-3xl font-bold text-foreground mt-1">{donations?.length || 0}</div>
+           </CardContent>
+         </Card>
+         <Card>
+           <CardContent className="p-5">
+             <div className="text-sm text-muted-foreground font-medium uppercase tracking-wide">Pending Verification</div>
+             <div className="text-3xl font-bold text-foreground mt-1">
                {donations?.filter(d => !d.verified_by).length || 0}
-            </div>
-         </div>
+             </div>
+           </CardContent>
+         </Card>
       </div>
 
       <div className="content-card rounded-lg p-0 overflow-hidden">

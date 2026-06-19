@@ -112,9 +112,9 @@ export function SidebarNav({ lang, isAdmin, capabilities }: SidebarNavProps) {
   }
 
   return (
-    <div className="flex-1 py-5 px-4 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+    <div className="flex-1 py-5 px-4 overflow-y-auto native-scroll-y">
       {visibleGroups.map((group) => (
-        <section key={group.id} className="mb-4 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+        <section key={group.id} className="mb-4 overflow-hidden rounded-3xl border border-slate-200 bg-card shadow-sm">
           <button
             onClick={() => toggleGroup(group.id)}
             className="flex w-full items-center justify-between px-4 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-slate-500 transition-colors hover:bg-slate-50"
@@ -123,7 +123,7 @@ export function SidebarNav({ lang, isAdmin, capabilities }: SidebarNavProps) {
             <ChevronDown className={cn("h-4 w-4 transition-transform", openGroups[group.id] ? "rotate-180" : "")} />
           </button>
 
-          <div className={cn("space-y-1 overflow-hidden transition-all duration-200", openGroups[group.id] ? "max-h-96 opacity-100" : "max-h-0 opacity-0")}>
+          <div className={cn("space-y-1 overflow-hidden transition-all duration-300", openGroups[group.id] ? "max-h-96 opacity-100" : "max-h-0 opacity-0")}>
             {group.items.map((item) => {
               const isActive = pathname === item.href || pathname?.startsWith(item.href + '/')
               return (

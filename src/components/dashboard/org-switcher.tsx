@@ -54,7 +54,7 @@ export function OrgSwitcher({ currentOrgId, organisations }: OrgSwitcherProps) {
       <button
         type="button"
         className={cn(
-          'inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50',
+          'inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-card px-3 py-1.5 text-sm font-medium text-foreground shadow-sm hover:bg-accent',
           pending && 'opacity-75 cursor-wait',
         )}
         onClick={() => setOpen((v) => !v)}
@@ -66,8 +66,8 @@ export function OrgSwitcher({ currentOrgId, organisations }: OrgSwitcherProps) {
         <ChevronDown className="h-4 w-4 text-slate-400" />
       </button>
       {open && (
-        <div className="absolute mt-1 w-56 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 z-50">
-          <ul className="max-h-60 overflow-auto py-1 text-sm text-slate-700">
+        <div className="absolute mt-1 w-56 rounded-md bg-card shadow-lg ring-1 ring-black ring-opacity-5 z-50">
+          <ul className="max-h-60 overflow-auto py-1 text-sm text-foreground">
             {organisations.map((org) => (
               <li key={org.id}>
                 <button
