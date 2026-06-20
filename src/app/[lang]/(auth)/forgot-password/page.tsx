@@ -31,39 +31,39 @@ export default function ForgotPasswordPage() {
   return (
     <div className="w-full">
       <div className="mb-8">
-        <Link href="/login" className="text-sm text-gray-500 hover:text-black flex items-center gap-1 mb-6">
+        <Link href="/login" className="text-sm text-slate-500 hover:text-slate-900 flex items-center gap-1 mb-6 transition-colors">
            <ArrowLeft size={16} /> Back to Login
         </Link>
-        <h2 className="text-2xl font-bold text-gray-900">Reset Password</h2>
-        <p className="text-gray-500 mt-2">
+        <h2 className="text-2xl font-semibold text-slate-900 tracking-tight">Reset Password</h2>
+        <p className="text-slate-500 mt-2 text-sm">
           Enter your email to receive a password reset link.
         </p>
       </div>
 
-      <form action={handleSubmit} className="space-y-5">
+      <form action={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+          <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Email Address</label>
           <div className="relative">
-             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
              <input 
                name="email" 
                type="email" 
                required 
-               className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
+               className="w-full pl-9 pr-4 py-2.5 bg-slate-50 rounded-sm border border-slate-200 focus:border-slate-400 focus:bg-white focus:ring-1 focus:ring-slate-400 outline-none transition-all text-sm"
                placeholder="name@organisation.org"
              />
           </div>
         </div>
 
         {error && (
-          <div className="p-3 rounded-lg bg-red-50 text-red-600 text-sm flex items-start gap-2">
+          <div className="p-3 bg-red-50 text-red-600 text-sm flex items-start gap-2 border border-red-100 rounded-sm">
              <ShieldAlert size={16} className="mt-0.5 shrink-0" />
              {error}
           </div>
         )}
 
         {success && (
-          <div className="p-3 rounded-lg bg-green-50 text-green-600 text-sm flex items-start gap-2">
+          <div className="p-3 bg-green-50 text-green-700 text-sm flex items-start gap-2 border border-green-100 rounded-sm">
              <div className="mt-0.5 shrink-0">✅</div>
              {success}
           </div>
@@ -71,9 +71,9 @@ export default function ForgotPasswordPage() {
 
         <button 
           disabled={loading}
-          className="flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-primary py-3 font-bold text-primary-foreground transition-colors hover:bg-brand-700 disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-sm bg-slate-900 py-2.5 font-semibold text-white transition-colors hover:bg-slate-800 disabled:opacity-50 mt-2"
         >
-          {loading && <Loader2 size={18} className="animate-spin" />}
+          {loading && <Loader2 size={16} className="animate-spin" />}
           Send Reset Link
         </button>
       </form>

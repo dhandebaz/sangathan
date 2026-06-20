@@ -66,7 +66,9 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: Megaphone, title: 'Campaign Management', desc: 'Goal-based peer-to-peer and public fundraising drives.' },
         { icon: ClipboardList, title: 'Field Forms & Surveys', desc: 'Offline-capable data collection for field workers.' },
         { icon: Network, title: 'Chapters & Subgroups', desc: 'Organise large NGOs by city chapters or wings.' },
-        { icon: Headphones, title: 'Helpdesk Support', desc: 'Centralized inbox for public and beneficiary inquiries.' }
+        { icon: Headphones, title: 'Helpdesk Support', desc: 'Centralized inbox for public and beneficiary inquiries.' },
+        { icon: Lock, title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
+        { icon: ShieldCheck, title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' }
       ]
     },
     {
@@ -89,7 +91,9 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: ClipboardList, title: 'Meeting Minutes', desc: 'Public ledger of committee proceedings and votes.' },
         { icon: Network, title: 'Clubs & Societies', desc: 'Mini-dashboards for sub-groups to manage members.' },
         { icon: Bell, title: 'Campus Notices', desc: 'Official noticeboard for urgent student updates.' },
-        { icon: Megaphone, title: 'Multi-channel Alerts', desc: 'Push notifications and SMS for rapid mobilization.' }
+        { icon: Megaphone, title: 'Multi-channel Alerts', desc: 'Push notifications and SMS for rapid mobilization.' },
+        { icon: Lock, title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
+        { icon: ShieldCheck, title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' }
       ]
     },
     {
@@ -112,7 +116,9 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: BadgeAlert, title: 'Shop Steward Roles', desc: 'Granular permissions for field representatives.' },
         { icon: ShieldCheck, title: 'Labor Law Compliance', desc: 'Automated checks against union regulations.' },
         { icon: Bell, title: 'Emergency SMS Alerts', desc: 'Urgent broadcasts for rapid member mobilization.' },
-        { icon: GraduationCap, title: 'Training & Certs', desc: 'Manage apprenticeship programs and skill workshops.' }
+        { icon: GraduationCap, title: 'Training & Certs', desc: 'Manage apprenticeship programs and skill workshops.' },
+        { icon: Lock, title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
+        { icon: ShieldCheck, title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' }
       ]
     },
     {
@@ -135,7 +141,9 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: FileText, title: 'Financial Ledgers', desc: 'Audit-ready P&L statements and transparent expenditure.' },
         { icon: Vote, title: 'Community Polls', desc: 'Vote on society upgrades and committee elections.' },
         { icon: Bell, title: 'Digital Notice Board', desc: 'Official society announcements with read receipts.' },
-        { icon: Home, title: 'Resident Directory', desc: 'Verified database of owners, tenants, and emergency contacts.' }
+        { icon: Home, title: 'Resident Directory', desc: 'Verified database of owners, tenants, and emergency contacts.' },
+        { icon: Lock, title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
+        { icon: ShieldCheck, title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' }
       ]
     }
   ]

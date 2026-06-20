@@ -1,4 +1,4 @@
-import { GitCommit, Sparkles, ShieldCheck, Zap, Server, Code, Users, Calendar, Activity, Rocket, Globe } from 'lucide-react'
+import { Sparkles, ShieldCheck, Zap, Server, Code, Users, Calendar, Activity, Rocket, Globe, LucideIcon } from 'lucide-react'
 import { Metadata } from 'next'
 import { PageHeader } from '@/components/public/page-header'
 
@@ -29,11 +29,34 @@ type ChangelogEntry = {
   descEn: string
   descHi: string
   color: 'green' | 'blue' | 'purple' | 'indigo' | 'orange' | 'emerald' | 'cyan' | 'pink' | 'rose' | 'amber' | 'slate'
-  icon: any
+  icon: LucideIcon
   features?: Feature[]
 }
 
 const changelogData: ChangelogEntry[] = [
+  {
+    version: 'v1.6',
+    titleEn: 'Authentication UI Overhaul & Social Logins',
+    titleHi: 'प्रमाणीकरण UI ओवरहाल और सोशल लॉगिन',
+    dateEn: 'June 2026',
+    dateHi: 'जून 2026',
+    descEn: 'Completely redesigned the authentication flows with a crisp, geometric aesthetic and introduced seamless sign-ins with Google and X (Twitter).',
+    descHi: 'प्रमाणीकरण प्रवाह को एक ज्यामितीय सौंदर्यशास्त्र के साथ पूरी तरह से फिर से डिज़ाइन किया गया है और Google और X (Twitter) के साथ निर्बाध साइन-इन पेश किया गया है।',
+    color: 'emerald',
+    icon: Sparkles,
+    features: [
+      {
+        nameEn: 'Geometric Design System', nameHi: 'ज्यामितीय डिजाइन सिस्टम',
+        textEn: 'Upgraded auth pages to a unified, premium geometric design system replacing outdated dark cards.',
+        textHi: 'पुराने डार्क कार्ड्स को बदलकर ऑथेंटिकेशन पेजों को एक एकीकृत, प्रीमियम ज्यामितीय डिजाइन सिस्टम में अपग्रेड किया।'
+      },
+      {
+        nameEn: 'Google & X OAuth', nameHi: 'Google और X OAuth',
+        textEn: 'One-click login and signup using your existing Google or X accounts for frictionless onboarding.',
+        textHi: 'बिना किसी परेशानी के Google या X खातों का उपयोग करके एक-क्लिक लॉगिन और साइनअप।'
+      }
+    ]
+  },
   {
     version: 'v1.5.2',
     titleEn: 'Pricing & Features Showcase',

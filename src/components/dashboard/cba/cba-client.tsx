@@ -68,7 +68,7 @@ export function CBAClient({ orgId }: CBAClientProps) {
       <Card>
         <CardHeader>
           <CardTitle>Document Repository</CardTitle>
-          <CardDescription>Your organization's registered contracts.</CardDescription>
+          <CardDescription>Your organization&apos;s registered contracts.</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
