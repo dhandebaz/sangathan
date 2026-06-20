@@ -100,7 +100,7 @@ export async function updateSession(request: NextRequest) {
       user = data.user
     }
   } catch {
-    // Auth error — proceed as unauthenticated without leaking details
+    // Auth error - proceed as unauthenticated without leaking details
   }
 
   // Protect System Admin Routes

@@ -37,7 +37,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
   return (
     <div className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 sm:pt-6 w-full pointer-events-none">
       <nav 
-        className={`pointer-events-auto w-full max-w-6xl transition-all duration-300 rounded-2xl sm:rounded-full border ${
+        className={`pointer-events-auto w-auto max-w-6xl transition-all duration-300 rounded-2xl sm:rounded-full border ${
           scrolled 
             ? 'bg-white/80  backdrop-blur-lg border-slate-200/50  shadow-[0_8px_30px_rgb(0,0,0,0.06)]' 
             : 'bg-white/50  backdrop-blur-md border-transparent shadow-none'
@@ -45,7 +45,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
         aria-label="Main navigation"
       >
         <div className="px-4 sm:px-6">
-            <div className="flex items-center justify-between h-14 sm:h-16">
+            <div className="flex items-center justify-between gap-4 sm:gap-8 h-14 sm:h-16">
              {/* Logo */}
              <div className="flex-shrink-0 flex items-center">
               <Link 

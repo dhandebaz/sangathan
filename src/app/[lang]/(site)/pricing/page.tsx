@@ -1,7 +1,6 @@
 import { Check, X, Info, Zap, ShieldCheck, Sparkles, Building2 } from 'lucide-react'
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { PageHeader } from '@/components/public/page-header'
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
@@ -20,13 +19,7 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
 
   return (
     <div className="bg-white min-h-screen">
-      <PageHeader 
-        title={isHindi ? 'सरल, पारदर्शी मूल्य निर्धारण' : 'Simple, transparent pricing'}
-        description={isHindi 
-          ? 'संगठन जमीनी स्तर के समूहों के लिए एक खुला स्रोत बुनियादी ढांचा है। हमने इसे सुलभ रखने के लिए मूल्य निर्धारण तैयार किया है।'
-          : 'Sangathan is an open-source infrastructure for grassroots collectives. We built our pricing to ensure it remains accessible to everyone.'}
-        badge={isHindi ? 'मूल्य निर्धारण' : 'Pricing'}
-      />
+
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         
@@ -74,12 +67,6 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
           <div className="relative rounded-3xl border-2 border-indigo-500 bg-white p-8 shadow-xl flex flex-col overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
             
-            <div className="absolute top-0 right-8 transform -translate-y-1/2">
-              <span className="bg-indigo-500 text-white text-xs font-bold px-3 py-1 uppercase tracking-wider rounded-full shadow-sm">
-                {isHindi ? 'संस्थानों के लिए' : 'For Institutions'}
-              </span>
-            </div>
-
             <div className="mb-6 relative z-10">
               <h3 className="text-2xl font-bold text-slate-900 mb-2 flex items-center gap-2">
                 {isHindi ? 'संस्थान' : 'Institution'} <Sparkles className="text-indigo-500" size={20} />
@@ -106,7 +93,8 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
               </div>
               {[
                 isHindi ? 'असीमित उपयोगकर्ता और सदस्य' : 'Unlimited users (Members + Volunteers)',
-                isHindi ? 'असीमित संगठन' : 'Unlimited Organisations',
+                isHindi ? '1 संगठन' : '1 Organisation',
+                isHindi ? 'कई संगठनों का प्रबंधन (व्यवस्थापक के रूप में)' : 'Manage multiple orgs (Admin access)',
                 isHindi ? 'BYOK (Bring Your Own Key) AI सुविधाएँ' : 'BYOK (Bring Your Own Key) AI Features',
                 isHindi ? 'उन्नत विश्लेषिकी और रिपोर्ट' : 'Advanced analytics & export',
                 isHindi ? 'प्राथमिकता समर्थन' : 'Priority email support',
@@ -134,14 +122,11 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
               </div>
               
               <div className="flex-grow text-center sm:text-left">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-slate-600 text-xs font-bold border border-slate-200 mb-3 uppercase tracking-wider">
-                  {isHindi ? 'ऐड-ऑन' : 'Optional Add-on'}
-                </div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-2">{isHindi ? 'व्हाइट-लेबल' : 'White-label Branding'}</h3>
                 <p className="text-slate-600 mb-4 max-w-lg">
                   {isHindi 
-                    ? 'संगठन ब्रांडिंग हटाएं। अपना कस्टम डोमेन और ईमेल सर्वर कनेक्ट करें ताकि यह पूरी तरह से आपका अपना प्लेटफॉर्म लगे।' 
-                    : 'Remove all "Powered by Sangathan" branding. Connect your custom domain and custom email sender so the platform looks entirely like your own.'}
+                    ? 'सभी "Powered by Sangathan" ब्रांडिंग हटाएं।' 
+                    : 'Remove all "Powered by Sangathan" branding across the platform.'}
                 </p>
                 <div className="flex items-center justify-center sm:justify-start gap-2 text-slate-900 font-semibold">
                   <span className="text-3xl font-extrabold">₹10,000</span>

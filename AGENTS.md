@@ -1,4 +1,4 @@
-# sangathan — Project Memory
+# sangathan - Project Memory
 
 > Auto-synced | 276 observations
 
@@ -24,14 +24,15 @@ Example:
 
 > Always read `.cursor/active-context.md` for exact instructions on the specific file you are currently editing. It updates dynamically.
 
-## 🔴 STOP — READ THESE FIRST
+## 🔴 STOP - READ THESE FIRST
 
-- **Update Changelog Automatically** — Whenever you write code, fix bugs, or update the app, you MUST automatically update the `src/app/[lang]/(site)/changelog/page.tsx` file with the relevant changes without asking. Keep the customer-facing descriptions professional (avoid technical jargon like "fixed ts errors" unless specifically requested).
-- **Don't mix Tailwind with inline styles** — Don't mix Tailwind with inline styles
-- **Don't import server-only code in client components** — Don't import server-only code in client components
-- **Environment variables: NEXT_PUBLIC_ prefix for client-side only** — Environment variables: NEXT_PUBLIC_ prefix for client-side only
-- **Don't use useEffect for data fetching — use server actions or loader** — Don't use useEffect for data fetching — use server actions or loader
-- **Clean up effects — return cleanup function from useEffect** — Clean up effects — return cleanup function from useEffect
+- **Update Changelog Automatically** - Whenever you write code, fix bugs, or update the app, you MUST automatically update the `src/app/[lang]/(site)/changelog/page.tsx` file with the relevant changes without asking. Keep the customer-facing descriptions professional (avoid technical jargon like "fixed ts errors" unless specifically requested).
+- **Update Features Page Automatically** - Whenever a new feature is added to the app, you MUST automatically update the `src/app/[lang]/(site)/features/page.tsx` file to reflect the new feature across the relevant organisation types.
+- **Don't mix Tailwind with inline styles** - Don't mix Tailwind with inline styles
+- **Don't import server-only code in client components** - Don't import server-only code in client components
+- **Environment variables: NEXT_PUBLIC_ prefix for client-side only** - Environment variables: NEXT_PUBLIC_ prefix for client-side only
+- **Don't use useEffect for data fetching - use server actions or loader** - Don't use useEffect for data fetching - use server actions or loader
+- **Clean up effects - return cleanup function from useEffect** - Clean up effects - return cleanup function from useEffect
 
 
 ## 📐 Conventions
@@ -42,17 +43,17 @@ Example:
 - Use middleware.ts for authentication guards, not client-side checks
 - Use next/image (not img tag) for automatic optimization
 - Handle loading.tsx and error.tsx for every async route
-- Use Server Components by default — add "use client" only when needed
+- Use Server Components by default - add "use client" only when needed
 - Use Suspense and Error Boundaries for async operations
 
 ## ⚡ Available Tools (ON-DEMAND only)
-- `sys_core_02(title, content, category)` — Save a note + auto-detect conflicts
-- `sys_core_03(items[])` — Save multiple notes in 1 call
-- `sys_core_01(text)` — Search memory for architecture, past fixes, decisions
-- `sys_core_05(text)` — Full-text search for details
-- `sys_core_16()` — Check compiler errors after edits
+- `sys_core_02(title, content, category)` - Save a note + auto-detect conflicts
+- `sys_core_03(items[])` - Save multiple notes in 1 call
+- `sys_core_01(text)` - Search memory for architecture, past fixes, decisions
+- `sys_core_05(text)` - Full-text search for details
+- `sys_core_16()` - Check compiler errors after edits
 
-> ℹ️ DO NOT call sys_core_14() or sys_core_08() at startup — context above IS your context.
+> ℹ️ DO NOT call sys_core_14() or sys_core_08() at startup - context above IS your context.
 
 ---
 *Auto-synced | 2026-06-15*

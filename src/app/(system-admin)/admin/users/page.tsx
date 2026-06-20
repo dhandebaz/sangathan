@@ -57,7 +57,7 @@ export default async function AdminUsersPage() {
               {users.map((user) => (
                 <tr key={user.id} className="hover:bg-gray-50">
                   <td className="py-3 px-6 font-mono text-xs">{user.email}</td>
-                  <td className="py-3 px-6">{user.full_name || '—'}</td>
+                  <td className="py-3 px-6">{user.full_name || '-'}</td>
                   <td className="py-3 px-6">
                     {user.is_platform_admin ? (
                       <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">

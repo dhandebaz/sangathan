@@ -38,7 +38,7 @@ export function checkServiceAccess(request: Request): { allowed: boolean; reason
     if (ip === '::1' || ip === '127.0.0.1' || ip === 'localhost') {
       return { allowed: true }
     }
-    return { allowed: false, reason: 'Service access not configured — ALLOWED_SERVICE_IPS is empty' }
+    return { allowed: false, reason: 'Service access not configured - ALLOWED_SERVICE_IPS is empty' }
   }
 
   if (ip === 'unknown') {

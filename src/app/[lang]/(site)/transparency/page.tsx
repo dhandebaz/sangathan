@@ -116,6 +116,22 @@ export default async function TransparencyPage({ params }: { params: Promise<{ l
                     <strong className="text-slate-900">{isHindi ? 'डिवाइस फ़िंगरप्रिंट' : 'Device Fingerprints'}</strong>
                     <span className="text-slate-600">{isHindi ? 'हम पूरे वेब पर आपको ट्रैक नहीं करते हैं।' : 'We do not build a profile of you across the internet.'}</span>
                   </li>
+                  <li className="flex flex-col">
+                    <strong className="text-slate-900">{isHindi ? 'बैकग्राउंड लोकेशन डेटा' : 'Background Location Tracking'}</strong>
+                    <span className="text-slate-600">{isHindi ? 'हम आपकी जीपीएस (GPS) स्थिति को ट्रैक या स्टोर नहीं करते हैं।' : 'We never track or store your GPS coordinates or background movements.'}</span>
+                  </li>
+                  <li className="flex flex-col">
+                    <strong className="text-slate-900">{isHindi ? 'निजी संदेश सामग्री' : 'Private Message Content'}</strong>
+                    <span className="text-slate-600">{isHindi ? 'हम आपके इनबॉक्स को विज्ञापन या AI प्रशिक्षण के लिए नहीं पढ़ते हैं।' : 'We do not read your communications for ad-profiling or AI training.'}</span>
+                  </li>
+                  <li className="flex flex-col">
+                    <strong className="text-slate-900">{isHindi ? 'कच्चे वित्तीय विवरण' : 'Raw Financial Details'}</strong>
+                    <span className="text-slate-600">{isHindi ? 'हम कभी भी आपके कार्ड या बैंक क्रेडेंशियल को स्टोर नहीं करते हैं।' : 'We use secure gateways and never store your card numbers or bank credentials.'}</span>
+                  </li>
+                  <li className="flex flex-col">
+                    <strong className="text-slate-900">{isHindi ? 'डेटा ब्रोकर की जानकारी' : 'Third-Party Broker Data'}</strong>
+                    <span className="text-slate-600">{isHindi ? 'हम डेटा दलालों से आपकी जानकारी नहीं खरीदते हैं।' : 'We never purchase shadow profiles of you from data brokers.'}</span>
+                  </li>
                </ul>
             </div>
           </div>
@@ -167,8 +183,8 @@ export default async function TransparencyPage({ params }: { params: Promise<{ l
               <h2 className="text-2xl font-bold text-slate-900 mb-3">{isHindi ? 'समर्थक मॉडल' : 'The Supporter Model'}</h2>
               <p className="text-lg text-slate-700 leading-relaxed">
                 {isHindi
-                  ? 'संगठन मुफ़्त है क्योंकि हम "इंस्टीट्यूशन" योजना का भुगतान करने वाले संगठनों के समुदाय द्वारा समर्थित हैं। यह मॉडल हमारे प्रोत्साहनों को आपके साथ संरेखित करता है—रोशनी चालू रखने के लिए हमें आपका डेटा बेचने की आवश्यकता नहीं है। हम विज्ञापनदाताओं के प्रति नहीं, अपने उपयोगकर्ताओं के प्रति जवाबदेह हैं।'
-                  : 'Sangathan is free for grassroots collectives because we are supported by larger organisations paying for the "Institution" plan. This aligns our incentives with yours—we do not need to sell your data to keep the lights on. We answer to our users, not to advertisers.'}
+                  ? 'संगठन मुफ़्त है क्योंकि हम "इंस्टीट्यूशन" योजना का भुगतान करने वाले संगठनों के समुदाय द्वारा समर्थित हैं। यह मॉडल हमारे प्रोत्साहनों को आपके साथ संरेखित करता है-रोशनी चालू रखने के लिए हमें आपका डेटा बेचने की आवश्यकता नहीं है। हम विज्ञापनदाताओं के प्रति नहीं, अपने उपयोगकर्ताओं के प्रति जवाबदेह हैं।'
+                  : 'Sangathan is free for grassroots collectives because we are supported by larger organisations paying for the "Institution" plan. This aligns our incentives with yours - we do not need to sell your data to keep the lights on. We answer to our users, not to advertisers.'}
               </p>
             </div>
           </div>

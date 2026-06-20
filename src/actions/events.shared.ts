@@ -11,7 +11,7 @@ export const EventSchema = z.object({
   capacity: z.number().optional(),
 })
 
-// Note: organisation_id is NOT included — it comes from auth context
+// Note: organisation_id is NOT included - it comes from auth context
 export const CreateEventSchema = EventSchema.extend({
   collaborating_org_ids: z.array(z.string().uuid()).optional(),
 })

@@ -13,11 +13,22 @@ import {
   Calendar,
   Lock,
   ArrowRight,
-  ShieldCheck
+  ShieldCheck,
+  ClipboardList,
+  CheckSquare,
+  Network,
+  Headphones,
+  BadgeAlert,
+  FileText,
+  Bell,
+  Wallet,
+  LineChart,
+  Database,
+  Ticket
 } from 'lucide-react'
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { PageHeader } from '@/components/public/page-header'
+
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
@@ -44,10 +55,18 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'अपने स्वयंसेवकों को प्रबंधित करें, पारदर्शी रूप से धन जुटाएं, और अपने दान दाताओं के साथ विश्वास बनाएं।'
         : 'Manage your volunteer base, raise funds transparently, and build unshakeable trust with your donors.',
       features: [
-        { icon: Users, title: 'Volunteer Registry', desc: 'Secure database of volunteers with skills tracking.' },
-        { icon: Receipt, title: 'Donation Ledger', desc: 'Transparent bookkeeping with automated receipts.' },
-        { icon: Megaphone, title: 'Public Campaigns', desc: 'Launch and track awareness drives and campaigns.' },
-        { icon: ShieldCheck, title: 'Transparency Reports', desc: 'Auto-generate reports for compliance.' }
+        { icon: Database, title: 'Donor CRM Database', desc: 'Centralized profiles, giving history, and engagement tracking.' },
+        { icon: Wallet, title: 'Donation Ledger', desc: 'Process one-time, recurring, and offline contributions.' },
+        { icon: Receipt, title: 'Tax Receipts Automation', desc: 'Auto-generate 80G/501c3 compliant tax receipts for donors.' },
+        { icon: Briefcase, title: 'Grant Tracking', desc: 'Manage grant applications and monitor fund utilization.' },
+        { icon: ShieldCheck, title: 'Audit-Ready Ledgers', desc: 'Automated cash books and government compliance reporting.' },
+        { icon: Users, title: 'Volunteer Registry', desc: 'Onboard volunteers, track skills, and log service hours.' },
+        { icon: CheckSquare, title: 'Task & Workflow', desc: 'Assign field tasks and track project milestones.' },
+        { icon: LineChart, title: 'Impact Analytics', desc: 'Dashboards measuring outcomes and ROI for funders.' },
+        { icon: Megaphone, title: 'Campaign Management', desc: 'Goal-based peer-to-peer and public fundraising drives.' },
+        { icon: ClipboardList, title: 'Field Forms & Surveys', desc: 'Offline-capable data collection for field workers.' },
+        { icon: Network, title: 'Chapters & Subgroups', desc: 'Organise large NGOs by city chapters or wings.' },
+        { icon: Headphones, title: 'Helpdesk Support', desc: 'Centralized inbox for public and beneficiary inquiries.' }
       ]
     },
     {
@@ -59,10 +78,18 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'छात्रों की आवाज़ को संगठित करें। सुरक्षित चुनाव कराएं और कैंपस की समस्याओं को ट्रैक करें।'
         : 'Organise the student voice. Conduct secure elections, track campus grievances, and manage events.',
       features: [
-        { icon: Vote, title: 'Secure Elections', desc: 'Cryptographically verifiable voting for representatives.' },
-        { icon: AlertTriangle, title: 'Grievance Redressal', desc: 'Track and resolve student complaints systematically.' },
-        { icon: Calendar, title: 'Event Management', desc: 'RSVPs and attendance tracking for campus events.' },
-        { icon: Lock, title: 'Digital IDs', desc: 'Generate verifiable digital student union ID cards.' }
+        { icon: Database, title: 'Central Student DB', desc: 'A verified database syncing with university enrollment.' },
+        { icon: Lock, title: 'Digital ID Cards', desc: 'Cryptographically secure digital IDs with QR access.' },
+        { icon: Users, title: 'Role-Based Governance', desc: 'Tiered access for executives, presidents, and students.' },
+        { icon: Vote, title: 'Secure Online Voting', desc: 'End-to-end verifiable, anonymous elections.' },
+        { icon: AlertTriangle, title: 'Grievance Redressal', desc: 'Ticketing system for academic and hostel complaints.' },
+        { icon: Ticket, title: 'Event Ticketing & RSVPs', desc: 'Manage campus events, QR check-ins, and waitlists.' },
+        { icon: Wallet, title: 'Club Sub-funding', desc: 'Allow societies to request and track micro-budgets.' },
+        { icon: FileText, title: 'Proposals & Bills', desc: 'Draft, debate, and pass union resolutions democratically.' },
+        { icon: ClipboardList, title: 'Meeting Minutes', desc: 'Public ledger of committee proceedings and votes.' },
+        { icon: Network, title: 'Clubs & Societies', desc: 'Mini-dashboards for sub-groups to manage members.' },
+        { icon: Bell, title: 'Campus Notices', desc: 'Official noticeboard for urgent student updates.' },
+        { icon: Megaphone, title: 'Multi-channel Alerts', desc: 'Push notifications and SMS for rapid mobilization.' }
       ]
     },
     {
@@ -74,10 +101,18 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'मज़दूरों के अधिकारों की रक्षा करें। सामूहिक सौदेबाजी (CBA) और हड़तालों का समन्वय करें।'
         : 'Protect worker rights with power. Coordinate collective bargaining, track dues, and organise actions.',
       features: [
-        { icon: Briefcase, title: 'CBA Tracking', desc: 'Manage Collective Bargaining Agreements and clauses.' },
-        { icon: Scale, title: 'Legal & Disputes', desc: 'Log workplace disputes and legal support requests.' },
-        { icon: Megaphone, title: 'Action Coordination', desc: 'Organise strikes, protests, and mass communications.' },
-        { icon: Receipt, title: 'Dues Collection', desc: 'Automated tracking of union membership dues.' }
+        { icon: Users, title: 'Member Database', desc: 'Track employment history, standing, and certifications.' },
+        { icon: Wallet, title: 'Automated Dues Collection', desc: 'Manage percentage or flat dues, with delinquency alerts.' },
+        { icon: Scale, title: 'Grievance Case Mgmt', desc: 'Track workplace disputes through arbitration stages.' },
+        { icon: Briefcase, title: 'CBA Contract Tracking', desc: 'Central repository for redlining and negotiation prep.' },
+        { icon: Megaphone, title: 'Strike Coordination', desc: 'Workplace mapping and picket line organization.' },
+        { icon: Vote, title: 'Secure Polling', desc: 'Conduct strike ballots and leadership elections.' },
+        { icon: HardHat, title: 'Worker Dispatch System', desc: 'Match member skills to employer job requirements.' },
+        { icon: Building2, title: 'Employer Management', desc: 'Monitor contract compliance across signatory companies.' },
+        { icon: BadgeAlert, title: 'Shop Steward Roles', desc: 'Granular permissions for field representatives.' },
+        { icon: ShieldCheck, title: 'Labor Law Compliance', desc: 'Automated checks against union regulations.' },
+        { icon: Bell, title: 'Emergency SMS Alerts', desc: 'Urgent broadcasts for rapid member mobilization.' },
+        { icon: GraduationCap, title: 'Training & Certs', desc: 'Manage apprenticeship programs and skill workshops.' }
       ]
     },
     {
@@ -89,10 +124,18 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'अपने पड़ोस को बेहतर बनाएं। रखरखाव, आगंतुक और सामुदायिक मतदान प्रबंधित करें।'
         : 'Modernise your neighbourhood. Manage maintenance, visitors, and democratic community polling.',
       features: [
-        { icon: Receipt, title: 'Maintenance Dues', desc: 'Automate flat-wise maintenance billing and collection.' },
-        { icon: Users, title: 'Visitor Log', desc: 'Secure entry tracking for guests and staff.' },
-        { icon: Vote, title: 'Community Polls', desc: 'Quick polls for neighborhood decisions and upgrades.' },
-        { icon: Calendar, title: 'Facility Booking', desc: 'Manage bookings for clubhouses and common areas.' }
+        { icon: Receipt, title: 'Maintenance Billing', desc: 'Automated invoices based on flat size and late fees.' },
+        { icon: Wallet, title: 'Online Payment Gateway', desc: 'Collect dues via UPI/Cards with auto-reconciliation.' },
+        { icon: Users, title: 'Digital Visitor Log', desc: 'Gatekeeper app with photo capture and timestamps.' },
+        { icon: Lock, title: 'Pre-approved Entry', desc: 'Residents approve guests or deliveries via the app.' },
+        { icon: CheckSquare, title: 'Staff Attendance', desc: 'Biometric/geo-enabled tracking for domestic help.' },
+        { icon: Headphones, title: 'Helpdesk Ticketing', desc: 'System for plumbing or electrical complaints.' },
+        { icon: Calendar, title: 'Facility Booking', desc: 'Reserve clubhouses, gyms, or sports courts easily.' },
+        { icon: Briefcase, title: 'Vendor Management', desc: 'Track society assets and preventive maintenance.' },
+        { icon: FileText, title: 'Financial Ledgers', desc: 'Audit-ready P&L statements and transparent expenditure.' },
+        { icon: Vote, title: 'Community Polls', desc: 'Vote on society upgrades and committee elections.' },
+        { icon: Bell, title: 'Digital Notice Board', desc: 'Official society announcements with read receipts.' },
+        { icon: Home, title: 'Resident Directory', desc: 'Verified database of owners, tenants, and emergency contacts.' }
       ]
     }
   ]
@@ -106,13 +149,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
 
   return (
     <div className="bg-white min-h-screen">
-      <PageHeader 
-        title={isHindi ? 'हर प्रकार के समूह के लिए' : 'Built for every collective'}
-        description={isHindi 
-          ? 'संगठन एक आकार-फिट-सभी उपकरण नहीं है। यह विशेष रूप से आपकी संरचना के अनुसार ढल जाता है।'
-          : 'Sangathan is not a one-size-fits-all tool. It intelligently adapts to the specific operational model of your organisation.'}
-        badge={isHindi ? 'विशेषताएं' : 'Platform Features'}
-      />
+
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         

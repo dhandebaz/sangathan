@@ -98,7 +98,7 @@ export default async function ModerationDashboardPage() {
                     </td>
                     <td className="py-3 px-4 text-xs font-mono uppercase">{action.action_type}</td>
                     <td className="py-3 px-4 text-xs">
-                      {action.severity || '—'}
+                      {action.severity || '-'}
                     </td>
                     <td className="py-3 px-4 text-xs text-gray-700 max-w-md truncate" title={action.reason}>
                       {action.reason}

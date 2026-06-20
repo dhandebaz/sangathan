@@ -77,7 +77,7 @@ export default async function GovernancePage({ params }: { params: Promise<{ lan
               <p>
                 {isHindi
                   ? 'हम प्रवर्तन के लिए एक स्तरीय दृष्टिकोण अपनाते हैं। मामूली उल्लंघनों के मामलों में, हम चेतावनी जारी कर सकते हैं। गंभीर उल्लंघनों के लिए- जैसे वित्तीय धोखाधड़ी, बाल शोषण, या आतंकवाद- हम बिना किसी पूर्व सूचना के खातों को तुरंत निलंबित या समाप्त करने का अधिकार सुरक्षित रखते हैं।'
-                  : 'We take a tiered approach to enforcement. In cases of minor violations, we may issue warnings. For serious violations—such as financial fraud, child exploitation, or terrorism—we reserve the right to suspend or terminate accounts immediately without prior notice.'}
+                  : 'We take a tiered approach to enforcement. In cases of minor violations, we may issue warnings. For serious violations - such as financial fraud, child exploitation, or terrorism-we reserve the right to suspend or terminate accounts immediately without prior notice.'}
               </p>
               <p>
                 {isHindi

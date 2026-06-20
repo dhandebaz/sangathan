@@ -27,7 +27,7 @@ export default function VisionPage() {
               <div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Modular Governance</h3>
                 <p className="text-gray-600">
-                  We plan to introduce a plugin system where organisations can enable specialized modules—such as election management, volunteer scheduling, or grant reporting—tailored to their specific needs.
+                  We plan to introduce a plugin system where organisations can enable specialized modules - such as election management, volunteer scheduling, or grant reporting - tailored to their specific needs.
                 </p>
               </div>
             </div>

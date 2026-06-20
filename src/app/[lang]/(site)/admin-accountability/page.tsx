@@ -37,7 +37,7 @@ export default function AdminAccountabilityPage() {
              <div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Immutable Audit Logs</h3>
                 <p className="text-gray-700 mb-2">
-                   Every critical action taken by an Admin—adding a member, deleting a record, changing a setting—is permanently recorded in the Audit Log.
+                   Every critical action taken by an Admin - adding a member, deleting a record, changing a setting - is permanently recorded in the Audit Log.
                 </p>
                 <p className="text-sm text-gray-600">
                    <strong>Why?</strong> To protect the organisation from internal bad actors. If data goes missing or is altered, the organisation can trace exactly who did it and when.

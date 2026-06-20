@@ -33,7 +33,7 @@ export default async function FAQPage({ params }: { params: Promise<{ lang: stri
            <AccordionContent className="text-gray-600 leading-relaxed">
               {isHindi
                 ? 'हाँ। मुख्य बुनियादी ढांचा- सदस्यों, फॉर्म, बैठकों का प्रबंधन और दान लॉगिंग- सभी संगठनों के लिए मुफ़्त है। हम प्रति उपयोगकर्ता शुल्क नहीं लेते हैं। हम उन संगठनों के स्वैच्छिक दान के माध्यम से प्लेटफ़ॉर्म को बनाए रखते हैं जो बुनियादी ढांचे की लागत का समर्थन कर सकते हैं।'
-                : 'Yes. The core infrastructure—managing members, forms, meetings, and logging donations—is completely free for all organisations. We do not charge per user. We sustain the platform entirely through voluntary donations from organisations that wish to support our infrastructure costs.'}
+                : 'Yes. The core infrastructure - managing members, forms, meetings, and logging donations - is completely free for all organisations. We do not charge per user. We sustain the platform entirely through voluntary donations from organisations that wish to support our infrastructure costs.'}
            </AccordionContent>
         </AccordionItem>
 
