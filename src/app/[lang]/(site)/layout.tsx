@@ -41,14 +41,14 @@ export default async function SiteLayout({
   const { data: { user } } = await supabase.auth.getUser()
   
   return (
-    <div className="relative flex min-h-screen flex-col bg-white dark:bg-[#0A0A0A] font-sans text-slate-900 dark:text-slate-50 selection:bg-indigo-200 selection:text-indigo-900 dark:selection:bg-indigo-900 dark:selection:text-indigo-100">
+    <div className="relative flex min-h-screen flex-col bg-white font-sans text-slate-900 selection:bg-indigo-200 selection:text-indigo-900">
       
       {/* Premium Global Background */}
       <div className="pointer-events-none fixed inset-0 flex justify-center -z-10">
         {/* Subtle mesh gradient top */}
-        <div className="absolute top-0 w-[1000px] max-w-full h-[600px] bg-gradient-to-b from-indigo-50/50 via-white to-white dark:from-indigo-950/20 dark:via-[#0A0A0A] dark:to-[#0A0A0A] rounded-full blur-3xl opacity-60"></div>
+        <div className="absolute top-0 w-[1000px] max-w-full h-[600px] bg-gradient-to-b from-indigo-50/50 via-white to-white rounded-full blur-3xl opacity-60"></div>
         {/* Subtle dot pattern */}
-        <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/dzvy8unqg/image/upload/v1724213160/noise_uvwxxa.webp')] opacity-[0.03] dark:opacity-[0.05] mix-blend-overlay"></div>
+        <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/dzvy8unqg/image/upload/v1724213160/noise_uvwxxa.webp')] opacity-[0.03] mix-blend-overlay"></div>
       </div>
 
       <Navbar lang={lang} isAuthenticated={Boolean(user)} />

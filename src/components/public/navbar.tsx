@@ -40,8 +40,8 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
       <nav 
         className={`pointer-events-auto w-full max-w-6xl transition-all duration-300 rounded-2xl sm:rounded-full border ${
           scrolled 
-            ? 'bg-white/80 dark:bg-black/80 backdrop-blur-lg border-slate-200/50 dark:border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.06)]' 
-            : 'bg-white/50 dark:bg-black/50 backdrop-blur-md border-transparent shadow-none'
+            ? 'bg-white/80  backdrop-blur-lg border-slate-200/50  shadow-[0_8px_30px_rgb(0,0,0,0.06)]' 
+            : 'bg-white/50  backdrop-blur-md border-transparent shadow-none'
         }`}
         aria-label="Main navigation"
       >
@@ -54,10 +54,10 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                 className="flex items-center gap-2 group"
                 aria-label="Sangathan Home"
               >
-                <div className="bg-slate-900 dark:bg-white rounded-lg p-1.5 transition-transform group-hover:scale-105">
-                  <Heart className="w-4 h-4 text-white dark:text-black fill-current" />
+                <div className="bg-slate-900  rounded-lg p-1.5 transition-transform group-hover:scale-105">
+                  <Heart className="w-4 h-4 text-white  fill-current" />
                 </div>
-                <span className="font-extrabold text-lg tracking-tight text-slate-900 dark:text-white">
+                <span className="font-extrabold text-lg tracking-tight text-slate-900 ">
                   Sangathan
                 </span>
               </Link>
@@ -71,16 +71,16 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                     <Link 
                       key={link.href}
                       href={link.href} 
-                      className={`relative px-4 py-2 text-sm font-semibold transition-all duration-200 rounded-full hover:bg-slate-100/50 dark:hover:bg-white/5 ${
+                      className={`relative px-4 py-2 text-sm font-semibold transition-all duration-200 rounded-full hover:bg-slate-100/50  ${
                         isActive 
-                          ? 'text-slate-900 dark:text-white'
-                          : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                          ? 'text-slate-900 '
+                          : 'text-slate-500  hover:text-slate-900 '
                       }`}
                       prefetch={true}
                     >
                       {link.label}
                       {isActive && (
-                        <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-slate-900 dark:bg-white rounded-full" />
+                        <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-slate-900  rounded-full" />
                       )}
                     </Link>
                   )
@@ -89,16 +89,16 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
 
              {/* Right side actions */}
              <div className="hidden md:flex items-center gap-3">
-                <div className="flex items-center bg-slate-100/50 dark:bg-white/5 rounded-full p-1 border border-slate-200/50 dark:border-white/5">
+                <div className="flex items-center bg-slate-100/50  rounded-full p-1 border border-slate-200/50 ">
                    <Link 
                      href={getPathForLang('en')} 
-                     className={`px-3 py-1 rounded-full text-xs font-bold transition-colors ${lang === 'en' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'}`}
+                     className={`px-3 py-1 rounded-full text-xs font-bold transition-colors ${lang === 'en' ? 'bg-white  text-slate-900  shadow-sm' : 'text-slate-500 hover:text-slate-900 '}`}
                    >
                      EN
                    </Link>
                    <Link 
                      href={getPathForLang('hi')} 
-                     className={`px-3 py-1 rounded-full text-xs font-bold transition-colors ${lang === 'hi' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'}`}
+                     className={`px-3 py-1 rounded-full text-xs font-bold transition-colors ${lang === 'hi' ? 'bg-white  text-slate-900  shadow-sm' : 'text-slate-500 hover:text-slate-900 '}`}
                    >
                      HI
                    </Link>
@@ -107,7 +107,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                 {isAuthenticated ? (
                    <Link 
                       href={`/${lang}/dashboard`}
-                      className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-bold text-slate-900 dark:text-white transition-all hover:scale-105 hover:shadow-sm"
+                      className="inline-flex items-center gap-2 rounded-full border border-slate-200  bg-white  px-4 py-2 text-sm font-bold text-slate-900  transition-all hover:scale-105 hover:shadow-sm"
                     prefetch={true}
                    >
                       <LayoutDashboard size={16} />
@@ -117,14 +117,14 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                     <div className="flex items-center gap-2">
                       <Link 
                          href={`/${lang}/login`}
-                         className="inline-flex items-center px-4 py-2 text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors hover:text-slate-900 dark:hover:text-white"
+                         className="inline-flex items-center px-4 py-2 text-sm font-bold text-slate-600  transition-colors hover:text-slate-900 "
                          prefetch={true}
                       >
                          {isHindi ? 'लॉग इन' : 'Login'}
                       </Link>
                       <Link 
                          href={`/${lang}/login?tab=signup`}
-                         className="group inline-flex items-center gap-1 rounded-full bg-slate-900 dark:bg-white px-5 py-2 text-sm font-bold text-white dark:text-slate-900 transition-all hover:bg-slate-800 dark:hover:bg-slate-100 hover:scale-105 shadow-[0_0_20px_rgb(0,0,0,0.1)]"
+                         className="group inline-flex items-center gap-1 rounded-full bg-slate-900  px-5 py-2 text-sm font-bold text-white  transition-all hover:bg-slate-800  hover:scale-105 shadow-[0_0_20px_rgb(0,0,0,0.1)]"
                       >
                          {isHindi ? 'साइन अप' : 'Get Started'}
                          <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
@@ -137,7 +137,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
              <div className="flex items-center md:hidden">
                 <button
                   onClick={() => setIsOpen(!isOpen)}
-                  className="inline-flex p-2 items-center justify-center rounded-full text-slate-900 dark:text-white bg-slate-100/50 dark:bg-white/10 hover:bg-slate-200/50"
+                  className="inline-flex p-2 items-center justify-center rounded-full text-slate-900  bg-slate-100/50  hover:bg-slate-200/50"
                   aria-expanded={isOpen}
                 >
                   {isOpen ? <X size={20} /> : <Menu size={20} />}
@@ -148,7 +148,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
 
         {/* Mobile Dropdown */}
         {isOpen && (
-          <div className="border-t border-slate-200/50 dark:border-white/10 md:hidden bg-white/95 dark:bg-black/95 backdrop-blur-xl rounded-b-2xl">
+          <div className="border-t border-slate-200/50  md:hidden bg-white/95  backdrop-blur-xl rounded-b-2xl">
             <div className="flex flex-col p-4 space-y-2">
                {navLinks.map((link) => (
                   <Link
@@ -157,8 +157,8 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                     onClick={() => setIsOpen(false)}
                     className={`flex items-center rounded-xl px-4 py-3 text-sm font-bold transition-colors ${
                       pathname === link.href
-                        ? 'bg-slate-100 dark:bg-white/10 text-slate-900 dark:text-white'
-                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5'
+                        ? 'bg-slate-100  text-slate-900 '
+                        : 'text-slate-600  hover:bg-slate-50 '
                     }`}
                     prefetch={true}
                   >
@@ -166,10 +166,10 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                   </Link>
                ))}
                
-               <div className="pt-4 mt-2 border-t border-slate-200/50 dark:border-white/10">
-                  <div className="flex gap-2 p-1 bg-slate-100/50 dark:bg-white/5 rounded-xl">
-                     <Link href={getPathForLang('en')} className={`flex-1 text-center py-2 rounded-lg text-sm font-bold transition-colors ${lang === 'en' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500'}`}>English</Link>
-                     <Link href={getPathForLang('hi')} className={`flex-1 text-center py-2 rounded-lg text-sm font-bold transition-colors ${lang === 'hi' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500'}`}>हिंदी</Link>
+               <div className="pt-4 mt-2 border-t border-slate-200/50 ">
+                  <div className="flex gap-2 p-1 bg-slate-100/50  rounded-xl">
+                     <Link href={getPathForLang('en')} className={`flex-1 text-center py-2 rounded-lg text-sm font-bold transition-colors ${lang === 'en' ? 'bg-white  text-slate-900  shadow-sm' : 'text-slate-500'}`}>English</Link>
+                     <Link href={getPathForLang('hi')} className={`flex-1 text-center py-2 rounded-lg text-sm font-bold transition-colors ${lang === 'hi' ? 'bg-white  text-slate-900  shadow-sm' : 'text-slate-500'}`}>हिंदी</Link>
                   </div>
                </div>
                
@@ -177,7 +177,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                   <Link
                     href={`/${lang}/dashboard`}
                     onClick={() => setIsOpen(false)}
-                    className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 font-bold text-slate-900 dark:text-white shadow-sm"
+                    className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200  bg-white  px-4 py-3 font-bold text-slate-900  shadow-sm"
                     prefetch={true}
                    >
                     <LayoutDashboard size={18} />
@@ -188,7 +188,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                        <Link
                           href={`/${lang}/login`}
                           onClick={() => setIsOpen(false)}
-                          className="flex items-center justify-center rounded-xl border border-slate-200 dark:border-white/10 py-3 font-bold text-slate-900 dark:text-white"
+                          className="flex items-center justify-center rounded-xl border border-slate-200  py-3 font-bold text-slate-900 "
                           prefetch={true}
                        >
                           {isHindi ? 'लॉग इन' : 'Login'}
@@ -196,7 +196,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                        <Link
                           href={`/${lang}/login?tab=signup`}
                           onClick={() => setIsOpen(false)}
-                          className="flex items-center justify-center rounded-xl bg-slate-900 dark:bg-white py-3 font-bold text-white dark:text-slate-900 shadow-md"
+                          className="flex items-center justify-center rounded-xl bg-slate-900  py-3 font-bold text-white  shadow-md"
                           prefetch={true}
                        >
                           {isHindi ? 'साइन अप' : 'Get Started'}

@@ -24,25 +24,18 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
       {/* 1. HERO SECTION - Premium Minimalist */}
       <section className="relative pt-20 pb-32 sm:pt-32 sm:pb-40 px-4 max-w-7xl mx-auto flex flex-col items-center text-center">
         {/* Dynamic glowing mesh behind text */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-indigo-500/10 dark:bg-indigo-500/20 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-indigo-500/10  blur-[120px] rounded-full pointer-events-none" />
         
         <div className="relative z-10 animate-fade-up" style={{ animationDuration: '1s' }}>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-300 text-xs sm:text-sm font-semibold mb-8 border border-slate-200 dark:border-white/10 shadow-sm transition-transform hover:scale-105">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-            </span>
-            {isHindi ? 'भारत में संचालित' : 'Designed & Built in India'}
-          </div>
-          
-          <h1 className="text-5xl sm:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-6 text-slate-900 dark:text-white leading-[1.05]">
+
+          <h1 className="text-5xl sm:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-6 text-slate-900  leading-[1.05]">
             {isHindi ? 'नागरिक समूहों के लिए' : 'The operating system'} <br className="hidden sm:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-500 dark:from-indigo-400 dark:to-cyan-300">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-500  ">
               {isHindi ? 'ऑपरेटिंग सिस्टम' : 'for civic collectives.'}
             </span>
           </h1>
           
-          <p className="text-xl sm:text-2xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+          <p className="text-xl sm:text-2xl text-slate-600  max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
             {isHindi
               ? 'एनजीओ और यूनियनों के लिए सुरक्षित बुनियादी ढांचा। सदस्यों, धन और शासन का प्रबंधन करें बिना अराजकता के।'
               : 'Secure infrastructure for NGOs and Unions. Manage members, funds, and governance without the chaos.'}
@@ -51,7 +44,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link 
               href={`/${lang}/login?tab=signup`} 
-              className="group relative w-full sm:w-auto bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-8 py-4 rounded-2xl font-bold text-lg transition-all hover:scale-105 hover:shadow-[0_0_40px_rgb(99,102,241,0.3)] flex items-center justify-center gap-2 overflow-hidden"
+              className="group relative w-full sm:w-auto bg-slate-900  text-white  px-8 py-4 rounded-2xl font-bold text-lg transition-all hover:scale-105 hover:shadow-[0_0_40px_rgb(99,102,241,0.3)] flex items-center justify-center gap-2 overflow-hidden"
             >
               <span className="relative z-10 flex items-center gap-2">
                 {isHindi ? 'संगठन बनाएं' : 'Start your Organisation'} <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
@@ -60,7 +53,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
             </Link>
             <Link 
               href={`/${lang}/docs`} 
-              className="w-full sm:w-auto bg-white dark:bg-white/5 text-slate-900 dark:text-white px-8 py-4 rounded-2xl font-bold text-lg border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/10 transition-all text-center"
+              className="w-full sm:w-auto bg-white  text-slate-900  px-8 py-4 rounded-2xl font-bold text-lg border border-slate-200  hover:bg-slate-50  transition-all text-center"
             >
               {isHindi ? 'दस्तावेज़ पढ़ें' : 'Read the Docs'}
             </Link>
@@ -71,65 +64,65 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
       {/* 2. BENTO BOX FEATURES - Premium Grid */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-4">{isHindi ? 'शासन बुनियादी ढांचा' : 'Governance Infrastructure'}</h2>
-            <p className="text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900  mb-4">{isHindi ? 'शासन बुनियादी ढांचा' : 'Governance Infrastructure'}</h2>
+            <p className="text-lg text-slate-500  max-w-2xl mx-auto">
               {isHindi ? 'अनौपचारिक समूहों को संरचित संस्थानों में बदलें।' : 'Everything you need to transform informal groups into structured, transparent institutions.'}
             </p>
          </div>
 
          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
             {/* Bento 1: Large Span */}
-            <div className="md:col-span-2 relative overflow-hidden rounded-3xl bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/10 p-8 group hover:border-indigo-500/50 transition-colors">
+            <div className="md:col-span-2 relative overflow-hidden rounded-3xl bg-slate-50  border border-slate-200  p-8 group hover:border-indigo-500/50 transition-colors">
                <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                <div className="relative z-10 h-full flex flex-col justify-between">
                  <div>
-                   <div className="w-12 h-12 rounded-2xl bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-6 shadow-sm">
-                     <Users className="text-indigo-500 dark:text-indigo-400" size={24} />
+                   <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-6 shadow-sm">
+                     <Users className="text-indigo-500 " size={24} />
                    </div>
-                   <h3 className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">Role-based Registry</h3>
-                   <p className="text-slate-500 dark:text-slate-400 max-w-sm">Secure member directories with granular access controls and identity verification.</p>
+                   <h3 className="text-2xl font-bold mb-2 text-slate-900 ">Role-based Registry</h3>
+                   <p className="text-slate-500  max-w-sm">Secure member directories with granular access controls and identity verification.</p>
                  </div>
                </div>
                {/* Decorative UI element */}
-               <div className="absolute bottom-[-20%] right-[-10%] w-3/4 h-2/3 bg-white dark:bg-black border border-slate-200 dark:border-white/10 rounded-t-3xl shadow-2xl p-4 opacity-50 group-hover:translate-y-[-10px] transition-transform duration-500">
-                  <div className="w-full h-8 bg-slate-100 dark:bg-white/5 rounded-lg mb-2" />
-                  <div className="w-2/3 h-8 bg-slate-100 dark:bg-white/5 rounded-lg mb-2" />
-                  <div className="w-5/6 h-8 bg-slate-100 dark:bg-white/5 rounded-lg" />
+               <div className="absolute bottom-[-20%] right-[-10%] w-3/4 h-2/3 bg-white  border border-slate-200  rounded-t-3xl shadow-2xl p-4 opacity-50 group-hover:translate-y-[-10px] transition-transform duration-500">
+                  <div className="w-full h-8 bg-slate-100  rounded-lg mb-2" />
+                  <div className="w-2/3 h-8 bg-slate-100  rounded-lg mb-2" />
+                  <div className="w-5/6 h-8 bg-slate-100  rounded-lg" />
                </div>
             </div>
 
             {/* Bento 2: Standard */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/10 p-8 group hover:border-cyan-500/50 transition-colors">
+            <div className="relative overflow-hidden rounded-3xl bg-slate-50  border border-slate-200  p-8 group hover:border-cyan-500/50 transition-colors">
                <div className="relative z-10">
-                 <div className="w-12 h-12 rounded-2xl bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-6 shadow-sm">
-                   <Vote className="text-cyan-500 dark:text-cyan-400" size={24} />
+                 <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-6 shadow-sm">
+                   <Vote className="text-cyan-500 " size={24} />
                  </div>
-                 <h3 className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">Resolutions</h3>
-                 <p className="text-slate-500 dark:text-slate-400">Cryptographically verifiable voting and polls for decisive governance.</p>
+                 <h3 className="text-2xl font-bold mb-2 text-slate-900 ">Resolutions</h3>
+                 <p className="text-slate-500 ">Cryptographically verifiable voting and polls for decisive governance.</p>
                </div>
             </div>
 
             {/* Bento 3: Standard */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/10 p-8 group hover:border-emerald-500/50 transition-colors">
+            <div className="relative overflow-hidden rounded-3xl bg-slate-50  border border-slate-200  p-8 group hover:border-emerald-500/50 transition-colors">
                <div className="relative z-10">
-                 <div className="w-12 h-12 rounded-2xl bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-6 shadow-sm">
-                   <Banknote className="text-emerald-500 dark:text-emerald-400" size={24} />
+                 <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-6 shadow-sm">
+                   <Banknote className="text-emerald-500 " size={24} />
                  </div>
-                 <h3 className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">Ledgers</h3>
-                 <p className="text-slate-500 dark:text-slate-400">Automated financial logging and transparent receipt tracking.</p>
+                 <h3 className="text-2xl font-bold mb-2 text-slate-900 ">Ledgers</h3>
+                 <p className="text-slate-500 ">Automated financial logging and transparent receipt tracking.</p>
                </div>
             </div>
 
             {/* Bento 4: Large Span */}
-            <div className="md:col-span-2 relative overflow-hidden rounded-3xl bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/10 p-8 group hover:border-purple-500/50 transition-colors">
+            <div className="md:col-span-2 relative overflow-hidden rounded-3xl bg-slate-50  border border-slate-200  p-8 group hover:border-purple-500/50 transition-colors">
                <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
                <div className="relative z-10 h-full flex flex-col justify-between">
                  <div>
-                   <div className="w-12 h-12 rounded-2xl bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-6 shadow-sm">
-                     <ShieldCheck className="text-purple-500 dark:text-purple-400" size={24} />
+                   <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-6 shadow-sm">
+                     <ShieldCheck className="text-purple-500 " size={24} />
                    </div>
-                   <h3 className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">Immutable Audit Logs</h3>
-                   <p className="text-slate-500 dark:text-slate-400 max-w-sm">Every administrative action is securely logged to prevent abuse of power and ensure absolute accountability.</p>
+                   <h3 className="text-2xl font-bold mb-2 text-slate-900 ">Immutable Audit Logs</h3>
+                   <p className="text-slate-500  max-w-sm">Every administrative action is securely logged to prevent abuse of power and ensure absolute accountability.</p>
                  </div>
                </div>
             </div>
@@ -137,11 +130,11 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
       </section>
 
       {/* 3. CAPABILITIES GRID (Sleek List) */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200 dark:border-white/10">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200 ">
          <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-               <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-2">{isHindi ? 'मुख्य क्षमताएं' : 'Platform Capabilities'}</h2>
-               <p className="text-slate-500 dark:text-slate-400 max-w-xl">
+               <h2 className="text-3xl font-extrabold tracking-tight text-slate-900  mb-2">{isHindi ? 'मुख्य क्षमताएं' : 'Platform Capabilities'}</h2>
+               <p className="text-slate-500  max-w-xl">
                   {isHindi ? 'आधुनिक नागरिक बुनियादी ढांचे के लिए उपकरण।' : 'A comprehensive suite of tools built for civic coordination.'}
                </p>
             </div>
@@ -160,12 +153,12 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
             ].map((item, idx) => (
               <div key={idx} className="group cursor-default">
                  <div className="flex items-center gap-4 mb-3">
-                    <div className="bg-slate-100 dark:bg-white/5 p-2 rounded-lg text-slate-600 dark:text-slate-400 group-hover:text-indigo-500 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-500/10 transition-colors">
+                    <div className="bg-slate-100  p-2 rounded-lg text-slate-600  group-hover:text-indigo-500 group-hover:bg-indigo-50  transition-colors">
                        <item.icon size={20} />
                     </div>
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">{item.title}</h3>
+                    <h3 className="text-lg font-bold text-slate-900 ">{item.title}</h3>
                  </div>
-                 <p className="text-slate-500 dark:text-slate-400 text-sm">{item.desc}</p>
+                 <p className="text-slate-500  text-sm">{item.desc}</p>
               </div>
             ))}
          </div>
@@ -173,7 +166,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
 
       {/* 4. PRIVACY & SECURITY */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-         <div className="relative rounded-[2.5rem] bg-slate-900 dark:bg-[#111] overflow-hidden p-10 sm:p-16 border border-slate-800 dark:border-white/10 shadow-2xl">
+         <div className="relative rounded-[2.5rem] bg-slate-900  overflow-hidden p-10 sm:p-16 border border-slate-800  shadow-2xl">
             {/* Background elements */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/20 blur-[120px] rounded-full translate-x-1/3 -translate-y-1/3" />
             <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-500/20 blur-[100px] rounded-full -translate-x-1/3 translate-y-1/3" />
@@ -211,10 +204,10 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
 
       {/* 5. FINAL CTA */}
       <section className="py-32 px-4 text-center max-w-3xl mx-auto">
-         <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-6">
+         <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900  mb-6">
             {isHindi ? 'एक स्थायी संस्थान बनाएं।' : 'Build a lasting institution.'}
          </h2>
-         <p className="text-lg text-slate-500 dark:text-slate-400 mb-10">
+         <p className="text-lg text-slate-500  mb-10">
             {isHindi
               ? 'संगठन के साथ शक्ति बनाने वाले एनजीओ, यूनियनों और समूहों के समुदाय में शामिल हों।'
               : 'Join the community of NGOs, unions, and collectives building power with Sangathan.'}

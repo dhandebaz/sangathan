@@ -35,6 +35,17 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.5.1',
+    titleEn: 'Design Consistency & Light Mode Only',
+    titleHi: 'डिज़ाइन संगति और केवल लाइट मोड',
+    dateEn: 'June 2026',
+    dateHi: 'जून 2026',
+    descEn: 'We have refined our public UI across the board. We completely removed the dark mode to ensure a consistent, premium light-mode experience and stripped away unnecessary badges to avoid a generic AI-generated look.',
+    descHi: 'हमने सभी जगह अपनी सार्वजनिक UI को परिष्कृत किया है। हमने एक सुसंगत, प्रीमियम लाइट-मोड अनुभव सुनिश्चित करने के लिए डार्क मोड को पूरी तरह से हटा दिया है और एक सामान्य AI-जनित लुक से बचने के लिए अनावश्यक बैज हटा दिए हैं।',
+    color: 'emerald',
+    icon: Sparkles,
+  },
+  {
     version: 'v1.5',
     titleEn: 'Premium Public UI Overhaul',
     titleHi: 'सार्वजनिक UI का प्रीमियम ओवरहाल',
@@ -236,17 +247,17 @@ const changelogData: ChangelogEntry[] = [
 ]
 
 const colorClasses = {
-  green: 'bg-green-100 text-green-600 ring-green-100 dark:bg-green-900 dark:text-green-300 dark:ring-green-900',
-  emerald: 'bg-emerald-100 text-emerald-600 ring-emerald-100 dark:bg-emerald-900 dark:text-emerald-300 dark:ring-emerald-900',
-  blue: 'bg-blue-100 text-blue-600 ring-blue-100 dark:bg-blue-900 dark:text-blue-300 dark:ring-blue-900',
-  purple: 'bg-purple-100 text-purple-600 ring-purple-100 dark:bg-purple-900 dark:text-purple-300 dark:ring-purple-900',
-  indigo: 'bg-indigo-100 text-indigo-600 ring-indigo-100 dark:bg-indigo-900 dark:text-indigo-300 dark:ring-indigo-900',
-  orange: 'bg-orange-100 text-orange-600 ring-orange-100 dark:bg-orange-900 dark:text-orange-300 dark:ring-orange-900',
-  cyan: 'bg-cyan-100 text-cyan-600 ring-cyan-100 dark:bg-cyan-900 dark:text-cyan-300 dark:ring-cyan-900',
-  pink: 'bg-pink-100 text-pink-600 ring-pink-100 dark:bg-pink-900 dark:text-pink-300 dark:ring-pink-900',
-  rose: 'bg-rose-100 text-rose-600 ring-rose-100 dark:bg-rose-900 dark:text-rose-300 dark:ring-rose-900',
-  amber: 'bg-amber-100 text-amber-600 ring-amber-100 dark:bg-amber-900 dark:text-amber-300 dark:ring-amber-900',
-  slate: 'bg-slate-100 text-slate-600 ring-slate-100 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-800',
+  green: 'bg-green-100 text-green-600 ring-green-100   ',
+  emerald: 'bg-emerald-100 text-emerald-600 ring-emerald-100   ',
+  blue: 'bg-blue-100 text-blue-600 ring-blue-100   ',
+  purple: 'bg-purple-100 text-purple-600 ring-purple-100   ',
+  indigo: 'bg-indigo-100 text-indigo-600 ring-indigo-100   ',
+  orange: 'bg-orange-100 text-orange-600 ring-orange-100   ',
+  cyan: 'bg-cyan-100 text-cyan-600 ring-cyan-100   ',
+  pink: 'bg-pink-100 text-pink-600 ring-pink-100   ',
+  rose: 'bg-rose-100 text-rose-600 ring-rose-100   ',
+  amber: 'bg-amber-100 text-amber-600 ring-amber-100   ',
+  slate: 'bg-slate-100 text-slate-600 ring-slate-100   ',
 }
 
 export default async function ChangelogPage({ params }: { params: Promise<{ lang: string }> }) {
@@ -254,7 +265,7 @@ export default async function ChangelogPage({ params }: { params: Promise<{ lang
   const isHindi = lang === 'hi'
 
   return (
-    <div className="bg-white dark:bg-transparent min-h-screen">
+    <div className="bg-white  min-h-screen">
       <PageHeader 
         title={isHindi ? 'परिवर्तन लॉग' : 'Changelog'}
         description={isHindi 
@@ -265,34 +276,34 @@ export default async function ChangelogPage({ params }: { params: Promise<{ lang
 
       {/* Timeline Section */}
       <div className="max-w-4xl mx-auto py-16 px-6 sm:px-8">
-        <div className="relative border-s-2 border-slate-200 dark:border-slate-800 ml-4 md:ml-6">
+        <div className="relative border-s-2 border-slate-200  ml-4 md:ml-6">
           {changelogData.map((entry, index) => {
             const Icon = entry.icon
             return (
               <div key={entry.version} className={`mb-16 ms-8 md:ms-12 ${index === changelogData.length - 1 ? 'mb-0' : ''}`}>
-                <span className={`absolute flex items-center justify-center w-10 h-10 rounded-full -start-5 ring-8 ring-white dark:ring-black shadow-sm ${colorClasses[entry.color]}`}>
+                <span className={`absolute flex items-center justify-center w-10 h-10 rounded-full -start-5 ring-8 ring-white  shadow-sm ${colorClasses[entry.color]}`}>
                   <Icon size={18} className="stroke-[2.5]" />
                 </span>
                 
                 <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4 mb-2">
-                  <h3 className="flex items-center text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+                  <h3 className="flex items-center text-2xl font-bold text-slate-900  tracking-tight">
                     {isHindi ? entry.titleHi : entry.titleEn}
-                    <span className={`bg-slate-100 text-slate-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-slate-800 dark:text-slate-300 ms-3 border border-slate-200 dark:border-slate-700`}>
+                    <span className={`bg-slate-100 text-slate-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded   ms-3 border border-slate-200 `}>
                       {entry.version}
                     </span>
                   </h3>
-                  <time className="block text-sm font-medium leading-none text-slate-400 dark:text-slate-500 flex-shrink-0">
+                  <time className="block text-sm font-medium leading-none text-slate-400  flex-shrink-0">
                     {isHindi ? entry.dateHi : entry.dateEn}
                   </time>
                 </div>
                 
-                <div className="prose prose-slate dark:prose-invert prose-lg max-w-none text-slate-600 dark:text-slate-400 mt-4">
+                <div className="prose prose-slate  prose-lg max-w-none text-slate-600  mt-4">
                   <p className="leading-relaxed">
                     {isHindi ? entry.descHi : entry.descEn}
                   </p>
                   
                   {entry.features && entry.features.length > 0 && (
-                    <div className="mt-6 bg-slate-50 dark:bg-slate-900/50 rounded-xl p-6 border border-slate-100 dark:border-slate-800">
+                    <div className="mt-6 bg-slate-50  rounded-xl p-6 border border-slate-100 ">
                       <ul className="space-y-4 m-0 p-0 list-none">
                         {entry.features.map((feature, fIndex) => (
                           <li key={fIndex} className="flex items-start m-0 p-0">
@@ -300,10 +311,10 @@ export default async function ChangelogPage({ params }: { params: Promise<{ lang
                               <div className={`w-1.5 h-1.5 rounded-full ${colorClasses[entry.color].split(' ')[0]}`}></div>
                             </div>
                             <div>
-                              <strong className="text-slate-900 dark:text-slate-200 font-semibold inline-block mb-1">
+                              <strong className="text-slate-900  font-semibold inline-block mb-1">
                                 {isHindi ? feature.nameHi : feature.nameEn}:
                               </strong>
-                              <span className="block text-slate-600 dark:text-slate-400 text-base leading-snug">
+                              <span className="block text-slate-600  text-base leading-snug">
                                 {isHindi ? feature.textHi : feature.textEn}
                               </span>
                             </div>
