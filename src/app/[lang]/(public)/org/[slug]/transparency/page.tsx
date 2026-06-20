@@ -98,9 +98,6 @@ export default async function TransparencyPage({ params }: PageProps) {
     <div className="min-h-screen bg-white">
       <header className="border-b border-gray-200 bg-gray-50 py-12 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4">
-            <ShieldCheck size={14} /> Verified Transparency
-          </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">{org.name}</h1>
           <p className="text-gray-500 text-sm">
             Operating transparently since {new Date(org.created_at).getFullYear()}

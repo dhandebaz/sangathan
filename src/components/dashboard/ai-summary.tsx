@@ -32,7 +32,7 @@ export function AiSummaryWidget({ orgId }: { orgId: string }) {
   }, [generateSummary])
 
   return (
-    <div className="bg-gradient-to-br from-indigo-50 to-card rounded-xl border border-indigo-100 p-6 shadow-sm relative overflow-hidden">
+    <div className="bg-gradient-to-br from-indigo-50 to-card rounded-sm border border-indigo-100 p-6 shadow-sm relative overflow-hidden">
       <div className="absolute top-0 right-0 p-4 opacity-10">
         {isAi ? <Sparkles size={120} /> : <BarChart2 size={120} />}
       </div>

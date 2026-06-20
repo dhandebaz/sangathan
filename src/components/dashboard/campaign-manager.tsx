@@ -177,7 +177,7 @@ export function CampaignManager({
         </div>
       </div>
 
-      <div className="bg-card rounded-xl border border-border overflow-hidden shadow-sm mb-6">
+      <div className="bg-card rounded-sm border border-border overflow-hidden shadow-sm mb-6">
         <div className="p-4 border-b border-border flex flex-col sm:flex-row gap-4 items-center justify-between bg-muted">
           <div className="relative w-full sm:max-w-xs">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
@@ -205,7 +205,7 @@ export function CampaignManager({
                 <tr key={camp.id} className="hover:bg-accent/50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                       <div className="w-10 h-10 rounded-full bg-brand-50 flex items-center justify-center text-brand-600">
+                       <div className="w-10 h-10 rounded-sm border border-brand-100 bg-brand-50 flex items-center justify-center text-brand-600">
                           <Flag size={18} />
                        </div>
                        <div>

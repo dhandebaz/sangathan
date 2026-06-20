@@ -25,26 +25,18 @@ export default async function TransparencyPage({ params }: { params: Promise<{ l
         description={isHindi 
           ? 'हमारा मानना है कि विश्वास कट्टरपंथी खुलेपन के माध्यम से अर्जित किया जाता है। यहाँ बताया गया है कि हम आपके डेटा की रक्षा कैसे करते हैं और प्लेटफ़ॉर्म को कैसे नियंत्रित करते हैं।'
           : 'We believe that trust is earned through radical openness. Here is how we protect your data, secure you from Big Tech, and govern the platform.'}
-        badge={isHindi ? 'नीतियां और सुरक्षा' : 'Policies & Protection'}
       />
 
       <div className="max-w-5xl mx-auto py-16 px-6 sm:px-8 space-y-24">
         
         {/* Anti-LLM / Data Protection Banner */}
-        <section className="relative overflow-hidden rounded-[2.5rem] bg-slate-900 p-8 sm:p-12 border border-slate-800 shadow-2xl">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/20 blur-[100px] rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-cyan-500/20 blur-[100px] rounded-full -translate-x-1/3 translate-y-1/3 pointer-events-none" />
-          
+        <section className="relative bg-slate-50 p-8 sm:p-12 border border-slate-200 rounded-[2.5rem]">
           <div className="relative z-10 flex flex-col md:flex-row gap-12 items-center">
             <div className="flex-1">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-6">
-                <BrainCircuit size={14} />
-                {isHindi ? 'एआई और बड़े डेटा से सुरक्षित' : 'Protected from Big Data & LLMs'}
-              </div>
-              <h2 className="text-3xl font-extrabold text-white mb-4 tracking-tight">
+              <h2 className="text-3xl font-extrabold text-slate-900 mb-4 tracking-tight">
                 {isHindi ? 'आपका डेटा आपका है। यह एआई के लिए प्रशिक्षण चारा नहीं है।' : 'Your data is yours. It is not training fodder for AI.'}
               </h2>
-              <p className="text-lg text-slate-300 leading-relaxed mb-6">
+              <p className="text-lg text-slate-600 leading-relaxed mb-6">
                 {isHindi 
                   ? 'संगठनों के पास अक्सर संवेदनशील डेटा होता है। बिग टेक प्लेटफ़ॉर्म (Facebook, WhatsApp) आपको विज्ञापनों से ट्रैक करते हैं और अपनी भाषा मॉडल (LLMs) को प्रशिक्षित करने के लिए आपके वार्तालापों को स्क्रैप करते हैं। संगठन अलग है।' 
                   : 'Grassroots collectives hold sensitive data. Big Tech platforms (like WhatsApp, Facebook) track you with ad pixels and actively scrape your conversations to train their Large Language Models (LLMs). Sangathan is built differently.'}
@@ -56,15 +48,15 @@ export default async function TransparencyPage({ params }: { params: Promise<{ l
                   isHindi ? 'कोई विज्ञापन नहीं, कोई पिक्सेल नहीं: हम आपको वेब पर ट्रैक नहीं करते हैं।' : 'No Ads, No Pixels: We never track your users across the web.'
                 ].map((item, idx) => (
                   <li key={idx} className="flex items-start gap-3">
-                    <Shield className="text-emerald-400 mt-1 shrink-0" size={18} />
-                    <span className="text-slate-200 font-medium">{item}</span>
+                    <Shield className="text-indigo-600 mt-1 shrink-0" size={18} />
+                    <span className="text-slate-700 font-medium">{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="w-48 h-48 sm:w-64 sm:h-64 shrink-0 bg-slate-800 rounded-full border-4 border-slate-700 flex items-center justify-center relative shadow-inner">
-              <Lock className="text-slate-400 w-24 h-24" />
-              <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 to-transparent rounded-full" />
+            <div className="w-48 h-48 sm:w-64 sm:h-64 shrink-0 bg-white border-2 border-slate-200 rounded-full flex items-center justify-center relative shadow-sm">
+              <Lock className="text-slate-300 w-24 h-24" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 to-transparent rounded-full" />
             </div>
           </div>
         </section>

@@ -176,8 +176,8 @@ export function AdminDashboard({
                      <div className="min-w-0">
                        <p className="text-sm font-medium text-foreground truncate">{item.title || 'Untitled'}</p>
                        <div className="flex items-center gap-2 mt-0.5">
-                         <span className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground bg-muted px-1.5 py-0.5 rounded">{item.type}</span>
-                         <span className="text-xs text-muted-foreground">{item.created_at}</span>
+                         <span className="text-xs font-medium text-muted-foreground capitalize">{item.type.replace('_', ' ')}</span>
+                         <span className="text-xs text-muted-foreground">• {item.created_at}</span>
                        </div>
                      </div>
                    </div>

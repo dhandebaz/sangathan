@@ -25,7 +25,6 @@ export default async function GovernancePage({ params }: { params: Promise<{ lan
         description={isHindi 
           ? 'एक तटस्थ, सुरक्षित और विश्वसनीय मंच बनाए रखने के लिए हमारी रूपरेखा।'
           : 'Our framework for maintaining a neutral, safe, and reliable platform.'}
-        badge={isHindi ? 'नीतियां' : 'Policies'}
       />
 
       <div className="max-w-4xl mx-auto py-16 px-6">

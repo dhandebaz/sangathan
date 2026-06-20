@@ -155,7 +155,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
             <button
               onClick={() => toggleGroup(group.id)}
               className={cn(
-                "flex w-full items-center justify-between px-3 py-1.5 text-xs font-semibold tracking-wider",
+                "flex w-full items-center justify-between px-3 py-1.5 text-xs font-bold",
                 "text-sidebar-fg/60 hover:text-sidebar-fg transition-colors"
               )}
               aria-expanded={!isCollapsed}
@@ -182,14 +182,14 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
                         key={item.href}
                         href={item.href}
                         className={cn(
-                          "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                          "group relative flex items-center gap-3 rounded-sm px-3 py-2.5 text-sm font-medium transition-all duration-150",
                           active
                             ? "bg-sidebar-bg-active text-sidebar-fg-active"
                             : "text-sidebar-fg hover:bg-accent hover:text-foreground"
                         )}
                       >
                         {active && (
-                          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-brand-500 rounded-full" />
+                          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-brand-500 rounded-sm" />
                         )}
                         <item.icon className={cn(
                           "w-4.5 h-4.5 shrink-0 transition-colors",

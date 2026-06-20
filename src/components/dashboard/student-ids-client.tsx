@@ -36,11 +36,11 @@ export function StudentIdCard({ student, orgName }: { student: Student; orgName:
   })
 
   return (
-    <div className="w-[380px] h-[240px] border border-border rounded-xl overflow-hidden shadow-md bg-card relative flex flex-col font-sans text-foreground select-none print:shadow-none print:border-black mx-auto">
+    <div className="w-[380px] h-[240px] border border-border rounded-sm overflow-hidden shadow-md bg-card relative flex flex-col font-sans text-foreground select-none print:shadow-none print:border-black mx-auto">
       {/* Card Header */}
       <div className="bg-indigo-700 text-white px-4 py-2 flex items-center justify-between">
         <div>
-          <h3 className="text-[10px] uppercase tracking-wider font-bold opacity-95 line-clamp-1">{orgName}</h3>
+          <h3 className="text-xs font-bold opacity-95 line-clamp-1">{orgName}</h3>
           <h2 className="text-xs font-black tracking-wide">STUDENT IDENTITY CARD</h2>
         </div>
         <BadgeCheck className="w-5 h-5 text-indigo-200" />
@@ -49,31 +49,31 @@ export function StudentIdCard({ student, orgName }: { student: Student; orgName:
       {/* Card Body */}
       <div className="p-4 flex gap-4 flex-1">
         {/* Photo Box */}
-        <div className="w-20 h-24 bg-muted border border-border rounded-lg flex flex-col items-center justify-center text-muted-foreground shrink-0">
+        <div className="w-20 h-24 bg-muted border border-border rounded-sm flex flex-col items-center justify-center text-muted-foreground shrink-0">
           <User className="w-10 h-10" />
-          <span className="text-[7px] mt-1 uppercase tracking-widest font-semibold text-muted-foreground">PHOTO</span>
+          <span className="text-[8px] mt-1 font-semibold text-muted-foreground">Photo</span>
         </div>
 
         {/* Details Box */}
         <div className="flex-1 flex flex-col justify-between min-w-0">
           <div className="space-y-1">
             <div>
-              <span className="text-[8px] uppercase tracking-wider text-muted-foreground block font-semibold">NAME</span>
+              <span className="text-[9px] text-muted-foreground block font-semibold">Name</span>
               <p className="text-xs font-bold text-foreground leading-tight truncate">{student.full_name}</p>
             </div>
             <div>
-              <span className="text-[8px] uppercase tracking-wider text-muted-foreground block font-semibold">MEMBERSHIP ID</span>
+              <span className="text-[9px] text-muted-foreground block font-semibold">Membership ID</span>
               <p className="text-xs font-mono font-bold text-indigo-600">{membershipId}</p>
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <span className="text-[8px] uppercase tracking-wider text-muted-foreground block font-semibold">STATUS</span>
-                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-green-100 text-green-800">
+                <span className="text-[9px] text-muted-foreground block font-semibold">Status</span>
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-[9px] font-bold bg-green-100 text-green-800">
                   ACTIVE
                 </span>
               </div>
               <div>
-                <span className="text-[8px] uppercase tracking-wider text-muted-foreground block font-semibold">ISSUE DATE</span>
+                <span className="text-[9px] text-muted-foreground block font-semibold">Issue Date</span>
                 <p className="text-[9px] text-foreground font-semibold">{issueDate}</p>
               </div>
             </div>
@@ -141,7 +141,7 @@ export function StudentIdsClient({ initialStudents, lang, orgName }: StudentIdsC
         </div>
       </div>
 
-      <div className="bg-card rounded-xl border border-border overflow-hidden shadow-sm mb-6">
+      <div className="bg-card rounded-sm border border-border overflow-hidden shadow-sm mb-6">
         <div className="p-4 border-b border-border flex flex-col sm:flex-row gap-4 items-center justify-between bg-muted">
           <div className="relative w-full sm:max-w-xs">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
@@ -171,7 +171,7 @@ export function StudentIdsClient({ initialStudents, lang, orgName }: StudentIdsC
                   <tr key={student.id} className="hover:bg-accent/50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
+                        <div className="w-10 h-10 rounded-sm bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-600">
                           <BadgeIcon size={18} />
                         </div>
                         <div className="font-medium text-foreground">{student.full_name}</div>
@@ -181,7 +181,7 @@ export function StudentIdsClient({ initialStudents, lang, orgName }: StudentIdsC
                       {membershipId}
                     </td>
                     <td className="px-6 py-4">
-                      <span className="bg-green-100 text-green-700 text-xs font-medium px-2 py-1 rounded">Active</span>
+                      <span className="bg-green-100 text-green-700 text-xs font-medium px-2 py-1 rounded-sm">Active</span>
                     </td>
                     <td className="px-6 py-4">
                       <Button

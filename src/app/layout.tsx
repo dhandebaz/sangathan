@@ -1,6 +1,12 @@
 import type { Metadata, Viewport } from "next";
+import { Outfit } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -52,8 +58,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="h-full">
-      <body className="antialiased h-full bg-background">
+    <html lang="en" className={`h-full ${outfit.variable}`}>
+      <body className="antialiased h-full bg-background font-sans">
         <a
           href="#main-content"
           className="sr-only fixed left-4 top-4 z-[100] rounded-lg bg-white px-4 py-3 font-semibold text-slate-900 shadow-lg focus:not-sr-only"

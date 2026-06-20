@@ -114,9 +114,9 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
             aria-label="Sangathan Dashboard"
           >
             {orgLogoUrl ? (
-              <Image src={orgLogoUrl} alt="" width={32} height={32} className="h-8 w-8 rounded-lg object-contain" />
+              <Image src={orgLogoUrl} alt="" width={32} height={32} className="h-8 w-8 rounded-sm object-contain" />
             ) : (
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold">
+              <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-primary text-primary-foreground text-xs font-bold">
                 {initials}
               </div>
             )}
@@ -132,7 +132,7 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
         <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
-            className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+            className="relative inline-flex h-9 w-9 items-center justify-center rounded-sm border border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
             aria-label="Notifications"
           >
             <Bell className="h-4 w-4" />
@@ -142,7 +142,7 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
             <button
               type="button"
               className={cn(
-                'flex items-center gap-2 rounded-lg border border-border bg-card px-2.5 py-1.5 hover:bg-accent transition-colors',
+                'flex items-center gap-2 rounded-sm border border-border bg-card px-2.5 py-1.5 hover:bg-accent transition-colors',
                 'h-9'
               )}
               aria-haspopup="menu"
@@ -157,7 +157,7 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
               </div>
               <div className="hidden sm:flex flex-col items-start leading-tight">
                 <span className="text-xs font-semibold text-foreground">{username}</span>
-                <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{displayRole}</span>
+                <span className="text-[10px] text-muted-foreground font-medium capitalize">{displayRole}</span>
               </div>
               <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
             </button>
@@ -166,10 +166,10 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
               <div
                 role="menu"
                 aria-label="Profile menu"
-                className="absolute right-0 mt-2 w-56 overflow-hidden rounded-xl border border-border bg-card shadow-lg py-1.5 z-50 animate-in fade-in zoom-in-95 duration-200"
+                className="absolute right-0 mt-2 w-56 overflow-hidden rounded-sm border border-border bg-card shadow-lg py-1.5 z-50 animate-in fade-in zoom-in-95 duration-200"
               >
                 <div className="px-3 py-3 border-b border-border flex items-center gap-3">
-                  <div className="flex items-center justify-center h-9 w-9 rounded-lg bg-accent text-brand-700 font-bold text-sm shrink-0">
+                  <div className="flex items-center justify-center h-9 w-9 rounded-sm bg-accent text-brand-700 font-bold text-sm shrink-0">
                     {initials}
                   </div>
                   <div className="flex flex-col min-w-0">
@@ -180,7 +180,7 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
                 <div className="p-1.5">
                   <button
                     type="button"
-                    className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors"
+                    className="w-full flex items-center gap-2.5 rounded-sm px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors"
                     role="menuitem"
                     onClick={() => {
                       router.push(`/${lang}/profile`)
@@ -192,7 +192,7 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
                   </button>
                   <button
                     type="button"
-                    className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors"
+                    className="w-full flex items-center gap-2.5 rounded-sm px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors"
                     role="menuitem"
                     onClick={() => {
                       router.push(`/${lang}/dashboard/settings`)
@@ -206,7 +206,7 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
                 <div className="border-t border-border p-1.5">
                   <button
                     type="button"
-                    className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors"
+                    className="w-full flex items-center gap-2.5 rounded-sm px-3 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors"
                     role="menuitem"
                     onClick={handleSignOut}
                     disabled={isSigningOut}

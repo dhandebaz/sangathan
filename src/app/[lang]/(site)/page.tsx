@@ -33,12 +33,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
         {/* 1. HERO SECTION - Premium Minimalist */}
         <section className="pt-32 pb-24 sm:pt-40 sm:pb-32 px-4 max-w-7xl mx-auto flex flex-col items-center text-center border-b border-slate-200">
           
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 border border-slate-200 text-slate-600 text-[11px] font-mono uppercase tracking-widest mb-8">
-            <span className="w-2 h-2 bg-indigo-500 rounded-none animate-pulse" />
-            {isHindi ? 'नागरिक बुनियादी ढांचा v2.0' : 'Civic Infrastructure v2.0'}
-          </div>
-
-          <h1 className="text-6xl sm:text-8xl lg:text-[7.5rem] font-black tracking-tighter mb-8 text-slate-900 leading-[0.95]">
+          <h1 className="text-6xl sm:text-8xl lg:text-[7.5rem] font-black tracking-tighter mb-8 text-slate-900 leading-[1.1]">
             {isHindi ? 'नागरिक समूहों के लिए' : 'The operating system'} <br className="hidden sm:block" />
             <span className="text-indigo-600">
               {isHindi ? 'ऑपरेटिंग सिस्टम' : 'for civic collectives.'}

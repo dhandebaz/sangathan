@@ -299,7 +299,7 @@ export function RoleManager({ initialRoles, organisationId }: RoleManagerProps) 
       )}
 
       {roles.length === 0 && !showNewRole && (
-        <div className="text-center py-12 bg-muted rounded-xl border border-dashed">
+        <div className="text-center py-12 bg-muted rounded-sm border border-dashed">
           <p className="text-muted-foreground mb-4">No custom roles defined yet.</p>
           <Button onClick={() => setShowNewRole(true)}>
             <Plus className="mr-2 h-4 w-4" />

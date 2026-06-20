@@ -25,7 +25,6 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
         description={isHindi 
           ? 'संगठन कोई स्टार्टअप नहीं है। यह नागरिक क्षेत्र के लिए डिजिटल सार्वजनिक बुनियादी ढांचा है।'
           : 'Sangathan is not a startup. It is digital public infrastructure for the civic sector.'}
-        badge={isHindi ? 'हमारा मिशन' : 'Our Mission'}
       />
 
       <div className="max-w-4xl mx-auto py-16 px-6">

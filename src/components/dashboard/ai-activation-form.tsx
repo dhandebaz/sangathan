@@ -42,9 +42,9 @@ export function AiActivationForm({ lang }: { lang: string }) {
   }
 
   return (
-    <div className="rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-xl">
+    <div className="rounded-sm border border-border bg-card p-6 sm:p-8 shadow-sm">
       <div className="mb-6 flex items-center gap-4 border-b border-border pb-6">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+        <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-brand-50 border border-brand-100 text-brand-600">
           <Sparkles className="h-6 w-6" />
         </div>
         <div>
@@ -57,7 +57,7 @@ export function AiActivationForm({ lang }: { lang: string }) {
         </div>
       </div>
 
-      <div className="mb-6 rounded-xl bg-blue-50 p-4 text-sm text-blue-800">
+      <div className="mb-6 rounded-sm bg-blue-50 border border-blue-100 p-4 text-sm text-blue-800">
         <p>
           {isHi 
             ? 'संगठन AI आपके संगठन के लिए उन्नत सुविधाएँ लाता है। चूंकि हम कोई सदस्यता शुल्क नहीं लेते हैं, इसलिए आपको अपना स्वयं का API कुंजी (OpenAI, Gemini, आदि) प्रदान करना होगा ताकि आप केवल अपने उपयोग के लिए भुगतान करें।' 
@@ -66,7 +66,7 @@ export function AiActivationForm({ lang }: { lang: string }) {
       </div>
 
       {status === 'success' ? (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-6 text-center">
+        <div className="rounded-sm border border-emerald-200 bg-emerald-50 p-6 text-center">
           <CheckCircle2 className="mx-auto mb-3 h-8 w-8 text-emerald-500" />
           <h4 className="mb-1 font-bold text-emerald-900">
             {isHi ? 'सक्रियण अनुरोध प्राप्त हुआ' : 'Activation Request Received'}
@@ -76,7 +76,7 @@ export function AiActivationForm({ lang }: { lang: string }) {
           </p>
           <button 
             onClick={() => setStatus('idle')}
-            className="mt-4 rounded-lg bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-200"
+            className="mt-4 rounded-sm border border-emerald-200 bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-200"
           >
             {isHi ? 'एक और सबमिट करें' : 'Submit Another'}
           </button>
@@ -92,7 +92,7 @@ export function AiActivationForm({ lang }: { lang: string }) {
                 id="provider"
                 name="provider" 
                 required
-                className="w-full appearance-none rounded-xl border border-border bg-muted px-4 py-3 text-sm text-foreground focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                className="w-full appearance-none rounded-sm border border-border bg-muted px-4 py-3 text-sm text-foreground focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
               >
                 <option value="">{isHi ? 'प्रदाता चुनें...' : 'Choose a provider...'}</option>
                 <option value="gemini">Google Gemini</option>
@@ -115,7 +115,7 @@ export function AiActivationForm({ lang }: { lang: string }) {
                 type="password"
                 required
                 placeholder={isHi ? 'यहाँ पेस्ट करें' : 'Paste your API key here'}
-                className="w-full rounded-xl border border-border bg-muted py-3 pl-11 pr-4 text-sm text-foreground focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                className="w-full rounded-sm border border-border bg-muted py-3 pl-11 pr-4 text-sm text-foreground focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
               />
             </div>
           </div>
@@ -132,13 +132,13 @@ export function AiActivationForm({ lang }: { lang: string }) {
                 type="text"
                 required
                 placeholder={isHi ? '₹5000 भुगतान के लिए 12 अंकों का संदर्भ' : '12-digit ref for the ₹5000 payment'}
-                className="w-full rounded-xl border border-border bg-muted py-3 pl-11 pr-4 text-sm text-foreground focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                className="w-full rounded-sm border border-border bg-muted py-3 pl-11 pr-4 text-sm text-foreground focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
               />
             </div>
           </div>
 
           {status === 'error' && (
-            <div className="flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-600">
+            <div className="flex items-center gap-2 rounded-sm border border-red-200 bg-red-50 p-3 text-sm text-red-600">
               <AlertCircle className="h-4 w-4 shrink-0" />
               <p>{errorMsg}</p>
             </div>
@@ -147,7 +147,7 @@ export function AiActivationForm({ lang }: { lang: string }) {
           <button
             type="submit"
             disabled={isPending}
-            className="mt-2 w-full rounded-xl bg-foreground px-4 py-3.5 text-sm font-bold text-primary-foreground transition-all hover:bg-foreground/80 disabled:opacity-70"
+            className="mt-2 w-full rounded-sm bg-slate-900 px-4 py-3.5 text-sm font-bold text-white transition-all hover:bg-slate-800 disabled:opacity-70"
           >
             {isPending 
               ? (isHi ? 'सबमिट किया जा रहा है...' : 'Submitting...') 

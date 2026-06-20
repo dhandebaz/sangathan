@@ -24,7 +24,6 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
         description={isHindi 
           ? 'हम एक छोटी, समर्पित टीम हैं। कृपया तेजी से प्रतिक्रिया सुनिश्चित करने के लिए उचित चैनल का उपयोग करें।'
           : 'We are a small, dedicated team. Please use the appropriate channel to ensure a faster response.'}
-        badge={isHindi ? 'मदद' : 'Get in Touch'}
       />
 
       <div className="max-w-5xl mx-auto py-16 px-6">

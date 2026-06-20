@@ -36,19 +36,24 @@ type ChangelogEntry = {
 const changelogData: ChangelogEntry[] = [
   {
     version: 'v1.6',
-    titleEn: 'Authentication UI Overhaul & Social Logins',
-    titleHi: 'प्रमाणीकरण UI ओवरहाल और सोशल लॉगिन',
+    titleEn: 'Authentication Overhaul & Typography Refinement',
+    titleHi: 'प्रमाणीकरण ओवरहाल और टाइपोग्राफी सुधार',
     dateEn: 'June 2026',
     dateHi: 'जून 2026',
-    descEn: 'Completely redesigned the authentication flows with a crisp, geometric aesthetic and introduced seamless sign-ins with Google and X (Twitter).',
-    descHi: 'प्रमाणीकरण प्रवाह को एक ज्यामितीय सौंदर्यशास्त्र के साथ पूरी तरह से फिर से डिज़ाइन किया गया है और Google और X (Twitter) के साथ निर्बाध साइन-इन पेश किया गया है।',
+    descEn: 'Completely redesigned the authentication flows with a crisp, geometric aesthetic, introduced Google and X logins, and applied a global typography refinement.',
+    descHi: 'प्रमाणीकरण प्रवाह को एक ज्यामितीय सौंदर्यशास्त्र के साथ पूरी तरह से फिर से डिज़ाइन किया गया है, Google और X (Twitter) लॉगिन पेश किए गए हैं, और वैश्विक टाइपोग्राफी सुधार लागू किए गए हैं।',
     color: 'emerald',
     icon: Sparkles,
     features: [
       {
         nameEn: 'Geometric Design System', nameHi: 'ज्यामितीय डिजाइन सिस्टम',
-        textEn: 'Upgraded auth pages to a unified, premium geometric design system replacing outdated dark cards.',
-        textHi: 'पुराने डार्क कार्ड्स को बदलकर ऑथेंटिकेशन पेजों को एक एकीकृत, प्रीमियम ज्यामितीय डिजाइन सिस्टम में अपग्रेड किया।'
+        textEn: 'Upgraded all pages to a unified, premium geometric design system, strictly removing outdated dark cards and AI-generated blobs.',
+        textHi: 'पुराने डार्क कार्ड्स और एआई-जनित ब्लॉब्स को हटाकर सभी पेजों को एक एकीकृत, प्रीमियम ज्यामितीय डिजाइन सिस्टम में अपग्रेड किया।'
+      },
+      {
+        nameEn: 'Typography Refinements', nameHi: 'टाइपोग्राफी सुधार',
+        textEn: 'Adopted Outfit as the unified global font, carefully calibrating header line-heights across the platform for perfect crispness.',
+        textHi: 'एकीकृत वैश्विक फ़ॉन्ट के रूप में आउटफ़िट को अपनाया, सही स्पष्टता के लिए पूरे प्लेटफ़ॉर्म पर हेडर लाइन-ऊंचाई को सावधानीपूर्वक समायोजित किया।'
       },
       {
         nameEn: 'Google & X OAuth', nameHi: 'Google और X OAuth',
@@ -305,7 +310,6 @@ export default async function ChangelogPage({ params }: { params: Promise<{ lang
         description={isHindi 
           ? 'हमारे सफर का एक पारदर्शी रिकॉर्ड। हर कदम पर संगठन को मजबूत बनाते हुए।'
           : 'A transparent record of our journey. Making Sangathan stronger with every release.'}
-        badge={isHindi ? 'अपडेट' : 'Updates & Improvements'}
       />
 
       {/* Timeline Section */}

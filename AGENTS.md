@@ -59,3 +59,4 @@ Example:
 *Auto-synced | 2026-06-15*
 
 - **NEVER use dark 'square blob' CTA blocks or rounded AI-generated style dark cards at the bottom of pages.** Use crisp, light, geometric technical designs instead.
+- **NEVER use AI-generated decorative pill badges/tags (e.g., small uppercase, wide-tracking rounded tags above headings).** Avoid anything that looks like a `CIVIC INFRASTRUCTURE V2.0` small pill tag. Stay entirely clear of this overused decorative pattern.

@@ -54,23 +54,23 @@ export default async function PublicNetworkPage(props: { params: Promise<{ slug:
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="bg-gray-900 text-white py-20 px-4">
+      <div className="bg-slate-50 border-b border-slate-200 py-20 px-4">
         <div className="max-w-5xl mx-auto">
-          <div className="flex items-center gap-2 mb-4 text-blue-400">
+          <div className="flex items-center gap-2 mb-4 text-indigo-600">
             <Globe className="w-5 h-5" />
-            <span className="text-sm font-semibold uppercase tracking-wider">Federated Network</span>
+            <span className="text-sm font-semibold uppercase tracking-widest">Federated Network</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">{network.name}</h1>
-          <p className="text-xl text-gray-300 max-w-2xl">{network.description}</p>
+          <h1 className="text-4xl md:text-5xl font-black mb-6 text-slate-900 tracking-tight">{network.name}</h1>
+          <p className="text-xl text-slate-600 max-w-2xl leading-relaxed">{network.description}</p>
 
           <div className="flex gap-8 mt-12">
             <div>
-              <div className="text-3xl font-bold">{orgCount}</div>
-              <div className="text-sm text-gray-400 uppercase tracking-wide">Organisations</div>
+              <div className="text-3xl font-bold text-slate-900">{orgCount}</div>
+              <div className="text-xs text-slate-500 font-semibold uppercase tracking-widest mt-1">Organisations</div>
             </div>
             <div>
-              <div className="text-3xl font-bold">{totalMembers.toLocaleString()}</div>
-              <div className="text-sm text-gray-400 uppercase tracking-wide">Total Members</div>
+              <div className="text-3xl font-bold text-slate-900">{totalMembers.toLocaleString()}</div>
+              <div className="text-xs text-slate-500 font-semibold uppercase tracking-widest mt-1">Total Members</div>
             </div>
           </div>
         </div>

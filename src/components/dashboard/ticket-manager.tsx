@@ -218,7 +218,7 @@ export function TicketManager({
         </div>
       </div>
 
-      <div className="bg-card rounded-xl border border-border overflow-hidden shadow-sm mb-6">
+      <div className="bg-card rounded-sm border border-border overflow-hidden shadow-sm mb-6">
         <div className="p-4 border-b border-border flex flex-col sm:flex-row gap-4 items-center justify-between bg-muted">
           <div className="relative w-full sm:max-w-xs">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
@@ -259,7 +259,7 @@ export function TicketManager({
                     </Badge>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`text-xs font-medium capitalize px-2 py-1 rounded-md ${
+                    <span className={`text-xs font-medium capitalize px-2 py-1 rounded-sm ${
                       ticket.priority === 'high' ? 'bg-red-100 text-red-700' :
                       ticket.priority === 'medium' ? 'bg-amber-100 text-amber-700' :
                       'bg-green-100 text-green-700'
