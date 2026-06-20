@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, ShieldCheck, Video, Banknote, Activity, Globe, Vote, Megaphone, Lock, Users, Fingerprint, Layers, Cpu, Check } from 'lucide-react'
+import { ArrowRight, ShieldCheck, Video, Banknote, Activity, Globe, Vote, Megaphone, Lock, Users, Fingerprint, Layers, Cpu, Check, FileText } from 'lucide-react'
 import { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
@@ -20,205 +20,236 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
   const isHindi = lang === 'hi'
   
   return (
-    <div className="overflow-hidden bg-transparent">
-      {/* 1. HERO SECTION - Premium Minimalist */}
-      <section className="relative pt-20 pb-32 sm:pt-32 sm:pb-40 px-4 max-w-7xl mx-auto flex flex-col items-center text-center">
-        {/* Dynamic glowing mesh behind text */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-indigo-500/10  blur-[120px] rounded-full pointer-events-none" />
-        
-        <div className="relative z-10 animate-fade-up" style={{ animationDuration: '1s' }}>
+    <div className="bg-white min-h-screen relative font-sans text-slate-900 selection:bg-indigo-100">
+      
+      {/* Background Dot Pattern (Technical Aesthetic) */}
+      <div 
+        className="absolute inset-0 z-0 pointer-events-none opacity-[0.03]"
+        style={{ backgroundImage: 'radial-gradient(circle, #0f172a 1px, transparent 1px)', backgroundSize: '24px 24px' }}
+      />
 
-          <h1 className="text-5xl sm:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-6 text-slate-900  leading-[1.05]">
+      <div className="relative z-10">
+        
+        {/* 1. HERO SECTION - Premium Minimalist */}
+        <section className="pt-32 pb-24 sm:pt-40 sm:pb-32 px-4 max-w-7xl mx-auto flex flex-col items-center text-center border-b border-slate-200">
+          
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 border border-slate-200 text-slate-600 text-[11px] font-mono uppercase tracking-widest mb-8">
+            <span className="w-2 h-2 bg-indigo-500 rounded-none animate-pulse" />
+            {isHindi ? 'नागरिक बुनियादी ढांचा v2.0' : 'Civic Infrastructure v2.0'}
+          </div>
+
+          <h1 className="text-6xl sm:text-8xl lg:text-[7.5rem] font-black tracking-tighter mb-8 text-slate-900 leading-[0.95]">
             {isHindi ? 'नागरिक समूहों के लिए' : 'The operating system'} <br className="hidden sm:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-500  ">
+            <span className="text-indigo-600">
               {isHindi ? 'ऑपरेटिंग सिस्टम' : 'for civic collectives.'}
             </span>
           </h1>
           
-          <p className="text-xl sm:text-2xl text-slate-600  max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+          <p className="text-xl sm:text-2xl text-slate-500 max-w-3xl mx-auto mb-12 leading-snug tracking-tight font-medium">
             {isHindi
               ? 'एनजीओ और यूनियनों के लिए सुरक्षित बुनियादी ढांचा। सदस्यों, धन और शासन का प्रबंधन करें बिना अराजकता के।'
               : 'Secure infrastructure for NGOs and Unions. Manage members, funds, and governance without the chaos.'}
           </p>
           
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
             <Link 
               href={`/${lang}/login?tab=signup`} 
-              className="group relative w-full sm:w-auto bg-slate-900  text-white  px-8 py-4 rounded-2xl font-bold text-lg transition-all hover:scale-105 hover:shadow-[0_0_40px_rgb(99,102,241,0.3)] flex items-center justify-center gap-2 overflow-hidden"
+              className="w-full sm:w-auto bg-slate-900 text-white px-8 py-4 font-bold text-sm tracking-widest uppercase transition-all hover:bg-indigo-600 flex items-center justify-center gap-3 border border-slate-900"
             >
-              <span className="relative z-10 flex items-center gap-2">
-                {isHindi ? 'संगठन बनाएं' : 'Start your Organisation'} <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+              {isHindi ? 'संगठन बनाएं' : 'Start your Organisation'} <ArrowRight size={16} />
             </Link>
             <Link 
               href={`/${lang}/docs`} 
-              className="w-full sm:w-auto bg-white  text-slate-900  px-8 py-4 rounded-2xl font-bold text-lg border border-slate-200  hover:bg-slate-50  transition-all text-center"
+              className="w-full sm:w-auto bg-transparent text-slate-900 px-8 py-4 font-bold text-sm tracking-widest uppercase border border-slate-200 hover:border-slate-400 hover:bg-slate-50 transition-all text-center"
             >
               {isHindi ? 'दस्तावेज़ पढ़ें' : 'Read the Docs'}
             </Link>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* 2. BENTO BOX FEATURES - Premium Grid */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-         <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900  mb-4">{isHindi ? 'शासन बुनियादी ढांचा' : 'Governance Infrastructure'}</h2>
-            <p className="text-lg text-slate-500  max-w-2xl mx-auto">
-              {isHindi ? 'अनौपचारिक समूहों को संरचित संस्थानों में बदलें।' : 'Everything you need to transform informal groups into structured, transparent institutions.'}
-            </p>
-         </div>
-
-         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
-            {/* Bento 1: Large Span */}
-            <div className="md:col-span-2 relative overflow-hidden rounded-3xl bg-slate-50  border border-slate-200  p-8 group hover:border-indigo-500/50 transition-colors">
-               <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-               <div className="relative z-10 h-full flex flex-col justify-between">
-                 <div>
-                   <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-6 shadow-sm">
-                     <Users className="text-indigo-500 " size={24} />
-                   </div>
-                   <h3 className="text-2xl font-bold mb-2 text-slate-900 ">Role-based Registry</h3>
-                   <p className="text-slate-500  max-w-sm">Secure member directories with granular access controls and identity verification.</p>
-                 </div>
-               </div>
-               {/* Decorative UI element */}
-               <div className="absolute bottom-[-20%] right-[-10%] w-3/4 h-2/3 bg-white  border border-slate-200  rounded-t-3xl shadow-2xl p-4 opacity-50 group-hover:translate-y-[-10px] transition-transform duration-500">
-                  <div className="w-full h-8 bg-slate-100  rounded-lg mb-2" />
-                  <div className="w-2/3 h-8 bg-slate-100  rounded-lg mb-2" />
-                  <div className="w-5/6 h-8 bg-slate-100  rounded-lg" />
-               </div>
-            </div>
-
-            {/* Bento 2: Standard */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-50  border border-slate-200  p-8 group hover:border-cyan-500/50 transition-colors">
-               <div className="relative z-10">
-                 <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-6 shadow-sm">
-                   <Vote className="text-cyan-500 " size={24} />
-                 </div>
-                 <h3 className="text-2xl font-bold mb-2 text-slate-900 ">Resolutions</h3>
-                 <p className="text-slate-500 ">Cryptographically verifiable voting and polls for decisive governance.</p>
-               </div>
-            </div>
-
-            {/* Bento 3: Standard */}
-            <div className="relative overflow-hidden rounded-3xl bg-slate-50  border border-slate-200  p-8 group hover:border-emerald-500/50 transition-colors">
-               <div className="relative z-10">
-                 <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-6 shadow-sm">
-                   <Banknote className="text-emerald-500 " size={24} />
-                 </div>
-                 <h3 className="text-2xl font-bold mb-2 text-slate-900 ">Ledgers</h3>
-                 <p className="text-slate-500 ">Automated financial logging and transparent receipt tracking.</p>
-               </div>
-            </div>
-
-            {/* Bento 4: Large Span */}
-            <div className="md:col-span-2 relative overflow-hidden rounded-3xl bg-slate-50  border border-slate-200  p-8 group hover:border-purple-500/50 transition-colors">
-               <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
-               <div className="relative z-10 h-full flex flex-col justify-between">
-                 <div>
-                   <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-6 shadow-sm">
-                     <ShieldCheck className="text-purple-500 " size={24} />
-                   </div>
-                   <h3 className="text-2xl font-bold mb-2 text-slate-900 ">Immutable Audit Logs</h3>
-                   <p className="text-slate-500  max-w-sm">Every administrative action is securely logged to prevent abuse of power and ensure absolute accountability.</p>
-                 </div>
-               </div>
-            </div>
-         </div>
-      </section>
-
-      {/* 3. CAPABILITIES GRID (Sleek List) */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200 ">
-         <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
-               <h2 className="text-3xl font-extrabold tracking-tight text-slate-900  mb-2">{isHindi ? 'मुख्य क्षमताएं' : 'Platform Capabilities'}</h2>
-               <p className="text-slate-500  max-w-xl">
-                  {isHindi ? 'आधुनिक नागरिक बुनियादी ढांचे के लिए उपकरण।' : 'A comprehensive suite of tools built for civic coordination.'}
-               </p>
-            </div>
-         </div>
-
-         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
-            {[
-              { icon: Users, title: 'Membership', desc: 'Secure Registry & CRM' },
-              { icon: Video, title: 'Events', desc: 'RSVP & Attendance' },
-              { icon: Check, title: 'Tasks', desc: 'Volunteer Management' },
-              { icon: Megaphone, title: 'Broadcast', desc: 'Mass Announcements' },
-              { icon: Vote, title: 'Elections', desc: 'Secure Polling' },
-              { icon: Activity, title: 'Analytics', desc: 'Growth Insights' },
-              { icon: Layers, title: 'Transparency', desc: 'Public Mode Data' },
-              { icon: Globe, title: 'Federation', desc: 'Network Connectivity' },
-            ].map((item, idx) => (
-              <div key={idx} className="group cursor-default">
-                 <div className="flex items-center gap-4 mb-3">
-                    <div className="bg-slate-100  p-2 rounded-lg text-slate-600  group-hover:text-indigo-500 group-hover:bg-indigo-50  transition-colors">
-                       <item.icon size={20} />
-                    </div>
-                    <h3 className="text-lg font-bold text-slate-900 ">{item.title}</h3>
-                 </div>
-                 <p className="text-slate-500  text-sm">{item.desc}</p>
+        {/* 2. BENTO BOX FEATURES - Sharp Technical Grid */}
+        <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-16 gap-6">
+              <div>
+                 <p className="text-indigo-600 font-mono text-xs uppercase tracking-widest mb-3">{isHindi ? 'मूल प्रणाली' : 'Core System'}</p>
+                 <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900">{isHindi ? 'शासन बुनियादी ढांचा' : 'Governance Infrastructure'}</h2>
               </div>
-            ))}
-         </div>
-      </section>
+              <p className="text-slate-500 max-w-md text-sm leading-relaxed">
+                {isHindi ? 'अनौपचारिक समूहों को संरचित संस्थानों में बदलें।' : 'Everything you need to transform informal groups into structured, transparent institutions. Built for absolute accountability.'}
+              </p>
+           </div>
 
-      {/* 4. PRIVACY & SECURITY */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-         <div className="relative rounded-[2.5rem] bg-slate-900  overflow-hidden p-10 sm:p-16 border border-slate-800  shadow-2xl">
-            {/* Background elements */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/20 blur-[120px] rounded-full translate-x-1/3 -translate-y-1/3" />
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-500/20 blur-[100px] rounded-full -translate-x-1/3 translate-y-1/3" />
-            
-            <div className="relative z-10">
-               <Fingerprint className="text-emerald-400 mb-6" size={48} />
-               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-6">
-                  {isHindi ? 'तटस्थ बुनियादी ढांचा' : 'Privacy & Neutrality First'}
-               </h2>
-               <p className="text-lg text-slate-300 mb-10 max-w-2xl leading-relaxed">
-                  {isHindi 
-                    ? 'हम डेटा नहीं बेचते हैं। हम विज्ञापन नहीं चलाते हैं। आपका सदस्य डेटा आपका है।' 
-                    : 'Sangathan is a platform, not a publisher. We provide the structure, you provide the ideology. We do not sell data or run ads.'}
-               </p>
-               
-               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-8 border-t border-slate-700/50">
-                  <div className="flex items-start gap-3">
-                     <Lock className="text-emerald-400 mt-1" size={20} />
-                     <div>
-                        <h4 className="text-white font-semibold mb-1">End-to-End Isolation</h4>
-                        <p className="text-slate-400 text-sm">Tenant data is strictly separated at the database level.</p>
-                     </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                     <Cpu className="text-indigo-400 mt-1" size={20} />
-                     <div>
-                        <h4 className="text-white font-semibold mb-1">No Ad Profiling</h4>
-                        <p className="text-slate-400 text-sm">Zero tracking pixels or third-party marketing analytics.</p>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </section>
+           {/* Technical CSS Grid */}
+           <div className="grid grid-cols-1 lg:grid-cols-3 gap-1">
+              
+              {/* Box 1 */}
+              <div className="lg:col-span-2 bg-white border border-slate-200 p-10 lg:p-14 group hover:border-indigo-300 transition-colors relative overflow-hidden flex flex-col justify-between min-h-[360px]">
+                 <div className="relative z-10">
+                   <div className="flex items-center gap-4 mb-6">
+                     <Users className="text-indigo-600" size={28} strokeWidth={1.5} />
+                     <h3 className="text-2xl font-bold tracking-tight text-slate-900">Role-based Registry</h3>
+                   </div>
+                   <p className="text-slate-500 max-w-md text-lg leading-relaxed mb-8">
+                     Secure member directories with granular access controls and identity verification. Isolate internal data silos securely.
+                   </p>
+                 </div>
+                 {/* Technical wireframe decoration */}
+                 <div className="absolute -bottom-8 -right-8 w-64 h-64 border border-slate-100 rounded-full opacity-50 group-hover:scale-110 transition-transform duration-700" />
+                 <div className="absolute -bottom-16 -right-16 w-96 h-96 border border-slate-100 rounded-full opacity-50 group-hover:scale-110 transition-transform duration-1000 delay-75" />
+                 
+                 <div className="mt-auto">
+                    <div className="w-full flex border-t border-slate-100 pt-4 gap-8">
+                      <div>
+                        <p className="text-xs font-mono text-slate-400 uppercase tracking-widest mb-1">Status</p>
+                        <p className="text-sm font-bold text-slate-700">Encrypted</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-mono text-slate-400 uppercase tracking-widest mb-1">Access</p>
+                        <p className="text-sm font-bold text-slate-700">Granular (RBAC)</p>
+                      </div>
+                    </div>
+                 </div>
+              </div>
 
-      {/* 5. FINAL CTA */}
-      <section className="py-32 px-4 text-center max-w-3xl mx-auto">
-         <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900  mb-6">
-            {isHindi ? 'एक स्थायी संस्थान बनाएं।' : 'Build a lasting institution.'}
-         </h2>
-         <p className="text-lg text-slate-500  mb-10">
-            {isHindi
-              ? 'संगठन के साथ शक्ति बनाने वाले एनजीओ, यूनियनों और समूहों के समुदाय में शामिल हों।'
-              : 'Join the community of NGOs, unions, and collectives building power with Sangathan.'}
-         </p>
-         <Link 
-            href="/signup" 
-            className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-10 py-5 rounded-full font-bold text-lg transition-all hover:scale-105 hover:shadow-[0_0_30px_rgb(79,70,229,0.4)]"
-         >
-            {isHindi ? 'अभी शुरू करें' : 'Get Started for Free'} <ArrowRight size={18} />
-         </Link>
-      </section>
+              {/* Box 2 */}
+              <div className="bg-white border border-slate-200 p-10 lg:p-14 group hover:border-indigo-300 transition-colors relative overflow-hidden flex flex-col min-h-[360px]">
+                 <div className="mb-auto">
+                   <Vote className="text-indigo-600 mb-6" size={28} strokeWidth={1.5} />
+                   <h3 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">Resolutions</h3>
+                   <p className="text-slate-500 text-lg leading-relaxed">
+                     Cryptographically verifiable voting and polls for decisive governance.
+                   </p>
+                 </div>
+              </div>
+
+              {/* Box 3 */}
+              <div className="bg-white border border-slate-200 p-10 lg:p-14 group hover:border-indigo-300 transition-colors relative overflow-hidden flex flex-col min-h-[360px]">
+                 <div className="mb-auto">
+                   <Banknote className="text-indigo-600 mb-6" size={28} strokeWidth={1.5} />
+                   <h3 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">Ledgers</h3>
+                   <p className="text-slate-500 text-lg leading-relaxed">
+                     Automated financial logging and transparent receipt tracking.
+                   </p>
+                 </div>
+              </div>
+
+              {/* Box 4 */}
+              <div className="lg:col-span-2 bg-white border border-slate-200 p-10 lg:p-14 group hover:border-indigo-300 transition-colors relative overflow-hidden flex flex-col min-h-[360px]">
+                 <div className="flex items-center gap-4 mb-6">
+                   <ShieldCheck className="text-indigo-600" size={28} strokeWidth={1.5} />
+                   <h3 className="text-2xl font-bold tracking-tight text-slate-900">Immutable Audit Logs</h3>
+                 </div>
+                 <p className="text-slate-500 max-w-xl text-lg leading-relaxed mb-8">
+                   Every administrative action is securely logged to prevent abuse of power and ensure absolute accountability across your collective.
+                 </p>
+                 <div className="mt-auto">
+                    <div className="w-full flex border-t border-slate-100 pt-4 gap-8">
+                      <div>
+                        <p className="text-xs font-mono text-slate-400 uppercase tracking-widest mb-1">Integrity</p>
+                        <p className="text-sm font-bold text-slate-700">WORM Storage</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-mono text-slate-400 uppercase tracking-widest mb-1">Retention</p>
+                        <p className="text-sm font-bold text-slate-700">Permanent</p>
+                      </div>
+                    </div>
+                 </div>
+              </div>
+
+           </div>
+        </section>
+
+        {/* 3. CAPABILITIES GRID (Data Grid Style) */}
+        <section className="py-24 border-t border-b border-slate-200 bg-slate-50/50">
+           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+             <div className="mb-16">
+                <p className="text-indigo-600 font-mono text-xs uppercase tracking-widest mb-3">{isHindi ? 'प्लेटफ़ॉर्म मॉड्यूल' : 'Platform Modules'}</p>
+                <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">{isHindi ? 'मुख्य क्षमताएं' : 'Capabilities'}</h2>
+             </div>
+
+             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0 border-l border-t border-slate-200">
+                {[
+                  { icon: Users, title: 'Membership', desc: 'Secure Registry & CRM' },
+                  { icon: Video, title: 'Events', desc: 'RSVP & Attendance' },
+                  { icon: Check, title: 'Tasks', desc: 'Volunteer Management' },
+                  { icon: Megaphone, title: 'Broadcast', desc: 'Mass Announcements' },
+                  { icon: Vote, title: 'Elections', desc: 'Secure Polling' },
+                  { icon: Activity, title: 'Analytics', desc: 'Growth Insights' },
+                  { icon: Layers, title: 'Transparency', desc: 'Public Mode Data' },
+                  { icon: Globe, title: 'Federation', desc: 'Network Connectivity' },
+                ].map((item, idx) => (
+                  <div key={idx} className="p-8 border-r border-b border-slate-200 bg-white hover:bg-slate-50 transition-colors">
+                     <item.icon className="text-slate-400 mb-6" size={24} strokeWidth={1.5} />
+                     <h3 className="text-lg font-bold text-slate-900 tracking-tight mb-2">{item.title}</h3>
+                     <p className="text-slate-500 text-sm font-medium">{item.desc}</p>
+                  </div>
+                ))}
+             </div>
+           </div>
+        </section>
+
+        {/* 4. PRIVACY & SECURITY - Redesigned as Technical Lines instead of Blob */}
+        <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div>
+                 <p className="text-indigo-600 font-mono text-xs uppercase tracking-widest mb-3">{isHindi ? 'डेटा संप्रभुता' : 'Data Sovereignty'}</p>
+                 <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 mb-6">
+                    {isHindi ? 'तटस्थ बुनियादी ढांचा' : 'Privacy & Neutrality First'}
+                 </h2>
+                 <p className="text-lg text-slate-500 mb-8 leading-relaxed">
+                    {isHindi 
+                      ? 'हम डेटा नहीं बेचते हैं। हम विज्ञापन नहीं चलाते हैं। आपका सदस्य डेटा आपका है।' 
+                      : 'Sangathan is a platform, not a publisher. We provide the structure, you provide the ideology. We do not sell data or run ads.'}
+                 </p>
+                 <Link href={`/${lang}/transparency`} className="text-sm font-bold uppercase tracking-widest text-indigo-600 hover:text-indigo-800 flex items-center gap-2">
+                   {isHindi ? 'हमारी डेटा नीति पढ़ें' : 'Read our data policy'} <ArrowRight size={16} />
+                 </Link>
+              </div>
+
+              <div className="space-y-6">
+                 {/* Minimalist Data Cards */}
+                 <div className="border border-slate-200 p-6 bg-white flex items-start gap-4 hover:border-indigo-300 transition-colors">
+                    <Lock className="text-slate-400 shrink-0" size={24} strokeWidth={1.5} />
+                    <div>
+                       <h4 className="text-slate-900 font-bold tracking-tight mb-2">End-to-End Isolation</h4>
+                       <p className="text-slate-500 text-sm leading-relaxed">Tenant data is strictly separated at the database level with RLS (Row Level Security) policies.</p>
+                    </div>
+                 </div>
+                 <div className="border border-slate-200 p-6 bg-white flex items-start gap-4 hover:border-indigo-300 transition-colors">
+                    <Fingerprint className="text-slate-400 shrink-0" size={24} strokeWidth={1.5} />
+                    <div>
+                       <h4 className="text-slate-900 font-bold tracking-tight mb-2">Zero Tracking</h4>
+                       <p className="text-slate-500 text-sm leading-relaxed">No tracking pixels. No cross-site profiling. Your members are not targeted for behavioral advertising.</p>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </section>
+
+        {/* 5. FINAL CTA - Minimalist & Sharp */}
+        <section className="border-t border-slate-200 bg-white relative overflow-hidden">
+           <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.02]"
+                style={{ backgroundImage: 'linear-gradient(slate-900 1px, transparent 1px), linear-gradient(90deg, slate-900 1px, transparent 1px)', backgroundSize: '40px 40px' }}
+           />
+           <div className="py-32 px-4 text-center max-w-4xl mx-auto relative z-10">
+             <h2 className="text-4xl sm:text-6xl font-black tracking-tighter text-slate-900 mb-6">
+                {isHindi ? 'एक स्थायी संस्थान बनाएं।' : 'Build a lasting institution.'}
+             </h2>
+             <p className="text-xl text-slate-500 mb-12 font-medium">
+                {isHindi
+                  ? 'संगठन के साथ शक्ति बनाने वाले एनजीओ, यूनियनों और समूहों के समुदाय में शामिल हों।'
+                  : 'Join the community of NGOs, unions, and collectives building power with Sangathan.'}
+             </p>
+             <Link 
+                href="/signup" 
+                className="inline-flex items-center gap-3 bg-slate-900 hover:bg-indigo-600 text-white px-10 py-5 font-bold text-sm tracking-widest uppercase transition-colors border border-slate-900"
+             >
+                {isHindi ? 'अभी शुरू करें' : 'Deploy Infrastructure'} <ArrowRight size={16} />
+             </Link>
+           </div>
+        </section>
+        
+      </div>
     </div>
   )
 }

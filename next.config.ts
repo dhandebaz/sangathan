@@ -33,6 +33,11 @@ const nextConfig: NextConfig = {
         destination: '/:lang/transparency',
         permanent: true,
       },
+      {
+        source: '/:lang/roadmap',
+        destination: '/:lang/features',
+        permanent: true,
+      },
     ];
   },
 };

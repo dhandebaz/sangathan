@@ -57,3 +57,5 @@ Example:
 
 ---
 *Auto-synced | 2026-06-15*
+
+- **NEVER use dark 'square blob' CTA blocks or rounded AI-generated style dark cards at the bottom of pages.** Use crisp, light, geometric technical designs instead.

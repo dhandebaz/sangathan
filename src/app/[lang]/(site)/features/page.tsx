@@ -221,29 +221,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
           })}
         </div>
 
-        {/* Unified Platform Banner */}
-        <div className="mt-40 relative rounded-[2.5rem] bg-slate-900 overflow-hidden p-10 sm:p-16 border border-slate-800 shadow-2xl text-center max-w-5xl mx-auto">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/20 blur-[120px] rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-cyan-500/20 blur-[100px] rounded-full -translate-x-1/3 translate-y-1/3 pointer-events-none" />
-          
-          <div className="relative z-10">
-             <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-6">
-                {isHindi ? 'एक ही बुनियादी ढांचा। अनंत संभावनाएं।' : 'One infrastructure. Infinite possibilities.'}
-             </h2>
-             <p className="text-lg text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-                {isHindi 
-                  ? 'चाहे आप 10 लोगों का स्वयंसेवक समूह हों या 10,000 सदस्यों वाला राष्ट्रव्यापी संघ, हमारा सिस्टम आपके साथ बढ़ता है।' 
-                  : 'Whether you are a 10-person volunteer group or a 10,000-member nationwide union, our system scales with you.'}
-             </p>
-             
-             <Link 
-                href={`/${lang}/pricing`} 
-                className="inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-900 px-10 py-5 rounded-full font-bold text-lg transition-all hover:scale-105 hover:shadow-[0_0_30px_rgb(255,255,255,0.3)]"
-             >
-                {isHindi ? 'मूल्य निर्धारण देखें' : 'View Pricing Plans'} <ArrowRight size={18} />
-             </Link>
-          </div>
-        </div>
+
 
       </div>
     </div>
