@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { checkCapability } from '@/lib/capabilities'
 import { generateText } from 'ai'
 import { openai } from '@ai-sdk/openai'
+import { checkRateLimit } from '@/lib/ratelimit'
 
 export async function GET(request: Request) {
   try {
@@ -14,6 +15,30 @@ export async function GET(request: Request) {
     }
 
     const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // Rate limit: 10 requests per minute per user
+    const allowed = await checkRateLimit(`ai_summary:${user.id}`, 'API')
+    if (!allowed) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
+
+    // Verify caller belongs to the requested org
+    const { data: membership } = await supabase
+      .from('members')
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('organisation_id', orgId)
+      .eq('status', 'active')
+      .maybeSingle()
+
+    if (!membership) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
     
     // Get stats from exactly 7 days ago
     const oneWeekAgo = new Date()
@@ -70,8 +95,7 @@ export async function GET(request: Request) {
     })
 
     return NextResponse.json({ summary: text, isAi: true })
-  } catch (error) {
-    console.error('Summary API Error:', error)
+  } catch {
     return NextResponse.json(
       { summary: 'Unable to load insights at this time.', isAi: false },
       { status: 500 }

@@ -54,8 +54,7 @@ export async function checkRateLimit(key: string, configType: 'LOGIN' | 'SIGNUP'
     
     const { success } = await limiter.limit(key)
     return success
-  } catch (err) {
-    console.error('Upstash rate limit error — blocking request', err)
+  } catch {
     return false
   }
 }
@@ -66,5 +65,23 @@ export async function checkRateLimitWithGrace(key: string, configType: 'LOGIN' |
     return { allowed, degraded: false }
   } catch {
     return { allowed: true, degraded: true }
+  }
+}
+
+/**
+ * Generic key-based rate limit check using Upstash Redis.
+ * Used internally by createSafeAction and for custom rate limit scenarios.
+ */
+export async function checkRateLimitByKey(key: string, points: number, duration: number): Promise<boolean> {
+  try {
+    const limiter = new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(points, `${duration} s`),
+      analytics: true,
+    })
+    const { success } = await limiter.limit(key)
+    return success
+  } catch {
+    return true // Fail open: if Redis is down, allow the request
   }
 }

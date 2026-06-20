@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { i18n } from '@/lib/i18n/config'
 import { createSignedCookie, verifySignedCookie } from '@/lib/auth/cookie'
 
-function applySecurityHeaders(response: NextResponse): NextResponse {
+function applySecurityHeaders(response: NextResponse, isApiRoute = false): NextResponse {
   response.headers.set('X-Frame-Options', 'DENY')
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
@@ -28,12 +28,43 @@ function applySecurityHeaders(response: NextResponse): NextResponse {
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
+      "worker-src 'self'",
+      "manifest-src 'self'",
     ].join('; ')
   )
+
+  // Additional isolation headers
+  response.headers.set('Cross-Origin-Opener-Policy', 'same-origin')
+  response.headers.set('Cross-Origin-Resource-Policy', 'same-origin')
+
+  // CORS for API routes
+  if (isApiRoute) {
+    response.headers.set('Access-Control-Allow-Origin', process.env.NEXT_PUBLIC_APP_URL || 'https://sangathan.app')
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Cron-Secret')
+    response.headers.set('Access-Control-Max-Age', '86400')
+  }
+
   return response
 }
 
+const MAX_BODY_SIZE = 1024 * 100 // 100KB
+
+function checkBodySize(request: NextRequest): NextResponse | null {
+  if (['POST', 'PUT', 'PATCH'].includes(request.method)) {
+    const contentLength = request.headers.get('content-length')
+    if (contentLength && parseInt(contentLength, 10) > MAX_BODY_SIZE) {
+      return NextResponse.json({ error: 'Request body too large' }, { status: 413 })
+    }
+  }
+  return null
+}
+
 export async function updateSession(request: NextRequest) {
+  // Block oversized request bodies early
+  const bodySizeCheck = checkBodySize(request)
+  if (bodySizeCheck) return applySecurityHeaders(bodySizeCheck)
+
   let supabaseResponse = NextResponse.next({
     request,
   })
@@ -68,9 +99,8 @@ export async function updateSession(request: NextRequest) {
       const { data } = await supabase.auth.getUser()
       user = data.user
     }
-  } catch (error) {
-    console.error('Middleware Auth Error:', error)
-    // Proceed as unauthenticated
+  } catch {
+    // Auth error — proceed as unauthenticated without leaking details
   }
 
   // Protect System Admin Routes
@@ -191,10 +221,11 @@ export async function updateSession(request: NextRequest) {
     return applySecurityHeaders(NextResponse.redirect(url))
   }
 
-  // --- Dashboard Route Check ---
+  // --- Route Type Check ---
   const isDashboardRoute = i18n.locales.some(loc => pathname.startsWith(`/${loc}/dashboard`))
+  const isApiRoute = pathname.startsWith('/api')
 
-  applySecurityHeaders(supabaseResponse)
+  applySecurityHeaders(supabaseResponse, isApiRoute)
 
    // --- CAPABILITIES (ORG TYPE) ENFORCEMENT ---
    if (user && isDashboardRoute) {

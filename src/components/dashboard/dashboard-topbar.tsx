@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { Bell, ChevronDown, LogOut, Settings, User } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
@@ -16,7 +17,8 @@ interface DashboardTopBarProps {
   orgType?: string
 }
 
-export function DashboardTopBar({ lang, userEmail, role, orgName, orgLogoUrl, orgType }: DashboardTopBarProps) {
+export function DashboardTopBar(props: DashboardTopBarProps) {
+  const { lang, userEmail, role, orgName, orgLogoUrl } = props
   const [open, setOpen] = useState(false)
   const [isSigningOut, setIsSigningOut] = useState(false)
   const pathname = usePathname()
@@ -98,7 +100,7 @@ export function DashboardTopBar({ lang, userEmail, role, orgName, orgLogoUrl, or
             aria-label="Sangathan Dashboard"
           >
             {orgLogoUrl ? (
-              <img src={orgLogoUrl} alt="" className="h-8 w-8 rounded-lg object-contain" />
+              <Image src={orgLogoUrl} alt="" width={32} height={32} className="h-8 w-8 rounded-lg object-contain" />
             ) : (
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold">
                 {initials}

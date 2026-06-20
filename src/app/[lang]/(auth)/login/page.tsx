@@ -2,16 +2,19 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { login, otpLogin, signup } from '@/actions/auth'
 import { Loader2, Mail, Lock, ArrowRight, ShieldAlert, User } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { Suspense } from 'react'
 
-export default function AuthPage() {
+function AuthForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const defaultTab = searchParams.get('tab') === 'signup' ? 'signup' : 'login'
 
   async function handleLoginSubmit(formData: FormData) {
     setLoading(true)
@@ -62,7 +65,7 @@ export default function AuthPage() {
 
   return (
     <div className="w-full">
-      <Tabs defaultValue="login" className="w-full">
+      <Tabs defaultValue={defaultTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2 mb-8">
           <TabsTrigger value="login">Log In</TabsTrigger>
           <TabsTrigger value="signup">Sign Up</TabsTrigger>
@@ -265,5 +268,13 @@ export default function AuthPage() {
         </TabsContent>
       </Tabs>
     </div>
+  )
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center py-12"><Loader2 className="animate-spin text-gray-400" size={32} /></div>}>
+      <AuthForm />
+    </Suspense>
   )
 }

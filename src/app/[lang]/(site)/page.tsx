@@ -65,7 +65,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link 
-                  href="/signup" 
+                  href={`/${lang}/login?tab=signup`} 
                   className="bg-[var(--text-primary)] text-[var(--bg-primary)] px-8 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition-all flex items-center justify-center gap-2"
                 >
                   {isHindi ? 'संगठन बनाएं' : 'Create Organisation'} <ArrowRight size={18} />
@@ -243,7 +243,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
          </div>
       </section>
 
-      {/* 6. HOW IT WORKS - 3 Steps */}
+      {/* 7. HOW IT WORKS - 3 Steps */}
       <section className="py-24 bg-[var(--bg-secondary)] border-t border-[var(--border-subtle)]">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl font-bold mb-16 text-[var(--text-primary)]">{isHindi ? 'यह काम किस प्रकार करता है' : 'How It Works'}</h2>

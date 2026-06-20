@@ -4,6 +4,7 @@ import { createSafeAction } from '@/lib/auth/actions'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { logger } from '@/lib/logger'
 import { logAction } from '@/lib/audit/log'
 import { triageTicketContent } from '@/actions/ai/triage'
 
@@ -52,7 +53,8 @@ export const createTicket = createSafeAction(
       .single()
 
     if (error || !data) {
-      return { error: error?.message || 'Failed to create ticket' }
+      logger.error('ticket_create', 'Failed to create ticket', { error: error?.message })
+      return { error: 'Failed to create ticket' }
     }
 
     await logAction({
@@ -97,7 +99,8 @@ export const updateTicketStatus = createSafeAction(
       .eq('organisation_id', context.organizationId)
 
     if (error) {
-      return { error: error.message }
+      logger.error('ticket_update', 'Failed to update ticket', { error: error.message })
+      return { error: 'Failed to update ticket' }
     }
 
     if (ticket) {
@@ -142,7 +145,8 @@ export const deleteTicket = createSafeAction(
       .eq('organisation_id', context.organizationId)
 
     if (error) {
-      return { error: error.message }
+      logger.error('ticket_delete', 'Failed to delete ticket', { error: error.message })
+      return { error: 'Failed to delete ticket' }
     }
 
     if (ticket) {

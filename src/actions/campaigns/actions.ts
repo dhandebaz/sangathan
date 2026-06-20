@@ -4,6 +4,7 @@ import { createSafeAction } from '@/lib/auth/actions'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { logger } from '@/lib/logger'
 import { logAction } from '@/lib/audit/log'
 
 // --- Schemas ---
@@ -42,7 +43,8 @@ export const createCampaign = createSafeAction(
       .single()
 
     if (error || !data) {
-      return { error: error?.message || 'Failed to create campaign' }
+      logger.error('campaign_create', 'Failed to create campaign', { error: error?.message })
+      return { error: 'Failed to create campaign' }
     }
 
     await logAction({
@@ -73,7 +75,8 @@ export const updateCampaignStatus = createSafeAction(
       .eq('organisation_id', context.organizationId)
 
     if (error) {
-      return { error: error.message }
+      logger.error('campaign_update', 'Failed to update campaign', { error: error.message })
+      return { error: 'Failed to update campaign' }
     }
 
     await logAction({
@@ -104,7 +107,8 @@ export const deleteCampaign = createSafeAction(
       .eq('organisation_id', context.organizationId)
 
     if (error) {
-      return { error: error.message }
+      logger.error('campaign_delete', 'Failed to delete campaign', { error: error.message })
+      return { error: 'Failed to delete campaign' }
     }
 
     await logAction({

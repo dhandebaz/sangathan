@@ -1,12 +1,5 @@
 import { createServiceClient } from '@/lib/supabase/service'
-
-type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+import type { Json } from '@/types/database'
 
 export type OrgCapability = 
   | 'basic_governance' 
@@ -27,12 +20,12 @@ export type OrgCapability =
   | 'memberships'
   | 'ai_features'
 
-export const DEFAULT_CAPABILITIES: Record<OrgCapability, boolean> = {
+export const BASE_CAPABILITIES: Record<OrgCapability, boolean> = {
   basic_governance: true,
   advanced_analytics: false,
-  federation_mode: true,
-  voting_engine: true,
-  volunteer_engine: true,
+  federation_mode: false,
+  voting_engine: false,
+  volunteer_engine: false,
   transparency_mode: false,
   coalition_tools: false,
   campaigns: false,
@@ -45,6 +38,23 @@ export const DEFAULT_CAPABILITIES: Record<OrgCapability, boolean> = {
   events: false,
   memberships: false,
   ai_features: false
+}
+
+export function getOrgTypeDefaults(orgType?: string | null): Record<OrgCapability, boolean> {
+  if (orgType === 'ngo') {
+    return { ...BASE_CAPABILITIES, volunteers: true, donations: true, campaigns: true, coalition_tools: true, transparency_mode: true, memberships: true, volunteer_engine: true }
+  }
+  if (orgType === 'student_union') {
+    return { ...BASE_CAPABILITIES, student_ids: true, events: true, voting_engine: true, grievances: true, federation_mode: true, campaigns: true, memberships: true }
+  }
+  if (orgType === 'workers_union') {
+    return { ...BASE_CAPABILITIES, grievances: true, voting_engine: true, federation_mode: true, campaigns: true, memberships: true }
+  }
+  if (orgType === 'rwa') {
+    return { ...BASE_CAPABILITIES, maintenance: true, complaints: true, donations: true, voting_engine: true, events: true, memberships: true }
+  }
+  
+  return { ...BASE_CAPABILITIES, voting_engine: true, federation_mode: true, volunteer_engine: true }
 }
 
 // Logic to unlock capabilities based on org maturity
@@ -67,8 +77,9 @@ export async function unlockCapabilities(orgId: string) {
   const completedEvents = events.count || 0
   
   // 2. Fetch Current Capabilities
-  const { data: org } = await supabase.from('organisations').select('capabilities').eq('id', orgId).single()
-  const current = (org?.capabilities as Record<string, boolean> || DEFAULT_CAPABILITIES)
+  const { data: org } = await supabase.from('organisations').select('capabilities, org_type').eq('id', orgId).single()
+  const defaults = getOrgTypeDefaults(org?.org_type)
+  const current = (org?.capabilities as Record<string, boolean> || defaults)
   
   const updates: Record<string, boolean> = {}
   let hasUpdates = false
@@ -116,29 +127,28 @@ export async function checkCapability(orgId: string, capability: OrgCapability, 
   } catch (error) {
     console.error('Capability check fallback: service client not configured', error)
     if (shouldThrow) throw new Error('System Configuration Error')
-    return DEFAULT_CAPABILITIES[capability] || false
+    return getOrgTypeDefaults()[capability] || false
   }
   
   const { data } = await supabase
     .from('organisations')
-    .select('capabilities')
+    .select('capabilities, org_type')
     .eq('id', orgId)
     .single()
     
+  const defaults = getOrgTypeDefaults(data?.org_type)
+  
   if (!data || !data.capabilities) {
-      if (shouldThrow && !DEFAULT_CAPABILITIES[capability]) {
+      if (shouldThrow && !defaults[capability]) {
           throw new Error(`Access Denied: Capability '${capability}' is not enabled for this organisation.`)
       }
-      return DEFAULT_CAPABILITIES[capability] || false
+      return defaults[capability] || false
   }
   
   const stored = data.capabilities as Record<string, boolean>
-  const hasCap = !!stored[capability] || !!DEFAULT_CAPABILITIES[capability]
+  const hasCap = !!stored[capability] || !!defaults[capability]
   
   if (!hasCap && shouldThrow) {
-      // If we are in a server action, throw error.
-      // If we are in a server component (page), we might want to redirect.
-      // We detect context roughly or just throw since standard error handling catches it.
       throw new Error(`Access Denied: Capability '${capability}' is locked.`)
   }
   
@@ -155,17 +165,18 @@ export async function getOrgCapabilities(orgId: string): Promise<Record<string, 
     supabase = createServiceClient()
   } catch (error) {
     console.error('Org capabilities fallback: service client not configured', error)
-    return DEFAULT_CAPABILITIES
+    return getOrgTypeDefaults()
   }
   
   const { data } = await supabase
     .from('organisations')
-    .select('capabilities')
+    .select('capabilities, org_type')
     .eq('id', orgId)
     .single()
     
-  if (!data || !data.capabilities) return DEFAULT_CAPABILITIES
+  const defaults = getOrgTypeDefaults(data?.org_type)
+  if (!data || !data.capabilities) return defaults
   
   const capabilities = data.capabilities as Record<string, boolean>
-  return { ...DEFAULT_CAPABILITIES, ...capabilities }
+  return { ...defaults, ...capabilities }
 }

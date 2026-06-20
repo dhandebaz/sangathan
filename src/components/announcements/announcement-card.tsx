@@ -19,7 +19,7 @@ export function AnnouncementCard({ announcement, isRead, onRead }: { announcemen
   const handleMarkRead = async () => {
     if (read) return
     setRead(true)
-    await markAnnouncementRead(announcement.id)
+    await markAnnouncementRead({ announcementId: announcement.id })
     if (onRead) onRead()
   }
 

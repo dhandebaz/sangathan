@@ -60,7 +60,7 @@ export function ImageUpload({ type, currentUrl, orgId }: ImageUploadProps) {
         .getPublicUrl(filePath)
 
       // Update database
-      const res = await updateOrganisationImage(type, publicUrl)
+      const res = await updateOrganisationImage({ type, url: publicUrl })
 
       if (!res.success) {
         throw new Error(res.error)

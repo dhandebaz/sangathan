@@ -21,6 +21,6 @@ export async function GET(request: NextRequest) {
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     logger.error('cron', 'Job processing failed', { error: message })
-    return NextResponse.json({ success: false, error: message }, { status: 500 })
+    return NextResponse.json({ success: false, error: 'Internal error' }, { status: 500 })
   }
 }

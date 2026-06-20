@@ -45,19 +45,19 @@ export function TaskCard({ task, userId, canManage }: { task: Task, userId: stri
 
   const handleAccept = async () => {
     setLoading(true)
-    await acceptAssignment(task.id)
+    await acceptAssignment({ taskId: task.id })
     setLoading(false)
   }
 
   const handleStart = async () => {
     setLoading(true)
-    await updateTaskStatus(task.id, 'in_progress')
+    await updateTaskStatus({ taskId: task.id, status: 'in_progress' })
     setLoading(false)
   }
 
   const handleComplete = async () => {
     setLoading(true)
-    await updateTaskStatus(task.id, 'completed')
+    await updateTaskStatus({ taskId: task.id, status: 'completed' })
     setLoading(false)
   }
 

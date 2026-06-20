@@ -27,7 +27,7 @@ export function QRScanner({ userId }: { eventId: string, userId: string }) {
       setMessage('Verifying...')
       
       try {
-        const res = await verifyAndCheckIn({ qrData: decodedText, scannedByUserId: userId })
+        const res = await verifyAndCheckIn({ qrData: decodedText })
         
         if (res.success) {
           setStatus('success')

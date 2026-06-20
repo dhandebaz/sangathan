@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Plus, Edit, Trash, Shield, User } from 'lucide-react'
+import { Plus, Edit, Trash, Shield } from 'lucide-react'
 import { createCustomRole, updateRole, deleteRole } from '@/actions/roles'
 import { toast } from 'sonner'
 
@@ -33,7 +33,7 @@ const defaultPermissions: Permissions = {
   can_manage_forms: false
 }
 
-export function RoleManager({ initialRoles, organisationId, lang }: RoleManagerProps) {
+export function RoleManager({ initialRoles, organisationId }: RoleManagerProps) {
   const [roles, setRoles] = useState<Role[]>(initialRoles)
   const [editingRole, setEditingRole] = useState<Role | null>(null)
   const [showNewRole, setShowNewRole] = useState(false)
@@ -60,7 +60,7 @@ export function RoleManager({ initialRoles, organisationId, lang }: RoleManagerP
       } else {
         toast.error(result.error || 'Failed to create role')
       }
-    } catch (err) {
+    } catch {
       toast.error('An error occurred')
     }
   }
@@ -83,7 +83,7 @@ export function RoleManager({ initialRoles, organisationId, lang }: RoleManagerP
       } else {
         toast.error(result.error || 'Failed to update role')
       }
-    } catch (err) {
+    } catch {
       toast.error('An error occurred')
     }
   }
@@ -98,7 +98,7 @@ export function RoleManager({ initialRoles, organisationId, lang }: RoleManagerP
       } else {
         toast.error(result.error || 'Failed to delete role')
       }
-    } catch (err) {
+    } catch {
       toast.error('An error occurred')
     }
   }

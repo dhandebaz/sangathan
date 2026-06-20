@@ -156,7 +156,6 @@ export default async function DocsIndex({ params }: { params: Promise<{ lang: st
                 </div>
                 <ul className="mt-3 grid gap-1 sm:grid-cols-2">
                   {category.items.map((item) => {
-                    const cleanSlug = item.slug.split('#')[0]
                     return (
                       <li key={item.slug}>
                         <Link href={`/${lang}/docs/${item.slug}`} className="flex min-h-10 items-center rounded-md px-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-orange-800">

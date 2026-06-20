@@ -61,7 +61,7 @@ export default async function DashboardLayout(props: {
         const membership = membershipData as unknown as Membership
         role = membership.role
       }
-    } catch (_e) {
+    } catch {
       capabilities = { basic_governance: false }
     }
   }
@@ -79,7 +79,7 @@ export default async function DashboardLayout(props: {
         maintenanceMessage = value.message || 'The platform is currently under maintenance.'
       }
     }
-  } catch (_e) {
+  } catch {
     maintenanceMessage = null
   }
 

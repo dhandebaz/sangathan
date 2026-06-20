@@ -4,8 +4,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { JoinButton } from '@/components/org/join-button'
 import { getCollaboratingOrgs } from '@/actions/collaboration'
 import Link from 'next/link'
-import { Calendar, MapPin, Video } from 'lucide-react'
-import { Organisation, DashboardEvent, DashboardAnnouncement, Meeting } from '@/types/dashboard'
+import { Organisation } from '@/types/dashboard'
 
 export default async function OrgPage(props: { params: Promise<{ slug: string; lang: string }> }) {
   const { slug, lang } = await props.params
@@ -54,7 +53,7 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
     if (profile) memberStatus = profile.status
   }
 
-  const { data: announcements } = await supabaseAdmin
+  await supabaseAdmin
     .from('announcements')
     .select('*')
     .eq('organisation_id', org.id)
@@ -63,36 +62,7 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
     .order('created_at', { ascending: false })
     .limit(5)
 
-  const { data: ownedEvents } = await supabaseAdmin
-    .from('events')
-    .select('*')
-    .eq('organisation_id', org.id)
-    .eq('event_type', 'public')
-    .gte('start_time', new Date().toISOString())
 
-  const { data: jointMappings } = await supabaseAdmin
-    .from('joint_events')
-    .select('event:events(*)')
-    .eq('organisation_id', org.id)
-
-  const jointEvents =
-    (jointMappings as unknown as { event: DashboardEvent }[])
-      ?.map((mapping) => mapping.event)
-      .filter((event) => event.event_type === 'public' && new Date(event.start_time) >= new Date()) || []
-
-  const allEvents = [...((ownedEvents as DashboardEvent[]) || []), ...jointEvents].sort(
-    (a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
-  )
-
-  const { data: publicMeetingsData } = await supabaseAdmin
-    .from('meetings')
-    .select('id, organisation_id, title, description, date, end_time, location, visibility, meeting_link')
-    .eq('organisation_id', org.id)
-    .eq('visibility', 'public')
-    .gte('date', new Date().toISOString())
-    .order('date', { ascending: true })
-
-  const publicMeetings = (publicMeetingsData as Meeting[] | null) || []
 
   const partners = (await getCollaboratingOrgs(org.id)) as (Organisation & { id: string })[]
 

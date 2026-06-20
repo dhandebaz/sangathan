@@ -53,7 +53,7 @@ export async function getUserMemberships(userId: string): Promise<MembershipCont
 
   try {
     await redis.set(cacheKey, memberships, { ex: 3600 }) // Cache for 1 hour
-  } catch (e) {
+  } catch {
     // Ignore cache set failures
   }
 

@@ -1,13 +1,12 @@
 'use server'
 
+import { createSafeAction } from '@/lib/auth/actions'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { enqueueJobs } from '@/lib/queue'
 import { checkBroadcastLimit } from '@/lib/risk-engine'
-
-// --- Schemas ---
 
 const AnnouncementSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 chars'),
@@ -19,69 +18,56 @@ const AnnouncementSchema = z.object({
   expires_at: z.string().datetime().optional().nullable(),
 })
 
-const CreateAnnouncementSchema = AnnouncementSchema.extend({
-  organisation_id: z.string().uuid(),
+const DeleteSchema = z.object({
+  id: z.string().uuid(),
 })
 
-// --- Actions ---
-
-export async function createAnnouncement(input: z.infer<typeof CreateAnnouncementSchema>) {
-  try {
-    const result = CreateAnnouncementSchema.safeParse(input)
-    if (!result.success) {
-      return { success: false, error: result.error.issues[0]?.message || 'Invalid announcement data' }
+export const createAnnouncement = createSafeAction(
+  AnnouncementSchema,
+  async (input, context) => {
+    if (input.send_email) {
+      const limitCheck = await checkBroadcastLimit(context.organizationId)
+      if (!limitCheck.allowed) {
+        return { error: `Broadcast blocked: ${limitCheck.reason}` }
+      }
     }
-
-    const data = result.data
 
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    
-    if (!user) return { success: false, error: 'Unauthorized' }
-
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role, organisation_id')
-      .eq('id', user.id)
-      .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
-
-    if (!profile || profile.organisation_id !== data.organisation_id || !['admin', 'editor'].includes(profile.role || '')) {
-      return { success: false, error: 'Permission denied' }
-    }
-    
-    // Risk Check: Broadcast Limit
-    if (data.send_email) {
-       const limitCheck = await checkBroadcastLimit(data.organisation_id)
-       if (!limitCheck.allowed) {
-          return { success: false, error: `Broadcast blocked: ${limitCheck.reason}` }
-       }
-    }
 
     const { data: announcement, error } = await supabase
       .from('announcements')
       .insert({
-        ...data,
-        created_by: user.id,
+        organisation_id: context.organizationId,
+        title: input.title,
+        content: input.content,
+        visibility_level: input.visibility_level,
+        is_pinned: input.is_pinned,
+        send_email: input.send_email,
+        scheduled_at: input.scheduled_at,
+        expires_at: input.expires_at,
+        created_by: context.user.id,
       } as never)
       .select()
       .single()
 
-    if (error || !announcement) throw new Error(error?.message || 'Failed to create announcement')
+    if (error || !announcement) {
+      return { error: error?.message || 'Failed to create announcement' }
+    }
 
-    if (data.send_email) {
+    if (input.send_email) {
       const supabaseAdmin = createServiceClient()
-      
+
       let query = supabaseAdmin
         .from('profiles')
         .select('email, full_name')
-        .eq('organisation_id', data.organisation_id)
+        .eq('organisation_id', context.organizationId)
         .eq('status', 'active')
 
-      if (data.visibility_level === 'executive') {
+      if (input.visibility_level === 'executive') {
         query = query.in('role', ['executive', 'admin', 'editor'])
-      } else if (data.visibility_level === 'core') {
+      } else if (input.visibility_level === 'core') {
         query = query.in('role', ['core', 'executive', 'admin', 'editor'])
-      } else if (data.visibility_level === 'volunteer') {
+      } else if (input.visibility_level === 'volunteer') {
         query = query.in('role', ['volunteer', 'core', 'executive', 'admin', 'editor'])
       }
 
@@ -89,25 +75,25 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
         data: { email: string; full_name: string | null }[] | null
         error: unknown
       }
-      
+
       if (members) {
         const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`
 
-        const emailJobs = members.map(member => ({
+        const emailJobs = members.map((member) => ({
           type: 'send_email' as const,
           payload: {
             to: member.email,
-            subject: `New Announcement: ${data.title}`,
+            subject: `New Announcement: ${input.title}`,
             html: `
               <div style="font-family: sans-serif; padding: 20px;">
-                <h2>${data.title}</h2>
-                <div style="margin: 20px 0; white-space: pre-wrap;">${data.content}</div>
+                <h2>${input.title}</h2>
+                <div style="margin: 20px 0; white-space: pre-wrap;">${input.content}</div>
                 <hr/>
                 <p><a href="${dashboardUrl}">View in Dashboard</a></p>
               </div>
             `,
-            tags: ['announcement', 'broadcast']
-          }
+            tags: ['announcement', 'broadcast'],
+          },
         }))
 
         await enqueueJobs(emailJobs)
@@ -122,51 +108,53 @@ export async function createAnnouncement(input: z.infer<typeof CreateAnnouncemen
       }
     }
 
+    await context.logAction({
+      action: 'ANNOUNCEMENT_CREATED',
+      resourceTable: 'announcements',
+      resourceId: announcement.id,
+      details: { title: input.title },
+    })
+
     revalidatePath('/', 'layout')
-    return { success: true }
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'An unexpected error occurred'
-    return { success: false, error: message }
-  }
-}
+    return { success: true, announcementId: announcement.id }
+  },
+  { allowedRoles: ['admin', 'editor'], actionName: 'create_announcement' },
+)
 
-export async function markAnnouncementRead(announcementId: string) {
-  try {
+export const markAnnouncementRead = createSafeAction(
+  z.object({ announcementId: z.string().uuid() }),
+  async (input, context) => {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    
-    if (!user) return { success: false }
-
     const { error } = await supabase
       .from('announcement_views')
       .upsert(
         {
-          announcement_id: announcementId,
-          user_id: user.id,
+          announcement_id: input.announcementId,
+          user_id: context.user.id,
         } as never,
         { onConflict: 'announcement_id,user_id' },
       )
 
-    if (error) throw error
-    
+    if (error) return { error: error.message }
     return { success: true }
-  } catch (err: unknown) {
-    console.error('Failed to mark announcement as read:', err)
-    return { success: false }
-  }
-}
+  },
+  { actionName: 'mark_announcement_read' },
+)
 
-export async function deleteAnnouncement(id: string) {
-  try {
+export const deleteAnnouncement = createSafeAction(
+  DeleteSchema,
+  async (input, context) => {
     const supabase = await createClient()
-    // Permission check handled by RLS partially, but we should be explicit
-    const { error } = await supabase.from('announcements').delete().eq('id', id)
-    if (error) throw error
-    
+    const { error } = await supabase
+      .from('announcements')
+      .delete()
+      .eq('id', input.id)
+      .eq('organisation_id', context.organizationId)
+
+    if (error) return { error: error.message }
+
     revalidatePath('/', 'layout')
     return { success: true }
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'An unexpected error occurred'
-    return { success: false, error: message }
-  }
-}
+  },
+  { allowedRoles: ['admin', 'editor'], actionName: 'delete_announcement' },
+)

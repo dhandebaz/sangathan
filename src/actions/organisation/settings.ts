@@ -1,137 +1,118 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
-import { createServiceClient } from '@/lib/supabase/service'
+import { createSafeAction, type ActionOptions } from '@/lib/auth/actions'
+import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
+import { createServiceClient } from '@/lib/supabase/service'
 import { logger } from '@/lib/logger'
-import { SupabaseClient } from '@supabase/supabase-js'
 
-export type ProfileData = {
-  description?: string
-  contact_email?: string
-  contact_phone?: string
-  website?: string
-  address?: string
-  social_links?: Record<string, string>
+const ProfileSchema = z.object({
+  description: z.string().optional(),
+  contact_email: z.string().email().optional().or(z.literal('')),
+  contact_phone: z.string().optional(),
+  website: z.string().url().optional().or(z.literal('')),
+  address: z.string().optional(),
+  social_links: z.record(z.string(), z.string()).optional(),
+})
+
+const SlugSchema = z.object({
+  slug: z.string().min(3).max(50).regex(/^[a-z0-9-]+$/, 'Slug can only contain lowercase letters, numbers, and dashes.'),
+})
+
+const ImageSchema = z.object({
+  type: z.enum(['logo', 'cover']),
+  url: z.string().url(),
+})
+
+const adminAction: ActionOptions = {
+  allowedRoles: ['admin', 'executive'],
+  actionName: 'organisation_settings',
 }
 
-async function getAdminOrg(supabase: SupabaseClient) {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('Unauthorized')
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('organisation_id, role')
-    .eq('id', user.id)
-    .single()
-
-  if (!profile || !profile.organisation_id || !['admin', 'executive'].includes(profile.role)) {
-    throw new Error('Unauthorized: Admin access required')
-  }
-
-  return { userId: user.id, orgId: profile.organisation_id }
-}
-
-export async function updateOrganisationProfile(data: ProfileData) {
-  try {
-    const supabase = await createClient()
-    const { orgId } = await getAdminOrg(supabase)
-
-    const adminClient = createServiceClient()
-
-    const { error } = await adminClient
+export const updateOrganisationProfile = createSafeAction(
+  ProfileSchema,
+  async (input, context) => {
+    const supabase = createServiceClient()
+    const { error } = await supabase
       .from('organisations')
       .update({
-        description: data.description,
-        contact_email: data.contact_email,
-        contact_phone: data.contact_phone,
-        website: data.website,
-        address: data.address,
-        social_links: data.social_links,
+        description: input.description,
+        contact_email: input.contact_email || null,
+        contact_phone: input.contact_phone,
+        website: input.website || null,
+        address: input.address,
+        social_links: input.social_links,
       })
-      .eq('id', orgId)
+      .eq('id', context.organizationId)
 
     if (error) {
-      throw new Error(error.message)
+      return { error: error.message }
     }
+
+    await context.logAction({
+      action: 'ORG_PROFILE_UPDATED',
+      resourceTable: 'organisations',
+      resourceId: context.organizationId,
+    })
 
     revalidatePath('/', 'layout')
-    
     return { success: true }
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
-    return { success: false, error: message }
-  }
-}
+  },
+  adminAction,
+)
 
-export async function updateOrganisationSlug(newSlug: string) {
-  try {
-    // Basic validation
-    if (!/^[a-z0-9-]+$/.test(newSlug)) {
-      throw new Error('Slug can only contain lowercase letters, numbers, and dashes.')
-    }
-    if (newSlug.length < 3 || newSlug.length > 50) {
-      throw new Error('Slug must be between 3 and 50 characters.')
-    }
+export const updateOrganisationSlug = createSafeAction(
+  SlugSchema,
+  async (input, context) => {
+    const supabase = createServiceClient()
+    const newSlug = input.slug
 
-    const supabase = await createClient()
-    const { orgId, userId } = await getAdminOrg(supabase)
-
-    const adminClient = createServiceClient()
-
-    // Check uniqueness
-    const { data: existing } = await adminClient
+    const { data: existing } = await supabase
       .from('organisations')
       .select('id')
       .eq('slug', newSlug)
       .single()
 
-    if (existing && existing.id !== orgId) {
-      throw new Error('This slug is already taken by another organisation.')
+    if (existing && existing.id !== context.organizationId) {
+      return { error: 'This slug is already taken by another organisation.' }
     }
 
-    const { error } = await adminClient
+    const { error } = await supabase
       .from('organisations')
       .update({ slug: newSlug })
-      .eq('id', orgId)
+      .eq('id', context.organizationId)
 
     if (error) {
-      throw new Error(error.message)
+      return { error: error.message }
     }
 
-    await logger.security('organisation', `Slug updated to ${newSlug} by user ${userId}`, { orgId })
+    await logger.security('organisation', `Slug updated to ${newSlug} by user ${context.user.id}`, {
+      orgId: context.organizationId,
+    })
 
     revalidatePath('/', 'layout')
-
     return { success: true }
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
-    return { success: false, error: message }
-  }
-}
+  },
+  adminAction,
+)
 
-export async function updateOrganisationImage(type: 'logo' | 'cover', url: string) {
-  try {
-    const supabase = await createClient()
-    const { orgId } = await getAdminOrg(supabase)
+export const updateOrganisationImage = createSafeAction(
+  ImageSchema,
+  async (input, context) => {
+    const supabase = createServiceClient()
+    const updateData = input.type === 'logo' ? { logo_url: input.url } : { cover_url: input.url }
 
-    const adminClient = createServiceClient()
-    const updateData = type === 'logo' ? { logo_url: url } : { cover_url: url }
-
-    const { error } = await adminClient
+    const { error } = await supabase
       .from('organisations')
       .update(updateData)
-      .eq('id', orgId)
+      .eq('id', context.organizationId)
 
     if (error) {
-      throw new Error(error.message)
+      return { error: error.message }
     }
 
     revalidatePath('/', 'layout')
-    
     return { success: true }
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
-    return { success: false, error: message }
-  }
-}
+  },
+  adminAction,
+)

@@ -1,10 +1,18 @@
 type SignedCookieValue = Record<string, unknown>
 
 function getSecretKey() {
-  const secretKey = process.env.COOKIE_SIGNING_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY
+  const secretKey = process.env.COOKIE_SIGNING_SECRET
 
   if (!secretKey) {
-    throw new Error('Missing COOKIE_SIGNING_SECRET or SUPABASE_SERVICE_ROLE_KEY')
+    throw new Error(
+      'Missing COOKIE_SIGNING_SECRET environment variable. ' +
+      'Set a long, random string (min 32 chars) for signing cookies. ' +
+      'Run: openssl rand -hex 32'
+    )
+  }
+
+  if (secretKey.length < 32) {
+    throw new Error('COOKIE_SIGNING_SECRET must be at least 32 characters long')
   }
 
   return secretKey

@@ -10,7 +10,7 @@ import { useRouter, useParams } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 
-export function AnnouncementForm({ orgId }: { orgId: string }) {
+export function AnnouncementForm() {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const params = useParams() as { lang?: string }
@@ -39,7 +39,6 @@ export function AnnouncementForm({ orgId }: { orgId: string }) {
     setLoading(true)
     
     const res = await createAnnouncement({
-      organisation_id: orgId,
       title: formData.title,
       content: formData.content,
       visibility_level: formData.visibility_level,

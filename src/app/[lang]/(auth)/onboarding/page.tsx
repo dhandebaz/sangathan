@@ -73,8 +73,6 @@ export default function OnboardingPage({ params }: { params: Promise<{ lang: str
                   <SelectItem value="student_union">Student Union</SelectItem>
                   <SelectItem value="workers_union">Workers Union</SelectItem>
                   <SelectItem value="rwa">Resident Welfare Association (RWA)</SelectItem>
-                  <SelectItem value="community_group">Community Group</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -87,7 +85,6 @@ export default function OnboardingPage({ params }: { params: Promise<{ lang: str
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="registered">Registered</SelectItem>
-                  <SelectItem value="in_progress">Registration In Progress</SelectItem>
                   <SelectItem value="unregistered">Unregistered</SelectItem>
                 </SelectContent>
               </Select>

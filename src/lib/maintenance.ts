@@ -8,6 +8,6 @@ export const MAINTENANCE_CONFIG = {
   enabled: false,
 }
 
-export function isMaintenanceMode(_req: Request) {
+export function isMaintenanceMode() {
   return false
 }

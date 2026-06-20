@@ -35,7 +35,7 @@ export default async function NewAnnouncementPage(props: { params: Promise<{ lan
         <p className="text-muted-foreground text-sm">Broadcast updates to your organisation members.</p>
       </div>
       
-      <AnnouncementForm orgId={profile.organisation_id} />
+      <AnnouncementForm />
     </div>
   )
 }

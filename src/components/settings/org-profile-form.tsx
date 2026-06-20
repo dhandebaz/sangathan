@@ -83,7 +83,7 @@ export function OrgProfileForm({ initialData }: OrgProfileFormProps) {
           description: res.error || 'Something went wrong.',
         })
       }
-    } catch (error) {
+    } catch {
       setIsLoading(false)
       toast.error('Error', {
         description: 'Failed to update profile. Please try again.',

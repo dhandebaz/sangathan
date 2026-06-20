@@ -1,191 +1,153 @@
 'use server'
 
+import { createSafeAction } from '@/lib/auth/actions'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { createHmac } from 'crypto'
 import { z } from 'zod'
-import {
-  EventSchema,
+import { EventSchema, RSVPSchema, getQrSigningSecret } from './events.shared'
+
+const CreateEventSchema = EventSchema.extend({
+  collaborating_org_ids: z.array(z.string().uuid()).optional(),
+})
+
+const UpdateEventSchema = EventSchema.extend({
+  id: z.string().uuid(),
+  collaborating_org_ids: z.array(z.string().uuid()).optional(),
+})
+
+const CheckInSchema = z.object({
+  qrData: z.string(),
+})
+
+// --- Create Event ---
+
+export const createEvent = createSafeAction(
   CreateEventSchema,
-  UpdateEventSchema,
-  RSVPSchema,
-  getQrSigningSecret,
-} from './events.shared'
-
-// --- Actions ---
-
-export async function createEvent(input: z.infer<typeof CreateEventSchema>) {
-  try {
-    const result = CreateEventSchema.safeParse(input)
-    if (!result.success) {
-      return { success: false, error: result.error.issues[0]?.message || 'Invalid event data' }
-    }
-
-    const data = result.data
-
+  async (input, context) => {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
 
-    if (!user) return { success: false, error: 'Unauthorized' }
-
-    // Check permissions
-    const { data: profileData } = await supabase
-      .from('profiles')
-      .select('role, organisation_id')
-      .eq('id', user.id)
-      .single()
-
-    const profile = profileData
-
-    if (!profile || profile.organisation_id !== data.organisation_id || !['admin', 'editor'].includes(profile.role)) {
-      return { success: false, error: 'Permission denied' }
-    }
-
-    // Verify collaborations if any
-    if (data.collaborating_org_ids && data.collaborating_org_ids.length > 0) {
+    if (input.collaborating_org_ids?.length) {
       const { count } = await supabase
         .from('organisation_links')
         .select('*', { count: 'exact', head: true })
-        .or(`and(requester_org_id.eq.${profile.organisation_id},responder_org_id.in.(${data.collaborating_org_ids.join(',')})),and(requester_org_id.in.(${data.collaborating_org_ids.join(',')}),responder_org_id.eq.${profile.organisation_id})`)
+        .or(
+          `and(requester_org_id.eq.${context.organizationId},responder_org_id.in.(${input.collaborating_org_ids.join(',')})),and(requester_org_id.in.(${input.collaborating_org_ids.join(',')}),responder_org_id.eq.${context.organizationId})`,
+        )
         .eq('status', 'active')
 
-      if ((count || 0) < data.collaborating_org_ids.length) {
-        return { success: false, error: 'One or more selected organizations are not active partners.' }
+      if ((count || 0) < input.collaborating_org_ids.length) {
+        return { error: 'One or more selected organizations are not active partners.' }
       }
     }
 
     const { data: event, error } = await supabase
       .from('events')
       .insert({
-        organisation_id: data.organisation_id,
-        title: data.title,
-        description: data.description,
-        start_time: data.start_time,
-        end_time: data.end_time,
-        location: data.location,
-        event_type: data.event_type,
-        rsvp_enabled: data.rsvp_enabled,
-        capacity: data.capacity,
-        created_by: user.id,
+        organisation_id: context.organizationId,
+        title: input.title,
+        description: input.description,
+        start_time: input.start_time,
+        end_time: input.end_time,
+        location: input.location,
+        event_type: input.event_type,
+        rsvp_enabled: input.rsvp_enabled,
+        capacity: input.capacity,
+        created_by: context.user.id,
       })
       .select()
       .single()
 
     if (error || !event) {
-      const message =
-        (error as { message?: string } | null)?.message || 'Failed to create event'
-      return { success: false, error: message }
+      return { error: error?.message || 'Failed to create event' }
     }
 
-    // Insert Joint Events
-    if (data.collaborating_org_ids && data.collaborating_org_ids.length > 0) {
-      const jointEvents = data.collaborating_org_ids.map((orgId) => ({
+    if (input.collaborating_org_ids?.length) {
+      const jointEvents = input.collaborating_org_ids.map((orgId) => ({
         event_id: event.id,
         organisation_id: orgId,
       }))
-
-      const { error: jointError } = await supabase
-        .from('joint_events')
-        .insert(jointEvents)
-
-      if (jointError) console.error('Joint Event Error:', jointError)
+      await supabase.from('joint_events').insert(jointEvents)
     }
+
+    await context.logAction({
+      action: 'EVENT_CREATED',
+      resourceTable: 'events',
+      resourceId: event.id,
+      details: { title: input.title },
+    })
 
     revalidatePath('/', 'layout')
-    return { success: true }
-  } catch (error: unknown) {
-    const message =
-      typeof error === 'object' && error !== null && 'message' in error
-        ? (error as { message?: string }).message || 'An unexpected error occurred'
-        : 'An unexpected error occurred'
-    return { success: false, error: message }
-  }
-}
+    return { success: true, eventId: event.id }
+  },
+  { allowedRoles: ['admin', 'editor'], actionName: 'create_event' },
+)
 
-export async function updateEvent(input: z.infer<typeof UpdateEventSchema>) {
-  try {
-    const result = UpdateEventSchema.safeParse(input)
-    if (!result.success) {
-      return { success: false, error: result.error.issues[0]?.message || 'Invalid event data' }
-    }
+// --- Update Event ---
 
-    const data = result.data
-
+export const updateEvent = createSafeAction(
+  UpdateEventSchema,
+  async (input, context) => {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
 
-    if (!user) return { success: false, error: 'Unauthorized' }
-
-    // Check permissions
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role, organisation_id')
-      .eq('id', user.id)
-      .single()
-
-    if (!profile || profile.organisation_id !== data.organisation_id || !['admin', 'editor'].includes(profile.role)) {
-      return { success: false, error: 'Permission denied' }
-    }
-
-    // Verify collaborations if any
-    if (data.collaborating_org_ids && data.collaborating_org_ids.length > 0) {
+    if (input.collaborating_org_ids?.length) {
       const { count } = await supabase
         .from('organisation_links')
         .select('*', { count: 'exact', head: true })
-        .or(`and(requester_org_id.eq.${profile.organisation_id},responder_org_id.in.(${data.collaborating_org_ids.join(',')})),and(requester_org_id.in.(${data.collaborating_org_ids.join(',')}),responder_org_id.eq.${profile.organisation_id})`)
+        .or(
+          `and(requester_org_id.eq.${context.organizationId},responder_org_id.in.(${input.collaborating_org_ids.join(',')})),and(requester_org_id.in.(${input.collaborating_org_ids.join(',')}),responder_org_id.eq.${context.organizationId})`,
+        )
         .eq('status', 'active')
 
-      if ((count || 0) < data.collaborating_org_ids.length) {
-        return { success: false, error: 'One or more selected organizations are not active partners.' }
+      if ((count || 0) < input.collaborating_org_ids.length) {
+        return { error: 'One or more selected organizations are not active partners.' }
       }
     }
 
     const { error } = await supabase
       .from('events')
       .update({
-        title: data.title,
-        description: data.description,
-        start_time: data.start_time,
-        end_time: data.end_time,
-        location: data.location,
-        event_type: data.event_type,
-        rsvp_enabled: data.rsvp_enabled,
-        capacity: data.capacity,
+        title: input.title,
+        description: input.description,
+        start_time: input.start_time,
+        end_time: input.end_time,
+        location: input.location,
+        event_type: input.event_type,
+        rsvp_enabled: input.rsvp_enabled,
+        capacity: input.capacity,
       })
-      .eq('id', data.id)
-      .eq('organisation_id', data.organisation_id)
+      .eq('id', input.id)
+      .eq('organisation_id', context.organizationId)
 
     if (error) {
-      return { success: false, error: error.message || 'Failed to update event' }
+      return { error: error.message || 'Failed to update event' }
     }
 
-    // Update Joint Events (Delete all existing and insert new ones)
-    await supabase.from('joint_events').delete().eq('event_id', data.id)
+    await supabase.from('joint_events').delete().eq('event_id', input.id)
 
-    if (data.collaborating_org_ids && data.collaborating_org_ids.length > 0) {
-      const jointEvents = data.collaborating_org_ids.map((orgId) => ({
-        event_id: data.id,
+    if (input.collaborating_org_ids?.length) {
+      const jointEvents = input.collaborating_org_ids.map((orgId) => ({
+        event_id: input.id,
         organisation_id: orgId,
       }))
-
-      const { error: jointError } = await supabase
-        .from('joint_events')
-        .insert(jointEvents)
-
-      if (jointError) console.error('Joint Event Error:', jointError)
+      await supabase.from('joint_events').insert(jointEvents)
     }
+
+    await context.logAction({
+      action: 'EVENT_UPDATED',
+      resourceTable: 'events',
+      resourceId: input.id,
+      details: { title: input.title },
+    })
 
     revalidatePath('/', 'layout')
     return { success: true }
-  } catch (error: unknown) {
-    const message =
-      typeof error === 'object' && error !== null && 'message' in error
-        ? (error as { message?: string }).message || 'An unexpected error occurred'
-        : 'An unexpected error occurred'
-    return { success: false, error: message }
-  }
-}
+  },
+  { allowedRoles: ['admin', 'editor'], actionName: 'update_event' },
+)
+
+// --- RSVP (hybrid: public + authenticated) ---
 
 export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
   try {
@@ -195,11 +157,9 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
     }
 
     const data = result.data
-
     const supabase = await createClient()
-    const supabaseAdmin = createServiceClient() // Use admin for public inserts/checks if needed
+    const supabaseAdmin = createServiceClient()
 
-    // 1. Get Event Details
     const { data: event, error: eventError } = await supabaseAdmin
       .from('events')
       .select('*')
@@ -207,10 +167,8 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
       .single()
 
     if (eventError || !event) return { success: false, error: 'Event not found' }
-
     if (!event.rsvp_enabled) return { success: false, error: 'RSVP is not enabled for this event' }
 
-    // Check Capacity
     if (event.capacity) {
       const { count } = await supabaseAdmin
         .from('event_rsvps')
@@ -223,18 +181,12 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
       }
     }
 
-    // 2. Determine User
     const { data: { user } } = await supabase.auth.getUser()
     const userId = user?.id
-    const guestName = data.guest_name
-    const guestEmail = data.guest_email
 
-    // 3. Check Permissions based on Event Type
     if (event.event_type !== 'public') {
       if (!userId) return { success: false, error: 'Login required for this event' }
 
-      // Check Profile Role
-      // Fetch profile AND check if their org is allowed
       const { data: profile } = await supabaseAdmin
         .from('profiles')
         .select('role, status, organisation_id')
@@ -247,7 +199,6 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
 
       let isAllowedOrg = profile.organisation_id === event.organisation_id
 
-      // Check joint events if not primary org
       if (!isAllowedOrg) {
         const { data: joint } = await supabaseAdmin
           .from('joint_events')
@@ -263,23 +214,20 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
         return { success: false, error: 'You are not a member of the hosting or collaborating organisations.' }
       }
 
-      const roleHierarchy = { 'viewer': 0, 'member': 1, 'general': 1, 'volunteer': 2, 'core': 3, 'executive': 4, 'editor': 5, 'admin': 6 }
-      const requiredRole = event.event_type // 'members', 'volunteer', 'core', 'executive'
-
+      const roleHierarchy = { viewer: 0, member: 1, general: 1, volunteer: 2, core: 3, executive: 4, editor: 5, admin: 6 } as const
+      const requiredRole = event.event_type
       const userLevel = roleHierarchy[profile.role as keyof typeof roleHierarchy] || 0
-      const requiredLevel = roleHierarchy[requiredRole as keyof typeof roleHierarchy] || 1 // default to member level
+      const requiredLevel = roleHierarchy[requiredRole as keyof typeof roleHierarchy] || 1
 
       if (requiredRole !== 'members' && userLevel < requiredLevel) {
         return { success: false, error: `This event is restricted to ${requiredRole} members.` }
       }
     } else {
-      if (!userId && (!guestEmail || !guestName)) {
+      if (!userId && (!data.guest_email || !data.guest_name)) {
         return { success: false, error: 'Name and Email are required for guests' }
       }
     }
 
-    // 4. Create RSVP
-    // Check existing
     if (userId) {
       const { data: existing } = await supabaseAdmin
         .from('event_rsvps')
@@ -307,19 +255,20 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
         user_id: userId || null,
         guest_name: userId ? null : data.guest_name,
         guest_email: userId ? null : data.guest_email,
-        status: 'registered'
+        status: 'registered',
       })
 
     if (insertError) throw insertError
 
     revalidatePath('/', 'layout')
     return { success: true }
-
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     return { success: false, error: message }
   }
 }
+
+// --- QR Utilities ---
 
 export async function generateQRData(eventId: string, userId?: string, rsvpId?: string) {
   const secret = getQrSigningSecret()
@@ -328,27 +277,20 @@ export async function generateQRData(eventId: string, userId?: string, rsvpId?: 
   return `${payload}.${signature}`
 }
 
-export async function verifyAndCheckIn(input: { qrData: string, scannedByUserId: string }) {
-  try {
+export const verifyAndCheckIn = createSafeAction(
+  CheckInSchema,
+  async (input, context) => {
     const [payloadStr, signature] = input.qrData.split('.')
-    if (!payloadStr || !signature) return { success: false, error: 'Invalid QR Format' }
+    if (!payloadStr || !signature) return { error: 'Invalid QR Format' }
 
-    // Verify Signature
     const secret = getQrSigningSecret()
     const expectedSig = createHmac('sha256', secret).update(payloadStr).digest('hex')
-
-    if (signature !== expectedSig) return { success: false, error: 'Invalid Signature' }
+    if (signature !== expectedSig) return { error: 'Invalid Signature' }
 
     const payload = JSON.parse(payloadStr)
     const { e: eventId, u: userId, r: rsvpId } = payload
 
     const supabaseAdmin = createServiceClient()
-
-    const { data: scannerProfile } = await supabaseAdmin
-      .from('profiles')
-      .select('organisation_id, role, status')
-      .eq('id', input.scannedByUserId)
-      .single()
 
     const { data: event } = await supabaseAdmin
       .from('events')
@@ -356,36 +298,34 @@ export async function verifyAndCheckIn(input: { qrData: string, scannedByUserId:
       .eq('id', eventId)
       .single()
 
-    if (!scannerProfile || !event || scannerProfile.organisation_id !== event.organisation_id) {
-      return { success: false, error: 'You are not allowed to check in attendees for this event' }
+    if (!event || event.organisation_id !== context.organizationId) {
+      return { error: 'You are not allowed to check in attendees for this event' }
     }
 
-    if (scannerProfile.status !== 'active' || !['admin', 'editor', 'executive'].includes(scannerProfile.role)) {
-      return { success: false, error: 'Insufficient permissions for event check-in' }
-    }
-
-    // Find RSVP
     let query = supabaseAdmin.from('event_rsvps').select('id, status').eq('event_id', eventId)
     if (userId) query = query.eq('user_id', userId)
     else if (rsvpId) query = query.eq('id', rsvpId)
-    else return { success: false, error: 'Invalid Token Data' }
+    else return { error: 'Invalid Token Data' }
 
     const { data: rsvp, error } = await query.single()
 
-    if (error || !rsvp) return { success: false, error: 'RSVP not found' }
+    if (error || !rsvp) return { error: 'RSVP not found' }
+    if (rsvp.status === 'attended') return { error: 'Already checked in' }
+    if (rsvp.status === 'cancelled') return { error: 'RSVP was cancelled' }
 
-    if (rsvp.status === 'attended') return { success: false, error: 'Already checked in' }
-    if (rsvp.status === 'cancelled') return { success: false, error: 'RSVP was cancelled' }
-
-    // Mark Attended
     await supabaseAdmin
       .from('event_rsvps')
       .update({ status: 'attended', checked_in_at: new Date().toISOString() })
       .eq('id', rsvp.id)
 
+    await context.logAction({
+      action: 'EVENT_CHECK_IN',
+      resourceTable: 'event_rsvps',
+      resourceId: rsvp.id,
+      details: { eventId },
+    })
+
     return { success: true }
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error'
-    return { success: false, error: message }
-  }
-}
+  },
+  { allowedRoles: ['admin', 'editor', 'executive'], actionName: 'event_check_in' },
+)

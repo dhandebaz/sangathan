@@ -13,7 +13,6 @@ export default function ResetPasswordPage() {
     setError(null)
 
     const password = formData.get('password') as string
-    const confirmPassword = formData.get('confirmPassword') as string
 
     try {
       const res = await resetPassword({ password })

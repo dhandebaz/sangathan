@@ -45,7 +45,7 @@ export function OrgSlugForm({ currentSlug, lang }: OrgSlugFormProps) {
 
     setIsLoading(true)
 
-    const res = await updateOrganisationSlug(data.slug)
+    const res = await updateOrganisationSlug({ slug: data.slug })
 
     setIsLoading(false)
 

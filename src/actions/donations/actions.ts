@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { logger } from '@/lib/logger'
 import { logAction } from '@/lib/audit/log'
 
 // --- Schemas ---
@@ -52,7 +53,8 @@ export const logDonation = createSafeAction(
         .maybeSingle()
 
       if (uniqueError) {
-        return { error: uniqueError.message }
+        logger.error('donation_unique_check', 'Failed to check UPI uniqueness', { error: uniqueError.message })
+        return { error: 'Failed to log donation' }
       }
 
       if (existing) {
@@ -82,9 +84,11 @@ export const logDonation = createSafeAction(
 
     if (error || !donation) {
       if (error?.code === '23505') {
+        logger.error('donation_insert', 'Duplicate donation entry', { error: error.message })
         return { error: 'Duplicate entry.' }
       }
-      return { error: error?.message || 'Failed to log donation' }
+      logger.error('donation_insert', 'Failed to log donation', { error: error?.message })
+      return { error: 'Failed to log donation' }
     }
 
     await logAction({
@@ -114,7 +118,8 @@ export const verifyDonation = createSafeAction(
       .eq('organisation_id', context.organizationId)
 
     if (error) {
-      return { error: error.message }
+      logger.error('donation_verify', 'Failed to verify donation', { error: error.message })
+      return { error: 'Failed to verify donation' }
     }
 
     await logAction({
@@ -143,7 +148,8 @@ export const deleteDonation = createSafeAction(
       .eq('organisation_id', context.organizationId)
 
     if (error) {
-      return { error: error.message }
+      logger.error('donation_delete', 'Failed to delete donation', { error: error.message })
+      return { error: 'Failed to delete donation' }
     }
 
     await logAction({
@@ -216,7 +222,7 @@ export async function submitPublicDonation(input: z.infer<typeof PublicDonationS
     } as never)
 
   if (error) {
-    console.error('Donation Insert Error:', error)
+    logger.error('donation_public_submit', 'Failed to record public donation', { error: error.message })
     return { success: false, error: 'Failed to record donation' }
   }
 

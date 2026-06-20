@@ -2292,6 +2292,144 @@ export type Database = {
           },
         ]
       }
+      grants: {
+        Row: {
+          id: string
+          organisation_id: string
+          title: string
+          amount: number
+          status: string
+          deadline: string | null
+          created_by: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          organisation_id: string
+          title: string
+          amount: number
+          status?: string
+          deadline?: string | null
+          created_by?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          organisation_id?: string
+          title?: string
+          amount?: number
+          status?: string
+          deadline?: string | null
+          created_by?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "grants_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      cba_documents: {
+        Row: {
+          id: string
+          organisation_id: string
+          title: string
+          file_url: string
+          status: string
+          valid_from: string | null
+          valid_until: string | null
+          created_by: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          organisation_id: string
+          title: string
+          file_url: string
+          status?: string
+          valid_from?: string | null
+          valid_until?: string | null
+          created_by?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          organisation_id?: string
+          title?: string
+          file_url?: string
+          status?: string
+          valid_from?: string | null
+          valid_until?: string | null
+          created_by?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cba_documents_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      visitors: {
+        Row: {
+          id: string
+          organisation_id: string
+          name: string
+          phone: string | null
+          purpose: string
+          expected_time: string | null
+          status: string
+          logged_by: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          organisation_id: string
+          name: string
+          phone?: string | null
+          purpose: string
+          expected_time?: string | null
+          status?: string
+          logged_by?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          organisation_id?: string
+          name?: string
+          phone?: string | null
+          purpose?: string
+          expected_time?: string | null
+          status?: string
+          logged_by?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "visitors_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       tickets: {
         Row: {
           created_at: string | null

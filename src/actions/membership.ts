@@ -242,7 +242,7 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
         return { success: false, error: 'Member not found in your organisation' }
     }
 
-    const { data: org } = await supabaseAdmin
+    await supabaseAdmin
         .from('organisations')
         .select('name')
         .eq('id', adminProfile.organisation_id as string)
@@ -306,7 +306,7 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
         return { success: false, error: 'Member not found' }
     }
 
-    const { data: org } = await supabaseAdmin
+    await supabaseAdmin
         .from('organisations')
         .select('name')
         .eq('id', adminProfile.organisation_id as string)

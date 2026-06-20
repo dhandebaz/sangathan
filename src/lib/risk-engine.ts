@@ -1,14 +1,7 @@
 'use server'
 
 import { createServiceClient } from '@/lib/supabase/service'
-
-type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+import type { Json } from '@/types/database'
 
 interface RiskEvent {
   entity_type: 'org' | 'user' | 'member' | 'event'

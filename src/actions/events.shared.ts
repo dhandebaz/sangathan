@@ -1,4 +1,3 @@
-import { createHmac } from 'crypto'
 import { z } from 'zod'
 
 export const EventSchema = z.object({
@@ -12,14 +11,13 @@ export const EventSchema = z.object({
   capacity: z.number().optional(),
 })
 
+// Note: organisation_id is NOT included — it comes from auth context
 export const CreateEventSchema = EventSchema.extend({
-  organisation_id: z.string().uuid(),
   collaborating_org_ids: z.array(z.string().uuid()).optional(),
 })
 
 export const UpdateEventSchema = EventSchema.extend({
   id: z.string().uuid(),
-  organisation_id: z.string().uuid(),
   collaborating_org_ids: z.array(z.string().uuid()).optional(),
 })
 

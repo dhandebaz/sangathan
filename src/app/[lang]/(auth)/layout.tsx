@@ -58,7 +58,7 @@ export default async function AuthLayout({
               </div>
               <div>
                  <h3 className="font-semibold text-lg text-white">No data selling</h3>
-                 <p className="text-sm leading-6 text-slate-300">We never track or sell your organisation's data.</p>
+                  <p className="text-sm leading-6 text-slate-300">We never track or sell your organisation&apos;s data.</p>
               </div>
            </div>
         </div>

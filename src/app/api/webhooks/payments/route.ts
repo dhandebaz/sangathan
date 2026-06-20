@@ -1,18 +1,31 @@
 import { NextResponse } from 'next/server'
+import { verifyWebhookRequest, webhookErrorResponse } from '@/lib/webhook-verify'
+import { logger } from '@/lib/logger'
 
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   try {
-    const body = await req.json()
+    const secret = process.env.STRIPE_WEBHOOK_SECRET || process.env.GITHUB_WEBHOOK_SECRET
+    if (!secret) {
+      logger.warn('webhook', 'Payments webhook called but no webhook secret configured')
+      return webhookErrorResponse(500, 'Webhook not configured')
+    }
 
-    // SKELETON: Logic for Razorpay/Stripe webhook
-    // 1. Verify Signature
-    // 2. Identify Org ID from metadata
-    // 3. Insert into public.transactions
+    const { body, valid, response } = await verifyWebhookRequest(request, 'generic')
 
-    console.log('Payment Webhook Received:', body)
+    if (!valid || response) {
+      return response || webhookErrorResponse(401, 'Unauthorized')
+    }
+
+    const payload = JSON.parse(body)
+
+    logger.info('webhook', 'Payment webhook processed', {
+      provider: payload.provider || 'unknown',
+      event: payload.event || payload.type || 'unknown',
+    })
 
     return NextResponse.json({ received: true })
-  } catch (_err) {
-    return NextResponse.json({ error: 'Webhook Error' }, { status: 400 })
+  } catch {
+    logger.error('webhook', 'Payment webhook failed')
+    return webhookErrorResponse(400, 'Invalid payload')
   }
 }

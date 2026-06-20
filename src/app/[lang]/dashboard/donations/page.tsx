@@ -2,7 +2,6 @@ import { createClient } from '@/lib/supabase/server'
 import { LogDonationDialog } from '@/components/donations/log-donation-dialog'
 import { DonationList } from '@/components/donations/donation-list'
 import { Printer } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Donation } from '@/types/dashboard'
 

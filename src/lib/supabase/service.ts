@@ -31,11 +31,16 @@ export function getCallerIp(request: Request): string {
 }
 
 export function checkServiceAccess(request: Request): { allowed: boolean; reason?: string } {
+  const ip = getCallerIp(request)
+
   if (ALLOWED_IPS.length === 0) {
-    return { allowed: true, reason: 'No IP restrictions configured' }
+    // Fail-closed: if no IPs are configured, only allow localhost/known-safe origins
+    if (ip === '::1' || ip === '127.0.0.1' || ip === 'localhost') {
+      return { allowed: true }
+    }
+    return { allowed: false, reason: 'Service access not configured — ALLOWED_SERVICE_IPS is empty' }
   }
 
-  const ip = getCallerIp(request)
   if (ip === 'unknown') {
     return { allowed: false, reason: 'Could not determine caller IP' }
   }

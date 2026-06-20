@@ -9,8 +9,18 @@ const withSerwist = withSerwistInit({
 });
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactCompiler: true,
+  poweredByHeader: false,
+  serverExternalPackages: ['@sentry/nextjs'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.supabase.co',
+        pathname: '/storage/v1/**',
+      },
+    ],
+  },
 };
 
 export default withSentryConfig(withSerwist(nextConfig), {

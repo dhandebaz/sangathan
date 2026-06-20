@@ -19,7 +19,7 @@ export function AiSummaryWidget({ orgId }: { orgId: string }) {
       const data = await response.json()
       setSummary(data.summary)
       setIsAi(data.isAi || false)
-    } catch (_err: unknown) {
+    } catch {
       setSummary("Insights are currently unavailable. Check your network or try again later.")
       setIsAi(false)
     } finally {

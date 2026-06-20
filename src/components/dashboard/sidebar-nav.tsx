@@ -1,14 +1,14 @@
 'use client'
 
-import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   ChevronDown, LayoutDashboard, Users, Settings, Megaphone,
   Calendar, CheckSquare, BarChart, Vote, Globe, Scale,
-  AlertCircle, Wrench, Gift, FileText, Flag, Badge,
-  HeartHandshake, Network, Shield, Landmark, ScrollText,
-  GalleryVerticalEnd, Gavel, UserCog
+  AlertCircle, Wrench, Gift, Flag, Badge,
+  HeartHandshake, Network, Landmark, ScrollText,
+  GalleryVerticalEnd, Gavel, UserCog, DollarSign, FileText, UserCheck
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -44,34 +44,22 @@ function useActiveGroup(pathname: string | null, groups: NavGroup[]) {
   }, [pathname, groups])
 }
 
-export function SidebarNav({ lang, isAdmin, capabilities }: SidebarNavProps) {
+export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavProps) {
   const pathname = usePathname()
 
   const groups: NavGroup[] = useMemo(() => [
     {
-      id: 'core',
-      title: 'Core',
+      id: 'overview',
+      title: 'Overview',
       items: [
         { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Overview', show: true },
-        { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Governance', show: true },
         { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
         { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events', show: true },
-        { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
-        { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Decisions', show: true },
-        { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!capabilities.campaigns },
-      ]
-    },
-    {
-      id: 'governance',
-      title: 'Governance',
-      items: [
-        { href: `/${lang}/dashboard/governance/proposals`, icon: Gavel, label: 'Proposals', show: true },
-        { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Voting & Resolutions', show: true },
       ]
     },
     {
       id: 'people',
-      title: 'People',
+      title: 'People & Members',
       items: [
         { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
         { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Teams & Committees', show: true },
@@ -81,14 +69,34 @@ export function SidebarNav({ lang, isAdmin, capabilities }: SidebarNavProps) {
       ]
     },
     {
-      id: 'operations',
-      title: 'Operations',
+      id: 'governance',
+      title: 'Governance & Operations',
       items: [
+        { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Proposals', show: true },
+        { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Voting & Decisions', show: true },
+        { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
+        { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!capabilities.campaigns },
         { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financial Ledger', show: true },
-        { href: `/${lang}/dashboard/grievances`, icon: Scale, label: 'Grievances', show: !!capabilities.grievances },
-        { href: `/${lang}/dashboard/complaints`, icon: AlertCircle, label: 'Complaints', show: !!capabilities.complaints },
-        { href: `/${lang}/dashboard/maintenance`, icon: Wrench, label: 'Maintenance', show: !!capabilities.maintenance },
         { href: `/${lang}/dashboard/donations`, icon: Gift, label: 'Donations', show: !!capabilities.donations },
+        { href: `/${lang}/dashboard/grants`, icon: DollarSign, label: 'Grants', show: orgType === 'ngo' },
+      ]
+    },
+    {
+      id: 'support_compliance',
+      title: orgType === 'workers_union' ? 'Grievances & Legal' :
+             orgType === 'rwa' ? 'Maintenance & Compliance' :
+             orgType === 'student_union' ? 'Support & Guidelines' :
+             'Support & Compliance',
+      items: [
+        { 
+          href: `/${lang}/dashboard/helpdesk`, 
+          icon: orgType === 'workers_union' ? Scale : orgType === 'rwa' ? Wrench : AlertCircle, 
+          label: orgType === 'workers_union' ? 'Grievances' : orgType === 'rwa' ? 'Maintenance' : 'Helpdesk', 
+          show: !!capabilities.grievances || !!capabilities.complaints || !!capabilities.maintenance || true // We can show it by default or based on a common capability
+        },
+        { href: `/${lang}/dashboard/cba`, icon: FileText, label: 'CBA Documents', show: orgType === 'workers_union' },
+        { href: `/${lang}/dashboard/visitors`, icon: UserCheck, label: 'Visitors', show: orgType === 'rwa' },
+        { href: `/${lang}/dashboard/compliance`, icon: ScrollText, label: 'Compliance Tracker', show: isAdmin },
       ]
     },
     {
@@ -101,7 +109,7 @@ export function SidebarNav({ lang, isAdmin, capabilities }: SidebarNavProps) {
         { href: `/${lang}/dashboard/settings`, icon: Settings, label: 'Settings', show: isAdmin },
       ]
     }
-  ], [lang, isAdmin, capabilities])
+  ], [lang, isAdmin, capabilities, orgType])
 
   const visibleGroups = useMemo(() =>
     groups
@@ -112,28 +120,26 @@ export function SidebarNav({ lang, isAdmin, capabilities }: SidebarNavProps) {
 
   const hasActiveGroup = useActiveGroup(pathname, visibleGroups)
 
-  const [collapsed, setCollapsed] = useState<Record<string, boolean>>(() => {
+  const autoCollapsed = useMemo(() => {
     const init: Record<string, boolean> = {}
     for (const g of visibleGroups) {
-      init[g.id] = !(g.id === 'core')
+      init[g.id] = !(g.id === 'overview' || hasActiveGroup[g.id])
     }
     return init
-  })
+  }, [visibleGroups, hasActiveGroup])
 
-  useEffect(() => {
-    setCollapsed(prev => {
-      const next = { ...prev }
-      for (const g of visibleGroups) {
-        const shouldBeOpen = g.id === 'core' || hasActiveGroup[g.id]
-        if (next[g.id] === shouldBeOpen) continue
-        next[g.id] = !shouldBeOpen
-      }
-      return next
-    })
-  }, [hasActiveGroup, visibleGroups])
+  const [userToggles, setUserToggles] = useState<Record<string, boolean>>({})
+
+  const collapsed = useMemo(() => {
+    const result = { ...autoCollapsed }
+    for (const [id, val] of Object.entries(userToggles)) {
+      if (id in result) result[id] = val
+    }
+    return result
+  }, [autoCollapsed, userToggles])
 
   const toggleGroup = useCallback((id: string) => {
-    setCollapsed(prev => ({ ...prev, [id]: !prev[id] }))
+    setUserToggles(prev => ({ ...prev, [id]: !prev[id] }))
   }, [])
 
   const isActive = useCallback((href: string) => {

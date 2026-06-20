@@ -1,12 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-
-type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+import type { Json } from '@/types/database'
 
 interface LogActionParams {
   organisation_id: string

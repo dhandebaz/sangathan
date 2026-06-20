@@ -19,7 +19,6 @@ import {
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { createTicket, updateTicketStatus, deleteTicket } from '@/actions/tickets/actions'
-import { assignTicket, setTicketSLA } from '@/actions/tickets/governance-actions'
 
 type Ticket = {
   id: string

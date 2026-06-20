@@ -48,3 +48,17 @@ export type ActionResponse<T = null> = {
   data?: T
   error?: string
 }
+
+import type { Json } from '@/types/database'
+
+export interface LogActionParams {
+  action: string
+  resourceTable: string
+  resourceId: string
+  organisationId?: string
+  details?: Json
+}
+
+export interface SafeActionContext extends UserContext {
+  logAction: (params: LogActionParams) => Promise<void>
+}
