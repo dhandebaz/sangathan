@@ -9,14 +9,14 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Plus } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
-import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { useRouter } from 'next/navigation'
 
 interface TicketDialogProps {
   orgType: string
+  orgId: string
 }
 
-export function TicketDialog({ orgType }: TicketDialogProps) {
+export function TicketDialog({ orgType, orgId }: TicketDialogProps) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -58,7 +58,6 @@ export function TicketDialog({ orgType }: TicketDialogProps) {
     
     try {
       const supabase = createClient()
-      const orgId = await getSelectedOrganisationId()
       
       if (!orgId) throw new Error('No organisation selected')
       

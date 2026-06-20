@@ -1,12 +1,9 @@
-'use client'
-
-import { use, useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { CheckCircle2, AlertCircle, Clock, FileText, Upload } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { createClient } from '@/lib/supabase/client'
 import { getSelectedOrganisationId } from '@/lib/auth/context'
+import { createServiceClient } from '@/lib/supabase/service'
 
 type ComplianceItem = {
   id: string
@@ -69,23 +66,18 @@ function getStatusLabel(status: ComplianceItem['status']) {
   }
 }
 
-export default function CompliancePage({ params }: { params: Promise<{ lang: string }> }) {
-  const { lang } = use(params)
-  const [orgType, setOrgType] = useState<string>('ngo')
-  const supabase = createClient()
+export default async function CompliancePage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params
+  const supabase = createServiceClient()
+  let orgType = 'ngo'
   
-  useEffect(() => {
-    async function fetchOrgType() {
-      const orgId = await getSelectedOrganisationId()
-      if (orgId) {
-        const { data } = await supabase.from('organisations').select('org_type').eq('id', orgId).single()
-        if (data?.org_type) {
-          setOrgType(data.org_type)
-        }
-      }
+  const orgId = await getSelectedOrganisationId()
+  if (orgId) {
+    const { data } = await supabase.from('organisations').select('org_type').eq('id', orgId).single()
+    if (data?.org_type) {
+      orgType = data.org_type
     }
-    fetchOrgType()
-  }, [supabase])
+  }
 
   let activeCompliance = ngoCompliance
   if (orgType === 'rwa') activeCompliance = rwaCompliance

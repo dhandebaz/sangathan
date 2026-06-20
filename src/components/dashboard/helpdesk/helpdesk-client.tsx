@@ -6,7 +6,6 @@ import { Badge } from '@/components/ui/badge'
 import { Clock, AlertCircle, CheckCircle2, ChevronRight } from 'lucide-react'
 import { TicketDialog } from './ticket-dialog'
 import { createClient } from '@/lib/supabase/client'
-import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { Button } from '@/components/ui/button'
 
 interface Ticket {
@@ -21,9 +20,10 @@ interface Ticket {
 
 interface HelpdeskClientProps {
   orgType: string
+  orgId: string
 }
 
-export function HelpdeskClient({ orgType }: HelpdeskClientProps) {
+export function HelpdeskClient({ orgType, orgId }: HelpdeskClientProps) {
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -51,7 +51,6 @@ export function HelpdeskClient({ orgType }: HelpdeskClientProps) {
   useEffect(() => {
     async function fetchTickets() {
       const supabase = createClient()
-      const orgId = await getSelectedOrganisationId()
       
       if (orgId) {
         const { data, error } = await supabase
@@ -99,7 +98,7 @@ export function HelpdeskClient({ orgType }: HelpdeskClientProps) {
             {currentConfig.pageDesc}
           </p>
         </div>
-        <TicketDialog orgType={orgType} />
+        <TicketDialog orgType={orgType} orgId={orgId} />
       </div>
 
       <Card>

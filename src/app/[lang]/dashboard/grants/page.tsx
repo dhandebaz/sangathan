@@ -11,7 +11,7 @@ export default async function GrantsPage() {
 
   return (
     <div className="container mx-auto py-6 max-w-5xl">
-      <GrantsClient />
+      <GrantsClient orgId={orgId} />
     </div>
   )
 }

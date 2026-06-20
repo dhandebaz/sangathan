@@ -11,7 +11,7 @@ export default async function VisitorsPage() {
 
   return (
     <div className="container mx-auto py-6 max-w-5xl">
-      <VisitorsClient />
+      <VisitorsClient orgId={orgId} />
     </div>
   )
 }

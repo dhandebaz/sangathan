@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/lib/supabase/client'
-import { getSelectedOrganisationId } from '@/lib/auth/context'
-import { FileText, DollarSign, Clock, CheckCircle2, AlertCircle } from 'lucide-react'
+import { FileText, Calendar, DollarSign, Clock, CheckCircle2, AlertCircle } from 'lucide-react'
 
 interface Grant {
   id: string
@@ -16,14 +15,17 @@ interface Grant {
   created_at: string | null
 }
 
-export function GrantsClient() {
+interface GrantsClientProps {
+  orgId: string
+}
+
+export function GrantsClient({ orgId }: GrantsClientProps) {
   const [grants, setGrants] = useState<Grant[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchGrants() {
       const supabase = createClient()
-      const orgId = await getSelectedOrganisationId()
       
       if (orgId) {
         const { data, error } = await supabase

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/lib/supabase/client'
-import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { FileText, Calendar, CheckCircle2, Clock, AlertCircle } from 'lucide-react'
 
 interface CBADocument {
@@ -17,14 +16,17 @@ interface CBADocument {
   created_at: string | null
 }
 
-export function CBAClient() {
+interface CBAClientProps {
+  orgId: string
+}
+
+export function CBAClient({ orgId }: CBAClientProps) {
   const [documents, setDocuments] = useState<CBADocument[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchDocuments() {
       const supabase = createClient()
-      const orgId = await getSelectedOrganisationId()
       
       if (orgId) {
         const { data, error } = await supabase

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/lib/supabase/client'
-import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { UserCheck, Clock, CheckCircle2, LogOut, Ban } from 'lucide-react'
 
 interface Visitor {
@@ -17,14 +16,17 @@ interface Visitor {
   created_at: string | null
 }
 
-export function VisitorsClient() {
+interface VisitorsClientProps {
+  orgId: string
+}
+
+export function VisitorsClient({ orgId }: VisitorsClientProps) {
   const [visitors, setVisitors] = useState<Visitor[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchVisitors() {
       const supabase = createClient()
-      const orgId = await getSelectedOrganisationId()
       
       if (orgId) {
         const { data, error } = await supabase

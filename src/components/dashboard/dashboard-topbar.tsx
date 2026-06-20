@@ -28,14 +28,24 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
 
   useEffect(() => {
     if (!open) return
-    const handler = (event: MouseEvent) => {
+    const handler = (event: MouseEvent | TouchEvent) => {
       if (!menuRef.current) return
       if (!menuRef.current.contains(event.target as Node)) {
         setOpen(false)
       }
     }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
+    
+    // Add listener on next tick to avoid immediate trigger from the click that opened it
+    const timer = setTimeout(() => {
+      document.addEventListener('mousedown', handler)
+      document.addEventListener('touchstart', handler)
+    }, 0)
+    
+    return () => {
+      clearTimeout(timer)
+      document.removeEventListener('mousedown', handler)
+      document.removeEventListener('touchstart', handler)
+    }
   }, [open])
 
   const displayOrgName = orgName || 'Sangathan'
@@ -86,9 +96,13 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
   }, [pathname])
 
   async function handleSignOut() {
-    setIsSigningOut(true)
-    await supabase.auth.signOut()
-    router.push(`/${lang}/login`)
+    if (isSigningOut) return
+    try {
+      setIsSigningOut(true)
+      await supabase.auth.signOut()
+    } finally {
+      window.location.href = `/${lang}/login`
+    }
   }
 
   return (
@@ -110,12 +124,8 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
         </div>
 
         <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground min-w-0">
-          <span className="truncate font-medium text-muted-foreground/70">{displayOrgName}</span>
           {breadcrumb && (
-            <>
-              <span className="text-border shrink-0">/</span>
-              <span className="truncate text-foreground font-medium">{breadcrumb}</span>
-            </>
+            <span className="truncate text-foreground font-medium">{breadcrumb}</span>
           )}
         </div>
 
@@ -137,7 +147,10 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
               )}
               aria-haspopup="menu"
               aria-expanded={open}
-              onClick={() => setOpen((prev) => !prev)}
+              onClick={(e) => {
+                e.stopPropagation()
+                setOpen((prev) => !prev)
+              }}
             >
               <div className="flex h-6 w-6 items-center justify-center rounded-md bg-accent text-brand-700 text-xs font-bold">
                 {initials}
@@ -160,7 +173,7 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
                     {initials}
                   </div>
                   <div className="flex flex-col min-w-0">
-                    <span className="text-sm font-semibold text-foreground truncate">{displayOrgName}</span>
+                    <span className="text-sm font-semibold text-foreground truncate">{username}</span>
                     <span className="text-xs text-muted-foreground truncate">{userEmail}</span>
                   </div>
                 </div>

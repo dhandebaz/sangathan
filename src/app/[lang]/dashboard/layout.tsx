@@ -7,7 +7,6 @@ import { ContextualFAB } from '@/components/mobile/contextual-fab'
 import { DashboardTopBar } from '@/components/dashboard/dashboard-topbar'
 import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { SidebarNav } from '@/components/dashboard/sidebar-nav'
-import { SignOutButton } from '@/components/dashboard/sign-out-button'
 
 interface Organisation {
   name: string
@@ -125,9 +124,6 @@ export default async function DashboardLayout(props: {
           </Link>
         </div>
 
-        <div className="border-t border-border p-3">
-          <SignOutButton lang={lang} />
-        </div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col md:pl-64">
