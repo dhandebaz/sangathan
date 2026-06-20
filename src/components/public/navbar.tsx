@@ -3,13 +3,22 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { Menu, X, LayoutDashboard, Heart } from 'lucide-react'
-import { useState } from 'react'
+import { Menu, X, LayoutDashboard, Heart, ArrowRight } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticated: boolean }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
   const isHindi = lang === 'hi'
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const getPathForLang = (targetLang: string) => {
     if (!pathname) return `/${targetLang}`
@@ -24,163 +33,180 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
     { href: `/${lang}/governance`, label: isHindi ? 'शासन' : 'Governance' },
     { href: `/${lang}/status`, label: isHindi ? 'स्थिति' : 'Status' },
     { href: `/${lang}/contact`, label: isHindi ? 'संपर्क' : 'Contact' },
-    { href: `/${lang}/support`, label: isHindi ? 'हमें समर्थन दें' : 'Support Us', highlight: true },
   ]
 
   return (
-    <nav 
-      className="fixed top-0 z-50 w-full border-b border-slate-200 bg-white/95 backdrop-blur-sm shadow-sm"
-      aria-label="Main navigation"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between gap-4">
-           <div className="flex-shrink-0 flex items-center">
-            <Link 
-              href={`/${lang}`} 
-              className="flex items-center"
-              aria-label="Sangathan Home"
-            >
-              <span className="sr-only">Sangathan</span>
-              <Image
-                src="/logo/logo.png"
-                alt=""
-                width={128}
-                height={32}
-                className="h-8 w-auto"
-                aria-hidden="true"
-                priority
-              />
-            </Link>
-           </div>
-
-           <div className="hidden md:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <Link 
-                  key={link.href}
-                  href={link.href} 
-                  className={`text-sm font-medium transition-colors duration-200 ${
-                    pathname === link.href 
-                      ? 'text-brand-700 border-b border-brand-600 pb-0.5'
-                      : link.highlight
-                        ? 'text-brand-700 flex items-center gap-1.5 hover:text-brand-800'
-                        : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                  prefetch={true}
-                >
-                  {link.highlight && <Heart size={14} className="fill-brand-500 text-brand-500" />}
-                  {link.label}
-                </Link>
-              ))}
-           </div>
-
-           <div className="hidden md:flex items-center gap-4">
-              <div className="flex items-center gap-2 border-r border-slate-200 pr-4">
-                 <Link href={getPathForLang('en')} className={`text-sm font-semibold ${lang === 'en' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}>EN</Link>
-                 <span className="text-slate-300">/</span>
-                 <Link href={getPathForLang('hi')} className={`text-sm font-semibold ${lang === 'hi' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}>HI</Link>
-              </div>
-
-              {isAuthenticated ? (
-                 <Link 
-                    href={`/${lang}/dashboard`}
-                    className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-50"
-                  prefetch={true}
-                 >
-                    <LayoutDashboard size={16} />
-                    {isHindi ? 'डैशबोर्ड' : 'Dashboard'}
-                 </Link>
-              ) : (
-                  <div className="flex items-center gap-3">
-                    <Link 
-                       href={`/${lang}/login`}
-                       className="inline-flex min-h-11 items-center text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900"
-                       prefetch={true}
-                    >
-                       {isHindi ? 'लॉग इन' : 'Login'}
-                    </Link>
-                    <Link 
-                       href={`/${lang}/login?tab=signup`}
-                       className="inline-flex min-h-11 items-center rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-700"
-                    >
-                       {isHindi ? 'साइन अप' : 'Sign Up'}
-                    </Link>
-                  </div>
-              )}
-           </div>
-
-           <div className="flex items-center md:hidden">
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-slate-900 hover:bg-slate-100"
-                aria-label={isOpen ? 'Close menu' : 'Open menu'}
-                aria-controls="mobile-navigation"
-                aria-expanded={isOpen}
+    <div className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 sm:pt-6 w-full pointer-events-none">
+      <nav 
+        className={`pointer-events-auto w-full max-w-6xl transition-all duration-300 rounded-2xl sm:rounded-full border ${
+          scrolled 
+            ? 'bg-white/80 dark:bg-black/80 backdrop-blur-lg border-slate-200/50 dark:border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.06)]' 
+            : 'bg-white/50 dark:bg-black/50 backdrop-blur-md border-transparent shadow-none'
+        }`}
+        aria-label="Main navigation"
+      >
+        <div className="px-4 sm:px-6">
+            <div className="flex items-center justify-between h-14 sm:h-16">
+             {/* Logo */}
+             <div className="flex-shrink-0 flex items-center">
+              <Link 
+                href={`/${lang}`} 
+                className="flex items-center gap-2 group"
+                aria-label="Sangathan Home"
               >
-                {isOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-           </div>
-          </div>
-      </div>
-
-      {isOpen && (
-        <div id="mobile-navigation" className="border-t border-slate-200 bg-white shadow-2xl md:hidden">
-          <div className="space-y-1 px-3 pb-4 pt-3">
-             {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`flex min-h-11 items-center rounded-xl px-3 py-2 text-base font-semibold transition-colors ${
-                    link.highlight
-                      ? 'text-brand-700 bg-brand-50 hover:bg-brand-100'
-                      : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900'
-                  }`}
-                  prefetch={true}
-                >
-                  {link.highlight && <Heart size={16} className="fill-brand-500 text-brand-500 mr-2" />}
-                  {link.label}
-                </Link>
-             ))}
-             <div className="border-t border-slate-200 my-2 pt-2">
-                <div className="flex gap-4 px-3 py-2">
-                   <Link href={getPathForLang('en')} className={`text-sm font-semibold ${lang === 'en' ? 'text-slate-900' : 'text-slate-500'}`}>English</Link>
-                   <Link href={getPathForLang('hi')} className={`text-sm font-semibold ${lang === 'hi' ? 'text-slate-900' : 'text-slate-500'}`}>हिंदी</Link>
+                <div className="bg-slate-900 dark:bg-white rounded-lg p-1.5 transition-transform group-hover:scale-105">
+                  <Heart className="w-4 h-4 text-white dark:text-black fill-current" />
                 </div>
+                <span className="font-extrabold text-lg tracking-tight text-slate-900 dark:text-white">
+                  Sangathan
+                </span>
+              </Link>
              </div>
-             {isAuthenticated ? (
-                <Link
-                  href={`/${lang}/dashboard`}
-                  onClick={() => setIsOpen(false)}
-                  className="mt-4 flex min-h-12 w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-3 text-center font-semibold text-slate-900"
-                  prefetch={true}
-                 >
-                  {isHindi ? 'डैशबोर्ड पर जाएं' : 'Go to Dashboard'}
-                </Link>
-             ) : (
-                <div className="flex flex-col gap-3 px-3 mt-4 pb-2">
-                   <div className="grid grid-cols-2 gap-3">
-                     <Link
-                        href={`/${lang}/login`}
-                        onClick={() => setIsOpen(false)}
-                        className="flex min-h-12 items-center justify-center rounded-xl border border-slate-200 py-2 text-center font-semibold text-slate-900"
-                        prefetch={true}
-                     >
-                        {isHindi ? 'लॉग इन' : 'Login'}
-                     </Link>
-                     <Link
-                        href={`/${lang}/login?tab=signup`}
-                        onClick={() => setIsOpen(false)}
-                        className="flex min-h-12 items-center justify-center rounded-xl bg-brand-600 py-2 text-center font-semibold text-white"
-                        prefetch={true}
-                     >
-                        {isHindi ? 'साइन अप' : 'Sign Up'}
-                     </Link>
-                   </div>
+
+             {/* Desktop Navigation */}
+             <div className="hidden md:flex items-center gap-1">
+                {navLinks.map((link) => {
+                  const isActive = pathname === link.href
+                  return (
+                    <Link 
+                      key={link.href}
+                      href={link.href} 
+                      className={`relative px-4 py-2 text-sm font-semibold transition-all duration-200 rounded-full hover:bg-slate-100/50 dark:hover:bg-white/5 ${
+                        isActive 
+                          ? 'text-slate-900 dark:text-white'
+                          : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                      }`}
+                      prefetch={true}
+                    >
+                      {link.label}
+                      {isActive && (
+                        <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-slate-900 dark:bg-white rounded-full" />
+                      )}
+                    </Link>
+                  )
+                })}
+             </div>
+
+             {/* Right side actions */}
+             <div className="hidden md:flex items-center gap-3">
+                <div className="flex items-center bg-slate-100/50 dark:bg-white/5 rounded-full p-1 border border-slate-200/50 dark:border-white/5">
+                   <Link 
+                     href={getPathForLang('en')} 
+                     className={`px-3 py-1 rounded-full text-xs font-bold transition-colors ${lang === 'en' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'}`}
+                   >
+                     EN
+                   </Link>
+                   <Link 
+                     href={getPathForLang('hi')} 
+                     className={`px-3 py-1 rounded-full text-xs font-bold transition-colors ${lang === 'hi' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'}`}
+                   >
+                     HI
+                   </Link>
                 </div>
-             )}
-          </div>
+
+                {isAuthenticated ? (
+                   <Link 
+                      href={`/${lang}/dashboard`}
+                      className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-bold text-slate-900 dark:text-white transition-all hover:scale-105 hover:shadow-sm"
+                    prefetch={true}
+                   >
+                      <LayoutDashboard size={16} />
+                      {isHindi ? 'डैशबोर्ड' : 'Dashboard'}
+                   </Link>
+                ) : (
+                    <div className="flex items-center gap-2">
+                      <Link 
+                         href={`/${lang}/login`}
+                         className="inline-flex items-center px-4 py-2 text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors hover:text-slate-900 dark:hover:text-white"
+                         prefetch={true}
+                      >
+                         {isHindi ? 'लॉग इन' : 'Login'}
+                      </Link>
+                      <Link 
+                         href={`/${lang}/login?tab=signup`}
+                         className="group inline-flex items-center gap-1 rounded-full bg-slate-900 dark:bg-white px-5 py-2 text-sm font-bold text-white dark:text-slate-900 transition-all hover:bg-slate-800 dark:hover:bg-slate-100 hover:scale-105 shadow-[0_0_20px_rgb(0,0,0,0.1)]"
+                      >
+                         {isHindi ? 'साइन अप' : 'Get Started'}
+                         <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                      </Link>
+                    </div>
+                )}
+             </div>
+
+             {/* Mobile Menu Button */}
+             <div className="flex items-center md:hidden">
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="inline-flex p-2 items-center justify-center rounded-full text-slate-900 dark:text-white bg-slate-100/50 dark:bg-white/10 hover:bg-slate-200/50"
+                  aria-expanded={isOpen}
+                >
+                  {isOpen ? <X size={20} /> : <Menu size={20} />}
+                </button>
+             </div>
+            </div>
         </div>
-      )}
-    </nav>
+
+        {/* Mobile Dropdown */}
+        {isOpen && (
+          <div className="border-t border-slate-200/50 dark:border-white/10 md:hidden bg-white/95 dark:bg-black/95 backdrop-blur-xl rounded-b-2xl">
+            <div className="flex flex-col p-4 space-y-2">
+               {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`flex items-center rounded-xl px-4 py-3 text-sm font-bold transition-colors ${
+                      pathname === link.href
+                        ? 'bg-slate-100 dark:bg-white/10 text-slate-900 dark:text-white'
+                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5'
+                    }`}
+                    prefetch={true}
+                  >
+                    {link.label}
+                  </Link>
+               ))}
+               
+               <div className="pt-4 mt-2 border-t border-slate-200/50 dark:border-white/10">
+                  <div className="flex gap-2 p-1 bg-slate-100/50 dark:bg-white/5 rounded-xl">
+                     <Link href={getPathForLang('en')} className={`flex-1 text-center py-2 rounded-lg text-sm font-bold transition-colors ${lang === 'en' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500'}`}>English</Link>
+                     <Link href={getPathForLang('hi')} className={`flex-1 text-center py-2 rounded-lg text-sm font-bold transition-colors ${lang === 'hi' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500'}`}>हिंदी</Link>
+                  </div>
+               </div>
+               
+               {isAuthenticated ? (
+                  <Link
+                    href={`/${lang}/dashboard`}
+                    onClick={() => setIsOpen(false)}
+                    className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 font-bold text-slate-900 dark:text-white shadow-sm"
+                    prefetch={true}
+                   >
+                    <LayoutDashboard size={18} />
+                    {isHindi ? 'डैशबोर्ड पर जाएं' : 'Go to Dashboard'}
+                  </Link>
+               ) : (
+                  <div className="grid grid-cols-2 gap-3 mt-4">
+                       <Link
+                          href={`/${lang}/login`}
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center justify-center rounded-xl border border-slate-200 dark:border-white/10 py-3 font-bold text-slate-900 dark:text-white"
+                          prefetch={true}
+                       >
+                          {isHindi ? 'लॉग इन' : 'Login'}
+                       </Link>
+                       <Link
+                          href={`/${lang}/login?tab=signup`}
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center justify-center rounded-xl bg-slate-900 dark:bg-white py-3 font-bold text-white dark:text-slate-900 shadow-md"
+                          prefetch={true}
+                       >
+                          {isHindi ? 'साइन अप' : 'Get Started'}
+                       </Link>
+                  </div>
+               )}
+            </div>
+          </div>
+        )}
+      </nav>
+    </div>
   )
 }

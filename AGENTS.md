@@ -26,11 +26,13 @@ Example:
 
 ## 🔴 STOP — READ THESE FIRST
 
+- **Update Changelog Automatically** — Whenever you write code, fix bugs, or update the app, you MUST automatically update the `src/app/[lang]/(site)/changelog/page.tsx` file with the relevant changes without asking. Keep the customer-facing descriptions professional (avoid technical jargon like "fixed ts errors" unless specifically requested).
 - **Don't mix Tailwind with inline styles** — Don't mix Tailwind with inline styles
 - **Don't import server-only code in client components** — Don't import server-only code in client components
 - **Environment variables: NEXT_PUBLIC_ prefix for client-side only** — Environment variables: NEXT_PUBLIC_ prefix for client-side only
 - **Don't use useEffect for data fetching — use server actions or loader** — Don't use useEffect for data fetching — use server actions or loader
 - **Clean up effects — return cleanup function from useEffect** — Clean up effects — return cleanup function from useEffect
+
 
 ## 📐 Conventions
 
