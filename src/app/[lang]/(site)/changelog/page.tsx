@@ -35,6 +35,17 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.5.2',
+    titleEn: 'Pricing & Features Showcase',
+    titleHi: 'मूल्य निर्धारण और सुविधाएँ',
+    dateEn: 'June 2026',
+    dateHi: 'जून 2026',
+    descEn: 'Launched transparent pricing tiers and a beautiful features showcase tailored to NGOs, Student Unions, Workers Unions, and RWAs.',
+    descHi: 'गैर सरकारी संगठनों, छात्र संघों, श्रमिक संघों और आरडब्ल्यूए (RWAs) के लिए पारदर्शी मूल्य निर्धारण स्तर और एक सुंदर सुविधा शोकेस लॉन्च किया गया।',
+    color: 'cyan',
+    icon: Sparkles,
+  },
+  {
     version: 'v1.5.1',
     titleEn: 'Design Consistency & Light Mode Only',
     titleHi: 'डिज़ाइन संगति और केवल लाइट मोड',

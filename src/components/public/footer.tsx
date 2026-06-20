@@ -7,19 +7,18 @@ export function Footer({ lang }: { lang: string }) {
     product: {
       title: isHindi ? 'उत्पाद' : 'Product',
       links: [
+        { label: isHindi ? 'विशेषताएं' : 'Features', href: `/${lang}/features` },
+        { label: isHindi ? 'मूल्य निर्धारण' : 'Pricing', href: `/${lang}/pricing` },
         { label: isHindi ? 'दस्तावेज़ीकरण' : 'Documentation', href: `/${lang}/docs` },
-        { label: isHindi ? 'विशेषताएं' : 'Features', href: `/${lang}/#features` },
         { label: isHindi ? 'रोडमैप' : 'Roadmap', href: `/${lang}/roadmap` },
         { label: isHindi ? 'परिवर्तन लॉग' : 'Changelog', href: `/${lang}/changelog` },
-        { label: isHindi ? 'सिस्टम स्थिति' : 'System Status', href: `/${lang}/status` },
       ]
     },
     trust: {
       title: isHindi ? 'विश्वास' : 'Trust',
       links: [
-        { label: isHindi ? 'शासन' : 'Governance', href: `/${lang}/governance` },
-        { label: isHindi ? 'सुरक्षा' : 'Security', href: `/${lang}/security` },
         { label: isHindi ? 'पारदर्शिता' : 'Transparency', href: `/${lang}/transparency` },
+        { label: isHindi ? 'सुरक्षा' : 'Security', href: `/${lang}/security` },
         { label: isHindi ? 'रिपोर्ट' : 'Reports', href: `/${lang}/reports` },
       ]
     },

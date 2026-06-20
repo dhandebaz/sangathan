@@ -29,10 +29,9 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
   }
 
   const navLinks = [
-    { href: `/${lang}/docs`, label: isHindi ? 'दस्तावेज़' : 'Docs' },
-    { href: `/${lang}/governance`, label: isHindi ? 'शासन' : 'Governance' },
-    { href: `/${lang}/status`, label: isHindi ? 'स्थिति' : 'Status' },
-    { href: `/${lang}/contact`, label: isHindi ? 'संपर्क' : 'Contact' },
+    { href: `/${lang}/features`, label: isHindi ? 'विशेषताएं' : 'Features' },
+    { href: `/${lang}/pricing`, label: isHindi ? 'मूल्य निर्धारण' : 'Pricing' },
+    { href: `/${lang}/transparency`, label: isHindi ? 'पारदर्शिता' : 'Transparency' },
   ]
 
   return (
@@ -54,12 +53,14 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                 className="flex items-center gap-2 group"
                 aria-label="Sangathan Home"
               >
-                <div className="bg-slate-900  rounded-lg p-1.5 transition-transform group-hover:scale-105">
-                  <Heart className="w-4 h-4 text-white  fill-current" />
-                </div>
-                <span className="font-extrabold text-lg tracking-tight text-slate-900 ">
-                  Sangathan
-                </span>
+                <Image
+                  src="/logo/logo.png"
+                  alt="Sangathan"
+                  width={140}
+                  height={40}
+                  className="h-8 w-auto transition-transform group-hover:scale-105"
+                  priority
+                />
               </Link>
              </div>
 
