@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Heart } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { getOrgCapabilities } from '@/lib/capabilities'
@@ -95,18 +96,19 @@ export default async function DashboardLayout(props: {
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 flex-col border-r border-sidebar-border bg-sidebar md:flex">
         <div className="flex h-16 items-center gap-3 border-b border-border px-4">
           <Link href={`/${lang}/dashboard`} className="flex items-center gap-3 min-w-0" aria-label="Sangathan Dashboard">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-bold">
-              {orgInitials}
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center">
+              <Image 
+                src="/logo/logo.png" 
+                alt="Sangathan Logo" 
+                width={32} 
+                height={32} 
+                className="object-contain dark:invert" 
+                priority
+              />
             </div>
             <div className="flex flex-col min-w-0">
-              <span className="text-sm font-semibold text-foreground truncate leading-tight">
-                {orgName ?? 'Sangathan'}
-              </span>
-              <span className="text-[10px] text-sidebar-fg uppercase tracking-wider font-medium">
-                {orgType === 'student_union' ? 'Student Union' :
-                 orgType === 'workers_union' ? 'Workers Union' :
-                 orgType === 'rwa' ? 'RWA' :
-                 orgType === 'ngo' ? 'NGO' : 'Organisation'}
+              <span className="text-lg font-bold text-foreground truncate leading-tight">
+                Sangathan
               </span>
             </div>
           </Link>

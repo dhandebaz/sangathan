@@ -53,6 +53,18 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
   const initials = userEmail?.[0]?.toUpperCase() ?? '?'
   const username = userEmail?.split('@')[0] || 'User'
 
+  const orgInitials = displayOrgName
+    .split(' ')
+    .map(w => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+
+  const orgTypeLabel = orgType === 'student_union' ? 'Student Union' :
+                       orgType === 'workers_union' ? 'Workers Union' :
+                       orgType === 'rwa' ? 'RWA' :
+                       orgType === 'ngo' ? 'NGO' : 'Organisation'
+
   const breadcrumb = useMemo(() => {
     if (!pathname) return ''
     const segments = pathname.split('/').filter(Boolean)
@@ -138,7 +150,12 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
             <Bell className="h-4 w-4" />
           </button>
 
-          <div ref={menuRef} className="relative">
+          <div 
+            ref={menuRef} 
+            className="relative"
+            onMouseEnter={() => setOpen(true)}
+            onMouseLeave={() => setOpen(false)}
+          >
             <button
               type="button"
               className={cn(
@@ -152,12 +169,12 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
                 setOpen((prev) => !prev)
               }}
             >
-              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-accent text-brand-700 text-xs font-bold">
-                {initials}
+              <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-primary text-primary-foreground text-xs font-bold">
+                {orgInitials}
               </div>
               <div className="hidden sm:flex flex-col items-start leading-tight">
-                <span className="text-xs font-semibold text-foreground">{username}</span>
-                <span className="text-[10px] text-muted-foreground font-medium capitalize">{displayRole}</span>
+                <span className="text-xs font-semibold text-foreground truncate max-w-[150px]">{displayOrgName}</span>
+                <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">{orgTypeLabel}</span>
               </div>
               <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
             </button>

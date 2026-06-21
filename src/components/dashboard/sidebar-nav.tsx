@@ -47,69 +47,239 @@ function useActiveGroup(pathname: string | null, groups: NavGroup[]) {
 export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavProps) {
   const pathname = usePathname()
 
-  const groups: NavGroup[] = useMemo(() => [
-    {
-      id: 'overview',
-      title: 'Overview',
-      items: [
-        { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Overview', show: true },
-        { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
-        { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events', show: true },
-      ]
-    },
-    {
-      id: 'people',
-      title: 'People & Members',
-      items: [
-        { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
-        { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Teams & Committees', show: true },
-        { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers', show: !!capabilities.volunteers },
-        { href: `/${lang}/dashboard/student-ids`, icon: Badge, label: 'Student IDs', show: !!capabilities.student_ids },
-        { href: `/${lang}/dashboard/networks`, icon: Globe, label: 'Networks', show: !!capabilities.federation_mode },
-      ]
-    },
-    {
-      id: 'governance',
-      title: 'Governance & Operations',
-      items: [
-        { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Proposals', show: true },
-        { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Voting & Decisions', show: true },
-        { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
-        { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!capabilities.campaigns },
-        { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financial Ledger', show: true },
-        { href: `/${lang}/dashboard/donations`, icon: Gift, label: 'Donations', show: !!capabilities.donations },
-        { href: `/${lang}/dashboard/grants`, icon: DollarSign, label: 'Grants', show: orgType === 'ngo' },
-      ]
-    },
-    {
-      id: 'support_compliance',
-      title: orgType === 'workers_union' ? 'Grievances & Legal' :
-             orgType === 'rwa' ? 'Maintenance & Compliance' :
-             orgType === 'student_union' ? 'Support & Guidelines' :
-             'Support & Compliance',
-      items: [
-        { 
-          href: `/${lang}/dashboard/helpdesk`, 
-          icon: orgType === 'workers_union' ? Scale : orgType === 'rwa' ? Wrench : AlertCircle, 
-          label: orgType === 'workers_union' ? 'Grievances' : orgType === 'rwa' ? 'Maintenance' : 'Helpdesk', 
-          show: !!capabilities.grievances || !!capabilities.complaints || !!capabilities.maintenance || true // We can show it by default or based on a common capability
-        },
-        { href: `/${lang}/dashboard/cba`, icon: FileText, label: 'CBA Documents', show: orgType === 'workers_union' },
-        { href: `/${lang}/dashboard/visitors`, icon: UserCheck, label: 'Visitors', show: orgType === 'rwa' },
-        { href: `/${lang}/dashboard/compliance`, icon: ScrollText, label: 'Compliance Tracker', show: isAdmin },
-      ]
-    },
-    {
+  const groups: NavGroup[] = useMemo(() => {
+    const c = capabilities
+    const adminGroup: NavGroup = {
       id: 'admin',
       title: 'Admin',
       items: [
-        { href: `/${lang}/dashboard/analytics`, icon: BarChart, label: 'Analytics', show: !!capabilities.advanced_analytics && isAdmin },
+        { href: `/${lang}/dashboard/analytics`, icon: BarChart, label: 'Analytics', show: !!c.advanced_analytics && isAdmin },
         { href: `/${lang}/dashboard/forms`, icon: GalleryVerticalEnd, label: 'Forms', show: isAdmin },
         { href: `/${lang}/dashboard/roles`, icon: UserCog, label: 'Custom Roles', show: isAdmin },
         { href: `/${lang}/dashboard/settings`, icon: Settings, label: 'Settings', show: isAdmin },
+      ].filter(i => i.show)
+    }
+
+    if (orgType === 'student_union') {
+      return [
+        {
+          id: 'overview',
+          title: 'Overview',
+          items: [
+            { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Dashboard', show: true },
+            { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
+            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events', show: true },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'student_body',
+          title: 'Student Body',
+          items: [
+            { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
+            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Committees', show: true },
+            { href: `/${lang}/dashboard/student-ids`, icon: Badge, label: 'Student IDs', show: !!c.student_ids },
+            { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers', show: !!c.volunteers },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'governance',
+          title: 'Governance & Ops',
+          items: [
+            { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Proposals', show: true },
+            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Voting & Elections', show: true },
+            { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!c.campaigns },
+            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
+            { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financials', show: true },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'support',
+          title: 'Student Services',
+          items: [
+            { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Helpdesk', show: true },
+            { href: `/${lang}/dashboard/grievances`, icon: Scale, label: 'Grievances', show: !!c.grievances },
+            { href: `/${lang}/dashboard/appeals`, icon: ScrollText, label: 'Appeals', show: isAdmin },
+          ].filter(i => i.show)
+        },
+        adminGroup
       ]
     }
-  ], [lang, isAdmin, capabilities, orgType])
+
+    if (orgType === 'workers_union') {
+      return [
+        {
+          id: 'overview',
+          title: 'Overview',
+          items: [
+            { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Dashboard', show: true },
+            { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
+            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events', show: true },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'workforce',
+          title: 'Workforce',
+          items: [
+            { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
+            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Local Branches', show: true },
+            { href: `/${lang}/dashboard/networks`, icon: Globe, label: 'Federation', show: !!c.federation_mode },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'union_actions',
+          title: 'Union Actions',
+          items: [
+            { href: `/${lang}/dashboard/cba`, icon: FileText, label: 'CBA Documents', show: true },
+            { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!c.campaigns },
+            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Strike Votes & Polls', show: true },
+            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
+            { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Union Dues', show: true },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'legal',
+          title: 'Legal & Support',
+          items: [
+            { href: `/${lang}/dashboard/grievances`, icon: Scale, label: 'Grievances', show: true },
+            { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Helpdesk', show: true },
+            { href: `/${lang}/dashboard/compliance`, icon: ScrollText, label: 'Compliance Tracker', show: isAdmin },
+          ].filter(i => i.show)
+        },
+        adminGroup
+      ]
+    }
+
+    if (orgType === 'rwa') {
+      return [
+        {
+          id: 'overview',
+          title: 'Overview',
+          items: [
+            { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Dashboard', show: true },
+            { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Notice Board', show: true },
+            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Community Events', show: true },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'residents',
+          title: 'Community',
+          items: [
+            { href: `/${lang}/dashboard/members`, icon: Users, label: 'Residents', show: true },
+            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Committees', show: true },
+            { href: `/${lang}/dashboard/visitors`, icon: UserCheck, label: 'Visitor Logs', show: true },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'estate_ops',
+          title: 'Estate Ops',
+          items: [
+            { href: `/${lang}/dashboard/maintenance`, icon: Wrench, label: 'Maintenance', show: true },
+            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
+            { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financials & Bills', show: true },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'governance_support',
+          title: 'Governance & Support',
+          items: [
+            { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Proposals', show: true },
+            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Polls & Elections', show: true },
+            { href: `/${lang}/dashboard/complaints`, icon: AlertCircle, label: 'Complaints', show: true },
+          ].filter(i => i.show)
+        },
+        adminGroup
+      ]
+    }
+
+    if (orgType === 'political_party') {
+      return [
+        {
+          id: 'overview',
+          title: 'Overview',
+          items: [
+            { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Dashboard', show: true },
+            { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
+            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Rallies & Events', show: true },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'people',
+          title: 'Party Cadre',
+          items: [
+            { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
+            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Wings & Cells', show: true },
+            { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers', show: !!c.volunteers },
+            { href: `/${lang}/dashboard/networks`, icon: Globe, label: 'Networks', show: !!c.federation_mode },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'campaigns',
+          title: 'Operations',
+          items: [
+            { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!c.campaigns },
+            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
+            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Internal Voting', show: true },
+            { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Party Funds', show: true },
+            { href: `/${lang}/dashboard/donations`, icon: Gift, label: 'Donations', show: !!c.donations },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'support',
+          title: 'Support',
+          items: [
+            { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Helpdesk', show: true },
+            { href: `/${lang}/dashboard/grievances`, icon: Scale, label: 'Grievances', show: !!c.grievances },
+          ].filter(i => i.show)
+        },
+        adminGroup
+      ]
+    }
+
+    // Default / NGO
+    return [
+      {
+        id: 'overview',
+        title: 'Overview',
+        items: [
+          { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Overview', show: true },
+          { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
+          { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events', show: true },
+        ].filter(i => i.show)
+      },
+      {
+        id: 'people',
+        title: 'People & Members',
+        items: [
+          { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
+          { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Teams & Committees', show: true },
+          { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers', show: !!c.volunteers },
+          { href: `/${lang}/dashboard/networks`, icon: Globe, label: 'Networks', show: !!c.federation_mode },
+        ].filter(i => i.show)
+      },
+      {
+        id: 'governance',
+        title: 'Governance & Ops',
+        items: [
+          { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Proposals', show: true },
+          { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Voting & Decisions', show: true },
+          { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
+          { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!c.campaigns },
+          { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financial Ledger', show: true },
+          { href: `/${lang}/dashboard/donations`, icon: Gift, label: 'Donations', show: !!c.donations },
+          { href: `/${lang}/dashboard/grants`, icon: DollarSign, label: 'Grants', show: true },
+        ].filter(i => i.show)
+      },
+      {
+        id: 'support_compliance',
+        title: 'Support & Compliance',
+        items: [
+          { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Helpdesk', show: true },
+          { href: `/${lang}/dashboard/compliance`, icon: ScrollText, label: 'Compliance Tracker', show: isAdmin },
+        ].filter(i => i.show)
+      },
+      adminGroup
+    ]
+  }, [lang, capabilities, isAdmin, orgType])
 
   const visibleGroups = useMemo(() =>
     groups
@@ -142,6 +312,18 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
     setUserToggles(prev => ({ ...prev, [id]: !prev[id] }))
   }, [])
 
+  const handleMouseEnter = useCallback((id: string) => {
+    setUserToggles(prev => ({ ...prev, [id]: false }))
+  }, [])
+
+  const handleMouseLeave = useCallback((id: string) => {
+    setUserToggles(prev => {
+      const next = { ...prev }
+      delete next[id]
+      return next
+    })
+  }, [])
+
   const isActive = useCallback((href: string) => {
     return pathname === href || pathname?.startsWith(href + '/')
   }, [pathname])
@@ -151,7 +333,12 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
       {visibleGroups.map((group) => {
         const isCollapsed = collapsed[group.id]
         return (
-          <div key={group.id} className="mb-5">
+          <div 
+            key={group.id} 
+            className="mb-5"
+            onMouseEnter={() => handleMouseEnter(group.id)}
+            onMouseLeave={() => handleMouseLeave(group.id)}
+          >
             <button
               onClick={() => toggleGroup(group.id)}
               className={cn(
