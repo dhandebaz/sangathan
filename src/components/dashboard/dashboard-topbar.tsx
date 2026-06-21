@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
-import { Bell, ChevronDown, LogOut, Settings, User } from 'lucide-react'
+import { Bell, ChevronDown, LogOut, Settings, User, Sparkles } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 
@@ -15,10 +15,11 @@ interface DashboardTopBarProps {
   orgName?: string | null
   orgLogoUrl?: string | null
   orgType?: string
+  planName?: string | null
 }
 
 export function DashboardTopBar(props: DashboardTopBarProps) {
-  const { lang, userEmail, role, orgName, orgLogoUrl, orgType } = props
+  const { lang, userEmail, role, orgName, orgLogoUrl, orgType, planName } = props
   const [open, setOpen] = useState(false)
   const [isSigningOut, setIsSigningOut] = useState(false)
   const pathname = usePathname()
@@ -174,7 +175,14 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
               </div>
               <div className="hidden sm:flex flex-col items-start leading-tight">
                 <span className="text-xs font-semibold text-foreground truncate max-w-[150px]">{displayOrgName}</span>
-                <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">{orgTypeLabel}</span>
+                <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider flex items-center gap-1">
+                  {orgTypeLabel}
+                  {planName === 'Institution' && (
+                    <span className="bg-indigo-100 text-indigo-700 px-1 py-0.5 rounded flex items-center gap-0.5 ml-1">
+                      <Sparkles className="w-2.5 h-2.5" /> Inst
+                    </span>
+                  )}
+                </span>
               </div>
               <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
             </button>

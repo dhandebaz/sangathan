@@ -2,6 +2,7 @@ import { Check, X, Info, Zap, ShieldCheck, Sparkles, Building2 } from 'lucide-re
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { CheckoutButton } from '@/components/pricing/checkout-button'
+import { createClient } from '@/lib/supabase/server'
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
   const isHindi = lang === 'hi'
@@ -16,6 +17,16 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 export default async function PricingPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   const isHindi = lang === 'hi'
+
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  let orgId = ''
+  if (user) {
+    const { data: profile } = await supabase.from('profiles').select('organisation_id').eq('id', user.id).single()
+    if (profile?.organisation_id) {
+      orgId = profile.organisation_id
+    }
+  }
 
   return (
     <div className="bg-white min-h-screen">
@@ -79,17 +90,28 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
               <span className="text-slate-500 font-medium">/{isHindi ? 'महीना' : 'month'}</span>
             </div>
 
-            <CheckoutButton 
-              amount={1000}
-              planName="Institution"
-              labelEn="Upgrade to Institution"
-              labelHi="अपग्रेड करें"
-              isHindi={isHindi}
-              className="relative w-full py-4 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-center transition-colors mb-8 group overflow-hidden"
-            >
-              <span className="relative z-10">{isHindi ? 'अपग्रेड करें' : 'Upgrade to Institution'}</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/0 via-white/20 to-indigo-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-            </CheckoutButton>
+            {!orgId ? (
+              <Link 
+                href={`/${lang}/login`}
+                className="relative block w-full py-4 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-center transition-colors mb-8 group overflow-hidden"
+              >
+                <span className="relative z-10">{isHindi ? 'लॉग इन करें' : 'Log in to Upgrade'}</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/0 via-white/20 to-indigo-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              </Link>
+            ) : (
+              <CheckoutButton 
+                amount={1000}
+                planName="Institution"
+                labelEn="Upgrade to Institution"
+                labelHi="अपग्रेड करें"
+                isHindi={isHindi}
+                orgId={orgId}
+                className="relative w-full py-4 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-center transition-colors mb-8 group overflow-hidden"
+              >
+                <span className="relative z-10">{isHindi ? 'अपग्रेड करें' : 'Upgrade to Institution'}</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/0 via-white/20 to-indigo-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              </CheckoutButton>
+            )}
 
             <div className="space-y-4 flex-grow relative z-10">
               <div className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-2">
@@ -139,14 +161,24 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
               </div>
               
               <div className="shrink-0 w-full sm:w-auto">
-                <CheckoutButton 
-                  amount={10000}
-                  planName="White-label"
-                  labelEn="Buy Now"
-                  labelHi="अभी खरीदें"
-                  isHindi={isHindi}
-                  className="block w-full sm:w-auto px-8 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-center transition-colors shadow-[0_0_20px_rgb(0,0,0,0.1)] hover:shadow-[0_0_30px_rgb(0,0,0,0.15)]"
-                />
+                {!orgId ? (
+                  <Link 
+                    href={`/${lang}/login`}
+                    className="block w-full sm:w-auto px-8 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-center transition-colors shadow-[0_0_20px_rgb(0,0,0,0.1)] hover:shadow-[0_0_30px_rgb(0,0,0,0.15)]"
+                  >
+                    {isHindi ? 'लॉग इन करें' : 'Log in to Buy'}
+                  </Link>
+                ) : (
+                  <CheckoutButton 
+                    amount={10000}
+                    planName="White-label"
+                    labelEn="Buy Now"
+                    labelHi="अभी खरीदें"
+                    isHindi={isHindi}
+                    orgId={orgId}
+                    className="block w-full sm:w-auto px-8 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-center transition-colors shadow-[0_0_20px_rgb(0,0,0,0.1)] hover:shadow-[0_0_30px_rgb(0,0,0,0.15)]"
+                  />
+                )}
               </div>
             </div>
           </div>

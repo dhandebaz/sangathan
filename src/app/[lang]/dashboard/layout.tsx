@@ -14,6 +14,8 @@ interface Organisation {
   name: string
   logo_url: string | null
   org_type: string
+  plan_name: string | null
+  whitelabel_enabled: boolean | null
 }
 
 interface Membership {
@@ -34,6 +36,8 @@ export default async function DashboardLayout(props: {
   let orgName: string | null = null
   let orgLogoUrl: string | null = null
   let orgType = 'ngo'
+  let planName: string | null = null
+  let whitelabelEnabled = false
   let maintenanceMessage: string | null = null
 
   if (user) {
@@ -42,7 +46,7 @@ export default async function DashboardLayout(props: {
       capabilities = await getOrgCapabilities(selectedOrgId)
       const { data: orgData } = await supabase
         .from('organisations')
-        .select('name, logo_url, org_type')
+        .select('name, logo_url, org_type, plan_name, whitelabel_enabled')
         .eq('id', selectedOrgId)
         .single()
       if (orgData) {
@@ -50,6 +54,8 @@ export default async function DashboardLayout(props: {
         orgName = org.name
         orgLogoUrl = org.logo_url
         orgType = org.org_type || 'ngo'
+        planName = org.plan_name
+        whitelabelEnabled = org.whitelabel_enabled ?? false
       }
       const { data: membershipData } = await supabase
         .from('members')
@@ -98,19 +104,32 @@ export default async function DashboardLayout(props: {
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 flex-col border-r border-sidebar-border bg-sidebar md:flex">
         <div className="flex h-16 items-center gap-3 border-b border-border px-4">
           <Link href={`/${lang}/dashboard`} className="flex items-center gap-3 min-w-0" aria-label="Sangathan Dashboard">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center">
-              <Image 
-                src="/logo/logo.png" 
-                alt="Sangathan Logo" 
-                width={32} 
-                height={32} 
-                className="object-contain dark:invert" 
-                priority
-              />
-            </div>
+            {(!whitelabelEnabled || !orgLogoUrl) ? (
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center">
+                <Image 
+                  src="/logo/logo.png" 
+                  alt="Sangathan Logo" 
+                  width={32} 
+                  height={32} 
+                  className="object-contain dark:invert" 
+                  priority
+                />
+              </div>
+            ) : (
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center">
+                <Image 
+                  src={orgLogoUrl} 
+                  alt={`${orgName} Logo`} 
+                  width={32} 
+                  height={32} 
+                  className="object-contain rounded-sm" 
+                  priority
+                />
+              </div>
+            )}
             <div className="flex flex-col min-w-0">
               <span className="text-lg font-bold text-foreground truncate leading-tight">
-                Sangathan
+                {whitelabelEnabled ? orgName : 'Sangathan'}
               </span>
             </div>
           </Link>
@@ -118,15 +137,17 @@ export default async function DashboardLayout(props: {
 
         <SidebarNav lang={lang} isAdmin={isAdmin} capabilities={capabilities} orgType={orgType} />
 
-        <div className="px-3 pb-3">
-          <Link
-            href={`/${lang}/dashboard/support`}
-            className="flex items-center justify-center gap-2 rounded-lg bg-foreground px-3 py-2.5 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
-          >
-            <Heart className="h-4 w-4 text-brand-300" />
-            Support Sangathan
-          </Link>
-        </div>
+        {!whitelabelEnabled && (
+          <div className="px-3 pb-3">
+            <Link
+              href={`/${lang}/dashboard/support`}
+              className="flex items-center justify-center gap-2 rounded-lg bg-foreground px-3 py-2.5 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+            >
+              <Heart className="h-4 w-4 text-brand-300" />
+              Support Sangathan
+            </Link>
+          </div>
+        )}
 
       </aside>
 
@@ -138,7 +159,7 @@ export default async function DashboardLayout(props: {
           </div>
         )}
         <header className="sticky top-0 z-40 flex h-16 items-center border-b border-border bg-card/95 px-4 shadow-sm backdrop-blur-sm sm:px-6 lg:px-8">
-          <DashboardTopBar lang={lang} userEmail={user?.email ?? null} role={role} orgName={orgName} orgLogoUrl={orgLogoUrl} orgType={orgType} />
+          <DashboardTopBar lang={lang} userEmail={user?.email ?? null} role={role} orgName={orgName} orgLogoUrl={orgLogoUrl} orgType={orgType} planName={planName} />
         </header>
 
         <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-8xl flex-1 animate-fade-in px-4 pb-24 pt-6 sm:px-6 lg:px-8 lg:pb-10 lg:pt-8">

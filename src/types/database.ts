@@ -1566,6 +1566,8 @@ export type Database = {
           status: string
           updated_at: string
           website: string | null
+          plan_name: string | null
+          whitelabel_enabled: boolean | null
           registration_status: Database["public"]["Enums"]["registration_status"] | null
           registration_number: string | null
           incorporation_date: string | null
@@ -1593,6 +1595,8 @@ export type Database = {
           status?: string
           updated_at?: string
           website?: string | null
+          plan_name?: string | null
+          whitelabel_enabled?: boolean | null
           registration_status?: Database["public"]["Enums"]["registration_status"] | null
           registration_number?: string | null
           incorporation_date?: string | null
@@ -1620,6 +1624,8 @@ export type Database = {
           status?: string
           updated_at?: string
           website?: string | null
+          plan_name?: string | null
+          whitelabel_enabled?: boolean | null
           registration_status?: Database["public"]["Enums"]["registration_status"] | null
           registration_number?: string | null
           incorporation_date?: string | null

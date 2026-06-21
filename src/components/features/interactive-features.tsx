@@ -168,13 +168,14 @@ export function InteractiveFeatures({ orgs, isHindi, lang }: InteractiveFeatures
         }
       }
     }
+    return () => {} // Cleanup function as per rules
   }, [orgs])
 
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId)
     setActiveFeatureIndex(0)
     if (typeof window !== 'undefined') {
-      window.history.pushState(null, '', `#${tabId}`)
+      window.history.replaceState(null, '', `#${tabId}`)
     }
   }
 
@@ -186,7 +187,7 @@ export function InteractiveFeatures({ orgs, isHindi, lang }: InteractiveFeatures
   const ActiveFeatureIcon = iconMap[activeFeature.icon] || ClipboardList
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 relative z-10">
       {/* Category Tab Navigation */}
       <div className="border-b border-slate-200">
         <div className="flex flex-wrap -mb-px justify-center gap-1 sm:gap-4">

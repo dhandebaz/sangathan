@@ -11,6 +11,7 @@ interface CheckoutButtonProps {
   labelEn: string
   labelHi: string
   isHindi: boolean
+  orgId: string
   className?: string
   children?: React.ReactNode
 }
@@ -21,6 +22,7 @@ export function CheckoutButton({
   labelEn,
   labelHi,
   isHindi,
+  orgId,
   className,
   children
 }: CheckoutButtonProps) {
@@ -34,7 +36,7 @@ export function CheckoutButton({
       const response = await fetch('/api/razorpay/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount, receipt: `receipt_${planName.toLowerCase()}` }),
+        body: JSON.stringify({ amount, receipt: `receipt_${planName.toLowerCase()}`, orgId, planName }),
       })
 
       const orderData = await response.json()

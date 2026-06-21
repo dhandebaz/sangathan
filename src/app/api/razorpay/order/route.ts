@@ -4,11 +4,18 @@ import Razorpay from 'razorpay'
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { amount, currency = 'INR', receipt = 'receipt_order_1' } = body
+    const { amount, currency = 'INR', receipt = 'receipt_order_1', orgId, planName } = body
 
     if (!amount || typeof amount !== 'number') {
       return NextResponse.json(
         { error: 'Invalid amount provided' },
+        { status: 400 }
+      )
+    }
+
+    if (!orgId || !planName) {
+      return NextResponse.json(
+        { error: 'Missing organisation or plan details' },
         { status: 400 }
       )
     }
@@ -37,6 +44,10 @@ export async function POST(req: NextRequest) {
       amount: amountInPaise,
       currency,
       receipt,
+      notes: {
+        orgId,
+        planName
+      }
     }
 
     const order = await razorpay.orders.create(options)
