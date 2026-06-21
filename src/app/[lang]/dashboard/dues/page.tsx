@@ -6,7 +6,7 @@ import DuesClient from '@/components/dashboard/dues/dues-client'
 
 export default async function DuesPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
-  const t = await getTranslations('dashboard')
+
   const organisationId = await getSelectedOrganisationId()
   
   if (!organisationId) {

@@ -33,13 +33,14 @@ export default function DuesClient({
       await createBillingPlan({
         name: planForm.name,
         amount: Number(planForm.amount),
+        currency: 'INR',
         frequency: planForm.frequency as any
       })
-      toast({ title: 'Plan Created', description: 'Billing plan created successfully.' })
+      toast.success('Plan Created', { description: 'Billing plan created successfully.'  })
       setIsPlanDialogOpen(false)
       setPlanForm({ name: '', amount: '', frequency: 'monthly' })
     } catch (e: any) {
-      toast.error()
+      toast.error('Error')
     }
   }
 
@@ -50,20 +51,20 @@ export default function DuesClient({
         due_date: generateForm.due_date,
         notes: generateForm.notes
       })
-      toast({ title: 'Dues Generated', description: `Generated dues for ${res.count} members.` })
+      toast.success('Dues Generated', { description: `Generated dues for ${res.data?.count} members.` })
       setIsGenerateDialogOpen(false)
       setGenerateForm({ plan_id: '', due_date: '', notes: '' })
     } catch (e: any) {
-      toast.error()
+      toast.error('Error')
     }
   }
 
   const handleMarkPaid = async (dueId: string) => {
     try {
       await markDueAsPaid({ due_id: dueId })
-      toast({ title: 'Payment Recorded', description: 'Due marked as paid.' })
+      toast.success('Payment Recorded', { description: 'Due marked as paid.'  })
     } catch (e: any) {
-      toast.error()
+      toast.error('Error')
     }
   }
 

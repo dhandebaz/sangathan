@@ -6,7 +6,7 @@ import ElectionsClient from '@/components/dashboard/elections/elections-client'
 
 export default async function ElectionsPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
-  const t = await getTranslations('dashboard')
+
   const organisationId = await getSelectedOrganisationId()
   
   if (!organisationId) {

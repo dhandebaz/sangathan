@@ -43,11 +43,11 @@ export default function JobsClient({
         positions_available: Number(jobForm.positions_available),
         start_date: jobForm.start_date || undefined
       })
-      toast.success()
+      toast.success('Success')
       setIsJobOpen(false)
       setJobForm({ title: '', employer_name: '', location: '', description: '', skills_required: '', wage_rate: '', positions_available: '1', start_date: '' })
     } catch (e: any) {
-      toast.error()
+      toast.error('Error')
     }
   }
 
@@ -55,21 +55,21 @@ export default function JobsClient({
     if (!selectedJob) return
     try {
       await applyForJob({ job_id: selectedJob, notes: applyNotes })
-      toast.success()
+      toast.success('Success')
       setIsApplyOpen(false)
       setApplyNotes('')
       setSelectedJob(null)
     } catch (e: any) {
-      toast.error()
+      toast.error('Error')
     }
   }
 
   const handleAppStatus = async (appId: string, status: any) => {
     try {
       await updateApplicationStatus({ application_id: appId, status })
-      toast({ title: 'Status Updated', description: `Application marked as ${status}` })
+      toast.success('Status Updated', { description: `Application marked as ${status}` })
     } catch (e: any) {
-      toast.error()
+      toast.error('Error')
     }
   }
 

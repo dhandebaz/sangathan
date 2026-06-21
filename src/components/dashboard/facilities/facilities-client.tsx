@@ -36,31 +36,31 @@ export default function FacilitiesClient({
         capacity: facilityForm.capacity ? Number(facilityForm.capacity) : undefined,
         hourly_rate: facilityForm.hourly_rate ? Number(facilityForm.hourly_rate) : undefined
       })
-      toast.success()
+      toast.success('Success')
       setIsFacilityOpen(false)
       setFacilityForm({ name: '', description: '', capacity: '', hourly_rate: '' })
     } catch (e: any) {
-      toast.error()
+      toast.error('Error')
     }
   }
 
   const handleBook = async () => {
     try {
       await bookFacility(bookingForm)
-      toast.success()
+      toast.success('Success')
       setIsBookingOpen(false)
       setBookingForm({ facility_id: '', start_time: '', end_time: '', notes: '' })
     } catch (e: any) {
-      toast.error()
+      toast.error('Error')
     }
   }
 
   const handleStatusUpdate = async (id: string, status: any) => {
     try {
       await updateBookingStatus({ booking_id: id, status })
-      toast.success()
+      toast.success('Success')
     } catch (e: any) {
-      toast.error()
+      toast.error('Error')
     }
   }
 

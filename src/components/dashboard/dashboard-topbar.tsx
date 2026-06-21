@@ -18,7 +18,7 @@ interface DashboardTopBarProps {
 }
 
 export function DashboardTopBar(props: DashboardTopBarProps) {
-  const { lang, userEmail, role, orgName, orgLogoUrl } = props
+  const { lang, userEmail, role, orgName, orgLogoUrl, orgType } = props
   const [open, setOpen] = useState(false)
   const [isSigningOut, setIsSigningOut] = useState(false)
   const pathname = usePathname()

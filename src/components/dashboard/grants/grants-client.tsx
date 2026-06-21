@@ -71,21 +71,21 @@ export function GrantsClient({ orgId }: GrantsClientProps) {
         status: form.status as any,
         deadline: form.deadline || undefined
       })
-      toast.success()
+      toast.success('Success')
       setIsUploadOpen(false)
       window.location.reload()
     } catch (e: any) {
-      toast.error()
+      toast.error('Error')
     }
   }
 
   const handleStatusChange = async (grantId: string, status: any) => {
     try {
       await updateGrantStatus({ grant_id: grantId, status })
-      toast({ title: 'Status Updated', description: 'Grant status updated successfully.' })
+      toast.success('Status Updated', { description: 'Grant status updated successfully.'  })
       setGrants(gs => gs.map(g => g.id === grantId ? { ...g, status } : g))
     } catch (e: any) {
-      toast.error()
+      toast.error('Error')
     }
   }
 

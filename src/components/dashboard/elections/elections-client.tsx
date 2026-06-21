@@ -42,10 +42,10 @@ export default function ElectionsClient({
         start_time: new Date(electionForm.start_time).toISOString(),
         end_time: new Date(electionForm.end_time).toISOString()
       })
-      toast.success()
+      toast.success('Success')
       setIsElectionOpen(false)
     } catch (e: any) {
-      toast.error()
+      toast.error('Error')
     }
   }
 
@@ -56,10 +56,10 @@ export default function ElectionsClient({
         title: positionForm.title,
         max_votes_per_voter: positionForm.max_votes
       })
-      toast.success()
+      toast.success('Success')
       setIsPositionOpen(false)
     } catch (e: any) {
-      toast.error()
+      toast.error('Error')
     }
   }
 
@@ -70,10 +70,10 @@ export default function ElectionsClient({
         profile_id: candidateForm.profile_id,
         manifesto_text: candidateForm.manifesto_text
       })
-      toast.success()
+      toast.success('Success')
       setIsCandidateOpen(false)
     } catch (e: any) {
-      toast.error()
+      toast.error('Error')
     }
   }
 
@@ -85,7 +85,7 @@ export default function ElectionsClient({
     }))
     
     if (voteArray.length < positions.length) {
-      toast({ title: 'Incomplete', description: 'Please cast a vote for all positions before submitting', variant: 'destructive' })
+      toast.error('Incomplete', { description: 'Please cast a vote for all positions before submitting' })
       return
     }
 
@@ -94,10 +94,10 @@ export default function ElectionsClient({
         election_id: electionId,
         votes: voteArray
       })
-      toast({ title: 'Vote Cast', description: 'Your anonymous vote has been recorded securely.' })
+      toast.success('Vote Cast', { description: 'Your anonymous vote has been recorded securely.'  })
       setVotes({})
     } catch (e: any) {
-      toast.error()
+      toast.error('Error')
     }
   }
 

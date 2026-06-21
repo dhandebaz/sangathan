@@ -8,6 +8,7 @@ import { AiActivationForm } from './ai-activation-form'
 export function SupportSangathan({ lang, isPublic = false }: { lang: string, isPublic?: boolean }) {
   const isHi = lang === 'hi'
   const [copiedId, setCopiedId] = useState<string | null>(null)
+  const upiIds = ['sheikh.arsalan@okaxis', 'sheikh.arsalan@ybl', '8527976791@fam']
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
