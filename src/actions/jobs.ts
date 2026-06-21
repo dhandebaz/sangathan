@@ -1,6 +1,7 @@
 'use server'
 
 import { createSafeAction } from '@/lib/auth/actions'
+import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 
@@ -16,9 +17,11 @@ const createJobSchema = z.object({
 })
 
 export const createJobPosting = createSafeAction(
-  'create_job_posting',
   createJobSchema,
-  async (data, { supabase, organisationId }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     const skillsArray = data.skills_required 
       ? data.skills_required.split(',').map(s => s.trim()) 
       : []
@@ -49,9 +52,11 @@ const applyJobSchema = z.object({
 })
 
 export const applyForJob = createSafeAction(
-  'apply_job',
   applyJobSchema,
-  async (data, { supabase, profileId }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     const { error } = await supabase
       .from('job_applications')
       .insert({
@@ -76,9 +81,11 @@ const updateApplicationStatusSchema = z.object({
 })
 
 export const updateApplicationStatus = createSafeAction(
-  'update_app_status',
   updateApplicationStatusSchema,
-  async (data, { supabase, organisationId }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     // Note: RLS ensures only admins of the job's org can update it
     const { error } = await supabase
       .from('job_applications')

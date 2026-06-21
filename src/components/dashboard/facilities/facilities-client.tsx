@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createFacility, bookFacility, updateBookingStatus } from '@/actions/facilities'
-import { useToast } from '@/hooks/use-toast'
+import { toast } from 'sonner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export default function FacilitiesClient({ 
@@ -22,8 +22,6 @@ export default function FacilitiesClient({
   bookings: any[], 
   isAdmin: boolean 
 }) {
-  const { toast } = useToast()
-  
   const [isFacilityOpen, setIsFacilityOpen] = useState(false)
   const [isBookingOpen, setIsBookingOpen] = useState(false)
   
@@ -38,31 +36,31 @@ export default function FacilitiesClient({
         capacity: facilityForm.capacity ? Number(facilityForm.capacity) : undefined,
         hourly_rate: facilityForm.hourly_rate ? Number(facilityForm.hourly_rate) : undefined
       })
-      toast({ title: 'Success', description: 'Facility created successfully' })
+      toast.success()
       setIsFacilityOpen(false)
       setFacilityForm({ name: '', description: '', capacity: '', hourly_rate: '' })
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 
   const handleBook = async () => {
     try {
       await bookFacility(bookingForm)
-      toast({ title: 'Success', description: 'Booking requested successfully' })
+      toast.success()
       setIsBookingOpen(false)
       setBookingForm({ facility_id: '', start_time: '', end_time: '', notes: '' })
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 
   const handleStatusUpdate = async (id: string, status: any) => {
     try {
       await updateBookingStatus({ booking_id: id, status })
-      toast({ title: 'Success', description: `Booking ${status}` })
+      toast.success()
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 

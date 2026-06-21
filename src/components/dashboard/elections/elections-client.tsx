@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createElection, createElectionPosition, nominateCandidate, submitVote } from '@/actions/elections'
-import { useToast } from '@/hooks/use-toast'
+import { toast } from 'sonner'
 import { Textarea } from '@/components/ui/textarea'
 
 export default function ElectionsClient({ 
@@ -23,8 +23,6 @@ export default function ElectionsClient({
   members: { id: string, full_name: string, email: string }[],
   isAdmin: boolean 
 }) {
-  const { toast } = useToast()
-  
   const [electionForm, setElectionForm] = useState({ title: '', description: '', start_time: '', end_time: '' })
   const [positionForm, setPositionForm] = useState({ election_id: '', title: '', max_votes: 1 })
   const [candidateForm, setCandidateForm] = useState({ position_id: '', profile_id: '', manifesto_text: '' })
@@ -44,10 +42,10 @@ export default function ElectionsClient({
         start_time: new Date(electionForm.start_time).toISOString(),
         end_time: new Date(electionForm.end_time).toISOString()
       })
-      toast({ title: 'Success', description: 'Election created successfully' })
+      toast.success()
       setIsElectionOpen(false)
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 
@@ -58,10 +56,10 @@ export default function ElectionsClient({
         title: positionForm.title,
         max_votes_per_voter: positionForm.max_votes
       })
-      toast({ title: 'Success', description: 'Position created successfully' })
+      toast.success()
       setIsPositionOpen(false)
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 
@@ -72,10 +70,10 @@ export default function ElectionsClient({
         profile_id: candidateForm.profile_id,
         manifesto_text: candidateForm.manifesto_text
       })
-      toast({ title: 'Success', description: 'Candidate nominated successfully' })
+      toast.success()
       setIsCandidateOpen(false)
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 
@@ -99,7 +97,7 @@ export default function ElectionsClient({
       toast({ title: 'Vote Cast', description: 'Your anonymous vote has been recorded securely.' })
       setVotes({})
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 

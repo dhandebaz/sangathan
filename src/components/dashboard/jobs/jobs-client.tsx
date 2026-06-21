@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { createJobPosting, applyForJob, updateApplicationStatus } from '@/actions/jobs'
-import { useToast } from '@/hooks/use-toast'
+import { toast } from 'sonner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export default function JobsClient({ 
@@ -21,8 +21,6 @@ export default function JobsClient({
   isAdmin: boolean,
   profileId: string
 }) {
-  const { toast } = useToast()
-  
   const [isJobOpen, setIsJobOpen] = useState(false)
   const [jobForm, setJobForm] = useState({ 
     title: '', employer_name: '', location: '', description: '', 
@@ -45,11 +43,11 @@ export default function JobsClient({
         positions_available: Number(jobForm.positions_available),
         start_date: jobForm.start_date || undefined
       })
-      toast({ title: 'Success', description: 'Job posted successfully' })
+      toast.success()
       setIsJobOpen(false)
       setJobForm({ title: '', employer_name: '', location: '', description: '', skills_required: '', wage_rate: '', positions_available: '1', start_date: '' })
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 
@@ -57,12 +55,12 @@ export default function JobsClient({
     if (!selectedJob) return
     try {
       await applyForJob({ job_id: selectedJob, notes: applyNotes })
-      toast({ title: 'Success', description: 'Application submitted successfully' })
+      toast.success()
       setIsApplyOpen(false)
       setApplyNotes('')
       setSelectedJob(null)
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 
@@ -71,7 +69,7 @@ export default function JobsClient({
       await updateApplicationStatus({ application_id: appId, status })
       toast({ title: 'Status Updated', description: `Application marked as ${status}` })
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 

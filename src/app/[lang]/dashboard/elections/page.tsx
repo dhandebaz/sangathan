@@ -1,6 +1,5 @@
-import { getTranslations } from 'next-intl/server'
 import { PageHeader } from '@/components/public/page-header'
-import { getSelectedOrganisationId } from '@/lib/cookies'
+import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import ElectionsClient from '@/components/dashboard/elections/elections-client'

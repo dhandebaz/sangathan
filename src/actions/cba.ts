@@ -1,6 +1,7 @@
 'use server'
 
 import { createSafeAction } from '@/lib/auth/actions'
+import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 
@@ -12,9 +13,11 @@ const uploadCBASchema = z.object({
 })
 
 export const uploadCBADocument = createSafeAction(
-  'upload_cba',
   uploadCBASchema,
-  async (data, { supabase, organisationId, profileId }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     const { error } = await supabase
       .from('cba_documents')
       .insert({
@@ -40,9 +43,11 @@ const updateCBAStatusSchema = z.object({
 })
 
 export const updateCBAStatus = createSafeAction(
-  'update_cba_status',
   updateCBAStatusSchema,
-  async (data, { supabase, organisationId }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     const { error } = await supabase
       .from('cba_documents')
       .update({ status: data.status })

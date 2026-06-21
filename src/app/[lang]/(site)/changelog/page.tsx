@@ -1,4 +1,4 @@
-import { Sparkles, ShieldCheck, Zap, Server, Code, Users, Calendar, Activity, Rocket, Globe, LucideIcon } from 'lucide-react'
+import { Sparkles, ShieldCheck, Zap, Server, Code, Users, Calendar, Activity, Rocket, Globe, LucideIcon, Building2 } from 'lucide-react'
 import { Metadata } from 'next'
 import { PageHeader } from '@/components/public/page-header'
 

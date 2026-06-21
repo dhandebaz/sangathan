@@ -11,8 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { createClient } from '@/lib/supabase/client'
 import { FileText, Calendar, CheckCircle2, Clock, AlertCircle, Plus, MoreVertical } from 'lucide-react'
 import { uploadCBADocument, updateCBAStatus } from '@/actions/cba'
-import { useToast } from '@/hooks/use-toast'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { toast } from 'sonner'
 
 interface CBADocument {
   id: string
@@ -33,8 +32,6 @@ export function CBAClient({ orgId }: CBAClientProps) {
   const [loading, setLoading] = useState(true)
   const [isUploadOpen, setIsUploadOpen] = useState(false)
   const [uploadForm, setUploadForm] = useState({ title: '', file_url: '', valid_from: '', valid_until: '' })
-  const { toast } = useToast()
-
   useEffect(() => {
     async function fetchDocuments() {
       const supabase = createClient()
@@ -73,12 +70,12 @@ export function CBAClient({ orgId }: CBAClientProps) {
         valid_from: uploadForm.valid_from || undefined,
         valid_until: uploadForm.valid_until || undefined
       })
-      toast({ title: 'Success', description: 'CBA document uploaded.' })
+      toast.success()
       setIsUploadOpen(false)
       // Optimistically reload
       window.location.reload()
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 
@@ -88,7 +85,7 @@ export function CBAClient({ orgId }: CBAClientProps) {
       toast({ title: 'Status Updated', description: 'Document status changed successfully.' })
       setDocuments(docs => docs.map(d => d.id === docId ? { ...d, status } : d))
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 
@@ -173,17 +170,17 @@ export function CBAClient({ orgId }: CBAClientProps) {
                     <Badge variant={doc.status === 'active' ? 'default' : 'secondary'} className="capitalize">
                       {doc.status}
                     </Badge>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon"><MoreVertical className="w-4 h-4" /></Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleStatusChange(doc.id, 'active')}>Mark Active</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleStatusChange(doc.id, 'draft')}>Mark Draft</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleStatusChange(doc.id, 'expired')}>Mark Expired</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleStatusChange(doc.id, 'archived')}>Archive</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <Select value={doc.status} onValueChange={(val) => handleStatusChange(doc.id, val)}>
+                      <SelectTrigger className="w-[110px] h-8 bg-transparent border-0 shadow-none hover:bg-accent hover:text-accent-foreground focus:ring-0">
+                        <SelectValue placeholder="Status" />
+                      </SelectTrigger>
+                      <SelectContent align="end">
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="draft">Draft</SelectItem>
+                        <SelectItem value="expired">Expired</SelectItem>
+                        <SelectItem value="archived">Archive</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
               ))}

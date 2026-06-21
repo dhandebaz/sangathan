@@ -1,6 +1,7 @@
 'use server'
 
 import { createSafeAction } from '@/lib/auth/actions'
+import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 
@@ -12,9 +13,11 @@ const createFacilitySchema = z.object({
 })
 
 export const createFacility = createSafeAction(
-  'create_facility',
   createFacilitySchema,
-  async (data, { supabase, organisationId }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     const { error } = await supabase
       .from('facilities')
       .insert({
@@ -36,9 +39,11 @@ const bookFacilitySchema = z.object({
 })
 
 export const bookFacility = createSafeAction(
-  'book_facility',
   bookFacilitySchema,
-  async (data, { supabase, organisationId, profileId }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     // Check for conflicting bookings
     const { data: conflicts } = await supabase
       .from('facility_bookings')
@@ -76,9 +81,11 @@ const updateBookingStatusSchema = z.object({
 })
 
 export const updateBookingStatus = createSafeAction(
-  'update_booking_status',
   updateBookingStatusSchema,
-  async (data, { supabase, organisationId }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     const { error } = await supabase
       .from('facility_bookings')
       .update({ status: data.status })

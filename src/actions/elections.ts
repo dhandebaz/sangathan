@@ -1,6 +1,7 @@
 'use server'
 
 import { createSafeAction } from '@/lib/auth/actions'
+import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 
@@ -12,9 +13,11 @@ const createElectionSchema = z.object({
 })
 
 export const createElection = createSafeAction(
-  'create_election',
   createElectionSchema,
-  async (data, { supabase, organisationId }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     const { data: election, error } = await supabase
       .from('elections')
       .insert({
@@ -38,9 +41,11 @@ const createPositionSchema = z.object({
 })
 
 export const createElectionPosition = createSafeAction(
-  'create_position',
   createPositionSchema,
-  async (data, { supabase }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     const { error } = await supabase
       .from('election_positions')
       .insert(data)
@@ -58,9 +63,11 @@ const nominateCandidateSchema = z.object({
 })
 
 export const nominateCandidate = createSafeAction(
-  'nominate_candidate',
   nominateCandidateSchema,
-  async (data, { supabase }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     const { error } = await supabase
       .from('candidates')
       .insert({
@@ -85,9 +92,11 @@ const voteSchema = z.object({
 })
 
 export const submitVote = createSafeAction(
-  'submit_vote',
   voteSchema,
-  async (data, { supabase, profileId }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     // Check if election is active
     const { data: election } = await supabase
       .from('elections')

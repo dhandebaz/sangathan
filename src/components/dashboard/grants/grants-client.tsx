@@ -7,12 +7,12 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createClient } from '@/lib/supabase/client'
 import { FileText, Calendar, DollarSign, Clock, CheckCircle2, AlertCircle, Plus, MoreVertical } from 'lucide-react'
 import { createGrant, updateGrantStatus } from '@/actions/grants'
-import { useToast } from '@/hooks/use-toast'
+import { toast } from 'sonner'
 
 interface Grant {
   id: string
@@ -32,8 +32,6 @@ export function GrantsClient({ orgId }: GrantsClientProps) {
   const [loading, setLoading] = useState(true)
   const [isUploadOpen, setIsUploadOpen] = useState(false)
   const [form, setForm] = useState({ title: '', amount: '', status: 'draft', deadline: '' })
-  const { toast } = useToast()
-
   useEffect(() => {
     async function fetchGrants() {
       const supabase = createClient()
@@ -73,11 +71,11 @@ export function GrantsClient({ orgId }: GrantsClientProps) {
         status: form.status as any,
         deadline: form.deadline || undefined
       })
-      toast({ title: 'Success', description: 'Grant tracked successfully.' })
+      toast.success()
       setIsUploadOpen(false)
       window.location.reload()
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 
@@ -87,7 +85,7 @@ export function GrantsClient({ orgId }: GrantsClientProps) {
       toast({ title: 'Status Updated', description: 'Grant status updated successfully.' })
       setGrants(gs => gs.map(g => g.id === grantId ? { ...g, status } : g))
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 
@@ -180,17 +178,17 @@ export function GrantsClient({ orgId }: GrantsClientProps) {
                     <Badge variant={grant.status === 'awarded' ? 'default' : 'secondary'} className="capitalize">
                       {grant.status}
                     </Badge>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon"><MoreVertical className="w-4 h-4" /></Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleStatusChange(grant.id, 'draft')}>Mark as Draft</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleStatusChange(grant.id, 'submitted')}>Mark as Submitted</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleStatusChange(grant.id, 'awarded')}>Mark as Awarded</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleStatusChange(grant.id, 'rejected')}>Mark as Rejected</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <Select value={grant.status} onValueChange={(val) => handleStatusChange(grant.id, val)}>
+                      <SelectTrigger className="w-[110px] h-8 bg-transparent border-0 shadow-none hover:bg-accent hover:text-accent-foreground focus:ring-0">
+                        <SelectValue placeholder="Status" />
+                      </SelectTrigger>
+                      <SelectContent align="end">
+                        <SelectItem value="draft">Draft</SelectItem>
+                        <SelectItem value="submitted">Submitted</SelectItem>
+                        <SelectItem value="awarded">Awarded</SelectItem>
+                        <SelectItem value="rejected">Rejected</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
               ))}

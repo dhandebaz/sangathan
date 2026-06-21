@@ -1,6 +1,7 @@
 'use server'
 
 import { createSafeAction } from '@/lib/auth/actions'
+import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 
@@ -12,9 +13,11 @@ const createBillingPlanSchema = z.object({
 })
 
 export const createBillingPlan = createSafeAction(
-  'create_billing_plan',
   createBillingPlanSchema,
-  async (data, { supabase, organisationId }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     const { data: plan, error } = await supabase
       .from('billing_plans')
       .insert({
@@ -38,9 +41,11 @@ const generateDuesSchema = z.object({
 })
 
 export const generateDuesForMembers = createSafeAction(
-  'generate_dues',
   generateDuesSchema,
-  async (data, { supabase, organisationId }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     // 1. Get the plan to get the amount
     const { data: plan, error: planError } = await supabase
       .from('billing_plans')
@@ -89,9 +94,11 @@ const markDuePaidSchema = z.object({
 })
 
 export const markDueAsPaid = createSafeAction(
-  'mark_due_paid',
   markDuePaidSchema,
-  async (data, { supabase, organisationId }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     const { error } = await supabase
       .from('membership_dues')
       .update({ status: 'paid', transaction_id: data.transaction_id })

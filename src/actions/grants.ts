@@ -1,6 +1,7 @@
 'use server'
 
 import { createSafeAction } from '@/lib/auth/actions'
+import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 
@@ -12,9 +13,11 @@ const createGrantSchema = z.object({
 })
 
 export const createGrant = createSafeAction(
-  'create_grant',
   createGrantSchema,
-  async (data, { supabase, organisationId, profileId }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     const { error } = await supabase
       .from('grants')
       .insert({
@@ -38,9 +41,11 @@ const updateGrantStatusSchema = z.object({
 })
 
 export const updateGrantStatus = createSafeAction(
-  'update_grant_status',
   updateGrantStatusSchema,
-  async (data, { supabase, organisationId }) => {
+  async (data, context) => {
+    const supabase = await createClient();
+    const organisationId = context.organizationId;
+    const profileId = context.user.id;
     const { error } = await supabase
       .from('grants')
       .update({ status: data.status })

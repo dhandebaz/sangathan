@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createBillingPlan, generateDuesForMembers, markDueAsPaid } from '@/actions/dues'
-import { useToast } from '@/hooks/use-toast'
+import { toast } from 'sonner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { BillingPlan, MembershipDue } from '@/types/dashboard'
 
@@ -22,7 +22,6 @@ export default function DuesClient({
   dues: any[], 
   lang: string 
 }) {
-  const { toast } = useToast()
   const [isPlanDialogOpen, setIsPlanDialogOpen] = useState(false)
   const [isGenerateDialogOpen, setIsGenerateDialogOpen] = useState(false)
   
@@ -40,7 +39,7 @@ export default function DuesClient({
       setIsPlanDialogOpen(false)
       setPlanForm({ name: '', amount: '', frequency: 'monthly' })
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 
@@ -55,7 +54,7 @@ export default function DuesClient({
       setIsGenerateDialogOpen(false)
       setGenerateForm({ plan_id: '', due_date: '', notes: '' })
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 
@@ -64,7 +63,7 @@ export default function DuesClient({
       await markDueAsPaid({ due_id: dueId })
       toast({ title: 'Payment Recorded', description: 'Due marked as paid.' })
     } catch (e: any) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+      toast.error()
     }
   }
 

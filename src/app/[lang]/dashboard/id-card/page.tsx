@@ -1,5 +1,4 @@
-import { getTranslations } from 'next-intl/server'
-import { getSelectedOrganisationId } from '@/lib/cookies'
+import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Card } from '@/components/ui/card'
