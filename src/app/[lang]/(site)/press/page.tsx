@@ -32,8 +32,8 @@ export default async function PressPage({ params }: { params: Promise<{ lang: st
           <h2 className="text-2xl font-bold text-gray-900 mb-4">{isHindi ? 'संगठन के बारे में' : 'About Sangathan'}</h2>
           <p className="text-gray-700 leading-relaxed mb-4">
             {isHindi
-              ? 'संगठन जमीनी स्तर के समूहों, एनजीओ और छात्र संघों के लिए डिज़ाइन किया गया एक तटस्थ, ओपन-सोर्स शासन बुनियादी ढांचा मंच है। यह संगठनों को सदस्यों, निधियों और लोकतांत्रिक निर्णय लेने को सुरक्षित रूप से प्रबंधित करने के लिए डिजिटल "ऑपरेटिंग सिस्टम" प्रदान करता है।'
-              : 'Sangathan is a neutral, open-source governance infrastructure platform designed for grassroots collectives, NGOs, and student unions. It provides the digital "operating system" for organizations to manage members, funds, and democratic decision-making securely.'}
+              ? 'संगठन जमीनी स्तर के समूहों, एनजीओ और छात्र संघों के लिए डिज़ाइन किया गया एक तटस्थ, मुफ़्त शासन बुनियादी ढांचा मंच है। यह संगठनों को सदस्यों, निधियों और लोकतांत्रिक निर्णय लेने को सुरक्षित रूप से प्रबंधित करने के लिए डिजिटल "ऑपरेटिंग सिस्टम" प्रदान करता है।'
+              : 'Sangathan is a neutral, free-to-use governance infrastructure platform designed for grassroots collectives, NGOs, and student unions. It provides the digital "operating system" for organizations to manage members, funds, and democratic decision-making securely.'}
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
              <div className="p-4 bg-gray-50 rounded-lg">

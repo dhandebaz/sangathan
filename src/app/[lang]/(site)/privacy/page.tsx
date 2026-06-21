@@ -75,8 +75,8 @@ export default function PrivacyPage() {
           <h2 className="text-xl font-semibold text-black mb-3">6. Data Sharing & Third Parties</h2>
           <p>We do not sell your data. We share data only with the following infrastructure sub-processors required to operate the Platform:</p>
           <ul className="list-disc pl-5 space-y-2">
-            <li><strong>Supabase:</strong> Database hosting, authentication services, and SMS delivery for phone number verification.</li>
-            <li><strong>Vercel:</strong> Web hosting and edge network services.</li>
+            <li><strong>Enterprise Database Providers:</strong> Database hosting, authentication services, and SMS delivery for phone number verification.</li>
+            <li><strong>Global Edge Networks:</strong> Web hosting and edge network services.</li>
           </ul>
           <p className="mt-2">
             We may disclose data if required by law, such as in response to a court order or valid subpoena from Indian law enforcement agencies.

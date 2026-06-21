@@ -1,7 +1,7 @@
 import { Check, X, Info, Zap, ShieldCheck, Sparkles, Building2 } from 'lucide-react'
 import { Metadata } from 'next'
 import Link from 'next/link'
-
+import { CheckoutButton } from '@/components/pricing/checkout-button'
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
   const isHindi = lang === 'hi'
@@ -50,7 +50,7 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
                 isHindi ? '1 संगठन' : '1 Organisation limit',
                 isHindi ? 'कुल 20 उपयोगकर्ता (सदस्य + स्वयंसेवक)' : 'Up to 20 users total (Members + Volunteers)',
                 isHindi ? 'सभी मुख्य शासन सुविधाएँ' : 'All core governance features',
-                isHindi ? 'खुला स्रोत कोड' : '100% Open Source',
+                isHindi ? 'हमेशा के लिए मुफ़्त' : 'Free to Use',
                 isHindi ? 'मानक समर्थन' : 'Standard community support',
               ].map((feature, idx) => (
                 <div key={idx} className="flex items-start gap-3">
@@ -79,13 +79,17 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
               <span className="text-slate-500 font-medium">/{isHindi ? 'महीना' : 'month'}</span>
             </div>
 
-            <Link 
-              href={`/${lang}/login?tab=signup`}
+            <CheckoutButton 
+              amount={1000}
+              planName="Institution"
+              labelEn="Upgrade to Institution"
+              labelHi="अपग्रेड करें"
+              isHindi={isHindi}
               className="relative w-full py-4 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-center transition-colors mb-8 group overflow-hidden"
             >
               <span className="relative z-10">{isHindi ? 'अपग्रेड करें' : 'Upgrade to Institution'}</span>
               <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/0 via-white/20 to-indigo-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-            </Link>
+            </CheckoutButton>
 
             <div className="space-y-4 flex-grow relative z-10">
               <div className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-2">
@@ -135,12 +139,14 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
               </div>
               
               <div className="shrink-0 w-full sm:w-auto">
-                <Link 
-                  href={`/${lang}/contact`}
+                <CheckoutButton 
+                  amount={10000}
+                  planName="White-label"
+                  labelEn="Buy Now"
+                  labelHi="अभी खरीदें"
+                  isHindi={isHindi}
                   className="block w-full sm:w-auto px-8 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-center transition-colors shadow-[0_0_20px_rgb(0,0,0,0.1)] hover:shadow-[0_0_30px_rgb(0,0,0,0.15)]"
-                >
-                  {isHindi ? 'संपर्क करें' : 'Contact Sales'}
-                </Link>
+                />
               </div>
             </div>
           </div>
@@ -150,12 +156,12 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
         <div className="mt-24 max-w-3xl mx-auto text-center">
           <ShieldCheck size={48} className="mx-auto text-emerald-500 mb-6" />
           <h2 className="text-3xl font-bold text-slate-900 mb-4">
-            {isHindi ? 'ओपन सोर्स और सुरक्षित' : 'Open Source & Secure'}
+            {isHindi ? 'मुफ़्त और सुरक्षित' : 'Free & Secure'}
           </h2>
           <p className="text-lg text-slate-600 leading-relaxed">
             {isHindi 
-              ? 'हमारा पूरा कोडबेस सार्वजनिक है। हम न तो डेटा बेचते हैं और न ही विज्ञापन चलाते हैं। संस्थागत योजना से प्राप्त आय इस प्लेटफ़ॉर्म को छोटे नागरिक समूहों के लिए हमेशा के लिए मुफ़्त रखने के लिए सर्वर लागत को निधि देती है।' 
-              : 'Our entire codebase is public. We do not sell data or run ads. The revenue from the Institution plan funds server costs to keep this platform free forever for small civic groups.'}
+              ? 'हम न तो डेटा बेचते हैं और न ही विज्ञापन चलाते हैं। संस्थागत योजना से प्राप्त आय इस प्लेटफ़ॉर्म को छोटे नागरिक समूहों के लिए हमेशा के लिए मुफ़्त रखने के लिए सर्वर लागत को निधि देती है।' 
+              : 'We do not sell data or run ads. The revenue from the Institution plan funds server costs to keep this platform free forever for small civic groups.'}
           </p>
         </div>
 

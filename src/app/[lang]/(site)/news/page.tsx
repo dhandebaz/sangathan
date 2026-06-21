@@ -34,15 +34,15 @@ const newsItems = [
     categoryColor: 'text-[var(--text-primary)]',
     title: '500+ Grassroots Collectives Onboarded',
     date: 'June 10, 2026',
-    excerpt: 'Sangathan has now surpassed 500 active civic organizations on the platform. We are humbled to see student unions, environmental NGOs, and housing societies building robust governance using our open-source tools. This milestone proves the dire need for civic tech infrastructure.',
+    excerpt: 'Sangathan has now surpassed 500 active civic organizations on the platform. We are humbled to see student unions, environmental NGOs, and housing societies building robust governance using our free-to-use tools. This milestone proves the dire need for civic tech infrastructure.',
   },
   {
-    id: 'open-source-launch',
+    id: 'free-plan-launch',
     category: 'Company News',
     categoryColor: 'text-brand-600',
-    title: 'Sangathan is now fully Open Source',
+    title: 'Sangathan introduces Forever Free Plan',
     date: 'May 01, 2026',
-    excerpt: 'We believe civic infrastructure must belong to the people. Sangathan is now available on GitHub for anyone to host, audit, and improve. We welcome contributors from all over the world to join us in building the digital public goods of the future.',
+    excerpt: 'We believe civic infrastructure must be accessible to everyone. Sangathan now offers a Forever Free plan, empowering grassroots collectives with zero-cost tools to build the digital public goods of the future without financial barriers.',
   }
 ]
 

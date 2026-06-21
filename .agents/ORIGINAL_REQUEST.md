@@ -66,3 +66,34 @@ All form definitions and submissions must persist securely to the database with 
 ### Build Verification
 - [ ] `npm run build` must complete with zero errors.
 - [ ] TypeScript compiler (`npx tsc --noEmit`) must complete with zero errors.
+
+## 2026-06-21T01:24:34Z
+
+# Teamwork Project Prompt — Draft
+
+> Status: Launched
+> Goal: Craft prompt → get user approval → delegate to teamwork_preview
+
+Redesign the features page (`src/app/[lang]/(site)/features/page.tsx`) to make it highly interactive and visually appealing using a click-driven exploration approach, while preserving all existing information and matching the current design theme. 
+
+Working directory: c:\Users\hudav\Documents\trae_projects\sangathan
+Integrity mode: demo
+
+## Requirements
+
+### R1. Interactive Features Presentation
+Build a click-driven interactive experience to present the features, rather than a long scrolling static list. The presentation should organize information intuitively (e.g., interactive tabs for each organization type like NGOs, Student Unions, Workers Unions, RWAs) and use interactive elements (like expandable cards or "click to reveal" mechanics) to display individual feature details.
+
+### R2. Responsive and Themed Design
+Ensure the new layout is fully responsive, looking great on both mobile and desktop screens. It must strictly adhere to the existing design system and Tailwind CSS theme of the Sangathan application, without introducing conflicting visual styles. 
+
+### R3. Playwright Verification
+Write a Playwright test to verify the interactive elements of the redesigned features page. The test must programmatically click through the interactive components to ensure they function as expected.
+
+## Acceptance Criteria
+
+### Interaction and Layout
+- [ ] Playwright test successfully clicks an organization category tab and verifies the relevant features for that category are displayed.
+- [ ] Playwright test successfully interacts with a feature item (e.g., clicks to expand) and verifies the detailed information is revealed.
+- [ ] The page renders without React hydration errors or browser console warnings.
+- [ ] The design uses existing Tailwind CSS utility classes and maintains visual consistency with the rest of the application.

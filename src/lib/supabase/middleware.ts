@@ -19,7 +19,9 @@ function applySecurityHeaders(response: NextResponse, isApiRoute = false): NextR
     'Content-Security-Policy',
     [
       "default-src 'self'",
-      "script-src 'self'",
+      process.env.NODE_ENV === 'development'
+        ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+        : "script-src 'self'",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https:",
       "font-src 'self' data:",
@@ -211,6 +213,7 @@ export async function updateSession(request: NextRequest) {
       pathname.startsWith(`/${loc}/cookies`) ||
       pathname.startsWith(`/${loc}/data-rights`) ||
       pathname.startsWith(`/${loc}/reports`) ||
+      pathname.startsWith(`/${loc}/features`) ||
       pathname.startsWith(`/${loc}/org/`) // Public Organization Pages
     )
 

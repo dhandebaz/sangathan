@@ -35,6 +35,28 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.9.2',
+    titleEn: 'Razorpay Integration for Plans and Contributions',
+    titleHi: 'प्लान और योगदान के लिए Razorpay इंटीग्रेशन',
+    dateEn: 'June 2026',
+    dateHi: 'जून 2026',
+    descEn: 'Integrated Razorpay checkout to make our Institution and White-label plans directly purchasable, and added a dynamic amount input on the supporter page for custom contributions.',
+    descHi: 'संस्थान और व्हाइट-लेबल प्लान को सीधे खरीदने योग्य बनाने के लिए Razorpay चेकआउट को एकीकृत किया गया, और कस्टम योगदान के लिए समर्थक पृष्ठ पर एक गतिशील राशि इनपुट जोड़ा गया।',
+    color: 'emerald',
+    icon: Sparkles
+  },
+  {
+    version: 'v1.9.1',
+    titleEn: 'Interactive Feature Exploration Redesign',
+    titleHi: 'इंटरैक्टिव सुविधा अन्वेषण पुनर्रचना',
+    dateEn: 'June 2026',
+    dateHi: 'जून 2026',
+    descEn: 'Redesigned the features page with a highly interactive, click-driven exploration dashboard, supporting both desktop split-pane and mobile accordion views for a premium look and feel.',
+    descHi: 'अधिक इंटरैक्टिव, क्लिक-चालित अन्वेषण डैशबोर्ड के साथ सुविधाओं के पेज को फिर से डिज़ाइन किया गया, जो प्रीमियम लुक और फील के लिए डेस्कटॉप स्प्लिट-पेन और मोबाइल अकॉर्डियन दोनों दृश्यों का समर्थन करता है।',
+    color: 'indigo',
+    icon: Sparkles
+  },
+  {
     version: 'v1.9',
     titleEn: 'Secondary Features (Facilities, Dispatch & IDs)',
     titleHi: 'माध्यमिक सुविधाएँ (सुविधाएँ, प्रेषण और आईडी)',

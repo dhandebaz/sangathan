@@ -1,100 +1,61 @@
-# Handoff Report — Codebase Mapping of Org-Specific Features
+# Handoff Report — Features Page Analysis & Redesign Plan
 
 ## 1. Observation
 
-- **Database Migrations for Org Features**:
-  - `supabase/migrations/20260615000000_org_types_and_security.sql` adds the `org_type` column to `public.organisations` (line 3) and updates `create_organisation_and_admin` to configure default capabilities JSON (lines 27-37):
-    ```sql
-    IF p_org_type = 'student_union' THEN
-      v_capabilities := '{"basic_governance": true, "campaigns": true, "student_ids": true, "events": true}'::jsonb;
-    ELSIF p_org_type = 'ngo' THEN
-      v_capabilities := '{"basic_governance": true, "donations": true, "volunteers": true, "events": true}'::jsonb;
-    ELSIF p_org_type = 'workers_union' THEN
-      v_capabilities := '{"basic_governance": true, "grievances": true, "memberships": true}'::jsonb;
-    ELSIF p_org_type = 'rwa' THEN
-      v_capabilities := '{"basic_governance": true, "complaints": true, "maintenance": true}'::jsonb;
-    ```
-  - `supabase/migrations/20260615000001_org_features.sql` creates tables `tickets` (line 2) and `campaigns` (line 55). It defines RLS policies for `tickets` and `campaigns` referencing `public.members.user_id` and `public.members.status` (lines 25-28, 36-39, 47-50, 76-79, 87-90):
-    ```sql
-    CREATE POLICY "Org members can view their tickets" ON public.tickets
-      FOR SELECT
-      USING (
-        EXISTS (
-          SELECT 1 FROM public.members
-          WHERE members.organisation_id = tickets.organisation_id
-          AND members.user_id = auth.uid()
-          AND members.status = 'active'
-        )
-      );
-    ```
-- **Members Table Schema**:
-  - `supabase/schema.sql` (lines 28-40) creates `public.members` with columns: `id`, `organisation_id`, `full_name`, `email`, `phone`, `role`, `joined_at`, `created_at`.
-  - There are no migrations adding `user_id` or `status` to `public.members`. Instead, `public.profiles` has `id` (references `auth.users(id)`), `organisation_id`, and `status` (added in `20240214000006_membership_governance.sql` lines 7-9).
-- **TypeScript and Database Bypasses (`as never`)**:
-  - In `src/actions/members/actions.ts` lines 41-56 and lines 88-101, member operations cast inputs to `as never` to bypass compilation:
-    ```typescript
-    const { data, error } = await supabase
-      .from('members')
-      .insert({
-        organisation_id: context.organizationId,
-        full_name: input.full_name,
-        email: input.email || null,
-        phone: input.phone,
-        designation: input.designation,
-        area: input.area,
-        joining_date: input.joining_date,
-        status: input.status,
-        notes: input.notes,
-        role: input.role,
-      } as never)
-    ```
-  - `designation`, `area`, `joining_date`, `status`, and `notes` do not exist in the database table `public.members` definition.
-- **Next.js Middleware Enforcement**:
-  - `src/lib/supabase/middleware.ts` lines 304-328 check paths against `caps` (capabilities):
-    ```typescript
-    if (p.includes('/dashboard/donations') && !caps.donations) {
-      return NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
-    }
-    ```
-- **Lack of Backend Actions for Tickets and Campaigns**:
-  - A regex search for `.from('tickets')` and `.from('campaigns')` across `src/` revealed only four select queries in:
-    - `src/app/[lang]/dashboard/campaigns/page.tsx` line 14
-    - `src/app/[lang]/dashboard/complaints/page.tsx` line 11
-    - `src/app/[lang]/dashboard/grievances/page.tsx` line 11
-    - `src/app/[lang]/dashboard/maintenance/page.tsx` line 11
-  - No insert/update/delete operations exist in any `src/` actions file for `tickets` or `campaigns`.
-- **Empty Webhook Skeletons**:
-  - `src/app/api/webhooks/razorpay/` and `src/app/api/webhooks/sender/` contain no files.
+- **Features Page File**: Located at `src/app/[lang]/(site)/features/page.tsx`. It contains 238 lines of code. It is an async Server Component page defined as:
+  ```typescript
+  export default async function FeaturesPage({ params }: { params: Promise<{ lang: string }> })
+  ```
+  And includes a data-driven static array `orgs` that maps four categories:
+  - `ngo` (Non-Governmental Organisations / गैर सरकारी संगठन (NGO))
+  - `student-union` (Student Unions / छात्र संघ)
+  - `worker-union` (Workers Unions / श्रमिक संघ)
+  - `rwa` (Resident Welfare Associations / रेजिडेंट वेलफेयर एसोसिएशन)
+  Each category contains exactly 14 items inside its `features` array.
+- **Site Layout Integration**: Located at `src/app/[lang]/(site)/layout.tsx`. It wraps all site pages inside `<Navbar lang={lang} isAuthenticated={Boolean(user)} />`, a `<main id="main-content" className="flex-grow pt-24" tabIndex={-1}>`, and a `<Footer lang={lang} />`. It also includes a fixed background mesh gradient/dot pattern overlay.
+- **Playwright Configuration**: File `playwright.config.ts` specifies the test directory under `./tests/e2e` with a baseURL of `http://localhost:3000`.
+- **E2E Test Directory**: Found `tests/e2e/auth.spec.ts` which imports `test, expect` from `@playwright/test` and runs assertions on `page.goto()`, `.toBeVisible()`, and page titles.
 
 ---
 
 ## 2. Logic Chain
 
-1. **Routing and Menu Enforcement**: The capabilities object returned from `getOrgCapabilities` is checked in `src/app/[lang]/dashboard/layout.tsx` to conditionally render sidebar navigation links (e.g., `capabilities.donations`, `capabilities.campaigns`). Middleware in `src/lib/supabase/middleware.ts` performs matching path redirections to `/dashboard` if capabilities are not enabled for the user's organisation.
-2. **Missing Backend Actions**: Since no CRUD server actions or API endpoints exist for the `tickets` and `campaigns` tables, community complaints, union grievances, maintenance requests, and student union campaigns are strictly read-only pages. Their create forms/dialogs are not wired up to any handler, confirming they are non-functional frontend placeholders.
-3. **Broken Database Constraints**: Because the RLS policies in `supabase/migrations/20260615000001_org_features.sql` reference `members.user_id` and `members.status` columns (which do not exist on `public.members`), any attempt by an authenticated user to select or insert into `tickets` or `campaigns` will fail at the database level with a column-not-found error.
-4. **TypeScript and App-Layer Discrepancies**: Casting objects `as never` in `src/actions/members/actions.ts` allows compilation of inserts/updates containing fields like `designation`, `area`, `status` on `members`. Since these columns do not exist in the database schema, this server action will crash on database execution.
+- **Premise 1**: The current features page lists 4 categories sequentially with 14 feature cards each. This totals 56 feature cards rendering simultaneously on a single long scrolling page, creating scroll fatigue and high cognitive load.
+- **Premise 2**: A client-side state (`useState`) can manage active category tabs (NGO, Student Union, Workers Union, RWA) and "click-to-reveal" selected features.
+- **Premise 3**: Initializing the React state to a default static category (e.g., `'ngo'`) prevents differences between the server-rendered HTML and client-rendered initial state, eliminating Next.js hydration warnings.
+- **Premise 4**: Performing anchor routing checks (reading URL hash values like `#student-union`) inside `useEffect` ensures that client-only APIs (like `window.location.hash`) are not executed during server rendering, preventing hydration mismatches.
+- **Premise 5**: Storing custom styling parameters in a predefined lookup table of Tailwind CSS classes (like `orgStyles` mapping `text`, `bg`, `border`, `glow`, etc.) prevents the mixing of inline style attributes (`style={{ ... }}`) with Tailwind utility classes.
+- **Premise 6**: E2E testing using Playwright under `tests/e2e/features.spec.ts` can verify the correct loading of active tab elements, user-click switching, deep linking via URL hash values, and bilingual Hindi/English switching.
 
 ---
 
 ## 3. Caveats
 
-- **Verification Constraints**: We operated under a read-only restriction and could not verify runtime database behaviors or execute migrations.
-- **Client Capabilities**: We assume the database has successfully executed migration scripts up to `20260615000001_org_features.sql`, meaning tables exist, but RLS policies are broken.
+- **External Route Search Params**: If the redesign later utilizes route search queries (e.g., `?category=rwa`) instead of client-state/hash, the component must be wrapped in a Next.js `<Suspense>` boundary to prevent hydration warnings or static generation de-optimization during production builds.
+- **CSS Transitions**: Performance of the click-to-reveal transitions (e.g. height expansions) was not benchmarked on mobile viewports.
+- **Verification of Supabase Authentication in layout.tsx**: It is assumed that the `layout.tsx` file executes `supabase.auth.getUser()` correctly for all user requests, and the redesign of the features page will not interfere with this session state check.
 
 ---
 
 ## 4. Conclusion
 
-The specialized features for NGOs, Student Unions, Workers Unions, and RWAs in the Sangathan app are largely **UI facades** with missing server actions and critical backend defects:
-1. **Volunteers and Student IDs** are frontend mockups mapping onto the generic `members` table.
-2. **Complaints, Grievances, Maintenance (Tickets), and Campaigns** lack any backend CRUD logic or actions.
-3. **The database schema is broken**: The newly added RLS policies reference non-existent columns (`members.user_id` and `members.status`), and member actions attempt to write columns (`designation`, `area`, `status`) that are missing from the `members` database table.
+- The features page (`src/app/[lang]/(site)/features/page.tsx`) can be refactored to support interactive tab navigation and click-to-reveal details without sacrificing SEO/metadata generation or causing Next.js hydration warnings.
+- The redesign should delegate the interactive sections to a Client Component (`src/components/features/interactive-features.tsx`) while keeping the main page component as a Server Component for dynamic metadata.
+- Custom colors should be statically mapped to Tailwind CSS configuration classes to prevent styling conflicts.
+- A new Playwright test spec can be safely added under `tests/e2e/features.spec.ts` using standard Playwright testing conventions in the project.
 
 ---
 
 ## 5. Verification Method
 
-1. **Verify Middleware Redirects**: Review `src/lib/supabase/middleware.ts` lines 294-329 to inspect path capability validations.
-2. **Verify Missing RLS Columns**: Inspect `supabase/schema.sql` (lines 28-40) and `supabase/migrations/20260615000001_org_features.sql` (lines 27-28) to confirm `public.members` lacks `user_id` and `status` columns.
-3. **Verify TypeScript Compile Bypasses**: Inspect `src/actions/members/actions.ts` lines 54 and 99 to confirm the usage of `as never` for missing table properties.
+To independently verify the features page layout, structure, and proposed test integration:
+1. **Source Code Inspection**:
+   - Inspect the features page at `src/app/[lang]/(site)/features/page.tsx` and confirm the existence and exact wording of the 14 features in each category.
+   - Inspect the site layout at `src/app/[lang]/(site)/layout.tsx` to confirm main container styles and navbar/footer imports.
+2. **Playwright Config Inspection**:
+   - Inspect `playwright.config.ts` to confirm target folders and baseURL.
+3. **E2E Test Execution (Post-implementation)**:
+   - Run the E2E tests using Playwright command:
+     `npx playwright test`
+   - Run specific tests under the E2E features spec using:
+     `npx playwright test tests/e2e/features.spec.ts`

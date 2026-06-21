@@ -1,36 +1,30 @@
-# Plan - Dynamic Form Builder and Public Survey System
+# Plan - Features Page Interactive Redesign
 
 ## 1. Objectives
-- Implement a Dynamic Form Builder and Public Survey system.
-- Build visual builder interface for organization admins in the dashboard with support for text, file uploads, date pickers, and conditional logic.
-- Support both public and member-only forms with secure URLs.
-- Provide a dashboard view for admins to view/review submissions.
-- Persist forms and submissions to database with appropriate RLS.
-- Write and execute programmatic verification script `verify_forms.js` verifying access controls and database persistence.
-- Complete Next.js build with 0 TypeScript/compilation errors.
+- Redesign the features page (`src/app/[lang]/(site)/features/page.tsx`) to be highly interactive using tabs for organization types and click-to-reveal / split-pane exploration mechanics.
+- Preserve 100% of the bilingual page text, descriptions, features, and meta information (including English and Hindi translations).
+- Ensure styling conforms to the existing design system and Tailwind CSS theme of Sangathan (crisp, light, geometric technical designs; no Tailwind/inline styles mixing; avoid dark cards and small uppercase pill badges).
+- Write a Playwright E2E test suite under `tests/e2e/features.spec.ts` verifying tab clicking, feature detail click expansion, deep linking via URL hash values, and bilingual English/Hindi rendering.
+- Verify that there are no React hydration errors or Next.js build compilation errors.
 
 ## 2. Approach & Architecture
 We will use the **Project Pattern**:
 - **Phase 1: Exploration**:
-  - Spawn an Explorer agent to analyze the current codebase: directory layout, Supabase schema (existing tables), middleware, auth setup, and where to integrate the dashboard views and public survey routes.
-- **Phase 2: Database Schema & RLS Policies (Milestone 1)**:
-  - Define schema for `forms` (including configuration/schema JSON with conditional logic rules) and `form_submissions` (with data JSON and metadata).
-  - Add RLS policies: public submissions should be insertable anonymously or via logged-in users depending on access config; reading submissions is restricted to org admins.
-- **Phase 3: Form Builder Interface & Admin Dash (Milestone 2)**:
-  - Build server actions/API endpoints to create, update, delete, and fetch forms.
-  - Implement form builder component with fields: text, date picker, file upload, conditional logic editor.
-- **Phase 4: Public Survey & Submission system (Milestone 3)**:
-  - Implement public survey page (e.g. `/survey/[formId]` or `/forms/[formId]`) that loads the form schema dynamically, handles conditional logic client-side, allows file uploads (persisted to Supabase storage if necessary), and handles submission.
-  - Support member-only access verification (redirect/auth check).
-- **Phase 5: Programmatic Verification & Audit (Milestone 4)**:
-  - Create and run `verify_forms.js`.
-  - Validate TypeScript compilation (`npx tsc --noEmit`) and project build (`npm run build`).
-  - Run the Forensic Integrity Auditor to verify no hardcoded responses or bypasses are used.
+  - Spawned `explorer_exploration_1` to analyze the features page layout, structure, translation setup, and Playwright configuration. (Completed)
+- **Phase 2: Component Development (Milestone 1)**:
+  - Create the interactive client component `src/components/features/interactive-features.tsx` supporting tabs navigation, feature lists, details panels, responsive accordion mode for mobile, and pure Tailwind styling mapping.
+- **Phase 3: Integration (Milestone 2)**:
+  - Modify `src/app/[lang]/(site)/features/page.tsx` to remain a Server Component, load routing parameters, and pass data down to the client component.
+- **Phase 4: Playwright Test Implementation (Milestone 3)**:
+  - Add `tests/e2e/features.spec.ts` asserting features page E2E functionality.
+- **Phase 5: Verification & Audit (Milestone 4)**:
+  - Run TypeScript compiler checks and Next.js build production compile.
+  - Run Playwright test suite to confirm E2E success.
+  - Run Forensic Integrity Audit to ensure zero cheating/hardcoding.
 
 ## 3. Team Roster & Dispatch
-- `explorer_forms`: Codebase analysis and DB recommendations.
-- `worker_m1`: Implement DB schema migrations and RLS policies.
-- `worker_m2`: Implement server actions and admin UI components.
-- `worker_m3`: Implement public submission page and access controls.
-- `worker_m4`: Write verification script and run builds.
-- `auditor_forms`: Forensic integrity audit.
+- `explorer_exploration_1`: Codebase and features page analysis. (Completed)
+- `worker_redesign_1`: Implement the interactive features component and integrate it with the page.
+- `worker_test_1`: Implement Playwright E2E tests.
+- `reviewer_review_1`: Review the correctness, code quality, and styling guidelines.
+- `auditor_features`: Perform forensic integrity audit verification.

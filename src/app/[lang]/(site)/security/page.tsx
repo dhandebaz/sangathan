@@ -98,8 +98,8 @@ export default async function SecurityPage({ params }: { params: Promise<{ lang:
               : 'We rely on world-class providers rather than building our own servers. This ensures you benefit from their massive security teams.'}
           </p>
           <ul className="list-disc pl-5 space-y-2">
-             <li><strong className="text-[var(--text-primary)]">Supabase:</strong> Database, Authentication & SMS Verification</li>
-             <li><strong className="text-[var(--text-primary)]">Vercel:</strong> Global Edge Network</li>
+             <li><strong className="text-[var(--text-primary)]">Enterprise Cloud Providers:</strong> Database, Authentication & SMS Verification</li>
+             <li><strong className="text-[var(--text-primary)]">Secure Hosting Partners:</strong> Global Edge Network</li>
           </ul>
         </section>
       </div>
