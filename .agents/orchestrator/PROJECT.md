@@ -16,10 +16,10 @@
 
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
-| 1 | Create Interactive Component | Develop `src/components/features/interactive-features.tsx` client component supporting tabs and click-to-reveal details. | None | PLANNED |
-| 2 | Integrate Page and Component | Refactor `src/app/[lang]/(site)/features/page.tsx` to keep Server Component routing/metadata and mount the new client component with translated data. | M1 | PLANNED |
-| 3 | E2E Testing with Playwright | Write Playwright test `tests/e2e/features.spec.ts` testing tabs switching, feature detail click expansion, deep links via hashes, and bilingual titles. | M2 | PLANNED |
-| 4 | Verification & Audit | Validate Next.js compile build (`npm run build`), tsc check (`npx tsc --noEmit`), run Playwright tests, and run Forensic Integrity Audit. | M3 | PLANNED |
+| 1 | Create Interactive Component | Develop `src/components/features/interactive-features.tsx` client component supporting tabs and click-to-reveal details. | None | DONE |
+| 2 | Integrate Page and Component | Refactor `src/app/[lang]/(site)/features/page.tsx` to keep Server Component routing/metadata and mount the new client component with translated data. | M1 | DONE |
+| 3 | E2E Testing with Playwright | Write Playwright test `tests/e2e/features.spec.ts` testing tabs switching, feature detail click expansion, deep links via hashes, and bilingual titles. | M2 | DONE |
+| 4 | Verification & Audit | Validate Next.js compile build (`npm run build`), tsc check (`npx tsc --noEmit`), run Playwright tests, and run Forensic Integrity Audit. | M3 | DONE |
 
 ## Interface Contracts
 ### InteractiveFeatures Props

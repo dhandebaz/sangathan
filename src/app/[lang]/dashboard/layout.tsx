@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { isRedirectError } from 'next/dist/client/components/redirect-error'
 import { Heart } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { getOrgCapabilities } from '@/lib/capabilities'
@@ -61,7 +62,8 @@ export default async function DashboardLayout(props: {
         const membership = membershipData as unknown as Membership
         role = membership.role
       }
-    } catch {
+    } catch (e) {
+      if (isRedirectError(e)) throw e
       capabilities = { basic_governance: false }
     }
   }

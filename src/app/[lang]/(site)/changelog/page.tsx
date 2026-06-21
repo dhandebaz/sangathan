@@ -35,6 +35,17 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.9.3',
+    titleEn: 'Dashboard Navigation and Loading Improvements',
+    titleHi: 'डैशबोर्ड नेविगेशन और लोडिंग में सुधार',
+    dateEn: 'June 2026',
+    dateHi: 'जून 2026',
+    descEn: 'Resolved an issue where the dashboard could enter an infinite loading state under certain redirection workflows, ensuring seamless onboarding and organization selection.',
+    descHi: 'एक समस्या को हल किया गया जहाँ डैशबोर्ड कुछ पुनर्निर्देशन कार्यप्रवाहों के तहत अनंत लोडिंग स्थिति में प्रवेश कर सकता था, जिससे सहज ऑनबोर्डिंग और संगठन चयन सुनिश्चित हो सके।',
+    color: 'blue',
+    icon: Zap
+  },
+  {
     version: 'v1.9.2',
     titleEn: 'Razorpay Integration for Plans and Contributions',
     titleHi: 'प्लान और योगदान के लिए Razorpay इंटीग्रेशन',
