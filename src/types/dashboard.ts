@@ -256,3 +256,174 @@ export interface SupporterSubscription {
   amount: number;
   created_at: string;
 }
+
+export interface DonationSubscription {
+  id: string;
+  organisation_id: string;
+  donor_id: string;
+  amount: number;
+  currency: string;
+  frequency: 'monthly' | 'quarterly' | 'annual';
+  status: 'active' | 'paused' | 'cancelled' | 'past_due';
+  next_payment_date: string;
+  payment_method_details?: Record<string, unknown> | null;
+  campaign_id?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TaxReceipt {
+  id: string;
+  organisation_id: string;
+  donation_id: string;
+  donor_id: string;
+  receipt_number: string;
+  receipt_date: string;
+  financial_year: string;
+  amount: number;
+  donor_pan?: string | null;
+  pdf_url?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Unit {
+  id: string;
+  organisation_id: string;
+  unit_number: string;
+  block_building?: string | null;
+  owner_profile_id?: string | null;
+  tenant_profile_id?: string | null;
+  area_sqft?: number | null;
+  status: 'occupied' | 'vacant' | 'under_construction';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Invoice {
+  id: string;
+  organisation_id: string;
+  unit_id: string;
+  type: 'maintenance' | 'special_levy' | 'penalty';
+  amount: number;
+  billing_period_start?: string | null;
+  billing_period_end?: string | null;
+  due_date: string;
+  status: 'draft' | 'pending' | 'paid' | 'partially_paid' | 'overdue' | 'cancelled';
+  transaction_id?: string | null;
+  notes?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+export interface BillingPlan {
+  id: string;
+  organisation_id: string;
+  name: string;
+  amount: number;
+  currency: string;
+  frequency: 'monthly' | 'quarterly' | 'annual' | 'one_time';
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MembershipDue {
+  id: string;
+  organisation_id: string;
+  member_profile_id: string;
+  plan_id?: string | null;
+  amount: number;
+  due_date: string;
+  status: 'pending' | 'paid' | 'overdue' | 'waived';
+  transaction_id?: string | null;
+  notes?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Election {
+  id: string;
+  organisation_id: string;
+  title: string;
+  description?: string | null;
+  start_time: string;
+  end_time: string;
+  status: 'upcoming' | 'active' | 'completed' | 'cancelled';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ElectionPosition {
+  id: string;
+  election_id: string;
+  title: string;
+  max_votes_per_voter: number;
+  created_at: string;
+}
+
+export interface Candidate {
+  id: string;
+  position_id: string;
+  profile_id: string;
+  manifesto_text?: string | null;
+  votes_count: number;
+  created_at: string;
+}
+
+export interface ElectionVoter {
+  id: string;
+  election_id: string;
+  profile_id: string;
+  voted_at: string;
+}
+
+export interface Facility {
+  id: string;
+  organisation_id: string;
+  name: string;
+  description?: string | null;
+  capacity?: number | null;
+  hourly_rate?: number | null;
+  status: 'available' | 'maintenance' | 'closed';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FacilityBooking {
+  id: string;
+  organisation_id: string;
+  facility_id: string;
+  profile_id: string;
+  start_time: string;
+  end_time: string;
+  status: 'pending' | 'approved' | 'rejected' | 'cancelled';
+  notes?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface JobPosting {
+  id: string;
+  organisation_id: string;
+  title: string;
+  employer_name: string;
+  location?: string | null;
+  description?: string | null;
+  skills_required?: string[] | null;
+  wage_rate?: string | null;
+  positions_available: number;
+  start_date?: string | null;
+  status: 'open' | 'filled' | 'cancelled' | 'completed';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface JobApplication {
+  id: string;
+  job_id: string;
+  profile_id: string;
+  status: 'applied' | 'dispatched' | 'rejected' | 'completed';
+  notes?: string | null;
+  created_at: string;
+  updated_at: string;
+}

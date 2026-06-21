@@ -3,8 +3,16 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createClient } from '@/lib/supabase/client'
-import { FileText, Calendar, DollarSign, Clock, CheckCircle2, AlertCircle } from 'lucide-react'
+import { FileText, Calendar, DollarSign, Clock, CheckCircle2, AlertCircle, Plus, MoreVertical } from 'lucide-react'
+import { createGrant, updateGrantStatus } from '@/actions/grants'
+import { useToast } from '@/hooks/use-toast'
 
 interface Grant {
   id: string
@@ -22,6 +30,9 @@ interface GrantsClientProps {
 export function GrantsClient({ orgId }: GrantsClientProps) {
   const [grants, setGrants] = useState<Grant[]>([])
   const [loading, setLoading] = useState(true)
+  const [isUploadOpen, setIsUploadOpen] = useState(false)
+  const [form, setForm] = useState({ title: '', amount: '', status: 'draft', deadline: '' })
+  const { toast } = useToast()
 
   useEffect(() => {
     async function fetchGrants() {
@@ -47,11 +58,36 @@ export function GrantsClient({ orgId }: GrantsClientProps) {
   function getStatusIcon(status: string) {
     switch (status) {
       case 'draft': return <FileText className="w-4 h-4 text-gray-500" />
-      case 'applied': return <Clock className="w-4 h-4 text-blue-500" />
-      case 'approved': return <CheckCircle2 className="w-4 h-4 text-green-500" />
+      case 'submitted': return <Clock className="w-4 h-4 text-blue-500" />
+      case 'awarded': return <CheckCircle2 className="w-4 h-4 text-green-500" />
       case 'rejected': return <AlertCircle className="w-4 h-4 text-red-500" />
-      case 'completed': return <CheckCircle2 className="w-4 h-4 text-purple-500" />
       default: return <Clock className="w-4 h-4 text-gray-500" />
+    }
+  }
+
+  const handleCreate = async () => {
+    try {
+      await createGrant({
+        title: form.title,
+        amount: Number(form.amount),
+        status: form.status as any,
+        deadline: form.deadline || undefined
+      })
+      toast({ title: 'Success', description: 'Grant tracked successfully.' })
+      setIsUploadOpen(false)
+      window.location.reload()
+    } catch (e: any) {
+      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+    }
+  }
+
+  const handleStatusChange = async (grantId: string, status: any) => {
+    try {
+      await updateGrantStatus({ grant_id: grantId, status })
+      toast({ title: 'Status Updated', description: 'Grant status updated successfully.' })
+      setGrants(gs => gs.map(g => g.id === grantId ? { ...g, status } : g))
+    } catch (e: any) {
+      toast({ title: 'Error', description: e.message, variant: 'destructive' })
     }
   }
 
@@ -64,6 +100,44 @@ export function GrantsClient({ orgId }: GrantsClientProps) {
             Track grant applications, compliance deadlines, and funds received.
           </p>
         </div>
+
+        <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
+          <DialogTrigger asChild>
+            <Button><Plus className="w-4 h-4 mr-2" /> Track New Grant</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader><DialogTitle>Track Grant Application</DialogTitle></DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>Grant Title</Label>
+                <Input value={form.title} onChange={e => setForm({...form, title: e.target.value})} placeholder="e.g. Clean Water Initiative 2026" />
+              </div>
+              <div className="space-y-2">
+                <Label>Expected Amount (₹)</Label>
+                <Input type="number" value={form.amount} onChange={e => setForm({...form, amount: e.target.value})} placeholder="50000" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Status</Label>
+                  <Select value={form.status} onValueChange={v => setForm({...form, status: v})}>
+                    <SelectTrigger><SelectValue placeholder="Status" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="draft">Drafting</SelectItem>
+                      <SelectItem value="submitted">Submitted</SelectItem>
+                      <SelectItem value="awarded">Awarded</SelectItem>
+                      <SelectItem value="rejected">Rejected</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Deadline / Decision Date</Label>
+                  <Input type="date" value={form.deadline} onChange={e => setForm({...form, deadline: e.target.value})} />
+                </div>
+              </div>
+              <Button className="w-full" onClick={handleCreate}>Save Grant</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <Card>
@@ -103,9 +177,20 @@ export function GrantsClient({ orgId }: GrantsClientProps) {
                   </div>
                   
                   <div className="flex items-center gap-4 self-end sm:self-auto">
-                    <Badge variant="secondary" className="capitalize">
+                    <Badge variant={grant.status === 'awarded' ? 'default' : 'secondary'} className="capitalize">
                       {grant.status}
                     </Badge>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon"><MoreVertical className="w-4 h-4" /></Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleStatusChange(grant.id, 'draft')}>Mark as Draft</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleStatusChange(grant.id, 'submitted')}>Mark as Submitted</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleStatusChange(grant.id, 'awarded')}>Mark as Awarded</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleStatusChange(grant.id, 'rejected')}>Mark as Rejected</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
               ))}

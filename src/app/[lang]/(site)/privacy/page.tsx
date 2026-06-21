@@ -107,9 +107,17 @@ export default function PrivacyPage() {
 
         <section>
           <h2 className="text-xl font-semibold text-black mb-3">9. Contact Us</h2>
-          <p>
+          <p className="mb-4">
             If you have questions regarding this Privacy Policy or our data practices, please contact our Data Protection Officer at: <a href="mailto:privacy@sangathan.space" className="text-blue-600 hover:underline">privacy@sangathan.space</a>
           </p>
+          <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+            <h3 className="font-bold text-gray-900 mb-2">Registered Entity Information</h3>
+            <ul className="space-y-2 text-gray-700">
+              <li><strong>Proprietor:</strong> Sheikh Arsalan Ullah Chishti</li>
+              <li><strong>Registered Address:</strong> Sangathan, Street 8, Ghaffar Manzil, Jamia Nagar, 110025, Delhi, Okhla</li>
+              <li><strong>Support Phone:</strong> +918527976791</li>
+            </ul>
+          </div>
         </section>
       </div>
     </div>

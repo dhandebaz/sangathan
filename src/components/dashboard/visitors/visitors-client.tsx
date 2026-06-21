@@ -3,8 +3,12 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
-import { UserCheck, Clock, CheckCircle2, LogOut, Ban } from 'lucide-react'
+import { UserCheck, Clock, CheckCircle2, LogOut, Ban, Check, LogOut as LogOutIcon } from 'lucide-react'
+import { LogVisitorDialog } from './log-visitor-dialog'
+import { checkInVisitor, checkOutVisitor } from '@/actions/visitors'
+import { useRouter } from 'next/navigation'
 
 interface Visitor {
   id: string
@@ -23,6 +27,8 @@ interface VisitorsClientProps {
 export function VisitorsClient({ orgId }: VisitorsClientProps) {
   const [visitors, setVisitors] = useState<Visitor[]>([])
   const [loading, setLoading] = useState(true)
+  const [actionLoading, setActionLoading] = useState<string | null>(null)
+  const router = useRouter()
 
   useEffect(() => {
     async function fetchVisitors() {
@@ -55,6 +61,26 @@ export function VisitorsClient({ orgId }: VisitorsClientProps) {
     }
   }
 
+  const handleCheckIn = async (id: string) => {
+    setActionLoading(`in-${id}`)
+    await checkInVisitor({ visitor_id: id })
+    
+    // Optimistic UI update
+    setVisitors(prev => prev.map(v => v.id === id ? { ...v, status: 'checked_in' } : v))
+    setActionLoading(null)
+    router.refresh()
+  }
+
+  const handleCheckOut = async (id: string) => {
+    setActionLoading(`out-${id}`)
+    await checkOutVisitor({ visitor_id: id })
+    
+    // Optimistic UI update
+    setVisitors(prev => prev.map(v => v.id === id ? { ...v, status: 'checked_out' } : v))
+    setActionLoading(null)
+    router.refresh()
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -64,6 +90,7 @@ export function VisitorsClient({ orgId }: VisitorsClientProps) {
             Track expected guests, gate passes, and current visitors on premises.
           </p>
         </div>
+        <LogVisitorDialog />
       </div>
 
       <Card>
@@ -102,6 +129,30 @@ export function VisitorsClient({ orgId }: VisitorsClientProps) {
                   </div>
                   
                   <div className="flex items-center gap-4 self-end sm:self-auto">
+                    {visitor.status === 'expected' && (
+                       <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="h-8 gap-1 text-green-600 border-green-200 hover:bg-green-50"
+                          onClick={() => handleCheckIn(visitor.id)}
+                          disabled={actionLoading === `in-${visitor.id}`}
+                       >
+                          <Check className="w-3.5 h-3.5" />
+                          Check In
+                       </Button>
+                    )}
+                    {visitor.status === 'checked_in' && (
+                       <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="h-8 gap-1 text-gray-600 hover:bg-gray-50"
+                          onClick={() => handleCheckOut(visitor.id)}
+                          disabled={actionLoading === `out-${visitor.id}`}
+                       >
+                          <LogOutIcon className="w-3.5 h-3.5" />
+                          Check Out
+                       </Button>
+                    )}
                     <Badge variant="secondary" className="capitalize">
                       {visitor.status.replace('_', ' ')}
                     </Badge>

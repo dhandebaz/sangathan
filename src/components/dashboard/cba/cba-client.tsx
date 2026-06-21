@@ -3,8 +3,16 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createClient } from '@/lib/supabase/client'
-import { FileText, Calendar, CheckCircle2, Clock, AlertCircle } from 'lucide-react'
+import { FileText, Calendar, CheckCircle2, Clock, AlertCircle, Plus, MoreVertical } from 'lucide-react'
+import { uploadCBADocument, updateCBAStatus } from '@/actions/cba'
+import { useToast } from '@/hooks/use-toast'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 interface CBADocument {
   id: string
@@ -23,6 +31,9 @@ interface CBAClientProps {
 export function CBAClient({ orgId }: CBAClientProps) {
   const [documents, setDocuments] = useState<CBADocument[]>([])
   const [loading, setLoading] = useState(true)
+  const [isUploadOpen, setIsUploadOpen] = useState(false)
+  const [uploadForm, setUploadForm] = useState({ title: '', file_url: '', valid_from: '', valid_until: '' })
+  const { toast } = useToast()
 
   useEffect(() => {
     async function fetchDocuments() {
@@ -54,6 +65,33 @@ export function CBAClient({ orgId }: CBAClientProps) {
     }
   }
 
+  const handleUpload = async () => {
+    try {
+      await uploadCBADocument({
+        title: uploadForm.title,
+        file_url: uploadForm.file_url,
+        valid_from: uploadForm.valid_from || undefined,
+        valid_until: uploadForm.valid_until || undefined
+      })
+      toast({ title: 'Success', description: 'CBA document uploaded.' })
+      setIsUploadOpen(false)
+      // Optimistically reload
+      window.location.reload()
+    } catch (e: any) {
+      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+    }
+  }
+
+  const handleStatusChange = async (docId: string, status: any) => {
+    try {
+      await updateCBAStatus({ document_id: docId, status })
+      toast({ title: 'Status Updated', description: 'Document status changed successfully.' })
+      setDocuments(docs => docs.map(d => d.id === docId ? { ...d, status } : d))
+    } catch (e: any) {
+      toast({ title: 'Error', description: e.message, variant: 'destructive' })
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -63,6 +101,36 @@ export function CBAClient({ orgId }: CBAClientProps) {
             Manage Collective Bargaining Agreements, drafts, and active contracts.
           </p>
         </div>
+        
+        <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
+          <DialogTrigger asChild>
+            <Button><Plus className="w-4 h-4 mr-2" /> Upload Document</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader><DialogTitle>Upload CBA Document</DialogTitle></DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>Document Title</Label>
+                <Input value={uploadForm.title} onChange={e => setUploadForm({...uploadForm, title: e.target.value})} placeholder="e.g. Master CBA 2026-2028" />
+              </div>
+              <div className="space-y-2">
+                <Label>File URL (Google Drive / S3 / PDF Link)</Label>
+                <Input type="url" value={uploadForm.file_url} onChange={e => setUploadForm({...uploadForm, file_url: e.target.value})} placeholder="https://..." />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Valid From</Label>
+                  <Input type="date" value={uploadForm.valid_from} onChange={e => setUploadForm({...uploadForm, valid_from: e.target.value})} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Valid Until</Label>
+                  <Input type="date" value={uploadForm.valid_until} onChange={e => setUploadForm({...uploadForm, valid_until: e.target.value})} />
+                </div>
+              </div>
+              <Button className="w-full" onClick={handleUpload}>Save Document</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <Card>
@@ -102,9 +170,20 @@ export function CBAClient({ orgId }: CBAClientProps) {
                   </div>
                   
                   <div className="flex items-center gap-4 self-end sm:self-auto">
-                    <Badge variant="secondary" className="capitalize">
+                    <Badge variant={doc.status === 'active' ? 'default' : 'secondary'} className="capitalize">
                       {doc.status}
                     </Badge>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon"><MoreVertical className="w-4 h-4" /></Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleStatusChange(doc.id, 'active')}>Mark Active</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleStatusChange(doc.id, 'draft')}>Mark Draft</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleStatusChange(doc.id, 'expired')}>Mark Expired</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleStatusChange(doc.id, 'archived')}>Archive</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
               ))}

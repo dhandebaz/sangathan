@@ -1,9 +1,11 @@
 import { createClient } from '@/lib/supabase/server'
 import { LogDonationDialog } from '@/components/donations/log-donation-dialog'
 import { DonationList } from '@/components/donations/donation-list'
+import { SubscriptionList } from '@/components/donations/subscription-list'
 import { Printer } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
-import { Donation } from '@/types/dashboard'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Donation, DonationSubscription } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,8 +45,15 @@ export default async function DonationsPage(props: PageProps) {
   
   const donations = data as unknown as Donation[] | null
 
-  if (error) {
-    return <div className="p-4 text-red-500">Error loading donations</div>
+  const { data: subData, error: subError } = await supabase
+    .from('donation_subscriptions')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  const subscriptions = subData as unknown as DonationSubscription[] | null
+
+  if (error || subError) {
+    return <div className="p-4 text-red-500">Error loading data</div>
   }
 
   const totalAmount = donations?.reduce((sum, d) => sum + Number(d.amount), 0) || 0
@@ -92,9 +101,22 @@ export default async function DonationsPage(props: PageProps) {
          </Card>
       </div>
 
-      <div className="content-card rounded-lg p-0 overflow-hidden">
-         <DonationList donations={donations || []} />
-      </div>
+      <Tabs defaultValue="one-time" className="w-full">
+        <TabsList className="mb-4">
+          <TabsTrigger value="one-time">One-Time Donations</TabsTrigger>
+          <TabsTrigger value="recurring">Recurring Subscriptions</TabsTrigger>
+        </TabsList>
+        <TabsContent value="one-time">
+          <div className="content-card rounded-lg p-0 overflow-hidden border">
+             <DonationList donations={donations || []} />
+          </div>
+        </TabsContent>
+        <TabsContent value="recurring">
+          <div className="content-card rounded-lg p-0 overflow-hidden border">
+             <SubscriptionList subscriptions={subscriptions || []} />
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

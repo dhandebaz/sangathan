@@ -8,7 +8,7 @@ import {
   Calendar, CheckSquare, BarChart, Vote, Globe, Scale,
   AlertCircle, Wrench, Gift, Flag, Badge,
   HeartHandshake, Network, Landmark, ScrollText,
-  GalleryVerticalEnd, Gavel, UserCog, DollarSign, FileText, UserCheck
+  GalleryVerticalEnd, Gavel, UserCog, DollarSign, FileText, UserCheck, HardHat
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -77,7 +77,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           items: [
             { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
             { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Committees', show: true },
-            { href: `/${lang}/dashboard/student-ids`, icon: Badge, label: 'Student IDs', show: !!c.student_ids },
+            { href: `/${lang}/dashboard/id-card`, icon: Badge, label: 'Student IDs', show: !!c.student_ids },
             { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers', show: !!c.volunteers },
           ].filter(i => i.show)
         },
@@ -86,7 +86,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           title: 'Governance & Ops',
           items: [
             { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Proposals', show: true },
-            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Voting & Elections', show: true },
+            { href: `/${lang}/dashboard/elections`, icon: Vote, label: 'Elections', show: true },
             { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!c.campaigns },
             { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
             { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financials', show: true },
@@ -132,8 +132,9 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
             { href: `/${lang}/dashboard/cba`, icon: FileText, label: 'CBA Documents', show: true },
             { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!c.campaigns },
             { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Strike Votes & Polls', show: true },
+            { href: `/${lang}/dashboard/jobs`, icon: HardHat, label: 'Worker Dispatch', show: true },
             { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
-            { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Union Dues', show: true },
+            { href: `/${lang}/dashboard/dues`, icon: Landmark, label: 'Union Dues', show: true },
           ].filter(i => i.show)
         },
         {
@@ -174,6 +175,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           title: 'Estate Ops',
           items: [
             { href: `/${lang}/dashboard/maintenance`, icon: Wrench, label: 'Maintenance', show: true },
+            { href: `/${lang}/dashboard/facilities`, icon: Calendar, label: 'Facility Booking', show: true },
             { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
             { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financials & Bills', show: true },
           ].filter(i => i.show)

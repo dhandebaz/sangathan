@@ -43,7 +43,6 @@ export function Footer({ lang }: { lang: string }) {
     contact: {
       title: isHindi ? 'संपर्क' : 'Connect',
       links: [
-        { label: 'hello@sangathan.space', href: 'mailto:hello@sangathan.space' },
         { label: 'Twitter / X', href: 'https://twitter.com/areynetaji' },
         { label: 'Instagram', href: 'https://instagram.com/areynetaji' },
         { label: isHindi ? 'मदद चाहिए?' : 'Contact Support', href: `/${lang}/contact` },

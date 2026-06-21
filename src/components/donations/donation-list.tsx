@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Check, Trash2 } from 'lucide-react'
-import { verifyDonation, deleteDonation } from '@/actions/donations/actions'
+import { Check, Trash2, Receipt } from 'lucide-react'
+import { verifyDonation, deleteDonation, generateTaxReceipt } from '@/actions/donations/actions'
 import { useRouter } from 'next/navigation'
 
 interface Donation {
@@ -13,6 +13,8 @@ interface Donation {
   upi_reference: string | null
   verified_by: string | null
   notes: string | null
+  donor_id?: string | null
+  tax_receipt_issued?: boolean | null
 }
 
 export function DonationList({ donations }: { donations: Donation[] }) {
@@ -30,6 +32,34 @@ export function DonationList({ donations }: { donations: Donation[] }) {
     if (!confirm('Are you sure you want to delete this donation record?')) return
     setLoading(id)
     await deleteDonation({ donationId: id })
+    router.refresh()
+    setLoading(null)
+  }
+
+  const handleGenerateReceipt = async (donation: Donation) => {
+    if (!donation.donor_id) {
+        alert('Cannot generate receipt: Donor ID is missing. Please ensure the donation is linked to a donor profile.');
+        return;
+    }
+    setLoading(`receipt-${donation.id}`)
+    
+    const financialYear = new Date(donation.date).getMonth() < 3 
+        ? `${new Date(donation.date).getFullYear() - 1}-${new Date(donation.date).getFullYear()}`
+        : `${new Date(donation.date).getFullYear()}-${new Date(donation.date).getFullYear() + 1}`;
+
+    const res = await generateTaxReceipt({
+        donationId: donation.id,
+        donor_id: donation.donor_id,
+        receipt_number: `TR-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+        financial_year: financialYear
+    })
+    
+    if (res?.error) {
+        alert(res.error)
+    } else if (res?.success) {
+        alert('Tax receipt generated successfully!')
+    }
+    
     router.refresh()
     setLoading(null)
   }
@@ -85,6 +115,19 @@ export function DonationList({ donations }: { donations: Donation[] }) {
                           >
                              <Check size={16} />
                           </button>
+                       )}
+                       {donation.verified_by && !donation.tax_receipt_issued && (
+                          <button 
+                             onClick={() => handleGenerateReceipt(donation)}
+                             disabled={loading === `receipt-${donation.id}`}
+                             className="text-blue-600 hover:bg-blue-50 p-1.5 rounded disabled:opacity-50"
+                             title="Generate Tax Receipt (80G)"
+                          >
+                             <Receipt size={16} />
+                          </button>
+                       )}
+                       {donation.verified_by && donation.tax_receipt_issued && (
+                          <span className="text-xs text-green-600 font-medium px-2">Receipt Issued</span>
                        )}
                        <button 
                           onClick={() => handleDelete(donation.id)}

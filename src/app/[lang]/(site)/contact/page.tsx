@@ -89,6 +89,15 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
                 : 'We aim to respond to all inquiries within 24-48 business hours. Safety and abuse reports are prioritized and reviewed urgently.'}
            </p>
         </div>
+
+        <div className="mt-8 bg-slate-50 p-8 rounded-3xl border border-slate-200 text-center max-w-2xl mx-auto">
+           <h3 className="text-xl font-bold text-slate-900 mb-3">{isHindi ? 'पंजीकृत जानकारी' : 'Registered Information'}</h3>
+           <div className="text-slate-500 space-y-2">
+              <p><strong>{isHindi ? 'प्रोपराइटर' : 'Proprietor'}:</strong> Sheikh Arsalan Ullah Chishti</p>
+              <p><strong>{isHindi ? 'पंजीकृत पता' : 'Registered Address'}:</strong> Sangathan, Street 8, Ghaffar Manzil, Jamia Nagar, 110025, Delhi, Okhla</p>
+              <p><strong>{isHindi ? 'संपर्क नंबर (समर्थन)' : 'Contact Number (Support)'}:</strong> +918527976791</p>
+           </div>
+        </div>
       </div>
     </div>
   )
