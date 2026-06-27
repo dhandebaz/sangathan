@@ -24,5 +24,9 @@ export default async function NewFormPage(props: { params: Promise<{ lang: strin
      return <AccessDenied lang={lang} />
   }
 
-  return <NewFormClient lang={lang} />
+  return (
+    <div className="space-y-6">
+      <NewFormClient lang={lang} />
+    </div>
+  )
 }

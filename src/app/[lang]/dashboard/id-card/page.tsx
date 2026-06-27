@@ -32,7 +32,7 @@ export default async function DigitalIDPage({ params }: { params: Promise<{ lang
   return (
     <div className="space-y-6 max-w-md mx-auto py-12">
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Digital ID Card</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Digital ID Card</h1>
         <p className="text-muted-foreground mt-2">Your official organization identifier.</p>
       </div>
 

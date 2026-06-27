@@ -311,8 +311,11 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
   }, [autoCollapsed, userToggles])
 
   const toggleGroup = useCallback((id: string) => {
-    setUserToggles(prev => ({ ...prev, [id]: !prev[id] }))
-  }, [])
+    setUserToggles(prev => {
+      const isCurrentlyCollapsed = id in prev ? prev[id] : autoCollapsed[id]
+      return { ...prev, [id]: !isCurrentlyCollapsed }
+    })
+  }, [autoCollapsed])
 
   const handleMouseEnter = useCallback((id: string) => {
     setUserToggles(prev => ({ ...prev, [id]: false }))

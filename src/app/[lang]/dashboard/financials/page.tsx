@@ -19,9 +19,9 @@ export default async function FinancialsPage() {
   const expenses = transactions?.filter(t => t.type === 'expense').reduce((acc, curr) => acc + Number(curr.amount), 0) || 0
 
   return (
-    <div className="max-w-6xl mx-auto py-8 px-4 space-y-8">
+    <div className="space-y-6 max-w-6xl mx-auto">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Financial Ledger</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Financial Ledger</h1>
         <p className="text-muted-foreground mt-1">Track income and expenses for your organisation.</p>
       </div>
 

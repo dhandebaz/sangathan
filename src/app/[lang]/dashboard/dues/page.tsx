@@ -40,10 +40,13 @@ export default async function DuesPage({ params }: { params: Promise<{ lang: str
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-          Membership Dues
-        </h1>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            Membership Dues
+          </h1>
+          <p className="text-muted-foreground mt-1">Track and manage member dues and billing plans.</p>
+        </div>
       </div>
 
       <DuesClient plans={plans || []} dues={dues || []} lang={lang} />

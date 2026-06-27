@@ -32,9 +32,9 @@ export default async function MaintenancePage() {
     .eq('organisation_id', ctx.organizationId)
 
   return (
-    <div>
+    <div className="space-y-6">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">Facility & Maintenance</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Facility & Maintenance</h1>
         <p className="text-muted-foreground mt-1">Manage infrastructure requests and maintenance billing.</p>
       </div>
 

@@ -29,10 +29,10 @@ export default async function NetworksPage(props: { params: Promise<{ lang: stri
   const isAdmin = ['admin', 'executive'].includes(profile.role)
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto py-6">
+    <div className="space-y-6 max-w-5xl mx-auto">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Networks</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Networks</h1>
           <p className="text-muted-foreground mt-1">Manage federated alliances and coalitions.</p>
         </div>
         <Button asChild>

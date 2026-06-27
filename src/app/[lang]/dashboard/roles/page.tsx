@@ -31,7 +31,7 @@ export default async function RolesPage(props: { params: Promise<{ lang: string 
   const { data: roles } = await getRoles(profile.organisation_id)
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="space-y-6 max-w-6xl mx-auto">
       <RoleManager 
         initialRoles={roles || []} 
         organisationId={profile.organisation_id} 

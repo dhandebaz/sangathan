@@ -15,7 +15,7 @@ export default async function ProposalsPage() {
     .order('created_at', { ascending: false })
 
   return (
-    <div className="max-w-5xl mx-auto py-8 px-4">
+    <div className="space-y-6">
       <ProposalManager proposals={proposals || []} />
     </div>
   )

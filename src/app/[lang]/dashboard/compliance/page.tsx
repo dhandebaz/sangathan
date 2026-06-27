@@ -87,7 +87,7 @@ export default async function CompliancePage({ params }: { params: Promise<{ lan
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Compliance Tracker</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Compliance Tracker</h1>
         <p className="text-muted-foreground mt-2">
           Monitor your legal and operational requirements specific to your organization type.
         </p>

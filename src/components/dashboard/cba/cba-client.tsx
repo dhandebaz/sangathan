@@ -93,7 +93,7 @@ export function CBAClient({ orgId }: CBAClientProps) {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">CBA Documents</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">CBA Documents</h1>
           <p className="text-muted-foreground mt-2">
             Manage Collective Bargaining Agreements, drafts, and active contracts.
           </p>

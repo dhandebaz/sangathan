@@ -16,7 +16,7 @@ export default async function AppealsPage() {
     .order('created_at', { ascending: false })
 
   return (
-    <div className="max-w-4xl">
+    <div className="space-y-6 max-w-4xl">
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Governance Appeals</h1>
         <p className="text-muted-foreground mt-1">

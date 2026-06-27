@@ -61,8 +61,8 @@ export default async function DonationsPage(props: PageProps) {
   return (
     <div>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-        <div>
-           <h1 className="text-3xl font-bold tracking-tight">Donations</h1>
+    <div className="space-y-6">
+           <h1 className="text-3xl font-bold tracking-tight text-foreground">Donations</h1>
             <p className="text-muted-foreground mt-1">Track manual payments and contributions.</p>
         </div>
         <div className="flex gap-2">

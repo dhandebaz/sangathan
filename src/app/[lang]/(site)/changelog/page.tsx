@@ -35,6 +35,17 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.9.4',
+    titleEn: 'Dashboard UI Consistency Improvements',
+    titleHi: 'डैशबोर्ड UI एकरूपता में सुधार',
+    dateEn: 'June 2026',
+    dateHi: 'जून 2026',
+    descEn: 'Standardised page headings, wrappers, and colour tokens across 30+ dashboard pages for a cohesive, polished experience. Removed hardcoded slate colours in favour of CSS variable tokens, ensuring consistent light-mode presentation.',
+    descHi: 'एक सुसंगत अनुभव के लिए 30+ डैशबोर्ड पृष्ठों पर पृष्ठ शीर्षकों और रंग टोकन को मानकीकृत किया गया। CSS वेरिएबल टोकन के पक्ष में हार्डकोडेड स्लेट रंगों को हटाया गया।',
+    color: 'slate',
+    icon: Zap
+  },
+  {
     version: 'v1.9.3',
     titleEn: 'Dashboard Navigation and Loading Improvements',
     titleHi: 'डैशबोर्ड नेविगेशन और लोडिंग में सुधार',

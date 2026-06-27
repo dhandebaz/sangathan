@@ -15,7 +15,7 @@ export default async function HelpdeskPage() {
   }
 
   return (
-    <div className="container mx-auto py-6 max-w-5xl">
+    <div className="space-y-6">
       <HelpdeskClient orgType={orgType} orgId={orgId} />
     </div>
   )

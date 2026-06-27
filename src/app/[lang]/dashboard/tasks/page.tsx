@@ -28,10 +28,10 @@ export default async function TasksPage(props: { params: Promise<{ lang: string 
   const canManage = ['admin', 'executive', 'editor'].includes(profile.role)
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto py-8">
+    <div className="space-y-6 max-w-6xl mx-auto">
       <div className="flex justify-between items-start gap-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Volunteer Tasks</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Volunteer Tasks</h1>
           <p className="text-muted-foreground mt-1">Manage and track volunteer activities and assignments.</p>
         </div>
         {canManage && (

@@ -30,10 +30,10 @@ export default async function RequestsPage(props: { params: Promise<{ lang: stri
     .order('created_at', { ascending: false })
 
   return (
-    <div className="max-w-5xl mx-auto py-8 px-4">
+    <div className="space-y-6 max-w-5xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Membership Requests</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Membership Requests</h1>
           <p className="text-muted-foreground text-sm mt-1">Review and approve new members.</p>
         </div>
         <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">

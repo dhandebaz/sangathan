@@ -26,9 +26,9 @@ export default async function AuditLogPage() {
   }
 
   return (
-    <div>
+    <div className="space-y-6">
        <div className="mb-6">
-         <h1 className="text-3xl font-bold tracking-tight">Audit Logs</h1>
+         <h1 className="text-3xl font-bold tracking-tight text-foreground">Audit Logs</h1>
          <p className="text-muted-foreground mt-1">Track actions and changes within your organisation.</p>
        </div>
 

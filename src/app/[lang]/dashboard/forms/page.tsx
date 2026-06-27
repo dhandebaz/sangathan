@@ -45,8 +45,8 @@ export default async function FormsPage(props: { params: Promise<{ lang: string 
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <div>
-           <h1 className="text-3xl font-bold tracking-tight">Forms</h1>
+    <div className="space-y-6">
+           <h1 className="text-3xl font-bold tracking-tight text-foreground">Forms</h1>
            <p className="text-muted-foreground mt-1">Collect data from public or internal users.</p>
         </div>
         <Button asChild>

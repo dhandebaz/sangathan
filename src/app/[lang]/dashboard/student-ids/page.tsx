@@ -31,10 +31,12 @@ export default async function StudentIdsPage(props: PageProps) {
   const orgName = orgData?.name || 'Student Union'
 
   return (
-    <StudentIdsClient
-      initialStudents={typedStudents}
-      lang={lang}
-      orgName={orgName}
-    />
+    <div className="space-y-6">
+      <StudentIdsClient
+        initialStudents={typedStudents}
+        lang={lang}
+        orgName={orgName}
+      />
+    </div>
   )
 }

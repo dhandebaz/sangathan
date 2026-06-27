@@ -32,7 +32,7 @@ export function VolunteersClient({ initialVolunteers }: VolunteersClientProps) {
     <div>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Volunteer Network</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Volunteer Network</h1>
           <p className="text-muted-foreground mt-1">Manage, assign, and coordinate your on-ground volunteers.</p>
         </div>
         <div className="flex gap-2">

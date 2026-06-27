@@ -35,10 +35,10 @@ export default async function AnnouncementsPage(props: { params: Promise<{ lang:
   const canManage = ['admin', 'editor'].includes(profile.role)
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto py-6">
+    <div className="space-y-6 max-w-4xl mx-auto">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Announcements</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Announcements</h1>
           <p className="text-muted-foreground mt-1">Updates and news from your organisation.</p>
         </div>
         {canManage && (

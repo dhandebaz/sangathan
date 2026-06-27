@@ -10,7 +10,7 @@ export default async function CBAPage() {
   }
 
   return (
-    <div className="container mx-auto py-6 max-w-5xl">
+    <div className="space-y-6">
       <CBAClient orgId={orgId} />
     </div>
   )

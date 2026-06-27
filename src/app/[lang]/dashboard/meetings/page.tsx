@@ -24,7 +24,7 @@ export default async function MeetingsPage(props: { params: Promise<{ lang: stri
     <div>
       <div className="flex justify-between items-center mb-6">
         <div>
-           <h1 className="text-3xl font-bold tracking-tight">Meetings</h1>
+           <h1 className="text-3xl font-bold tracking-tight text-foreground">Meetings</h1>
            <p className="text-muted-foreground mt-1">Schedule and track organisational gatherings.</p>
         </div>
         <Link 
@@ -40,7 +40,7 @@ export default async function MeetingsPage(props: { params: Promise<{ lang: stri
         {meetings?.map((meeting) => (
           <div key={meeting.id} className="content-card rounded-lg p-6 hover:shadow-md transition-shadow">
              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
+    <div className="space-y-6">
                    <h3 className="text-xl font-bold mb-1">{meeting.title}</h3>
                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">

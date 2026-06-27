@@ -41,7 +41,7 @@ export function ProposalManager({ proposals: initialProposals }: { proposals: Pr
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Proposals & Deliberation</h2>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Proposals & Deliberation</h1>
           <p className="text-muted-foreground">Draft and discuss ideas before they go to a vote.</p>
         </div>
         <Button onClick={() => setShowNew(!showNew)}>
