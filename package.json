@@ -10,7 +10,9 @@
     "lint": "eslint",
     "audit": "npm audit --audit-level=high",
     "secrets:scan": "node scripts/scan-secrets.mjs",
+    "setup-hooks": "git config core.hooksPath .githooks",
     "precommit": "npm run secrets:scan && npm run lint",
+    "setup-hooks": "git config core.hooksPath .githooks",
     "ci": "npm run lint && npm run build && npm run audit"
   },
   "dependencies": {

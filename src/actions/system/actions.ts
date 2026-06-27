@@ -109,3 +109,81 @@ export const reactivateOrganisation = async (input: z.infer<typeof OrgActionSche
   revalidatePath('/', 'layout')
   return { success: true }
 }
+
+export async function getSystemJobs() {
+  await requirePlatformAdmin()
+  const supabase = createServiceClient()
+  const { data } = await supabase
+    .from('system_jobs')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(100)
+  return data || []
+}
+
+export async function retryFailedJob(jobId: string) {
+  await requirePlatformAdmin()
+
+  const supabase = createServiceClient()
+  const { error } = await supabase
+    .from('system_jobs')
+    .update({ status: 'pending', attempts: 0, last_error: null, locked_until: null })
+    .eq('id', jobId)
+
+  if (error) return { success: false, error: error.message }
+  revalidatePath('/admin/jobs', 'page')
+  return { success: true }
+}
+
+export async function cancelPendingJob(jobId: string) {
+  await requirePlatformAdmin()
+
+  const supabase = createServiceClient()
+  const { error } = await supabase
+    .from('system_jobs')
+    .update({ status: 'failed', last_error: 'Cancelled by admin' })
+    .eq('id', jobId)
+
+  if (error) return { success: false, error: error.message }
+  revalidatePath('/admin/jobs', 'page')
+  return { success: true }
+}
+
+export async function getWebhookEvents() {
+  await requirePlatformAdmin()
+  const supabase = createServiceClient()
+  const { data } = await supabase
+    .from('webhook_events')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(100)
+  return data || []
+}
+
+export async function getPlatformStats() {
+  await requirePlatformAdmin()
+  const supabase = createServiceClient()
+
+  const [orgRes, userRes, appealRes, jobRes, logRes] = await Promise.all([
+    supabase.from('organisations').select('*', { count: 'exact', head: true }),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }),
+    supabase.from('appeals').select('*', { count: 'exact', head: true }).in('status', ['pending', 'under_review']),
+    supabase.from('system_jobs').select('*', { count: 'exact', head: true }).eq('status', 'failed'),
+    supabase.from('system_logs').select('*', { count: 'exact', head: true }).eq('level', 'critical'),
+  ])
+
+  return {
+    totalOrganisations: orgRes.count || 0,
+    totalUsers: userRes.count || 0,
+    openAppeals: appealRes.count || 0,
+    failedJobs: jobRes.count || 0,
+    criticalLogs24h: logRes.count || 0,
+  }
+}
+
+export async function addSystemLog(input: { level: string; source: string; message: string; metadata?: Record<string, unknown>; user_id?: string; organisation_id?: string }) {
+  const supabase = createServiceClient()
+  const { error } = await supabase.from('system_logs').insert(input)
+  if (error) throw new Error(error.message)
+  return { success: true }
+}

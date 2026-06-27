@@ -1,17 +1,38 @@
 import { createClient } from '@/lib/supabase/server'
+import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { Plus, Calendar, MapPin, Users, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { Meeting } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
+async function getOrgType(supabase: Awaited<ReturnType<typeof createClient>>): Promise<string> {
+  const orgId = await getSelectedOrganisationId()
+  const { data } = await supabase.from('organisations').select('org_type').eq('id', orgId).single()
+  return data?.org_type || 'default'
+}
+
+function getOrgLabels(orgType: string) {
+  const labels: Record<string, { title: string; description: string }> = {
+    ngo: { title: 'Meetings', description: 'Track board meetings, team syncs, and stakeholder gatherings.' },
+    student_union: { title: 'Union Meetings', description: 'Schedule council meetings, club assemblies, and student forums.' },
+    workers_union: { title: 'Union Meetings', description: 'Organize collective bargaining sessions, shop floor meetings, and member assemblies.' },
+    rwa: { title: 'Society Meetings', description: 'Manage AGMs, committee meetings, and resident gatherings.' },
+  }
+  return labels[orgType] || { title: 'Meetings', description: 'Schedule and track organisational gatherings.' }
+}
+
 export default async function MeetingsPage(props: { params: Promise<{ lang: string }> }) {
   const { lang } = await props.params
   const supabase = await createClient()
+  const selectedOrgId = await getSelectedOrganisationId()
+  const orgType = await getOrgType(supabase)
+  const { title, description } = getOrgLabels(orgType)
 
   const { data, error } = await supabase
     .from('meetings')
     .select('id, title, date, location, meeting_attendance(count)')
+    .eq('organisation_id', selectedOrgId)
     .order('date', { ascending: false })
   
   const meetings = data as Meeting[] | null
@@ -24,8 +45,8 @@ export default async function MeetingsPage(props: { params: Promise<{ lang: stri
     <div>
       <div className="flex justify-between items-center mb-6">
         <div>
-           <h1 className="text-3xl font-bold tracking-tight text-foreground">Meetings</h1>
-           <p className="text-muted-foreground mt-1">Schedule and track organisational gatherings.</p>
+           <h1 className="text-3xl font-bold tracking-tight text-foreground">{title}</h1>
+           <p className="text-muted-foreground mt-1">{description}</p>
         </div>
         <Link 
             href={`/${lang}/dashboard/meetings/new`} 

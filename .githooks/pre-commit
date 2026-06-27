@@ -1,16 +1,19 @@
 #!/bin/sh
-# Pre-commit hook: scan staged files for secrets
+# Pre-commit hook: scan staged files for secrets and run secret scanner
 # Install: git config core.hooksPath .githooks
 
-echo "🔍 Scanning staged files for secrets..."
+echo "--- Pre-commit: scanning staged files for secrets ---"
+
 STAGED=$(git diff --cached --name-only --diff-filter=ACMR)
 
 if [ -z "$STAGED" ]; then
+  echo "No staged files to scan."
   exit 0
 fi
 
-# Check for common secret patterns in staged files
 FAILED=0
+ENV_STAGED=""
+
 for FILE in $STAGED; do
   if [ ! -f "$FILE" ]; then
     continue
@@ -18,22 +21,53 @@ for FILE in $STAGED; do
 
   # Skip binary files
   case "$FILE" in
-    *.png|*.jpg|*.jpeg|*.gif|*.svg|*.ico|*.woff|*.woff2|*.ttf|*.eot)
+    *.png|*.jpg|*.jpeg|*.gif|*.svg|*.ico|*.woff|*.woff2|*.ttf|*.eot|*.mp4|*.webm|*.wasm|*.zip)
       continue
       ;;
   esac
 
-  # Check for potential secrets
-  if grep -qE '(sk_live_|sk_test_|ghp_|gho_|xox[bp]-|AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC )?PRIVATE KEY-----|SG\.[0-9a-zA-Z_-]{20,}\.[0-9a-zA-Z_-]{20,})' "$FILE" 2>/dev/null; then
-    echo "❌ Potential secret found in $FILE"
-    grep -nE '(sk_live_|sk_test_|ghp_|gho_|xox[bp]-|AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC )?PRIVATE KEY-----)' "$FILE"
+  # Detect .env files being committed
+  case "$FILE" in
+    *.env|*.env.*)
+      echo "[FAIL] .env file detected in staged files: $FILE"
+      FAILED=1
+      ENV_STAGED="$FILE"
+      ;;
+  esac
+
+  # Check for common secret patterns in staged files
+  SECRET_PATTERNS='(sk_live_|sk_test_|ghp_|gho_|ghu_|ghs_|xox[bpras]-|AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC )?PRIVATE KEY-----|SG\.[0-9a-zA-Z_-]{20,}\.[0-9a-zA-Z_-]{20,}|SUPABASE_SERVICE_ROLE_KEY|NEXT_PUBLIC_SUPABASE_[A-Z_]+=.+$)'
+
+  if grep -qE "$SECRET_PATTERNS" "$FILE" 2>/dev/null; then
+    echo "[FAIL] Potential secret found in $FILE:"
+    grep -nE "$SECRET_PATTERNS" "$FILE" | sed 's/^/    /'
+    FAILED=1
+  fi
+
+  # Check for generic sk- prefixed secrets (API keys)
+  if grep -qE '\bsk-[A-Za-z0-9_-]{20,}\b' "$FILE" 2>/dev/null; then
+    echo "[FAIL] Generic API key pattern (sk-...) found in $FILE"
+    grep -nE '\bsk-[A-Za-z0-9_-]{20,}\b' "$FILE" | sed 's/^/    /'
     FAILED=1
   fi
 done
 
+# Run npm secrets:scan if Node.js is available
+if command -v node >/dev/null 2>&1; then
+  echo "Running npm run secrets:scan on staged files..."
+  STAGED_FILES=$(echo "$STAGED" | tr '\n' ' ')
+  if [ -n "$STAGED_FILES" ]; then
+    npm run secrets:scan -- "$STAGED_FILES" 2>/dev/null || true
+  fi
+else
+  echo "[WARN] Node.js not available, skipping npm run secrets:scan"
+fi
+
+echo ""
 if [ "$FAILED" -eq 1 ]; then
-  echo "❌ Commit blocked: remove secrets before committing."
+  echo "[FAIL] Commit blocked: resolve the issues above before committing."
   exit 1
 fi
 
-echo "✅ No secrets detected in staged files."
+echo "[PASS] No secrets detected in staged files."
+exit 0

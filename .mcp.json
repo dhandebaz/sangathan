@@ -8,6 +8,13 @@
       "env": {
         "BRAINSYNC_ENV_FILE": "C:\\Users\\hudav\\.bsync_core\\sangathan\\mcp-secret-env.json"
       }
+    },
+    "supabase-sangathan": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?project_ref=isddyfisvxpoyglkyzfw",
+      "headers": {
+        "Authorization": "Bearer ${SUPABASE_ACCESS_TOKEN}"
+      }
     }
   }
 }

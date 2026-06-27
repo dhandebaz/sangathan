@@ -1,13 +1,13 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import type { Json } from '@/types/database'
 
-export type OrgCapability = 
-  | 'basic_governance' 
-  | 'advanced_analytics' 
-  | 'federation_mode' 
-  | 'voting_engine' 
-  | 'volunteer_engine' 
-  | 'transparency_mode' 
+export type OrgCapability =
+  | 'basic_governance'
+  | 'advanced_analytics'
+  | 'federation_mode'
+  | 'voting_engine'
+  | 'volunteer_engine'
+  | 'transparency_mode'
   | 'coalition_tools'
   | 'campaigns'
   | 'grievances'
@@ -19,6 +19,16 @@ export type OrgCapability =
   | 'events'
   | 'memberships'
   | 'ai_features'
+  | 'compliance'
+  | 'grants'
+  | 'cba_documents'
+  | 'visitors'
+  | 'jobs'
+  | 'dues'
+  | 'elections'
+  | 'meetings'
+  | 'subgroups'
+  | 'tasks'
 
 export const BASE_CAPABILITIES: Record<OrgCapability, boolean> = {
   basic_governance: true,
@@ -37,23 +47,33 @@ export const BASE_CAPABILITIES: Record<OrgCapability, boolean> = {
   student_ids: false,
   events: false,
   memberships: false,
-  ai_features: false
+  ai_features: false,
+  compliance: true,
+  grants: false,
+  cba_documents: false,
+  visitors: false,
+  jobs: false,
+  dues: false,
+  elections: false,
+  meetings: true,
+  subgroups: true,
+  tasks: true,
 }
 
 export function getOrgTypeDefaults(orgType?: string | null): Record<OrgCapability, boolean> {
   if (orgType === 'ngo') {
-    return { ...BASE_CAPABILITIES, volunteers: true, donations: true, campaigns: true, coalition_tools: true, transparency_mode: true, memberships: true, volunteer_engine: true }
+    return { ...BASE_CAPABILITIES, volunteers: true, donations: true, campaigns: true, coalition_tools: true, transparency_mode: true, memberships: true, volunteer_engine: true, federation_mode: true, grants: true, events: true, elections: true, dues: true, compliance: true, meetings: true, subgroups: true }
   }
   if (orgType === 'student_union') {
-    return { ...BASE_CAPABILITIES, student_ids: true, events: true, voting_engine: true, grievances: true, federation_mode: true, campaigns: true, memberships: true }
+    return { ...BASE_CAPABILITIES, student_ids: true, events: true, voting_engine: true, grievances: true, federation_mode: true, campaigns: true, memberships: true, elections: true, subgroups: true, compliance: true, meetings: true, dues: true }
   }
   if (orgType === 'workers_union') {
-    return { ...BASE_CAPABILITIES, grievances: true, voting_engine: true, federation_mode: true, campaigns: true, memberships: true }
+    return { ...BASE_CAPABILITIES, grievances: true, voting_engine: true, federation_mode: true, campaigns: true, memberships: true, cba_documents: true, jobs: true, dues: true, elections: true, events: true, compliance: true, meetings: true, subgroups: true }
   }
   if (orgType === 'rwa') {
-    return { ...BASE_CAPABILITIES, maintenance: true, complaints: true, donations: true, voting_engine: true, events: true, memberships: true }
+    return { ...BASE_CAPABILITIES, maintenance: true, complaints: true, donations: true, voting_engine: true, events: true, memberships: true, visitors: true, elections: true, grievances: true, compliance: true, meetings: true, subgroups: true }
   }
-  
+
   return { ...BASE_CAPABILITIES, voting_engine: true, federation_mode: true, volunteer_engine: true }
 }
 

@@ -1,0 +1,35 @@
+#!/bin/sh
+# Commit-msg hook: validate conventional commit format
+# Install: git config core.hooksPath .githooks
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Skip merge commits
+if echo "$COMMIT_MSG" | grep -qE '^Merge '; then
+  exit 0
+fi
+
+VALID_TYPES='feat|fix|chore|docs|refactor|test|style|perf|ci|revert|security'
+
+# Pattern: type(scope): message  OR  type: message
+PATTERN="^(${VALID_TYPES})(\([a-zA-Z0-9._-]+\))?: .+"
+
+if echo "$COMMIT_MSG" | grep -qE "$PATTERN"; then
+  exit 0
+fi
+
+echo ""
+echo "[FAIL] Commit message does not follow conventional commit format."
+echo ""
+echo "  Expected format:  type(scope): message"
+echo "                    type: message"
+echo ""
+echo "  Valid types: feat, fix, chore, docs, refactor, test, style, perf, ci, revert, security"
+echo ""
+echo "  Examples:"
+echo "    feat(auth): add login flow"
+echo "    fix: resolve timeout on payment page"
+echo "    chore(deps): update dependencies"
+echo ""
+exit 1

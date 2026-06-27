@@ -1,14 +1,25 @@
 import Link from 'next/link'
-import { Activity, Building2, FileClock, Gavel, LayoutDashboard, Scale, ShieldCheck, Users } from 'lucide-react'
+import { Activity, BarChart3, Bell, Building2, CreditCard, FileClock, FileText, Gavel, LayoutDashboard, Scale, Search, ScrollText, Server, Settings as SettingsIcon, Shield, ShieldCheck, Siren, Users, Webhook } from 'lucide-react'
 import { requirePlatformAdmin } from '@/lib/auth/context'
 
 const adminLinks = [
   { href: '/admin', label: 'Overview', icon: LayoutDashboard },
   { href: '/admin/organisations', label: 'Organisations', icon: Building2 },
   { href: '/admin/users', label: 'Users', icon: Users },
+  { href: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
+  { href: '/admin/settings', label: 'Settings', icon: SettingsIcon },
   { href: '/admin/logs', label: 'Logs', icon: FileClock },
+  { href: '/admin/audit', label: 'Audit', icon: ScrollText },
   { href: '/admin/moderation', label: 'Moderation', icon: Gavel },
-  { href: '/admin/compliance', label: 'Compliance', icon: Scale },
+  { href: '/admin/appeals', label: 'Appeals', icon: Scale },
+  { href: '/admin/compliance', label: 'Compliance', icon: Shield },
+  { href: '/admin/security', label: 'Security', icon: ShieldCheck },
+  { href: '/admin/risk-events', label: 'Risk Events', icon: Siren },
+  { href: '/admin/data-requests', label: 'Data Requests', icon: FileText },
+  { href: '/admin/billing', label: 'Billing', icon: CreditCard },
+  { href: '/admin/broadcasts', label: 'Broadcasts', icon: Bell },
+  { href: '/admin/jobs', label: 'Jobs', icon: Server },
+  { href: '/admin/webhooks', label: 'Webhooks', icon: Webhook },
   { href: '/admin/health', label: 'Health', icon: Activity },
 ]
 

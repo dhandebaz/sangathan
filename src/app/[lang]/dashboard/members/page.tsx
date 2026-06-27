@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { AddMemberDialog } from '@/components/members/add-member-dialog'
 import { MemberTable } from '@/components/members/member-table'
 import { Printer } from 'lucide-react'
@@ -9,6 +10,22 @@ import Link from 'next/link'
 import { Member } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
+
+async function getOrgType(supabase: Awaited<ReturnType<typeof createClient>>): Promise<string> {
+  const orgId = await getSelectedOrganisationId()
+  const { data } = await supabase.from('organisations').select('org_type').eq('id', orgId).single()
+  return data?.org_type || 'default'
+}
+
+function getOrgLabels(orgType: string) {
+  const labels: Record<string, { title: string; description: string }> = {
+    ngo: { title: 'Members & Supporters', description: 'Manage your community of supporters, volunteers, and beneficiaries.' },
+    student_union: { title: 'Student Body', description: 'Manage the student community, class representatives, and club members.' },
+    workers_union: { title: 'Worker Registry', description: 'Manage union members, shop stewards, and workplace delegates.' },
+    rwa: { title: 'Residents', description: 'Manage resident directory, owner and tenant records.' },
+  }
+  return labels[orgType] || { title: 'Members', description: 'Manage your organisation members.' }
+}
 
 interface PageProps {
   searchParams: Promise<{
@@ -27,10 +44,14 @@ export default async function MembersPage({ searchParams, params }: PageProps & 
   const pageSize = 20
 
   const supabase = await createClient()
+  const selectedOrgId = await getSelectedOrganisationId()
+  const orgType = await getOrgType(supabase)
+  const { title, description } = getOrgLabels(orgType)
 
   let dbQuery = supabase
     .from('members')
     .select('*', { count: 'exact' })
+    .eq('organisation_id', selectedOrgId)
     .order('created_at', { ascending: false })
 
   if (query) {
@@ -58,8 +79,8 @@ export default async function MembersPage({ searchParams, params }: PageProps & 
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-           <h1 className="text-3xl font-bold tracking-tight text-foreground">Members</h1>
-           <p className="text-muted-foreground mt-1">Manage your organisation&apos;s members and staff.</p>
+           <h1 className="text-3xl font-bold tracking-tight text-foreground">{title}</h1>
+           <p className="text-muted-foreground mt-1">{description}</p>
         </div>
         <div className="flex gap-2">
             <Button variant="outline" asChild>

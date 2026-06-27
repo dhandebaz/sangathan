@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { LogDonationDialog } from '@/components/donations/log-donation-dialog'
 import { DonationList } from '@/components/donations/donation-list'
 import { SubscriptionList } from '@/components/donations/subscription-list'
@@ -8,6 +9,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Donation, DonationSubscription } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
+
+async function getOrgType(supabase: Awaited<ReturnType<typeof createClient>>): Promise<string> {
+  const orgId = await getSelectedOrganisationId()
+  const { data } = await supabase.from('organisations').select('org_type').eq('id', orgId).single()
+  return data?.org_type || 'default'
+}
+
+function getOrgLabels(orgType: string) {
+  const labels: Record<string, { title: string; description: string }> = {
+    ngo: { title: 'Donations & Fundraising', description: 'Track donor contributions, issue tax receipts, and manage fundraising campaigns.' },
+    rwa: { title: 'Maintenance Collections', description: 'Track maintenance fee collections and society funds.' },
+    student_union: { title: 'Contributions', description: 'Track financial contributions and member subscriptions.' },
+    workers_union: { title: 'Contributions', description: 'Track financial contributions and member subscriptions.' },
+  }
+  return labels[orgType] || { title: 'Donations', description: 'Track contributions and manage financial support.' }
+}
 
 interface PageProps {
   params: Promise<{ lang: string }>
@@ -25,10 +42,14 @@ export default async function DonationsPage(props: PageProps) {
   const status = params.status || 'all'
   
   const supabase = await createClient()
+  const selectedOrgId = await getSelectedOrganisationId()
+  const orgType = await getOrgType(supabase)
+  const { title, description } = getOrgLabels(orgType)
 
   let dbQuery = supabase
     .from('donations')
     .select('*')
+    .eq('organisation_id', selectedOrgId)
     .order('date', { ascending: false })
 
   if (query) {
@@ -48,6 +69,7 @@ export default async function DonationsPage(props: PageProps) {
   const { data: subData, error: subError } = await supabase
     .from('donation_subscriptions')
     .select('*')
+    .eq('organisation_id', selectedOrgId)
     .order('created_at', { ascending: false })
 
   const subscriptions = subData as unknown as DonationSubscription[] | null
@@ -62,8 +84,8 @@ export default async function DonationsPage(props: PageProps) {
     <div>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
     <div className="space-y-6">
-           <h1 className="text-3xl font-bold tracking-tight text-foreground">Donations</h1>
-            <p className="text-muted-foreground mt-1">Track manual payments and contributions.</p>
+           <h1 className="text-3xl font-bold tracking-tight text-foreground">{title}</h1>
+             <p className="text-muted-foreground mt-1">{description}</p>
         </div>
         <div className="flex gap-2">
             <a 

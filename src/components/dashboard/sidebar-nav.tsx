@@ -8,7 +8,8 @@ import {
   Calendar, CheckSquare, BarChart, Vote, Globe, Scale,
   AlertCircle, Wrench, Gift, Flag, Badge,
   HeartHandshake, Network, Landmark, ScrollText,
-  GalleryVerticalEnd, Gavel, UserCog, DollarSign, FileText, UserCheck, HardHat
+  GalleryVerticalEnd, Gavel, UserCog, DollarSign, FileText, UserCheck, HardHat,
+  CalendarCheck
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -68,7 +69,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           items: [
             { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Dashboard', show: true },
             { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
-            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events', show: true },
+            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events', show: !!c.events },
           ].filter(i => i.show)
         },
         {
@@ -76,7 +77,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           title: 'Student Body',
           items: [
             { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
-            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Committees', show: true },
+            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Committees', show: !!c.subgroups },
             { href: `/${lang}/dashboard/id-card`, icon: Badge, label: 'Student IDs', show: !!c.student_ids },
             { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers', show: !!c.volunteers },
           ].filter(i => i.show)
@@ -86,9 +87,10 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           title: 'Governance & Ops',
           items: [
             { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Proposals', show: true },
-            { href: `/${lang}/dashboard/elections`, icon: Vote, label: 'Elections', show: true },
+            { href: `/${lang}/dashboard/elections`, icon: Vote, label: 'Elections', show: !!c.elections },
+            { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Meetings', show: !!c.meetings },
             { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!c.campaigns },
-            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
+            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: !!c.tasks },
             { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financials', show: true },
           ].filter(i => i.show)
         },
@@ -113,7 +115,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           items: [
             { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Dashboard', show: true },
             { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
-            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events', show: true },
+            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events', show: !!c.events },
           ].filter(i => i.show)
         },
         {
@@ -121,7 +123,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           title: 'Workforce',
           items: [
             { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
-            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Local Branches', show: true },
+            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Local Branches', show: !!c.subgroups },
             { href: `/${lang}/dashboard/networks`, icon: Globe, label: 'Federation', show: !!c.federation_mode },
           ].filter(i => i.show)
         },
@@ -129,21 +131,22 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           id: 'union_actions',
           title: 'Union Actions',
           items: [
-            { href: `/${lang}/dashboard/cba`, icon: FileText, label: 'CBA Documents', show: true },
+            { href: `/${lang}/dashboard/cba`, icon: FileText, label: 'CBA Documents', show: !!c.cba_documents },
             { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!c.campaigns },
-            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Strike Votes & Polls', show: true },
-            { href: `/${lang}/dashboard/jobs`, icon: HardHat, label: 'Worker Dispatch', show: true },
-            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
-            { href: `/${lang}/dashboard/dues`, icon: Landmark, label: 'Union Dues', show: true },
+            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Strike Votes & Polls', show: !!c.voting_engine },
+            { href: `/${lang}/dashboard/jobs`, icon: HardHat, label: 'Worker Dispatch', show: !!c.jobs },
+            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: !!c.tasks },
+            { href: `/${lang}/dashboard/dues`, icon: Landmark, label: 'Union Dues', show: !!c.dues },
+            { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Meetings', show: !!c.meetings },
           ].filter(i => i.show)
         },
         {
           id: 'legal',
           title: 'Legal & Support',
           items: [
-            { href: `/${lang}/dashboard/grievances`, icon: Scale, label: 'Grievances', show: true },
+            { href: `/${lang}/dashboard/grievances`, icon: Scale, label: 'Grievances', show: !!c.grievances },
             { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Helpdesk', show: true },
-            { href: `/${lang}/dashboard/compliance`, icon: ScrollText, label: 'Compliance Tracker', show: isAdmin },
+            { href: `/${lang}/dashboard/compliance`, icon: ScrollText, label: 'Compliance Tracker', show: !!c.compliance },
           ].filter(i => i.show)
         },
         adminGroup
@@ -158,7 +161,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           items: [
             { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Dashboard', show: true },
             { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Notice Board', show: true },
-            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Community Events', show: true },
+            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Community Events', show: !!c.events },
           ].filter(i => i.show)
         },
         {
@@ -166,18 +169,19 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           title: 'Community',
           items: [
             { href: `/${lang}/dashboard/members`, icon: Users, label: 'Residents', show: true },
-            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Committees', show: true },
-            { href: `/${lang}/dashboard/visitors`, icon: UserCheck, label: 'Visitor Logs', show: true },
+            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Committees', show: !!c.subgroups },
+            { href: `/${lang}/dashboard/visitors`, icon: UserCheck, label: 'Visitor Logs', show: !!c.visitors },
           ].filter(i => i.show)
         },
         {
           id: 'estate_ops',
           title: 'Estate Ops',
           items: [
-            { href: `/${lang}/dashboard/maintenance`, icon: Wrench, label: 'Maintenance', show: true },
+            { href: `/${lang}/dashboard/maintenance`, icon: Wrench, label: 'Maintenance', show: !!c.maintenance },
             { href: `/${lang}/dashboard/facilities`, icon: Calendar, label: 'Facility Booking', show: true },
-            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
+            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: !!c.tasks },
             { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financials & Bills', show: true },
+            { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Meetings', show: !!c.meetings },
           ].filter(i => i.show)
         },
         {
@@ -185,8 +189,8 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           title: 'Governance & Support',
           items: [
             { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Proposals', show: true },
-            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Polls & Elections', show: true },
-            { href: `/${lang}/dashboard/complaints`, icon: AlertCircle, label: 'Complaints', show: true },
+            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Polls & Elections', show: !!c.elections },
+            { href: `/${lang}/dashboard/complaints`, icon: AlertCircle, label: 'Complaints', show: !!c.complaints },
           ].filter(i => i.show)
         },
         adminGroup
@@ -201,7 +205,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           items: [
             { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Dashboard', show: true },
             { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
-            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Rallies & Events', show: true },
+            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Rallies & Events', show: !!c.events },
           ].filter(i => i.show)
         },
         {
@@ -209,7 +213,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           title: 'Party Cadre',
           items: [
             { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
-            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Wings & Cells', show: true },
+            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Wings & Cells', show: !!c.subgroups },
             { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers', show: !!c.volunteers },
             { href: `/${lang}/dashboard/networks`, icon: Globe, label: 'Networks', show: !!c.federation_mode },
           ].filter(i => i.show)
@@ -219,8 +223,9 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           title: 'Operations',
           items: [
             { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!c.campaigns },
-            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
-            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Internal Voting', show: true },
+            { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Meetings', show: !!c.meetings },
+            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: !!c.tasks },
+            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Internal Voting', show: !!c.voting_engine },
             { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Party Funds', show: true },
             { href: `/${lang}/dashboard/donations`, icon: Gift, label: 'Donations', show: !!c.donations },
           ].filter(i => i.show)
@@ -245,7 +250,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
         items: [
           { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Overview', show: true },
           { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
-          { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events', show: true },
+          { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events', show: !!c.events },
         ].filter(i => i.show)
       },
       {
@@ -253,7 +258,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
         title: 'People & Members',
         items: [
           { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
-          { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Teams & Committees', show: true },
+          { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Teams & Committees', show: !!c.subgroups },
           { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers', show: !!c.volunteers },
           { href: `/${lang}/dashboard/networks`, icon: Globe, label: 'Networks', show: !!c.federation_mode },
         ].filter(i => i.show)
@@ -263,12 +268,13 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
         title: 'Governance & Ops',
         items: [
           { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Proposals', show: true },
-          { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Voting & Decisions', show: true },
-          { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: true },
+          { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Voting & Decisions', show: !!c.voting_engine },
+          { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: !!c.tasks },
+          { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Meetings', show: !!c.meetings },
           { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!c.campaigns },
           { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financial Ledger', show: true },
           { href: `/${lang}/dashboard/donations`, icon: Gift, label: 'Donations', show: !!c.donations },
-          { href: `/${lang}/dashboard/grants`, icon: DollarSign, label: 'Grants', show: true },
+          { href: `/${lang}/dashboard/grants`, icon: DollarSign, label: 'Grants', show: !!c.grants },
         ].filter(i => i.show)
       },
       {
@@ -276,7 +282,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
         title: 'Support & Compliance',
         items: [
           { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Helpdesk', show: true },
-          { href: `/${lang}/dashboard/compliance`, icon: ScrollText, label: 'Compliance Tracker', show: isAdmin },
+          { href: `/${lang}/dashboard/compliance`, icon: ScrollText, label: 'Compliance Tracker', show: !!c.compliance },
         ].filter(i => i.show)
       },
       adminGroup
