@@ -22,8 +22,8 @@ export default async function SecurityPage() {
         .eq('legal_hold', true),
       supabase
         .from('organisations')
-        .select('id, name, slug, is_suspended')
-        .eq('is_suspended', true)
+        .select('id, name, slug')
+        .eq('status', 'suspended')
         .limit(50),
       supabase
         .from('rate_limits')
@@ -172,13 +172,13 @@ export default async function SecurityPage() {
               </tr>
             </thead>
             <tbody className="divide-y">
-              {(rateLimits || []).map((rl) => (
-                <tr key={rl.id} className="hover:bg-gray-50">
+              {(rateLimits || []).map((rl, idx) => (
+                <tr key={rl.key || idx} className="hover:bg-gray-50">
                   <td className="py-3 px-6 font-mono text-xs">{rl.key}</td>
-                  <td className="py-3 px-6">{rl.count}</td>
-                  <td className="py-3 px-6 text-xs">{rl.window}</td>
+                  <td className="py-3 px-6">{rl.points}</td>
+                  <td className="py-3 px-6 text-xs">{new Date(rl.window_start).toLocaleString()}</td>
                   <td className="py-3 px-6 text-xs text-gray-500 whitespace-nowrap">
-                    {new Date(rl.created_at).toLocaleString()}
+                    {rl.created_at ? new Date(rl.created_at).toLocaleString() : '-'}
                   </td>
                 </tr>
               ))}
@@ -205,9 +205,8 @@ interface PlatformActionRow {
 }
 
 interface RateLimitRow {
-  id: string
   key: string
-  count: number
-  window: string
+  points: number
+  window_start: string
   created_at: string
 }

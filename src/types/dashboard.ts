@@ -216,7 +216,6 @@ export interface SystemAdminOrganisation {
   id: string;
   name: string;
   slug: string;
-  is_suspended: boolean;
   created_at: string;
   status: 'active' | 'warning' | 'suspended' | 'under_review';
   membership_policy: 'open_auto' | 'admin_approval' | 'invite_only';

@@ -19,7 +19,7 @@ export default async function SystemAdminDashboard() {
          supabase.from('members').select('*', { count: 'exact', head: true }),
          supabase.from('appeals').select('*', { count: 'exact', head: true }).in('status', ['pending', 'under_review']),
          supabase.from('organisations')
-            .select('id, name, slug, is_suspended, status, membership_policy, created_at, members(count)')
+             .select('id, name, slug, status, membership_policy, created_at, members(count)')
             .order('created_at', { ascending: false })
             .limit(5) as unknown as Promise<{ data: (SystemAdminOrganisation & { members?: { count: number }[] })[] | null }>
       ])
@@ -115,10 +115,10 @@ export default async function SystemAdminDashboard() {
                                     <td className="py-3 px-6 font-mono text-xs text-gray-500">{org.slug}</td>
                                     <td className="py-3 px-6">{memberTotal}</td>
                                     <td className="py-3 px-6">
-                                       {org.is_suspended
-                                          ? <span className="text-red-600 font-bold text-xs bg-red-50 px-2 py-1 rounded">SUSPENDED</span>
-                                          : <span className="text-green-600 text-xs">Active</span>
-                                       }
+                        {org.status === 'suspended'
+                           ? <span className="text-red-600 font-bold text-xs bg-red-50 px-2 py-1 rounded">SUSPENDED</span>
+                           : <span className="text-green-600 text-xs">Active</span>
+                        }
                                     </td>
                                     <td className="py-3 px-6 text-right">
                                        <Link href={`/admin/organisations/${org.id}`} className="text-blue-600 hover:underline">

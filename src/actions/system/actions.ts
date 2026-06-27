@@ -34,7 +34,7 @@ export const suspendOrganisation = async (input: z.infer<typeof OrgActionSchema>
   // STRICT WHERE CLAUSE: Ensure ID is provided via .eq()
   const { error } = await supabase
     .from('organisations')
-    .update({ is_suspended: true } as never)
+    .update({ status: 'suspended' })
     .eq('id', result.data.organisationId)
 
   if (error) throw new Error(error.message)
@@ -84,7 +84,7 @@ export const reactivateOrganisation = async (input: z.infer<typeof OrgActionSche
   // STRICT WHERE CLAUSE: Ensure ID is provided via .eq()
   const { error } = await supabase
     .from('organisations')
-    .update({ is_suspended: false } as never)
+    .update({ status: 'active' })
     .eq('id', result.data.organisationId)
 
   if (error) throw new Error(error.message)

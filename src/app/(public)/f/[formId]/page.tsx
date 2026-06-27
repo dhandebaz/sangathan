@@ -42,9 +42,11 @@ export default async function PublicFormPage({ params }: PageProps) {
   // Fetch Organisation Name for branding
   const { data: org } = await supabase
     .from('organisations')
-    .select('name')
+    .select('name, whitelabel_enabled')
     .eq('id', form.organisation_id)
-    .single() as { data: { name: string } | null, error: { message: string } | null }
+    .single() as { data: { name: string; whitelabel_enabled?: boolean } | null, error: { message: string } | null }
+
+  const whitelabelEnabled = org?.whitelabel_enabled ?? false
 
   // Visibility Validation Gates
   const userClient = await createClient()
@@ -87,9 +89,11 @@ export default async function PublicFormPage({ params }: PageProps) {
               </a>
             </div>
             
+            {!whitelabelEnabled && (
             <div className="mt-8 text-center text-xs text-gray-400">
                Powered by Sangathan Platform
             </div>
+            )}
           </div>
         </div>
       )
@@ -138,9 +142,11 @@ export default async function PublicFormPage({ params }: PageProps) {
               </a>
             </div>
             
+            {!whitelabelEnabled && (
             <div className="mt-8 text-center text-xs text-gray-400">
                Powered by Sangathan Platform
             </div>
+            )}
           </div>
         </div>
       )

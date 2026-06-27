@@ -18,11 +18,11 @@ export default async function PrintDonationLedger() {
 
   const { data: orgData } = await supabase
     .from('organisations')
-    .select('name')
+    .select('name, whitelabel_enabled')
     .eq('id', ctx.organizationId)
     .single()
   
-  const org = orgData as Organisation | null
+  const org = orgData as (Organisation & { whitelabel_enabled?: boolean }) | null
 
   const totalAmount = donations?.reduce((sum, d) => sum + Number(d.amount), 0) || 0
 
@@ -38,6 +38,7 @@ export default async function PrintDonationLedger() {
       title="Donation Ledger"
       orgName={org?.name || 'Organisation'}
       meta={meta}
+      whitelabelEnabled={org?.whitelabel_enabled ?? false}
     >
       <table className="w-full text-left text-sm border-collapse">
         <thead>

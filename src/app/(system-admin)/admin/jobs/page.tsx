@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 
 interface SystemJob {
   id: string
-  job_type: string
+  type: string
   status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled'
   attempts: number
   max_attempts: number
@@ -61,7 +61,7 @@ export default async function JobsPage() {
             <tbody className="divide-y">
               {jobs.map((job) => (
                 <tr key={job.id} className="hover:bg-gray-50">
-                  <td className="py-3 px-6 font-mono text-xs font-medium">{job.job_type}</td>
+                  <td className="py-3 px-6 font-mono text-xs font-medium">{job.type}</td>
                   <td className="py-3 px-6">
                     <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold ${statusBadge[job.status] || 'bg-gray-100 text-gray-800'}`}>
                       {job.status}

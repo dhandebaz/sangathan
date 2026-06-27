@@ -35,11 +35,12 @@ export default async function PrintMeetingPage({ params }: PageProps) {
 
   const { data: orgData } = await supabase
     .from('organisations')
-    .select('name')
+    .select('name, whitelabel_enabled')
     .eq('id', ctx.organizationId)
     .single()
   
-  const org = orgData as Organisation | null
+  const org = orgData as (Organisation & { whitelabel_enabled?: boolean }) | null
+  const whitelabelEnabled = org?.whitelabel_enabled ?? false
 
   // Generate Verification Hash
   // We include meeting ID, date, title, and attendance count to ensure content integrity
@@ -106,7 +107,7 @@ export default async function PrintMeetingPage({ params }: PageProps) {
       <div className="fixed bottom-0 left-0 w-full p-8 print:p-0 print:relative print:mt-12">
           <div className="border-t-2 border-black pt-2 flex justify-between items-end text-[10px] font-mono text-muted-foreground">
             <div>
-                <p>Generated via Sangathan Platform</p>
+                {!whitelabelEnabled && <p>Generated via Sangathan Platform</p>}
                 <p>Date: {new Date().toLocaleString()}</p>
             </div>
             <div className="text-right">

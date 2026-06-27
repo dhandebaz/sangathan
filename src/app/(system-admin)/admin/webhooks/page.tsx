@@ -10,7 +10,7 @@ interface WebhookEvent {
   event_type: string
   status: 'received' | 'processed' | 'failed' | 'ignored'
   payload: Record<string, unknown> | null
-  error: string | null
+  processing_error: string | null
   created_at: string
 }
 
@@ -74,8 +74,8 @@ export default async function WebhooksPage() {
                       </pre>
                     </details>
                   </td>
-                  <td className="py-3 px-6 text-xs text-red-600 max-w-xs truncate" title={event.error || ''}>
-                    {event.error || '-'}
+                  <td className="py-3 px-6 text-xs text-red-600 max-w-xs truncate" title={event.processing_error || ''}>
+                    {event.processing_error || '-'}
                   </td>
                   <td className="py-3 px-6 text-xs text-gray-500 whitespace-nowrap">
                     {new Date(event.created_at).toLocaleString()}

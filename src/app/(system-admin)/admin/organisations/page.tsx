@@ -66,9 +66,8 @@ export default async function OrganisationsPage() {
                      <th className="py-3 px-6 font-medium text-gray-500">Status</th>
                      <th className="py-3 px-6 font-medium text-gray-500">Membership policy</th>
                      <th className="py-3 px-6 font-medium text-gray-500">Created</th>
-                     <th className="py-3 px-6 font-medium text-gray-500">Total members</th>
-                     <th className="py-3 px-6 font-medium text-gray-500">Status</th>
-                     <th className="py-3 px-6 font-medium text-gray-500 text-right">Actions</th>
+                      <th className="py-3 px-6 font-medium text-gray-500">Total members</th>
+                      <th className="py-3 px-6 font-medium text-gray-500 text-right">Actions</th>
                   </tr>
                </thead>
                <tbody className="divide-y">
@@ -91,11 +90,11 @@ export default async function OrganisationsPage() {
                            <td className="py-3 px-6 text-xs text-gray-600 whitespace-nowrap">
                              {new Date(org.created_at).toLocaleString()}
                            </td>
-                           <td className="py-3 px-6">
-                             {memberCount}
-                           </td>
-                           <td className="py-3 px-6 text-right">
-                             <div className="flex items-center justify-end gap-3">
+                            <td className="py-3 px-6 text-xs">
+                              {memberCount}
+                            </td>
+                            <td className="py-3 px-6 text-right">
+                              <div className="flex items-center justify-end gap-3">
                                <Link
                                  href={`/admin/organisations/${org.id}`}
                                  className="text-blue-600 hover:underline text-xs font-medium"

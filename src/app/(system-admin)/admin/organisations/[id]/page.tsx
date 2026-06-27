@@ -18,7 +18,7 @@ export default async function OrganisationDetailsPage({ params }: PageProps) {
 
   const { data: org, error } = await supabase
     .from('organisations')
-    .select('id, name, slug, is_suspended, status, membership_policy, created_at')
+    .select('id, name, slug, status, membership_policy, created_at')
     .eq('id', id)
     .single() as { data: SystemAdminOrganisation | null, error: { message: string } | null }
 
@@ -26,9 +26,9 @@ export default async function OrganisationDetailsPage({ params }: PageProps) {
 
   const { data: members } = await supabase
     .from('members')
-    .select('id, full_name, email, phone, status, created_at')
+    .select('id, role, joined_at, profiles(full_name, email, phone, status)')
     .eq('organisation_id', id)
-    .order('created_at', { ascending: false })
+    .order('joined_at', { ascending: false })
     .limit(25)
 
   const { data: logs } = await supabase
@@ -59,13 +59,13 @@ export default async function OrganisationDetailsPage({ params }: PageProps) {
             <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                <div>
                   <div className="text-sm text-gray-500 uppercase font-bold">Current Status</div>
-                  <div className={`text-xl font-bold ${org.is_suspended ? 'text-red-600' : 'text-green-600'}`}>
-                     {org.is_suspended ? 'SUSPENDED' : 'ACTIVE'}
-                  </div>
-               </div>
-               
-               <div>
-                  {org.is_suspended ? (
+                   <div className={`text-xl font-bold ${org.status === 'suspended' ? 'text-red-600' : 'text-green-600'}`}>
+                     {org.status === 'suspended' ? 'SUSPENDED' : 'ACTIVE'}
+                   </div>
+                </div>
+                
+                <div>
+                   {org.status === 'suspended' ? (
                      <form action={async () => {
                         'use server'
                         await reactivateOrganisation({ organisationId: org.id })
@@ -104,18 +104,20 @@ export default async function OrganisationDetailsPage({ params }: PageProps) {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                <h3 className="font-bold mb-4">Recent Members</h3>
                <ul className="space-y-2">
-                  {members?.map((member) => (
-                     <li key={member.id} className="text-sm border-b pb-2 last:border-0">
-                        <div className="font-medium">{member.full_name}</div>
-                        <div className="text-gray-500 text-xs">
-                          {member.email || member.phone || 'No contact'}
-                        </div>
-                        <div className="text-gray-400 text-xs">
-                          {member.status} · {new Date(member.created_at).toLocaleDateString()}
-                        </div>
-                     </li>
-                  ))}
-               </ul>
+                    {members?.map((member) => {
+                       const profile = member.profiles as { full_name?: string; email?: string; phone?: string; status?: string } | null
+                       return (
+                       <li key={member.id} className="text-sm border-b pb-2 last:border-0">
+                          <div className="font-medium">{profile?.full_name || 'Unknown'}</div>
+                          <div className="text-gray-500 text-xs">
+                            {profile?.email || profile?.phone || 'No contact'}
+                          </div>
+                          <div className="text-gray-400 text-xs">
+                            {profile?.status || 'active'} · {new Date(member.joined_at || '').toLocaleDateString()}
+                          </div>
+                       </li>)
+})}
+                 </ul>
             </div>
          </div>
 

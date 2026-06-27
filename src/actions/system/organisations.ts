@@ -93,7 +93,7 @@ export async function getAllOrganisations() {
   const supabase = createServiceClient()
   const { data } = await supabase
     .from('organisations')
-    .select('id, name, slug, is_suspended, status, membership_policy, org_type, created_at, legal_hold, broadcast_restricted, plan_name, risk_score')
+    .select('id, name, slug, status, membership_policy, org_type, created_at, legal_hold, broadcast_restricted, plan_name, risk_score')
     .order('created_at', { ascending: false })
   return data || []
 }

@@ -18,11 +18,12 @@ export default async function StudentIdsPrintPage(props: PrintPageProps) {
   // Fetch organisation details
   const { data: orgData } = await supabase
     .from('organisations')
-    .select('name')
+    .select('name, whitelabel_enabled')
     .eq('id', ctx.organizationId)
     .single()
 
   const orgName = orgData?.name || 'Student Union'
+  const whitelabelEnabled = (orgData as { whitelabel_enabled?: boolean } | null)?.whitelabel_enabled ?? false
 
   // Fetch active students / member details
   let query = supabase
@@ -41,7 +42,7 @@ export default async function StudentIdsPrintPage(props: PrintPageProps) {
   const title = id ? 'Student Identity Card' : 'Student Identity Cards Batch'
 
   return (
-    <PrintLayout title={title} orgName={orgName}>
+    <PrintLayout title={title} orgName={orgName} whitelabelEnabled={whitelabelEnabled}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center py-4 print:grid-cols-2">
         {typedStudents.map((student) => (
           <div key={student.id} className="print:break-inside-avoid print:mb-6">

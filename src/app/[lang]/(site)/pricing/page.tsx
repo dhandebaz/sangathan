@@ -121,7 +121,7 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
                 isHindi ? 'असीमित उपयोगकर्ता और सदस्य' : 'Unlimited users (Members + Volunteers)',
                 isHindi ? '1 संगठन' : '1 Organisation',
                 isHindi ? 'कई संगठनों का प्रबंधन (व्यवस्थापक के रूप में)' : 'Manage multiple orgs (Admin access)',
-                isHindi ? 'BYOK (Bring Your Own Key) AI सुविधाएँ' : 'BYOK (Bring Your Own Key) AI Features',
+                isHindi ? 'AI संचालित बुद्धिमत्ता' : 'AI-Powered Intelligence',
                 isHindi ? 'उन्नत विश्लेषिकी और रिपोर्ट' : 'Advanced analytics & export',
                 isHindi ? 'प्राथमिकता समर्थन' : 'Priority email support',
               ].map((feature, idx) => (

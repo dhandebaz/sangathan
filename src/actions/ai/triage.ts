@@ -1,19 +1,14 @@
 import { generateObject } from 'ai'
-import { openai } from '@ai-sdk/openai'
 import { z } from 'zod'
-import { checkCapability } from '@/lib/capabilities'
+import { nvidia, FAST_MODEL, checkAiAccess } from '@/lib/ai/nvidia'
 
 export async function triageTicketContent(content: string, orgId: string) {
   try {
-    const hasAiFeatures = await checkCapability(orgId, 'ai_features')
-
-    // Non-AI Fallback if AI features are disabled or no key is provided
-    if (!hasAiFeatures || !process.env.OPENAI_API_KEY) {
-      return runKeywordFallback(content)
-    }
+    const hasAiAccess = await checkAiAccess(orgId)
+    if (!hasAiAccess) return runKeywordFallback(content)
 
     const { object } = await generateObject({
-      model: openai('gpt-4o-mini'),
+      model: nvidia(FAST_MODEL),
       schema: z.object({
         severity: z.enum(['low', 'medium', 'high', 'critical']),
         tags: z.array(z.string()).max(3),

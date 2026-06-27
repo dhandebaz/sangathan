@@ -21,14 +21,14 @@ export default async function PrintMembersPage() {
 
   const { data: orgData } = await supabase
     .from('organisations')
-    .select('name')
+    .select('name, whitelabel_enabled')
     .eq('id', ctx.organizationId)
     .single()
   
-  const org = orgData as Organisation | null
+  const org = orgData as (Organisation & { whitelabel_enabled?: boolean }) | null
 
   return (
-    <PrintLayout title="Member List" orgName={org?.name || 'Organisation'}>
+    <PrintLayout title="Member List" orgName={org?.name || 'Organisation'} whitelabelEnabled={org?.whitelabel_enabled ?? false}>
       <table>
         <thead>
           <tr>

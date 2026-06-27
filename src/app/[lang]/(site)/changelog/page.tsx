@@ -35,6 +35,49 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.10.0',
+    titleEn: 'AI-Powered Intelligence — NVIDIA NIM Integration',
+    titleHi: 'AI-संचालित बुद्धिमत्ता — NVIDIA NIM एकीकरण',
+    dateEn: 'June 2026',
+    dateHi: 'जून 2026',
+    descEn: 'Six AI features powered by NVIDIA NIM (Llama 3 via OpenAI-compatible API) to help organizations work smarter. All features gracefully fall back when AI is disabled.',
+    descHi: 'संगठनों को अधिक स्मार्ट तरीके से काम करने में मदद करने के लिए NVIDIA NIM (Llama 3) द्वारा संचालित छह AI सुविधाएँ। AI अक्षम होने पर सभी सुविधाएँ स्वचालित रूप से फ़ॉलबैक हो जाती हैं।',
+    color: 'purple',
+    icon: Sparkles,
+    features: [
+      {
+        nameEn: 'AI Weekly Summary', nameHi: 'AI साप्ताहिक सारांश',
+        textEn: 'Upgraded dashboard summary with richer stats — tickets, members, events, and polls. Generates a strategic 3-4 sentence briefing using Llama 3.3 70B.',
+        textHi: 'टिकट, सदस्य, इवेंट और पोल के साथ उन्नत डैशबोर्ड सारांश। Llama 3.3 70B का उपयोग करके रणनीतिक 3-4 वाक्यों का ब्रीफिंग तैयार करता है।'
+      },
+      {
+        nameEn: 'Social Content Generator', nameHi: 'सोशल कंटेंट जनरेटर',
+        textEn: 'Draft social posts, newsletters, announcements, and reports from real org activity. Supports professional, casual, motivational, and formal tones.',
+        textHi: 'वास्तविक संगठन गतिविधि से सोशल पोस्ट, न्यूज़लेटर, घोषणाएँ और रिपोर्ट तैयार करें। पेशेवर, आकस्मिक, प्रेरणादायक और औपचारिक शैलियों का समर्थन करता है।'
+      },
+      {
+        nameEn: 'Meeting Minutes Automation', nameHi: 'मीटिंग मिनट्स ऑटोमेशन',
+        textEn: 'Paste meeting notes to get structured minutes with summary, key discussions, decisions, action items, and next steps. Optionally create tasks from action items.',
+        textHi: 'मीटिंग नोट्स पेस्ट करें और सारांश, मुख्य चर्चाएँ, निर्णय, कार्य आइटम और अगले कदमों के साथ संरचित मिनट्स प्राप्त करें। कार्य आइटम से कार्य बनाएँ।'
+      },
+      {
+        nameEn: 'Form Response Analysis', nameHi: 'फ़ॉर्म प्रतिक्रिया विश्लेषण',
+        textEn: 'Analyze form submissions for trends, patterns, and urgent flags. Automatically highlight submissions needing immediate attention.',
+        textHi: 'रुझानों, पैटर्न और अत्यावश्यक फ़्लैग के लिए फ़ॉर्म सबमिशन का विश्लेषण करें। तत्काल ध्यान देने की आवश्यकता वाले सबमिशन को स्वचालित रूप से हाइलाइट करें।'
+      },
+      {
+        nameEn: 'Smart Notifications', nameHi: 'स्मार्ट नोटिफिकेशन',
+        textEn: 'Personalized push notifications for tasks, events, meetings, milestones, and announcements — generated per member with context-aware messaging.',
+        textHi: 'कार्यों, इवेंट्स, मीटिंग्स, माइलस्टोन और घोषणाओं के लिए वैयक्तिकृत पुश नोटिफिकेशन — संदर्भ-जागरूक मैसेजिंग के साथ प्रति सदस्य उत्पन्न।'
+      },
+      {
+        nameEn: 'Proposal & Policy Analyzer', nameHi: 'प्रस्ताव और नीति विश्लेषक',
+        textEn: 'Analyze proposals for readability, strengths, concerns, conflicts with existing polls, and community sentiment. Generate plain-language briefs for member voting.',
+        textHi: 'पठनीयता, ताकत, चिंताओं, मौजूदा पोल के साथ संघर्ष और सामुदायिक भावना के लिए प्रस्तावों का विश्लेषण करें। सदस्य मतदान के लिए सरल भाषा में ब्रीफ तैयार करें।'
+      },
+    ],
+  },
+  {
     version: 'v1.9.6',
     titleEn: 'Compliance Tracker — Real Certificate Management',
     titleHi: 'कम्प्लायंस ट्रैकर — वास्तविक प्रमाणपत्र प्रबंधन',

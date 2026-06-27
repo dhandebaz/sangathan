@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+html {
+  cursor: default;
+}
+
 :root {
   color-scheme: light;
 

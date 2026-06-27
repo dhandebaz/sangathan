@@ -6,9 +6,10 @@ interface PrintLayoutProps {
   orgName: string
   meta?: ReactNode
   children: ReactNode
+  whitelabelEnabled?: boolean
 }
 
-export function PrintLayout({ title, orgName, meta, children }: PrintLayoutProps) {
+export function PrintLayout({ title, orgName, meta, children, whitelabelEnabled = false }: PrintLayoutProps) {
   return (
     <div className="p-8 bg-white min-h-screen text-black font-sans">
       <div className="mb-8 border-b-2 border-black pb-4">
@@ -28,9 +29,11 @@ export function PrintLayout({ title, orgName, meta, children }: PrintLayoutProps
         {children}
       </div>
 
-      <div className="mt-12 pt-4 border-t text-xs text-center text-gray-400">
-        Generated via Sangathan Platform • {new Date().toLocaleString()}
-      </div>
+      {!whitelabelEnabled && (
+        <div className="mt-12 pt-4 border-t text-xs text-center text-gray-400">
+          Generated via Sangathan Platform • {new Date().toLocaleString()}
+        </div>
+      )}
 
       <style>{`
         @media print {
