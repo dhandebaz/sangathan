@@ -4,6 +4,9 @@ import { i18n } from '@/lib/i18n/config'
 import { createSignedCookie, verifySignedCookie } from '@/lib/auth/cookie'
 
 function applySecurityHeaders(response: NextResponse, isApiRoute = false): NextResponse {
+  // Generate a cryptographically random nonce per request for CSP
+  const nonce = crypto.randomUUID()
+
   response.headers.set('X-Frame-Options', 'DENY')
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
@@ -21,7 +24,7 @@ function applySecurityHeaders(response: NextResponse, isApiRoute = false): NextR
       "default-src 'self'",
       process.env.NODE_ENV === 'development'
         ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
-        : "script-src 'self'",
+        : `script-src 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' 'unsafe-eval' https:`,
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https:",
       "font-src 'self' data:",
@@ -30,10 +33,13 @@ function applySecurityHeaders(response: NextResponse, isApiRoute = false): NextR
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
-      "worker-src 'self'",
+      "worker-src 'self' blob:",
       "manifest-src 'self'",
     ].join('; ')
   )
+
+  // Pass the nonce to Next.js so it applies it to its own inline scripts
+  response.headers.set('x-nonce', nonce)
 
   // Additional isolation headers
   response.headers.set('Cross-Origin-Opener-Policy', 'same-origin')

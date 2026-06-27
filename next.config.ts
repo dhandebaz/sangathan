@@ -9,7 +9,6 @@ const withSerwist = withSerwistInit({
 });
 
 const nextConfig: NextConfig = {
-  reactCompiler: true,
   poweredByHeader: false,
   serverExternalPackages: ['@sentry/nextjs'],
   images: {

@@ -35,6 +35,29 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.9.5',
+    titleEn: 'Navigation Fixes & Build Optimization',
+    titleHi: 'नेविगेशन सुधार और बिल्ड ऑप्टिमाइज़ेशन',
+    dateEn: 'June 2026',
+    dateHi: 'जून 2026',
+    descEn: 'Fixed page interactivity and improved build performance by removing the experimental React Compiler, plus fixed sidebar navigation dropdowns requiring two clicks to expand.',
+    descHi: 'प्रायोगिक रिएक्ट कंपाइलर को हटाकर पेज इंटरैक्टिविटी ठीक की गई और बिल्ड प्रदर्शन में सुधार किया गया, साथ ही साइडबार नेविगेशन ड्रॉपडाउन को एक क्लिक में खोलने के लिए ठीक किया गया।',
+    color: 'blue',
+    icon: Zap,
+    features: [
+      {
+        nameEn: 'Build Speed Optimization', nameHi: 'बिल्ड स्पीड ऑप्टिमाइज़ेशन',
+        textEn: 'Removed the experimental React Compiler (babel-plugin-react-compiler) which was analysing all 108 page components, causing slow Vercel builds exceeding one minute and triggering hydration failures in client-side interactivity.',
+        textHi: 'प्रायोगिक रिएक्ट कंपाइलर को हटाया गया जो सभी 108 पेज कंपोनेंट्स का विश्लेषण कर रहा था, जिससे Vercel बिल्ड धीमे हो रहे थे और क्लाइंट-साइड इंटरैक्टिविटी में हाइड्रेशन विफलताएं हो रही थीं।'
+      },
+      {
+        nameEn: 'Sidebar Toggle Fix', nameHi: 'साइडबार टॉगल सुधार',
+        textEn: 'Fixed sidebar navigation dropdowns that required two clicks to expand — the toggle function was misreading initial collapsed state, causing the first click to appear to do nothing.',
+        textHi: 'साइडबार नेविगेशन ड्रॉपडाउन को ठीक किया गया जो विस्तार करने के लिए दो क्लिक की आवश्यकता थी — टॉगल फ़ंक्शन प्रारंभिक संक्षिप्त स्थिति को गलत पढ़ रहा था, जिससे पहला क्लिक कुछ नहीं करता दिख रहा था।'
+      }
+    ]
+  },
+  {
     version: 'v1.9.4',
     titleEn: 'Dashboard UI Consistency Improvements',
     titleHi: 'डैशबोर्ड UI एकरूपता में सुधार',
