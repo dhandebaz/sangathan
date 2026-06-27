@@ -35,6 +35,39 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.9.6',
+    titleEn: 'Compliance Tracker — Real Certificate Management',
+    titleHi: 'कम्प्लायंस ट्रैकर — वास्तविक प्रमाणपत्र प्रबंधन',
+    dateEn: 'June 2026',
+    dateHi: 'जून 2026',
+    descEn: 'Replaced the static compliance checklist with a fully editable, database-backed Compliance Tracker. Each certification (12A, 80G, FCRA, Trade Union Registration, etc.) is now a real entity with document uploads, status tracking, and notes. The old page showed hardcoded statuses that never reflected actual progress — now everything is dynamic and editable by org admins.',
+    descHi: 'स्टैटिक कम्प्लायंस चेकलिस्ट को पूरी तरह से एडिट करने योग्य, डेटाबेस-समर्थित कम्प्लायंस ट्रैकर से बदल दिया गया। प्रत्येक प्रमाणपत्र (12A, 80G, FCRA, ट्रेड यूनियन रजिस्ट्रेशन, आदि) अब दस्तावेज़ अपलोड, स्थिति ट्रैकिंग और नोट्स के साथ एक वास्तविक इकाई है।',
+    color: 'emerald',
+    icon: ShieldCheck,
+    features: [
+      {
+        nameEn: 'Org-Type-Specific Defaults', nameHi: 'संगठन-प्रकार-विशिष्ट डिफ़ॉल्ट',
+        textEn: 'Each organisation type (NGO, RWA, Workers Union, Student Union) gets relevant compliance items pre-seeded — no more one-size-fits-all checklists.',
+        textHi: 'प्रत्येक संगठन प्रकार (NGO, RWA, श्रमिक संघ, छात्र संघ) को प्रासंगिक कम्प्लायंस आइटम पूर्व-निर्धारित मिलते हैं — अब कोई एक-आकार-सभी के लिए चेकलिस्ट नहीं।'
+      },
+      {
+        nameEn: 'Document Upload & Storage', nameHi: 'दस्तावेज़ अपलोड और भंडारण',
+        textEn: 'Upload PDFs and images for each compliance item. Documents are stored securely in org-specific folders with RLS policies.',
+        textHi: 'प्रत्येक कम्प्लायंस आइटम के लिए PDF और इमेज अपलोड करें। दस्तावेज़ RLS नीतियों के साथ org-विशिष्ट फ़ोल्डरों में सुरक्षित रूप से संग्रहीत किए जाते हैं।'
+      },
+      {
+        nameEn: 'Editable Status & Notes', nameHi: 'संपादन योग्य स्थिति और नोट्स',
+        textEn: 'Admins can update status (Not Started → In Progress → Submitted → Approved/Rejected) and add notes for each requirement.',
+        textHi: 'प्रशासक प्रत्येक आवश्यकता के लिए स्थिति (शुरू नहीं किया → प्रगति पर → सबमिट किया → स्वीकृत/अस्वीकृत) और नोट्स अपडेट कर सकते हैं।'
+      },
+      {
+        nameEn: 'Custom Requirements', nameHi: 'कस्टम आवश्यकताएं',
+        textEn: 'Add, edit, or remove compliance items as needed. Organisations can track any certification or registration relevant to them.',
+        textHi: 'आवश्यकतानुसार कम्प्लायंस आइटम जोड़ें, संपादित करें या हटाएं। संगठन उनसे संबंधित किसी भी प्रमाणपत्र या पंजीकरण को ट्रैक कर सकते हैं।'
+      },
+    ]
+  },
+  {
     version: 'v1.9.5',
     titleEn: 'Navigation Fixes & Build Optimization',
     titleHi: 'नेविगेशन सुधार और बिल्ड ऑप्टिमाइज़ेशन',

@@ -38,6 +38,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'ClipboardList', title: 'Field Forms & Surveys', desc: 'Offline-capable data collection for field workers.' },
         { icon: 'Network', title: 'Chapters & Subgroups', desc: 'Organise large NGOs by city chapters or wings.' },
         { icon: 'Headphones', title: 'Helpdesk Support', desc: 'Centralized inbox for public and beneficiary inquiries.' },
+        { icon: 'ShieldCheck', title: 'Certificate Compliance Tracker', desc: 'Track 12A, 80G, FCRA and other statutory certifications with document uploads.' },
         { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
         { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' }
       ]
@@ -63,6 +64,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Network', title: 'Clubs & Societies', desc: 'Mini-dashboards for sub-groups to manage members.' },
         { icon: 'Bell', title: 'Campus Notices', desc: 'Official noticeboard for urgent student updates.' },
         { icon: 'Megaphone', title: 'Multi-channel Alerts', desc: 'Push notifications and SMS for rapid mobilization.' },
+        { icon: 'ShieldCheck', title: 'University Compliance', desc: 'Track charter agreements, election reports, and mandatory committee formations.' },
         { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
         { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' }
       ]
@@ -88,6 +90,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'ShieldCheck', title: 'Labor Law Compliance', desc: 'Automated checks against union regulations.' },
         { icon: 'Bell', title: 'Emergency SMS Alerts', desc: 'Urgent broadcasts for rapid member mobilization.' },
         { icon: 'GraduationCap', title: 'Training & Certs', desc: 'Manage apprenticeship programs and skill workshops.' },
+        { icon: 'ShieldCheck', title: 'Labour Law Compliance', desc: 'Track Trade Union Act registration, annual returns, and strike notice clearance.' },
         { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
         { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' }
       ]
@@ -113,6 +116,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Vote', title: 'Community Polls', desc: 'Vote on society upgrades and committee elections.' },
         { icon: 'Bell', title: 'Digital Notice Board', desc: 'Official society announcements with read receipts.' },
         { icon: 'Home', title: 'Resident Directory', desc: 'Verified database of owners, tenants, and emergency contacts.' },
+        { icon: 'ShieldCheck', title: 'Society Compliance Dashboard', desc: 'Manage registration renewals, fire safety NOCs, lift certificates, and AGM filings.' },
         { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
         { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' }
       ]

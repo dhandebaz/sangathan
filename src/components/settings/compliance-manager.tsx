@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { updateComplianceData } from '@/actions/organisation/compliance'
 import { Database } from '@/types/database'
-import { Upload } from 'lucide-react'
+import { Upload, ExternalLink } from 'lucide-react'
+import Link from 'next/link'
 
 type Org = {
   id: string
@@ -148,26 +149,37 @@ export function ComplianceManager({ org }: { org: Org }) {
       </div>
 
       <div className="bg-white border rounded-lg shadow-sm p-6 space-y-6">
-        <div>
-          <h2 className="text-lg font-semibold mb-1">Document Vault</h2>
-          <p className="text-sm text-gray-500">
-            Securely store your Trust Deed, By-laws, PAN Card, and other compliance documents. 
-            These are private and only accessible to org admins.
-          </p>
+        <div className="flex items-start justify-between">
+          <div>
+            <h2 className="text-lg font-semibold mb-1">Document Vault</h2>
+            <p className="text-sm text-gray-500">
+              Upload and manage compliance documents like Trust Deed, By-laws, PAN Card, and certifications.
+            </p>
+          </div>
+          <Link
+            href="/en/dashboard/compliance"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-600 hover:text-brand-700"
+          >
+            Open Compliance Tracker
+            <ExternalLink className="w-3.5 h-3.5" />
+          </Link>
         </div>
 
-        {/* Temporary static UI for documents since file uploading logic requires a dedicated component */}
         <div className="border border-dashed border-gray-300 rounded-lg p-8 flex flex-col items-center justify-center text-center space-y-3">
           <div className="bg-gray-100 p-3 rounded-full">
             <Upload className="w-6 h-6 text-gray-400" />
           </div>
           <div>
-            <p className="text-sm font-medium">Click to upload or drag and drop</p>
-            <p className="text-xs text-gray-500">PDF, JPG, or PNG (max 10MB)</p>
+            <p className="text-sm font-medium">Manage documents in the Compliance Tracker</p>
+            <p className="text-xs text-gray-500">Upload, track status, and manage all your compliance requirements in one place.</p>
           </div>
-          <Button variant="outline" size="sm" className="mt-2" onClick={() => toast.info('Document upload API coming soon')}>
-            Select File
-          </Button>
+          <Link
+            href="/en/dashboard/compliance"
+            className="inline-flex items-center gap-2 text-sm font-medium text-brand-600 hover:text-brand-700 mt-1"
+          >
+            Go to Compliance Tracker
+            <ExternalLink className="w-3.5 h-3.5" />
+          </Link>
         </div>
 
       </div>
