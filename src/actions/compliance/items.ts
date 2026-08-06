@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { COMPLIANCE_RULES, OrgMetrics } from '@/lib/compliance-engine/rules'
 
 export type ComplianceItemRow = {
   id: string
@@ -17,10 +18,83 @@ export type ComplianceItemRow = {
   notes: string | null
   created_at: string
   updated_at: string
+  registration_link?: string
+}
+
+async function evaluateComplianceRecommendations(orgId: string, orgType: string) {
+  const supabase = await createClient()
+
+  // 1. Fetch real usage metrics
+  const { count: memberCount } = await supabase
+    .from('profiles')
+    .select('*', { count: 'exact', head: true })
+    .eq('organisation_id', orgId)
+
+  const { count: eventCount } = await supabase
+    .from('events')
+    .select('*', { count: 'exact', head: true })
+    .eq('organisation_id', orgId)
+
+  const { data: donations } = await supabase
+    .from('donations')
+    .select('amount, currency')
+    .eq('organisation_id', orgId)
+
+  const totalDonations = donations?.reduce((sum, d) => sum + (d.amount || 0), 0) || 0
+  const hasForeignDonations = donations?.some(d => d.currency && d.currency !== 'INR') || false
+
+  const metrics: OrgMetrics = {
+    memberCount: memberCount || 0,
+    totalDonations: totalDonations,
+    eventCount: eventCount || 0,
+    hasForeignDonations,
+    hasPaidTickets: false // placeholder, could check event_tickets table
+  }
+
+  // 2. Determine required items based on rules
+  const requiredRuleIds: string[] = []
+  for (const rule of COMPLIANCE_RULES) {
+    const isApplicableType = rule.orgTypes.includes('all') || rule.orgTypes.includes(orgType.toLowerCase())
+    if (isApplicableType && rule.condition(metrics)) {
+      requiredRuleIds.push(rule.id)
+    }
+  }
+
+  // 3. Fetch existing items
+  const { data: existingItems } = await supabase
+    .from('compliance_items')
+    .select('title')
+    .eq('organisation_id', orgId)
+
+  const existingTitles = new Set(existingItems?.map(i => i.title) || [])
+
+  // 4. Insert missing items
+  for (const ruleId of requiredRuleIds) {
+    const rule = COMPLIANCE_RULES.find(r => r.id === ruleId)
+    if (rule && !existingTitles.has(rule.title)) {
+      await supabase.from('compliance_items').insert({
+        organisation_id: orgId,
+        title: rule.title,
+        category: rule.category,
+        description: rule.description,
+        status: 'not_started'
+      })
+    }
+  }
 }
 
 export async function getComplianceItems(orgId: string): Promise<ComplianceItemRow[]> {
   const supabase = await createClient()
+
+  // Ensure AI Engine evaluates rules before fetching
+  const { data: orgData } = await supabase
+    .from('organisations')
+    .select('org_type')
+    .eq('id', orgId)
+    .single()
+
+  await evaluateComplianceRecommendations(orgId, orgData?.org_type || 'ngo')
+
   const { data, error } = await supabase
     .from('compliance_items')
     .select('*')
@@ -32,33 +106,16 @@ export async function getComplianceItems(orgId: string): Promise<ComplianceItemR
     return []
   }
 
-  if (!data || data.length === 0) {
-    const { data: orgData } = await supabase
-      .from('organisations')
-      .select('org_type')
-      .eq('id', orgId)
-      .single()
-
-    const { error: seedError } = await supabase.rpc('seed_compliance_items', {
-      p_org_id: orgId,
-      p_org_type: orgData?.org_type || 'ngo'
-    })
-
-    if (seedError) {
-      console.error('Error seeding compliance items:', seedError)
-      return []
+  // Enrich with registration_links from rules
+  const enrichedData = data.map((item: ComplianceItemRow) => {
+    const matchingRule = COMPLIANCE_RULES.find(r => r.title === item.title)
+    if (matchingRule?.registration_link) {
+      item.registration_link = matchingRule.registration_link
     }
+    return item
+  })
 
-    const { data: seededData } = await supabase
-      .from('compliance_items')
-      .select('*')
-      .eq('organisation_id', orgId)
-      .order('created_at', { ascending: true })
-
-    return seededData || []
-  }
-
-  return data
+  return enrichedData || []
 }
 
 export async function updateComplianceItemStatus(
@@ -93,41 +150,6 @@ export async function deleteComplianceItem(itemId: string) {
     .from('compliance_items')
     .delete()
     .eq('id', itemId)
-
-  if (error) return { success: false, error: error.message }
-
-  revalidatePath('/[lang]/dashboard/compliance')
-  return { success: true }
-}
-
-export async function addComplianceItem(formData: FormData) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { success: false, error: 'Unauthorized' }
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('organisation_id')
-    .eq('id', user.id)
-    .single()
-
-  if (!profile?.organisation_id) return { success: false, error: 'No organisation' }
-
-  const title = formData.get('title') as string
-  const category = formData.get('category') as string
-  const description = formData.get('description') as string
-
-  if (!title || !category) return { success: false, error: 'Title and category required' }
-
-  const { error } = await supabase
-    .from('compliance_items')
-    .insert({
-      organisation_id: profile.organisation_id,
-      title,
-      category,
-      description: description || null,
-      status: 'not_started'
-    })
 
   if (error) return { success: false, error: error.message }
 

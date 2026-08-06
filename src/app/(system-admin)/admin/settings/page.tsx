@@ -42,8 +42,11 @@ export default async function SystemSettingsPage() {
           const description = formData.get('description') as string
           let value: Record<string, unknown> = {}
           try {
-            value = JSON.parse(formData.get('value') as string)
-          } catch {}
+            const rawVal = formData.get('value') as string
+            value = rawVal ? JSON.parse(rawVal) : {}
+          } catch (err) {
+            console.warn('[AdminSettings] Failed to parse setting JSON value:', err)
+          }
           await createSystemSetting({ key, value, description: description || undefined })
         }} className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <input
@@ -103,8 +106,11 @@ export default async function SystemSettingsPage() {
                         'use server'
                         let value: Record<string, unknown> = {}
                         try {
-                          value = JSON.parse(formData.get('value') as string)
-                        } catch {}
+                          const rawVal = formData.get('value') as string
+                          value = rawVal ? JSON.parse(rawVal) : {}
+                        } catch (err) {
+                          console.warn('[AdminSettings] Failed to parse setting JSON value:', err)
+                        }
                         await updateSystemSetting({ key: setting.key, value })
                       }}>
                         <input name="value" defaultValue={JSON.stringify(setting.value)} className="hidden" />

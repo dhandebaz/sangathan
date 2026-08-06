@@ -1,17 +1,20 @@
 import { Redis } from '@upstash/redis'
 
-// Fallback to a mock instance if ENV vars are missing during local development
-// This ensures the app doesn't crash before the user links Vercel ENV vars
+// Initialize Upstash Redis client with graceful fallback logging for local development
 const getRedisClient = () => {
   try {
     if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
       return Redis.fromEnv()
+    } else {
+      if (process.env.NODE_ENV === 'production') {
+        console.error('[Redis] Missing UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN in production environment.')
+      }
     }
   } catch (error) {
-    console.warn('Failed to initialize Redis. Ensure UPSTASH_REDIS_REST_URL is set.', error)
+    console.error('[Redis] Failed to initialize Redis client:', error)
   }
   
-  // Return a dummy client that fails gracefully for local dev
+  // Safe fallback client for offline/local dev environments missing credentials
   return {
     get: async () => null,
     set: async () => 'OK',

@@ -186,45 +186,16 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  // Define strictly public paths (no auth required)
-  const isPublicPath = 
-    pathname === '/' ||
-    pathname.startsWith('/api') ||
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/f/') || // Public Forms
-    pathname.startsWith('/donate') || // Public Donation
-    pathname.startsWith('/auth') || // Auth Callback
-    authRoutes.some(route => pathname === route || i18n.locales.some(loc => pathname.startsWith(`/${loc}${route}`))) || // Auth pages
-    i18n.locales.some(loc => 
-      pathname === `/${loc}` || 
-      pathname.startsWith(`/${loc}/docs`) || 
-      pathname.startsWith(`/${loc}/contact`) || 
-      pathname.startsWith(`/${loc}/status`) || 
-      pathname.startsWith(`/${loc}/terms`) || 
-      pathname.startsWith(`/${loc}/privacy`) ||
-      pathname.startsWith(`/${loc}/about`) ||
-      pathname.startsWith(`/${loc}/governance`) ||
-      pathname.startsWith(`/${loc}/security`) ||
-      pathname.startsWith(`/${loc}/transparency`) ||
-      pathname.startsWith(`/${loc}/roadmap`) ||
-      pathname.startsWith(`/${loc}/changelog`) ||
-      pathname.startsWith(`/${loc}/brand`) ||
-      pathname.startsWith(`/${loc}/press`) ||
-      pathname.startsWith(`/${loc}/acceptable-use-policy`) ||
-      pathname.startsWith(`/${loc}/refund-policy`) ||
-      pathname.startsWith(`/${loc}/vision`) ||
-      pathname.startsWith(`/${loc}/community-guidelines`) ||
-      pathname.startsWith(`/${loc}/data-practices`) ||
-      pathname.startsWith(`/${loc}/admin-accountability`) ||
-      pathname.startsWith(`/${loc}/cookies`) ||
-      pathname.startsWith(`/${loc}/data-rights`) ||
-      pathname.startsWith(`/${loc}/reports`) ||
-      pathname.startsWith(`/${loc}/features`) ||
-      pathname.startsWith(`/${loc}/org/`) // Public Organization Pages
-    )
+  // --- PROTECTED ROUTES ---
+  // Instead of whitelisting every public page (fragile, breaks when new pages are added),
+  // we define which routes REQUIRE authentication. Everything else is public by default.
+  const protectedPrefixes = ['/dashboard', '/members', '/onboarding', '/bootstrap-org']
+  const isProtectedPath = i18n.locales.some(loc =>
+    protectedPrefixes.some(prefix => pathname.startsWith(`/${loc}${prefix}`))
+  ) || protectedPrefixes.some(prefix => pathname.startsWith(prefix))
 
-  // Protect all other routes (Dashboard, etc)
-  if (!user && !isPublicPath) {
+  // Redirect unauthenticated users away from protected routes only
+  if (!user && isProtectedPath) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return applySecurityHeaders(NextResponse.redirect(url))

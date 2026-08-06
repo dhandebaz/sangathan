@@ -37,11 +37,11 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Megaphone', title: 'Campaign Management', desc: 'Goal-based peer-to-peer and public fundraising drives.' },
         { icon: 'ClipboardList', title: 'Field Forms & Surveys', desc: 'Offline-capable data collection for field workers.' },
         { icon: 'Network', title: 'Chapters & Subgroups', desc: 'Organise large NGOs by city chapters or wings.' },
-        { icon: 'Headphones', title: 'Helpdesk Support', desc: 'Centralized inbox for public and beneficiary inquiries.' },
-        { icon: 'ShieldCheck', title: 'Certificate Compliance Tracker', desc: 'Track 12A, 80G, FCRA and other statutory certifications with document uploads.' },
+        { icon: 'ShieldCheck', title: 'Helpdesk Support', desc: 'Centralized inbox for public and beneficiary inquiries.' },
+        { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests 12A, 80G, FCRA based on actual usage and donations.' },
         { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
         { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' },
-        { icon: 'Sparkles', title: 'AI-Powered Intelligence', desc: 'Smart summaries, social content generation, meeting minutes, form analysis, personalized notifications, and proposal analysis.' }
+        { icon: 'Zap', title: 'Smart Intelligence', desc: 'Smart summaries, social content generation, meeting minutes, form analysis, personalized notifications, and proposal analysis.' }
       ]
     },
     {
@@ -65,10 +65,10 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Network', title: 'Clubs & Societies', desc: 'Mini-dashboards for sub-groups to manage members.' },
         { icon: 'Bell', title: 'Campus Notices', desc: 'Official noticeboard for urgent student updates.' },
         { icon: 'Megaphone', title: 'Multi-channel Alerts', desc: 'Push notifications and SMS for rapid mobilization.' },
-        { icon: 'ShieldCheck', title: 'University Compliance', desc: 'Track charter agreements, election reports, and mandatory committee formations.' },
+        { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests charter agreements, election reports based on campus activity.' },
         { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
         { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' },
-        { icon: 'Sparkles', title: 'AI-Powered Intelligence', desc: 'Smart summaries, social content generation, meeting minutes, form analysis, personalized notifications, and proposal analysis.' }
+        { icon: 'Zap', title: 'Smart Intelligence', desc: 'Smart summaries, social content generation, meeting minutes, form analysis, personalized notifications, and proposal analysis.' }
       ]
     },
     {
@@ -92,10 +92,10 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'ShieldCheck', title: 'Labor Law Compliance', desc: 'Automated checks against union regulations.' },
         { icon: 'Bell', title: 'Emergency SMS Alerts', desc: 'Urgent broadcasts for rapid member mobilization.' },
         { icon: 'GraduationCap', title: 'Training & Certs', desc: 'Manage apprenticeship programs and skill workshops.' },
-        { icon: 'ShieldCheck', title: 'Labour Law Compliance', desc: 'Track Trade Union Act registration, annual returns, and strike notice clearance.' },
+        { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests Trade Union Act filings based on worker scale and actions.' },
         { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
         { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' },
-        { icon: 'Sparkles', title: 'AI-Powered Intelligence', desc: 'Smart summaries, social content generation, meeting minutes, form analysis, personalized notifications, and proposal analysis.' }
+        { icon: 'Zap', title: 'Smart Intelligence', desc: 'Smart summaries, social content generation, meeting minutes, form analysis, personalized notifications, and proposal analysis.' }
       ]
     },
     {
@@ -119,10 +119,10 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Vote', title: 'Community Polls', desc: 'Vote on society upgrades and committee elections.' },
         { icon: 'Bell', title: 'Digital Notice Board', desc: 'Official society announcements with read receipts.' },
         { icon: 'Home', title: 'Resident Directory', desc: 'Verified database of owners, tenants, and emergency contacts.' },
-        { icon: 'ShieldCheck', title: 'Society Compliance Dashboard', desc: 'Manage registration renewals, fire safety NOCs, lift certificates, and AGM filings.' },
+        { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests renewals and NOCs based on maintenance and facility usage.' },
         { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
         { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' },
-        { icon: 'Sparkles', title: 'AI-Powered Intelligence', desc: 'Smart summaries, social content generation, meeting minutes, form analysis, personalized notifications, and proposal analysis.' }
+        { icon: 'Zap', title: 'Smart Intelligence', desc: 'Smart summaries, social content generation, meeting minutes, form analysis, personalized notifications, and proposal analysis.' }
       ]
     }
   ]

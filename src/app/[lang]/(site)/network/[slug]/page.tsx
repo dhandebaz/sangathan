@@ -58,7 +58,7 @@ export default async function PublicNetworkPage(props: { params: Promise<{ slug:
         <div className="max-w-5xl mx-auto">
           <div className="flex items-center gap-2 mb-4 text-indigo-600">
             <Globe className="w-5 h-5" />
-            <span className="text-sm font-semibold uppercase tracking-widest">Federated Network</span>
+            <span className="text-sm font-semibold text-slate-600">Federated Network</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-black mb-6 text-slate-900 tracking-tight">{network.name}</h1>
           <p className="text-xl text-slate-600 max-w-2xl leading-relaxed">{network.description}</p>
@@ -66,11 +66,11 @@ export default async function PublicNetworkPage(props: { params: Promise<{ slug:
           <div className="flex gap-8 mt-12">
             <div>
               <div className="text-3xl font-bold text-slate-900">{orgCount}</div>
-              <div className="text-xs text-slate-500 font-semibold uppercase tracking-widest mt-1">Organisations</div>
+              <div className="text-sm text-slate-500 font-semibold mt-1">Organisations</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-slate-900">{totalMembers.toLocaleString()}</div>
-              <div className="text-xs text-slate-500 font-semibold uppercase tracking-widest mt-1">Total Members</div>
+              <div className="text-sm text-slate-500 font-semibold mt-1">Total Members</div>
             </div>
           </div>
         </div>

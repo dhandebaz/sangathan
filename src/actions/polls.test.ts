@@ -68,6 +68,7 @@ describe('polls actions', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockUserRole = 'admin'
+    process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-key'
   })
 
   describe('createPoll', () => {
@@ -103,7 +104,7 @@ describe('polls actions', () => {
         id: POLL_ID,
         organisation_id: ORG_ID,
         status: 'active',
-        visibility_level: 'members',
+        visibility_level: 'member',
         voting_method: 'anonymous'
       }
 
@@ -112,6 +113,7 @@ describe('polls actions', () => {
         .mockResolvedValueOnce({ data: null, error: null }) // double vote check
 
       const result = await castVote({ poll_id: POLL_ID, option_id: OPT_ID })
+      expect(result.error).toBeUndefined()
       expect(result.success).toBe(true)
       expect(revalidatePath).toHaveBeenCalled()
     })
@@ -120,25 +122,21 @@ describe('polls actions', () => {
   describe('closePoll', () => {
     it('should close a poll and calculate results', async () => {
       const { createServiceClient } = await import('@/lib/supabase/service')
-      const mockSupabaseAdmin = createServiceClient() as unknown as { single: Mock, then: Mock }
+      const mockSupabaseAdmin = createServiceClient() as unknown as { single: Mock, then: Mock, eq: Mock }
       const mockPoll = {
         id: POLL_ID,
         organisation_id: ORG_ID,
         status: 'active',
         type: 'informal'
       }
-      const mockVotes = [
-        { option_id: 'opt-1' },
-        { option_id: 'opt-1' },
-        { option_id: 'opt-2' },
-      ]
 
       mockSupabaseAdmin.single.mockResolvedValue({ data: mockPoll, error: null })
       mockSupabaseAdmin.then.mockImplementation((fn: (data: unknown) => unknown) =>
-        Promise.resolve({ data: mockVotes, error: null }).then(fn)
+        Promise.resolve({ data: [{ id: 'opt-1' }, { id: 'opt-2' }], error: null }).then(fn)
       )
 
       const result = await closePoll({ poll_id: POLL_ID })
+      expect(result.error).toBeUndefined()
       expect(result.success).toBe(true)
       expect(revalidatePath).toHaveBeenCalled()
     })

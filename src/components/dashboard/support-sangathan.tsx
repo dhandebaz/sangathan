@@ -1,12 +1,12 @@
 'use client'
 
 import Image from 'next/image'
-import { Server, Database, Shield, Heart, Copy, CheckCircle2, CreditCard, Loader2 } from 'lucide-react'
+import { Copy, CheckCircle2, CreditCard, Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { RazorpayScript } from '@/components/razorpay-script'
 
-export function SupportSangathan({ lang, isPublic = false }: { lang: string, isPublic?: boolean }) {
+export function SupportSangathan({ lang }: { lang: string; isPublic?: boolean }) {
   const isHi = lang === 'hi'
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const [amount, setAmount] = useState<string>('500')
@@ -48,16 +48,16 @@ export function SupportSangathan({ lang, isPublic = false }: { lang: string, isP
         name: 'Sangathan',
         description: 'Voluntary Contribution',
         order_id: orderData.id,
-        handler: async function (response: any) {
+        handler: async function (paymentResponse: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) {
           try {
             // 3. Verify Payment
             const verifyRes = await fetch('/api/razorpay/verify', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
+                razorpay_order_id: paymentResponse.razorpay_order_id,
+                razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                razorpay_signature: paymentResponse.razorpay_signature,
               }),
             })
             
@@ -68,7 +68,7 @@ export function SupportSangathan({ lang, isPublic = false }: { lang: string, isP
             } else {
               toast.error(isHi ? 'भुगतान सत्यापन विफल रहा' : 'Payment verification failed')
             }
-          } catch (e) {
+          } catch {
             toast.error(isHi ? 'भुगतान सत्यापन में त्रुटि' : 'Error verifying payment')
           }
         },
@@ -82,12 +82,14 @@ export function SupportSangathan({ lang, isPublic = false }: { lang: string, isP
         },
       }
 
-      const paymentObject = new (window as any).Razorpay(options)
+      const RazorpayConstructor = (window as unknown as { Razorpay: new (options: unknown) => { open: () => void } }).Razorpay
+      const paymentObject = new RazorpayConstructor(options)
       paymentObject.open()
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error)
-      toast.error(error.message || 'Something went wrong')
+      const message = error instanceof Error ? error.message : 'Something went wrong'
+      toast.error(message)
     } finally {
       setIsProcessing(false)
     }

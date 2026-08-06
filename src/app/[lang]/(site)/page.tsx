@@ -49,13 +49,13 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
             <Link 
               href={`/${lang}/login?tab=signup`} 
-              className="w-full sm:w-auto bg-slate-900 text-white px-8 py-4 font-bold text-sm tracking-widest uppercase transition-all hover:bg-indigo-600 flex items-center justify-center gap-3 border border-slate-900"
+              className="w-full sm:w-auto bg-slate-900 text-white px-8 py-4 font-bold text-sm transition-all hover:bg-indigo-600 flex items-center justify-center gap-3 border border-slate-900 rounded-md"
             >
               {isHindi ? 'संगठन बनाएं' : 'Start your Organisation'} <ArrowRight size={16} />
             </Link>
             <Link 
               href={`/${lang}/docs`} 
-              className="w-full sm:w-auto bg-transparent text-slate-900 px-8 py-4 font-bold text-sm tracking-widest uppercase border border-slate-200 hover:border-slate-400 hover:bg-slate-50 transition-all text-center"
+              className="w-full sm:w-auto bg-transparent text-slate-900 px-8 py-4 font-bold text-sm border border-slate-200 hover:border-slate-400 hover:bg-slate-50 transition-all text-center rounded-md"
             >
               {isHindi ? 'दस्तावेज़ पढ़ें' : 'Read the Docs'}
             </Link>
@@ -66,7 +66,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
         <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-16 gap-6">
               <div>
-                 <p className="text-indigo-600 font-mono text-xs uppercase tracking-widest mb-3">{isHindi ? 'मूल प्रणाली' : 'Core System'}</p>
+                 <p className="text-indigo-600 font-medium text-sm mb-3">{isHindi ? 'मूल प्रणाली' : 'Core System'}</p>
                  <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900">{isHindi ? 'शासन बुनियादी ढांचा' : 'Governance Infrastructure'}</h2>
               </div>
               <p className="text-slate-500 max-w-md text-sm leading-relaxed">
@@ -95,11 +95,11 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                  <div className="mt-auto">
                     <div className="w-full flex border-t border-slate-100 pt-4 gap-8">
                       <div>
-                        <p className="text-xs font-mono text-slate-400 uppercase tracking-widest mb-1">Status</p>
+                        <p className="text-sm font-medium text-slate-500 mb-1">Status</p>
                         <p className="text-sm font-bold text-slate-700">Encrypted</p>
                       </div>
                       <div>
-                        <p className="text-xs font-mono text-slate-400 uppercase tracking-widest mb-1">Access</p>
+                        <p className="text-sm font-medium text-slate-500 mb-1">Access</p>
                         <p className="text-sm font-bold text-slate-700">Granular (RBAC)</p>
                       </div>
                     </div>
@@ -140,11 +140,11 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                  <div className="mt-auto">
                     <div className="w-full flex border-t border-slate-100 pt-4 gap-8">
                       <div>
-                        <p className="text-xs font-mono text-slate-400 uppercase tracking-widest mb-1">Integrity</p>
+                        <p className="text-sm font-medium text-slate-500 mb-1">Integrity</p>
                         <p className="text-sm font-bold text-slate-700">WORM Storage</p>
                       </div>
                       <div>
-                        <p className="text-xs font-mono text-slate-400 uppercase tracking-widest mb-1">Retention</p>
+                        <p className="text-sm font-medium text-slate-500 mb-1">Retention</p>
                         <p className="text-sm font-bold text-slate-700">Permanent</p>
                       </div>
                     </div>
@@ -158,7 +158,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
         <section className="py-24 border-t border-b border-slate-200 bg-slate-50/50">
            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
              <div className="mb-16">
-                <p className="text-indigo-600 font-mono text-xs uppercase tracking-widest mb-3">{isHindi ? 'प्लेटफ़ॉर्म मॉड्यूल' : 'Platform Modules'}</p>
+                <p className="text-indigo-600 font-medium text-sm mb-3">{isHindi ? 'प्लेटफ़ॉर्म मॉड्यूल' : 'Platform Modules'}</p>
                 <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">{isHindi ? 'मुख्य क्षमताएं' : 'Capabilities'}</h2>
              </div>
 
@@ -187,7 +187,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
         <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
-                 <p className="text-indigo-600 font-mono text-xs uppercase tracking-widest mb-3">{isHindi ? 'डेटा संप्रभुता' : 'Data Sovereignty'}</p>
+                 <p className="text-indigo-600 font-medium text-sm mb-3">{isHindi ? 'डेटा संप्रभुता' : 'Data Sovereignty'}</p>
                  <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 mb-6">
                     {isHindi ? 'तटस्थ बुनियादी ढांचा' : 'Privacy & Neutrality First'}
                  </h2>
@@ -196,7 +196,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                       ? 'हम डेटा नहीं बेचते हैं। हम विज्ञापन नहीं चलाते हैं। आपका सदस्य डेटा आपका है।' 
                       : 'Sangathan is a platform, not a publisher. We provide the structure, you provide the ideology. We do not sell data or run ads.'}
                  </p>
-                 <Link href={`/${lang}/transparency`} className="text-sm font-bold uppercase tracking-widest text-indigo-600 hover:text-indigo-800 flex items-center gap-2">
+                 <Link href={`/${lang}/transparency`} className="text-sm font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-2">
                    {isHindi ? 'हमारी डेटा नीति पढ़ें' : 'Read our data policy'} <ArrowRight size={16} />
                  </Link>
               </div>
@@ -237,7 +237,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
              </p>
              <Link 
                 href="/signup" 
-                className="inline-flex items-center gap-3 bg-slate-900 hover:bg-indigo-600 text-white px-10 py-5 font-bold text-sm tracking-widest uppercase transition-colors border border-slate-900"
+                className="inline-flex items-center gap-3 bg-slate-900 hover:bg-indigo-600 text-white px-10 py-5 font-bold text-sm transition-colors border border-slate-900 rounded-md"
              >
                 {isHindi ? 'अभी शुरू करें' : 'Deploy Infrastructure'} <ArrowRight size={16} />
              </Link>

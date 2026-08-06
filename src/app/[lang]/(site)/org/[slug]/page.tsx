@@ -162,7 +162,7 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
             {org.public_transparency_enabled && (
               <Link
                 href={`/${lang}/governance/platform-charter`}
-                className="mt-4 inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-slate-700 transition-colors"
               >
                 Platform Charter Adherent
                 <ArrowUpRight className="w-3 h-3" />
@@ -176,19 +176,19 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         {metrics && (
           <div className="mb-10">
-            <p className="font-mono text-xs uppercase tracking-widest text-slate-400 mb-4">ORGANISATION METRICS</p>
+            <p className="text-sm font-semibold text-slate-500 mb-4">Organisation Metrics</p>
             <div className="grid grid-cols-3 gap-0 border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm">
               <div className="p-6 md:p-8 text-center border-r border-slate-200">
                 <div className="text-3xl md:text-4xl font-black text-slate-900">{metrics.members}</div>
-                <div className="text-xs font-mono uppercase tracking-widest text-slate-400 mt-1">Active Members</div>
+                <div className="text-sm font-medium text-slate-500 mt-1">Active Members</div>
               </div>
               <div className="p-6 md:p-8 text-center border-r border-slate-200">
                 <div className="text-3xl md:text-4xl font-black text-slate-900">{metrics.events}</div>
-                <div className="text-xs font-mono uppercase tracking-widest text-slate-400 mt-1">Events Hosted</div>
+                <div className="text-sm font-medium text-slate-500 mt-1">Events Hosted</div>
               </div>
               <div className="p-6 md:p-8 text-center">
                 <div className="text-3xl md:text-4xl font-black text-slate-900">{metrics.hours}+</div>
-                <div className="text-xs font-mono uppercase tracking-widest text-slate-400 mt-1">Volunteer Hours</div>
+                <div className="text-sm font-medium text-slate-500 mt-1">Volunteer Hours</div>
               </div>
             </div>
           </div>
@@ -198,14 +198,14 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
           <div className="lg:col-span-2 space-y-8">
             {org.description && (
               <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 md:p-8">
-                <p className="font-mono text-xs uppercase tracking-widest text-slate-400 mb-4">ABOUT</p>
+                <p className="text-sm font-semibold text-slate-500 mb-4">About</p>
                 <p className="text-slate-600 leading-relaxed">{org.description}</p>
               </div>
             )}
 
             {/* Membership Section */}
             <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 md:p-8">
-              <p className="font-mono text-xs uppercase tracking-widest text-slate-400 mb-4">MEMBERSHIP</p>
+              <p className="text-sm font-semibold text-slate-500 mb-4">Membership</p>
               {memberStatus === 'active' ? (
                 <div className="flex items-center gap-3 bg-emerald-50 text-emerald-700 p-4 rounded-xl border border-emerald-200 font-medium">
                   <BadgeCheck className="w-5 h-5 text-emerald-500 flex-shrink-0" />
@@ -240,7 +240,7 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
           {/* Sidebar */}
           <div className="space-y-6 mt-8 lg:mt-0">
             <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
-              <p className="font-mono text-xs uppercase tracking-widest text-slate-400 mb-4">CONTACT</p>
+              <p className="text-sm font-semibold text-slate-500 mb-4">Contact</p>
               <div className="space-y-4">
                 {org.contact_email && (
                   <div className="flex items-start gap-3">
@@ -285,7 +285,7 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
 
               {org.social_links && Object.keys(org.social_links).length > 0 && (
                 <div className="mt-6 pt-6 border-t border-slate-100">
-                  <p className="font-mono text-xs uppercase tracking-widest text-slate-400 mb-3">SOCIAL</p>
+                  <p className="text-sm font-semibold text-slate-500 mb-3">Social</p>
                   <div className="flex flex-wrap gap-2">
                     {Object.entries(org.social_links).map(([platform, url]) => (
                       <a

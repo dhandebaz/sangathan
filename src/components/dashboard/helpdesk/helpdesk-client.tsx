@@ -27,27 +27,6 @@ export function HelpdeskClient({ orgType, orgId }: HelpdeskClientProps) {
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [loading, setLoading] = useState(true)
 
-  const config = {
-    workers_union: {
-      pageTitle: 'Grievance Tracker',
-      pageDesc: 'Manage and track workplace disputes and contract violations.'
-    },
-    rwa: {
-      pageTitle: 'Maintenance & Complaints',
-      pageDesc: 'Manage community maintenance requests and resident complaints.'
-    },
-    student_union: {
-      pageTitle: 'Student Support Desk',
-      pageDesc: 'Track and resolve student inquiries and facility requests.'
-    },
-    ngo: {
-      pageTitle: 'Operations Helpdesk',
-      pageDesc: 'Track support requests and operational issues.'
-    }
-  }
-
-  const currentConfig = config[orgType as keyof typeof config] || config.ngo
-
   useEffect(() => {
     async function fetchTickets() {
       const supabase = createClient()
@@ -79,6 +58,15 @@ export function HelpdeskClient({ orgType, orgId }: HelpdeskClientProps) {
     }
   }
 
+  function getTypeColor(type: string) {
+    switch (type) {
+      case 'bug': return 'bg-red-50 text-red-700 border-red-200'
+      case 'feature_request': return 'bg-purple-50 text-purple-700 border-purple-200'
+      case 'help': return 'bg-blue-50 text-blue-700 border-blue-200'
+      default: return 'bg-slate-50 text-slate-700'
+    }
+  }
+
   function getStatusIcon(status: string) {
     switch (status) {
       case 'open': return <AlertCircle className="w-4 h-4 text-orange-500" />
@@ -93,9 +81,11 @@ export function HelpdeskClient({ orgType, orgId }: HelpdeskClientProps) {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">{currentConfig.pageTitle}</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2">
+            Platform Support
+          </h1>
           <p className="text-muted-foreground mt-2">
-            {currentConfig.pageDesc}
+            Need help? Found a bug? Let us know. We'll route your request to the right team.
           </p>
         </div>
         <TicketDialog orgType={orgType} orgId={orgId} />
@@ -103,15 +93,15 @@ export function HelpdeskClient({ orgType, orgId }: HelpdeskClientProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-          <CardDescription>All tracked cases for your organization.</CardDescription>
+          <CardTitle>Your Support Tickets</CardTitle>
+          <CardDescription>Track the status of your requests and issues.</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
             <div className="py-8 text-center text-muted-foreground">Loading...</div>
           ) : tickets.length === 0 ? (
             <div className="py-8 text-center text-muted-foreground border-2 border-dashed rounded-lg">
-              No records found. Click the button above to create one.
+              No tickets found. Click the button above to contact support.
             </div>
           ) : (
             <div className="space-y-4">
@@ -124,8 +114,8 @@ export function HelpdeskClient({ orgType, orgId }: HelpdeskClientProps) {
                     <div>
                       <h3 className="font-medium text-sm text-slate-900">{ticket.title}</h3>
                       <div className="flex flex-wrap items-center gap-2 mt-1.5">
-                        <Badge variant="outline" className="text-xs uppercase font-medium bg-slate-50">
-                          {ticket.type}
+                        <Badge variant="outline" className={`text-xs uppercase font-medium ${getTypeColor(ticket.type)}`}>
+                          {ticket.type.replace('_', ' ')}
                         </Badge>
                         <Badge variant="outline" className={`text-xs uppercase font-medium border-0 ${getPriorityColor(ticket.priority)}`}>
                           {ticket.priority}

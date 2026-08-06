@@ -1,63 +1,39 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import Razorpay from 'razorpay'
+import { logger } from '@/lib/logger'
 
-export async function POST(req: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const body = await req.json()
-    const { amount, currency = 'INR', receipt = 'receipt_order_1', orgId, planName } = body
-
-    if (!amount || typeof amount !== 'number') {
-      return NextResponse.json(
-        { error: 'Invalid amount provided' },
-        { status: 400 }
-      )
-    }
-
-    if (!orgId || !planName) {
-      return NextResponse.json(
-        { error: 'Missing organisation or plan details' },
-        { status: 400 }
-      )
-    }
-
-    // Razorpay requires amounts in smallest unit (paise for INR)
-    // The client should send amount in INR (whole numbers), and we convert it here:
-    const amountInPaise = Math.round(amount * 100)
-
-    const key_id = process.env.NEXT_PUBLIC_RAZORPAY_API_KEY
+    const key_id = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_API_KEY
     const key_secret = process.env.RAZORPAY_KEY_SECRET
 
     if (!key_id || !key_secret) {
-      console.error('Razorpay keys are missing from environment variables')
-      return NextResponse.json(
-        { error: 'Server configuration error' },
-        { status: 500 }
-      )
+      logger.error('razorpay', 'Razorpay credentials missing')
+      return NextResponse.json({ error: 'Payment gateway configuration error' }, { status: 500 })
     }
 
-    const razorpay = new Razorpay({
+    const instance = new Razorpay({
       key_id,
       key_secret,
     })
 
-    const options = {
-      amount: amountInPaise,
-      currency,
-      receipt,
-      notes: {
-        orgId,
-        planName
-      }
+    const { amount, receipt, currency = 'INR' } = await request.json()
+
+    if (!amount || amount <= 0) {
+      return NextResponse.json({ error: 'Invalid amount' }, { status: 400 })
     }
 
-    const order = await razorpay.orders.create(options)
+    const options = {
+      amount: Math.round(amount * 100),
+      currency,
+      receipt: receipt || `receipt_${Date.now()}`,
+    }
+
+    const order = await instance.orders.create(options)
 
     return NextResponse.json(order)
   } catch (error: any) {
-    console.error('Error creating Razorpay order:', error)
-    return NextResponse.json(
-      { error: error.message || 'Something went wrong' },
-      { status: 500 }
-    )
+    logger.error('razorpay', 'Failed to create Razorpay order', { error: error?.message || error })
+    return NextResponse.json({ error: error?.message || 'Failed to create order' }, { status: 500 })
   }
 }

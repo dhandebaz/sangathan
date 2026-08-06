@@ -68,7 +68,7 @@ export function Footer({ lang }: { lang: string }) {
                    ? 'जमीनी संगठनों के लिए डिजिटल बुनियादी ढांचा। न्यूनतम, शांत और गोपनीयता के लिए निर्मित।' 
                    : 'Digital infrastructure for grassroots organisations. Built for privacy, autonomy, and absolute institutional integrity.'}
               </p>
-              <div className="flex items-center gap-3 text-xs font-mono text-slate-400 uppercase tracking-widest">
+              <div className="flex items-center gap-3 text-sm font-semibold text-slate-500">
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-none animate-pulse" />
                 {isHindi ? 'सभी प्रणालियां काम कर रही हैं' : 'All systems operational'}
               </div>
@@ -113,7 +113,7 @@ export function Footer({ lang }: { lang: string }) {
         </div>
         
         {/* Bottom Strip */}
-        <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-slate-400 font-mono tracking-widest uppercase">
+        <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-semibold text-slate-500">
            <div className="flex items-center gap-1">
               {isHindi ? 'द्वारा संचालित' : 'Powered by'} 
               <a 

@@ -1,6 +1,7 @@
 import { Mail, ShieldAlert, CreditCard, MessageSquare } from 'lucide-react'
 import { Metadata } from 'next'
 import { PageHeader } from '@/components/public/page-header'
+import { ContactForm } from '@/components/public/contact-form'
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
@@ -27,57 +28,74 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
       />
 
       <div className="max-w-5xl mx-auto py-16 px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-          <div className="p-8 bg-slate-50  border border-slate-200  rounded-3xl hover:border-indigo-500/50 transition-colors group">
-             <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-6">
-               <Mail className="w-6 h-6 text-indigo-500 group-hover:scale-110 transition-transform" />
-             </div>
-             <h3 className="text-xl font-bold mb-3 text-slate-900 ">{isHindi ? 'सामान्य सहायता' : 'General Support'}</h3>
-             <p className="text-slate-500  mb-6">
-                {isHindi
-                  ? 'अपने संगठन को स्थापित करने, डेटा आयात करने या तकनीकी समस्याओं के लिए सहायता।'
-                  : 'For help with setting up your organisation, importing data, or technical issues.'}
-             </p>
-             <a href="mailto:support@sangathan.space" className="text-indigo-600  font-bold hover:underline">support@sangathan.space</a>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16 items-start">
+          
+          {/* Contact Form Section */}
+          <div className="bg-slate-50 p-8 rounded-3xl border border-slate-200">
+            <h2 className="text-2xl font-bold mb-2 text-slate-900">
+              {isHindi ? 'हमें एक संदेश भेजें' : 'Send us a message'}
+            </h2>
+            <p className="text-slate-500 mb-8">
+              {isHindi 
+                ? 'आपकी पूछताछ स्वतः ही सही टीम को भेज दी जाएगी।' 
+                : 'Your inquiry will be automatically routed to the right team.'}
+            </p>
+            <ContactForm isHindi={isHindi} />
           </div>
 
-          <div className="p-8 bg-slate-50  border border-slate-200  rounded-3xl hover:border-red-500/50 transition-colors group">
-             <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-6">
-               <ShieldAlert className="w-6 h-6 text-red-500 group-hover:scale-110 transition-transform" />
-             </div>
-             <h3 className="text-xl font-bold mb-3 text-slate-900 ">{isHindi ? 'विश्वास और सुरक्षा' : 'Trust & Safety'}</h3>
-             <p className="text-slate-500  mb-6">
-                {isHindi
-                  ? 'दुरुपयोग, अभद्र भाषा, स्पैम, या हमारी स्वीकार्य उपयोग नीति के उल्लंघन की रिपोर्ट करने के लिए।'
-                  : 'To report abuse, hate speech, spam, or violations of our Acceptable Use Policy.'}
-             </p>
-             <a href="mailto:abuse@sangathan.space" className="text-red-500  font-bold hover:underline">abuse@sangathan.space</a>
-          </div>
+          {/* Department Information Section */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="p-6 bg-slate-50  border border-slate-200  rounded-3xl hover:border-indigo-500/50 transition-colors group">
+               <div className="w-10 h-10 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-4">
+                 <Mail className="w-5 h-5 text-indigo-500 group-hover:scale-110 transition-transform" />
+               </div>
+               <h3 className="text-lg font-bold mb-2 text-slate-900 ">{isHindi ? 'सामान्य सहायता' : 'General Support'}</h3>
+               <p className="text-sm text-slate-500  mb-4">
+                  {isHindi
+                    ? 'अपने संगठन को स्थापित करने, डेटा आयात करने या तकनीकी समस्याओं के लिए सहायता।'
+                    : 'For help with setting up your organisation, importing data, or technical issues.'}
+               </p>
+               <span className="text-sm text-indigo-600 font-medium">support@sangathan.space</span>
+            </div>
 
-          <div className="p-8 bg-slate-50  border border-slate-200  rounded-3xl hover:border-emerald-500/50 transition-colors group">
-             <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-6">
-               <CreditCard className="w-6 h-6 text-emerald-500 group-hover:scale-110 transition-transform" />
-             </div>
-             <h3 className="text-xl font-bold mb-3 text-slate-900 ">{isHindi ? 'बिलिंग और रिफंड' : 'Billing & Refunds'}</h3>
-             <p className="text-slate-500  mb-6">
-                {isHindi
-                  ? 'समर्थक सदस्यता, चालान, या धनवापसी अनुरोधों के बारे में प्रश्नों के लिए।'
-                  : 'For questions about Supporter Subscriptions, invoices, or refund requests.'}
-             </p>
-             <a href="mailto:billing@sangathan.space" className="text-emerald-600  font-bold hover:underline">billing@sangathan.space</a>
-          </div>
+            <div className="p-6 bg-slate-50  border border-slate-200  rounded-3xl hover:border-red-500/50 transition-colors group">
+               <div className="w-10 h-10 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-4">
+                 <ShieldAlert className="w-5 h-5 text-red-500 group-hover:scale-110 transition-transform" />
+               </div>
+               <h3 className="text-lg font-bold mb-2 text-slate-900 ">{isHindi ? 'विश्वास और सुरक्षा' : 'Trust & Safety'}</h3>
+               <p className="text-sm text-slate-500  mb-4">
+                  {isHindi
+                    ? 'दुरुपयोग, अभद्र भाषा, स्पैम, या नीति उल्लंघन की रिपोर्ट करने के लिए।'
+                    : 'To report abuse, hate speech, spam, or violations of our Acceptable Use Policy.'}
+               </p>
+               <span className="text-sm text-red-500 font-medium">abuse@sangathan.space</span>
+            </div>
 
-          <div className="p-8 bg-slate-50  border border-slate-200  rounded-3xl hover:border-cyan-500/50 transition-colors group">
-             <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-6">
-               <MessageSquare className="w-6 h-6 text-cyan-500 group-hover:scale-110 transition-transform" />
-             </div>
-             <h3 className="text-xl font-bold mb-3 text-slate-900 ">{isHindi ? 'मीडिया और प्रेस' : 'Media & Press'}</h3>
-             <p className="text-slate-500  mb-6">
-                {isHindi
-                  ? 'हमारे मंच या मिशन के बारे में पूछताछ करने वाले पत्रकारों और शोधकर्ताओं के लिए।'
-                  : 'For journalists and researchers inquiring about our platform or mission.'}
-             </p>
-             <a href="mailto:press@sangathan.space" className="text-cyan-600  font-bold hover:underline">press@sangathan.space</a>
+            <div className="p-6 bg-slate-50  border border-slate-200  rounded-3xl hover:border-emerald-500/50 transition-colors group">
+               <div className="w-10 h-10 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-4">
+                 <CreditCard className="w-5 h-5 text-emerald-500 group-hover:scale-110 transition-transform" />
+               </div>
+               <h3 className="text-lg font-bold mb-2 text-slate-900 ">{isHindi ? 'बिलिंग और रिफंड' : 'Billing & Refunds'}</h3>
+               <p className="text-sm text-slate-500  mb-4">
+                  {isHindi
+                    ? 'समर्थक सदस्यता, चालान, या धनवापसी अनुरोधों के बारे में प्रश्नों के लिए।'
+                    : 'For questions about Supporter Subscriptions, invoices, or refund requests.'}
+               </p>
+               <span className="text-sm text-emerald-600 font-medium">billing@sangathan.space</span>
+            </div>
+
+            <div className="p-6 bg-slate-50  border border-slate-200  rounded-3xl hover:border-cyan-500/50 transition-colors group">
+               <div className="w-10 h-10 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-4">
+                 <MessageSquare className="w-5 h-5 text-cyan-500 group-hover:scale-110 transition-transform" />
+               </div>
+               <h3 className="text-lg font-bold mb-2 text-slate-900 ">{isHindi ? 'मीडिया और प्रेस' : 'Media & Press'}</h3>
+               <p className="text-sm text-slate-500  mb-4">
+                  {isHindi
+                    ? 'हमारे मंच या मिशन के बारे में पूछताछ करने वाले पत्रकारों के लिए।'
+                    : 'For journalists and researchers inquiring about our platform or mission.'}
+               </p>
+               <span className="text-sm text-cyan-600 font-medium">press@sangathan.space</span>
+            </div>
           </div>
         </div>
 

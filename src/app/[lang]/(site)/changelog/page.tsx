@@ -35,20 +35,140 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
-    version: 'v1.10.0',
-    titleEn: 'AI-Powered Intelligence — NVIDIA NIM Integration',
-    titleHi: 'AI-संचालित बुद्धिमत्ता — NVIDIA NIM एकीकरण',
-    dateEn: 'June 2026',
-    dateHi: 'जून 2026',
-    descEn: 'Six AI features powered by NVIDIA NIM (Llama 3 via OpenAI-compatible API) to help organizations work smarter. All features gracefully fall back when AI is disabled.',
-    descHi: 'संगठनों को अधिक स्मार्ट तरीके से काम करने में मदद करने के लिए NVIDIA NIM (Llama 3) द्वारा संचालित छह AI सुविधाएँ। AI अक्षम होने पर सभी सुविधाएँ स्वचालित रूप से फ़ॉलबैक हो जाती हैं।',
+    version: 'v1.12.3',
+    titleEn: 'Dependency Pruning & Build Performance Optimization',
+    titleHi: 'निर्भरता छंटाई और बिल्ड प्रदर्शन अनुकूलन',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Audited and pruned unneeded project dependencies to reduce bundle bloat and accelerate production compilation speeds.',
+    descHi: 'बंडल के आकार को कम करने और उत्पादन संकलन की गति में सुधार के लिए अनावश्यक प्रोजेक्ट निर्भरताओं का ऑडिट और छंटाई की गई।',
+    color: 'emerald',
+    icon: Zap,
+    features: [
+      {
+        nameEn: 'Dependency Audit', nameHi: 'निर्भरता ऑडिट',
+        textEn: 'Removed redundant packages while ensuring all necessary core runtime and build dependencies are accurately linked.',
+        textHi: 'यह सुनिश्चित करते हुए कि सभी आवश्यक कोर रनटाइम और बिल्ड निर्भरताएं सटीक रूप से जुड़ी हुई हैं, अनावश्यक पैकेज हटा दिए गए।'
+      }
+    ]
+  },
+  {
+    version: 'v1.12.2',
+    titleEn: 'Single Payment Gateway Consolidation (Razorpay)',
+    titleHi: 'एकल भुगतान गेटवे एकीकरण (Razorpay)',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Consolidated payment infrastructure to use Razorpay as the sole payment gateway for platform subscription checkouts, while retaining direct org-to-member UPI ID reference logging.',
+    descHi: 'प्लेटफॉर्म सदस्यता चेकआउट के लिए Razorpay को एकमात्र भुगतान गेटवे के रूप में उपयोग करने के लिए भुगतान बुनियादी ढांचे को समेकित किया गया, जबकि प्रत्यक्ष org-से-सदस्य UPI ID संदर्भ लॉगिंग को बरकरार रखा गया।',
+    color: 'indigo',
+    icon: Sparkles,
+    features: [
+      {
+        nameEn: 'Razorpay API Handlers', nameHi: 'Razorpay API हैंडलर',
+        textEn: 'Implemented backend order creation and SHA-256 HMAC signature verification endpoints for Razorpay.',
+        textHi: 'Razorpay के लिए बैकएंड ऑर्डर निर्माण और SHA-256 HMAC हस्ताक्षर सत्यापन एंडपॉइंट लागू किए गए।'
+      },
+      {
+        nameEn: 'Gateway Cleanup', nameHi: 'गेटवे की सफाई',
+        textEn: 'Removed unused alternative payment gateway SDKs and webhooks to keep the application lean and secure.',
+        textHi: 'आवेदन को हल्का और सुरक्षित रखने के लिए अप्रयुक्त वैकल्पिक भुगतान गेटवे SDK और वेबहुक हटा दिए गए।'
+      }
+    ]
+  },
+  {
+    version: 'v1.12.1',
+    titleEn: 'Design System Unification',
+    titleHi: 'डिज़ाइन सिस्टम एकीकरण',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Completed a comprehensive review of the application\'s visual identity, stripping away remaining AI-generated blobby design patterns and enforcing a crisp, geometric, and technical aesthetic across all public pages and core UI components.',
+    descHi: 'एप्लिकेशन की दृश्य पहचान की व्यापक समीक्षा पूरी की, शेष AI-जनित ब्लॉबी डिज़ाइन पैटर्न को हटा दिया और सभी सार्वजनिक पृष्ठों और मुख्य UI घटकों में एक क्रिस्प, ज्यामितीय और तकनीकी सौंदर्यशास्त्र लागू किया।',
+    color: 'emerald',
+    icon: Sparkles,
+    features: [
+      {
+        nameEn: 'Geometric Components', nameHi: 'ज्यामितीय घटक',
+        textEn: 'Updated core UI components (Cards, Buttons, Badges) to use sharp, technical border radii instead of organic, rounded shapes.',
+        textHi: 'जैविक, गोलाकार आकृतियों के बजाय तेज, तकनीकी बॉर्डर रेडी का उपयोग करने के लिए मुख्य UI घटकों (कार्ड, बटन, बैज) को अपडेट किया गया।'
+      },
+      {
+        nameEn: 'Typography Cleanup', nameHi: 'टाइपोग्राफी सफाई',
+        textEn: 'Removed overused decorative typography patterns (wide-tracking uppercase labels) from headings across the platform for a cleaner look.',
+        textHi: 'क्लीनर लुक के लिए पूरे प्लेटफॉर्म में हेडिंग से अति प्रयोग किए गए सजावटी टाइपोग्राफी पैटर्न (वाइड-ट्रैकिंग अपरकेस लेबल) को हटा दिया गया।'
+      }
+    ]
+  },
+  {
+    version: 'v1.12.0',
+    titleEn: 'Smart Compliance Tracker',
+    titleHi: 'स्मार्ट अनुपालन ट्रैकर',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Redesigned the Compliance Tracker to automatically suggest exact legal documents and registrations based on the organization\'s real usage metrics (members, donations, events).',
+    descHi: 'संगठन के वास्तविक उपयोग मीट्रिक के आधार पर सटीक कानूनी दस्तावेजों और पंजीकरणों का स्वचालित रूप से सुझाव देने के लिए अनुपालन ट्रैकर को नया रूप दिया गया।',
     color: 'purple',
     icon: Sparkles,
     features: [
       {
-        nameEn: 'AI Weekly Summary', nameHi: 'AI साप्ताहिक सारांश',
-        textEn: 'Upgraded dashboard summary with richer stats — tickets, members, events, and polls. Generates a strategic 3-4 sentence briefing using Llama 3.3 70B.',
-        textHi: 'टिकट, सदस्य, इवेंट और पोल के साथ उन्नत डैशबोर्ड सारांश। Llama 3.3 70B का उपयोग करके रणनीतिक 3-4 वाक्यों का ब्रीफिंग तैयार करता है।'
+        nameEn: 'Usage-Based Triggers', nameHi: 'उपयोग-आधारित ट्रिगर',
+        textEn: 'Compliance requirements unlock progressively. For example, 80G tax exemption unlocks only after receiving the first donation.',
+        textHi: 'अनुपालन आवश्यकताएं उत्तरोत्तर अनलॉक होती हैं। उदाहरण के लिए, पहला दान प्राप्त करने के बाद ही 80G कर छूट अनलॉक होती है।'
+      },
+      {
+        nameEn: 'Direct Registration Links', nameHi: 'सीधे पंजीकरण लिंक',
+        textEn: 'Exact government portal links (e.g., GST, FCRA) are now provided directly alongside the required compliance items.',
+        textHi: 'सटीक सरकारी पोर्टल लिंक (जैसे, जीएसटी, एफसीआरए) अब सीधे आवश्यक अनुपालन वस्तुओं के साथ प्रदान किए जाते हैं।'
+      }
+    ]
+  },
+  {
+    version: 'v1.11.0',
+    titleEn: 'Production Hardening & System Operations Upgrade',
+    titleHi: 'उत्पादन सुदृढ़ीकरण और प्रणाली संचालन उन्नयन',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Hardened platform data processing, automated election tally operations, enhanced tax receipt calculation accuracy, and refined error handling across system administration workflows.',
+    descHi: 'प्लेटफ़ॉर्म डेटा प्रोसेसिंग को सुदृढ़ किया गया, स्वचालित चुनाव गणना संचालन, कर रसीद गणना सटीकता में सुधार, और प्रशासनिक वर्कफ़्लो में त्रुटि प्रबंधन को परिष्कृत किया गया।',
+    color: 'emerald',
+    icon: ShieldCheck,
+    features: [
+      {
+        nameEn: 'Atomic Election Vote Tallying', nameHi: 'परमाणु चुनाव वोट गणना',
+        textEn: 'Upgraded candidate vote counting to atomic database operations to guarantee vote tally accuracy under high concurrent user participation.',
+        textHi: 'उच्च समवर्ती उपयोगकर्ता भागीदारी के तहत वोट गणना सटीकता की गारंटी के लिए उम्मीदवार वोट गणना को परमाणु डेटाबेस संचालन में अपग्रेड किया गया।'
+      },
+      {
+        nameEn: 'Automated Tax Receipt Valuation', nameHi: 'स्वचालित कर रसीद मूल्य निर्धारण',
+        textEn: 'Seamlessly linked tax receipt generation with live donation ledger balances for instant, precise tax documentation.',
+        textHi: 'त्वरित, सटीक कर प्रलेखन के लिए लाइव दान बहीखाता शेष राशि के साथ कर रसीद निर्माण को निर्बाध रूप से जोड़ा गया।'
+      },
+      {
+        nameEn: 'Robust System Settings Parsing', nameHi: 'मजबूत सिस्टम सेटिंग्स पार्सिंग',
+        textEn: 'Enhanced system administration configuration handling with structured error reporting and robust JSON parsing.',
+        textHi: 'संरचित त्रुटि रिपोर्टिंग और मजबूत JSON पार्सिंग के साथ उन्नत सिस्टम प्रशासन कॉन्फ़िगरेशन प्रबंधन।'
+      },
+      {
+        nameEn: 'Unauthenticated Pricing Access', nameHi: 'अनअथेंटिकेटेड मूल्य निर्धारण एक्सेस',
+        textEn: 'Configured middleware routing to allow visitors to view public pricing and feature tiers without needing to log in first.',
+        textHi: 'विज़िटर्स को लॉगिन किए बिना सार्वजनिक मूल्य निर्धारण और सुविधा स्तरों को देखने की अनुमति देने के लिए मिडलवेयर राउटिंग कॉन्फ़िगर की गई।'
+      }
+    ]
+  },
+  {
+    version: 'v1.10.0',
+    titleEn: 'Smart Intelligence Platform',
+    titleHi: 'स्मार्ट इंटेलिजेंस प्लेटफॉर्म',
+    dateEn: 'June 2026',
+    dateHi: 'जून 2026',
+    descEn: 'Six intelligent features to help organizations work smarter. All features gracefully fall back when disabled.',
+    descHi: 'संगठनों को अधिक स्मार्ट तरीके से काम करने में मदद करने के लिए छह स्मार्ट सुविधाएँ। अक्षम होने पर सभी सुविधाएँ स्वचालित रूप से फ़ॉलबैक हो जाती हैं।',
+    color: 'purple',
+    icon: Zap,
+    features: [
+      {
+        nameEn: 'Automated Weekly Summary', nameHi: 'स्वचालित साप्ताहिक सारांश',
+        textEn: 'Upgraded dashboard summary with richer stats — tickets, members, events, and polls. Generates a strategic 3-4 sentence briefing.',
+        textHi: 'टिकट, सदस्य, इवेंट और पोल के साथ उन्नत डैशबोर्ड सारांश। रणनीतिक 3-4 वाक्यों का ब्रीफिंग तैयार करता है।'
       },
       {
         nameEn: 'Social Content Generator', nameHi: 'सोशल कंटेंट जनरेटर',

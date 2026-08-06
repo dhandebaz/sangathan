@@ -3,13 +3,13 @@
 import { useState } from 'react'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Plus } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import { submitSupportTicket } from '@/actions/helpdesk/submit'
+import { toast } from 'sonner'
 
 interface TicketDialogProps {
   orgType: string
@@ -21,36 +21,7 @@ export function TicketDialog({ orgType, orgId }: TicketDialogProps) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [type, setType] = useState('')
-  const [priority, setPriority] = useState('medium')
-
-  // Dynamic config based on orgType
-  const config = {
-    workers_union: {
-      dialogTitle: 'File a Grievance',
-      dialogDesc: 'Submit a formal grievance or dispute for tracking.',
-      types: ['Workplace Dispute', 'Harassment', 'Contract Violation', 'Other']
-    },
-    rwa: {
-      dialogTitle: 'Report an Issue',
-      dialogDesc: 'Log a maintenance request or community complaint.',
-      types: ['Plumbing', 'Electrical', 'Security', 'Noise Complaint', 'Other']
-    },
-    student_union: {
-      dialogTitle: 'Create Support Ticket',
-      dialogDesc: 'Request help from the student union or university admin.',
-      types: ['Academic Issue', 'Facility Request', 'General Inquiry', 'Other']
-    },
-    ngo: {
-      dialogTitle: 'Create Support Ticket',
-      dialogDesc: 'Log a request for volunteers or beneficiaries.',
-      types: ['Volunteer Issue', 'Beneficiary Request', 'General Support', 'Other']
-    }
-  }
-
-  const currentConfig = config[orgType as keyof typeof config] || config.ngo
+  const [message, setMessage] = useState('')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -58,32 +29,25 @@ export function TicketDialog({ orgType, orgId }: TicketDialogProps) {
     
     try {
       const supabase = createClient()
-      
       if (!orgId) throw new Error('No organisation selected')
       
       const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
       
-      const { error } = await supabase.from('tickets').insert({
-        title,
-        description,
-        type,
-        priority,
-        status: 'open',
-        organisation_id: orgId,
-        created_by: user?.id
-      })
+      const res = await submitSupportTicket(message, orgId, user.id)
       
-      if (error) throw error
+      if (!res.success) {
+        throw new Error(res.error || 'Failed to submit')
+      }
       
+      toast.success('Your ticket has been sent to our platform support team.')
+
       setOpen(false)
-      setTitle('')
-      setDescription('')
-      setType('')
-      setPriority('medium')
+      setMessage('')
       router.refresh()
     } catch (err) {
       console.error('Error creating ticket:', err)
-      alert('Failed to create ticket')
+      toast.error('Failed to create ticket')
     } finally {
       setLoading(false)
     }
@@ -92,76 +56,36 @@ export function TicketDialog({ orgType, orgId }: TicketDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="gap-2">
+        <Button className="gap-2 bg-indigo-600 hover:bg-indigo-700 text-white">
           <Plus className="w-4 h-4" />
-          {currentConfig.dialogTitle}
+          Contact Support
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{currentConfig.dialogTitle}</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            Platform Support
+          </DialogTitle>
           <DialogDescription>
-            {currentConfig.dialogDesc}
+            Report a bug, request a feature, or ask for help. We will route your request to the right team.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 pt-4">
           <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
-            <Input 
-              id="title" 
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Brief summary..." 
-              required 
-            />
-          </div>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="type">Category</Label>
-              <Select value={type} onValueChange={setType} required>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {currentConfig.types.map(t => (
-                    <SelectItem key={t} value={t.toLowerCase()}>{t}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="priority">Priority</Label>
-              <Select value={priority} onValueChange={setPriority}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select priority" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="low">Low</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
-                  <SelectItem value="critical">Critical</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="description">Details</Label>
+            <Label htmlFor="message">How can we help you?</Label>
             <Textarea 
-              id="description" 
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Provide more context..." 
-              className="min-h-[100px]"
+              id="message" 
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="e.g. The login button isn't working... or I would love a dark mode..." 
+              className="min-h-[120px]"
               required 
             />
           </div>
           
           <DialogFooter>
-            <Button type="submit" disabled={loading || !title || !type || !description}>
-              {loading ? 'Submitting...' : 'Submit'}
+            <Button type="submit" disabled={loading || !message.trim()} className="bg-indigo-600 hover:bg-indigo-700 text-white w-full sm:w-auto">
+              {loading ? 'Submitting...' : 'Submit Request'}
             </Button>
           </DialogFooter>
         </form>

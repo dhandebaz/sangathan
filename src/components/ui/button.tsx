@@ -31,7 +31,7 @@ const triggerHaptic = (type: 'light' | 'medium' | 'heavy' | 'success' | 'warning
 }
 
 const buttonVariants = cva(
-  "inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-xl text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.97] select-none",
+  "inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-md text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.97] select-none",
   {
     variants: {
       variant: {
@@ -48,8 +48,8 @@ const buttonVariants = cva(
       },
       size: {
         default: "px-4 py-2.5",
-        sm: "min-h-10 rounded-lg px-3 text-xs",
-        lg: "min-h-12 rounded-xl px-6 text-base",
+        sm: "min-h-10 rounded-sm px-3 text-xs",
+        lg: "min-h-12 rounded-md px-6 text-base",
         icon: "h-11 w-11 min-h-11 min-w-11 p-0",
       },
     },

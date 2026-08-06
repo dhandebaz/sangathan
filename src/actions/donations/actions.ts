@@ -228,7 +228,14 @@ export const generateTaxReceipt = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
-    // Generate a simple PDF URL or placeholder
+    // Fetch donation amount for the receipt
+    const { data: donation } = await supabase
+      .from('donations')
+      .select('amount')
+      .eq('id', input.donationId)
+      .single()
+
+    const donationAmount = (donation as { amount?: number })?.amount || 0
     const pdfUrl = `/api/tax-receipts/${input.receipt_number}.pdf`
 
     const { data: receipt, error } = await supabase
@@ -239,7 +246,7 @@ export const generateTaxReceipt = createSafeAction(
         donor_id: input.donor_id,
         receipt_number: input.receipt_number,
         financial_year: input.financial_year,
-        amount: 0, // This should be fetched from the donation, using 0 for type safety bypass here since we'll rely on trigger/db or pass it
+        amount: donationAmount,
         donor_pan: input.donor_pan,
         pdf_url: pdfUrl,
       } as never)

@@ -2,20 +2,11 @@
 
 import { useState, useRef } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { CheckCircle2, AlertCircle, Clock, FileText, Upload, Trash2, Plus, X, Download } from 'lucide-react'
+import { CheckCircle2, AlertCircle, Clock, FileText, Upload, Trash2, X, Download, ExternalLink, Sparkles } from 'lucide-react'
 import { toast } from 'sonner'
-import { updateComplianceItemStatus, deleteComplianceItem, addComplianceItem, uploadComplianceDocument, removeComplianceDocument } from '@/actions/compliance/items'
+import { updateComplianceItemStatus, deleteComplianceItem, uploadComplianceDocument, removeComplianceDocument } from '@/actions/compliance/items'
 import type { ComplianceItemRow } from '@/actions/compliance/items'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
   not_started: { label: 'Not Started', color: 'bg-gray-100 text-gray-800 border-gray-200', icon: <FileText className="w-4 h-4 text-gray-500" /> },
@@ -45,7 +36,7 @@ function ComplianceItemRow({
   item: ComplianceItemRow
   onStatusChange: (id: string, status: string) => void
   onDelete: (id: string) => void
-    onUpload: (id: string, file: File) => Promise<{ success: boolean; error?: string }>
+  onUpload: (id: string, file: File) => Promise<{ success: boolean; error?: string }>
   onRemoveDoc: (id: string) => void
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -66,9 +57,7 @@ function ComplianceItemRow({
     }
 
     setIsUploading(true)
-    const formData = new FormData()
-    formData.append('file', file)
-    const res = await onUpload(item.id, file)
+    await onUpload(item.id, file)
     setIsUploading(false)
 
     if (fileInputRef.current) fileInputRef.current.value = ''
@@ -83,10 +72,22 @@ function ComplianceItemRow({
           <p className="text-sm text-muted-foreground mt-1">{item.description}</p>
           <div className="flex flex-wrap gap-2 mt-2">
             <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded">{item.category}</span>
+            {item.registration_link && (
+              <a
+                href={item.registration_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-brand-600 hover:underline flex items-center gap-1 bg-brand-50 px-2 py-0.5 rounded"
+              >
+                <ExternalLink className="w-3 h-3" />
+                Official Portal
+              </a>
+            )}
             {item.document_name && (
               <a
                 href={item.document_url || '#'}
                 target="_blank"
+                rel="noopener noreferrer"
                 className="text-xs text-blue-600 hover:underline flex items-center gap-1 bg-blue-50 px-2 py-0.5 rounded"
               >
                 <Download className="w-3 h-3" />
@@ -156,10 +157,6 @@ export function ComplianceTracker({
   lang: string
 }) {
   const [items, setItems] = useState(initialItems)
-  const [isAddOpen, setIsAddOpen] = useState(false)
-  const [addTitle, setAddTitle] = useState('')
-  const [addCategory, setAddCategory] = useState('')
-  const [addDescription, setAddDescription] = useState('')
 
   async function handleStatusChange(id: string, status: string) {
     const res = await updateComplianceItemStatus(id, status)
@@ -205,28 +202,6 @@ export function ComplianceTracker({
     }
   }
 
-  async function handleAddItem() {
-    if (!addTitle.trim() || !addCategory.trim()) {
-      toast.error('Title and category are required')
-      return
-    }
-    const formData = new FormData()
-    formData.append('title', addTitle)
-    formData.append('category', addCategory)
-    formData.append('description', addDescription)
-    const res = await addComplianceItem(formData)
-    if (res.success) {
-      toast.success('Compliance item added')
-      setAddTitle('')
-      setAddCategory('')
-      setAddDescription('')
-      setIsAddOpen(false)
-      window.location.reload()
-    } else {
-      toast.error('Failed to add item', { description: res.error })
-    }
-  }
-
   const statusCounts = items.reduce(
     (acc, i) => {
       acc[i.status] = (acc[i.status] || 0) + 1
@@ -244,57 +219,13 @@ export function ComplianceTracker({
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Compliance Tracker</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2">
+            Compliance Tracker <Sparkles className="w-5 h-5 text-brand-500" />
+          </h1>
           <p className="text-muted-foreground mt-2">
-            Track and manage certifications, registrations, and legal requirements for your organisation.
+            AI-powered tracker that automatically suggests exact certifications and registrations based on your organisation's usage.
           </p>
         </div>
-        <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-          <DialogTrigger asChild>
-            <Button className="gap-2">
-              <Plus className="w-4 h-4" /> Add Requirement
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add Compliance Requirement</DialogTitle>
-              <DialogDescription>
-                Track a new certification, registration, or legal requirement for your organisation.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 pt-2">
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Title</label>
-                <input
-                  value={addTitle}
-                  onChange={(e) => setAddTitle(e.target.value)}
-                  className="w-full border rounded-md px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-brand-500"
-                  placeholder="e.g. GST Registration"
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Category</label>
-                <input
-                  value={addCategory}
-                  onChange={(e) => setAddCategory(e.target.value)}
-                  className="w-full border rounded-md px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-brand-500"
-                  placeholder="e.g. Tax, Legal, Safety"
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Description (optional)</label>
-                <textarea
-                  value={addDescription}
-                  onChange={(e) => setAddDescription(e.target.value)}
-                  className="w-full border rounded-md px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-brand-500 resize-none"
-                  rows={2}
-                  placeholder="Brief description of this requirement"
-                />
-              </div>
-              <Button className="w-full" onClick={handleAddItem}>Add Requirement</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
@@ -318,7 +249,7 @@ export function ComplianceTracker({
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-blue-600">{progressPct}%</div>
+            <div className="text-2xl font-bold text-brand-600">{progressPct}%</div>
             <div className="text-xs text-muted-foreground">Completion Progress</div>
           </CardContent>
         </Card>
@@ -328,14 +259,20 @@ export function ComplianceTracker({
         <CardHeader>
           <CardTitle>{orgType.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())} Requirements</CardTitle>
           <CardDescription>
-            Upload supporting documents and track progress for each requirement. Documents are stored securely and only visible to org admins.
+            Documents are stored securely and only visible to org admins. Requirements unlock automatically as your usage grows.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           {items.length === 0 && (
-            <p className="text-sm text-muted-foreground text-center py-8">
-              No compliance requirements added yet. Click &quot;Add Requirement&quot; to get started.
-            </p>
+            <div className="flex flex-col items-center justify-center py-16 text-center bg-muted/30 rounded-lg border border-dashed">
+              <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center mb-4 text-brand-600">
+                <Sparkles className="w-6 h-6 animate-pulse" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Analyzing your organisation...</h3>
+              <p className="text-muted-foreground max-w-md text-sm">
+                Our AI engine is currently monitoring your organisation's activity. As you gain members, collect donations, or host events, exact legal and compliance documents will automatically unlock here.
+              </p>
+            </div>
           )}
           {items.map((item) => (
             <ComplianceItemRow

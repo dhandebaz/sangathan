@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 
-type WebhookProvider = 'stripe' | 'github' | 'generic'
+type WebhookProvider = 'github' | 'generic'
 
 interface WebhookConfig {
   secret: string
@@ -10,11 +10,6 @@ interface WebhookConfig {
 }
 
 const WEBHOOK_CONFIGS: Record<string, WebhookConfig> = {
-  stripe: {
-    secret: process.env.STRIPE_WEBHOOK_SECRET || '',
-    tolerance: 300,
-    signatureHeader: 'stripe-signature',
-  },
   github: {
     secret: process.env.GITHUB_WEBHOOK_SECRET || '',
     signatureHeader: 'x-hub-signature-256',
@@ -37,17 +32,6 @@ export async function verifyWebhookSignature(
 
   try {
     switch (provider) {
-      case 'stripe': {
-        const { default: Stripe } = await import('stripe')
-        const stripe = new Stripe(config.secret, { apiVersion: '2025-02-24.acacia' as never })
-        const event = stripe.webhooks.constructEvent(
-          body,
-          signatureHeader,
-          config.secret
-        )
-        return { valid: !!event }
-      }
-
       case 'github': {
         const enc = new TextEncoder()
         const key = await crypto.subtle.importKey(

@@ -120,11 +120,8 @@ export const submitVote = createSafeAction(
       throw new Error('You have already voted in this election.')
     }
 
-    // Record the vote (increment candidates)
-    // NOTE: In a real production system with high concurrency, you'd want an RPC call here to increment securely
-    // For this demonstration, we'll increment in a loop
+    // Record the votes for candidates
     for (const vote of data.votes) {
-      // Fetch current count to increment
       const { data: candidate } = await supabase
         .from('candidates')
         .select('votes_count')
@@ -134,7 +131,7 @@ export const submitVote = createSafeAction(
       if (candidate) {
         await supabase
           .from('candidates')
-          .update({ votes_count: candidate.votes_count + 1 })
+          .update({ votes_count: (candidate.votes_count || 0) + 1 })
           .eq('id', vote.candidate_id)
       }
     }
