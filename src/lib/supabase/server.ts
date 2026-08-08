@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { withCircuitBreaker } from '@/lib/circuit-breaker'
+import { getSupabasePublicKey } from '@/lib/supabase/env'
 
 // Custom fetch with Circuit Breaker to prevent hanging on latent DB
 const resilientFetch = async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -29,13 +30,16 @@ const resilientFetch = async (input: RequestInfo | URL, init?: RequestInit) => {
 export async function createClient() {
   const cookieStore = await cookies()
 
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    throw new Error('Missing Supabase Environment Variables')
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabasePublicKey = getSupabasePublicKey()
+
+  if (!supabaseUrl || !supabasePublicKey) {
+    throw new Error('Missing Supabase public configuration')
   }
 
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    supabaseUrl,
+    supabasePublicKey,
     {
       cookies: {
         getAll() {

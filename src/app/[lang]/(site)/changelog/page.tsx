@@ -40,7 +40,7 @@ const changelogData: ChangelogEntry[] = [
     titleHi: 'विश्वसनीय एआई सेवा',
     dateEn: 'August 2026',
     dateHi: 'अगस्त 2026',
-    descEn: 'AI-powered meeting minutes, proposal analysis, form insights, content drafting, notifications, and ticket triage now automatically continue through an available provider when another service is temporarily unavailable.',
+    descEn: 'AI-powered meeting minutes, proposal analysis, form insights, content drafting, notifications, and ticket triage now automatically continue through an available provider when another service is temporarily unavailable. Supabase connections support modern publishable keys for safer key rotation, and the platform now uses updated, leaner production dependencies.',
     descHi: 'बैठक विवरण, प्रस्ताव विश्लेषण, फॉर्म अंतर्दृष्टि, सामग्री लेखन, सूचनाएं और टिकट वर्गीकरण अब किसी सेवा के अस्थायी रूप से अनुपलब्ध होने पर उपलब्ध एआई प्रदाता के माध्यम से जारी रहते हैं।',
     color: 'cyan',
     icon: Server,

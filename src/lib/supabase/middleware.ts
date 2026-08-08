@@ -2,6 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import { i18n } from '@/lib/i18n/config'
 import { createSignedCookie, verifySignedCookie } from '@/lib/auth/cookie'
+import { getSupabasePublicKey, hasSupabasePublicConfig } from '@/lib/supabase/env'
 
 function applySecurityHeaders(response: NextResponse, isApiRoute = false): NextResponse {
   // Generate a cryptographically random nonce per request for CSP
@@ -77,13 +78,15 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
-  let user = null
+  let user: { id: string; email?: string } | null = null
 
   try {
-    if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    if (hasSupabasePublicConfig()) {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+      const supabasePublicKey = getSupabasePublicKey()!
       const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+        supabaseUrl,
+        supabasePublicKey,
         {
           cookies: {
             getAll() {
@@ -104,8 +107,15 @@ export async function updateSession(request: NextRequest) {
         }
       )
 
-      const { data } = await supabase.auth.getUser()
-      user = data.user
+      const { data } = await supabase.auth.getClaims()
+      const claims = data?.claims
+      const userId = claims?.sub
+      if (typeof userId === 'string') {
+        user = {
+          id: userId,
+          email: typeof claims?.email === 'string' ? claims.email : undefined,
+        }
+      }
     }
   } catch {
     // Auth error - proceed as unauthenticated without leaking details
@@ -144,12 +154,14 @@ export async function updateSession(request: NextRequest) {
   if (user && isAuthRoute) {
     const cookieName = 'user-metadata'
     const cached = request.cookies.get(cookieName)?.value
-    let profile = cached ? await verifySignedCookie(cached) : null
+      let profile = cached ? await verifySignedCookie(cached) : null
 
-    if (!profile) {
+      if (!profile) {
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+        const supabasePublicKey = getSupabasePublicKey()!
         const supabase = createServerClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          supabaseUrl,
+          supabasePublicKey,
           {
             cookies: {
               getAll() { return request.cookies.getAll() },
