@@ -1,5 +1,6 @@
 import { createOpenAI } from '@ai-sdk/openai'
 import { createServiceClient } from '@/lib/supabase/service'
+import { isResilientAiConfigured } from '@/lib/ai/resilient-router'
 
 const BASE_URL = process.env.NVIDIA_API_BASE || 'https://integrate.api.nvidia.com/v1'
 const API_KEY = process.env.NVIDIA_API_KEY
@@ -13,11 +14,11 @@ export const FAST_MODEL = 'meta/llama-3.1-8b-instruct'
 export const SMART_MODEL = 'meta/llama-3.3-70b-instruct'
 
 export function isAiConfigured() {
-  return !!API_KEY
+  return isResilientAiConfigured()
 }
 
 export async function checkAiAccess(orgId: string): Promise<boolean> {
-  if (!API_KEY) return false
+  if (!isAiConfigured()) return false
 
   let supabase
   try {

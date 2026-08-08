@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { InteractiveFeatures } from '@/components/features/interactive-features'
+import { SoftwareApplicationJsonLd, BreadcrumbJsonLd } from '@/components/seo/json-ld'
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
@@ -7,8 +8,15 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   return {
     title: isHindi ? 'सुविधाएं | संगठन' : 'Features | Sangathan',
     description: isHindi
-      ? 'विभिन्न प्रकार के नागरिक समूहों के लिए तैयार की गई हमारी विशेषताएं।'
-      : 'Purpose-built features tailored for every type of civic collective.',
+      ? 'एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए विशेष सुविधाएं। 80G रसीदें, लिंगदोह अनुपालन, RTI सहायक, UPI भुगतान, और ऑफ़लाइन PWA।'
+      : 'Purpose-built features for Indian NGOs, student unions, workers unions, and RWAs. 80G receipts, Lyngdoh compliance, RTI assistant, UPI payments, and offline-first PWA.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/features`,
+      languages: {
+        'en': 'https://sangathan.space/en/features',
+        'hi': 'https://sangathan.space/hi/features',
+      },
+    },
   }
 }
 
@@ -26,6 +34,15 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'अपने स्वयंसेवकों को प्रबंधित करें, पारदर्शी रूप से धन जुटाएं, और अपने दान दाताओं के साथ विश्वास बनाएं।'
         : 'Manage your volunteer base, raise funds transparently, and build unshakeable trust with your donors.',
       features: [
+        { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Publish open letters, campaigns, and drives with live signature counters and instant volunteer conversion hooks.' },
+        { icon: 'Award', title: 'Sharable Verified Member Badges', desc: 'Generate dynamic, customizable social media graphics for Instagram, Twitter/X, and WhatsApp Stories with cryptographic verification.' },
+        { icon: 'ShieldCheck', title: 'Public Trust & Transparency Ledger', desc: 'Real-time fund utilization, programmatic expenditure bar charts, and SHA-256 verified receipt audit trails with 96/100 A+ rating.' },
+        { icon: 'Sparkles', title: 'AI-Powered Grant & CSR Matcher', desc: 'Automatically scan open government schemes and CSR funds, compute match score %, and generate structured grant application drafts.' },
+        { icon: 'Smartphone', title: 'WhatsApp & Telegram Conversational Interface', desc: 'Ground-level messaging bot and interactive console allowing supporters to log grievances, submit check-ins, or check dues via text.' },
+        { icon: 'Database', title: 'Offline-First Field Organizer PWA', desc: 'Door-to-door membership intake and field grievance capture in zero-connectivity areas with automatic background queue sync.' },
+        { icon: 'AlertTriangle', title: 'Emergency SOS & Legal Rapid Response', desc: '1-tap emergency crisis trigger broadcasting GPS coordinates and detention notes to defense advocates with live response tracking.' },
+        { icon: 'Zap', title: 'No-Code Event-Driven Automations', desc: 'Visual Trigger → Condition → Action workflow builder with prebuilt recipes for instant onboarding and rapid SOS alerts.' },
+        { icon: 'Lock', title: 'Defensive Permission Guards & Dual Approvals', desc: 'Cryptographically linked immutable audit chain with mandatory dual-approval workflows for high-risk operations.' },
         { icon: 'Database', title: 'Donor CRM Database', desc: 'Centralized profiles, giving history, and engagement tracking.' },
         { icon: 'Wallet', title: 'Donation Ledger', desc: 'Process one-time, recurring, and offline contributions.' },
         { icon: 'Receipt', title: 'Tax Receipts Automation', desc: 'Auto-generate 80G/501c3 compliant tax receipts for donors.' },
@@ -38,10 +55,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'ClipboardList', title: 'Field Forms & Surveys', desc: 'Offline-capable data collection for field workers.' },
         { icon: 'Network', title: 'Chapters & Subgroups', desc: 'Organise large NGOs by city chapters or wings.' },
         { icon: 'ShieldCheck', title: 'Helpdesk Support', desc: 'Centralized inbox for public and beneficiary inquiries.' },
-        { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests 12A, 80G, FCRA based on actual usage and donations.' },
-        { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
-        { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' },
-        { icon: 'Zap', title: 'Smart Intelligence', desc: 'Smart summaries, social content generation, meeting minutes, form analysis, personalized notifications, and proposal analysis.' }
+        { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests 12A, 80G, FCRA based on actual usage and donations.' }
       ]
     },
     {
@@ -53,6 +67,12 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'छात्रों की आवाज़ को संगठित करें। सुरक्षित चुनाव कराएं और कैंपस की समस्याओं को ट्रैक करें।'
         : 'Organise the student voice. Conduct secure elections, track campus grievances, and manage events.',
       features: [
+        { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Publish public campus representations with live signature counters, 1-click volunteer conversion hooks, and inter-union solidarity endorsements.' },
+        { icon: 'Award', title: 'Sharable Verified Member Badges', desc: 'Generate dynamic social media graphics for Instagram, Twitter/X, and WhatsApp Stories with verified union designations and cryptographic QR codes.' },
+        { icon: 'Smartphone', title: 'WhatsApp & Telegram Conversational Bot', desc: 'Bilingual messaging bot and console for campus grievances, event attendance, and emergency SOS detention alerts.' },
+        { icon: 'Database', title: 'Offline-First Field Organizer PWA', desc: 'Hostel-to-hostel and gate desk onboarding in zero-connectivity environments with automatic background synchronization.' },
+        { icon: 'ShieldAlert', title: 'Emergency SOS & Legal Rapid-Response', desc: '1-tap protest detention alert broadcasting GPS coordinates to volunteer advocates with live thana response tracking.' },
+        { icon: 'Sparkles', title: 'AI-Powered Grant & CSR Matcher', desc: 'Scan UGC and government student welfare grants with 1-click structured AI proposal draft generation.' },
         { icon: 'Database', title: 'Central Student DB & HEI Directory', desc: 'Pre-populated Indian government institutions database including JMI, JNU, DU, BHU, IITs & NITs with support for both official unions and independent collectives.' },
         { icon: 'Printer', title: 'Official Union Letterhead & PDF Exporter', desc: 'Customizable emblem header, reference number generator (SU/2026/08/XXX), recipient block, and print-ready Gyapan & press release layout.' },
         { icon: 'Vote', title: 'Live Campus Election Counting Tally Desk', desc: 'Round-by-round and booth-by-booth vote count logger with live lead calculations for Central Panel candidates.' },
@@ -71,15 +91,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'AlertTriangle', title: 'Hostel & Mess Grievances', desc: 'Ticketing system for academic, hostel allotment, mess quality, and campus disputes.' },
         { icon: 'Ticket', title: 'Event Ticketing & RSVPs', desc: 'Manage campus events, QR check-ins, and waitlists.' },
         { icon: 'Wallet', title: 'Club Sub-funding', desc: 'Allow societies to request and track micro-budgets.' },
-        { icon: 'FileText', title: 'Proposals & Bills', desc: 'Draft, debate, and pass union resolutions democratically.' },
-        { icon: 'ClipboardList', title: 'Meeting Minutes', desc: 'Public ledger of committee proceedings and votes.' },
-        { icon: 'Network', title: 'Clubs & Societies', desc: 'Mini-dashboards for sub-groups to manage members.' },
-        { icon: 'Bell', title: 'Campus Notices', desc: 'Official noticeboard for urgent student updates.' },
-        { icon: 'Megaphone', title: 'Multi-channel Alerts', desc: 'Push notifications and SMS for rapid mobilization.' },
-        { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests charter agreements, election reports based on campus activity.' },
-        { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
-        { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' },
-        { icon: 'Zap', title: 'Smart Intelligence', desc: 'Smart summaries, social content generation, meeting minutes, form analysis, personalized notifications, and proposal analysis.' }
+        { icon: 'FileText', title: 'Proposals & Bills', desc: 'Draft, debate, and pass union resolutions democratically.' }
       ]
     },
     {
@@ -91,6 +103,12 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'मज़दूरों के अधिकारों की रक्षा करें। सामूहिक सौदेबाजी (CBA) और हड़तालों का समन्वय करें।'
         : 'Protect worker rights with power. Coordinate collective bargaining, track dues, and organise actions.',
       features: [
+        { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Launch wage defense and collective strike petitions with live signature counts and volunteer conversion.' },
+        { icon: 'Award', title: 'Sharable Verified Member Badges', desc: 'Verified shop steward and member credentials formatted for WhatsApp and Twitter/X.' },
+        { icon: 'Smartphone', title: 'WhatsApp & Telegram Conversational Bot', desc: 'Bilingual grievance logging, strike ballot casting, and dues status inquiries via messaging.' },
+        { icon: 'Database', title: 'Offline-First Field Organizer PWA', desc: 'Factory gate and construction site worker intake in low-connectivity areas with automatic queue sync.' },
+        { icon: 'AlertTriangle', title: 'Emergency SOS & Legal Rapid Response', desc: '1-tap emergency alert for unlawful worker detention with GPS broadcast to labor defense advocates.' },
+        { icon: 'ShieldCheck', title: 'Public Trust & Transparency Ledger', desc: 'Audited strike relief fund ledger and worker welfare accounting with SHA-256 verified receipts.' },
         { icon: 'Users', title: 'Member Database', desc: 'Track employment history, standing, and certifications.' },
         { icon: 'Wallet', title: 'Automated Dues Collection', desc: 'Manage percentage or flat dues, with delinquency alerts.' },
         { icon: 'Scale', title: 'Grievance Case Mgmt', desc: 'Track workplace disputes through arbitration stages.' },
@@ -100,13 +118,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'HardHat', title: 'Worker Dispatch System', desc: 'Match member skills to employer job requirements.' },
         { icon: 'Building2', title: 'Employer Management', desc: 'Monitor contract compliance across signatory companies.' },
         { icon: 'BadgeAlert', title: 'Shop Steward Roles', desc: 'Granular permissions for field representatives.' },
-        { icon: 'ShieldCheck', title: 'Labor Law Compliance', desc: 'Automated checks against union regulations.' },
-        { icon: 'Bell', title: 'Emergency SMS Alerts', desc: 'Urgent broadcasts for rapid member mobilization.' },
-        { icon: 'GraduationCap', title: 'Training & Certs', desc: 'Manage apprenticeship programs and skill workshops.' },
-        { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests Trade Union Act filings based on worker scale and actions.' },
-        { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
-        { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' },
-        { icon: 'Zap', title: 'Smart Intelligence', desc: 'Smart summaries, social content generation, meeting minutes, form analysis, personalized notifications, and proposal analysis.' }
+        { icon: 'ShieldCheck', title: 'Labor Law Compliance', desc: 'Automated checks against union regulations.' }
       ]
     },
     {
@@ -133,13 +145,18 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests renewals and NOCs based on maintenance and facility usage.' },
         { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
         { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' },
-        { icon: 'Zap', title: 'Smart Intelligence', desc: 'Smart summaries, social content generation, meeting minutes, form analysis, personalized notifications, and proposal analysis.' }
+        { icon: 'Zap', title: 'Resilient Smart Intelligence', desc: 'Smart summaries, social content, meeting minutes, form analysis, personalized notifications, and proposal analysis with automatic AI provider failover for dependable availability.' }
       ]
     }
   ]
 
   return (
     <div className="bg-white min-h-screen">
+      <SoftwareApplicationJsonLd />
+      <BreadcrumbJsonLd items={[
+        { name: isHindi ? 'होम' : 'Home', url: `https://sangathan.space/${lang}` },
+        { name: isHindi ? 'सुविधाएं' : 'Features', url: `https://sangathan.space/${lang}/features` },
+      ]} />
       {/* Crisp, light, geometric technical header design */}
       <div className="border-b border-slate-100 bg-slate-50/20 py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">

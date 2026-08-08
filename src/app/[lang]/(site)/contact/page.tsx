@@ -2,6 +2,7 @@ import { Mail, ShieldAlert, CreditCard, MessageSquare } from 'lucide-react'
 import { Metadata } from 'next'
 import { PageHeader } from '@/components/public/page-header'
 import { ContactForm } from '@/components/public/contact-form'
+import { OrganizationJsonLd, BreadcrumbJsonLd } from '@/components/seo/json-ld'
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
@@ -11,6 +12,13 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     description: isHindi
       ? 'समर्थन, दुरुपयोग रिपोर्टिंग और पूछताछ के लिए हमसे संपर्क करें।'
       : 'Get in touch with us for support, abuse reporting, and inquiries.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/contact`,
+      languages: {
+        'en': 'https://sangathan.space/en/contact',
+        'hi': 'https://sangathan.space/hi/contact',
+      },
+    },
   }
 }
 
@@ -20,6 +28,11 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
 
   return (
     <div className="bg-white  min-h-screen">
+      <OrganizationJsonLd />
+      <BreadcrumbJsonLd items={[
+        { name: isHindi ? 'होम' : 'Home', url: `https://sangathan.space/${lang}` },
+        { name: isHindi ? 'संपर्क' : 'Contact', url: `https://sangathan.space/${lang}/contact` },
+      ]} />
       <PageHeader 
         title={isHindi ? 'संपर्क करें' : 'Contact Us'}
         description={isHindi 

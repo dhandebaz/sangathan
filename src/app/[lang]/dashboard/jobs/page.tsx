@@ -18,8 +18,7 @@ export default async function JobsPage({ params }: { params: Promise<{ lang: str
   const { data: profile } = await supabase
     .from('profiles')
     .select('id, role')
-    .eq('user_id', user?.id || '')
-    .eq('organisation_id', organisationId)
+    .eq('id', user?.id || '')
     .single()
 
   const isAdmin = profile?.role === 'admin' || profile?.role === 'editor' || profile?.role === 'executive'

@@ -35,6 +35,160 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.22.0',
+    titleEn: 'Resilient AI Service',
+    titleHi: 'विश्वसनीय एआई सेवा',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'AI-powered meeting minutes, proposal analysis, form insights, content drafting, notifications, and ticket triage now automatically continue through an available provider when another service is temporarily unavailable.',
+    descHi: 'बैठक विवरण, प्रस्ताव विश्लेषण, फॉर्म अंतर्दृष्टि, सामग्री लेखन, सूचनाएं और टिकट वर्गीकरण अब किसी सेवा के अस्थायी रूप से अनुपलब्ध होने पर उपलब्ध एआई प्रदाता के माध्यम से जारी रहते हैं।',
+    color: 'cyan',
+    icon: Server,
+    features: [
+      {
+        nameEn: 'Automatic AI Failover',
+        nameHi: 'स्वचालित एआई फेलओवर',
+        textEn: 'Keeps supported AI tools available by moving requests to another configured provider during rate limits, quota interruptions, or service outages.',
+        textHi: 'दर सीमा, कोटा रुकावट या सेवा बाधा के दौरान अनुरोधों को दूसरे कॉन्फ़िगर किए गए प्रदाता तक ले जाकर एआई उपकरण उपलब्ध रखता है।',
+      },
+    ],
+  },
+  {
+    version: 'v1.21.0',
+    titleEn: 'Zero-Meta Master Channels, Real-Time WebSockets & Indian Statutory Compliance',
+    titleHi: 'मास्टर संचार चैनल, रीयल-टाइम वेबसॉकेट्स एवं भारतीय वैधानिक अनुपालन',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Comprehensive upgrade introducing zero-Meta-API WhatsApp QR Multi-Device pairing, 1-click grammY Telegram webhook linking, real-time Supabase WebSocket inbox synchronization, automated Indian statutory compliance rules for all 4 organization types, and full platform-wide polish.',
+    descHi: 'शून्य-मेटा एपीआई व्हाट्सएप क्यूआर पेयरिंग, 1-क्लिक ग्रैमी टेलीग्राम वेबहुक लिंकिंग, रीयल-टाइम सुपाबेस वेबसॉकेट इनबॉक्स सिंक, सभी 4 संगठन प्रकारों के लिए स्वचालित भारतीय वैधानिक अनुपालन और संपूर्ण प्लेटफॉर्म सुधार।',
+    color: 'emerald' as const,
+    icon: Sparkles,
+    features: [
+      {
+        nameEn: 'Zero-Meta WhatsApp QR Linking',
+        nameHi: 'व्हाट्सएप क्यूआर डिवाइस लिंकिंग',
+        textEn: 'Seamless Multi-Device QR code pairing allowing grassroots organizations to connect their official WhatsApp without developer accounts or API token hurdles.',
+        textHi: 'बिना किसी डेवलपर खाते या एपीआई टोकन के जमीनी संगठनों के लिए आसान व्हाट्सएप क्यूआर डिवाइस लिंकिंग।'
+      },
+      {
+        nameEn: '1-Click Telegram Engine & Realtime Inbox',
+        nameHi: 'टेलीग्राम इंजन एवं रीयल-टाइम इनबॉक्स',
+        textEn: 'Automatic @BotFather webhook registration with instant Supabase Realtime channel stream for two-way volunteer communication.',
+        textHi: 'स्वचालित बॉट वेबहुक और सुपाबेस रीयल-टाइम वेबसॉकेट्स के साथ तत्काल द्विमार्गी वॉलंटियर संचार इनबॉक्स।'
+      },
+      {
+        nameEn: 'AI Indian Statutory Compliance Rules',
+        nameHi: 'भारतीय वैधानिक अनुपालन नियम',
+        textEn: 'Context-aware statutory filing suggestions covering 12A/80G, CSR-1, Lyngdoh Committee electoral compliance, Trade Union Form H, and RWA Registrar submissions.',
+        textHi: '12A/80G, सीएसआर-1, लिंगदोह समिति चुनावी अनुपालन, ट्रेड यूनियन फॉर्म H, और आरडब्ल्यूए रजिस्ट्रार फाइलिंग के लिए स्वचालित नियम।'
+      }
+    ]
+  },
+  {
+    version: 'v1.20.0',
+    titleEn: 'India-Targeted SEO, Frontend Design Refresh & Content Enhancement',
+    titleHi: 'भारत-लक्षित एसईओ, फ्रंटेंड डिज़ाइन रिफ्रेश और सामग्री संवर्धन',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Comprehensive update delivering India-targeted SEO infrastructure with JSON-LD structured data across all pages, expanded sitemap covering 30+ routes with hreflang alternates, enhanced landing page with new \'Who Uses Sangathan\', \'Built for India\', and \'What\'s New\' sections, security page design consistency fix, navigation and footer expansion, and comprehensive keyword optimization targeting Indian grassroots organizations.',
+    descHi: 'भारत-लक्षित एसईओ बुनियादी ढांचे के साथ व्यापक अपडेट जिसमें सभी पृष्ठों पर JSON-LD संरचित डेटा, hreflang विकल्पों के साथ 30+ मार्गों को कवर करने वाला विस्तारित साइटमैप, नए \'संगठन किसके लिए\', \'भारत के लिए बनाया गया\', और \'नया क्या है\' अनुभागों के साथ उन्नत लैंडिंग पृष्ठ, सुरक्षा पृष्ठ डिज़ाइन स्थिरता सुधार, नेविगेशन और फुटर विस्तार, और भारतीय जमीनी संगठनों को लक्षित करते हुए व्यापक कीवर्ड अनुकूलन शामिल है।',
+    color: 'blue' as const,
+    icon: Globe,
+    features: [
+      {
+        nameEn: 'India-Targeted SEO Infrastructure',
+        nameHi: 'भारत-लक्षित एसईओ बुनियादी ढांचा',
+        textEn: 'JSON-LD structured data (Organization, WebSite, SoftwareApplication, Breadcrumb, FAQ schemas), comprehensive sitemap with 30+ pages and hreflang alternates, enhanced robots.txt, and 30+ India-specific keywords targeting NGO, Student Union, Workers Union, and RWA search queries.',
+        textHi: 'JSON-LD संरचित डेटा (संगठन, वेबसाइट, सॉफ्टवेयर एप्लिकेशन, ब्रेडक्रम्ब, एफएक्यू स्कीमा), hreflang विकल्पों के साथ 30+ पृष्ठों का व्यापक साइटमैप, उन्नत robots.txt, और एनजीओ, छात्र संघ, श्रमिक संघ और आरडब्ल्यूए खोज प्रश्नों को लक्षित करने वाले 30+ भारत-विशिष्ट कीवर्ड।'
+      },
+      {
+        nameEn: 'Landing Page Design Enhancement',
+        nameHi: 'लैंडिंग पृष्ठ डिज़ाइन संवर्धन',
+        textEn: 'Three new sections: \'Who Uses Sangathan\' showcasing all 4 organization types, \'Built for India\' highlighting UPI, Hindi, compliance, and offline-first capabilities, and \'What\'s New\' featuring v1.19.0 highlights.',
+        textHi: 'तीन नए अनुभाग: सभी 4 संगठन प्रकारों को प्रदर्शित करने वाला \'संगठन किसके लिए\', UPI, हिंदी, अनुपालन और ऑफ़लाइन-प्रथम क्षमताओं को उजागर करने वाला \'भारत के लिए बनाया गया\', और v1.19.0 हाइलाइट्स प्रस्तुत करने वाला \'नया क्या है\'।'
+      },
+      {
+        nameEn: 'Navigation & Footer Expansion',
+        nameHi: 'नेविगेशन और फुटर विस्तार',
+        textEn: 'Added About and Changelog to main navigation bar. Expanded footer with Roadmap, Status, Network, Community Guidelines, and Refund Policy links.',
+        textHi: 'मुख्य नेविगेशन बार में हमारे बारे में और अपडेट जोड़ा गया। रोडमैप, स्थिति, नेटवर्क, सामुदायिक दिशानिर्देश और रिफंड नीति लिंक के साथ फुटर का विस्तार किया गया।'
+      },
+      {
+        nameEn: 'Security Page Design Fix & Feature Components Update',
+        nameHi: 'सुरक्षा पृष्ठ डिज़ाइन सुधार और फीचर कंपोनेंट अपडेट',
+        textEn: 'Fixed CSS variable references in the Security page for consistent styling. Added missing icon mappings in the interactive features component for all 4 organization types. Dynamic feature count display.',
+        textHi: 'सुसंगत स्टाइलिंग के लिए सुरक्षा पृष्ठ में CSS वेरिएबल संदर्भों को ठीक किया गया। सभी 4 संगठन प्रकारों के लिए इंटरैक्टिव फीचर कंपोनेंट में गायब आइकन मैपिंग जोड़ी गई। गतिशील सुविधा गणना प्रदर्शन।'
+      }
+    ]
+  },
+  {
+    version: 'v1.19.0',
+    titleEn: '4-Pillar Enterprise Civic OS: Viral Growth, Grassroots Bot & Financial Transparency',
+    titleHi: '4-स्तंभ एंटरप्राइज सिविक ओएस: वायरल ग्रोथ, बॉट इंटरफेस एवं वित्तीय पारदर्शिता',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Major milestone release delivering 4 foundational civic pillars: 1-Click Public Petition & Campaign Studio with live counters and volunteer conversion hooks, Sharable Verified Member Badges for Instagram/X/WhatsApp Stories, WhatsApp & Telegram Conversational Interface & Simulator, Offline-First Field Mode PWA, Emergency SOS Legal Rapid-Response Network with GPS broadcasting, Public Trust & Transparency Ledger with SHA-256 audited receipts, AI-Powered Grant & CSR Opportunity Matcher, No-Code Event-Driven Automations, Immutable Audit Chain with Dual-Approval workflows, and Guided 5-Minute Onboarding Wizards.',
+    descHi: '4 मूलभूत नागरिक स्तंभों को पेश करने वाली प्रमुख रिलीज़: लाइव काउंटरों और स्वयंसेवक रूपांतरण हुक के साथ 1-क्लिक सार्वजनिक याचिका और अभियान स्टूडियो, इंस्टाग्राम/एक्स/व्हाट्सएप कहानियों के लिए साझा करने योग्य सत्यापित सदस्य बैज, व्हाट्सएप और टेलीग्राम बॉट इंटरफेस और सिम्युलेटर, ऑफलाइन-प्रथम फील्ड मोड पीडब्ल्यूए, जीपीएस प्रसारण के साथ आपातकालीन एसओएस कानूनी नेटवर्क, एसएचए-256 ऑडिट प्राप्तियों के साथ सार्वजनिक विश्वास और पारदर्शिता बहीखाता, एआई-संचालित अनुदान और सीएसआर मैचर, नो-कोड ऑटोमेशन, दोहरे अनुमोदन वर्कफ़्लो के साथ अपरिवर्तनीय ऑडिट श्रृंखला, और 5-मिनट का निर्देशित ऑनबोर्डिंग विज़ार्ड।',
+    color: 'emerald',
+    icon: Rocket,
+    features: [
+      {
+        nameEn: '1-Click Public Petition & Campaign Studio',
+        nameHi: '1-क्लिक सार्वजनिक याचिका एवं अभियान स्टूडियो',
+        textEn: 'Publish open petitions with live counters, 1-click volunteer conversion hooks, and inter-union solidarity co-sponsorship endorsements.',
+        textHi: 'लाइव काउंटरों, 1-क्लिक स्वयंसेवक रूपांतरण हुक, और अंतर-यूनियन एकजुटता सह-प्रायोजन के साथ खुली याचिकाएं प्रकाशित करें।'
+      },
+      {
+        nameEn: 'Sharable Verified Member Badges',
+        nameHi: 'साझा करने योग्य सत्यापित सदस्य बैज',
+        textEn: 'Generate high-resolution dynamic social media graphics for Instagram, Twitter/X, and WhatsApp Stories with verified QR codes and cryptographic hashes.',
+        textHi: 'सत्यापित क्यूआर कोड और क्रिप्टोग्राफिक हैश के साथ इंस्टाग्राम, ट्विटर/एक्स और व्हाट्सएप स्टोरीज के लिए उच्च-रिज़ॉल्यूशन सोशल मीडिया ग्राफिक्स जेनरेट करें।'
+      },
+      {
+        nameEn: 'Unified Member Communications & 2-Way Live Dispatch',
+        nameHi: 'एकीकृत सदस्य संचार एवं 2-तरफा लाइव डिस्पैच',
+        textEn: 'Multi-tenant organization-specific communications desk unifying member interactions across WhatsApp and Telegram. Supports 2-way admin direct messaging, auto-categorized grievance ticketing, and 1-click mass broadcasts.',
+        textHi: 'व्हाट्सएप और टेलीग्राम पर सदस्य इंटरैक्शन को एकीकृत करने वाला बहु-किरायेदार संगठन-विशिष्ट संचार डेस्क। 2-तरफा व्यवस्थापक प्रत्यक्ष संदेश, ऑटो-वर्गीकृत शिकायत टिकटिंग और 1-क्लिक मास प्रसारण का समर्थन करता है।'
+      },
+      {
+        nameEn: 'grammY Telegram Engine & WhatsApp QR Linked Devices',
+        nameHi: 'grammY टेलीग्राम इंजन एवं व्हाट्सएप क्यूआर लिंक्ड डिवाइस',
+        textEn: 'Production-ready Telegram Bot API integration using the grammY framework with automated webhook registration, alongside a live WhatsApp QR scanner for Multi-Device session pairing and Meta Cloud API integration.',
+        textHi: 'grammY फ्रेमवर्क का उपयोग करके स्वचालित वेबहुक पंजीकरण के साथ उत्पादन-तैयार टेलीग्राम बॉट एपीआई एकीकरण, मल्टी-डिवाइस सत्र युग्मन और मेटा क्लाउड एपीआई के लिए लाइव व्हाट्सएप क्यूआर स्कैनर।'
+      },
+      {
+        nameEn: 'Offline-First Field Organizer Mode (PWA)',
+        nameHi: 'ऑफलाइन-प्रथम फील्ड आयोजक मोड',
+        textEn: 'Door-to-door membership drives, rally check-ins, and grievance intake in zero-connectivity areas with automatic background queue synchronization.',
+        textHi: 'स्वचालित पृष्ठभूमि कतार सिंक्रनाइज़ेशन के साथ शून्य-कनेक्टिविटी क्षेत्रों में डोर-टू-डोर सदस्यता अभियान और हाजिरी।'
+      },
+      {
+        nameEn: 'Emergency SOS & Legal Rapid-Response',
+        nameHi: 'आपातकालीन एसओएस एवं विधिक त्वरित प्रतिक्रिया',
+        textEn: '1-tap crisis alert broadcasting GPS coordinates and situation notes to defense advocates with live police station (थाना) response tracking.',
+        textHi: 'लाइव थाना प्रतिक्रिया ट्रैकिंग के साथ अधिवक्ताओं को जीपीएस निर्देशांक और स्थिति विवरण प्रसारित करने वाला 1-टैप आपातकालीन अलर्ट।'
+      },
+      {
+        nameEn: 'Public Trust & Transparency Ledger',
+        nameHi: 'सार्वजनिक विश्वास एवं पारदर्शिता बहीखाता',
+        textEn: 'Real-time fund utilization breakdowns with SHA-256 verified receipt audit trails and live 96/100 A+ public trust rating.',
+        textHi: 'एसएचए-256 सत्यापित रसीद ऑडिट और लाइव 96/100 ए+ पब्लिक ट्रस्ट रेटिंग के साथ रीयल-टाइम फंड उपयोग।'
+      },
+      {
+        nameEn: 'AI Grant & CSR Opportunity Matcher',
+        nameHi: 'एआई अनुदान एवं सीएसआर मैचर',
+        textEn: 'Automated matching against open Indian government and CSR databases with 1-click structured AI proposal draft generation.',
+        textHi: '1-क्लिक संरचित एआई प्रस्ताव मसौदा निर्माण के साथ खुले भारतीय सरकारी और सीएसआर डेटाबेस के खिलाफ स्वचालित मिलान।'
+      },
+      {
+        nameEn: 'No-Code Automations & Dual Approvals',
+        nameHi: 'नो-कोड ऑटोमेशन एवं दोहरा अनुमोदन',
+        textEn: 'Event-driven triggers for digital IDs and welcome messages, paired with mandatory dual-approval guardrails for high-risk operations.',
+        textHi: 'डिजिटल आईडी और स्वागत संदेशों के लिए ईवेंट-संचालित ट्रिगर, उच्च जोखिम वाले संचालन के लिए अनिवार्य दोहरे अनुमोदन गार्ड के साथ।'
+      }
+    ]
+  },
+  {
     version: 'v1.18.0',
     titleEn: 'Official Union Letterhead, Election Counting Tally & Regional i18n',
     titleHi: 'आधिकारिक यूनियन लेटरहेड, चुनाव मतगणना टैली एवं क्षेत्रीय भाषाएं',

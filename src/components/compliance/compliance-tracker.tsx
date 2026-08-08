@@ -243,7 +243,9 @@ export function ComplianceTracker({
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-yellow-600">{statusCounts.in_progress || 0 + statusCounts.submitted || 0}</div>
+            <div className="text-2xl font-bold text-yellow-600">
+              {(statusCounts.in_progress || 0) + (statusCounts.submitted || 0)}
+            </div>
             <div className="text-xs text-muted-foreground">In Progress / Submitted</div>
           </CardContent>
         </Card>

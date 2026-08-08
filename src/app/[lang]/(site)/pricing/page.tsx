@@ -3,6 +3,8 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { CheckoutButton } from '@/components/pricing/checkout-button'
 import { createClient } from '@/lib/supabase/server'
+import { BreadcrumbJsonLd, FAQJsonLd } from '@/components/seo/json-ld'
+import { PageHeader } from '@/components/public/page-header'
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
   const isHindi = lang === 'hi'
@@ -11,6 +13,13 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     description: isHindi
       ? 'पारदर्शी मूल्य निर्धारण। जमीनी स्तर के समूहों के लिए हमेशा के लिए मुफ्त।'
       : 'Transparent pricing. Free forever for grassroots collectives.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/pricing`,
+      languages: {
+        'en': 'https://sangathan.space/en/pricing',
+        'hi': 'https://sangathan.space/hi/pricing',
+      },
+    },
   }
 }
 
@@ -30,7 +39,20 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
 
   return (
     <div className="bg-white min-h-screen">
-
+      <BreadcrumbJsonLd items={[
+        { name: isHindi ? 'होम' : 'Home', url: `https://sangathan.space/${lang}` },
+        { name: isHindi ? 'मूल्य निर्धारण' : 'Pricing', url: `https://sangathan.space/${lang}/pricing` },
+      ]} />
+      <FAQJsonLd questions={[
+        { question: 'Is Sangathan free to use?', answer: 'Yes, the Community plan is free forever for small civic collectives with up to 20 users. All core governance features are included.' },
+        { question: 'What payment methods are accepted?', answer: 'We accept UPI, credit/debit cards, and net banking through Razorpay. All payments are processed in Indian Rupees (INR).' },
+        { question: 'Can I upgrade or downgrade my plan?', answer: 'Yes, you can upgrade to the Institution plan at any time. Downgrades take effect at the end of your billing cycle.' },
+        { question: 'Is there a refund policy?', answer: 'Yes, we offer a full refund within 14 days of purchase if you are not satisfied with the Institution plan.' },
+      ]} />
+      <PageHeader 
+        title={isHindi ? 'सरल और पारदर्शी मूल्य निर्धारण' : 'Simple, Transparent Pricing'}
+        description={isHindi ? 'जमीनी स्तर के समूहों के लिए हमेशा के लिए मुफ्त। बड़े संगठनों के लिए किफायती।' : 'Free forever for grassroots collectives. Affordable for growing institutions.'}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         

@@ -5,7 +5,7 @@ import { JoinButton } from '@/components/org/join-button'
 import { getCollaboratingOrgs } from '@/actions/collaboration'
 import Link from 'next/link'
 import { Organisation } from '@/types/dashboard'
-import { Mail, Phone, Globe, MapPin, Calendar, Clock, ShieldCheck, ArrowUpRight, BadgeCheck, AlertCircle } from 'lucide-react'
+import { Mail, Phone, Globe, MapPin, Calendar, Clock, ShieldCheck, ArrowUpRight, BadgeCheck, AlertCircle, Megaphone } from 'lucide-react'
 
 export default async function OrgPage(props: { params: Promise<{ slug: string; lang: string }> }) {
   const { slug, lang } = await props.params
@@ -239,6 +239,45 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
 
           {/* Sidebar */}
           <div className="space-y-6 mt-8 lg:mt-0">
+            {/* Public Civic Portals */}
+            <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 space-y-3">
+              <p className="text-sm font-semibold text-slate-500 mb-2">Civic Engagement</p>
+              
+              <Link
+                href={`/${lang}/org/${org.slug}/petitions`}
+                className="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 transition group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center text-indigo-700">
+                    <Megaphone className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition">Petitions &amp; Campaigns</h4>
+                    <p className="text-[11px] text-slate-500">Sign democratic open letters</p>
+                  </div>
+                </div>
+                <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition" />
+              </Link>
+
+              {org.public_transparency_enabled && (
+                <Link
+                  href={`/${lang}/org/${org.slug}/transparency`}
+                  className="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-200 transition group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-700">
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-900 group-hover:text-emerald-700 transition">Public Transparency</h4>
+                      <p className="text-[11px] text-slate-500">Audited expense &amp; fund ledger</p>
+                    </div>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 transition" />
+                </Link>
+              )}
+            </div>
+
             <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
               <p className="text-sm font-semibold text-slate-500 mb-4">Contact</p>
               <div className="space-y-4">

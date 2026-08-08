@@ -93,34 +93,36 @@ export default function LegalAidClient({ initialLogs }: LegalAidClientProps) {
   return (
     <div className="space-y-8">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gradient-to-r from-rose-950 via-slate-900 to-rose-950 text-white p-6 rounded-2xl border border-rose-800 shadow-xl">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white text-slate-900 p-6 rounded-sm border border-slate-200 shadow-xs">
         <div className="flex items-center gap-3">
-          <Shield className="w-8 h-8 text-rose-400" />
+          <div className="w-10 h-10 rounded-sm bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600">
+            <Shield className="w-5 h-5" />
+          </div>
           <div>
-            <h2 className="text-xl font-bold">Legal Aid & Anti-Ragging Cell</h2>
-            <p className="text-slate-300 text-sm mt-1">
+            <h2 className="text-lg font-bold text-slate-900">Legal Aid &amp; Anti-Ragging Cell</h2>
+            <p className="text-slate-500 text-xs mt-0.5">
               Protest detention SOS alerts, volunteer advocate directory, and UGC-compliant anti-ragging cell.
             </p>
           </div>
         </div>
 
         {/* Tab Controls */}
-        <div className="flex bg-white/10 p-1 rounded-xl border border-white/20">
+        <div className="flex bg-slate-100 p-1 rounded-sm border border-slate-200">
           <button
             onClick={() => setActiveTab('sos')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${activeTab === 'sos' ? 'bg-rose-600 text-white shadow' : 'text-slate-300 hover:text-white'}`}
+            className={`px-3 py-1.5 rounded-sm text-xs font-bold transition ${activeTab === 'sos' ? 'bg-white text-rose-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
           >
             Emergency SOS Trigger
           </button>
           <button
             onClick={() => setActiveTab('ragging')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${activeTab === 'ragging' ? 'bg-rose-600 text-white shadow' : 'text-slate-300 hover:text-white'}`}
+            className={`px-3 py-1.5 rounded-sm text-xs font-bold transition ${activeTab === 'ragging' ? 'bg-white text-rose-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
           >
             UGC Anti-Ragging Desk
           </button>
           <button
             onClick={() => setActiveTab('directory')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${activeTab === 'directory' ? 'bg-rose-600 text-white shadow' : 'text-slate-300 hover:text-white'}`}
+            className={`px-3 py-1.5 rounded-sm text-xs font-bold transition ${activeTab === 'directory' ? 'bg-white text-rose-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
           >
             Advocate Directory
           </button>

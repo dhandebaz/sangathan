@@ -9,7 +9,7 @@ import {
   AlertCircle, Wrench, Gift, Flag, Badge,
   HeartHandshake, Network, Landmark, ScrollText,
   GalleryVerticalEnd, Gavel, UserCog, DollarSign, FileText, UserCheck, HardHat,
-  CalendarCheck, Printer
+  CalendarCheck, Printer, Zap, ShieldCheck, Smartphone, Database, AlertTriangle, Sparkles, Award, Radio, MessageSquare
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -52,12 +52,29 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
     const c = capabilities
     const adminGroup: NavGroup = {
       id: 'admin',
-      title: 'Admin',
+      title: 'Admin & Guardrails',
       items: [
+        { href: `/${lang}/dashboard/automations`, icon: Zap, label: 'Automations', show: isAdmin },
+        { href: `/${lang}/dashboard/audit`, icon: ShieldCheck, label: 'Audit & Guardrails', show: isAdmin },
+        { href: `/${lang}/dashboard/transparency`, icon: Landmark, label: 'Transparency Ledger', show: true },
         { href: `/${lang}/dashboard/analytics`, icon: BarChart, label: 'Analytics', show: !!c.advanced_analytics && isAdmin },
         { href: `/${lang}/dashboard/forms`, icon: GalleryVerticalEnd, label: 'Forms', show: isAdmin },
         { href: `/${lang}/dashboard/roles`, icon: UserCog, label: 'Custom Roles', show: isAdmin },
         { href: `/${lang}/dashboard/settings`, icon: Settings, label: 'Settings', show: isAdmin },
+      ].filter(i => i.show)
+    }
+
+    const fieldToolsGroup: NavGroup = {
+      id: 'field_ops',
+      title: 'Field & Grassroots',
+      items: [
+        { href: `/${lang}/dashboard/communications`, icon: MessageSquare, label: 'Unified Communications', show: true },
+        { href: `/${lang}/dashboard/channels`, icon: Radio, label: 'Master Channels & QR', show: true },
+        { href: `/${lang}/dashboard/field-mode`, icon: Database, label: 'Offline Field Mode', show: true },
+        { href: `/${lang}/dashboard/bot-simulator`, icon: Smartphone, label: 'Bot Simulator', show: true },
+        { href: `/${lang}/dashboard/emergency-sos`, icon: AlertTriangle, label: 'Emergency SOS', show: true },
+        { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Petitions & Campaigns', show: true },
+        { href: `/${lang}/members/badge`, icon: Award, label: 'Verified Member Badges', show: true },
       ].filter(i => i.show)
     }
 
@@ -80,7 +97,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
             { href: `/${lang}/dashboard/induction`, icon: UserCheck, label: 'Induction Drive', show: true },
             { href: `/${lang}/dashboard/posts`, icon: Badge, label: 'Union Posts (पद)', show: true },
             { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Committees', show: !!c.subgroups },
-            { href: `/${lang}/dashboard/id-card`, icon: Badge, label: 'Student IDs', show: !!c.student_ids },
+            { href: `/${lang}/dashboard/id-card`, icon: Award, label: 'Student IDs & Badges', show: true },
             { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers', show: !!c.volunteers },
           ].filter(i => i.show)
         },
@@ -102,6 +119,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
             { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financials', show: true },
           ].filter(i => i.show)
         },
+        fieldToolsGroup,
         {
           id: 'support',
           title: 'Student Services',
@@ -133,6 +151,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           title: 'Workforce',
           items: [
             { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
+            { href: `/${lang}/dashboard/id-card`, icon: Award, label: 'Member IDs & Badges', show: true },
             { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Local Branches', show: !!c.subgroups },
             { href: `/${lang}/dashboard/networks`, icon: Globe, label: 'Federation', show: !!c.federation_mode },
           ].filter(i => i.show)
@@ -142,7 +161,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           title: 'Union Actions',
           items: [
             { href: `/${lang}/dashboard/cba`, icon: FileText, label: 'CBA Documents', show: !!c.cba_documents },
-            { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!c.campaigns },
+            { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns & Petitions', show: true },
             { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Strike Votes & Polls', show: !!c.voting_engine },
             { href: `/${lang}/dashboard/jobs`, icon: HardHat, label: 'Worker Dispatch', show: !!c.jobs },
             { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: !!c.tasks },
@@ -150,6 +169,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
             { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Meetings', show: !!c.meetings },
           ].filter(i => i.show)
         },
+        fieldToolsGroup,
         {
           id: 'legal',
           title: 'Legal & Support',
@@ -179,6 +199,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           title: 'Community',
           items: [
             { href: `/${lang}/dashboard/members`, icon: Users, label: 'Residents', show: true },
+            { href: `/${lang}/dashboard/id-card`, icon: Award, label: 'Resident IDs', show: true },
             { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Committees', show: !!c.subgroups },
             { href: `/${lang}/dashboard/visitors`, icon: UserCheck, label: 'Visitor Logs', show: !!c.visitors },
           ].filter(i => i.show)
@@ -194,6 +215,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
             { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Meetings', show: !!c.meetings },
           ].filter(i => i.show)
         },
+        fieldToolsGroup,
         {
           id: 'governance_support',
           title: 'Governance & Support',
@@ -223,6 +245,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           title: 'Party Cadre',
           items: [
             { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
+            { href: `/${lang}/dashboard/id-card`, icon: Award, label: 'Cadre Badges', show: true },
             { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Wings & Cells', show: !!c.subgroups },
             { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers', show: !!c.volunteers },
             { href: `/${lang}/dashboard/networks`, icon: Globe, label: 'Networks', show: !!c.federation_mode },
@@ -232,7 +255,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           id: 'campaigns',
           title: 'Operations',
           items: [
-            { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!c.campaigns },
+            { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns & Petitions', show: true },
             { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Meetings', show: !!c.meetings },
             { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: !!c.tasks },
             { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Internal Voting', show: !!c.voting_engine },
@@ -240,6 +263,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
             { href: `/${lang}/dashboard/donations`, icon: Gift, label: 'Donations', show: !!c.donations },
           ].filter(i => i.show)
         },
+        fieldToolsGroup,
         {
           id: 'support',
           title: 'Support',
@@ -268,6 +292,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
         title: 'People & Members',
         items: [
           { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
+          { href: `/${lang}/dashboard/id-card`, icon: Award, label: 'Member Badges', show: true },
           { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Teams & Committees', show: !!c.subgroups },
           { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers', show: !!c.volunteers },
           { href: `/${lang}/dashboard/networks`, icon: Globe, label: 'Networks', show: !!c.federation_mode },
@@ -281,12 +306,13 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Voting & Decisions', show: !!c.voting_engine },
           { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: !!c.tasks },
           { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Meetings', show: !!c.meetings },
-          { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!c.campaigns },
+          { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Petitions & Campaigns', show: true },
           { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financial Ledger', show: true },
           { href: `/${lang}/dashboard/donations`, icon: Gift, label: 'Donations', show: !!c.donations },
-          { href: `/${lang}/dashboard/grants`, icon: DollarSign, label: 'Grants', show: !!c.grants },
+          { href: `/${lang}/dashboard/grants`, icon: DollarSign, label: 'Grants & Matcher', show: true },
         ].filter(i => i.show)
       },
+      fieldToolsGroup,
       {
         id: 'support_compliance',
         title: 'Support & Compliance',
@@ -362,54 +388,40 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           >
             <button
               onClick={() => toggleGroup(group.id)}
-              className={cn(
-                "flex w-full items-center justify-between px-3 py-1.5 text-xs font-bold",
-                "text-sidebar-fg/60 hover:text-sidebar-fg transition-colors"
-              )}
-              aria-expanded={!isCollapsed}
+              className="flex items-center justify-between w-full px-3 py-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors group"
             >
-              {group.title}
-              <ChevronDown className={cn(
-                "h-3.5 w-3.5 transition-transform duration-200",
-                !isCollapsed && "rotate-180"
-              )} />
+              <span>{group.title}</span>
+              <ChevronDown
+                className={cn(
+                  'h-3.5 w-3.5 transition-transform duration-200 text-muted-foreground group-hover:text-foreground',
+                  isCollapsed && '-rotate-90'
+                )}
+              />
             </button>
 
-            <div
-              className={cn(
-                "grid transition-all duration-250 ease-in-out",
-                isCollapsed ? "grid-rows-[0fr] opacity-0" : "grid-rows-[1fr] opacity-100"
-              )}
-            >
-              <div className="overflow-hidden">
-                <div className="mt-1 space-y-0.5">
-                  {group.items.map((item) => {
-                    const active = isActive(item.href)
-                    return (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className={cn(
-                          "group relative flex items-center gap-3 rounded-sm px-3 py-2.5 text-sm font-medium transition-all duration-150",
-                          active
-                            ? "bg-sidebar-bg-active text-sidebar-fg-active"
-                            : "text-sidebar-fg hover:bg-accent hover:text-foreground"
-                        )}
-                      >
-                        {active && (
-                          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-brand-500 rounded-sm" />
-                        )}
-                        <item.icon className={cn(
-                          "w-4.5 h-4.5 shrink-0 transition-colors",
-                          active ? "text-brand-600" : "text-sidebar-fg/60 group-hover:text-sidebar-fg"
-                        )} />
-                        <span className="truncate">{item.label}</span>
-                      </Link>
-                    )
-                  })}
-                </div>
+            {!isCollapsed && (
+              <div className="mt-1 space-y-1">
+                {group.items.map((item) => {
+                  const Icon = item.icon
+                  const active = isActive(item.href)
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={cn(
+                        'flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                        active
+                          ? 'bg-accent text-accent-foreground font-semibold shadow-xs'
+                          : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                      )}
+                    >
+                      <Icon className={cn('h-4 w-4 shrink-0', active ? 'text-foreground' : 'text-muted-foreground')} />
+                      <span className="truncate">{item.label}</span>
+                    </Link>
+                  )
+                })}
               </div>
-            </div>
+            )}
           </div>
         )
       })}

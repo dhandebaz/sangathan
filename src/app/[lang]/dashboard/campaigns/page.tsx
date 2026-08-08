@@ -31,39 +31,36 @@ export default async function CampaignsPage(props: { params: Promise<{ lang: str
   }
 
   if (!orgId) {
-    return <CampaignManager campaigns={[]} role={role} isAdminOrEditor={false} />
+    return <CampaignManager lang={lang} campaigns={[]} petitions={[]} role={role} isAdminOrEditor={false} />
   }
 
   let campaigns: any[] = []
+  let petitions: any[] = []
+  let orgSlug = 'org'
 
-  const { data, error } = await supabase
-    .from('campaigns')
-    .select('*')
-    .eq('organisation_id', orgId)
-    .order('created_at', { ascending: false })
+  const adminClient = createServiceClient()
 
-  if (error) {
-    try {
-      const adminClient = createServiceClient()
-      const fallbackRes = await adminClient
-        .from('campaigns')
-        .select('*')
-        .eq('organisation_id', orgId)
-        .order('created_at', { ascending: false })
+  try {
+    const [orgRes, campRes, petRes] = await Promise.all([
+      adminClient.from('organisations').select('slug').eq('id', orgId).single(),
+      adminClient.from('campaigns').select('*').eq('organisation_id', orgId).order('created_at', { ascending: false }),
+      adminClient.from('petitions').select('*').eq('organisation_id', orgId).order('created_at', { ascending: false }),
+    ])
 
-      if (!fallbackRes.error) {
-        campaigns = fallbackRes.data || []
-      }
-    } catch {
-      campaigns = []
-    }
-  } else {
-    campaigns = data || []
+    if (orgRes.data?.slug) orgSlug = orgRes.data.slug
+    if (campRes.data) campaigns = campRes.data
+    if (petRes.data) petitions = petRes.data
+  } catch {
+    campaigns = []
+    petitions = []
   }
 
   return (
     <CampaignManager
+      lang={lang}
+      orgSlug={orgSlug}
       campaigns={campaigns}
+      petitions={petitions}
       role={role}
       isAdminOrEditor={['admin', 'editor', 'executive'].includes(role)}
     />

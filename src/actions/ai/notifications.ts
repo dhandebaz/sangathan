@@ -1,10 +1,10 @@
 'use server'
 
-import { generateText } from 'ai'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { createSafeAction } from '@/lib/auth/actions'
-import { nvidia, FAST_MODEL, checkAiAccess } from '@/lib/ai/nvidia'
+import { checkAiAccess } from '@/lib/ai/nvidia'
+import { generateResilientCompletion } from '@/lib/ai/resilient-router'
 import { enqueueJob } from '@/lib/queue'
 import { sendPushNotification } from '@/actions/push'
 
@@ -23,8 +23,6 @@ const NotificationTypeSchema = z.object({
 
 async function generateNotification(
   input: z.infer<typeof NotificationTypeSchema>,
-  orgId: string,
-  userId: string,
 ) {
   const supabase = await createClient()
   const { data: member } = await supabase
@@ -46,10 +44,11 @@ async function generateNotification(
 
   const prompt = prompts[input.notification_type] || prompts.custom_announcement
 
-  const { text } = await generateText({
-    model: nvidia(FAST_MODEL),
-    prompt,
+  const completion = await generateResilientCompletion({
+    messages: [{ role: 'user', content: prompt }],
+    maxTokens: 500,
   })
+  const text = completion.text
 
   const [title, ...bodyParts] = text.split(/\.\s+/)
   const body = bodyParts.join('. ')
@@ -72,7 +71,7 @@ async function generateNotification(
     // Push may not be configured; notification is queued
   }
 
-  return { success: true, notification: payload }
+  return { success: true, notification: payload, providerUsed: completion.providerUsed, latencyMs: completion.latencyMs }
 }
 
 export const generatePersonalizedNotification = createSafeAction(
@@ -80,7 +79,7 @@ export const generatePersonalizedNotification = createSafeAction(
   async (input, context) => {
     if (!(await checkAiAccess(context.organizationId))) return { error: 'AI features not available' }
 
-    return generateNotification(input, context.organizationId, context.user.id)
+    return generateNotification(input)
   },
   { allowedRoles: ['admin', 'editor'], actionName: 'ai_personalized_notification' },
 )
@@ -96,15 +95,11 @@ export const generateBulkNotifications = createSafeAction(
 
     const results = []
     for (const memberId of input.member_ids.slice(0, 10)) {
-      const result = await generateNotification(
-        {
-          member_id: memberId,
-          notification_type: input.notification_type,
-          context: input.context,
-        },
-        context.organizationId,
-        context.user.id,
-      )
+      const result = await generateNotification({
+        member_id: memberId,
+        notification_type: input.notification_type,
+        context: input.context,
+      })
 
       results.push({ memberId, success: !('error' in result) })
     }

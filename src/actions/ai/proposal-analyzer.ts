@@ -1,10 +1,10 @@
 'use server'
 
-import { generateObject } from 'ai'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { createSafeAction } from '@/lib/auth/actions'
-import { nvidia, SMART_MODEL, checkAiAccess } from '@/lib/ai/nvidia'
+import { checkAiAccess } from '@/lib/ai/nvidia'
+import { generateStructuredCompletion } from '@/lib/ai/resilient-router'
 
 const ProposalAnalysisSchema = z.object({
   proposalId: z.string().uuid(),
@@ -37,9 +37,7 @@ export const analyzeProposal = createSafeAction(
       .eq('organisation_id', context.organizationId)
       .in('status', ['active', 'pending'])
 
-    const { object } = await generateObject({
-      model: nvidia(SMART_MODEL),
-      schema: z.object({
+    const analysisSchema = z.object({
         readability_score: z.enum(['easy', 'moderate', 'complex']),
         summary: z.string().describe('One-paragraph plain-language summary of the proposal'),
         strengths: z.array(z.string()),
@@ -59,7 +57,8 @@ export const analyzeProposal = createSafeAction(
           opposing_points: z.array(z.string()),
         }),
         recommendation: z.string(),
-      }),
+      })
+    const result = await generateStructuredCompletion({
       prompt: `Analyze this organization proposal for civic impact, clarity, and potential issues.
 
 Title: ${proposal.title}
@@ -70,9 +69,10 @@ Community Comments: ${comments?.map(c => c.content).join('\n') || 'No comments y
 Active Org Polls: ${activePolls?.map(p => p.question).join('\n') || 'None'}
 
 Provide a comprehensive analysis including readability, strengths, concerns, potential conflicts with existing polls/activities, suggested amendments, community sentiment from comments, and an overall recommendation.`,
-    })
+      maxTokens: 3_000,
+    }, analysisSchema)
 
-    return { success: true, analysis: object }
+    return { success: true, analysis: result.object, providerUsed: result.providerUsed, latencyMs: result.latencyMs }
   },
   { allowedRoles: ['admin', 'editor', 'executive'], actionName: 'ai_analyze_proposal' },
 )
@@ -92,23 +92,23 @@ export const generateProposalBrief = createSafeAction(
 
     if (!proposal) return { error: 'Proposal not found' }
 
-    const { object } = await generateObject({
-      model: nvidia(SMART_MODEL),
-      schema: z.object({
+    const briefSchema = z.object({
         plain_language_summary: z.string(),
         what_it_means: z.string(),
         key_changes_if_passed: z.array(z.string()),
         who_it_affects: z.string(),
-      }),
+      })
+    const result = await generateStructuredCompletion({
       prompt: `Write a citizen-friendly brief for this proposal so all members can understand it before voting.
 
 Title: ${proposal.title}
 Content: ${proposal.content}
 
 Use plain, jargon-free language. Explain what it means, what changes if it passes, and who it affects.`,
-    })
+      maxTokens: 1_500,
+    }, briefSchema)
 
-    return { success: true, brief: object }
+    return { success: true, brief: result.object, providerUsed: result.providerUsed, latencyMs: result.latencyMs }
   },
   { allowedRoles: ['admin', 'editor', 'executive'], actionName: 'ai_proposal_brief' },
 )

@@ -1,24 +1,24 @@
-import { generateObject } from 'ai'
 import { z } from 'zod'
-import { nvidia, FAST_MODEL, checkAiAccess } from '@/lib/ai/nvidia'
+import { checkAiAccess } from '@/lib/ai/nvidia'
+import { generateStructuredCompletion } from '@/lib/ai/resilient-router'
 
 export async function triageTicketContent(content: string, orgId: string) {
   try {
     const hasAiAccess = await checkAiAccess(orgId)
     if (!hasAiAccess) return runKeywordFallback(content)
 
-    const { object } = await generateObject({
-      model: nvidia(FAST_MODEL),
-      schema: z.object({
+    const triageSchema = z.object({
         severity: z.enum(['low', 'medium', 'high', 'critical']),
         tags: z.array(z.string()).max(3),
         summary: z.string().describe('A 10-word summary of the core issue'),
-      }),
+      })
+    const { object } = await generateStructuredCompletion({
       prompt: `Analyze the following incoming complaint/grievance for an organization. 
       Determine its severity, assign 1-3 relevant tags, and summarize it in under 10 words.
       
       Content: "${content}"`,
-    })
+      maxTokens: 500,
+    }, triageSchema)
 
     return object
   } catch (error) {

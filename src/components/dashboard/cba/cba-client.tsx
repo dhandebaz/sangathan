@@ -51,7 +51,7 @@ export function CBAClient({ orgId }: CBAClientProps) {
     }
     
     fetchDocuments()
-  }, [])
+  }, [orgId])
 
   function getStatusIcon(status: string) {
     switch (status) {

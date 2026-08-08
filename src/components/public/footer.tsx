@@ -11,6 +11,8 @@ export function Footer({ lang }: { lang: string }) {
         { label: isHindi ? 'मूल्य निर्धारण' : 'Pricing', href: `/${lang}/pricing` },
         { label: isHindi ? 'दस्तावेज़ीकरण' : 'Documentation', href: `/${lang}/docs` },
         { label: isHindi ? 'परिवर्तन लॉग' : 'Changelog', href: `/${lang}/changelog` },
+        { label: isHindi ? 'रोडमैप' : 'Roadmap', href: `/${lang}/roadmap` },
+        { label: isHindi ? 'स्थिति' : 'Status', href: `/${lang}/status` },
       ]
     },
     company: {
@@ -20,6 +22,8 @@ export function Footer({ lang }: { lang: string }) {
         { label: isHindi ? 'विजन' : 'Vision', href: `/${lang}/vision` },
         { label: isHindi ? 'प्रेस' : 'Press', href: `/${lang}/press` },
         { label: isHindi ? 'सामान्य प्रश्न' : 'FAQ', href: `/${lang}/faq` },
+        { label: isHindi ? 'नेटवर्क' : 'Network', href: `/${lang}/network` },
+        { label: isHindi ? 'सामुदायिक दिशानिर्देश' : 'Community Guidelines', href: `/${lang}/community-guidelines` },
       ]
     },
     trust: {
@@ -38,6 +42,7 @@ export function Footer({ lang }: { lang: string }) {
         { label: isHindi ? 'डेटा अधिकार' : 'Data Rights', href: `/${lang}/data-rights` },
         { label: isHindi ? 'कुकीज़' : 'Cookies', href: `/${lang}/cookies` },
         { label: isHindi ? 'स्वीकार्य उपयोग' : 'Acceptable Use', href: `/${lang}/acceptable-use-policy` },
+        { label: isHindi ? 'रिफंड नीति' : 'Refund Policy', href: `/${lang}/refund-policy` },
       ]
     },
     contact: {

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { ArrowRight, Shield, Globe, Lock, Heart } from 'lucide-react'
 import { Metadata } from 'next'
 import { PageHeader } from '@/components/public/page-header'
+import { OrganizationJsonLd, BreadcrumbJsonLd } from '@/components/seo/json-ld'
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
@@ -11,6 +12,13 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     description: isHindi 
       ? 'जमीनी आंदोलनों के लिए डिजिटल बुनियादी ढांचा।'
       : 'Digital infrastructure for grassroots movements.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/about`,
+      languages: {
+        'en': 'https://sangathan.space/en/about',
+        'hi': 'https://sangathan.space/hi/about',
+      },
+    },
   }
 }
 
@@ -20,6 +28,11 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
 
   return (
     <div className="bg-white ">
+      <OrganizationJsonLd />
+      <BreadcrumbJsonLd items={[
+        { name: isHindi ? 'होम' : 'Home', url: `https://sangathan.space/${lang}` },
+        { name: isHindi ? 'हमारे बारे में' : 'About', url: `https://sangathan.space/${lang}/about` },
+      ]} />
       <PageHeader 
         title={isHindi ? 'संगठन के बारे में' : 'About Sangathan'}
         description={isHindi 

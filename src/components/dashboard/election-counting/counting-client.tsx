@@ -54,12 +54,14 @@ export default function CountingClient({ initialLogs }: CountingClientProps) {
   return (
     <div className="space-y-8">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 text-white p-6 rounded-2xl border border-emerald-800 shadow-xl">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white text-slate-900 p-6 rounded-sm border border-slate-200 shadow-xs">
         <div className="flex items-center gap-3">
-          <Vote className="w-8 h-8 text-emerald-400" />
+          <div className="w-10 h-10 rounded-sm bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+            <Vote className="w-5 h-5" />
+          </div>
           <div>
-            <h2 className="text-xl font-bold">Live Campus Election Counting Tally Desk</h2>
-            <p className="text-slate-300 text-sm mt-1">
+            <h2 className="text-lg font-bold text-slate-900">Live Campus Election Counting Tally Desk</h2>
+            <p className="text-slate-500 text-xs mt-0.5">
               Real-time booth-by-booth vote counting tally logger and Central Panel leads tracker.
             </p>
           </div>

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { Menu, X, LayoutDashboard, Heart, ArrowRight } from 'lucide-react'
+import { Menu, X, LayoutDashboard, ArrowRight } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
 export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticated: boolean }) {
@@ -31,6 +31,8 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
   const navLinks = [
     { href: `/${lang}/features`, label: isHindi ? 'विशेषताएं' : 'Features' },
     { href: `/${lang}/pricing`, label: isHindi ? 'मूल्य निर्धारण' : 'Pricing' },
+    { href: `/${lang}/about`, label: isHindi ? 'हमारे बारे में' : 'About' },
+    { href: `/${lang}/changelog`, label: isHindi ? 'अपडेट' : 'Changelog' },
     { href: `/${lang}/transparency`, label: isHindi ? 'पारदर्शिता' : 'Transparency' },
   ]
 

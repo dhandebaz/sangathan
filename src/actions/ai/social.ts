@@ -1,10 +1,10 @@
 'use server'
 
-import { generateText } from 'ai'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { createSafeAction } from '@/lib/auth/actions'
-import { nvidia, FAST_MODEL, SMART_MODEL, checkAiAccess } from '@/lib/ai/nvidia'
+import { checkAiAccess } from '@/lib/ai/nvidia'
+import { generateResilientCompletion } from '@/lib/ai/resilient-router'
 
 const GenerateContentSchema = z.object({
   content_type: z.enum(['social_post', 'newsletter', 'announcement', 'report']),
@@ -49,10 +49,11 @@ ${input.target_audience ? `Target audience: ${input.target_audience}` : ''}
 
 Write 2-3 paragraphs. Use a ${input.tone} tone.`
 
-    const { text, usage } = await generateText({
-      model: nvidia(SMART_MODEL),
-      prompt,
+    const result = await generateResilientCompletion({
+      messages: [{ role: 'user', content: prompt }],
+      maxTokens: 1_500,
     })
+    const text = result.text
 
     const supabase = await createClient()
     const { error } = await supabase.from('generated_content').insert({
@@ -64,13 +65,13 @@ Write 2-3 paragraphs. Use a ${input.tone} tone.`
       tone: input.tone,
       language: 'en',
       status: 'draft',
-      model_used: SMART_MODEL,
-      prompt_tokens: usage?.inputTokens || null,
-      completion_tokens: usage?.outputTokens || null,
+      model_used: result.providerUsed,
+      prompt_tokens: null,
+      completion_tokens: null,
     } as never)
 
     if (error) return { error: error.message }
-    return { success: true, content: text }
+    return { success: true, content: text, providerUsed: result.providerUsed, latencyMs: result.latencyMs }
   },
   { allowedRoles: ['admin', 'editor', 'executive'], actionName: 'ai_generate_content' },
 )
@@ -84,12 +85,12 @@ export const draftResponse = createSafeAction(
 
 Draft: "${input.draft_text}"`
 
-    const { text, usage } = await generateText({
-      model: nvidia(FAST_MODEL),
-      prompt,
+    const result = await generateResilientCompletion({
+      messages: [{ role: 'user', content: prompt }],
+      maxTokens: 1_000,
     })
 
-    return { success: true, rewritten: text, usage }
+    return { success: true, rewritten: result.text, usage: undefined, providerUsed: result.providerUsed, latencyMs: result.latencyMs }
   },
   { allowedRoles: ['admin', 'editor', 'executive'], actionName: 'ai_draft_response' },
 )

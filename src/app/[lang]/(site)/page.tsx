@@ -1,6 +1,7 @@
 import Link from 'next/link'
-import { ArrowRight, ShieldCheck, Video, Banknote, Activity, Globe, Vote, Megaphone, Lock, Users, Fingerprint, Layers, Cpu, Check, FileText } from 'lucide-react'
+import { ArrowRight, ShieldCheck, Video, Banknote, Activity, Globe, Vote, Megaphone, Lock, Users, Fingerprint, Layers, Cpu, Check, FileText, Building2, GraduationCap, HardHat, Home, Smartphone, Zap } from 'lucide-react'
 import { Metadata } from 'next'
+import { WebSiteJsonLd, BreadcrumbJsonLd } from '@/components/seo/json-ld'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,8 +11,15 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   return {
     title: isHindi ? 'नागरिक समूहों के लिए ऑपरेटिंग सिस्टम | संगठन' : 'The Operating System for Civic Collectives | Sangathan',
     description: isHindi
-      ? 'एनजीओ, छात्र संघों और सामुदायिक समूहों के लिए सदस्यों, निधियों और शासन का प्रबंधन करने के लिए डिजिटल बुनियादी ढांचा।'
-      : 'Digital infrastructure for NGOs, student unions, and community groups to manage members, funds, and governance.',
+      ? 'एनजीओ, छात्र संघों, श्रमिक संघों और आवास समितियों के लिए सदस्यों, निधियों, चुनावों और शासन का प्रबंधन करने के लिए डिजिटल बुनियादी ढांचा। भारत के लिए निर्मित।'
+      : 'Digital infrastructure for NGOs, student unions, workers unions, and housing societies to manage members, funds, elections, and governance. Built for India.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}`,
+      languages: {
+        'en': 'https://sangathan.space/en',
+        'hi': 'https://sangathan.space/hi',
+      },
+    },
   }
 }
 
@@ -21,7 +29,10 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
   
   return (
     <div className="bg-white min-h-screen relative font-sans text-slate-900 selection:bg-indigo-100">
-      
+      <WebSiteJsonLd />
+      <BreadcrumbJsonLd items={[
+        { name: isHindi ? 'होम' : 'Home', url: `https://sangathan.space/${lang}` },
+      ]} />
       {/* Background Dot Pattern (Technical Aesthetic) */}
       <div 
         className="absolute inset-0 z-0 pointer-events-none opacity-[0.03]"
@@ -42,8 +53,8 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
           
           <p className="text-xl sm:text-2xl text-slate-500 max-w-3xl mx-auto mb-12 leading-snug tracking-tight font-medium">
             {isHindi
-              ? 'एनजीओ और यूनियनों के लिए सुरक्षित बुनियादी ढांचा। सदस्यों, धन और शासन का प्रबंधन करें बिना अराजकता के।'
-              : 'Secure infrastructure for NGOs and Unions. Manage members, funds, and governance without the chaos.'}
+              ? 'एनजीओ, छात्र संघों, श्रमिक संघों और आवास समितियों के लिए सुरक्षित बुनियादी ढांचा। सदस्यों, धन और शासन का प्रबंधन करें बिना अराजकता के।'
+              : 'Secure infrastructure for NGOs, Student Unions, Workers Unions, and Housing Societies. Manage members, funds, and governance without the chaos.'}
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
@@ -183,6 +194,183 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
            </div>
         </section>
 
+        {/* WHO USES SANGATHAN */}
+        <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="mb-16">
+            <p className="text-indigo-600 font-medium text-sm mb-3">{isHindi ? 'किसके लिए' : 'Built For'}</p>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">{isHindi ? 'हर नागरिक समूह के लिए' : 'Every Civic Collective'}</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* NGO */}
+            <Link href={`/${lang}/features#ngo`} className="group bg-white border border-slate-200 p-8 hover:border-indigo-300 hover:shadow-sm transition-all flex flex-col h-full">
+              <div className="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Building2 className="text-indigo-600" size={24} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">
+                {isHindi ? 'एनजीओ और गैर-लाभकारी' : 'NGOs & Non-Profits'}
+              </h3>
+              <p className="text-slate-500 text-sm mb-6 flex-grow leading-relaxed">
+                {isHindi ? 'स्वयंसेवकों का प्रबंधन करें, 80G रसीदों के साथ दान ट्रैक करें और फंडर्स को प्रभाव दिखाएं।' : 'Manage volunteers, track donations with 80G receipts, and demonstrate impact to funders.'}
+              </p>
+              <ul className="space-y-2 mb-6">
+                {['80G Tax Receipts', 'FCRA Compliance', 'Donor CRM', 'Grant Matcher'].map((feature, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
+                    <Check className="text-indigo-500 shrink-0 mt-0.5" size={16} />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-auto text-sm font-bold text-indigo-600 flex items-center gap-1 group-hover:gap-2 transition-all">
+                {isHindi ? 'अधिक जानें' : 'Learn more'} <ArrowRight size={14} />
+              </div>
+            </Link>
+
+            {/* Student Unions */}
+            <Link href={`/${lang}/features#student`} className="group bg-white border border-slate-200 p-8 hover:border-emerald-300 hover:shadow-sm transition-all flex flex-col h-full">
+              <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <GraduationCap className="text-emerald-600" size={24} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">
+                {isHindi ? 'छात्र संघ' : 'Student Unions'}
+              </h3>
+              <p className="text-slate-500 text-sm mb-6 flex-grow leading-relaxed">
+                {isHindi ? 'लिंगदोह अनुपालन के साथ परिसर चुनाव चलाएं, RTI दायर करें और छात्रों को जुटाएं।' : 'Run campus elections with Lyngdoh compliance, file RTIs, and mobilize students across hostels.'}
+              </p>
+              <ul className="space-y-2 mb-6">
+                {['Lyngdoh Compliance', 'Gyapan Builder', 'Campus Elections', 'Hostel Audit'].map((feature, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
+                    <Check className="text-emerald-500 shrink-0 mt-0.5" size={16} />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-auto text-sm font-bold text-emerald-600 flex items-center gap-1 group-hover:gap-2 transition-all">
+                {isHindi ? 'अधिक जानें' : 'Learn more'} <ArrowRight size={14} />
+              </div>
+            </Link>
+
+            {/* Workers Unions */}
+            <Link href={`/${lang}/features#worker`} className="group bg-white border border-slate-200 p-8 hover:border-orange-300 hover:shadow-sm transition-all flex flex-col h-full">
+              <div className="w-12 h-12 bg-orange-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <HardHat className="text-orange-600" size={24} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">
+                {isHindi ? 'श्रमिक संघ' : 'Workers Unions'}
+              </h3>
+              <p className="text-slate-500 text-sm mb-6 flex-grow leading-relaxed">
+                {isHindi ? 'सामूहिक सौदेबाजी का समन्वय करें, हड़ताल कार्यों का प्रबंधन करें और शिकायतों को ट्रैक करें।' : 'Coordinate collective bargaining, manage strike actions, and track grievances through arbitration.'}
+              </p>
+              <ul className="space-y-2 mb-6">
+                {['CBA Tracking', 'Strike Coordination', 'Dues Collection', 'Grievance Mgmt'].map((feature, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
+                    <Check className="text-orange-500 shrink-0 mt-0.5" size={16} />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-auto text-sm font-bold text-orange-600 flex items-center gap-1 group-hover:gap-2 transition-all">
+                {isHindi ? 'अधिक जानें' : 'Learn more'} <ArrowRight size={14} />
+              </div>
+            </Link>
+
+            {/* RWAs */}
+            <Link href={`/${lang}/features#rwa`} className="group bg-white border border-slate-200 p-8 hover:border-cyan-300 hover:shadow-sm transition-all flex flex-col h-full">
+              <div className="w-12 h-12 bg-cyan-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Home className="text-cyan-600" size={24} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">
+                {isHindi ? 'रेजिडेंट वेलफेयर' : 'Resident Welfare'}
+              </h3>
+              <p className="text-slate-500 text-sm mb-6 flex-grow leading-relaxed">
+                {isHindi ? 'रखरखाव बिलिंग को स्वचालित करें, आगंतुकों का प्रबंधन करें और सोसायटी चुनाव आयोजित करें।' : 'Automate maintenance billing, manage visitors, book facilities, and conduct society elections.'}
+              </p>
+              <ul className="space-y-2 mb-6">
+                {['Maintenance Billing', 'Visitor Management', 'Facility Booking', 'Society Polls'].map((feature, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
+                    <Check className="text-cyan-500 shrink-0 mt-0.5" size={16} />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-auto text-sm font-bold text-cyan-600 flex items-center gap-1 group-hover:gap-2 transition-all">
+                {isHindi ? 'अधिक जानें' : 'Learn more'} <ArrowRight size={14} />
+              </div>
+            </Link>
+          </div>
+        </section>
+
+        {/* BUILT FOR INDIA */}
+        <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 mb-6">
+                {isHindi ? 'भारतीय संगठनों के लिए निर्मित' : 'Built for Indian Organizations'}
+              </h2>
+              <p className="text-lg text-slate-500 mb-8 leading-relaxed">
+                {isHindi 
+                  ? 'संगठन को भारत की जटिल नागरिक संरचनाओं के लिए डिज़ाइन किया गया है। UPI भुगतान, क्षेत्रीय भाषाओं और भारतीय वैधानिक नियमों के अनुपालन के साथ गहराई से एकीकृत।' 
+                  : 'Sangathan is designed ground-up for the complexities of Indian civic structures. Deeply integrated with UPI payments, regional languages, and compliance for Indian statutory rules.'}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="border border-slate-200 p-6 bg-white hover:border-indigo-300 transition-colors">
+                <Banknote className="text-indigo-600 mb-4" size={24} strokeWidth={1.5} />
+                <h4 className="text-slate-900 font-bold tracking-tight mb-2">UPI & Razorpay Payments</h4>
+                <p className="text-slate-500 text-sm leading-relaxed">Direct integration with India's payment infrastructure.</p>
+              </div>
+              <div className="border border-slate-200 p-6 bg-white hover:border-indigo-300 transition-colors">
+                <Globe className="text-indigo-600 mb-4" size={24} strokeWidth={1.5} />
+                <h4 className="text-slate-900 font-bold tracking-tight mb-2">Hindi & Regional Languages</h4>
+                <p className="text-slate-500 text-sm leading-relaxed">Full bilingual interface with 6 regional dictionaries.</p>
+              </div>
+              <div className="border border-slate-200 p-6 bg-white hover:border-indigo-300 transition-colors">
+                <ShieldCheck className="text-indigo-600 mb-4" size={24} strokeWidth={1.5} />
+                <h4 className="text-slate-900 font-bold tracking-tight mb-2">Indian Compliance</h4>
+                <p className="text-slate-500 text-sm leading-relaxed">80G, FCRA, Lyngdoh Committee, RTI Act 2005.</p>
+              </div>
+              <div className="border border-slate-200 p-6 bg-white hover:border-indigo-300 transition-colors">
+                <Zap className="text-indigo-600 mb-4" size={24} strokeWidth={1.5} />
+                <h4 className="text-slate-900 font-bold tracking-tight mb-2">Offline-First PWA</h4>
+                <p className="text-slate-500 text-sm leading-relaxed">Works on low-end Android devices and zero-connectivity areas.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* WHAT'S NEW */}
+        <section className="py-16 border-t border-b border-slate-200 bg-slate-50/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <p className="text-indigo-600 font-medium text-sm mb-2">v1.19.0</p>
+                <h2 className="text-2xl font-bold tracking-tight text-slate-900">{isHindi ? 'नया क्या है' : "What's New"}</h2>
+              </div>
+              <Link href={`/${lang}/changelog`} className="text-sm font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
+                {isHindi ? 'सभी अपडेट देखें' : 'View all updates'} <ArrowRight size={14} />
+              </Link>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="border border-slate-200 p-5 bg-white">
+                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">🔗 Public Petitions</h4>
+                <p className="text-slate-500 text-sm">Live signature counters & volunteer conversion</p>
+              </div>
+              <div className="border border-slate-200 p-5 bg-white">
+                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">📱 WhatsApp & Telegram</h4>
+                <p className="text-slate-500 text-sm">Bilingual messaging for ground-level operations</p>
+              </div>
+              <div className="border border-slate-200 p-5 bg-white">
+                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">🛡️ Emergency SOS</h4>
+                <p className="text-slate-500 text-sm">1-tap crisis alert with GPS broadcasting</p>
+              </div>
+              <div className="border border-slate-200 p-5 bg-white">
+                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">🤖 AI Grant Matcher</h4>
+                <p className="text-slate-500 text-sm">Automated matching with govt schemes & CSR</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* 4. PRIVACY & SECURITY - Redesigned as Technical Lines instead of Blob */}
         <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -236,7 +424,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                   : 'Join the community of NGOs, unions, and collectives building power with Sangathan.'}
              </p>
              <Link 
-                href="/signup" 
+                href={`/${lang}/login?tab=signup`} 
                 className="inline-flex items-center gap-3 bg-slate-900 hover:bg-indigo-600 text-white px-10 py-5 font-bold text-sm transition-colors border border-slate-900 rounded-md"
              >
                 {isHindi ? 'अभी शुरू करें' : 'Deploy Infrastructure'} <ArrowRight size={16} />

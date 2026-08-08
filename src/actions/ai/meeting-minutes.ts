@@ -1,10 +1,10 @@
 'use server'
 
-import { generateObject, generateText } from 'ai'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { createSafeAction } from '@/lib/auth/actions'
-import { nvidia, SMART_MODEL, checkAiAccess } from '@/lib/ai/nvidia'
+import { checkAiAccess } from '@/lib/ai/nvidia'
+import { generateResilientCompletion, generateStructuredCompletion } from '@/lib/ai/resilient-router'
 
 const MeetingMinutesSchema = z.object({
   meetingId: z.string().uuid(),
@@ -38,9 +38,7 @@ export const generateMeetingMinutes = createSafeAction(
 
     if (!meeting) return { error: 'Meeting not found' }
 
-    const { object: minutes } = await generateObject({
-      model: nvidia(SMART_MODEL),
-      schema: MinutesSchema,
+    const minutesResult = await generateStructuredCompletion({
       prompt: `Generate structured meeting minutes from these notes.
 
 Meeting title: ${meeting.title}
@@ -48,11 +46,12 @@ Date: ${meeting.date}
 Notes: ${input.notes}
 
 Extract: summary, key discussion points, decisions made, action items with priority, and next steps.`,
-    })
+      maxTokens: 2_500,
+    }, MinutesSchema)
+    const minutes = minutesResult.object
 
-    const { text: formattedMinutes } = await generateText({
-      model: nvidia(SMART_MODEL),
-      prompt: `Format the following meeting minutes as a clean markdown document with proper headings.
+    const formattedResult = await generateResilientCompletion({
+      messages: [{ role: 'user', content: `Format the following meeting minutes as a clean markdown document with proper headings.
 
 Meeting: ${meeting.title}
 Date: ${meeting.date}
@@ -69,8 +68,10 @@ Action Items:
 ${minutes.action_items.map(a => `- [ ] ${a.task} (${a.priority} priority)${a.assignee_hint ? ` - ${a.assignee_hint}` : ''}`).join('\n')}
 
 Next Steps:
-${minutes.next_steps.map(n => `- ${n}`).join('\n')}`,
+${minutes.next_steps.map(n => `- ${n}`).join('\n')}` }],
+      maxTokens: 2_500,
     })
+    const formattedMinutes = formattedResult.text
 
     const { error: storeError } = await supabase.from('generated_content').insert({
       organisation_id: context.organizationId,
@@ -82,7 +83,7 @@ ${minutes.next_steps.map(n => `- ${n}`).join('\n')}`,
       language: 'en',
       status: 'draft',
       source_summary: minutes.summary,
-      model_used: SMART_MODEL,
+      model_used: formattedResult.providerUsed,
     } as never)
 
     if (storeError) return { error: storeError.message }
@@ -91,6 +92,8 @@ ${minutes.next_steps.map(n => `- ${n}`).join('\n')}`,
       success: true,
       minutes: formattedMinutes,
       action_items: minutes.action_items,
+      providerUsed: formattedResult.providerUsed,
+      latencyMs: minutesResult.latencyMs + formattedResult.latencyMs,
     }
   },
   { allowedRoles: ['admin', 'editor'], actionName: 'ai_meeting_minutes' },
@@ -111,19 +114,20 @@ export const createTasksFromMinutes = createSafeAction(
 
     if (!meeting) return { error: 'Meeting not found' }
 
-    const { object } = await generateObject({
-      model: nvidia(SMART_MODEL),
-      schema: z.object({
+    const taskSchema = z.object({
         tasks: z.array(z.object({
           title: z.string(),
           description: z.string(),
           priority: z.enum(['low', 'medium', 'high']),
         })),
-      }),
+      })
+    const taskResult = await generateStructuredCompletion({
       prompt: `Extract actionable tasks from these meeting notes. Each task must be specific and actionable.
 
 Notes: ${input.notes}`,
-    })
+      maxTokens: 2_000,
+    }, taskSchema)
+    const object = taskResult.object
 
     const tasks = []
     for (const task of object.tasks) {
@@ -140,7 +144,7 @@ Notes: ${input.notes}`,
       if (!error && created) tasks.push(created.id)
     }
 
-    return { success: true, tasksCreated: tasks.length, taskIds: tasks }
+    return { success: true, tasksCreated: tasks.length, taskIds: tasks, providerUsed: taskResult.providerUsed, latencyMs: taskResult.latencyMs }
   },
   { allowedRoles: ['admin', 'editor'], actionName: 'ai_tasks_from_minutes' },
 )

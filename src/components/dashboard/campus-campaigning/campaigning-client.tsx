@@ -91,34 +91,36 @@ export default function CampaigningClient({ initialTasks, initialEvents }: Campa
   return (
     <div className="space-y-8">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gradient-to-r from-orange-950 via-slate-900 to-orange-950 text-white p-6 rounded-2xl border border-orange-800 shadow-xl">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white text-slate-900 p-6 rounded-sm border border-slate-200 shadow-xs">
         <div className="flex items-center gap-3">
-          <Megaphone className="w-8 h-8 text-orange-400" />
+          <div className="w-10 h-10 rounded-sm bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-600">
+            <Megaphone className="w-5 h-5" />
+          </div>
           <div>
-            <h2 className="text-xl font-bold">Campus Campaigning & Mobilization Suite</h2>
-            <p className="text-slate-300 text-sm mt-1">
+            <h2 className="text-lg font-bold text-slate-900">Campus Campaigning &amp; Mobilization Suite</h2>
+            <p className="text-slate-500 text-xs mt-0.5">
               Hostel-to-Hostel (H2H) canvassing tracker, Class-to-Class (C2C) lecture campaign scheduler, and poster wall allocation.
             </p>
           </div>
         </div>
 
         {/* Tab Controls */}
-        <div className="flex bg-white/10 p-1 rounded-xl border border-white/20">
+        <div className="flex bg-slate-100 p-1 rounded-sm border border-slate-200">
           <button
             onClick={() => setActiveTab('h2h')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${activeTab === 'h2h' ? 'bg-orange-600 text-white shadow' : 'text-slate-300 hover:text-white'}`}
+            className={`px-3 py-1.5 rounded-sm text-xs font-bold transition ${activeTab === 'h2h' ? 'bg-white text-orange-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
           >
             H2H Hostel Canvassing
           </button>
           <button
             onClick={() => setActiveTab('c2c')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${activeTab === 'c2c' ? 'bg-orange-600 text-white shadow' : 'text-slate-300 hover:text-white'}`}
+            className={`px-3 py-1.5 rounded-sm text-xs font-bold transition ${activeTab === 'c2c' ? 'bg-white text-orange-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
           >
             C2C Class Campaigning
           </button>
           <button
             onClick={() => setActiveTab('posters')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${activeTab === 'posters' ? 'bg-orange-600 text-white shadow' : 'text-slate-300 hover:text-white'}`}
+            className={`px-3 py-1.5 rounded-sm text-xs font-bold transition ${activeTab === 'posters' ? 'bg-white text-orange-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
           >
             Handmade Poster Wall Map
           </button>

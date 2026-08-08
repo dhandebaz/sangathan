@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.20.0] - 2026-08-09
+### Added
+- **India-Targeted SEO Infrastructure**: Expanded `sitemap.ts` to 30+ routes with hreflang alternates (`en`/`hi`), updated `robots.ts` for `https://sangathan.space`, added `json-ld.tsx` server components (Organization, WebSite, SoftwareApplication, Breadcrumb, FAQ), and injected 30+ India-specific keywords into site layout metadata.
+- **Frontend & Landing Page Enhancements**: Added 3 new sections to `src/app/[lang]/(site)/page.tsx` ("Who Uses Sangathan", "Built for India", "What's New") with full Hindi translations (`isHindi`).
+- **Standardized UI Pages**: Standardized `security/page.tsx` using `PageHeader` and Tailwind CSS utilities. Enhanced `pricing/page.tsx`, `about/page.tsx`, `contact/page.tsx` with JSON-LD, breadcrumbs, and `PageHeader`.
+- **Navigation & Footer Updates**: Added links for About, Changelog, Roadmap, Status, Network, Community Guidelines, and Refund Policy.
+- **Dynamic Icons**: Added missing Lucide icon mappings and dynamic feature counter to `interactive-features.tsx`.
+
 ### Added
 - **Feature Gap Analysis**: Conducted a thorough feature gap analysis for the 4 organization types (NGOs, Unions, RWAs/Housing Societies, Student Groups).
 - **CBA & Grants Management**: Added database tables and dashboard UI for Unions to manage Collective Bargaining Agreements, and for NGOs to track grant proposals and compliance deadlines directly from their dashboards.

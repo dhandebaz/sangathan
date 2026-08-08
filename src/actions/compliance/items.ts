@@ -21,21 +21,23 @@ export type ComplianceItemRow = {
   registration_link?: string
 }
 
+import { createServiceClient } from '@/lib/supabase/service'
+
 async function evaluateComplianceRecommendations(orgId: string, orgType: string) {
-  const supabase = await createClient()
+  const adminClient = createServiceClient()
 
   // 1. Fetch real usage metrics
-  const { count: memberCount } = await supabase
+  const { count: memberCount } = await adminClient
     .from('profiles')
     .select('*', { count: 'exact', head: true })
     .eq('organisation_id', orgId)
 
-  const { count: eventCount } = await supabase
+  const { count: eventCount } = await adminClient
     .from('events')
     .select('*', { count: 'exact', head: true })
     .eq('organisation_id', orgId)
 
-  const { data: donations } = await supabase
+  const { data: donations } = await adminClient
     .from('donations')
     .select('amount, currency')
     .eq('organisation_id', orgId)
@@ -48,7 +50,7 @@ async function evaluateComplianceRecommendations(orgId: string, orgType: string)
     totalDonations: totalDonations,
     eventCount: eventCount || 0,
     hasForeignDonations,
-    hasPaidTickets: false // placeholder, could check event_tickets table
+    hasPaidTickets: false
   }
 
   // 2. Determine required items based on rules
@@ -61,7 +63,7 @@ async function evaluateComplianceRecommendations(orgId: string, orgType: string)
   }
 
   // 3. Fetch existing items
-  const { data: existingItems } = await supabase
+  const { data: existingItems } = await adminClient
     .from('compliance_items')
     .select('title')
     .eq('organisation_id', orgId)
@@ -72,7 +74,7 @@ async function evaluateComplianceRecommendations(orgId: string, orgType: string)
   for (const ruleId of requiredRuleIds) {
     const rule = COMPLIANCE_RULES.find(r => r.id === ruleId)
     if (rule && !existingTitles.has(rule.title)) {
-      await supabase.from('compliance_items').insert({
+      await adminClient.from('compliance_items').insert({
         organisation_id: orgId,
         title: rule.title,
         category: rule.category,

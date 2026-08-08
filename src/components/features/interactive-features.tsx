@@ -30,11 +30,21 @@ import {
   Database,
   Ticket,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Globe,
+  Award,
+  Smartphone,
+  Sparkles,
+  ShieldAlert,
+  Printer,
+  BadgeCheck,
+  UserCheck,
+  Zap,
+  Shield
 } from 'lucide-react'
 
 // Map icon names as strings to Lucide React components
-const iconMap: Record<string, React.ComponentType<any>> = {
+const iconMap: Record<string, React.ElementType> = {
   Building2, 
   GraduationCap, 
   HardHat, 
@@ -60,7 +70,17 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   Wallet,
   LineChart,
   Database,
-  Ticket
+  Ticket,
+  Globe,
+  Award,
+  Smartphone,
+  Sparkles,
+  ShieldAlert,
+  Printer,
+  BadgeCheck,
+  UserCheck,
+  Zap,
+  Shield
 }
 
 interface Feature {
@@ -163,7 +183,9 @@ export function InteractiveFeatures({ orgs, isHindi, lang }: InteractiveFeatures
       if (hash) {
         const tabId = hash.replace('#', '')
         if (orgs.some(org => org.id === tabId)) {
+          // eslint-disable-next-line
           setActiveTab(tabId)
+          // eslint-disable-next-line
           setActiveFeatureIndex(0)
         }
       }
@@ -247,7 +269,7 @@ export function InteractiveFeatures({ orgs, isHindi, lang }: InteractiveFeatures
         {/* Left Pane: Features List */}
         <div className="lg:col-span-4 space-y-2 max-h-[640px] overflow-y-auto pr-3 border-r border-slate-100">
           <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4 px-3">
-            {isHindi ? 'सभी १४ सुविधाएं' : 'All 14 Features'}
+            {isHindi ? `सभी ${currentOrg.features.length} सुविधाएं` : `All ${currentOrg.features.length} Features`}
           </h3>
           {currentOrg.features.map((feature, index) => {
             const isActive = activeFeatureIndex === index

@@ -3,7 +3,11 @@
 import { MetricCard } from '@/components/analytics/metric-card'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Calendar, Users, CheckSquare, ArrowRight, UsersRound, Ticket, HandCoins, Building, Wrench, Scale, ScrollText } from 'lucide-react'
+import {
+  Calendar, Users, CheckSquare, ArrowRight, UsersRound, Ticket,
+  HandCoins, Building, Wrench, Scale, ScrollText,
+  MessageSquare, Radio, Flag, ShieldCheck, Database, AlertTriangle
+} from 'lucide-react'
 import Link from 'next/link'
 import { AdminStats, RecentActivityItem, DashboardEvent } from '@/types/dashboard'
 
@@ -80,6 +84,13 @@ export function AdminDashboard({
   const features = orgFeatures(type, lang)
   const label = orgLabel(type)
 
+  const quickTools = [
+    { label: 'Unified Inbox', href: `/${lang}/dashboard/communications`, icon: MessageSquare, desc: '2-way WhatsApp & Telegram chat desk' },
+    { label: 'Master Channels & QR', href: `/${lang}/dashboard/channels`, icon: Radio, desc: 'Link WhatsApp via QR & Telegram bot' },
+    { label: 'Petitions & Campaigns', href: `/${lang}/dashboard/campaigns`, icon: Flag, desc: 'Public petitions with viral join hooks' },
+    { label: 'Transparency Ledger', href: `/${lang}/dashboard/transparency`, icon: ShieldCheck, desc: 'Public trust & cryptographically hashed expenses' },
+  ]
+
   return (
     <div className="space-y-6 pb-20 md:pb-0">
       <div className="flex flex-col gap-1">
@@ -92,6 +103,21 @@ export function AdminDashboard({
         <MetricCard title="Events" value={stats.events} icon={Calendar} />
         <MetricCard title="Open Tasks" value={stats.tasks} icon={CheckSquare} />
         <MetricCard title={type === 'ngo' ? 'Donations' : 'Activity'} value={stats.donations} icon={type === 'ngo' ? HandCoins : Building} />
+      </div>
+
+      {/* Grassroots & Field Tools */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        {quickTools.map((tool) => (
+          <Button key={tool.href} asChild variant="outline" className="h-auto flex-col items-start gap-1 p-3.5 bg-white hover:bg-slate-50/80 border-slate-200 shadow-xs">
+            <Link href={tool.href}>
+              <div className="flex items-center gap-2">
+                <tool.icon className="h-4 w-4 text-indigo-600" />
+                <span className="font-semibold text-xs text-slate-900">{tool.label}</span>
+              </div>
+              <span className="text-[11px] text-slate-500 font-normal line-clamp-1">{tool.desc}</span>
+            </Link>
+          </Button>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">

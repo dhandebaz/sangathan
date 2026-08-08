@@ -82,21 +82,23 @@ export default function CollaborationClient({
   return (
     <div className="space-y-8">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 text-white p-6 rounded-2xl border border-purple-900/50 shadow-xl">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white text-slate-900 p-6 rounded-sm border border-slate-200 shadow-xs">
         <div className="flex items-center gap-3">
-          <Network className="w-8 h-8 text-purple-400" />
+          <div className="w-10 h-10 rounded-sm bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600">
+            <Network className="w-5 h-5" />
+          </div>
           <div>
-            <h2 className="text-xl font-bold">Multi-Org Collaboration Hub (संयुक्त मोर्चा)</h2>
-            <p className="text-slate-300 text-sm mt-1">
+            <h2 className="text-lg font-bold text-slate-900">Multi-Org Collaboration Hub (संयुक्त मोर्चा)</h2>
+            <p className="text-slate-500 text-xs mt-0.5">
               Co-sign joint Gyapans, schedule joint protests/rallies, and manage campus student alliances.
             </p>
           </div>
         </div>
         <button
           onClick={() => setShowJointForm(!showJointForm)}
-          className="inline-flex items-center gap-2 bg-purple-500 hover:bg-purple-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow"
+          className="inline-flex items-center gap-1.5 bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs px-4 py-2 rounded-sm transition shadow-xs"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-3.5 h-3.5" />
           {showJointForm ? 'Cancel Form' : 'New Joint Action'}
         </button>
       </div>

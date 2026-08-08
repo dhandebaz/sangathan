@@ -44,12 +44,14 @@ Yours sincerely,`
   return (
     <div className="space-y-8">
       {/* Top Banner (Hidden during print) */}
-      <div className="print:hidden flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 rounded-2xl border border-indigo-900 shadow-xl">
+      <div className="print:hidden flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white text-slate-900 p-6 rounded-sm border border-slate-200 shadow-xs">
         <div className="flex items-center gap-3">
-          <Printer className="w-8 h-8 text-indigo-400" />
+          <div className="w-10 h-10 rounded-sm bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
+            <Printer className="w-5 h-5" />
+          </div>
           <div>
-            <h2 className="text-xl font-bold">Official Union Letterhead & Printable PDF Exporter</h2>
-            <p className="text-slate-300 text-sm mt-1">
+            <h2 className="text-lg font-bold text-slate-900">Official Union Letterhead &amp; Printable PDF Exporter</h2>
+            <p className="text-slate-500 text-xs mt-0.5">
               Format formal Gyapans, Press Releases, and RTI Applications into official print-ready letterheads.
             </p>
           </div>
@@ -58,16 +60,16 @@ Yours sincerely,`
         <div className="flex gap-2">
           <button
             onClick={handleCopyText}
-            className="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl border border-slate-700 shadow"
+            className="inline-flex items-center gap-1.5 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-sm border border-slate-300 shadow-xs transition"
           >
-            <Copy className="w-4 h-4" />
+            <Copy className="w-3.5 h-3.5" />
             Copy Text
           </button>
           <button
             onClick={handlePrint}
-            className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition shadow"
+            className="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs px-4 py-2 rounded-sm shadow-xs transition"
           >
-            <Printer className="w-4 h-4" />
+            <Printer className="w-3.5 h-3.5" />
             Print / Save Official PDF
           </button>
         </div>

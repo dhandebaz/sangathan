@@ -113,30 +113,32 @@ export default function RtiAtrClient({ initialLogs }: RtiAtrClientProps) {
   return (
     <div className="space-y-8">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gradient-to-r from-blue-950 via-slate-900 to-blue-950 text-white p-6 rounded-2xl border border-blue-800 shadow-xl">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white text-slate-900 p-6 rounded-sm border border-slate-200 shadow-xs">
         <div className="flex items-center gap-3">
-          <FileText className="w-8 h-8 text-blue-400" />
+          <div className="w-10 h-10 rounded-sm bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
+            <FileText className="w-5 h-5" />
+          </div>
           <div>
-            <h2 className="text-xl font-bold">RTI & Action Taken Report (ATR) Assistant</h2>
-            <p className="text-slate-300 text-sm mt-1">
-              File Right to Information (RTI Act 2005) queries & track Vice-Chancellor / Dean commitment deadlines.
+            <h2 className="text-lg font-bold text-slate-900">RTI &amp; Action Taken Report (ATR) Assistant</h2>
+            <p className="text-slate-500 text-xs mt-0.5">
+              File Right to Information (RTI Act 2005) queries &amp; track Vice-Chancellor / Dean commitment deadlines.
             </p>
           </div>
         </div>
 
         {/* Tab Controls */}
-        <div className="flex bg-white/10 p-1 rounded-xl border border-white/20">
+        <div className="flex bg-slate-100 p-1 rounded-sm border border-slate-200">
           <button
             onClick={() => setActiveTab('rti')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${activeTab === 'rti' ? 'bg-blue-600 text-white shadow' : 'text-slate-300 hover:text-white'}`}
+            className={`px-3 py-1.5 rounded-sm text-xs font-bold transition ${activeTab === 'rti' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
           >
-            RTI Act 2005 Generator
+            RTI Draft Generator
           </button>
           <button
             onClick={() => setActiveTab('atr')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${activeTab === 'atr' ? 'bg-blue-600 text-white shadow' : 'text-slate-300 hover:text-white'}`}
+            className={`px-3 py-1.5 rounded-sm text-xs font-bold transition ${activeTab === 'atr' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
           >
-            VC/Dean ATR Commitment Tracker
+            VC/Dean Commitment Tracker
           </button>
         </div>
       </div>

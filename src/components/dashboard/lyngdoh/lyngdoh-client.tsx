@@ -68,12 +68,14 @@ export default function LyngdohClient({ initialCandidates }: LyngdohClientProps)
   return (
     <div className="space-y-8">
       {/* Overview Banner */}
-      <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 text-white p-6 rounded-2xl border border-emerald-900/50 shadow-xl">
+      <div className="bg-white text-slate-900 p-6 rounded-sm border border-slate-200 shadow-xs">
         <div className="flex items-center gap-3">
-          <Scale className="w-8 h-8 text-emerald-400" />
+          <div className="w-10 h-10 rounded-sm bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+            <Scale className="w-5 h-5" />
+          </div>
           <div>
-            <h2 className="text-xl font-bold">Lyngdoh Committee Guidelines Audit</h2>
-            <p className="text-slate-300 text-sm mt-1">
+            <h2 className="text-lg font-bold text-slate-900">Lyngdoh Committee Guidelines Audit</h2>
+            <p className="text-slate-500 text-xs mt-0.5">
               Supreme Court mandated compliance checklist for Indian Student Union elections (Age limits, attendance, ₹5,000 spending cap).
             </p>
           </div>
