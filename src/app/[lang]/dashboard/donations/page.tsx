@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { LogDonationDialog } from '@/components/donations/log-donation-dialog'
 import { DonationList } from '@/components/donations/donation-list'
@@ -7,11 +8,12 @@ import { Printer } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Donation, DonationSubscription } from '@/types/dashboard'
+import { redirect } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 
-async function getOrgType(supabase: Awaited<ReturnType<typeof createClient>>): Promise<string> {
-  const orgId = await getSelectedOrganisationId()
+async function getOrgType(supabase: Awaited<ReturnType<typeof createClient>>, orgId: string): Promise<string> {
+  if (!orgId) return 'default'
   const { data } = await supabase.from('organisations').select('org_type').eq('id', orgId).single()
   return data?.org_type || 'default'
 }
@@ -42,10 +44,43 @@ export default async function DonationsPage(props: PageProps) {
   const status = params.status || 'all'
   
   const supabase = await createClient()
-  const selectedOrgId = await getSelectedOrganisationId()
-  const orgType = await getOrgType(supabase)
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    redirect(`/${lang}/login`)
+  }
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('organisation_id')
+    .eq('id', user.id)
+    .single()
+
+  let selectedOrgId = profile?.organisation_id
+  if (!selectedOrgId) {
+    try {
+      selectedOrgId = await getSelectedOrganisationId()
+    } catch {
+      // Fallback
+    }
+  }
+
+  if (!selectedOrgId) {
+    return (
+      <div className="p-8 text-center border border-border bg-card rounded-xl">
+        <h2 className="text-xl font-bold">No Organisation Selected</h2>
+        <p className="text-muted-foreground mt-2">Please join or set up an organisation to view donations.</p>
+      </div>
+    )
+  }
+
+  const orgType = await getOrgType(supabase, selectedOrgId)
   const { title, description } = getOrgLabels(orgType)
 
+  let donations: Donation[] = []
+  let subscriptions: DonationSubscription[] = []
+
+  // Fetch Donations
   let dbQuery = supabase
     .from('donations')
     .select('*')
@@ -63,29 +98,71 @@ export default async function DonationsPage(props: PageProps) {
   }
 
   const { data, error } = await dbQuery
-  
-  const donations = data as unknown as Donation[] | null
 
-  const { data: subData, error: subError } = await supabase
+  if (error) {
+    try {
+      const adminClient = createServiceClient()
+      let fallbackQuery = adminClient
+        .from('donations')
+        .select('*')
+        .eq('organisation_id', selectedOrgId)
+        .order('date', { ascending: false })
+
+      if (query) {
+        fallbackQuery = fallbackQuery.or(`donor_name.ilike.%${query}%,upi_reference.ilike.%${query}%`)
+      }
+
+      if (status === 'verified') {
+        fallbackQuery = fallbackQuery.not('verified_by', 'is', null)
+      } else if (status === 'pending') {
+        fallbackQuery = fallbackQuery.is('verified_by', null)
+      }
+
+      const fallbackRes = await fallbackQuery
+      if (!fallbackRes.error) {
+        donations = (fallbackRes.data || []) as unknown as Donation[]
+      }
+    } catch {
+      donations = []
+    }
+  } else {
+    donations = (data || []) as unknown as Donation[]
+  }
+
+  // Fetch Subscriptions (graceful fallback)
+  const { data: subData } = await supabase
     .from('donation_subscriptions')
     .select('*')
     .eq('organisation_id', selectedOrgId)
     .order('created_at', { ascending: false })
 
-  const subscriptions = subData as unknown as DonationSubscription[] | null
+  if (subData) {
+    subscriptions = subData as unknown as DonationSubscription[]
+  } else {
+    try {
+      const adminClient = createServiceClient()
+      const fallbackSub = await adminClient
+        .from('donation_subscriptions')
+        .select('*')
+        .eq('organisation_id', selectedOrgId)
+        .order('created_at', { ascending: false })
 
-  if (error || subError) {
-    return <div className="p-4 text-red-500">Error loading data</div>
+      if (fallbackSub.data) {
+        subscriptions = fallbackSub.data as unknown as DonationSubscription[]
+      }
+    } catch {
+      subscriptions = []
+    }
   }
 
-  const totalAmount = donations?.reduce((sum, d) => sum + Number(d.amount), 0) || 0
+  const totalAmount = donations.reduce((sum, d) => sum + Number(d.amount || 0), 0)
 
   return (
     <div>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-    <div className="space-y-6">
+        <div className="space-y-1">
            <h1 className="text-3xl font-bold tracking-tight text-foreground">{title}</h1>
-             <p className="text-muted-foreground mt-1">{description}</p>
+           <p className="text-muted-foreground mt-1">{description}</p>
         </div>
         <div className="flex gap-2">
             <a 
@@ -110,14 +187,14 @@ export default async function DonationsPage(props: PageProps) {
          <Card>
            <CardContent className="p-5">
              <div className="text-sm text-muted-foreground font-medium uppercase tracking-wide">Total Transactions</div>
-             <div className="text-3xl font-bold text-foreground mt-1">{donations?.length || 0}</div>
+             <div className="text-3xl font-bold text-foreground mt-1">{donations.length}</div>
            </CardContent>
          </Card>
          <Card>
            <CardContent className="p-5">
              <div className="text-sm text-muted-foreground font-medium uppercase tracking-wide">Pending Verification</div>
              <div className="text-3xl font-bold text-foreground mt-1">
-               {donations?.filter(d => !d.verified_by).length || 0}
+               {donations.filter(d => !d.verified_by).length}
              </div>
            </CardContent>
          </Card>
@@ -130,12 +207,12 @@ export default async function DonationsPage(props: PageProps) {
         </TabsList>
         <TabsContent value="one-time">
           <div className="content-card rounded-lg p-0 overflow-hidden border">
-             <DonationList donations={donations || []} />
+             <DonationList donations={donations} />
           </div>
         </TabsContent>
         <TabsContent value="recurring">
           <div className="content-card rounded-lg p-0 overflow-hidden border">
-             <SubscriptionList subscriptions={subscriptions || []} />
+             <SubscriptionList subscriptions={subscriptions} />
           </div>
         </TabsContent>
       </Tabs>

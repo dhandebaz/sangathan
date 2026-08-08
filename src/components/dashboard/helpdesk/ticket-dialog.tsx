@@ -45,9 +45,10 @@ export function TicketDialog({ orgType, orgId }: TicketDialogProps) {
       setOpen(false)
       setMessage('')
       router.refresh()
-    } catch (err) {
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : 'Failed to create ticket'
       console.error('Error creating ticket:', err)
-      toast.error('Failed to create ticket')
+      toast.error(errorMsg)
     } finally {
       setLoading(false)
     }

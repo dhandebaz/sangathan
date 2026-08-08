@@ -1,21 +1,38 @@
 import { createClient } from '@/lib/supabase/server'
-import { getUserContext } from '@/lib/auth/context'
 import { VolunteersClient } from '@/components/dashboard/volunteers-client'
+import { redirect } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 
-export default async function VolunteersPage() {
+export default async function VolunteersPage(props: { params: Promise<{ lang: string }> }) {
+  const { lang } = await props.params
   const supabase = await createClient()
-  const ctx = await getUserContext()
 
-  // Fetch all active members for the NGO to act as the volunteer roster
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    redirect(`/${lang}/login`)
+  }
+
+  // Fast direct profile lookup to avoid Redis latency
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('organisation_id')
+    .eq('id', user.id)
+    .single()
+
+  const orgId = profile?.organisation_id
+  if (!orgId) {
+    return <VolunteersClient initialVolunteers={[]} />
+  }
+
+  // Fetch active volunteers with lightweight columns & limit for fast response
   const { data: volunteers } = await supabase
     .from('members')
-    .select('*')
-    .eq('organisation_id', ctx.organizationId)
+    .select('id, full_name, email, phone, created_at')
+    .eq('organisation_id', orgId)
     .eq('status', 'active')
+    .order('created_at', { ascending: false })
+    .limit(100)
 
-  const typedVolunteers = volunteers || []
-
-  return <VolunteersClient initialVolunteers={typedVolunteers} />
+  return <VolunteersClient initialVolunteers={volunteers || []} />
 }

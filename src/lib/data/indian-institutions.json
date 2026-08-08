@@ -1,0 +1,211 @@
+[
+  {
+    "id": "jmi-delhi",
+    "name": "Jamia Millia Islamia (JMI)",
+    "short_name": "JMI",
+    "state": "Delhi",
+    "city": "New Delhi",
+    "type": "central_university",
+    "union_status": "independent_collectives_only",
+    "website": "https://www.jmi.ac.in",
+    "established_year": 1920
+  },
+  {
+    "id": "jnu-delhi",
+    "name": "Jawaharlal Nehru University (JNU)",
+    "short_name": "JNU",
+    "state": "Delhi",
+    "city": "New Delhi",
+    "type": "central_university",
+    "union_status": "official_union_permitted",
+    "website": "https://www.jnu.ac.in",
+    "established_year": 1969
+  },
+  {
+    "id": "du-delhi",
+    "name": "University of Delhi (DU)",
+    "short_name": "DU",
+    "state": "Delhi",
+    "city": "New Delhi",
+    "type": "central_university",
+    "union_status": "official_union_permitted",
+    "website": "https://www.du.ac.in",
+    "established_year": 1922
+  },
+  {
+    "id": "amu-aligarh",
+    "name": "Aligarh Muslim University (AMU)",
+    "short_name": "AMU",
+    "state": "Uttar Pradesh",
+    "city": "Aligarh",
+    "type": "central_university",
+    "union_status": "independent_collectives_only",
+    "website": "https://www.amu.ac.in",
+    "established_year": 1920
+  },
+  {
+    "id": "bhu-varanasi",
+    "name": "Banaras Hindu University (BHU)",
+    "short_name": "BHU",
+    "state": "Uttar Pradesh",
+    "city": "Varanasi",
+    "type": "central_university",
+    "union_status": "independent_collectives_only",
+    "website": "https://www.bhu.ac.in",
+    "established_year": 1916
+  },
+  {
+    "id": "uoh-hyderabad",
+    "name": "University of Hyderabad (UoH)",
+    "short_name": "UoH",
+    "state": "Telangana",
+    "city": "Hyderabad",
+    "type": "central_university",
+    "union_status": "official_union_permitted",
+    "website": "https://uohyd.ac.in",
+    "established_year": 1974
+  },
+  {
+    "id": "pu-chandigarh",
+    "name": "Panjab University (PU)",
+    "short_name": "PU",
+    "state": "Chandigarh",
+    "city": "Chandigarh",
+    "type": "state_university",
+    "union_status": "official_union_permitted",
+    "website": "https://puchd.ac.in",
+    "established_year": 1882
+  },
+  {
+    "id": "mu-mumbai",
+    "name": "University of Mumbai",
+    "short_name": "MU",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "type": "state_university",
+    "union_status": "official_union_permitted",
+    "website": "https://mu.ac.in",
+    "established_year": 1857
+  },
+  {
+    "id": "au-chennai",
+    "name": "Anna University",
+    "short_name": "AU",
+    "state": "Tamil Nadu",
+    "city": "Chennai",
+    "type": "state_university",
+    "union_status": "nominated_council",
+    "website": "https://www.annauniv.edu",
+    "established_year": 1978
+  },
+  {
+    "id": "iit-delhi",
+    "name": "Indian Institute of Technology Delhi (IIT Delhi)",
+    "short_name": "IITD",
+    "state": "Delhi",
+    "city": "New Delhi",
+    "type": "iit",
+    "union_status": "independent_collectives_only",
+    "website": "https://home.iitd.ac.in",
+    "established_year": 1961
+  },
+  {
+    "id": "iit-bombay",
+    "name": "Indian Institute of Technology Bombay (IIT Bombay)",
+    "short_name": "IITB",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "type": "iit",
+    "union_status": "independent_collectives_only",
+    "website": "https://www.iitb.ac.in",
+    "established_year": 1958
+  },
+  {
+    "id": "iit-madras",
+    "name": "Indian Institute of Technology Madras (IIT Madras)",
+    "short_name": "IITM",
+    "state": "Tamil Nadu",
+    "city": "Chennai",
+    "type": "iit",
+    "union_status": "independent_collectives_only",
+    "website": "https://www.iitm.ac.in",
+    "established_year": 1959
+  },
+  {
+    "id": "nit-trichy",
+    "name": "National Institute of Technology Tiruchirappalli (NIT Trichy)",
+    "short_name": "NITT",
+    "state": "Tamil Nadu",
+    "city": "Tiruchirappalli",
+    "type": "nit",
+    "union_status": "nominated_council",
+    "website": "https://www.nitt.edu",
+    "established_year": 1964
+  },
+  {
+    "id": "aiims-delhi",
+    "name": "All India Institute of Medical Sciences (AIIMS Delhi)",
+    "short_name": "AIIMS",
+    "state": "Delhi",
+    "city": "New Delhi",
+    "type": "aiims",
+    "union_status": "official_union_permitted",
+    "website": "https://www.aiims.edu",
+    "established_year": 1956
+  },
+  {
+    "id": "nlsiu-bangalore",
+    "name": "National Law School of India University (NLSIU)",
+    "short_name": "NLSIU",
+    "state": "Karnataka",
+    "city": "Bengaluru",
+    "type": "nlu",
+    "union_status": "official_union_permitted",
+    "website": "https://www.nls.ac.in",
+    "established_year": 1986
+  },
+  {
+    "id": "lu-lucknow",
+    "name": "University of Lucknow",
+    "short_name": "LU",
+    "state": "Uttar Pradesh",
+    "city": "Lucknow",
+    "type": "state_university",
+    "union_status": "independent_collectives_only",
+    "website": "https://www.lkouniv.ac.in",
+    "established_year": 1921
+  },
+  {
+    "id": "au-allahabad",
+    "name": "University of Allahabad",
+    "short_name": "AU",
+    "state": "Uttar Pradesh",
+    "city": "Prayagraj",
+    "type": "central_university",
+    "union_status": "independent_collectives_only",
+    "website": "https://www.allduniv.ac.in",
+    "established_year": 1887
+  },
+  {
+    "id": "calcutta-univ",
+    "name": "University of Calcutta",
+    "short_name": "CU",
+    "state": "West Bengal",
+    "city": "Kolkata",
+    "type": "state_university",
+    "union_status": "official_union_permitted",
+    "website": "https://www.caluniv.ac.in",
+    "established_year": 1857
+  },
+  {
+    "id": "jadavpur-univ",
+    "name": "Jadavpur University",
+    "short_name": "JU",
+    "state": "West Bengal",
+    "city": "Kolkata",
+    "type": "state_university",
+    "union_status": "official_union_permitted",
+    "website": "http://www.jadavpur.edu",
+    "established_year": 1955
+  }
+]

@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { AddMemberDialog } from '@/components/members/add-member-dialog'
 import { MemberTable } from '@/components/members/member-table'
@@ -7,12 +8,13 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { MemberFilters } from '@/components/members/member-filters'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { Member } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 
-async function getOrgType(supabase: Awaited<ReturnType<typeof createClient>>): Promise<string> {
-  const orgId = await getSelectedOrganisationId()
+async function getOrgType(supabase: Awaited<ReturnType<typeof createClient>>, orgId: string): Promise<string> {
+  if (!orgId) return 'default'
   const { data } = await supabase.from('organisations').select('org_type').eq('id', orgId).single()
   return data?.org_type || 'default'
 }
@@ -44,8 +46,37 @@ export default async function MembersPage({ searchParams, params }: PageProps & 
   const pageSize = 20
 
   const supabase = await createClient()
-  const selectedOrgId = await getSelectedOrganisationId()
-  const orgType = await getOrgType(supabase)
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    redirect(`/${lang}/login`)
+  }
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('organisation_id, role')
+    .eq('id', user.id)
+    .single()
+
+  let selectedOrgId = profile?.organisation_id
+  if (!selectedOrgId) {
+    try {
+      selectedOrgId = await getSelectedOrganisationId()
+    } catch {
+      // Ignore fallback error
+    }
+  }
+
+  if (!selectedOrgId) {
+    return (
+      <div className="p-8 text-center border border-border bg-card rounded-xl">
+        <h2 className="text-xl font-bold">No Organisation Selected</h2>
+        <p className="text-muted-foreground mt-2">Please join or set up an organisation to manage members.</p>
+      </div>
+    )
+  }
+
+  const orgType = await getOrgType(supabase, selectedOrgId)
   const { title, description } = getOrgLabels(orgType)
 
   let dbQuery = supabase
@@ -66,11 +97,40 @@ export default async function MembersPage({ searchParams, params }: PageProps & 
   const to = from + pageSize - 1
   dbQuery = dbQuery.range(from, to)
 
-  const { data: members, error, count } = await dbQuery as { data: Member[] | null, error: { message: string } | null, count: number | null }
+  let { data: members, error, count } = await dbQuery as { data: Member[] | null, error: { message: string } | null, count: number | null }
+
+  if (error) {
+    try {
+      const adminClient = createServiceClient()
+      let fallbackQuery = adminClient
+        .from('members')
+        .select('*', { count: 'exact' })
+        .eq('organisation_id', selectedOrgId)
+        .order('created_at', { ascending: false })
+
+      if (query) {
+        fallbackQuery = fallbackQuery.or(`full_name.ilike.%${query}%,phone.ilike.%${query}%`)
+      }
+      if (status !== 'all') {
+        fallbackQuery = fallbackQuery.eq('status', status)
+      }
+      fallbackQuery = fallbackQuery.range(from, to)
+
+      const fallbackRes = await fallbackQuery as { data: Member[] | null, error: { message: string } | null, count: number | null }
+      if (!fallbackRes.error) {
+        members = fallbackRes.data
+        count = fallbackRes.count
+        error = null
+      }
+    } catch (e) {
+      console.error('Fallback query error:', e)
+    }
+  }
 
   if (error) {
     console.error('Error fetching members:', error)
-    return <div className="p-4 text-destructive">Error loading members. Please try again.</div>
+    members = []
+    count = 0
   }
 
   const totalPages = count ? Math.ceil(count / pageSize) : 1

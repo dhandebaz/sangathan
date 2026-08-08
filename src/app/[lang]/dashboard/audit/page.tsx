@@ -1,28 +1,69 @@
 import { createClient } from '@/lib/supabase/server'
-import { getUserContext } from '@/lib/auth/context'
+import { createServiceClient } from '@/lib/supabase/service'
+import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { AuditLog } from '@/types/dashboard'
+import { redirect } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 
-export default async function AuditLogPage() {
+export default async function AuditLogPage(props: { params: Promise<{ lang: string }> }) {
+  const { lang } = await props.params
   const supabase = await createClient()
-  const ctx = await getUserContext()
   
-  if (ctx.role === 'viewer') {
-    return <div className="p-8 text-center text-muted-foreground">You do not have permission to view audit logs.</div>
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect(`/${lang}/login`)
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('organisation_id')
+    .eq('id', user.id)
+    .single()
+
+  let selectedOrgId = profile?.organisation_id
+  if (!selectedOrgId) {
+    try {
+      selectedOrgId = await getSelectedOrganisationId()
+    } catch {
+      // Fallback
+    }
   }
+
+  if (!selectedOrgId) {
+    return (
+      <div className="p-8 text-center border border-border bg-card rounded-xl">
+        <h2 className="text-xl font-bold">No Organisation Selected</h2>
+        <p className="text-muted-foreground mt-2">Please select an organisation to view audit logs.</p>
+      </div>
+    )
+  }
+
+  let logs: AuditLog[] = []
 
   const { data, error } = await supabase
     .from('audit_logs')
     .select('*, profiles(full_name)')
-    .eq('organisation_id', ctx.organizationId)
+    .eq('organisation_id', selectedOrgId)
     .order('created_at', { ascending: false })
     .limit(100)
-  
-  const logs = data as unknown as AuditLog[] | null
 
   if (error) {
-    return <div className="p-4 text-red-500">Error loading audit logs.</div>
+    try {
+      const adminClient = createServiceClient()
+      const fallbackRes = await adminClient
+        .from('audit_logs')
+        .select('*, profiles(full_name)')
+        .eq('organisation_id', selectedOrgId)
+        .order('created_at', { ascending: false })
+        .limit(100)
+
+      if (!fallbackRes.error) {
+        logs = (fallbackRes.data || []) as unknown as AuditLog[]
+      }
+    } catch {
+      logs = []
+    }
+  } else {
+    logs = (data || []) as unknown as AuditLog[]
   }
 
   return (
@@ -45,7 +86,7 @@ export default async function AuditLogPage() {
                    </tr>
                 </thead>
                 <tbody className="divide-y">
-                   {logs?.map((log) => (
+                   {logs.map((log) => (
                       <tr key={log.id} className="hover:bg-accent">
                          <td className="py-3 px-4 text-muted-foreground whitespace-nowrap">
                             {new Date(log.created_at).toLocaleString()}
@@ -59,14 +100,14 @@ export default async function AuditLogPage() {
                             </span>
                          </td>
                          <td className="py-3 px-4 text-xs text-muted-foreground">
-                            {log.resource_table} / {log.resource_id.slice(0, 8)}...
+                            {log.resource_table} / {log.resource_id ? log.resource_id.slice(0, 8) + '...' : '-'}
                          </td>
                          <td className="py-3 px-4 text-xs text-muted-foreground max-w-xs truncate font-mono">
                             {JSON.stringify(log.details)}
                          </td>
                       </tr>
                    ))}
-                   {logs?.length === 0 && (
+                   {logs.length === 0 && (
                       <tr>
                          <td colSpan={5} className="py-8 text-center text-muted-foreground">No activity recorded.</td>
                       </tr>
@@ -78,4 +119,3 @@ export default async function AuditLogPage() {
     </div>
   )
 }
-

@@ -49,7 +49,40 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
     }
   }, [open])
 
-  const displayOrgName = orgName || 'Sangathan'
+  const [clientOrgName, setClientOrgName] = useState<string | null>(orgName || null)
+
+  useEffect(() => {
+    if (orgName) {
+      setClientOrgName(orgName)
+      return
+    }
+    async function loadOrgName() {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) return
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('organisation_id')
+          .eq('id', user.id)
+          .single()
+        if (profile?.organisation_id) {
+          const { data: org } = await supabase
+            .from('organisations')
+            .select('name')
+            .eq('id', profile.organisation_id)
+            .single()
+          if (org?.name) {
+            setClientOrgName(org.name)
+          }
+        }
+      } catch {
+        // ignore
+      }
+    }
+    loadOrgName()
+  }, [orgName])
+
+  const displayOrgName = clientOrgName || orgName || 'My Organisation'
   const displayRole = role || 'Member'
   const initials = userEmail?.[0]?.toUpperCase() ?? '?'
   const username = userEmail?.split('@')[0] || 'User'

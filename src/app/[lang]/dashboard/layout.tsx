@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
 import { Heart } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { getOrgCapabilities } from '@/lib/capabilities'
 import { MobileNav } from '@/components/mobile/mobile-nav'
 import { ContextualFAB } from '@/components/mobile/contextual-fab'
@@ -42,31 +43,80 @@ export default async function DashboardLayout(props: {
 
   if (user) {
     try {
-      const selectedOrgId = await getSelectedOrganisationId()
-      capabilities = await getOrgCapabilities(selectedOrgId)
-      const { data: orgData } = await supabase
-        .from('organisations')
-        .select('name, logo_url, org_type, plan_name, whitelabel_enabled')
-        .eq('id', selectedOrgId)
+      let selectedOrgId = ''
+
+      // 1. Direct profile lookup for fast and reliable org ID
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('organisation_id')
+        .eq('id', user.id)
         .single()
-      if (orgData) {
-        const org = orgData as unknown as Organisation
-        orgName = org.name
-        orgLogoUrl = org.logo_url
-        orgType = org.org_type || 'ngo'
-        planName = org.plan_name
-        whitelabelEnabled = org.whitelabel_enabled ?? false
+
+      if (profile?.organisation_id) {
+        selectedOrgId = profile.organisation_id
+      } else {
+        try {
+          selectedOrgId = await getSelectedOrganisationId()
+        } catch {
+          // fallback
+        }
       }
-      const { data: membershipData } = await supabase
-        .from('members')
-        .select('role')
-        .eq('user_id', user.id)
-        .eq('organisation_id', selectedOrgId)
-        .eq('status', 'active')
-        .maybeSingle()
-      if (membershipData) {
-        const membership = membershipData as unknown as Membership
-        role = membership.role
+
+      if (selectedOrgId) {
+        try {
+          capabilities = await getOrgCapabilities(selectedOrgId)
+        } catch {
+          capabilities = { basic_governance: true }
+        }
+
+        const { data: orgData, error: orgErr } = await supabase
+          .from('organisations')
+          .select('name, logo_url, org_type, plan_name, whitelabel_enabled')
+          .eq('id', selectedOrgId)
+          .single()
+
+        if (orgData) {
+          const org = orgData as unknown as Organisation
+          orgName = org.name
+          orgLogoUrl = org.logo_url
+          orgType = org.org_type || 'ngo'
+          planName = org.plan_name
+          whitelabelEnabled = org.whitelabel_enabled ?? false
+        } else {
+          // Fallback via Service Client
+          try {
+            const adminClient = createServiceClient()
+            const { data: adminOrg } = await adminClient
+              .from('organisations')
+              .select('name, logo_url, org_type, plan_name, whitelabel_enabled')
+              .eq('id', selectedOrgId)
+              .single()
+
+            if (adminOrg) {
+              const org = adminOrg as unknown as Organisation
+              orgName = org.name
+              orgLogoUrl = org.logo_url
+              orgType = org.org_type || 'ngo'
+              planName = org.plan_name
+              whitelabelEnabled = org.whitelabel_enabled ?? false
+            }
+          } catch {
+            // Ignore
+          }
+        }
+
+        const { data: membershipData } = await supabase
+          .from('members')
+          .select('role')
+          .eq('user_id', user.id)
+          .eq('organisation_id', selectedOrgId)
+          .eq('status', 'active')
+          .maybeSingle()
+
+        if (membershipData) {
+          const membership = membershipData as unknown as Membership
+          role = membership.role
+        }
       }
     } catch (e) {
       if (isRedirectError(e)) throw e
@@ -92,12 +142,6 @@ export default async function DashboardLayout(props: {
   }
 
   const isAdmin = ['admin', 'executive'].includes(role)
-  const orgInitials = (orgName || 'S')
-    .split(' ')
-    .map(w => w[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase()
 
   return (
     <div className="flex min-h-screen bg-background text-foreground md:pb-0">
@@ -129,7 +173,7 @@ export default async function DashboardLayout(props: {
             )}
             <div className="flex flex-col min-w-0">
               <span className="text-lg font-bold text-foreground truncate leading-tight">
-                {whitelabelEnabled ? orgName : 'Sangathan'}
+                {whitelabelEnabled ? (orgName || 'Organisation') : 'Sangathan'}
               </span>
             </div>
           </Link>

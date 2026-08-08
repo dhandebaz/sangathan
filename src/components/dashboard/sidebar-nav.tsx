@@ -9,7 +9,7 @@ import {
   AlertCircle, Wrench, Gift, Flag, Badge,
   HeartHandshake, Network, Landmark, ScrollText,
   GalleryVerticalEnd, Gavel, UserCog, DollarSign, FileText, UserCheck, HardHat,
-  CalendarCheck
+  CalendarCheck, Printer
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -77,6 +77,8 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           title: 'Student Body',
           items: [
             { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
+            { href: `/${lang}/dashboard/induction`, icon: UserCheck, label: 'Induction Drive', show: true },
+            { href: `/${lang}/dashboard/posts`, icon: Badge, label: 'Union Posts (पद)', show: true },
             { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Committees', show: !!c.subgroups },
             { href: `/${lang}/dashboard/id-card`, icon: Badge, label: 'Student IDs', show: !!c.student_ids },
             { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers', show: !!c.volunteers },
@@ -87,9 +89,15 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           title: 'Governance & Ops',
           items: [
             { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Proposals', show: true },
+            { href: `/${lang}/dashboard/memorandums`, icon: FileText, label: 'Gyapan & Memorandums', show: true },
+            { href: `/${lang}/dashboard/letterhead`, icon: Printer, label: 'Official Letterhead', show: true },
+            { href: `/${lang}/dashboard/rti-atr`, icon: FileText, label: 'RTI & ATR Assistant', show: true },
+            { href: `/${lang}/dashboard/collaboration`, icon: Network, label: 'Joint Front & Collab', show: true },
             { href: `/${lang}/dashboard/elections`, icon: Vote, label: 'Elections', show: !!c.elections },
+            { href: `/${lang}/dashboard/election-counting`, icon: Vote, label: 'Election Counting Desk', show: !!c.elections },
+            { href: `/${lang}/dashboard/lyngdoh-compliance`, icon: Scale, label: 'Lyngdoh Audit', show: !!c.elections },
+            { href: `/${lang}/dashboard/campus-campaigning`, icon: Megaphone, label: 'Campus Campaigning', show: true },
             { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Meetings', show: !!c.meetings },
-            { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns', show: !!c.campaigns },
             { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: !!c.tasks },
             { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financials', show: true },
           ].filter(i => i.show)
@@ -98,6 +106,8 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           id: 'support',
           title: 'Student Services',
           items: [
+            { href: `/${lang}/dashboard/hostel-mess`, icon: Wrench, label: 'Hostel & Mess Audit', show: true },
+            { href: `/${lang}/dashboard/legal-aid`, icon: Scale, label: 'Legal Aid & Anti-Ragging', show: true },
             { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Helpdesk', show: true },
             { href: `/${lang}/dashboard/grievances`, icon: Scale, label: 'Grievances', show: !!c.grievances },
             { href: `/${lang}/dashboard/appeals`, icon: ScrollText, label: 'Appeals', show: isAdmin },

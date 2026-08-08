@@ -17,26 +17,39 @@ export async function submitSupportTicket(message: string, orgId: string, userId
   try {
     const supabase = createServiceClient()
     
-    // 1. AI Intent Classification
-    const { object } = await generateObject({
-      model: openai('gpt-4o'),
-      schema: z.object({
-        intent: z.enum(['bug', 'feature_request', 'help']),
-        title: z.string().describe('A short, 3-5 word summary of the issue'),
-        priority: z.enum(['low', 'medium', 'high', 'critical']).describe('Estimated priority based on the request severity')
-      }),
-      prompt: `Analyze the following support request from a user.
-      Determine the intent (bug, feature request, or general help).
-      Assign a short title and a priority.
-      
-      User Request: "${message}"`
-    })
+    let intent: 'bug' | 'feature_request' | 'help' = 'help'
+    let title = message.slice(0, 50) + (message.length > 50 ? '...' : '')
+    let priority: 'low' | 'medium' | 'high' | 'critical' = 'medium'
 
-    const { intent, title, priority } = object
+    // 1. AI Intent Classification (Fail-safe try/catch)
+    if (process.env.OPENAI_API_KEY) {
+      try {
+        const { object } = await generateObject({
+          model: openai('gpt-4o'),
+          schema: z.object({
+            intent: z.enum(['bug', 'feature_request', 'help']),
+            title: z.string().describe('A short, 3-5 word summary of the issue'),
+            priority: z.enum(['low', 'medium', 'high', 'critical']).describe('Estimated priority based on the request severity')
+          }),
+          prompt: `Analyze the following support request from a user.
+          Determine the intent (bug, feature request, or general help).
+          Assign a short title and a priority.
+          
+          User Request: "${message}"`
+        })
+
+        if (object) {
+          intent = object.intent
+          title = object.title
+          priority = object.priority
+        }
+      } catch (aiError) {
+        console.warn('AI classification skipped or failed, using intelligent fallback:', aiError)
+      }
+    }
 
     // 2. Save to Database
-    // We map intent to ticket 'type'
-    const { error: dbError } = await supabase.from('tickets').insert({
+    const { data: ticket, error: dbError } = await supabase.from('tickets').insert({
       title,
       description: message,
       type: intent,
@@ -44,20 +57,27 @@ export async function submitSupportTicket(message: string, orgId: string, userId
       status: 'open',
       organisation_id: orgId,
       created_by: userId
-    })
+    }).select().single()
 
-    if (dbError) throw dbError
+    if (dbError) {
+      console.error('Database insert error for ticket:', dbError)
+      throw new Error(dbError.message || 'Failed to save ticket')
+    }
 
     // 3. Sentry Logging for Bugs
     if (intent === 'bug') {
-      Sentry.captureMessage(`Bug Report: ${title}`, { 
-        level: 'warning', 
-        tags: { orgId, userId },
-        extra: { message }
-      })
+      try {
+        Sentry.captureMessage(`Bug Report: ${title}`, { 
+          level: 'warning', 
+          tags: { orgId, userId },
+          extra: { message }
+        })
+      } catch (sentryErr) {
+        console.warn('Sentry logging skipped:', sentryErr)
+      }
     }
 
-    // 4. Send Email to Admin via AgentMail
+    // 4. Send Email Notification via AgentMail (Optional & Safe)
     try {
       if (process.env.AGENTMAIL_API_KEY && process.env.AGENTMAIL_INBOX_ID) {
         await agentmail.inboxes.messages.send(INBOX_ID, {
@@ -77,14 +97,14 @@ export async function submitSupportTicket(message: string, orgId: string, userId
         })
       }
     } catch (emailError) {
-      console.error('Failed to send email with agentmail:', emailError)
-      // We don't throw here to avoid failing the user request if email fails
+      console.warn('Failed to send email notification:', emailError)
     }
 
-    return { success: true, intent }
+    return { success: true, ticket }
 
-  } catch (error) {
-    console.error('Error submitting support ticket:', error)
-    return { success: false, error: 'Failed to process support ticket' }
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : 'Unknown error'
+    console.error('Error submitting support ticket:', errorMsg)
+    return { success: false, error: errorMsg }
   }
 }

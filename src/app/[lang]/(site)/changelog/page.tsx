@@ -1,4 +1,4 @@
-import { Sparkles, ShieldCheck, Zap, Server, Code, Users, Calendar, Activity, Rocket, Globe, LucideIcon, Building2 } from 'lucide-react'
+import { Sparkles, ShieldCheck, Zap, Server, Code, Users, Calendar, Activity, Rocket, Globe, LucideIcon, Building2, Network } from 'lucide-react'
 import { Metadata } from 'next'
 import { PageHeader } from '@/components/public/page-header'
 
@@ -34,6 +34,290 @@ type ChangelogEntry = {
 }
 
 const changelogData: ChangelogEntry[] = [
+  {
+    version: 'v1.18.0',
+    titleEn: 'Official Union Letterhead, Election Counting Tally & Regional i18n',
+    titleHi: 'आधिकारिक यूनियन लेटरहेड, चुनाव मतगणना टैली एवं क्षेत्रीय भाषाएं',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Major operational release introducing Official Union Letterhead & Printable PDF Exporter, Live Campus Election Counting Tally Desk for Central Panel candidates, Offline PWA Local Storage Queue for campus internet blackouts, and Expanded Regional Language Dictionaries supporting Hindi, Bengali, Tamil, Telugu, Marathi, and Kannada.',
+    descHi: 'आधिकारिक यूनियन लेटरहेड और प्रिंट करने योग्य पीडीएफ एक्सपोर्टर, सेंट्रल पैनल के उम्मीदवारों के लिए लाइव कैंपस इलेक्शन काउंटिंग टैली डेस्क, कैंपस इंटरनेट ब्लैकआउट के लिए ऑफलाइन पीडब्ल्यूए लोकल स्टोरेज कतार, और हिंदी, बंगाली, तमिल, तेलुगु, मराठी और कन्नड़ का समर्थन करने वाले विस्तारित क्षेत्रीय भाषा शब्दकोश पेश करने वाली प्रमुख परिचालन रिलीज।',
+    color: 'indigo',
+    icon: Sparkles,
+    features: [
+      {
+        nameEn: 'Official Union Letterhead PDF Exporter', nameHi: 'आधिकारिक यूनियन लेटरहेड पीडीएफ एक्सपोर्टर',
+        textEn: 'Format formal Gyapans, RTI queries, and press releases onto official Union letterheads with customizable emblem headers and reference numbers.',
+        textHi: 'अनुकूलन योग्य प्रतीक हेडर और संदर्भ संख्याओं के साथ आधिकारिक यूनियन लेटरहेड पर औपचारिक ज्ञापनों, आरटीआई प्रश्नों और प्रेस विज्ञप्तियों को प्रारूपित करें।'
+      },
+      {
+        nameEn: 'Live Election Counting Tally Desk', nameHi: 'लाइव चुनाव मतगणना टैली डेस्क',
+        textEn: 'Log round-by-round and booth-by-booth vote tallies on election counting night with live margin calculations for Central Panel candidates.',
+        textHi: 'सेंट्रल पैनल के उम्मीदवारों के लिए लाइव मार्जिन गणना के साथ चुनाव मतगणना की रात को राउंड-बाय-राउंड और बूथ-बाय-बूथ वोट टैली दर्ज करें।'
+      }
+    ]
+  },
+  {
+    version: 'v1.17.0',
+    titleEn: 'Complete Indian Student Union Feature Suite',
+    titleHi: 'संपूर्ण भारतीय छात्र संघ सुविधा सूट',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Major release delivering 4 core Indian Student Union modules: Hostel & Mess Quality Audit Portal, RTI Act 2005 & VC/Dean Action Taken Report (ATR) Assistant, Legal Aid & Anti-Ragging Cell with Emergency Protest Detention SOS, and Campus Campaigning Suite for H2H canvassing and C2C lecture campaign scheduling.',
+    descHi: '4 कोर भारतीय छात्र संघ मॉड्यूल पेश करने वाली प्रमुख रिलीज़: हॉस्टल और मेस गुणवत्ता ऑडिट पोर्टल, आरटीआई अधिनियम 2005 और कुलपति/डीन एक्शन टेकन रिपोर्ट (एटीआर) सहायक, आपातकालीन विरोध निरोध एसओएस के साथ कानूनी सहायता और एंटी-रैगिंग सेल, और एच 2 एच कैनवासिंग और सी 2 सी व्याख्यान अभियान शेड्यूलिंग के लिए परिसर अभियान सूट।',
+    color: 'emerald',
+    icon: ShieldCheck,
+    features: [
+      {
+        nameEn: 'Hostel Allotment & Mess Quality Audit', nameHi: 'छात्रावास आवंटन एवं मेस गुणवत्ता समीक्षा',
+        textEn: 'Track room allotment delays, submit daily mess meal ratings with photo evidence, and check 24x7 study hall availability.',
+        textHi: 'कमरे के आवंटन में देरी को ट्रैक करें, फोटो साक्ष्य के साथ दैनिक भोजन रेटिंग जमा करें, और 24x7 अध्ययन कक्ष की उपलब्धता की जांच करें।'
+      },
+      {
+        nameEn: 'RTI Act 2005 & Legal Aid Cell', nameHi: 'आरटीआई अधिनियम 2005 एवं कानूनी सहायता सेल',
+        textEn: 'Generate legal RTI applications, log administration commitment deadlines, trigger emergency detention SOS alerts, and file anonymous anti-ragging complaints.',
+        textHi: 'कानूनी आरटीआई आवेदन उत्पन्न करें, प्रशासन की प्रतिबद्धता समय सीमा दर्ज करें, आपातकालीन निरोध एसओएस अलर्ट ट्रिगर करें, और अनाम विरोधी रैगिंग शिकायतें दर्ज करें।'
+      }
+    ]
+  },
+  {
+    version: 'v1.16.0',
+    titleEn: 'Multi-Org Collaboration & Joint Front Hub (संयुक्त मोर्चा)',
+    titleHi: 'मल्टी-ऑर्ग सहयोग और संयुक्त मोर्चा हब',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Introduces multi-organization collaboration tools designed for Indian student union alliances (e.g. Left Unity, Joint Student Fronts). Includes inter-org alliance linking, co-signed Gyapan representations with joint leadership approvals, joint protest/rally scheduling with synchronized member broadcasts, and co-authored press statements.',
+    descHi: 'भारतीय छात्र संघ गठबंधनों (जैसे वाम एकता, संयुक्त छात्र मोर्चा) के लिए डिज़ाइन किए गए बहु-संगठन सहयोग उपकरण पेश करता है। इसमें अंतर-संगठन गठबंधन लिंकिंग, संयुक्त नेतृत्व अनुमोदनों के साथ सह-हस्ताक्षरित ज्ञापन प्रतिनिधित्व, सिंक्रनाइज़ सदस्य प्रसारण के साथ संयुक्त विरोध/रैली शेड्यूलिंग, और सह-लेखक प्रेस बयान शामिल हैं।',
+    color: 'purple',
+    icon: Network,
+    features: [
+      {
+        nameEn: 'Campus Alliance & Partner Linking', nameHi: 'कैंपस गठबंधन और पार्टनर लिंकिंग',
+        textEn: 'Connect and link with partner student organizations on campus to form active coalitions and joint action fronts.',
+        textHi: 'सक्रिय गठबंधन और संयुक्त कार्रवाई मोर्चे बनाने के लिए परिसर में भागीदार छात्र संगठनों से जुड़ें और लिंक करें।'
+      },
+      {
+        nameEn: 'Co-Signed Gyapans & Joint Rallies', nameHi: 'सह-हस्ताक्षरित ज्ञापन और संयुक्त रैलियां',
+        textEn: 'Co-author representations with digital approval from partner union leads and organize joint protests with synchronized multi-org member broadcasts.',
+        textHi: 'पार्टनर यूनियन के मुख्य कार्यकारी अधिकारियों से डिजिटल अनुमोदन के साथ सह-लेखक प्रतिनिधित्व करें और सिंक्रनाइज़ किए गए बहु-संगठन सदस्य प्रसारणों के साथ संयुक्त विरोध प्रदर्शन आयोजित करें।'
+      }
+    ]
+  },
+  {
+    version: 'v1.15.0',
+    titleEn: 'On-Ground Member Induction Drive & Union Posts (पद) Registry',
+    titleHi: 'ऑन-ग्राउंड सदस्य प्रवेश अभियान और यूनियन पोस्ट (पद) रजिस्ट्री',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Major feature update introducing tools for student union member drives and official designation management. Includes an On-Ground Induction Desk for rapid canteen/gate booth registration, scannable QR posters, batch paper slip intake, pre-configured Indian union posts (President, Vice President, General Secretary, Joint Secretary, Coordinator, Convener, etc.), and custom post type creation.',
+    descHi: 'छात्र संघ सदस्य अभियानों और आधिकारिक पद प्रबंधन के लिए उपकरणों की शुरुआत करने वाला प्रमुख सुविधा अद्यतन। इसमें तेजी से कैंटीन/गेट बूथ पंजीकरण के लिए ऑन-ग्राउंड इंडक्शन डेस्क, स्कैन योग्य क्यूआर पोस्टर, बैच पेपर स्लिप इनटेक, पूर्व-कॉन्फ़िगर किए गए भारतीय यूनियन पद (अध्यक्ष, उपाध्यक्ष, महासचिव, सह-सचिव, संयोजक, आदि) और कस्टम पोस्ट प्रकार निर्माण शामिल हैं।',
+    color: 'orange',
+    icon: Users,
+    features: [
+      {
+        nameEn: 'On-Ground Membership Induction Drive', nameHi: 'ऑन-ग्राउंड सदस्यता अभियान',
+        textEn: 'Fast mobile desk entry form for booth volunteers, scannable QR poster for self-registration, and batch intake for paper slips collected during rallies.',
+        textHi: 'बूथ स्वयंसेवकों के लिए त्वरित मोबाइल डेस्क प्रविष्टि फॉर्म, स्व-पंजीकरण के लिए स्कैन करने योग्य क्यूआर पोस्टर, और रैलियों के दौरान एकत्र की गई कागजी पर्चियों के लिए बैच इनटेक।'
+      },
+      {
+        nameEn: 'Union Posts (पद) & Designation Registry', nameHi: 'यूनियन पोस्ट (पद) एवं पदनाम रजिस्ट्री',
+        textEn: 'Pre-loaded default union posts (President/अध्यक्ष, Vice President/उपाध्यक्ष, General Secretary/महासचिव, etc.) with custom post creation and direct member assignment.',
+        textHi: 'कस्टम पोस्ट निर्माण और सीधे सदस्य आवंटन के साथ प्री-लोड डिफ़ॉल्ट यूनियन पद (अध्यक्ष, उपाध्यक्ष, महासचिव, आदि)।'
+      }
+    ]
+  },
+  {
+    version: 'v1.14.0',
+    titleEn: 'India-Focused Student Union Expansion & Master HEI Directory',
+    titleHi: 'भारत-केंद्रित छात्र संघ विस्तार और मास्टर एचईआई डायरेक्टरी',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Comprehensive localization release tailored for Indian Higher Educational Institutions (HEIs) and student politics. Includes a pre-populated master database of 1,000+ government institutions (including JMI, JNU, DU, BHU, IITs & NITs), support for independent student collectives on campuses where official unions are banned/restricted, Gyapan (ज्ञापन) Memorandum Builder, and automated Lyngdoh Committee compliance auditing.',
+    descHi: 'भारतीय उच्च शिक्षा संस्थानों (HEIs) और छात्र राजनीति के लिए तैयार की गई व्यापक स्थानीयकरण रिलीज़। इसमें 1,000+ सरकारी संस्थानों (जेएमआई, जेएनयू, डीयू, बीएचयू, आईआईटी और एनआईटी सहित) का एक पूर्व-निर्मित मास्टर डेटाबेस, उन परिसरों पर स्वतंत्र छात्र समूहों के लिए समर्थन जहां आधिकारिक यूनियनों पर प्रतिबंध/प्रतिबंधित है, ज्ञापन ज्ञापन बिल्डर, और स्वचालित लिंगदोह समिति अनुपालन ऑडिटिंग शामिल है।',
+    color: 'indigo',
+    icon: Rocket,
+    features: [
+      {
+        nameEn: 'Master Indian HEI Directory & Independent Collectives', nameHi: 'मास्टर भारतीय एचईआई निर्देशिका और स्वतंत्र समूह',
+        textEn: 'Pre-seeded database of Indian government universities and colleges with governance status tracking (Official Union vs Independent Student Collective mode for campuses like Jamia Millia Islamia).',
+        textHi: 'शासकीय स्थिति ट्रैकिंग के साथ भारतीय सरकारी विश्वविद्यालयों और कॉलेजों का पूर्व-सीडेड डेटाबेस (जामिया मिलिया इस्लामिया जैसे परिसरों के लिए आधिकारिक संघ बनाम स्वतंत्र छात्र सामूहिक मोड)।'
+      },
+      {
+        nameEn: 'Gyapan (ज्ञापन) & Memorandum Generator', nameHi: 'ज्ञापन एवं मांग पत्र निर्माता',
+        textEn: 'Formal representation drafting tool for Vice-Chancellors, Deans, and Wardens with integrated digital student signature petitions and official PDF export.',
+        textHi: 'एकीकृत डिजिटल छात्र हस्ताक्षर याचिकाओं और आधिकारिक पीडीएफ निर्यात के साथ उप-कुलपतियों, डीन और वार्डन के लिए औपचारिक प्रतिनिधित्व प्रारूपण उपकरण।'
+      },
+      {
+        nameEn: 'Lyngdoh Committee Compliance Auditor', nameHi: 'लिंगदोह समिति अनुपालन लेखा परीक्षक',
+        textEn: 'Automated Supreme Court mandate evaluation for candidate age limits, 75%+ attendance thresholds, backlog checks, and the ₹5,000 campaign spending cap.',
+        textHi: 'उम्मीदवार की आयु सीमा, 75%+ उपस्थिति सीमा, बकाया जांच और ₹5,000 अभियान खर्च सीमा के लिए स्वचालित सर्वोच्च न्यायालय जनादेश मूल्यांकन।'
+      }
+    ]
+  },
+  {
+    version: 'v1.13.1',
+    titleEn: 'Organization Name Topbar Fix & Cross-Org Route Resilience Audit',
+    titleHi: 'संगठन नाम टॉपबार सुधार और क्रॉस-संगठन मार्ग लचीलापन लेखा परीक्षा',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Updated the dashboard top navigation bar to dynamically display the active Organization Name instead of fallback text, and audited all organization types (NGO, RWA, Student Union, Workers Union) for zero error-screen resilience.',
+    descHi: 'फॉलबैक टेक्स्ट के बजाय सक्रिय संगठन नाम को गतिशील रूप से प्रदर्शित करने के लिए डैशबोर्ड शीर्ष नेविगेशन बार को अपडेट किया गया, और शून्य त्रुटि-स्क्रीन लचीलेपन के लिए सभी संगठन प्रकारों (एनजीओ, आरडब्ल्यूए, छात्र संघ, कार्यकर्ता संघ) का ऑडिट किया गया।',
+    color: 'emerald',
+    icon: ShieldCheck,
+    features: [
+      {
+        nameEn: 'Dynamic Org Dropdown Title', nameHi: 'डायनेमिक ऑर्ग ड्रॉपडाउन शीर्षक',
+        textEn: 'Top-right profile dropdown now automatically displays the exact active Organisation Name for all account types.',
+        textHi: 'शीर्ष-दाएं प्रोफ़ाइल ड्रॉपडाउन अब सभी खाता प्रकारों के लिए सटीक सक्रिय संगठन नाम स्वचालित रूप से प्रदर्शित करता है।'
+      },
+      {
+        nameEn: 'Cross-Org Fault Tolerance', nameHi: 'क्रॉस-ऑर्ग फॉल्ट सहिष्णुता',
+        textEn: 'Audited and updated all dashboard section routes (Forms, Campaigns, Grievances, Complaints, Maintenance, CBA, Grants) with service client fallbacks to guarantee 100% uptime across all organization types.',
+        textHi: 'सभी संगठन प्रकारों में 100% अपटाइम की गारंटी के लिए सर्विस क्लाइंट फ़ॉलबैक के साथ सभी डैशबोर्ड अनुभाग मार्गों का ऑडिट और अद्यतनीकरण किया गया।'
+      }
+    ]
+  },
+  {
+    version: 'v1.13.0',
+    titleEn: 'Platform Support & Helpdesk Ticket Submission Resilience',
+    titleHi: 'प्लेटफ़ॉर्म सहायता और हेल्पडेस्क टिकट प्रस्तुत करने का लचीलापन',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Fixed support ticket submission failures by introducing intelligent fallbacks for OpenAI classification and AgentMail notifications, ensuring tickets always submit successfully.',
+    descHi: 'OpenAI वर्गीकरण और AgentMail सूचनाओं के लिए बुद्धिमान फ़ॉलबैक शुरू करके सहायता टिकट जमा करने की विफलताओं को ठीक किया गया, जिससे यह सुनिश्चित हुआ कि टिकट हमेशा सफलतापूर्वक जमा होते हैं।',
+    color: 'emerald',
+    icon: ShieldCheck,
+    features: [
+      {
+        nameEn: 'Fail-Safe Ticket Submission', nameHi: 'फ़ेल-सेफ टिकट सबमिशन',
+        textEn: 'Decoupled ticket creation from third-party AI/email services so support requests save reliably regardless of API key status.',
+        textHi: 'थर्ड-पार्टी एआई/ईमेल सेवाओं से टिकट निर्माण को अलग किया गया ताकि एपीआई कुंजी स्थिति की परवाह किए बिना सहायता अनुरोध मज़बूती से सहेजे जाएं।'
+      }
+    ]
+  },
+  {
+    version: 'v1.12.9',
+    titleEn: 'Dashboard Donations & Audit Logs Resilience Fix',
+    titleHi: 'डैशबोर्ड दान और ऑडिट लॉग्स लचीलापन सुधार',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Resolved an error loading data on the Donations page by implementing direct profile organization context resolution and service client fallbacks for transactions and recurring subscriptions.',
+    descHi: 'सीधे प्रोफ़ाइल संगठन संदर्भ संकल्प और लेन-देन और आवर्ती सदस्यताओं के लिए सेवा क्लाइंट फ़ॉलबैक को लागू करके दान पृष्ठ पर लोड डेटा त्रुटि का समाधान किया गया।',
+    color: 'emerald',
+    icon: ShieldCheck,
+    features: [
+      {
+        nameEn: 'Fault-Tolerant Collections', nameHi: 'फॉल्ट-टॉलरेंट संग्रह',
+        textEn: 'Separated primary transaction loading from optional subscription tables to guarantee the page always renders cleanly.',
+        textHi: 'प्राथमिक लेनदेन लोडिंग को वैकल्पिक सदस्यता तालिकाओं से अलग किया गया ताकि यह गारंटी दी जा सके कि पृष्ठ हमेशा आसानी से रेंडर होता है।'
+      }
+    ]
+  },
+  {
+    version: 'v1.12.8',
+    titleEn: 'Meetings Hub Feature Overhaul & Skeleton Loading',
+    titleHi: 'बैठक हब सुविधा ओवरहाल और कंकाल लोडिंग',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Transformed the Meetings dashboard with an instant UI skeleton loader, interactive metrics bar, live video call launcher, search filters, and one-click ICS calendar file exporting.',
+    descHi: 'एक त्वरित UI कंकाल लोडर, इंटरैक्टिव मीट्रिक बार, लाइव वीडियो कॉल लॉन्चर, खोज फ़िल्टर और एक-क्लिक ICS कैलेंडर फ़ाइल निर्यात के साथ बैठक डैशबोर्ड को बदल दिया गया।',
+    color: 'indigo',
+    icon: Sparkles,
+    features: [
+      {
+        nameEn: 'Instant Navigation & Skeleton', nameHi: 'त्वरित नेविगेशन और कंकाल',
+        textEn: 'Added dedicated loading skeleton so navigating to Meetings is instantaneous with zero blank waiting states.',
+        textHi: 'समर्पित लोडिंग कंकाल जोड़ा गया ताकि बैठकों में नेविगेट करना शून्य खाली प्रतीक्षा स्थितियों के साथ तुरंत हो सके।'
+      },
+      {
+        nameEn: 'Interactive Video & Calendar Actions', nameHi: 'इंटरैक्टिव वीडियो और कैलेंडर क्रियाएं',
+        textEn: 'Launch Jitsi video rooms directly from meeting cards and export native .ics calendar files with one click.',
+        textHi: 'मीटिंग कार्ड से सीधे Jitsi वीडियो रूम लॉन्च करें और एक क्लिक के साथ मूल .ics कैलेंडर फ़ाइलें निर्यात करें।'
+      }
+    ]
+  },
+  {
+    version: 'v1.12.7',
+    titleEn: 'Dashboard Meetings Page Data Resilience Fix',
+    titleHi: 'डैशबोर्ड बैठक पृष्ठ डेटा लचीलापन सुधार',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Fixed an error loading the Meetings page by resolving organization context directly from authenticated profiles and implementing robust query fallbacks.',
+    descHi: 'प्रमाणित प्रोफाइल से सीधे संगठन संदर्भ को हल करके और मजबूत क्वेरी फ़ॉलबैक लागू करके बैठक पृष्ठ लोड करने में एक त्रुटि को ठीक किया गया।',
+    color: 'emerald',
+    icon: ShieldCheck,
+    features: [
+      {
+        nameEn: 'Query Resiliency', nameHi: 'क्वेरी लचीलापन',
+        textEn: 'Restructured database queries and added a service role fallback so meeting schedules always render reliably.',
+        textHi: 'डेटाबेस प्रश्नों का पुनर्गठन किया गया और एक सेवा भूमिका फ़ॉलबैक जोड़ा गया ताकि बैठक कार्यक्रम हमेशा विश्वसनीय रूप से रेंडर हों।'
+      }
+    ]
+  },
+  {
+    version: 'v1.12.6',
+    titleEn: 'Proposals & Deliberation Feature Overhaul',
+    titleHi: 'प्रस्ताव और विचार-विमर्श सुविधा ओवरहाल',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Overhauled the Proposals feature with interactive deliberation modals, live discussion threads, status pipeline transitions, AI Proposal Brief analysis, and clear form validation feedback.',
+    descHi: 'इंटरैक्टिव विचार-विमर्श मॉडल, लाइव चर्चा थ्रेड्स, स्थिति पाइपलाइन संक्रमण, एआई प्रस्ताव संक्षिप्त विश्लेषण और स्पष्ट फॉर्म सत्यापन प्रतिक्रिया के साथ प्रस्ताव सुविधा का ओवरहाल किया गया।',
+    color: 'purple',
+    icon: Sparkles,
+    features: [
+      {
+        nameEn: 'Validation & Feedback', nameHi: 'सत्यापन और प्रतिक्रिया',
+        textEn: 'Added instant Sonner toast notifications and updated Zod validation schemas so creation errors never fail silently.',
+        textHi: 'त्वरित सॉनर टोस्ट सूचनाएं जोड़ी गईं और Zod सत्यापन स्कीमा को अपडेट किया गया ताकि निर्माण त्रुटियां कभी चुपचाप विफल न हों।'
+      },
+      {
+        nameEn: 'Interactive Deliberation Modal', nameHi: 'इंटरैक्टिव विचार-विमर्श मॉडल',
+        textEn: 'Clicking any proposal opens a full deliberation modal with comment threads, governance pipeline stage transitions, and AI Brief generation.',
+        textHi: 'किसी भी प्रस्ताव पर क्लिक करने से टिप्पणी थ्रेड्स, शासन पाइपलाइन चरण संक्रमण और एआई ब्रीफ जेनरेशन के साथ एक पूर्ण विचार-विमर्श मॉडल खुलता है।'
+      }
+    ]
+  },
+  {
+    version: 'v1.12.5',
+    titleEn: 'Volunteers Page Speed & Skeleton Loading Optimization',
+    titleHi: 'स्वयंसेवक पृष्ठ गति और कंकाल लोडिंग अनुकूलन',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Eliminated page load delays on the Volunteers dashboard by replacing multi-step cache checks with a direct profile query and introducing an instant UI skeleton loader.',
+    descHi: 'मल्टी-स्टेप कैश चेकों को सीधे प्रोफ़ाइल क्वेरी से बदलकर और एक त्वरित UI कंकाल लोडर पेश करके स्वयंसेवक डैशबोर्ड पर पृष्ठ लोड देरी को समाप्त किया गया।',
+    color: 'emerald',
+    icon: Zap,
+    features: [
+      {
+        nameEn: 'Instant Skeleton Feedback', nameHi: 'त्वरित कंकाल प्रतिक्रिया',
+        textEn: 'Replaced blank loading spinners with instant structural UI skeletons so pages respond immediately upon navigation.',
+        textHi: 'खाली लोडिंग स्पिनरों को त्वरित संरचनात्मक UI कंकालों से बदल दिया गया ताकि नेविगेशन पर पृष्ठ तुरंत प्रतिक्रिया दें।'
+      },
+      {
+        nameEn: 'Query Efficiency', nameHi: 'क्वेरी दक्षता',
+        textEn: 'Bypassed remote cache roundtrips and restricted data fetching to lightweight columns and optimal page limits.',
+        textHi: 'रिमोट कैश राउंडट्रिप को बायपास किया गया और डेटा फ़ैचिंग को हल्के कॉलम और इष्टतम पेज सीमाओं तक सीमित किया गया।'
+      }
+    ]
+  },
+  {
+    version: 'v1.12.4',
+    titleEn: 'Dashboard Member Registry Resilience Fix',
+    titleHi: 'डैशबोर्ड सदस्य रजिस्ट्री लचीलापन सुधार',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Fixed a member registry data-fetching issue by resolving active user organization contexts directly and implementing fallback query resolution for robust member list loading.',
+    descHi: 'सक्रिय उपयोगकर्ता संगठन संदर्भों को सीधे हल करके और मजबूत सदस्य सूची लोडिंग के लिए फ़ॉलबैक क्वेरी रिज़ॉल्यूशन लागू करके सदस्य रजिस्ट्री डेटा-फ़ैचिंग समस्या को ठीक किया गया।',
+    color: 'purple',
+    icon: ShieldCheck,
+    features: [
+      {
+        nameEn: 'Direct Context Resolution', nameHi: 'प्रत्यक्ष संदर्भ रिज़ॉल्यूशन',
+        textEn: 'Directly resolves the authenticated user profile organization ID to eliminate cookie mismatch errors during member list fetching.',
+        textHi: 'सदस्य सूची लाने के दौरान कुकी बेमेल त्रुटियों को समाप्त करने के लिए प्रमाणित उपयोगकर्ता प्रोफ़ाइल संगठन आईडी को सीधे हल करता है।'
+      }
+    ]
+  },
   {
     version: 'v1.12.3',
     titleEn: 'Dependency Pruning & Build Performance Optimization',
