@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Button } from '@/components/ui/button'
 import { updateOrganisationProfile } from '@/actions/organisation/settings'
+import { StateDistrictSelector } from '@/components/geo/state-district-selector'
 import { toast } from 'sonner'
 
 const profileSchema = z.object({
@@ -143,12 +144,31 @@ export function OrgProfileForm({ initialData }: OrgProfileFormProps) {
           {errors.website && <p className="text-xs text-red-600">{errors.website.message}</p>}
         </div>
 
+        <div className="space-y-3 pt-2">
+          <label className="text-sm font-medium text-gray-700">Official State & District (India)</label>
+          <StateDistrictSelector
+            onStateChange={(_, stateName) => {
+              const currentAddress = form.getValues('address') || ''
+              if (!currentAddress.includes(stateName)) {
+                form.setValue('address', currentAddress ? `${currentAddress}, ${stateName}` : stateName)
+              }
+            }}
+            onDistrictChange={(district) => {
+              if (!district) return
+              const currentAddress = form.getValues('address') || ''
+              if (!currentAddress.includes(district)) {
+                form.setValue('address', currentAddress ? `${currentAddress}, ${district}` : district)
+              }
+            }}
+          />
+        </div>
+
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700">Physical Address</label>
+          <label className="text-sm font-medium text-gray-700">Physical Address / Headquarters</label>
           <input
             {...form.register('address')}
             className="w-full border rounded-md px-3 py-2 text-sm"
-            placeholder="123 Main St, City, Country"
+            placeholder="e.g. Office No. 402, Trade Center, CP, New Delhi, Delhi - 110001"
           />
           {errors.address && <p className="text-xs text-red-600">{errors.address.message}</p>}
         </div>

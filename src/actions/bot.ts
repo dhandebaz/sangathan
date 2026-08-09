@@ -2,6 +2,7 @@
 
 import { createServiceClient } from '@/lib/supabase/service'
 import { parseBotMessage } from '@/lib/bot/parser'
+import { getDistrictsByState, getStateByName, getStateByCode } from '@/lib/geo/india'
 
 interface ProcessBotInput {
   organisationId: string
@@ -136,11 +137,27 @@ export async function processIncomingBotMessage(input: ProcessBotInput): Promise
       break
     }
 
+    case 'DISTRICTS': {
+      const stateArg = parsed.details || 'Delhi'
+      const stateObj = getStateByName(stateArg) || getStateByCode(stateArg) || getStateByName('Delhi')
+      if (stateObj) {
+        const topDistricts = stateObj.districts.slice(0, 8).join(', ')
+        replyText = parsed.isHindi
+          ? `📍 ${stateObj.nameHi} (${stateObj.code}): कुल ${stateObj.districts.length} जिले।\nप्रमुख जिले: ${topDistricts}${stateObj.districts.length > 8 ? '...' : ''}`
+          : `📍 ${stateObj.name} (${stateObj.code}): ${stateObj.districts.length} administrative districts.\nDistricts: ${topDistricts}${stateObj.districts.length > 8 ? '...' : ''}`
+      } else {
+        replyText = parsed.isHindi
+          ? `📍 कृपया राज्य का नाम लिखें। उदाहरण: DISTRICTS महाराष्ट्र`
+          : `📍 Please specify state name. Example: DISTRICTS Karnataka`
+      }
+      break
+    }
+
     case 'HELP':
     default: {
       replyText = parsed.isHindi
-        ? `🏛️ ${orgName} - व्हाट्सएप/टेलीग्राम सेवा:\n\n1️⃣ शिकायत <विवरण> - समस्या दर्ज करें\n2️⃣ हाजिरी <कोड> - कार्यक्रम में उपस्थिति दर्ज करें\n3️⃣ बकाया - अपना सदस्यता शुल्क जांचें\n4️⃣ वोट <विकल्प> - मतदान करें\n5️⃣ मदद <स्थान> - आपातकालीन कानूनी एसओएस\n6️⃣ स्थिति - अपना डिजिटल सदस्य कार्ड देखें`
-        : `🏛️ ${orgName} - Grassroots Bot Commands:\n\n1️⃣ GRIEVANCE <text> - Log a campus or workplace issue\n2️⃣ CHECKIN <code> - Mark rally or meeting attendance\n3️⃣ DUES - Check your dues & contribution standing\n4️⃣ VOTE <option> - Cast your secret ballot\n5️⃣ SOS <location> - Emergency Legal Defense SOS\n6️⃣ STATUS - View verified membership card`
+        ? `🏛️ ${orgName} - व्हाट्सएप/टेलीग्राम सेवा:\n\n1️⃣ शिकायत <विवरण> - समस्या दर्ज करें\n2️⃣ हाजिरी <कोड> - कार्यक्रम में उपस्थिति दर्ज करें\n3️⃣ बकाया - अपना सदस्यता शुल्क जांचें\n4️⃣ वोट <विकल्प> - मतदान करें\n5️⃣ मदद <स्थान> - आपातकालीन कानूनी एसओएस\n6️⃣ स्थिति - अपना डिजिटल सदस्य कार्ड देखें\n7️⃣ जिले <राज्य> - प्रशासनिक जिले देखें`
+        : `🏛️ ${orgName} - Grassroots Bot Commands:\n\n1️⃣ GRIEVANCE <text> - Log a campus or workplace issue\n2️⃣ CHECKIN <code> - Mark rally or meeting attendance\n3️⃣ DUES - Check your dues & contribution standing\n4️⃣ VOTE <option> - Cast your secret ballot\n5️⃣ SOS <location> - Emergency Legal Defense SOS\n6️⃣ STATUS - View verified membership card\n7️⃣ DISTRICTS <state> - Query district registry`
       break
     }
   }

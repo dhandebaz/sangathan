@@ -246,43 +246,43 @@ export function PublicPricingGrid({ orgId, lang, isHindi }: PublicPricingGridPro
             <tbody className="divide-y divide-slate-100">
               <tr>
                 <td className="p-4 font-medium text-slate-700">{isHindi ? 'सदस्य क्षमता' : 'Member Capacity'}</td>
-                <td className="p-4 text-center text-slate-600">Up to 20 users</td>
-                <td className="p-4 text-center font-bold text-indigo-900 bg-indigo-50/20">Unlimited users</td>
+                <td className="p-4 text-center text-slate-600">{isHindi ? '20 उपयोगकर्ताओं तक' : 'Up to 20 users'}</td>
+                <td className="p-4 text-center font-bold text-indigo-900 bg-indigo-50/20">{isHindi ? 'असीमित उपयोगकर्ता' : 'Unlimited users'}</td>
               </tr>
               <tr>
                 <td className="p-4 font-medium text-slate-700">{isHindi ? 'मतदान और चुनाव इंजन' : 'Voting & Anonymous Elections'}</td>
-                <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
-                <td className="p-4 text-center text-emerald-600 font-bold bg-indigo-50/20">✓ Included</td>
+                <td className="p-4 text-center text-emerald-600 font-bold">{isHindi ? '✓ शामिल है' : '✓ Included'}</td>
+                <td className="p-4 text-center text-emerald-600 font-bold bg-indigo-50/20">{isHindi ? '✓ शामिल है' : '✓ Included'}</td>
               </tr>
               <tr>
                 <td className="p-4 font-medium text-slate-700">{isHindi ? 'महासंघ और गठबंधन उपकरण' : 'Coalition & Federation Tools'}</td>
-                <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
-                <td className="p-4 text-center text-emerald-600 font-bold bg-indigo-50/20">✓ Included</td>
+                <td className="p-4 text-center text-emerald-600 font-bold">{isHindi ? '✓ शामिल है' : '✓ Included'}</td>
+                <td className="p-4 text-center text-emerald-600 font-bold bg-indigo-50/20">{isHindi ? '✓ शामिल है' : '✓ Included'}</td>
               </tr>
               <tr>
                 <td className="p-4 font-medium text-slate-700">{isHindi ? 'बैठकें, कार्य और उप-समूह' : 'Meetings, Tasks & Subgroups'}</td>
-                <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
-                <td className="p-4 text-center text-emerald-600 font-bold bg-indigo-50/20">✓ Included</td>
+                <td className="p-4 text-center text-emerald-600 font-bold">{isHindi ? '✓ शामिल है' : '✓ Included'}</td>
+                <td className="p-4 text-center text-emerald-600 font-bold bg-indigo-50/20">{isHindi ? '✓ शामिल है' : '✓ Included'}</td>
               </tr>
               <tr>
                 <td className="p-4 font-medium text-slate-700">{isHindi ? 'सार्वजनिक याचिकाएं और सदस्य बैज' : 'Public Petitions & Badges'}</td>
-                <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
-                <td className="p-4 text-center text-emerald-600 font-bold bg-indigo-50/20">✓ Included</td>
+                <td className="p-4 text-center text-emerald-600 font-bold">{isHindi ? '✓ शामिल है' : '✓ Included'}</td>
+                <td className="p-4 text-center text-emerald-600 font-bold bg-indigo-50/20">{isHindi ? '✓ शामिल है' : '✓ Included'}</td>
               </tr>
               <tr>
                 <td className="p-4 font-medium text-slate-700">{isHindi ? 'स्मार्ट AI बुद्धिमत्ता (Llama 3.3 70B)' : 'AI Intelligence Suite (Llama 3.3)'}</td>
                 <td className="p-4 text-center text-slate-400">—</td>
-                <td className="p-4 text-center font-bold text-indigo-900 bg-indigo-50/20">1,000 requests/mo</td>
+                <td className="p-4 text-center font-bold text-indigo-900 bg-indigo-50/20">{isHindi ? '1,000 अनुरोध/माह' : '1,000 requests/mo'}</td>
               </tr>
               <tr>
                 <td className="p-4 font-medium text-slate-700">{isHindi ? 'उन्नत एनालिटिक्स और डेटा निर्यात' : 'Advanced Analytics & Data Export'}</td>
                 <td className="p-4 text-center text-slate-400">—</td>
-                <td className="p-4 text-center text-emerald-600 font-bold bg-indigo-50/20">✓ Included</td>
+                <td className="p-4 text-center text-emerald-600 font-bold bg-indigo-50/20">{isHindi ? '✓ शामिल है' : '✓ Included'}</td>
               </tr>
               <tr>
                 <td className="p-4 font-medium text-slate-700">{isHindi ? 'सहायता स्तर' : 'Support SLA'}</td>
-                <td className="p-4 text-center text-slate-600">Community Support</td>
-                <td className="p-4 text-center font-bold text-indigo-900 bg-indigo-50/20">Priority Email & Chat</td>
+                <td className="p-4 text-center text-slate-600">{isHindi ? 'सामुदायिक सहायता' : 'Community Support'}</td>
+                <td className="p-4 text-center font-bold text-indigo-900 bg-indigo-50/20">{isHindi ? 'प्राथमिकता ईमेल और चैट' : 'Priority Email & Chat'}</td>
               </tr>
             </tbody>
           </table>

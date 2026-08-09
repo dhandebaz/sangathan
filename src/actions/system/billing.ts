@@ -9,7 +9,8 @@ import { requirePlatformAdmin } from '@/lib/auth/context'
 
 const UpdatePlanSchema = z.object({
   organisationId: z.string().uuid(),
-  planName: z.string().min(1),
+  planName: z.enum(['Community', 'Institution']),
+  planPeriod: z.enum(['monthly', 'yearly', 'lifetime']).optional(),
 })
 
 export async function setOrganisationPlan(input: z.infer<typeof UpdatePlanSchema>) {
@@ -26,9 +27,34 @@ export async function setOrganisationPlan(input: z.infer<typeof UpdatePlanSchema
 
   const supabase = createServiceClient()
 
+  // Fetch current capabilities
+  const { data: org } = await supabase
+    .from('organisations')
+    .select('capabilities')
+    .eq('id', result.data.organisationId)
+    .single()
+
+  const currentCaps = (org?.capabilities as Record<string, boolean>) || {}
+  const isInstitution = result.data.planName === 'Institution'
+
+  const updatedCapabilities = {
+    ...currentCaps,
+    ai_features: isInstitution,
+    advanced_analytics: isInstitution,
+  }
+
+  const updates: Record<string, unknown> = {
+    plan_name: result.data.planName,
+    plan_status: 'active',
+    capabilities: updatedCapabilities,
+  }
+  if (result.data.planPeriod) {
+    updates.plan_period = result.data.planPeriod
+  }
+
   const { error } = await supabase
     .from('organisations')
-    .update({ plan_name: result.data.planName })
+    .update(updates as never)
     .eq('id', result.data.organisationId)
 
   if (error) return { success: false, error: error.message }
@@ -39,36 +65,33 @@ export async function setOrganisationPlan(input: z.infer<typeof UpdatePlanSchema
     action: 'ORG_PLAN_CHANGED',
     resource_table: 'organisations',
     resource_id: result.data.organisationId,
-    details: { plan: result.data.planName },
+    details: {
+      plan: result.data.planName,
+      capabilities: updatedCapabilities,
+    },
   })
 
   revalidatePath('/admin/billing', 'page')
   return { success: true }
 }
 
-export async function getAllBillingPlans() {
+export async function getAllBillingTransactions() {
   await requirePlatformAdmin()
   const supabase = createServiceClient()
   const { data } = await supabase
-    .from('billing_plans')
+    .from('billing_transactions')
     .select('*, organisations(name, slug)')
     .order('created_at', { ascending: false })
     .limit(100)
   return data || []
 }
 
-export async function getOrganisationBilling(organisationId: string) {
+export async function getAllOrganisationsPlanOverview() {
   await requirePlatformAdmin()
   const supabase = createServiceClient()
-  const { data: plans } = await supabase
-    .from('billing_plans')
-    .select('*')
-    .eq('organisation_id', organisationId)
-  const { data: invoices } = await supabase
-    .from('invoices')
-    .select('*, units(unit_number)')
-    .eq('organisation_id', organisationId)
+  const { data } = await supabase
+    .from('organisations')
+    .select('id, name, slug, org_type, plan_name, plan_period, plan_status, plan_expires_at, whitelabel_enabled, created_at')
     .order('created_at', { ascending: false })
-    .limit(50)
-  return { plans: plans || [], invoices: invoices || [] }
+  return data || []
 }

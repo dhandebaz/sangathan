@@ -1,4 +1,4 @@
-import { Sparkles, ShieldCheck, Zap, Server, Code, Users, Calendar, Activity, Rocket, Globe, LucideIcon, Building2, Network } from 'lucide-react'
+import { Sparkles, ShieldCheck, Zap, Server, Code, Users, Calendar, Activity, Rocket, Globe, LucideIcon, Building2, Network, Phone } from 'lucide-react'
 import { Metadata } from 'next'
 import { PageHeader } from '@/components/public/page-header'
 
@@ -34,6 +34,167 @@ type ChangelogEntry = {
 }
 
 const changelogData: ChangelogEntry[] = [
+  {
+    version: 'v1.31.0',
+    titleEn: 'Grassroots Colony Utility Kit — Chanda, Tenant Verification, Municipal Letters & Local Directory',
+    titleHi: 'ज़मीनी कॉलोनी यूटिलिटी किट — चंदा, किरायेदार सत्यापन, नगरपालिका पत्र एवं स्थानीय निर्देशिका',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Introduced a practical daily-use utility kit for RWA colonies — especially designed for kacchi colonies, unauthorised areas, and urban villages. Includes a 1-tap cash collection tracker for monthly chowkidari/safai chanda, a printable Delhi Police tenant verification form, pre-formatted municipal letter templates for representations to MLAs, MCD, DJB, BSES, and Police, plus a local services directory with pre-loaded emergency numbers.',
+    descHi: 'RWA कॉलोनियों के लिए रोज़मर्रा के उपयोग वाली व्यावहारिक यूटिलिटी किट पेश की गई — विशेष रूप से कच्ची कॉलोनियों, अनधिकृत क्षेत्रों और शहरी गांवों के लिए डिज़ाइन की गई। मासिक चौकीदारी/सफाई चंदा के लिए 1-टैप कैश कलेक्शन ट्रैकर, प्रिंट करने योग्य दिल्ली पुलिस किरायेदार सत्यापन फॉर्म, विधायकों, MCD, DJB, BSES और पुलिस को प्रतिनिधित्व के लिए पूर्व-स्वरूपित नगरपालिका पत्र टेम्प्लेट, और पूर्व-लोड आपातकालीन नंबरों के साथ स्थानीय सेवा निर्देशिका शामिल है।',
+    color: 'orange',
+    icon: Phone,
+    features: [
+      {
+        nameEn: 'Chanda Ledger (चंदा बहीखाता)',
+        nameHi: 'चंदा बहीखाता',
+        textEn: 'Monthly micro-collection tracker for chowkidari, safai, and community funds. Create collection rounds, auto-generate entries for all members, and mark payments with a single tap. Includes area-wise grouping and real-time collection rate dashboard.',
+        textHi: 'चौकीदारी, सफाई और सामुदायिक फंड के लिए मासिक सूक्ष्म-संग्रह ट्रैकर। संग्रह राउंड बनाएं, सभी सदस्यों के लिए ऑटो-एंट्री जनरेट करें और एक टैप से भुगतान चिह्नित करें।',
+      },
+      {
+        nameEn: 'Delhi Police Tenant Verification Form',
+        nameHi: 'दिल्ली पुलिस किरायेदार सत्यापन फॉर्म',
+        textEn: 'Generate pre-filled, print-ready tenant verification forms for submission to the local SHO office. Includes landlord details, tenant information, property specifics, and formal declaration with signature blocks.',
+        textHi: 'स्थानीय SHO कार्यालय में जमा करने के लिए पूर्व-भरे, प्रिंट-तैयार किरायेदार सत्यापन फॉर्म तैयार करें। मकान मालिक विवरण, किरायेदार जानकारी, संपत्ति विवरण और हस्ताक्षर ब्लॉक के साथ औपचारिक घोषणा शामिल है।',
+      },
+      {
+        nameEn: 'Municipal Letter Templates & Representations',
+        nameHi: 'नगरपालिका पत्र टेम्पलेट व प्रतिनिधित्व',
+        textEn: 'Pre-formatted letter templates for official colony representations to MLAs, Ward Councillors, MCD, DJB, BSES, and Police. Includes customizable letterhead, CC distribution, and print-ready output.',
+        textHi: 'विधायकों, वार्ड पार्षदों, MCD, DJB, BSES और पुलिस को आधिकारिक कॉलोनी प्रतिनिधित्व के लिए पूर्व-स्वरूपित पत्र टेम्पलेट। अनुकूलन योग्य लेटरहेड, CC वितरण और प्रिंट-तैयार आउटपुट शामिल है।',
+      },
+      {
+        nameEn: 'Local Services Directory with Emergency Numbers',
+        nameHi: 'आपातकालीन नंबरों सहित स्थानीय सेवा निर्देशिका',
+        textEn: 'Pinned contacts board with pre-loaded emergency numbers (Police 100, Fire 101, Ambulance 102, BSES, DJB, MCD helplines) plus editable local service contacts for electricians, plumbers, beat constables, and more.',
+        textHi: 'पूर्व-लोड आपातकालीन नंबरों (पुलिस 100, अग्निशमन 101, एम्बुलेंस 102, BSES, DJB, MCD हेल्पलाइन) और इलेक्ट्रीशियन, प्लंबर, बीट कॉन्स्टेबल आदि के लिए संपादन योग्य स्थानीय सेवा संपर्कों वाला पिन किया गया संपर्क बोर्ड।',
+      },
+    ],
+  },
+  {
+    version: 'v1.30.0',
+    titleEn: 'National Master Reference & Geographical Data Engine (780+ Districts & Taxonomies)',
+    titleHi: 'राष्ट्रीय मास्टर संदर्भ व भौगोलिक डेटा इंजन (780+ जिले एवं वैधानिक वर्गीकरण)',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Equipped Sangathan with a pre-populated, verified master dataset of all 28 Indian States, 8 Union Territories, and 780+ administrative districts with ISO codes. Introduced domain-specific statutory taxonomies for NGOs (UN SDGs, 12A/80G, CSR-1), Student Unions (Central Panel posts, HEI faculties, UGC grievance bodies), Workers Unions (industrial sectors, dispute categories, ALC/RLC/CGIT tribunals), and RWAs (unit types, society amenities, standardized maintenance heads).',
+    descHi: 'संगठन को भारत के सभी 28 राज्यों, 8 केंद्र शासित प्रदेशों और 780+ प्रशासनिक जिलों के पूर्व-आबादीकृत, सत्यापित मास्टर डेटा से सुसज्जित किया गया। एनजीओ (UN SDGs, 12A/80G, CSR-1), छात्र संघ (केंद्रीय पैनल पद, विश्वविद्यालय संकाय, यूजीसी निवारण सेल), श्रमिक संघ (औद्योगिक क्षेत्र, विवाद श्रेणियां, ALC/CGIT न्यायाधिकरण), और RWA (इकाई प्रकार, समाज सुविधाएं, मानकीकृत रखरखाव मदें) के लिए डोमेन-विशिष्ट वैधानिक वर्गीकरण पेश किया गया।',
+    color: 'amber',
+    icon: Globe,
+    features: [
+      {
+        nameEn: 'Complete 28 States, 8 UTs & 780+ Districts Registry',
+        nameHi: 'संपूर्ण 28 राज्य, 8 केंद्र शासित प्रदेश व 780+ जिले रजिस्ट्री',
+        textEn: 'ISO 3166-2:IN compliant standardized geographical dataset with cascading State → District selector components for onboarding, member surveys, and event geofencing.',
+        textHi: 'ऑनबोर्डिंग, सदस्य सर्वेक्षण और इवेंट जियोफेंसिंग के लिए कैस्केडिंग राज्य → जिला चयनकर्ता घटकों के साथ ISO 3166-2:IN मानकीकृत भौगोलिक डेटासेट।',
+      },
+      {
+        nameEn: 'Domain-Specific Statutory Master Taxonomies',
+        nameHi: 'डोमेन-विशिष्ट वैधानिक मास्टर वर्गीकरण',
+        textEn: 'Standardized taxonomies covering 17 UN SDGs, statutory tax codes, student central panel portfolios, labor dispute categories, and RWA maintenance heads.',
+        textHi: '17 संयुक्त राष्ट्र सतत विकास लक्ष्यों, वैधानिक कर कोड, छात्र केंद्रीय पैनल विभागों, श्रम विवाद श्रेणियों और RWA रखरखाव मदों को कवर करने वाले मानकीकृत वर्गीकरण।',
+      },
+      {
+        nameEn: 'Interactive Master Reference Data Hub',
+        nameHi: 'इंटरैक्टिव मास्टर संदर्भ डेटा केंद्र',
+        textEn: 'Dedicated dashboard interface enabling organizers to browse, search, and copy official administrative codes and statutory authority mappings.',
+        textHi: 'समर्पित डैशबोर्ड इंटरफ़ेस जो आयोजकों को आधिकारिक प्रशासनिक कोड और वैधानिक प्राधिकरण मैपिंग ब्राउज़, खोज और कॉपी करने में सक्षम बनाता है।',
+      },
+    ],
+  },
+  {
+    version: 'v1.29.0',
+    titleEn: 'All-in-One Civic Infrastructure: Universal Importer, Document Vault & Statutory Registers',
+    titleHi: 'ऑल-इन-वन नागरिक अवसंरचना: यूनिवर्सल आयातक, दस्तावेज़ वॉल्ट व वैधानिक रजिस्टर्स',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Transformed Sangathan into a fully self-contained, sovereign operating system for civil society organizations. Organizers can now migrate rosters directly from Excel/CSV in 60 seconds with auto-column matching, manage encrypted institutional documents and deeds in a sovereign cloud vault, and generate print-ready official registers (Form I, Form H, Cash Book) for government and registrar inspections with zero external software needed.',
+    descHi: 'संगठन को नागरिक समाज संगठनों के लिए पूरी तरह से आत्मनिर्भर, संप्रभु ऑपरेटिंग सिस्टम में बदल दिया गया। आयोजक अब ऑटो-कॉलम मिलान के साथ 60 सेकंड में एक्सेल/सीएसवी से रोस्टर आयात कर सकते हैं, सुरक्षित क्लाउड वॉल्ट में कानूनी विलेखों और समझौतों का प्रबंधन कर सकते हैं, और सरकारी निरीक्षणों के लिए 1-क्लिक में आधिकारिक प्रिंट-रेडी वैधानिक रजिस्टर तैयार कर सकते हैं।',
+    color: 'emerald',
+    icon: Sparkles,
+    features: [
+      {
+        nameEn: 'Smart Universal Data Importer & Migration Wizard',
+        nameHi: 'स्मार्ट यूनिवर्सल डेटा आयातक व माइग्रेशन विज़ार्ड',
+        textEn: 'Visual column auto-matcher with telephone validation, sandbox preview, duplicate conflict reconciliation, and instant 1-click batch import from Excel, Google Sheets, or CSV files.',
+        textHi: 'एक्सेल, गूगल शीट्स या सीएसवी से तत्काल बैच आयात के लिए स्वचालित कॉलम मिलान, फ़ोन नंबर सत्यापन, पूर्वावलोकन और डुप्लिकेट समाधान।',
+      },
+      {
+        nameEn: 'Institutional Document & Asset Cloud Vault',
+        nameHi: 'संस्थागत दस्तावेज़ एवं परिसंपत्ति क्लाउड वॉल्ट',
+        textEn: 'Role-based encrypted storage for Trust Deeds, 12A/80G tax orders, CBAs, AGM circulars, and asset deeds with granular access control (Public, Members Only, Executives Only).',
+        textHi: 'ट्रस्ट डीड, 12A/80G कर आदेश, CBA, एजीएम परिपत्र और परिसंपत्ति विलेखों के लिए भूमिका-आधारित एन्क्रिप्टेड स्टोरेज।',
+      },
+      {
+        nameEn: '1-Click Statutory PDF Registers & Audit Books',
+        nameHi: '1-क्लिक वैधानिक PDF रजिस्टर व ऑडिट बुक्स',
+        textEn: 'Official print-ready Form I Member Rolls (Societies/RWAs), Form H Returns (Trade Unions Act 1926), and Double-Entry Cash Books with SHA-256 verification hashes for registrar audits.',
+        textHi: 'रजिस्ट्रार ऑडिट के लिए आधिकारिक प्रिंट-रेडी फॉर्म I सदस्य रजिस्टर, फॉर्म H रिटर्न (ट्रेड यूनियन अधिनियम 1926), और SHA-256 सत्यापित डबल-एंट्री कैश बुक।',
+      },
+    ],
+  },
+  {
+    version: 'v1.28.0',
+    titleEn: 'Comprehensive Statutory Data, Legal Frameworks & Organisation Playbooks',
+    titleHi: 'व्यापक वैधानिक डेटा, कानूनी ढांचा एवं संगठन नियमावली हैंडबुक',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Equipped Sangathan with exhaustive, domain-specific legal frameworks, statutory checklists, and operational playbooks for all 4 organization archetypes (NGOs, Student Unions, Workers Unions, and RWAs). Introduced an in-app Statutory Knowledge Hub with direct links to government registration portals, standard regulatory templates (Gyapan, 80G Receipts, POSH ICC, Strike Notices, AGM Circulations), and interactive documentation playbooks in English and Hindi.',
+    descHi: 'संगठन को सभी 4 संगठन प्रकारों (एनजीओ, छात्र संघ, श्रमिक संघ, और आरडब्ल्यूए) के लिए संपूर्ण कानूनी ढांचे, वैधानिक चेकलिस्ट और परिचालन हैंडबुक से सुसज्जित किया गया। सरकारी पंजीकरण पोर्टलों, मानकीकृत नियामक प्रारूपों (ज्ञापन, 80G रसीदें, POSH ICC, हड़ताल नोटिस, एजीएम सर्कुलर) और द्विभाषी इंटरैक्टिव हैंडबुक के साथ एक इन-ऐप वैधानिक ज्ञान केंद्र पेश किया गया।',
+    color: 'indigo',
+    icon: Building2,
+    features: [
+      {
+        nameEn: 'Dedicated Organisation Playbooks in Docs',
+        nameHi: 'दस्तावेज़ों में समर्पित संगठन हैंडबुक व नियमावली',
+        textEn: 'Exhaustive legal handbooks for NGOs (Trusts/Societies/Sec 8, 12A/80G, CSR-1, FCRA), Student Unions (Supreme Court Lyngdoh Committee, Gyapan memoranda, election counting desk, UGC Anti-Ragging), Workers Unions (Trade Unions Act 1926, CBAs, strike notice protocols, shop stewards), and RWAs (Model Bye-laws, maintenance billing formulas, 21-day AGM notices).',
+        textHi: 'एनजीओ (12A/80G, CSR-1, FCRA), छात्र संघ (लिंगदोह समिति, ज्ञापन प्रारूप, मतगणना डेस्क), श्रमिक संघ (ट्रेड यूनियन अधिनियम 1926, CBA, हड़ताल नोटिस) और RWA (मॉडल उप-नियम, मेंटेनेंस बिलिंग, AGM नोटिस) के लिए विस्तृत कानूनी हैंडबुक।',
+      },
+      {
+        nameEn: 'In-App Statutory Knowledge & Regulatory Hub',
+        nameHi: 'इन-ऐप वैधानिक ज्ञान व विनियामक केंद्र',
+        textEn: 'Interactive dashboard module providing organizers with instant access to their governing acts, direct government portal links (NITI Aayog Darpan, MCA, Income Tax, UGC, Ministry of Labour), critical statutory benchmarks, and ready-to-use templates.',
+        textHi: 'इंटरैक्टिव डैशबोर्ड मॉड्यूल जो आयोजकों को उनके शासी अधिनियमों, आधिकारिक सरकारी पोर्टल लिंक (नीति आयोग दर्पण, MCA, आयकर, UGC, श्रम मंत्रालय), महत्वपूर्ण वैधानिक नियमों और उपयोग के लिए तैयार प्रारूपों तक तत्काल पहुंच प्रदान करता है।',
+      },
+      {
+        nameEn: 'Instant On-Demand SEO Revalidation & IndexNow Protocol',
+        nameHi: 'तत्काल ऑन-डिमांड एसईओ पुनर्वैधीकरण और इंडेक्सनाउ प्रोटोकॉल',
+        textEn: 'Automatic Next.js ISR cache purging and instant IndexNow search engine notification pings whenever organisation profiles, compliance badges, events, or coalition networks update.',
+        textHi: 'संगठन प्रोफाइल, अनुपालन विवरण, कार्यक्रम या गठबंधन नेटवर्क अपडेट होने पर स्वचालित कैश रीफ्रेश और सर्च इंजनों को त्वरित इंडेक्सनाउ सूचना।',
+      },
+    ],
+  },
+  {
+    version: 'v1.27.0',
+    titleEn: 'Full-Spectrum SEO, Schema.org Graph, Dynamic Social Previews & AI Search Indexes',
+    titleHi: 'पूर्ण-स्पेक्ट्रम एसईओ, स्कीमा.ऑर्ग ग्राफ़, डायनामिक सोशल प्रीव्यू एवं एआई सर्च इंडेक्स',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Empowered public organisations and civil society collectives to be fully discoverable across Google, Bing, and AI search engines (Perplexity, ChatGPT Search, Claude). Introduced rich Schema.org structured data, dynamic Edge OpenGraph image generation for social previews on WhatsApp and Twitter/X, comprehensive multi-entity XML sitemaps, AI bot crawler allowances, and a standardized llms.txt citation directory.',
+    descHi: 'सार्वजनिक संगठनों और नागरिक समाज समूहों को गूगल, बिंग और एआई सर्च इंजनों (Perplexity, ChatGPT Search, Claude) पर पूरी तरह से खोजने योग्य बनाया गया। समृद्ध स्कीमा.ऑर्ग संरचित डेटा, व्हाट्सएप और ट्विटर पर सोशल पूर्वावलोकन के लिए डायनामिक ओपनग्राफ इमेज जनरेटर, व्यापक एक्सएमएल साइटमैप, एआई बॉट क्रॉलर अनुमतियां और मानकीकृत llms.txt दस्तावेज़ीकरण पेश किया गया।',
+    color: 'emerald',
+    icon: Globe,
+    features: [
+      {
+        nameEn: 'Schema.org JSON-LD for Public Organisations & Events',
+        nameHi: 'सार्वजनिक संगठनों और आयोजनों के लिए Schema.org JSON-LD',
+        textEn: 'Deep structural markup (NGO, EducationalOrganization, LaborUnion, Event, Breadcrumbs) enabling Google Knowledge Graph and AI search engines to accurately reference registered entities.',
+        textHi: 'गहन संरचनात्मक मार्कअप जो गूगल नॉलेज ग्राफ़ और एआई सर्च इंजनों को पंजीकृत संगठनों और आयोजनों को सटीक रूप से संदर्भित करने में सक्षम बनाता है।',
+      },
+      {
+        nameEn: 'Dynamic Edge OpenGraph Image Generator',
+        nameHi: 'डायनामिक एज ओपनग्राफ इमेज जनरेटर',
+        textEn: 'Generates branded 1200x630 preview cards dynamically for every public organisation when shared across WhatsApp, Telegram, Twitter, LinkedIn, and Discord.',
+        textHi: 'व्हाट्सएप, टेलीग्राम, ट्विटर और लिंक्डइन पर साझा किए जाने पर प्रत्येक सार्वजनिक संगठन के लिए 1200x630 ब्रांडेड पूर्वावलोकन कार्ड तुरंत तैयार करता है।',
+      },
+      {
+        nameEn: 'Dynamic Supabase XML Sitemap & llms.txt Citation Standard',
+        nameHi: 'डायनामिक सुपाबेस एक्सएमएल साइटमैप एवं llms.txt उद्धरण मानक',
+        textEn: 'Auto-indexes public collectives, alliances, and upcoming events in sitemap.xml alongside an llms.txt reference guide optimized for next-gen AI search answer engines.',
+        textHi: 'अगली पीढ़ी के एआई सर्च आंसर इंजनों के लिए llms.txt गाइड के साथ सभी सार्वजनिक संगठनों, गठबंधनों और आगामी कार्यक्रमों को sitemap.xml में स्वचालित रूप से अनुक्रमित करता है।',
+      },
+    ],
+  },
   {
     version: 'v1.26.0',
     titleEn: 'Civic Solidarity Patronage, Member Capacity Safeguards & Annual Billing',

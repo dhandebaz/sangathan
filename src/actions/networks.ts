@@ -4,12 +4,12 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
-// Removed custom email dependencies
+import { revalidatePublicNetworkPages } from '@/lib/seo/revalidate'
 
 const NetworkSchema = z.object({
   name: z.string().min(3),
   description: z.string().optional(),
-  slug: z.string().min(3).regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric"),
+  slug: z.string().min(3).regex(/^[a-z0-9-]+$/, 'Slug must be lowercase alphanumeric'),
   visibility: z.enum(['public', 'private']),
 })
 
@@ -27,7 +27,9 @@ export async function createNetwork(input: z.infer<typeof NetworkSchema>) {
     const data = result.data
 
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) return { success: false, error: 'Unauthorized' }
 
@@ -54,7 +56,7 @@ export async function createNetwork(input: z.infer<typeof NetworkSchema>) {
       .from('networks')
       .insert({
         ...data,
-        created_by: user.id
+        created_by: user.id,
       })
       .select()
       .single()
@@ -65,18 +67,18 @@ export async function createNetwork(input: z.infer<typeof NetworkSchema>) {
     await supabaseAdmin.from('network_admins').insert({
       network_id: network.id,
       user_id: user.id,
-      role: 'coordinator'
+      role: 'coordinator',
     })
 
-    await supabaseAdmin
-      .from('network_memberships')
-      .insert({
-        network_id: network.id,
-        organisation_id: profile.organisation_id as string,
-        status: 'active',
-      } as never)
+    await supabaseAdmin.from('network_memberships').insert({
+      network_id: network.id,
+      organisation_id: profile.organisation_id as string,
+      status: 'active',
+    } as never)
 
     revalidatePath('/', 'layout')
+    await revalidatePublicNetworkPages(network.slug)
+
     return { success: true, id: network.id }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
@@ -92,31 +94,28 @@ export async function joinNetwork(networkId: string) {
     }
 
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) return { success: false, error: 'Unauthorized' }
 
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('role, organisation_id, organisations(name, capabilities)')
+      .select('role, organisation_id')
       .eq('id', user.id)
       .single()
 
-    if (profileError || !profile || !profile.organisation_id || profile.role !== 'admin') {
-      return { success: false, error: 'Only organisation admins can join networks' }
-    }
-
-    const organisation = profile.organisations as { name?: string; capabilities?: Record<string, boolean> } | null
-    if (!organisation?.capabilities?.federation_mode) {
-      return { success: false, error: 'Federation Mode is not enabled for your organisation.' }
+    if (profileError || !profile || profile.role !== 'admin' || !profile.organisation_id) {
+      return { success: false, error: 'Permission denied' }
     }
 
     const supabaseAdmin = createServiceClient()
 
     const { data: network, error: networkError } = await supabaseAdmin
       .from('networks')
-      .select('id, name, slug, visibility')
-      .eq('id', result.data.networkId)
+      .select('id, visibility, slug')
+      .eq('id', networkId)
       .single()
 
     if (networkError || !network) {
@@ -140,32 +139,19 @@ export async function joinNetwork(networkId: string) {
 
     const membershipStatus = network.visibility === 'public' ? 'active' : 'pending'
 
-    const { error: insertError } = await supabaseAdmin
-      .from('network_memberships')
-      .insert({
-        network_id: network.id,
-        organisation_id: profile.organisation_id,
-        status: membershipStatus,
-      } as never)
+    const { error: insertError } = await supabaseAdmin.from('network_memberships').insert({
+      network_id: network.id,
+      organisation_id: profile.organisation_id,
+      status: membershipStatus,
+    } as never)
 
     if (insertError) throw insertError
 
-    if (membershipStatus === 'pending') {
-      const { data: coordinators } = await supabaseAdmin
-        .from('network_admins')
-        .select('user:profiles!network_admins_user_id_fkey(email, full_name)')
-        .eq('network_id', network.id)
-
-      if (coordinators) {
-        for (const coordinator of coordinators as unknown as { user: { email: string; full_name?: string | null } | null }[]) {
-          if (!coordinator.user?.email) continue
-          // Notifications can be handled by in-app system or Supabase triggers
-        }
-      }
+    revalidatePath('/', 'layout')
+    if (network.slug) {
+      await revalidatePublicNetworkPages(network.slug)
     }
 
-    revalidatePath('/', 'layout')
-    revalidatePath('/', 'layout')
     return { success: true, status: membershipStatus }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'

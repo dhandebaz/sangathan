@@ -36,12 +36,22 @@ export function AddMemberDialog({
     setIsLoading(true)
 
     const formData = new FormData(event.currentTarget)
+    const rawPhone = (formData.get('phone') as string) || ''
+    
+    // Auto-clean phone numbers to E.164 +91
+    let cleanedPhone = rawPhone.replace(/[^\d+]/g, '').trim()
+    if (cleanedPhone.startsWith('0') && cleanedPhone.length === 11) {
+      cleanedPhone = '+91' + cleanedPhone.substring(1)
+    } else if (!cleanedPhone.startsWith('+') && cleanedPhone.length === 10) {
+      cleanedPhone = '+91' + cleanedPhone
+    }
+
     const data = {
-      full_name: formData.get('full_name') as string,
-      phone: formData.get('phone') as string,
-      email: (formData.get('email') as string) || undefined,
-      designation: (formData.get('designation') as string) || undefined,
-      area: (formData.get('area') as string) || undefined,
+      full_name: (formData.get('full_name') as string).trim(),
+      phone: cleanedPhone,
+      email: (formData.get('email') as string)?.trim() || undefined,
+      designation: (formData.get('designation') as string)?.trim() || undefined,
+      area: (formData.get('area') as string)?.trim() || undefined,
       joining_date: (formData.get('joining_date') ? new Date(formData.get('joining_date') as string).toISOString() : new Date().toISOString()),
       status: 'active' as const,
       role: 'member' as const,

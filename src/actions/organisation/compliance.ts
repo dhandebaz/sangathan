@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { revalidatePublicOrgPages } from '@/lib/seo/revalidate'
 
 interface ComplianceUpdatePayload {
   registration_status: 'registered' | 'unregistered' | 'in_progress'
@@ -14,8 +15,10 @@ interface ComplianceUpdatePayload {
 export async function updateComplianceData(orgId: string, payload: ComplianceUpdatePayload) {
   try {
     const supabase = await createClient()
-    
-    const { data: { user } } = await supabase.auth.getUser()
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
     if (!user) {
       return { success: false, error: 'Unauthorized' }
     }
@@ -34,24 +37,28 @@ export async function updateComplianceData(orgId: string, payload: ComplianceUpd
     // Clean up fields if they are switching back to unregistered
     const updateData = {
       registration_status: payload.registration_status,
-      ...(payload.registration_status === 'registered' ? {
-        registration_number: payload.registration_number || null,
-        incorporation_date: payload.incorporation_date || null,
-        tax_id: payload.tax_id || null,
-        darpan_id: payload.darpan_id || null,
-      } : {
-        // Clear them out if they are not registered to keep DB clean
-        registration_number: null,
-        incorporation_date: null,
-        tax_id: null,
-        darpan_id: null,
-      })
+      ...(payload.registration_status === 'registered'
+        ? {
+            registration_number: payload.registration_number || null,
+            incorporation_date: payload.incorporation_date || null,
+            tax_id: payload.tax_id || null,
+            darpan_id: payload.darpan_id || null,
+          }
+        : {
+            // Clear them out if they are not registered to keep DB clean
+            registration_number: null,
+            incorporation_date: null,
+            tax_id: null,
+            darpan_id: null,
+          }),
     }
 
-    const { error } = await supabase
+    const { data: orgData, error } = await supabase
       .from('organisations')
       .update(updateData)
       .eq('id', orgId)
+      .select('slug')
+      .single()
 
     if (error) {
       console.error('Compliance update error:', error)
@@ -59,7 +66,10 @@ export async function updateComplianceData(orgId: string, payload: ComplianceUpd
     }
 
     revalidatePath('/[lang]/dashboard/settings', 'page')
-    
+    if (orgData?.slug) {
+      await revalidatePublicOrgPages(orgData.slug)
+    }
+
     return { success: true }
   } catch (err) {
     console.error('Compliance update exception:', err)

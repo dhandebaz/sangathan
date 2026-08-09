@@ -1,16 +1,20 @@
 import React from 'react'
+import { Organisation } from '@/types/dashboard'
 
 export function OrganizationJsonLd() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'Sangathan',
+    alternateName: 'संगठन',
     url: 'https://sangathan.space',
-    description: 'Digital infrastructure for NGOs, student unions, and community groups to manage members, funds, and governance.',
+    description: 'Digital public infrastructure for NGOs, student unions, worker collectives, and community RWAs to manage members, funds, and democratic governance.',
     contactPoint: {
       '@type': 'ContactPoint',
       email: 'support@sangathan.space',
       telephone: '+918527976791',
+      contactType: 'customer support',
+      availableLanguage: ['English', 'Hindi'],
     },
     address: {
       '@type': 'PostalAddress',
@@ -35,6 +39,7 @@ export function WebSiteJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'Sangathan',
+    alternateName: 'संगठन',
     url: 'https://sangathan.space',
     potentialAction: {
       '@type': 'SearchAction',
@@ -57,20 +62,30 @@ export function SoftwareApplicationJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: 'Sangathan',
-    operatingSystem: 'Web',
-    applicationCategory: 'GovernmentApplication',
+    alternateName: 'संगठन',
+    operatingSystem: 'Web, Progressive Web App (PWA)',
+    applicationCategory: 'CivicGovernanceApplication',
     offers: [
       {
         '@type': 'Offer',
         price: '0',
         priceCurrency: 'INR',
-        name: 'Free Tier',
+        name: 'Community Plan (Free Forever)',
+        description: 'Free civic infrastructure for grassroots collectives up to 20 users.',
       },
       {
         '@type': 'Offer',
-        price: '999',
+        price: '1000',
         priceCurrency: 'INR',
-        name: 'Pro Tier',
+        name: 'Institution Plan (Monthly)',
+        description: 'Solidarity patronage for funded NGOs and unions with unlimited members and AI tools.',
+      },
+      {
+        '@type': 'Offer',
+        price: '10000',
+        priceCurrency: 'INR',
+        name: 'Institution Plan (Annual)',
+        description: 'Annual patronage with 2 months free.',
       },
     ],
   }
@@ -115,6 +130,200 @@ export function FAQJsonLd({ questions }: { questions: { question: string; answer
         text: q.answer,
       },
     })),
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  )
+}
+
+export interface OrgProfileJsonLdProps {
+  org: Organisation & {
+    org_type?: string | null
+    description?: string | null
+    logo_url?: string | null
+    cover_url?: string | null
+    contact_email?: string | null
+    contact_phone?: string | null
+    website?: string | null
+    social_links?: Record<string, string> | null
+    address?: string | null
+    registration_status?: string | null
+    registration_number?: string | null
+    incorporation_date?: string | null
+    tax_id?: string | null
+    darpan_id?: string | null
+  }
+  lang: string
+  memberCount?: number
+  eventCount?: number
+  partners?: { name: string; slug: string }[]
+}
+
+export function OrgProfileJsonLd({ org, lang, memberCount, eventCount, partners }: OrgProfileJsonLdProps) {
+  const schemaType =
+    org.org_type === 'ngo'
+      ? 'NGO'
+      : org.org_type === 'student_union'
+        ? 'EducationalOrganization'
+        : org.org_type === 'workers_union'
+          ? 'LaborUnion'
+          : 'Organization'
+
+  const sameAsList: string[] = []
+  if (org.website) sameAsList.push(org.website)
+  if (org.social_links) {
+    for (const url of Object.values(org.social_links)) {
+      if (url && typeof url === 'string') sameAsList.push(url)
+    }
+  }
+
+  const jsonLd: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': schemaType,
+    name: org.name,
+    url: `https://sangathan.space/${lang}/org/${org.slug}`,
+    description: org.description || `${org.name} on Sangathan - Digital Civic Infrastructure.`,
+    ...(org.logo_url ? { logo: org.logo_url } : {}),
+    ...(org.cover_url ? { image: org.cover_url } : {}),
+    ...(org.incorporation_date ? { foundingDate: org.incorporation_date } : {}),
+    ...(org.tax_id ? { taxID: org.tax_id } : {}),
+    ...(org.registration_number ? { identifier: org.registration_number } : {}),
+    ...(org.address
+      ? {
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: org.address,
+            addressCountry: 'IN',
+          },
+        }
+      : {}),
+    ...(org.contact_email || org.contact_phone
+      ? {
+          contactPoint: {
+            '@type': 'ContactPoint',
+            ...(org.contact_email ? { email: org.contact_email } : {}),
+            ...(org.contact_phone ? { telephone: org.contact_phone } : {}),
+            contactType: 'general inquiries',
+          },
+        }
+      : {}),
+    ...(sameAsList.length > 0 ? { sameAs: sameAsList } : {}),
+    ...(memberCount !== undefined ? { member: { '@type': 'QuantitativeValue', value: memberCount } } : {}),
+    ...(partners && partners.length > 0
+      ? {
+          memberOf: partners.map((p) => ({
+            '@type': 'Organization',
+            name: p.name,
+            url: `https://sangathan.space/${lang}/org/${p.slug}`,
+          })),
+        }
+      : {}),
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  )
+}
+
+export interface EventJsonLdProps {
+  event: {
+    id: string
+    title: string
+    description?: string | null
+    start_time: string
+    end_time?: string | null
+    location?: string | null
+    event_type?: string
+  }
+  org: {
+    name: string
+    slug: string
+    logo_url?: string | null
+  }
+  lang: string
+}
+
+export function EventJsonLd({ event, org, lang }: EventJsonLdProps) {
+  const isOnline = event.event_type === 'online' || event.location?.toLowerCase().includes('online')
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: event.title,
+    description: event.description || `${event.title} organized by ${org.name}`,
+    startDate: event.start_time,
+    ...(event.end_time ? { endDate: event.end_time } : {}),
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: isOnline
+      ? 'https://schema.org/OnlineEventAttendanceMode'
+      : 'https://schema.org/OfflineEventAttendanceMode',
+    location: isOnline
+      ? {
+          '@type': 'VirtualLocation',
+          url: `https://sangathan.space/${lang}/org/${org.slug}/events/${event.id}`,
+        }
+      : {
+          '@type': 'Place',
+          name: event.location || org.name,
+          address: event.location || 'India',
+        },
+    organizer: {
+      '@type': 'Organization',
+      name: org.name,
+      url: `https://sangathan.space/${lang}/org/${org.slug}`,
+      ...(org.logo_url ? { logo: org.logo_url } : {}),
+    },
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'INR',
+      availability: 'https://schema.org/InStock',
+      url: `https://sangathan.space/${lang}/org/${org.slug}/events/${event.id}`,
+    },
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  )
+}
+
+export interface NetworkJsonLdProps {
+  network: {
+    name: string
+    description?: string | null
+    slug: string
+  }
+  memberOrgs: { name: string; slug: string }[]
+  totalMembers?: number
+  lang: string
+}
+
+export function NetworkJsonLd({ network, memberOrgs, totalMembers, lang }: NetworkJsonLdProps) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: network.name,
+    url: `https://sangathan.space/${lang}/network/${network.slug}`,
+    description: network.description || `${network.name} - Joint Civic Federation & Coalition on Sangathan.`,
+    ...(totalMembers !== undefined ? { member: { '@type': 'QuantitativeValue', value: totalMembers } } : {}),
+    ...(memberOrgs.length > 0
+      ? {
+          subOrganization: memberOrgs.map((m) => ({
+            '@type': 'Organization',
+            name: m.name,
+            url: `https://sangathan.space/${lang}/org/${m.slug}`,
+          })),
+        }
+      : {}),
   }
 
   return (

@@ -10,6 +10,7 @@ import { updateComplianceData } from '@/actions/organisation/compliance'
 import { Database } from '@/types/database'
 import { Upload, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 
 type Org = {
   id: string
@@ -33,6 +34,8 @@ type ComplianceFormValues = z.infer<typeof complianceSchema>
 
 export function ComplianceManager({ org }: { org: Org }) {
   const [isLoading, setIsLoading] = useState(false)
+  const params = useParams()
+  const lang = (params?.lang as string) || 'en'
 
   const form = useForm<ComplianceFormValues>({
     resolver: zodResolver(complianceSchema),
@@ -157,7 +160,7 @@ export function ComplianceManager({ org }: { org: Org }) {
             </p>
           </div>
           <Link
-            href="/en/dashboard/compliance"
+            href={`/${lang}/dashboard/compliance`}
             className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-600 hover:text-brand-700"
           >
             Open Compliance Tracker
@@ -174,7 +177,7 @@ export function ComplianceManager({ org }: { org: Org }) {
             <p className="text-xs text-gray-500">Upload, track status, and manage all your compliance requirements in one place.</p>
           </div>
           <Link
-            href="/en/dashboard/compliance"
+            href={`/${lang}/dashboard/compliance`}
             className="inline-flex items-center gap-2 text-sm font-medium text-brand-600 hover:text-brand-700 mt-1"
           >
             Go to Compliance Tracker

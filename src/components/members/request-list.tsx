@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { approveMember, rejectMember } from '@/actions/membership'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 interface MembershipRequest {
   id: string
@@ -18,17 +19,27 @@ export function RequestList({ requests }: { requests: MembershipRequest[] }) {
 
   const handleApprove = async (id: string) => {
     setLoading(id)
-    await approveMember({ memberId: id })
+    const result = await approveMember({ memberId: id })
+    if (result && result.error) {
+      toast.error(result.error)
+    } else {
+      toast.success('Member approved successfully')
+      router.refresh()
+    }
     setLoading(null)
-    router.refresh()
   }
 
   const handleReject = async (id: string) => {
     if (!confirm('Are you sure you want to reject this request?')) return
     setLoading(id)
-    await rejectMember({ memberId: id })
+    const result = await rejectMember({ memberId: id })
+    if (result && result.error) {
+      toast.error(result.error)
+    } else {
+      toast.success('Request rejected')
+      router.refresh()
+    }
     setLoading(null)
-    router.refresh()
   }
 
   if (requests.length === 0) {

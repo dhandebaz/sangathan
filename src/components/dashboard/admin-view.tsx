@@ -12,7 +12,7 @@ import {
   HandCoins, Wrench, Scale, ScrollText, MessageSquare, Radio,
   Flag, ShieldCheck, Gift, HeartHandshake, Vote, Database,
   Megaphone, Landmark, HardHat, AlertCircle, UserCheck, Network,
-  RefreshCw, Sparkles
+  RefreshCw, Sparkles, FolderLock, Printer, FileSpreadsheet, Layers
 } from 'lucide-react'
 import Link from 'next/link'
 import { AdminStats, RecentActivityItem, DashboardEvent } from '@/types/dashboard'
@@ -290,7 +290,39 @@ export function AdminDashboard({
       {/* Quick Tools */}
       <div>
         <h2 className="text-sm font-semibold text-foreground mb-3">🛠️ Quick Tools</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <Card className="hover:shadow-md transition-all">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-orange-100 flex items-center justify-center shrink-0">
+                <FolderLock className="h-5 w-5 text-orange-700" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground">Document Vault</p>
+                <p className="text-xs text-muted-foreground">Deeds, CBAs & 80G</p>
+              </div>
+              <Button asChild variant="ghost" size="sm" className="shrink-0">
+                <Link href={`/${lang}/dashboard/documents`}>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+          <Card className="hover:shadow-md transition-all">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-amber-100 flex items-center justify-center shrink-0">
+                <Printer className="h-5 w-5 text-amber-700" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground">Statutory Registers</p>
+                <p className="text-xs text-muted-foreground">Form I, H & Cash Book</p>
+              </div>
+              <Button asChild variant="ghost" size="sm" className="shrink-0">
+                <Link href={`/${lang}/dashboard/registers`}>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
           <Card className="hover:shadow-md transition-all">
             <CardContent className="p-4 flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-indigo-100 flex items-center justify-center shrink-0">
@@ -318,6 +350,22 @@ export function AdminDashboard({
               </div>
               <Button asChild variant="ghost" size="sm" className="shrink-0">
                 <Link href={`/${lang}/dashboard/channels`}>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+          <Card className="hover:shadow-md transition-all">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-orange-100 flex items-center justify-center shrink-0">
+                <Layers className="h-5 w-5 text-orange-700" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground">Master Reference Data</p>
+                <p className="text-xs text-muted-foreground">780+ Districts & Codes</p>
+              </div>
+              <Button asChild variant="ghost" size="sm" className="shrink-0">
+                <Link href={`/${lang}/dashboard/reference-data`}>
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>

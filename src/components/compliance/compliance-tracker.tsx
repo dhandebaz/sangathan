@@ -148,6 +148,8 @@ function ComplianceItemRow({
   )
 }
 
+import { OrgStatutoryKnowledge } from './org-statutory-knowledge'
+
 export function ComplianceTracker({
   items: initialItems,
   orgType,
@@ -157,7 +159,9 @@ export function ComplianceTracker({
   orgType: string
   lang: string
 }) {
+  const isHindi = lang === 'hi'
   const [items, setItems] = useState(initialItems)
+  const [activeTab, setActiveTab] = useState<'tracker' | 'knowledge'>('tracker')
 
   async function handleStatusChange(id: string, status: string) {
     const res = await updateComplianceItemStatus(id, status)
@@ -221,74 +225,113 @@ export function ComplianceTracker({
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            Compliance Tracker <Sparkles className="w-5 h-5 text-brand-500" />
+            {isHindi ? 'अनुपालन व कानूनी ज्ञान केंद्र' : 'Compliance & Statutory Knowledge Hub'}{' '}
+            <Sparkles className="w-5 h-5 text-brand-500" />
           </h1>
-          <p className="text-muted-foreground mt-2">
-            AI-powered tracker that automatically suggests exact certifications and registrations based on your organisation&apos;s usage.
+          <p className="text-muted-foreground mt-2 text-sm">
+            {isHindi
+              ? 'स्वचालित विनियामक ट्रैकिंग, लागू कानूनी अधिनियम, और संगठन प्रकार के अनुसार मानकीकृत प्रारूप।'
+              : "Automated regulatory tracking, applicable legal acts, and standardized statutory frameworks tailored to your organisation."}
           </p>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex items-center gap-2 bg-muted p-1 rounded-xl shrink-0">
+          <button
+            type="button"
+            onClick={() => setActiveTab('tracker')}
+            className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+              activeTab === 'tracker'
+                ? 'bg-background text-foreground shadow-xs'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            {isHindi ? 'अनुपालन चेकलिस्ट' : 'Compliance Checklist'}
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('knowledge')}
+            className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+              activeTab === 'knowledge'
+                ? 'bg-background text-foreground shadow-xs'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            {isHindi ? 'कानूनी नियम व संदर्भ' : 'Legal Acts & Handbooks'}
+          </button>
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold">{items.length}</div>
-            <div className="text-xs text-muted-foreground">Total Requirements</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-green-600">{approvedCount}</div>
-            <div className="text-xs text-muted-foreground">Approved</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-yellow-600">
-              {(statusCounts.in_progress || 0) + (statusCounts.submitted || 0)}
-            </div>
-            <div className="text-xs text-muted-foreground">In Progress / Submitted</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-brand-600">{progressPct}%</div>
-            <div className="text-xs text-muted-foreground">Completion Progress</div>
-          </CardContent>
-        </Card>
-      </div>
+      {activeTab === 'knowledge' ? (
+        <OrgStatutoryKnowledge orgType={orgType} lang={lang} />
+      ) : (
+        <>
+          <div className="grid gap-4 md:grid-cols-4">
+            <Card>
+              <CardContent className="p-4">
+                <div className="text-2xl font-bold">{items.length}</div>
+                <div className="text-xs text-muted-foreground">{isHindi ? 'कुल आवश्यकताएं' : 'Total Requirements'}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4">
+                <div className="text-2xl font-bold text-green-600">{approvedCount}</div>
+                <div className="text-xs text-muted-foreground">{isHindi ? 'स्वीकृत' : 'Approved'}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4">
+                <div className="text-2xl font-bold text-yellow-600">
+                  {(statusCounts.in_progress || 0) + (statusCounts.submitted || 0)}
+                </div>
+                <div className="text-xs text-muted-foreground">{isHindi ? 'प्रगति पर / प्रस्तुत' : 'In Progress / Submitted'}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4">
+                <div className="text-2xl font-bold text-brand-600">{progressPct}%</div>
+                <div className="text-xs text-muted-foreground">{isHindi ? 'पूर्णता प्रगति' : 'Completion Progress'}</div>
+              </CardContent>
+            </Card>
+          </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{getOrgLabel(orgType)} Requirements</CardTitle>
-          <CardDescription>
-            Documents are stored securely and only visible to org admins. Requirements unlock automatically as your usage grows.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {items.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-16 text-center bg-muted/30 rounded-lg border border-dashed">
-              <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center mb-4 text-brand-600">
-                <Sparkles className="w-6 h-6 animate-pulse" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Analyzing your organisation...</h3>
-              <p className="text-muted-foreground max-w-md text-sm">
-                Our AI engine is currently monitoring your organisation&apos;s activity. As you gain members, collect donations, or host events, exact legal and compliance documents will automatically unlock here.
-              </p>
-            </div>
-          )}
-          {items.map((item) => (
-            <ComplianceItemRow
-              key={item.id}
-              item={item}
-              onStatusChange={handleStatusChange}
-              onDelete={handleDelete}
-              onUpload={handleUpload}
-              onRemoveDoc={handleRemoveDoc}
-            />
-          ))}
-        </CardContent>
-      </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>{getOrgLabel(orgType, isHindi ? 'hi' : 'en')} {isHindi ? 'आवश्यकताएं' : 'Requirements'}</CardTitle>
+              <CardDescription>
+                {isHindi
+                  ? 'दस्तावेज़ सुरक्षित रूप से संग्रहीत हैं और केवल संगठन एडमिन को दिखाई देते हैं।'
+                  : 'Documents are stored securely and only visible to org admins. Requirements unlock automatically as your usage grows.'}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {items.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-16 text-center bg-muted/30 rounded-lg border border-dashed">
+                  <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center mb-4 text-brand-600">
+                    <Sparkles className="w-6 h-6 animate-pulse" />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">{isHindi ? 'आपके संगठन का विश्लेषण किया जा रहा है...' : 'Analyzing your organisation...'}</h3>
+                  <p className="text-muted-foreground max-w-md text-sm">
+                    {isHindi
+                      ? 'हमारा सिस्टम आपकी गतिविधि की निगरानी कर रहा है। जैसे ही आप सदस्य जोड़ते हैं या दान प्राप्त करते हैं, प्रासंगिक कानूनी आवश्यकताएं यहां अनलॉक हो जाएंगी।'
+                      : 'Our compliance engine is currently monitoring your organisation activity. As you gain members, collect donations, or host events, exact legal and compliance documents will automatically unlock here.'}
+                  </p>
+                </div>
+              )}
+              {items.map((item) => (
+                <ComplianceItemRow
+                  key={item.id}
+                  item={item}
+                  onStatusChange={handleStatusChange}
+                  onDelete={handleDelete}
+                  onUpload={handleUpload}
+                  onRemoveDoc={handleRemoveDoc}
+                />
+              ))}
+            </CardContent>
+          </Card>
+        </>
+      )}
     </div>
   )
 }

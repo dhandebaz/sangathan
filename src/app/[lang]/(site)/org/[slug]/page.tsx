@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
@@ -10,6 +11,99 @@ import {
   ArrowUpRight, BadgeCheck, AlertCircle, Megaphone, ArrowRight,
   Sparkles
 } from 'lucide-react'
+import { OrgProfileJsonLd, BreadcrumbJsonLd } from '@/components/seo/json-ld'
+
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string; lang: string }>
+}): Promise<Metadata> {
+  const { slug, lang } = await props.params
+  const supabaseAdmin = createServiceClient()
+  const { data: org } = await supabaseAdmin
+    .from('organisations')
+    .select('name, description, logo_url, org_type, registration_status, address')
+    .eq('slug', slug)
+    .single()
+
+  if (!org) {
+    return {
+      title: 'Organisation Not Found | Sangathan',
+      description: 'The requested organisation profile could not be found.',
+    }
+  }
+
+  const isHindi = lang === 'hi'
+  const typeLabel =
+    org.org_type === 'ngo'
+      ? isHindi ? 'गैर-सरकारी संगठन (NGO)' : 'Non-Governmental Organisation'
+      : org.org_type === 'student_union'
+        ? isHindi ? 'छात्र संघ' : 'Student Union'
+        : org.org_type === 'workers_union'
+          ? isHindi ? 'कर्मचारी संघ' : 'Workers Union'
+          : isHindi ? 'रेजिडेंट वेलफेयर एसोसिएशन' : 'Resident Welfare Association'
+
+  const title = `${org.name} | ${typeLabel} | Sangathan`
+  const description =
+    org.description ||
+    `${org.name} is a verified ${typeLabel.toLowerCase()} on Sangathan, digital public infrastructure for collective democratic governance.`
+
+  const ogImageUrl = `https://sangathan.space/api/og/org/${slug}`
+
+  return {
+    title,
+    description,
+    keywords: [
+      org.name,
+      typeLabel,
+      'Sangathan',
+      'Civil Society',
+      'Grassroots Democracy',
+      'NGO India',
+      'Student Union',
+      'Civic Infrastructure',
+    ],
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/org/${slug}`,
+      languages: {
+        en: `https://sangathan.space/en/org/${slug}`,
+        hi: `https://sangathan.space/hi/org/${slug}`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `https://sangathan.space/${lang}/org/${slug}`,
+      siteName: 'Sangathan',
+      locale: isHindi ? 'hi_IN' : 'en_IN',
+      type: 'profile',
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${org.name} - Sangathan Public Record`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [ogImageUrl],
+      creator: '@areynetaji',
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+  }
+}
 
 export default async function OrgPage(props: { params: Promise<{ slug: string; lang: string }> }) {
   const { slug, lang } = await props.params
@@ -113,6 +207,21 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
 
   return (
     <div className="min-h-screen bg-slate-50">
+      <BreadcrumbJsonLd
+        items={[
+          { name: isHindi ? 'होम' : 'Home', url: `https://sangathan.space/${lang}` },
+          { name: isHindi ? 'नेटवर्क' : 'Network', url: `https://sangathan.space/${lang}/network` },
+          { name: org.name, url: `https://sangathan.space/${lang}/org/${org.slug}` },
+        ]}
+      />
+      <OrgProfileJsonLd
+        org={org}
+        lang={lang}
+        memberCount={metrics?.members}
+        eventCount={metrics?.events}
+        partners={partners.map((p) => ({ name: p.name, slug: p.slug }))}
+      />
+
       {/* Hero Section */}
       <div className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden border-b border-slate-200 bg-white">
         <div className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>

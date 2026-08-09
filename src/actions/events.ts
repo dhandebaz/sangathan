@@ -7,6 +7,7 @@ import { revalidatePath } from 'next/cache'
 import { createHmac } from 'crypto'
 import { z } from 'zod'
 import { EventSchema, RSVPSchema, getQrSigningSecret } from './events.shared'
+import { revalidatePublicEventPages } from '@/lib/seo/revalidate'
 
 const CreateEventSchema = EventSchema.extend({
   collaborating_org_ids: z.array(z.string().uuid()).optional(),
@@ -79,6 +80,16 @@ export const createEvent = createSafeAction(
     })
 
     revalidatePath('/', 'layout')
+    const { data: orgData } = await supabase
+      .from('organisations')
+      .select('slug')
+      .eq('id', context.organizationId)
+      .single()
+
+    if (orgData?.slug) {
+      await revalidatePublicEventPages(orgData.slug, event.id)
+    }
+
     return { success: true, eventId: event.id }
   },
   { allowedRoles: ['admin', 'editor'], actionName: 'create_event' },
@@ -142,6 +153,16 @@ export const updateEvent = createSafeAction(
     })
 
     revalidatePath('/', 'layout')
+    const { data: orgData } = await supabase
+      .from('organisations')
+      .select('slug')
+      .eq('id', context.organizationId)
+      .single()
+
+    if (orgData?.slug) {
+      await revalidatePublicEventPages(orgData.slug, input.id)
+    }
+
     return { success: true }
   },
   { allowedRoles: ['admin', 'editor'], actionName: 'update_event' },

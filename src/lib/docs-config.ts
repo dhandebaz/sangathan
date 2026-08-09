@@ -19,6 +19,8 @@ export const docsConfig: DocSection[] = [
     icon: Users,
     items: [
       { title: { en: 'Member Management', hi: 'सदस्य प्रबंधन' }, slug: 'members' },
+      { title: { en: 'Universal Data Importer', hi: 'यूनिवर्सल डेटा आयातक' }, slug: 'data-importer' },
+      { title: { en: 'Document Vault', hi: 'दस्तावेज़ वॉल्ट' }, slug: 'document-vault' },
       { title: { en: 'Forms System', hi: 'फॉर्म सिस्टम' }, slug: 'forms' },
       { title: { en: 'Meetings & Minutes', hi: 'बैठकें और कार्यवृत्त' }, slug: 'meetings' },
       { title: { en: 'Donation Ledger', hi: 'दान बहीखाता' }, slug: 'donations' },
@@ -39,6 +41,8 @@ export const docsConfig: DocSection[] = [
     title: { en: 'Specialized Modules', hi: 'विशिष्ट मॉड्यूल' },
     icon: Wrench,
     items: [
+      { title: { en: 'Statutory Registers', hi: 'वैधानिक रजिस्टर्स' }, slug: 'statutory-registers' },
+      { title: { en: 'Master Reference & Geo Data', hi: 'मास्टर संदर्भ व भौगोलिक डेटा' }, slug: 'master-reference-data' },
       { title: { en: 'Grievances & Complaints', hi: 'शिकायतें' }, slug: 'grievances' },
       { title: { en: 'Maintenance', hi: 'रखरखाव' }, slug: 'maintenance' },
       { title: { en: 'Student IDs', hi: 'छात्र आईडी' }, slug: 'student-ids' },
@@ -60,6 +64,16 @@ export const docsConfig: DocSection[] = [
     icon: Shield,
     items: [
       { title: { en: 'System Admin Guide', hi: 'सिस्टम एडमिन गाइड' }, slug: 'system-admin' },
+    ]
+  },
+  {
+    title: { en: 'Organisation Playbooks', hi: 'संगठन नियमावली व दिशानिर्देश' },
+    icon: Shield,
+    items: [
+      { title: { en: 'NGO & Civil Society Handbook', hi: 'एनजीओ व नागरिक समाज हैंडबुक' }, slug: 'ngo-playbook' },
+      { title: { en: 'Student Union & Campus Guild', hi: 'छात्र संघ व विश्वविद्यालय परिषद' }, slug: 'student-union-playbook' },
+      { title: { en: 'Trade Union & Labor Collective', hi: 'श्रमिक संघ व ट्रेड यूनियन' }, slug: 'workers-union-playbook' },
+      { title: { en: 'Resident Welfare Association (RWA)', hi: 'आवासीय कल्याण संघ (RWA)' }, slug: 'rwa-playbook' },
     ]
   },
   {

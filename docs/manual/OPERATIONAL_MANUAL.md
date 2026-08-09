@@ -362,3 +362,179 @@ Sangathan is secure, but we recommend **not** storing highly sensitive personal 
 
 ### 22.5 What if the platform shuts down?
 We are committed to a **90-day shutdown notice**. You will have ample time to export all your data (CSV/JSON) and migrate to another system.
+
+---
+
+## Section 23: NGO & Civil Society Handbook
+
+### 23.1 Legal Incorporation Types & Statutory Framework
+Indian Non-Governmental Organisations operating on Sangathan typically register under one of three legal vehicles:
+1. **Public Charitable Trust (Indian Trusts Act 1882):** Managed by a Board of Trustees through a registered Trust Deed. Ideal for family-founded or closed governing bodies with permanent trustees.
+2. **Society (Societies Registration Act 1860):** Governed by a minimum of 7 members with a Memorandum of Association (MoA) and democratic Managing Committee elected at AGMs.
+3. **Section 8 Non-Profit Company (Companies Act 2013):** Most structured vehicle with national jurisdiction, high transparency, registered with the Ministry of Corporate Affairs (MCA).
+
+### 23.2 Essential Regulatory Registrations Checklist
+* **Permanent Account Number (PAN):** Institutional tax identity issued by the Income Tax Department.
+* **NITI Aayog NGO Darpan:** Unique Darpan ID required to access central government grants, Ministry portal funding, and CSR partnerships. Register at `ngodarpan.gov.in`.
+* **Section 12A & 80G Tax Certificates:**
+  * **12A Exemption:** Exempts the NGO's surplus income from corporate income tax under Section 11/12 of Income Tax Act.
+  * **80G Deduction:** Grants donors a 50% tax deduction on qualifying contributions. Sangathan automatically generates 80G compliant digital tax receipts with donor PAN and certificate numbers.
+* **MCA Form CSR-1:** Mandatory filing with MCA to receive Corporate Social Responsibility allocations under Section 135 of the Companies Act.
+* **Foreign Contribution Regulation Act (FCRA):** Required prior to soliciting or receiving any international donation. Requires mandatory account with State Bank of India, Main Branch, New Delhi.
+
+### 23.3 Public Trust Ledger & Financial Disclosure
+Sangathan empowers NGOs to run transparent, audit-ready operations:
+* **Real-time Utilization Ledger:** Map expenditures directly against public fundraising campaigns.
+* **SHA-256 Verified Receipts:** Cryptographically verifiable digital receipts to prevent duplicate issuance.
+* **Volunteer Log:** Track volunteer service hours, project assignments, and impact milestones.
+
+---
+
+## Section 24: Student Union & Campus Guild Handbook
+
+### 24.1 Supreme Court Lyngdoh Committee Electoral Guidelines
+All higher education institutions (HEIs) in India must follow the Supreme Court Lyngdoh Committee recommendations (Order 2006):
+* **Age Limits for Candidates:**
+  * Undergraduate (UG): 17 to 22 years.
+  * Postgraduate (PG): Up to 25 years.
+  * Research Scholars (M.Phil / Ph.D.): Up to 28 years.
+* **Academic Standing:** Minimum 75% attendance record and no academic backlogs or supplementary exams in past semesters.
+* **Disciplinary Record:** Candidate must have no criminal record or campus disciplinary suspension.
+* **Poll Expenditure Limit:** Maximum ₹5,000 per candidate for the entire election campaign.
+* **Campaigning Restrictions:** Complete prohibition of printed posters, vehicle rallies, loudspeakers, or political party funding on campus. Hand-made posters and student assemblies permitted.
+
+### 24.2 Representation & Gyapan (ज्ञापन) Workflow
+1. **Drafting Official Memorandums:** Use Sangathan's Letterhead & Gyapan Builder with official reference numbers (`SU/YYYY/MM/XXX`).
+2. **Student Signature Petitions:** Attach live digital verified student petitions to formal representations submitted to Vice Chancellors, Deans of Students Welfare (DSW), and Wardens.
+3. **Action Taken Report (ATR) Tracking:** Record administrative response deadlines (14-day statutory turnaround) and log official minutes.
+
+### 24.3 Campus Governance & Welfare Cells
+* **Hostel & Mess Quality Audit:** Daily mess meal quality ratings with photo verification, hostel allotment grievance tracking, and study hall maintenance logs.
+* **UGC Anti-Ragging Cell:** Maintain anti-ragging squad rosters, anonymous reporting desks, and annual compliance logs under UGC 2009 Regulations.
+* **Live Election Tally Desk:** Real-time booth-by-booth vote counting tally interface with live lead calculation for Central Panel candidates.
+
+---
+
+## Section 25: Trade Union & Labor Collective Handbook
+
+### 25.1 Statutory Registration under Trade Unions Act 1926
+* **Formation Threshold:** Minimum 7 members can apply for registration under Section 4. However, the union must represent at least 10% or 100 workers (whichever is less) engaged in the establishment.
+* **Form A Application:** Submitted to the Registrar of Trade Unions with by-laws, list of executive members, and registered office details.
+* **Annual General Return (Form H):** Mandatory yearly audit statement of assets, liabilities, and audited member subscription receipts submitted by April 30.
+
+### 25.2 Collective Bargaining Agreement (CBA) & Strike Protocols
+* **CBA Lifecycle:**
+  1. *Charter of Demands:* Drafted democratically using Sangathan's proposal voting tool.
+  2. *Bipartite Negotiations:* Meeting minutes and redlining logged in the CBA repository.
+  3. *Memorandum of Settlement (MoS):* Signed under Section 12(3) or 18(1) of the Industrial Disputes Act 1947.
+* **Strike Notice Requirements (Section 22/23):**
+  * Mandatory 14-day advance notice to management and the Conciliation Officer.
+  * No strike during the pendency of conciliation proceedings before a Board or Labour Court.
+
+### 25.3 Workplace Operations & Shop Stewards
+* **Shop Steward Matrix:** Assign floor representatives per shift/department with specific grievance logging permissions.
+* **Strike Relief Mutual-Aid Ledger:** Transparent accounting for emergency relief funds with dual-approval disbursements.
+* **Field Organizer Mode:** Offline intake for factory gates and construction sites with automatic background synchronization.
+
+---
+
+## Section 26: Resident Welfare Association (RWA) Handbook
+
+### 26.1 Governing Framework & Model By-Laws
+RWAs and Apartment Owners Associations (AOAs) operate under State-specific Apartment Ownership Acts (e.g., Delhi Apartment Ownership Act, Karnataka Apartment Ownership Act, UP Apartment Act) and the Societies Registration Act:
+* **Builder Handover Protocols:** Audit of common area conveyance, corpus fund transfers, completion certificates, and MEP equipment warranties.
+* **Management Committee Composition:** President, Vice-President, Secretary, Treasurer, and Block Executive Members elected at Annual General Meetings.
+
+### 26.2 Maintenance Billing & Invoicing Engine
+* **Calculation Models:**
+  1. *Flat / Equal Rate:* Uniform fee per apartment unit.
+  2. *Per Sq. Ft. Area:* Calculated based on super built-up area.
+  3. *Hybrid Model:* Fixed common amenity charge + area-based sinking fund contribution.
+* **Automated Dues Collection:** UPI QR codes, instant receipts, auto-reconciliation, and late fee policies.
+
+### 26.3 Society Operations & Democratic Governance
+* **AGM Notice Protocols:** 21 days advance written notice with audited balance sheets and agenda items.
+* **Digital Notice Board & Community Polls:** Quorum verification and secret digital ballots for society capital expenditure upgrades.
+* **Gate Security & Facilities:** Pre-approved visitor entry, domestic staff attendance tracking, and clubhouse reservation workflows.
+* **Safety Audits:** Annual Fire Safety NOC, structural audit certificates, and statutory lift inspection compliance.
+
+---
+
+## Section 27: Universal Data Importer & Spreadsheet Migration
+
+### 27.1 Overview & Key Features
+The Universal Data Importer allows grassroots organisations to migrate legacy rosters from Microsoft Excel (.xlsx), Google Sheets, and Comma/Tab-Delimited CSV files into Sangathan in under 60 seconds with zero technical complexity:
+* **Visual Column Auto-Matcher:** Analyzes spreadsheet header rows and automatically detects standard fields (`Full Name`, `Phone / WhatsApp`, `Email`, `Designation / Title`, `Unit / Flat / Area / Hostel`, `Role`, `Internal Notes`).
+* **Indian Mobile & E.164 Phone Sanitization:** Automatically cleans messy entries with spaces, dashes, brackets, and leading `0`s into standardized `+91` E.164 format.
+* **Deduplication & Conflict Sandbox:** Compares batch records against the organisation's active database, skipping duplicate telephone numbers and emails safely without breaking existing records.
+* **Capacity Safeguards:** Automatically verifies plan membership quotas prior to batch insertion.
+
+### 27.2 Step-by-Step Migration Guide
+1. Navigate to **Members** $\rightarrow$ Click **Import (CSV / Excel)** (`/[lang]/dashboard/members/import`).
+2. Upload your `.csv` file or paste raw tabular text directly from Excel or Google Sheets.
+3. Review auto-detected column matches and adjust any custom column drop-downs.
+4. Preview the first 3 rows in the interactive preview sandbox.
+5. Click **Start Import** to execute the bulk migration. View the summary of newly inserted members and skipped duplicates with full immutable audit logs.
+
+---
+
+## Section 28: Sovereign Document & Asset Cloud Vault
+
+### 28.1 Overview & Architecture
+The Sovereign Document Cloud (`/[lang]/dashboard/documents`) provides an encrypted, permanent repository for civil society legal deeds, agreements, circulars, and institutional property documents:
+* **Domain Categorization:**
+  * *Statutory & Legal:* Trust Deeds, 12A/80G tax orders, CSR-1 certificates, FCRA approvals.
+  * *Bipartite & CBAs:* Collective Bargaining Agreements, wage settlements, strike notices.
+  * *AGM & Circulars:* Annual General Meeting minutes, resolution extracts, election notifications.
+  * *Asset & Deeds:* Land title deeds, builder conveyance deeds, lease agreements.
+  * *Press & Media:* Official press releases, co-signed joint statements.
+* **Granular Access Control:**
+  * `Public`: Accessible by supporters and media on public campaign and transparency pages.
+  * `Members Only`: Accessible to verified enrolled members across the organisation.
+  * `Executives Only`: Restricted to President, General Secretary, and designated Admins.
+
+---
+
+## Section 29: Statutory PDF Registers & Government Inspection Rolls
+
+### 29.1 Overview & Compliance Standards
+Under Indian statutory laws (Societies Registration Act 1860, Trade Unions Act 1926, and Income Tax Act 1961), organisations must produce physical serialized registers during Registrar audits and government inspections. Sangathan generates 1-click official print-ready PDF registers:
+
+### 29.2 Available Statutory Registers (`/[lang]/dashboard/registers`)
+1. **Form I: Statutory Register of Members**
+   * *Prescribed Under:* Societies Registration Act 1860 & State Apartment Acts.
+   * *Contents:* Serial Number, Full Name, Contact Details, Designation, Flat/Unit Number, Admission Date, and Voting Standing.
+2. **Form H: Annual General Return & Subscription Roll**
+   * *Prescribed Under:* Trade Unions Act 1926 (Section 28 & Regulation 18).
+   * *Contents:* Workman Name, Trade Designation, Shop Floor/Plant Shift, Enrolment Date, Subscription Standing, and Executive Committee attestation block.
+3. **Double-Entry Cash Book & 80G Tax Register**
+   * *Prescribed Under:* Income Tax Act 1961 (Section 12A/80G) & NITI Aayog Norms.
+   * *Contents:* Voucher Number, Date, Donor Particulars, 80G Receipt Number, Inflow Breakdown, and SHA-256 Public Trust Verification.
+
+---
+
+## Section 30: Master Reference Data & National Geographical Standards
+
+### 30.1 Overview & National Scope
+Sangathan includes a pre-populated, verified master registry covering the entire administrative geography of India and domain-specific statutory taxonomies for civil society organizations:
+* **All 28 States and 8 Union Territories:** Standardized with official ISO 3166-2:IN codes, English and Hindi nomenclature, and administrative classifications.
+* **780+ Administrative Districts:** Complete mapping of districts across every state and union territory, enabling precise local unit tagging, field survey geofencing, and district-level CSR grant allocation.
+* **Cascading Geographical Selectors:** Reusable UI components for seamless State $\rightarrow$ District selection across member onboarding, event management, and survey forms.
+
+### 30.2 Domain-Specific Statutory Taxonomies
+1. **NGO & Civil Society Taxonomies:**
+   * *UN SDGs & NITI Aayog Mappings:* 17 Sustainable Development Goal sector codes (No Poverty, Quality Education, Gender Equality, WASH, Climate Action).
+   * *Statutory Tax Exemption Codes:* Section 12A/12AB, 80G, MCA Form CSR-1, and MHA FCRA reference numbers.
+2. **Student Union Academic & Welfare Taxonomies:**
+   * *Central Panel Designations:* President (SU-PRES), Vice-President (SU-VP), General Secretary (SU-GS), Joint Secretary (SU-JS), Central Councillor (SU-CC).
+   * *Campus Redressal Channels:* Dean of Students Welfare (DSW), Proctor Office, UGC Anti-Ragging Squad (UGC-ARC), Internal Complaints Committee (POSH-ICC), Hostel Wardens Council.
+3. **Workers Union Industrial Classifications:**
+   * *Industrial Sectors:* Automobile & Heavy Mfg, IT & App-based Gig Economy, Transport & Logistics, Construction Labour, Healthcare & Sanitation, Textile & Garments, Mining & Energy.
+   * *Dispute Categories:* Minimum Wage Non-Payment (DISP-WAGE), Unlawful Termination (DISP-RET), Workplace Safety (DISP-SAFE), Overtime (DISP-OT), Contract Labour Regularization (DISP-REG).
+   * *Statutory Dispute Authorities:* Assistant Labour Commissioner (AUTH-ALC), Regional Labour Commissioner (AUTH-RLC), Industrial Tribunal (AUTH-IT), CGIT (AUTH-CGIT).
+4. **Resident Welfare Association (RWA) Standards:**
+   * *Residential Unit Formats:* 1BHK, 2BHK, 3BHK, 4BHK, Penthouse/Duplex, Independent Villa, Society Retail Shop.
+   * *Standardized Maintenance Heads:* Common Grid Power, Security Agency Contract, Housekeeping & Waste Segregation, Elevator AMC, Generator Diesel Fuel, Fire Safety AMC, Capital Sinking Fund.
+
+
+

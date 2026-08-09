@@ -7,6 +7,7 @@ export type BotCommandType =
   | 'VOTE'
   | 'SOS'
   | 'STATUS'
+  | 'DISTRICTS'
   | 'HELP'
   | 'UNKNOWN'
 
@@ -98,7 +99,18 @@ export function parseBotMessage(text: string): ParsedBotMessage {
     return { command: 'STATUS', rawText: trimmed, args: parts.slice(1), details: parts.slice(1).join(' '), isHindi }
   }
 
-  // 7. Help
+  // 7. Districts & State Coverage
+  if (
+    firstWord === 'DISTRICTS' ||
+    firstWord === 'DISTRICT' ||
+    firstWord === 'JILA' ||
+    trimmed.startsWith('जिले') ||
+    trimmed.startsWith('जिला')
+  ) {
+    return { command: 'DISTRICTS', rawText: trimmed, args: parts.slice(1), details: parts.slice(1).join(' '), isHindi }
+  }
+
+  // 8. Help
   if (
     firstWord === 'HELP' ||
     firstWord === 'MENU' ||

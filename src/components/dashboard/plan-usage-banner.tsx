@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Users, ArrowUpRight, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { Users, ArrowUpRight, AlertCircle } from 'lucide-react'
 import { OrgPlanUsage } from '@/lib/plans/config'
 
 interface PlanUsageBannerProps {
@@ -8,6 +8,8 @@ interface PlanUsageBannerProps {
 }
 
 export function PlanUsageBanner({ usage, lang }: PlanUsageBannerProps) {
+  const isHindi = lang === 'hi'
+
   // Only show banner for Community tier or if over 80% usage
   if (usage.planName !== 'Community' && !usage.isNearMemberLimit) {
     return null
@@ -32,10 +34,10 @@ export function PlanUsageBanner({ usage, lang }: PlanUsageBannerProps) {
             </div>
             <div className="flex items-center gap-2">
               <span className="text-sm font-bold text-slate-900">
-                {usage.planTier.name} Plan Member Capacity
+                {isHindi ? usage.planTier.nameHi : usage.planTier.name} {isHindi ? 'योजना सदस्य क्षमता' : 'Plan Member Capacity'}
               </span>
               <span className="text-xs font-semibold text-slate-500">
-                ({usage.memberCount} of {usage.maxMembers} slots used)
+                ({usage.memberCount} {isHindi ? 'कुल' : 'of'} {usage.maxMembers} {isHindi ? 'स्लॉट उपयोग में' : 'slots used'})
               </span>
             </div>
           </div>
@@ -51,15 +53,23 @@ export function PlanUsageBanner({ usage, lang }: PlanUsageBannerProps) {
           <p className="text-xs text-slate-600">
             {isFull ? (
               <span className="text-rose-700 font-semibold flex items-center gap-1 mt-1">
-                <AlertCircle className="w-3.5 h-3.5" /> Capacity limit reached. New member joins and invites are paused.
+                <AlertCircle className="w-3.5 h-3.5" />
+                {isHindi
+                  ? 'क्षमता सीमा पूरी हो गई है। नए सदस्यों को जोड़ना और आमंत्रण रोक दिए गए हैं।'
+                  : 'Capacity limit reached. New member joins and invites are paused.'}
               </span>
             ) : isNear ? (
               <span className="text-amber-800 font-medium flex items-center gap-1 mt-1">
-                <AlertCircle className="w-3.5 h-3.5" /> Approaching the 20-member free tier limit. Upgrade to unlock up to 1,000 members & AI intelligence.
+                <AlertCircle className="w-3.5 h-3.5" />
+                {isHindi
+                  ? '20 सदस्यों की मुफ्त सीमा के करीब। असीमित सदस्यों और AI बुद्धिमत्ता के लिए अपग्रेड करें।'
+                  : 'Approaching the 20-member free tier limit. Upgrade for unlimited members & AI intelligence.'}
               </span>
             ) : (
               <span>
-                Free community tier supports up to 20 members. Upgrade anytime for unlimited growth.
+                {isHindi
+                  ? 'मुफ्त समुदाय योजना 20 सदस्यों तक का समर्थन करती है। असीमित वृद्धि के लिए कभी भी अपग्रेड करें।'
+                  : 'Free community tier supports up to 20 members. Upgrade anytime for unlimited growth.'}
               </span>
             )}
           </p>
@@ -70,7 +80,7 @@ export function PlanUsageBanner({ usage, lang }: PlanUsageBannerProps) {
             href={`/${lang}/dashboard/billing`}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-sm transition-colors"
           >
-            <span>{isFull ? 'Upgrade to Unlock' : 'View Billing & Plans'}</span>
+            <span>{isFull ? (isHindi ? 'अनलॉक करने के लिए अपग्रेड करें' : 'Upgrade to Unlock') : (isHindi ? 'बिलिंग और योजनाएं देखें' : 'View Billing & Plans')}</span>
             <ArrowUpRight className="w-3.5 h-3.5" />
           </Link>
         </div>

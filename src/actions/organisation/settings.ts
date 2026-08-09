@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { createServiceClient } from '@/lib/supabase/service'
 import { logger } from '@/lib/logger'
+import { revalidatePublicOrgPages } from '@/lib/seo/revalidate'
 
 const ProfileSchema = z.object({
   description: z.string().optional(),
@@ -33,7 +34,7 @@ export const updateOrganisationProfile = createSafeAction(
   ProfileSchema,
   async (input, context) => {
     const supabase = createServiceClient()
-    const { error } = await supabase
+    const { data: orgData, error } = await supabase
       .from('organisations')
       .update({
         description: input.description,
@@ -44,6 +45,8 @@ export const updateOrganisationProfile = createSafeAction(
         social_links: input.social_links,
       })
       .eq('id', context.organizationId)
+      .select('slug')
+      .single()
 
     if (error) {
       return { error: error.message }
@@ -56,6 +59,10 @@ export const updateOrganisationProfile = createSafeAction(
     })
 
     revalidatePath('/', 'layout')
+    if (orgData?.slug) {
+      await revalidatePublicOrgPages(orgData.slug)
+    }
+
     return { success: true }
   },
   adminAction,
@@ -91,6 +98,7 @@ export const updateOrganisationSlug = createSafeAction(
     })
 
     revalidatePath('/', 'layout')
+    await revalidatePublicOrgPages(newSlug)
     return { success: true }
   },
   adminAction,
@@ -102,16 +110,22 @@ export const updateOrganisationImage = createSafeAction(
     const supabase = createServiceClient()
     const updateData = input.type === 'logo' ? { logo_url: input.url } : { cover_url: input.url }
 
-    const { error } = await supabase
+    const { data: orgData, error } = await supabase
       .from('organisations')
       .update(updateData)
       .eq('id', context.organizationId)
+      .select('slug')
+      .single()
 
     if (error) {
       return { error: error.message }
     }
 
     revalidatePath('/', 'layout')
+    if (orgData?.slug) {
+      await revalidatePublicOrgPages(orgData.slug)
+    }
+
     return { success: true }
   },
   adminAction,

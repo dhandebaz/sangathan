@@ -9,7 +9,8 @@ import {
   AlertCircle, Wrench, Gift, Flag, Badge,
   HeartHandshake, Network, Landmark, ScrollText,
   GalleryVerticalEnd, Gavel, UserCog, DollarSign, FileText, UserCheck, HardHat,
-  CalendarCheck, Printer, Zap, ShieldCheck, Smartphone, Database, AlertTriangle, Sparkles, Award, Radio, MessageSquare, CreditCard
+  CalendarCheck, Printer, Zap, ShieldCheck, Smartphone, Database, AlertTriangle, Sparkles, Award, Radio, MessageSquare, CreditCard,
+  FolderLock, BookOpen, Layers, Phone, BookOpenText, MapPinHouse, FileSignature
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -54,6 +55,9 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
       id: 'admin',
       title: 'Admin & Guardrails',
       items: [
+        { href: `/${lang}/dashboard/documents`, icon: FolderLock, label: 'Document Vault', show: true },
+        { href: `/${lang}/dashboard/registers`, icon: BookOpen, label: 'Statutory Registers', show: true },
+        { href: `/${lang}/dashboard/reference-data`, icon: Layers, label: 'Master Reference Data', show: true },
         { href: `/${lang}/dashboard/billing`, icon: CreditCard, label: 'Billing & Plans', show: isAdmin },
         { href: `/${lang}/dashboard/automations`, icon: Zap, label: 'Automations', show: isAdmin },
         { href: `/${lang}/dashboard/audit`, icon: ShieldCheck, label: 'Audit & Guardrails', show: isAdmin },
@@ -214,6 +218,16 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
             { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: !!c.tasks },
             { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financials & Bills', show: true },
             { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Meetings', show: !!c.meetings },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'colony_utilities',
+          title: 'Colony Utilities',
+          items: [
+            { href: `/${lang}/dashboard/chanda`, icon: BookOpenText, label: 'Chanda Ledger (चंदा)', show: true },
+            { href: `/${lang}/dashboard/tenant-verification`, icon: FileSignature, label: 'Tenant Verification', show: true },
+            { href: `/${lang}/dashboard/municipal-letters`, icon: Printer, label: 'Municipal Letters', show: true },
+            { href: `/${lang}/dashboard/local-directory`, icon: Phone, label: 'Local Directory', show: true },
           ].filter(i => i.show)
         },
         fieldToolsGroup,

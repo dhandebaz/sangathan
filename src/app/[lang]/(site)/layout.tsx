@@ -2,7 +2,7 @@ import { Navbar } from '@/components/public/navbar'
 import { Footer } from '@/components/public/footer'
 import { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
-import { OrganizationJsonLd, WebSiteJsonLd } from '@/components/seo/json-ld'
+import { OrganizationJsonLd, WebSiteJsonLd, SoftwareApplicationJsonLd } from '@/components/seo/json-ld'
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
@@ -78,6 +78,7 @@ export default async function SiteLayout({
 
       <OrganizationJsonLd />
       <WebSiteJsonLd />
+      <SoftwareApplicationJsonLd />
 
       <Navbar lang={lang} isAuthenticated={Boolean(user)} />
       

@@ -3,7 +3,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { AddMemberDialog } from '@/components/members/add-member-dialog'
 import { MemberTable } from '@/components/members/member-table'
-import { Printer } from 'lucide-react'
+import { Printer, FileSpreadsheet } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { MemberFilters } from '@/components/members/member-filters'
@@ -89,7 +89,7 @@ export default async function MembersPage({ searchParams, params }: PageProps & 
     .order('created_at', { ascending: false })
 
   if (query) {
-    dbQuery = dbQuery.or(`full_name.ilike.%${query}%,phone.ilike.%${query}%`)
+    dbQuery = dbQuery.or(`full_name.ilike.%${query}%,phone.ilike.%${query}%,designation.ilike.%${query}%,area.ilike.%${query}%`)
   }
 
   if (status !== 'all') {
@@ -145,11 +145,17 @@ export default async function MembersPage({ searchParams, params }: PageProps & 
            <h1 className="text-3xl font-bold tracking-tight text-foreground">{title}</h1>
            <p className="text-muted-foreground mt-1">{description}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+            <Button variant="outline" asChild>
+                <Link href={`/${lang}/dashboard/members/import`}>
+                    <FileSpreadsheet className="mr-2 h-4 w-4 text-orange-700" />
+                    {lang === 'hi' ? 'आयात (CSV / Excel)' : 'Import (CSV / Excel)'}
+                </Link>
+            </Button>
             <Button variant="outline" asChild>
                 <a href={`/${lang}/dashboard/members/print`} target="_blank">
                     <Printer className="mr-2 h-4 w-4" />
-                    Print List
+                    {lang === 'hi' ? 'सूची प्रिंट करें' : 'Print List'}
                 </a>
             </Button>
             <AddMemberDialog />

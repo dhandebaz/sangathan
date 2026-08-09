@@ -57,6 +57,11 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Network', title: 'Chapters & Subgroups', desc: 'Organise large NGOs by city chapters or wings.' },
         { icon: 'ShieldCheck', title: 'Helpdesk Support', desc: 'Centralized inbox for public and beneficiary inquiries.' },
         { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable tier scaling, live member slot meters, automated receipt archiving, and multi-org enterprise capabilities.' },
+        { icon: 'FileSpreadsheet', title: 'Universal Excel / CSV Data Importer', desc: '1-click spreadsheet migration with automated column matching, phone number validation, and duplicate conflict reconciliation.' },
+        { icon: 'FolderLock', title: 'Institutional Document & Asset Vault', desc: 'Encrypted cloud storage for Trust Deeds, 12A/80G tax orders, CSR-1 certificates, and property conveyance deeds with role permissions.' },
+        { icon: 'Printer', title: 'Statutory PDF Registers & Audit Books', desc: '1-click export of official Form I Member Rolls, Form H Returns, and Double-Entry Cash Books formatted for government inspections.' },
+        { icon: 'MapPin', title: 'National Geo Engine (780+ Districts)', desc: 'Pre-populated registry of all 28 Indian States, 8 UTs, and 780+ administrative districts with ISO codes and SDG sector taxonomies.' },
+        { icon: 'Globe', title: 'Public SEO & AI Search Engine Citability', desc: 'Schema.org JSON-LD structured data, dynamic Edge OpenGraph image previews, and high-signal public profiles indexed across Google, Bing, and AI answer engines.' },
         { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests 12A, 80G, FCRA based on actual usage and donations.' }
       ]
     },
@@ -70,6 +75,8 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         : 'Organise the student voice. Conduct secure elections, track campus grievances, and manage events.',
       features: [
         { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Publish public campus representations with live signature counters, 1-click volunteer conversion hooks, and inter-union solidarity endorsements.' },
+        { icon: 'FileSpreadsheet', title: 'Batch Student Roster Importer', desc: 'Instantly import campus batches, hostel rosters, and department lists from CSV/Excel with auto-phone validation.' },
+        { icon: 'FolderLock', title: 'Campus Document & MoU Vault', desc: 'Secure repository for university representations, administrative agreements, and legal aid case files.' },
         { icon: 'Award', title: 'Sharable Verified Member Badges', desc: 'Generate dynamic social media graphics for Instagram, Twitter/X, and WhatsApp Stories with verified union designations and cryptographic QR codes.' },
         { icon: 'Users', title: 'Team Invite System', desc: 'Invite members via email with shareable links. New members can accept and join instantly with role-based access.' },
         { icon: 'Smartphone', title: 'WhatsApp & Telegram Conversational Bot', desc: 'Bilingual messaging bot and console for campus grievances, event attendance, and emergency SOS detention alerts.' },
@@ -95,6 +102,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Ticket', title: 'Event Ticketing & RSVPs', desc: 'Manage campus events, QR check-ins, and waitlists.' },
         { icon: 'Wallet', title: 'Club Sub-funding', desc: 'Allow societies to request and track micro-budgets.' },
         { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable campus scaling, live member slot meters, automated receipt archiving, and multi-org capabilities.' },
+        { icon: 'Globe', title: 'Public SEO & OpenGraph Social Previews', desc: 'Schema.org structured data, dynamic 1200x630 social preview cards for WhatsApp/Twitter, and high-signal public profiles.' },
         { icon: 'FileText', title: 'Proposals & Bills', desc: 'Draft, debate, and pass union resolutions democratically.' }
       ]
     },
@@ -108,6 +116,9 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         : 'Protect worker rights with power. Coordinate collective bargaining, track dues, and organise actions.',
       features: [
         { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Launch wage defense and collective strike petitions with live signature counts and volunteer conversion.' },
+        { icon: 'FileSpreadsheet', title: 'Factory Floor CSV / Excel Importer', desc: 'Import thousands of shift workers and shop floor delegates from spreadsheets with automatic duplicate cleansing.' },
+        { icon: 'FolderLock', title: 'CBA & Bipartite Document Vault', desc: 'Encrypted storage for Collective Bargaining Agreements, strike notices, and wage settlement deeds.' },
+        { icon: 'Printer', title: 'Form H Annual General Return Ledger', desc: 'Official print-ready Trade Unions Act 1926 membership and subscription ledger for Labour Commissioner audits.' },
         { icon: 'Award', title: 'Sharable Verified Member Badges', desc: 'Verified shop steward and member credentials formatted for WhatsApp and Twitter/X.' },
         { icon: 'Users', title: 'Team Invite System', desc: 'Invite members via email with shareable links. New members can accept and join instantly with role-based access.' },
         { icon: 'Smartphone', title: 'WhatsApp & Telegram Conversational Bot', desc: 'Bilingual grievance logging, strike ballot casting, and dues status inquiries via messaging.' },
@@ -124,6 +135,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Building2', title: 'Employer Management', desc: 'Monitor contract compliance across signatory companies.' },
         { icon: 'BadgeAlert', title: 'Shop Steward Roles', desc: 'Granular permissions for field representatives.' },
         { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable union dues budgeting, member slot tracking, and multi-branch federation tools.' },
+        { icon: 'Globe', title: 'Public Union Directory & Schema.org Graph', desc: 'Indexed union representations, public solidarity petitions, and verified collective bargaining records.' },
         { icon: 'ShieldCheck', title: 'Labor Law Compliance', desc: 'Automated checks against union regulations.' }
       ]
     },
@@ -137,6 +149,9 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         : 'Modernise your neighbourhood. Manage maintenance, visitors, and democratic community polling.',
       features: [
         { icon: 'Receipt', title: 'Maintenance Billing', desc: 'Automated invoices based on flat size and late fees.' },
+        { icon: 'FileSpreadsheet', title: 'Spreadsheet Flat & Resident Importer', desc: 'Bulk import flat numbers, owner contacts, and tenant directories from Excel in 60 seconds.' },
+        { icon: 'FolderLock', title: 'Society Deed & Resolution Vault', desc: 'Centralized repository for builder handover deeds, AGM meeting minutes, fire safety NOCs, and lift licenses.' },
+        { icon: 'Printer', title: 'Form I Statutory Member Register', desc: 'Official Societies Registration Act compliant membership book ready for annual registrar filings.' },
         { icon: 'Wallet', title: 'Online Payment Gateway', desc: 'Collect dues via UPI/Cards with auto-reconciliation.' },
         { icon: 'Users', title: 'Team Invite System', desc: 'Invite members via email with shareable links. New members can accept and join instantly with role-based access.' },
         { icon: 'Users', title: 'Digital Visitor Log', desc: 'Gatekeeper app with photo capture and timestamps.' },
@@ -150,6 +165,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Bell', title: 'Digital Notice Board', desc: 'Official society announcements with read receipts.' },
         { icon: 'Home', title: 'Resident Directory', desc: 'Verified database of owners, tenants, and emergency contacts.' },
         { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable society scaling, resident capacity meters, and transparent audit trails.' },
+        { icon: 'Globe', title: 'Public RWA Portal & SEO Discoverability', desc: 'Public community noticeboard, verified estate representation, and search-optimized public registry.' },
         { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests renewals and NOCs based on maintenance and facility usage.' },
         { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
         { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' },
