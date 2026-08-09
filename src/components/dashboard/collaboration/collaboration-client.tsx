@@ -6,11 +6,13 @@ import { Network, Plus, CheckCircle2, XCircle, Users, Megaphone, FileText, Send,
 import { createCollaborationRequest, respondToCollaborationRequest } from '@/actions/collaboration'
 import { toast } from 'sonner'
 
+import { CollaborationLink } from '@/types/dashboard'
+
 interface CollaborationClientProps {
   organisationId: string
   activePartners: { id: string; name: string; slug: string }[]
-  pendingIncoming: any[]
-  pendingOutgoing: any[]
+  pendingIncoming: CollaborationLink[]
+  pendingOutgoing: CollaborationLink[]
   availableOrgs: { id: string; name: string; slug: string; org_type: string }[]
 }
 
@@ -134,7 +136,7 @@ export default function CollaborationClient({
                   <label className="block text-sm font-semibold text-slate-700 mb-1">Action Type</label>
                   <select
                     value={actionType}
-                    onChange={e => setActionType(e.target.value as any)}
+                    onChange={e => setActionType(e.target.value as 'joint_gyapan' | 'joint_protest' | 'joint_press')}
                     className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white"
                   >
                     <option value="joint_gyapan">Co-Signed Gyapan (संयुक्त ज्ञापन)</option>
@@ -236,7 +238,7 @@ export default function CollaborationClient({
           </CardHeader>
           <CardContent className="p-4 space-y-4">
             {/* Incoming */}
-            {incoming.map((item: any) => (
+            {incoming.map((item: CollaborationLink) => (
               <div key={item.id} className="p-3 bg-amber-50 rounded-xl border border-amber-200 flex items-center justify-between gap-2">
                 <div>
                   <p className="font-bold text-slate-900 text-sm">{item.requester?.name}</p>
@@ -262,7 +264,7 @@ export default function CollaborationClient({
             ))}
 
             {/* Outgoing */}
-            {outgoing.map((item: any) => (
+            {outgoing.map((item: CollaborationLink) => (
               <div key={item.id} className="p-3 bg-slate-50 rounded-xl border flex items-center justify-between">
                 <div>
                   <p className="font-bold text-slate-900 text-sm">{item.responder?.name}</p>

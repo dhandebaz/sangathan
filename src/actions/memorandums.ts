@@ -22,7 +22,7 @@ export async function createMemorandum(input: z.infer<typeof CreateMemorandumSch
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { success: false, error: 'Unauthorized' }
 
-    let orgId = await getSelectedOrganisationId()
+    const orgId = await getSelectedOrganisationId()
     if (!orgId) return { success: false, error: 'Organisation not found' }
 
     const { data, error } = await supabase

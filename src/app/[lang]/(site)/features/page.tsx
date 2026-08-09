@@ -29,8 +29,8 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
       id: 'ngo',
       title: isHindi ? 'गैर सरकारी संगठन (NGO)' : 'Non-Governmental Organisations',
       icon: 'Building2',
-      color: 'indigo',
-      description: isHindi 
+      color: 'emerald',
+      description: isHindi
         ? 'अपने स्वयंसेवकों को प्रबंधित करें, पारदर्शी रूप से धन जुटाएं, और अपने दान दाताओं के साथ विश्वास बनाएं।'
         : 'Manage your volunteer base, raise funds transparently, and build unshakeable trust with your donors.',
       features: [
@@ -59,11 +59,11 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
       ]
     },
     {
-      id: 'student-union',
+      id: 'student_union',
       title: isHindi ? 'छात्र संघ' : 'Student Unions',
       icon: 'GraduationCap',
-      color: 'emerald',
-      description: isHindi 
+      color: 'indigo',
+      description: isHindi
         ? 'छात्रों की आवाज़ को संगठित करें। सुरक्षित चुनाव कराएं और कैंपस की समस्याओं को ट्रैक करें।'
         : 'Organise the student voice. Conduct secure elections, track campus grievances, and manage events.',
       features: [
@@ -95,11 +95,11 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
       ]
     },
     {
-      id: 'worker-union',
+      id: 'workers_union',
       title: isHindi ? 'श्रमिक संघ' : 'Workers Unions',
       icon: 'HardHat',
-      color: 'orange',
-      description: isHindi 
+      color: 'amber',
+      description: isHindi
         ? 'मज़दूरों के अधिकारों की रक्षा करें। सामूहिक सौदेबाजी (CBA) और हड़तालों का समन्वय करें।'
         : 'Protect worker rights with power. Coordinate collective bargaining, track dues, and organise actions.',
       features: [
@@ -123,10 +123,10 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
     },
     {
       id: 'rwa',
-      title: isHindi ? 'रेजिडेंट वेलफेयर एसोसिएशन' : 'Resident Welfare Associations',
+      title: isHindi ? 'आवासीय कल्याण संघ (RWA)' : 'Resident Welfare Association (RWA)',
       icon: 'Home',
-      color: 'cyan',
-      description: isHindi 
+      color: 'sky',
+      description: isHindi
         ? 'अपने पड़ोस को बेहतर बनाएं। रखरखाव, आगंतुक और सामुदायिक मतदान प्रबंधित करें।'
         : 'Modernise your neighbourhood. Manage maintenance, visitors, and democratic community polling.',
       features: [

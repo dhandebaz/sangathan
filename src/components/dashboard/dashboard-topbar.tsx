@@ -7,6 +7,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { Bell, ChevronDown, LogOut, Settings, User, Sparkles } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
+import { getOrgLabel } from '@/lib/org-types'
 
 interface DashboardTopBarProps {
   lang: string
@@ -89,15 +90,13 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
 
   const orgInitials = displayOrgName
     .split(' ')
+    .filter(w => w.length > 0)
     .map(w => w[0])
     .join('')
     .slice(0, 2)
-    .toUpperCase()
+    .toUpperCase() || '?'
 
-  const orgTypeLabel = orgType === 'student_union' ? 'Student Union' :
-                       orgType === 'workers_union' ? 'Workers Union' :
-                       orgType === 'rwa' ? 'RWA' :
-                       orgType === 'ngo' ? 'NGO' : 'Organisation'
+  const orgTypeLabel = getOrgLabel(orgType)
 
   const breadcrumb = useMemo(() => {
     if (!pathname) return ''
@@ -146,8 +145,9 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
     try {
       setIsSigningOut(true)
       await supabase.auth.signOut()
+      router.push(`/${lang}/login`)
     } finally {
-      window.location.href = `/${lang}/login`
+      setIsSigningOut(false)
     }
   }
 

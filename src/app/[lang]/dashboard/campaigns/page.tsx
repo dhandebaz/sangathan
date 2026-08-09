@@ -20,7 +20,7 @@ export default async function CampaignsPage(props: { params: Promise<{ lang: str
     .single()
 
   let orgId = profile?.organisation_id
-  let role = profile?.role || 'member'
+  const role = profile?.role || 'member'
 
   if (!orgId) {
     try {

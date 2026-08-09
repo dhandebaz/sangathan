@@ -35,6 +35,43 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.23.0',
+    titleEn: 'Redesigned Dashboards, Mobile-Native Feel & New Member Onboarding',
+    titleHi: 'नवीनीकृत डैशबोर्ड, मोबाइल-नेटिव अनुभव एवं नए सदस्य ऑनबोर्डिंग',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Complete dashboard redesign tailored for each organization type (NGO, Student Union, Workers Union, RWA) with a mobile-first native app experience. New step-by-step onboarding guide helps first-time digital users get started easily. Bottom navigation adapts to show the most relevant features per organization type.',
+    descHi: 'प्रत्येक संगठन प्रकार (एनजीओ, छात्र संघ, श्रमिक संघ, आरडब्ल्यूए) के अनुरूप पूर्ण डैशबोर्ड पुनर्रचना, मोबाइल-प्रथम नेटिव ऐप अनुभव के साथ। नया चरण-दर-चरण ऑनबोर्डिंग गाइड पहली बार डिजिटल उपयोगकर्ताओं को आसानी से शुरू करने में मदद करता है। निचला नेविगेशन प्रत्येक संगठन प्रकार के लिए सबसे प्रासंगिक सुविधाएं दिखाता है।',
+    color: 'indigo',
+    icon: Rocket,
+    features: [
+      {
+        nameEn: 'Org-Type Specific Dashboards',
+        nameHi: 'संगठन-प्रकार विशिष्ट डैशबोर्ड',
+        textEn: 'Each organization type now has tailored stats, priority actions, and feature grids that match their specific workflow needs.',
+        textHi: 'प्रत्येक संगठन प्रकार के पास अब अपने विशिष्ट कार्यप्रवाह आवश्यकताओं से मेल खाने वाले आंकड़े, प्राथमिकता कार्य और सुविधा ग्रिड हैं।',
+      },
+      {
+        nameEn: 'New Member Onboarding Guide',
+        nameHi: 'नए सदस्य ऑनबोर्डिंग गाइड',
+        textEn: 'A simple 4-step walkthrough helps first-time users understand the app. Can be skipped anytime and re-triggered from settings.',
+        textHi: 'एक सरल 4-चरणीय वॉकथ्रू पहली बार उपयोगकर्ताओं को ऐप समझने में मदद करता है। किसी भी समय छोड़ा जा सकता है और सेटिंग्स से फिर से शुरू किया जा सकता है।',
+      },
+      {
+        nameEn: 'Mobile-Native Bottom Navigation',
+        nameHi: 'मोबाइल-नेटिव निचला नेविगेशन',
+        textEn: 'Bottom tab bar now adapts to show the most relevant 4th tab based on organization type (Donations for NGO, Elections for Student Union, etc).',
+        textHi: 'निचला टैब बार अब संगठन प्रकार के आधार पर सबसे प्रासंगिक चौथे टैब (एनजीओ के लिए दान, छात्र संघ के लिए चुनाव, आदि) दिखाने के लिए अनुकूलित होता है।',
+      },
+      {
+        nameEn: 'Bilingual Hindi/English Interface',
+        nameHi: 'द्विभाषी हिंदी/अंग्रेज़ी इंटरफ़ेस',
+        textEn: 'All dashboard sections now display content in both Hindi and English for better accessibility across user comfort levels.',
+        textHi: 'सभी डैशबोर्ड अनुभाग अब उपयोगकर्ता सुविधा स्तरों में बेहतर पहुंच के लिए हिंदी और अंग्रेज़ी दोनों में सामग्री प्रदर्शित करते हैं।',
+      },
+    ],
+  },
+  {
     version: 'v1.22.0',
     titleEn: 'Resilient AI Service',
     titleHi: 'विश्वसनीय एआई सेवा',

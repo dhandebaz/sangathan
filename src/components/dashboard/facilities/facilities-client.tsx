@@ -12,14 +12,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { createFacility, bookFacility, updateBookingStatus } from '@/actions/facilities'
 import { toast } from 'sonner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { FacilityWithOrg, BookingWithDetails } from '@/types/dashboard'
 
 export default function FacilitiesClient({ 
   facilities, 
   bookings, 
   isAdmin 
 }: { 
-  facilities: any[], 
-  bookings: any[], 
+  facilities: FacilityWithOrg[], 
+  bookings: BookingWithDetails[], 
   isAdmin: boolean 
 }) {
   const [isFacilityOpen, setIsFacilityOpen] = useState(false)
@@ -29,38 +30,38 @@ export default function FacilitiesClient({
   const [bookingForm, setBookingForm] = useState({ facility_id: '', start_time: '', end_time: '', notes: '' })
 
   const handleCreateFacility = async () => {
-    try {
-      await createFacility({
-        name: facilityForm.name,
-        description: facilityForm.description,
-        capacity: facilityForm.capacity ? Number(facilityForm.capacity) : undefined,
-        hourly_rate: facilityForm.hourly_rate ? Number(facilityForm.hourly_rate) : undefined
-      })
-      toast.success('Success')
+    const res = await createFacility({
+      name: facilityForm.name,
+      description: facilityForm.description,
+      capacity: facilityForm.capacity ? Number(facilityForm.capacity) : undefined,
+      hourly_rate: facilityForm.hourly_rate ? Number(facilityForm.hourly_rate) : undefined
+    })
+    if (res?.success) {
+      toast.success('Facility created successfully')
       setIsFacilityOpen(false)
       setFacilityForm({ name: '', description: '', capacity: '', hourly_rate: '' })
-    } catch (e: any) {
-      toast.error('Error')
+    } else {
+      toast.error('Failed', { description: res?.error || 'Could not create facility' })
     }
   }
 
   const handleBook = async () => {
-    try {
-      await bookFacility(bookingForm)
-      toast.success('Success')
+    const res = await bookFacility(bookingForm)
+    if (res?.success) {
+      toast.success('Facility booked successfully')
       setIsBookingOpen(false)
       setBookingForm({ facility_id: '', start_time: '', end_time: '', notes: '' })
-    } catch (e: any) {
-      toast.error('Error')
+    } else {
+      toast.error('Failed', { description: res?.error || 'Could not book facility' })
     }
   }
 
-  const handleStatusUpdate = async (id: string, status: any) => {
-    try {
-      await updateBookingStatus({ booking_id: id, status })
-      toast.success('Success')
-    } catch (e: any) {
-      toast.error('Error')
+  const handleStatusUpdate = async (id: string, status: 'approved' | 'rejected' | 'cancelled') => {
+    const res = await updateBookingStatus({ booking_id: id, status })
+    if (res?.success) {
+      toast.success('Status updated')
+    } else {
+      toast.error('Failed', { description: res?.error || 'Could not update status' })
     }
   }
 
@@ -159,7 +160,7 @@ export default function FacilitiesClient({
                     {new Date(b.start_time).toLocaleString()} - {new Date(b.end_time).toLocaleString()}
                   </div>
                   {isAdmin && <div className="text-sm font-medium mt-1">Booked by: {b.profiles?.full_name}</div>}
-                  {b.notes && <div className="text-sm text-slate-600 mt-2 bg-slate-50 p-2 rounded">"{b.notes}"</div>}
+                   {b.notes && <div className="text-sm text-slate-600 mt-2 bg-slate-50 p-2 rounded">&quot;{b.notes}&quot;</div>}
                 </div>
                 <div className="flex flex-col items-end gap-3">
                   {b.status === 'pending' && <span className="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-sm font-medium bg-amber-100 text-amber-700"><Clock className="w-4 h-4"/> Pending</span>}

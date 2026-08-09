@@ -63,29 +63,28 @@ export function CBAClient({ orgId }: CBAClientProps) {
   }
 
   const handleUpload = async () => {
-    try {
-      await uploadCBADocument({
-        title: uploadForm.title,
-        file_url: uploadForm.file_url,
-        valid_from: uploadForm.valid_from || undefined,
-        valid_until: uploadForm.valid_until || undefined
-      })
-      toast.success('Success')
+    const res = await uploadCBADocument({
+      title: uploadForm.title,
+      file_url: uploadForm.file_url,
+      valid_from: uploadForm.valid_from || undefined,
+      valid_until: uploadForm.valid_until || undefined
+    })
+    if (res?.success) {
+      toast.success('Document uploaded successfully')
       setIsUploadOpen(false)
-      // Optimistically reload
-      window.location.reload()
-    } catch (e: any) {
-      toast.error('Error')
+      setUploadForm({ title: '', file_url: '', valid_from: '', valid_until: '' })
+    } else {
+      toast.error('Failed', { description: res?.error || 'Could not upload document' })
     }
   }
 
   const handleStatusChange = async (docId: string, status: any) => {
-    try {
-      await updateCBAStatus({ document_id: docId, status })
-      toast.success('Status Updated', { description: 'Document status changed successfully.'  })
+    const res = await updateCBAStatus({ document_id: docId, status })
+    if (res?.success) {
+      toast.success('Status Updated', { description: 'Document status changed successfully.' })
       setDocuments(docs => docs.map(d => d.id === docId ? { ...d, status } : d))
-    } catch (e: any) {
-      toast.error('Error')
+    } else {
+      toast.error('Failed', { description: res?.error || 'Could not update status' })
     }
   }
 

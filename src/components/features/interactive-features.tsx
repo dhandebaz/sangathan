@@ -117,17 +117,6 @@ const orgStyles: Record<string, {
   iconBg: string
 }> = {
   ngo: {
-    tabActive: 'border-indigo-600 text-indigo-600 bg-indigo-50/50',
-    bgLight: 'bg-indigo-50',
-    bgGlow: 'bg-indigo-500/10',
-    text: 'text-indigo-600',
-    border: 'border-indigo-200',
-    hoverBorder: 'hover:border-indigo-400',
-    button: 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm',
-    featureActive: 'bg-indigo-50/80 border-indigo-200 text-indigo-900',
-    iconBg: 'bg-indigo-100/80 text-indigo-700'
-  },
-  'student-union': {
     tabActive: 'border-emerald-600 text-emerald-600 bg-emerald-50/50',
     bgLight: 'bg-emerald-50',
     bgGlow: 'bg-emerald-500/10',
@@ -138,25 +127,36 @@ const orgStyles: Record<string, {
     featureActive: 'bg-emerald-50/80 border-emerald-200 text-emerald-900',
     iconBg: 'bg-emerald-100/80 text-emerald-700'
   },
-  'worker-union': {
-    tabActive: 'border-orange-600 text-orange-600 bg-orange-50/50',
-    bgLight: 'bg-orange-50',
-    bgGlow: 'bg-orange-500/10',
-    text: 'text-orange-600',
-    border: 'border-orange-200',
-    hoverBorder: 'hover:border-orange-400',
-    button: 'bg-orange-600 hover:bg-orange-700 text-white shadow-sm',
-    featureActive: 'bg-orange-50/80 border-orange-200 text-orange-900',
-    iconBg: 'bg-orange-100/80 text-orange-700'
+  student_union: {
+    tabActive: 'border-indigo-600 text-indigo-600 bg-indigo-50/50',
+    bgLight: 'bg-indigo-50',
+    bgGlow: 'bg-indigo-500/10',
+    text: 'text-indigo-600',
+    border: 'border-indigo-200',
+    hoverBorder: 'hover:border-indigo-400',
+    button: 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm',
+    featureActive: 'bg-indigo-50/80 border-indigo-200 text-indigo-900',
+    iconBg: 'bg-indigo-100/80 text-indigo-700'
+  },
+  workers_union: {
+    tabActive: 'border-amber-600 text-amber-600 bg-amber-50/50',
+    bgLight: 'bg-amber-50',
+    bgGlow: 'bg-amber-500/10',
+    text: 'text-amber-600',
+    border: 'border-amber-200',
+    hoverBorder: 'hover:border-amber-400',
+    button: 'bg-amber-600 hover:bg-amber-700 text-white shadow-sm',
+    featureActive: 'bg-amber-50/80 border-amber-200 text-amber-900',
+    iconBg: 'bg-amber-100/80 text-amber-700'
   },
   rwa: {
-    tabActive: 'border-cyan-600 text-cyan-600 bg-cyan-50/50',
-    bgLight: 'bg-cyan-50',
-    bgGlow: 'bg-cyan-500/10',
-    text: 'text-cyan-600',
-    border: 'border-cyan-200',
-    hoverBorder: 'hover:border-cyan-400',
-    button: 'bg-cyan-600 hover:bg-cyan-700 text-white shadow-sm',
+    tabActive: 'border-sky-600 text-sky-600 bg-sky-50/50',
+    bgLight: 'bg-sky-50',
+    bgGlow: 'bg-sky-500/10',
+    text: 'text-sky-600',
+    border: 'border-sky-200',
+    hoverBorder: 'hover:border-sky-400',
+    button: 'bg-sky-600 hover:bg-sky-700 text-white shadow-sm',
     featureActive: 'bg-cyan-50/80 border-cyan-200 text-cyan-900',
     iconBg: 'bg-cyan-100/80 text-cyan-700'
   }
@@ -185,7 +185,7 @@ export function InteractiveFeatures({ orgs, isHindi, lang }: InteractiveFeatures
         if (orgs.some(org => org.id === tabId)) {
           // eslint-disable-next-line
           setActiveTab(tabId)
-          // eslint-disable-next-line
+           
           setActiveFeatureIndex(0)
         }
       }

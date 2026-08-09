@@ -157,7 +157,7 @@ export async function restrictOrg(event: { entity_id: string }) {
   await supabase.from('platform_actions').insert({
     action_type: 'restriction',
     target_org_id: event.entity_id,
-    severity: 'medium',
+    severity: 'level_3',
     reason: 'Automated broadcast limit enforcement',
     created_by: 'system',
   })

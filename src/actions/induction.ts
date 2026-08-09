@@ -37,7 +37,7 @@ export async function inductMemberAction(input: z.infer<typeof InductMemberSchem
         area: result.data.course || 'General Student',
         designation: 'Union Inductee',
         organisation_id: orgId,
-        role: 'member',
+        role: 'general',
         status: 'active',
         created_at: new Date().toISOString()
       })
@@ -72,7 +72,7 @@ export async function batchInductMembersAction(membersList: { fullName: string; 
       area: m.course || 'Batch Drive Inductee',
       designation: 'Union Inductee',
       organisation_id: orgId,
-      role: 'member',
+      role: 'general',
       status: 'active',
       created_at: new Date().toISOString()
     }))

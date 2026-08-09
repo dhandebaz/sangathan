@@ -17,12 +17,14 @@ import { toast } from 'sonner'
 import { createTransparencyEntryAction } from '@/actions/transparency-ledger'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { TransparencyEntry } from '@/types/dashboard'
+import { Json } from '@/types/database'
 
 interface TransparencyClientProps {
   lang: string
   orgSlug: string
   orgName: string
-  entries: any[]
+  entries: TransparencyEntry[]
   totalExpenditure: number
   programmaticRatio: number
   transparencyScore: number
@@ -239,7 +241,7 @@ export function TransparencyClient({
                 <Label className="text-xs font-semibold text-slate-700">Category *</Label>
                 <Select
                   value={form.category}
-                  onValueChange={(val: any) => setForm({ ...form, category: val })}
+                   onValueChange={(val: string) => setForm({ ...form, category: val as any })}
                 >
                   <SelectTrigger className="mt-1 h-9 text-xs rounded-sm">
                     <SelectValue placeholder="Category" />

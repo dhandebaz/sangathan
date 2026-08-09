@@ -174,7 +174,7 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
         organisation_id: data.orgId,
         email: email,
         full_name: fullName,
-        role: 'member', // Default role
+        role: 'general', // Default role
         status: status,
         approved_at: approved_at
       })

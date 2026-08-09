@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useId } from 'react'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
 import { Printer, FileText, Sparkles, Building, CheckCircle2, Copy } from 'lucide-react'
 import { toast } from 'sonner'
@@ -13,7 +14,8 @@ interface LetterheadClientProps {
 export default function LetterheadClient({ defaultOrgName }: LetterheadClientProps) {
   const [unionName, setUnionName] = useState(defaultOrgName || 'STUDENT UNION EXECUTIVE COUNCIL')
   const [tagline, setTagline] = useState('Recognized Apex Student Body • Central Campus Representation')
-  const [refNumber, setRefNumber] = useState(`SU/REG/${new Date().getFullYear()}/${Math.floor(1000 + Math.random() * 9000)}`)
+  const id = useId()
+  const [refNumber, setRefNumber] = useState(`SU/REG/${new Date().getFullYear()}/${Math.floor(1000 + parseInt(id.replace(/[^0-9]/g, '').slice(0, 4) || '0042', 10))}`)
   const [letterDate, setLetterDate] = useState(new Date().toISOString().split('T')[0])
   const [recipient, setRecipient] = useState('To,\nThe Vice-Chancellor / Dean of Student Welfare,\nCentral Administration Building, Campus')
   const [subject, setSubject] = useState('MEMORANDUM REGARDING IMMEDIATE RESOLUTION OF HOSTEL MESS & SANITATION ISSUES')

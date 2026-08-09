@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import {
   MessageSquare, Send, Smartphone, QrCode, Radio, Search,
   CheckCircle2, AlertTriangle, ShieldCheck, User, ArrowRight,
@@ -21,13 +21,14 @@ import {
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { BotLog, BotConversation, BotChannelConfig } from '@/types/dashboard'
 
 interface CommunicationsClientProps {
   lang: string
   orgId: string
   orgName: string
-  configs: any[]
-  initialConversations: any[]
+  configs: BotChannelConfig[]
+  initialConversations: BotConversation[]
   stats: {
     totalConversations: number
     totalInboundMessages: number
@@ -45,13 +46,13 @@ export function CommunicationsClient({
   stats: initialStats,
 }: CommunicationsClientProps) {
   const router = useRouter()
-  const [conversations, setConversations] = useState<any[]>(initialConversations)
+  const [conversations, setConversations] = useState<BotConversation[]>(initialConversations)
   const [stats, setStats] = useState(initialStats)
   const [selectedConvId, setSelectedConvId] = useState<string | null>(
     initialConversations[0]?.id || null
   )
   const [searchTerm, setSearchTerm] = useState('')
-  const [chatLogs, setChatLogs] = useState<any[]>([])
+  const [chatLogs, setChatLogs] = useState<BotLog[]>([])
   const [loadingChat, setLoadingChat] = useState(false)
   const [replyText, setReplyText] = useState('')
   const [sendingReply, setSendingReply] = useState(false)
@@ -78,7 +79,7 @@ export function CommunicationsClient({
       setIsLiveSyncing(true)
       const res = await getOrgUnifiedCommunicationsAction(orgId)
       if (res.success) {
-        setConversations(res.conversations || [])
+        setConversations((res.conversations || []) as BotConversation[])
         setStats(res.stats)
       }
       if (selectedConvId) {
@@ -150,7 +151,7 @@ export function CommunicationsClient({
     }
   }, [selectedConvId])
 
-  async function handleSendReply(e: React.FormEvent) {
+  const handleSendReply = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedConvId || !replyText.trim()) return
 
@@ -164,10 +165,10 @@ export function CommunicationsClient({
     if (res.success) {
       toast.success('Direct reply dispatched to member!')
       const newLog = {
-        id: 'temp-' + Date.now(),
+        id: 'temp-' + crypto.randomUUID(),
         conversation_id: selectedConvId,
         channel: selectedConv?.channel || 'whatsapp',
-        direction: 'outgoing',
+        direction: 'outgoing' as const,
         message_text: replyText.trim(),
         created_at: new Date().toISOString(),
       }
@@ -177,7 +178,7 @@ export function CommunicationsClient({
     } else {
       toast.error(res.error || 'Failed to dispatch reply.')
     }
-  }
+  }, [selectedConvId, replyText, selectedConv, router])
 
   async function handleBroadcast(e: React.FormEvent) {
     e.preventDefault()
@@ -238,16 +239,17 @@ export function CommunicationsClient({
             New Mass Broadcast
           </Button>
 
-          <Link href={`/${lang}/dashboard/channels`}>
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-xs border-slate-300 font-semibold text-slate-700 h-9"
-            >
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className="text-xs border-slate-300 font-semibold text-slate-700 h-9"
+          >
+            <Link href={`/${lang}/dashboard/channels`}>
               <Radio className="w-3.5 h-3.5 mr-1.5 text-indigo-600" />
               Manage Master Channels
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
       </div>
 
@@ -279,11 +281,11 @@ export function CommunicationsClient({
             >
               {tgConfig?.status === 'connected' ? 'Active' : 'Unlinked'}
             </span>
-            <Link href={`/${lang}/dashboard/channels`}>
-              <Button variant="ghost" size="sm" className="h-7 text-xs text-indigo-600">
-                Configure
-              </Button>
-            </Link>
+             <Button asChild variant="ghost" size="sm" className="h-10 text-xs text-indigo-600">
+               <Link href={`/${lang}/dashboard/channels`}>
+                 Configure
+               </Link>
+             </Button>
           </div>
         </div>
 
@@ -313,11 +315,11 @@ export function CommunicationsClient({
             >
               {waConfig?.status === 'connected' ? 'Linked' : 'Scan Required'}
             </span>
-            <Link href={`/${lang}/dashboard/channels`}>
-              <Button variant="ghost" size="sm" className="h-7 text-xs text-emerald-700">
-                Pair QR
-              </Button>
-            </Link>
+             <Button asChild variant="ghost" size="sm" className="h-10 text-xs text-emerald-700">
+               <Link href={`/${lang}/dashboard/channels`}>
+                 Pair QR
+               </Link>
+             </Button>
           </div>
         </div>
       </div>

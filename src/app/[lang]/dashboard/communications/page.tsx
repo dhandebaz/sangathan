@@ -42,7 +42,7 @@ export default async function CommunicationsPage(props: { params: Promise<{ lang
       orgId={orgId}
       orgName={orgName}
       configs={result.configs || []}
-      initialConversations={result.conversations || []}
+      initialConversations={(result.conversations || []) as any}
       stats={result.stats || { totalConversations: 0, totalInboundMessages: 0, totalBotGrievances: 0, totalSosAlerts: 0 }}
     />
   )

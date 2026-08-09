@@ -2,12 +2,16 @@
 
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { LayoutDashboard, Calendar, Users, Video, Settings as SettingsIcon } from 'lucide-react'
+import {
+  LayoutDashboard, Calendar, Users, Video, Settings as SettingsIcon,
+  HandCoins, Vote, Wrench, Scale, Menu, Flag
+} from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useEffect, useRef } from 'react'
 
 interface MobileNavProps {
   lang: string
+  orgType?: string
 }
 
 const triggerHaptic = (type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error' = 'light') => {
@@ -35,9 +39,27 @@ const triggerHaptic = (type: 'light' | 'medium' | 'heavy' | 'success' | 'warning
   }
 }
 
-export function MobileNav({ lang }: MobileNavProps) {
+function getTab4(orgType: string): { href: string; icon: typeof LayoutDashboard; label: string } {
+  switch (orgType) {
+    case 'ngo':
+      return { href: '/dashboard/donations', icon: HandCoins, label: 'Donations' }
+    case 'student_union':
+      return { href: '/dashboard/elections', icon: Vote, label: 'Elections' }
+    case 'workers_union':
+      return { href: '/dashboard/grievances', icon: Scale, label: 'Grievances' }
+    case 'rwa':
+      return { href: '/dashboard/maintenance', icon: Wrench, label: 'Maintenance' }
+    case 'political_party':
+      return { href: '/dashboard/campaigns', icon: Flag, label: 'Campaigns' }
+    default:
+      return { href: '/dashboard/events', icon: Calendar, label: 'Events' }
+  }
+}
+
+export function MobileNav({ lang, orgType = 'ngo' }: MobileNavProps) {
   const pathname = usePathname()
   const prevPathnameRef = useRef(pathname)
+  const tab4 = getTab4(orgType)
 
   useEffect(() => {
     if (prevPathnameRef.current !== pathname) {
@@ -51,41 +73,34 @@ export function MobileNav({ lang }: MobileNavProps) {
       href: `/${lang}/dashboard`,
       icon: LayoutDashboard,
       label: 'Home',
-      show: true
     },
     {
       href: `/${lang}/dashboard/members`,
       icon: Users,
-      label: 'Members',
-      show: true
+      label: orgType === 'rwa' ? 'Residents' : orgType === 'political_party' ? 'Cadre' : 'Members',
     },
     {
       href: `/${lang}/dashboard/events`,
       icon: Calendar,
       label: 'Events',
-      show: true
     },
     {
-      href: `/${lang}/dashboard/meetings`,
-      icon: Video,
-      label: 'Meetings',
-      show: true
+      href: tab4.href,
+      icon: tab4.icon,
+      label: tab4.label,
     },
     {
       href: `/${lang}/dashboard/settings`,
-      icon: SettingsIcon,
-      label: 'Settings',
-      show: true
-    }
+      icon: Menu,
+      label: 'More',
+    },
   ]
-
-  const visibleItems = navItems.filter(item => item.show).slice(0, 5)
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-sm pb-[max(env(safe-area-inset-bottom),8px)] shadow-[0_-4px_24px_rgba(15,23,42,0.08)] md:hidden select-none" aria-label="Dashboard navigation">
       <div className="flex h-16 items-center justify-around">
-        {visibleItems.map((item) => {
-          const isActive = pathname === item.href
+        {navItems.map((item) => {
+          const isActive = pathname === item.href || (item.href !== `/${lang}/dashboard` && pathname?.startsWith(item.href + '/'))
           return (
             <Link
               key={item.href}

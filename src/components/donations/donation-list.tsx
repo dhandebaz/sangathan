@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Check, Trash2, Receipt } from 'lucide-react'
 import { verifyDonation, deleteDonation, generateTaxReceipt } from '@/actions/donations/actions'
 import { useRouter } from 'next/navigation'
@@ -21,31 +21,32 @@ export function DonationList({ donations }: { donations: Donation[] }) {
   const router = useRouter()
   const [loading, setLoading] = useState<string | null>(null)
 
-  const handleVerify = async (id: string) => {
+  const handleVerify = useCallback(async (id: string) => {
     setLoading(id)
     await verifyDonation({ donationId: id })
     router.refresh()
     setLoading(null)
-  }
+  }, [router])
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = useCallback(async (id: string) => {
     if (!confirm('Are you sure you want to delete this donation record?')) return
     setLoading(id)
     await deleteDonation({ donationId: id })
     router.refresh()
     setLoading(null)
-  }
+  }, [router])
 
-  const handleGenerateReceipt = async (donation: Donation) => {
+  const handleGenerateReceipt = useCallback(async (donation: Donation) => {
     if (!donation.donor_id) {
         alert('Cannot generate receipt: Donor ID is missing. Please ensure the donation is linked to a donor profile.');
         return;
     }
     setLoading(`receipt-${donation.id}`)
     
-    const financialYear = new Date(donation.date).getMonth() < 3 
-        ? `${new Date(donation.date).getFullYear() - 1}-${new Date(donation.date).getFullYear()}`
-        : `${new Date(donation.date).getFullYear()}-${new Date(donation.date).getFullYear() + 1}`;
+    const donationDate = new Date(donation.date)
+    const financialYear = donationDate.getMonth() < 3 
+        ? `${donationDate.getFullYear() - 1}-${donationDate.getFullYear()}`
+        : `${donationDate.getFullYear()}-${donationDate.getFullYear() + 1}`;
 
     const receiptNum = `TR-${Date.now().toString(36).toUpperCase()}`
 
@@ -64,7 +65,7 @@ export function DonationList({ donations }: { donations: Donation[] }) {
     
     router.refresh()
     setLoading(null)
-  }
+  }, [router])
 
   return (
     <div className="overflow-x-auto">

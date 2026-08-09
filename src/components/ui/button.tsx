@@ -68,22 +68,24 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, haptic = 'light', onClick, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, haptic = 'light', disabled, onClick, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
-    
+
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (haptic !== false && !props.disabled) {
+      if (e.defaultPrevented) return
+      if (haptic !== false && !disabled) {
         triggerHaptic(haptic)
       }
       onClick?.(e)
     }
-    
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         onClick={handleClick}
         {...props}
+        disabled={asChild ? undefined : disabled}
       />
     )
   }

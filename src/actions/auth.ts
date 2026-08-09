@@ -351,3 +351,18 @@ export async function finalizeSignup(input: { organizationName: string; organiza
 
   return { success: true, orgId: result.organisation_id }
 }
+
+export async function markOnboardingCompleted(userId: string) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('profiles')
+    .update({ onboarding_completed: true })
+    .eq('id', userId)
+
+  if (error) {
+    console.error('Failed to mark onboarding completed:', error)
+    return { success: false, error: error.message }
+  }
+
+  return { success: true }
+}

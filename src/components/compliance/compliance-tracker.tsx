@@ -7,6 +7,7 @@ import { CheckCircle2, AlertCircle, Clock, FileText, Upload, Trash2, X, Download
 import { toast } from 'sonner'
 import { updateComplianceItemStatus, deleteComplianceItem, uploadComplianceDocument, removeComplianceDocument } from '@/actions/compliance/items'
 import type { ComplianceItemRow } from '@/actions/compliance/items'
+import { getOrgLabel } from '@/lib/org-types'
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
   not_started: { label: 'Not Started', color: 'bg-gray-100 text-gray-800 border-gray-200', icon: <FileText className="w-4 h-4 text-gray-500" /> },
@@ -259,7 +260,7 @@ export function ComplianceTracker({
 
       <Card>
         <CardHeader>
-          <CardTitle>{orgType.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())} Requirements</CardTitle>
+          <CardTitle>{getOrgLabel(orgType)} Requirements</CardTitle>
           <CardDescription>
             Documents are stored securely and only visible to org admins. Requirements unlock automatically as your usage grows.
           </CardDescription>

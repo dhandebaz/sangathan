@@ -66,7 +66,7 @@ export async function processIncomingBotMessage(input: ProcessBotInput): Promise
   }
 
   let replyText = ''
-  let actionExecuted = parsed.command
+  const actionExecuted = parsed.command
 
   switch (parsed.command) {
     case 'GRIEVANCE': {

@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { createElection, createElectionPosition, nominateCandidate, submitVote } from '@/actions/elections'
 import { toast } from 'sonner'
 import { Textarea } from '@/components/ui/textarea'
+import { ElectionWithPositions, ElectionPositionWithCandidates, CandidateWithProfile } from '@/types/dashboard'
 
 export default function ElectionsClient({ 
   elections, 
@@ -18,7 +19,7 @@ export default function ElectionsClient({
   members,
   isAdmin 
 }: { 
-  elections: any[], 
+  elections: ElectionWithPositions[], 
   votedElectionIds: string[],
   members: { id: string, full_name: string, email: string }[],
   isAdmin: boolean 
@@ -35,69 +36,72 @@ export default function ElectionsClient({
   const [votes, setVotes] = useState<Record<string, string>>({})
 
   const handleCreateElection = async () => {
-    try {
-      await createElection({
-        title: electionForm.title,
-        description: electionForm.description,
-        start_time: new Date(electionForm.start_time).toISOString(),
-        end_time: new Date(electionForm.end_time).toISOString()
-      })
-      toast.success('Success')
+    if (!electionForm.start_time || !electionForm.end_time) {
+      toast.error('Invalid dates', { description: 'Please select valid start and end times' })
+      return
+    }
+    const res = await createElection({
+      title: electionForm.title,
+      description: electionForm.description,
+      start_time: new Date(electionForm.start_time).toISOString(),
+      end_time: new Date(electionForm.end_time).toISOString()
+    })
+    if (res?.success) {
+      toast.success('Election created successfully')
       setIsElectionOpen(false)
-    } catch (e: any) {
-      toast.error('Error')
+    } else {
+      toast.error('Failed', { description: res?.error || 'Could not create election' })
     }
   }
 
   const handleCreatePosition = async () => {
-    try {
-      await createElectionPosition({
-        election_id: positionForm.election_id,
-        title: positionForm.title,
-        max_votes_per_voter: positionForm.max_votes
-      })
-      toast.success('Success')
+    const res = await createElectionPosition({
+      election_id: positionForm.election_id,
+      title: positionForm.title,
+      max_votes_per_voter: positionForm.max_votes
+    })
+    if (res?.success) {
+      toast.success('Position created successfully')
       setIsPositionOpen(false)
-    } catch (e: any) {
-      toast.error('Error')
+    } else {
+      toast.error('Failed', { description: res?.error || 'Could not create position' })
     }
   }
 
   const handleNominate = async () => {
-    try {
-      await nominateCandidate({
-        position_id: candidateForm.position_id,
-        profile_id: candidateForm.profile_id,
-        manifesto_text: candidateForm.manifesto_text
-      })
-      toast.success('Success')
+    const res = await nominateCandidate({
+      position_id: candidateForm.position_id,
+      profile_id: candidateForm.profile_id,
+      manifesto_text: candidateForm.manifesto_text
+    })
+    if (res?.success) {
+      toast.success('Nomination submitted successfully')
       setIsCandidateOpen(false)
-    } catch (e: any) {
-      toast.error('Error')
+    } else {
+      toast.error('Failed', { description: res?.error || 'Could not submit nomination' })
     }
   }
 
-  const handleSubmitVote = async (electionId: string, positions: any[]) => {
-    // Validate we have a vote for every position
+  const handleSubmitVote = async (electionId: string, positions: ElectionPositionWithCandidates[]) => {
     const voteArray = Object.keys(votes).map(posId => ({
       position_id: posId,
       candidate_id: votes[posId]
     }))
-    
+
     if (voteArray.length < positions.length) {
       toast.error('Incomplete', { description: 'Please cast a vote for all positions before submitting' })
       return
     }
 
-    try {
-      await submitVote({
-        election_id: electionId,
-        votes: voteArray
-      })
-      toast.success('Vote Cast', { description: 'Your anonymous vote has been recorded securely.'  })
+    const res = await submitVote({
+      election_id: electionId,
+      votes: voteArray
+    })
+    if (res?.success) {
+      toast.success('Vote Cast', { description: 'Your anonymous vote has been recorded securely.' })
       setVotes({})
-    } catch (e: any) {
-      toast.error('Error')
+    } else {
+      toast.error('Vote Failed', { description: res?.error || 'Could not record your vote. Please try again.' })
     }
   }
 
@@ -172,9 +176,9 @@ export default function ElectionsClient({
                   <Select value={candidateForm.position_id} onValueChange={v => setCandidateForm({...candidateForm, position_id: v})}>
                     <SelectTrigger><SelectValue placeholder="Select position" /></SelectTrigger>
                     <SelectContent>
-                      {elections.flatMap(e => e.election_positions.map((p: any) => (
+                      {elections.flatMap(e => e.election_positions?.map((p: ElectionPositionWithCandidates) => (
                         <SelectItem key={p.id} value={p.id}>{e.title} - {p.title}</SelectItem>
-                      )))}
+                      )) ?? [])}
                     </SelectContent>
                   </Select>
                 </div>
@@ -239,14 +243,14 @@ export default function ElectionsClient({
               )}
 
               <div className="space-y-6">
-                {election.election_positions.map((pos: any) => (
+                 {election.election_positions?.map((pos: ElectionPositionWithCandidates) => (
                   <div key={pos.id} className="border rounded-xl p-5 bg-slate-50/50">
                     <h3 className="font-bold text-slate-900 text-lg mb-4 flex items-center gap-2">
                       <Trophy className="w-5 h-5 text-indigo-500" /> {pos.title}
                     </h3>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {pos.candidates.map((cand: any) => (
+                      {pos.candidates?.map((cand: CandidateWithProfile) => (
                         <div 
                           key={cand.id} 
                           className={`p-4 border rounded-xl bg-white transition-all ${!hasVoted && isActive && votes[pos.id] === cand.id ? 'border-indigo-500 ring-1 ring-indigo-500' : 'hover:border-slate-300'}`}
@@ -275,13 +279,13 @@ export default function ElectionsClient({
                             )}
                           </div>
                           {cand.manifesto_text && (
-                            <div className="mt-3 text-sm text-slate-600 bg-slate-50 p-3 rounded-lg italic">
-                              "{cand.manifesto_text}"
-                            </div>
+                              <div className="mt-3 text-sm text-slate-600 bg-slate-50 p-3 rounded-lg italic">
+                               &quot;{cand.manifesto_text}&quot;
+                             </div>
                           )}
                         </div>
                       ))}
-                      {pos.candidates.length === 0 && (
+                      {(!pos.candidates || pos.candidates.length === 0) && (
                         <div className="col-span-2 text-center py-4 text-slate-400 text-sm">
                           No candidates nominated yet.
                         </div>
@@ -291,12 +295,12 @@ export default function ElectionsClient({
                 ))}
               </div>
 
-              {!hasVoted && isActive && election.election_positions.length > 0 && (
+               {!hasVoted && isActive && (election.election_positions?.length ?? 0) > 0 && (
                 <div className="mt-6 pt-6 border-t flex justify-end">
                   <Button 
                     size="lg" 
                     className="bg-indigo-600 hover:bg-indigo-700"
-                    onClick={() => handleSubmitVote(election.id, election.election_positions)}
+                     onClick={() => handleSubmitVote(election.id, election.election_positions || [])}
                   >
                     <Vote className="w-4 h-4 mr-2" />
                     Submit Anonymous Vote

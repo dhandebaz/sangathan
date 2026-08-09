@@ -1,7 +1,11 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { Plus, UserPlus, CheckCircle, Vote, Megaphone, Calendar, HeartHandshake, Scale, AlertCircle, Wrench, Gift, Landmark, Network, Badge, Users } from 'lucide-react'
+import {
+  Plus, UserPlus, CheckCircle, Vote, Megaphone, Calendar,
+  HeartHandshake, Scale, AlertCircle, Wrench, Gift, Network,
+  Badge, Users, HelpCircle
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
@@ -35,7 +39,7 @@ export function ContextualFAB({ lang, role, capabilities }: ContextualFABProps) 
   } else if (pathname.endsWith('/dashboard/polls') && isAdmin && capabilities.voting_engine !== false) {
     action = { href: `/${lang}/dashboard/polls/new`, icon: Vote, label: 'New Poll' }
   } else if (pathname.endsWith('/dashboard/announcements') && isAdmin) {
-    action = { href: `/${lang}/dashboard/announcements/new`, icon: Megaphone, label: 'Post Announcement' }
+    action = { href: `/${lang}/dashboard/announcements/new`, icon: Megaphone, label: 'Post Update' }
   } else if (pathname.endsWith('/dashboard/forms') && isAdmin) {
     action = { href: `/${lang}/dashboard/forms/new`, icon: Plus, label: 'Create Form' }
   } else if (pathname.endsWith('/dashboard/campaigns') && isAdmin) {
@@ -50,8 +54,6 @@ export function ContextualFAB({ lang, role, capabilities }: ContextualFABProps) 
     action = { href: `/${lang}/dashboard/maintenance`, icon: Wrench, label: 'New Request' }
   } else if (pathname.endsWith('/dashboard/donations') && isAdmin && capabilities.donations) {
     action = { href: `/${lang}/dashboard/donations`, icon: Gift, label: 'Record Donation' }
-  } else if (pathname.endsWith('/dashboard/financials') && isAdmin) {
-    action = { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Add Transaction' }
   } else if (pathname.endsWith('/dashboard/meetings') && isAdmin) {
     action = { href: `/${lang}/dashboard/meetings/new`, icon: Calendar, label: 'Schedule Meeting' }
   } else if (pathname.endsWith('/dashboard/subgroups') && isAdmin) {
@@ -60,6 +62,8 @@ export function ContextualFAB({ lang, role, capabilities }: ContextualFABProps) 
     action = { href: `/${lang}/dashboard/networks/new`, icon: Network, label: 'Add Network' }
   } else if (pathname.endsWith('/dashboard/student-ids') && isAdmin && capabilities.student_ids) {
     action = { href: `/${lang}/dashboard/student-ids`, icon: Badge, label: 'Issue ID' }
+  } else if (pathname.endsWith('/dashboard') && pathname === `/${lang}/dashboard`) {
+    action = { href: `/${lang}/dashboard/helpdesk`, icon: HelpCircle, label: 'Need Help?' }
   }
 
   if (!action) return null
@@ -68,12 +72,10 @@ export function ContextualFAB({ lang, role, capabilities }: ContextualFABProps) 
     <div className="fixed bottom-20 right-4 z-50 md:hidden">
       <Button 
         asChild 
-        size="icon"
-        className="h-14 w-14 rounded-full shadow-xl hover:shadow-2xl bg-primary text-primary-foreground"
+        className="h-16 w-16 rounded-full shadow-xl hover:shadow-2xl bg-brand-600 hover:bg-brand-700 text-white transition-all active:scale-95"
       >
-        <Link href={action.href}>
+        <Link href={action.href} aria-label={action.label}>
           <action.icon className="h-7 w-7" />
-          <span className="sr-only">{action.label}</span>
         </Link>
       </Button>
     </div>

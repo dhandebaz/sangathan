@@ -20,7 +20,7 @@ export default async function MaintenancePage(props: { params: Promise<{ lang: s
     .single()
 
   let orgId = profile?.organisation_id
-  let role = profile?.role || 'member'
+  const role = profile?.role || 'member'
 
   if (!orgId) {
     try {

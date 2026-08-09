@@ -64,28 +64,28 @@ export function GrantsClient({ orgId }: GrantsClientProps) {
   }
 
   const handleCreate = async () => {
-    try {
-      await createGrant({
-        title: form.title,
-        amount: Number(form.amount),
-        status: form.status as any,
-        deadline: form.deadline || undefined
-      })
-      toast.success('Success')
+    const res = await createGrant({
+      title: form.title,
+      amount: Number(form.amount),
+      status: form.status as any,
+      deadline: form.deadline || undefined
+    })
+    if (res?.success) {
+      toast.success('Grant created successfully')
       setIsUploadOpen(false)
-      window.location.reload()
-    } catch (e: any) {
-      toast.error('Error')
+      setForm({ title: '', amount: '', status: 'draft', deadline: '' })
+    } else {
+      toast.error('Failed', { description: res?.error || 'Could not create grant' })
     }
   }
 
   const handleStatusChange = async (grantId: string, status: any) => {
-    try {
-      await updateGrantStatus({ grant_id: grantId, status })
-      toast.success('Status Updated', { description: 'Grant status updated successfully.'  })
+    const res = await updateGrantStatus({ grant_id: grantId, status })
+    if (res?.success) {
+      toast.success('Status Updated', { description: 'Grant status updated successfully.' })
       setGrants(gs => gs.map(g => g.id === grantId ? { ...g, status } : g))
-    } catch (e: any) {
-      toast.error('Error')
+    } else {
+      toast.error('Failed', { description: res?.error || 'Could not update status' })
     }
   }
 

@@ -9,7 +9,7 @@ import { requirePlatformAdmin } from '@/lib/auth/context'
 
 const ResolveAppealSchema = z.object({
   appealId: z.string().uuid(),
-  resolution: z.enum(['approved', 'rejected']),
+  resolution: z.enum(['accepted', 'rejected']),
   note: z.string().optional(),
 })
 
@@ -47,7 +47,7 @@ export async function resolveAppeal(input: z.infer<typeof ResolveAppealSchema>) 
 
   if (error) return { success: false, error: error.message }
 
-  if (result.data.resolution === 'approved') {
+  if (result.data.resolution === 'accepted') {
     await supabase
       .from('organisations')
       .update({ is_suspended: false, status: 'active' })
@@ -64,7 +64,7 @@ export async function resolveAppeal(input: z.infer<typeof ResolveAppealSchema>) 
   await logAction({
     organisation_id: appeal.organisation_id,
     user_id: user.id,
-    action: result.data.resolution === 'approved' ? 'APPEAL_APPROVED' : 'APPEAL_REJECTED',
+    action: result.data.resolution === 'accepted' ? 'APPEAL_APPROVED' : 'APPEAL_REJECTED',
     resource_table: 'appeals',
     resource_id: result.data.appealId,
     details: { note: result.data.note },

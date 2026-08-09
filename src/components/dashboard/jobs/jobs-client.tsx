@@ -11,13 +11,14 @@ import { Textarea } from '@/components/ui/textarea'
 import { createJobPosting, applyForJob, updateApplicationStatus } from '@/actions/jobs'
 import { toast } from 'sonner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { JobPostingWithApps, JobApplicationWithProfile } from '@/types/dashboard'
 
 export default function JobsClient({ 
   jobs, 
   isAdmin,
   profileId 
 }: { 
-  jobs: any[], 
+  jobs: JobPostingWithApps[], 
   isAdmin: boolean,
   profileId: string
 }) {
@@ -32,44 +33,44 @@ export default function JobsClient({
   const [applyNotes, setApplyNotes] = useState('')
 
   const handleCreateJob = async () => {
-    try {
-      await createJobPosting({
-        title: jobForm.title,
-        employer_name: jobForm.employer_name,
-        location: jobForm.location,
-        description: jobForm.description,
-        skills_required: jobForm.skills_required,
-        wage_rate: jobForm.wage_rate,
-        positions_available: Number(jobForm.positions_available),
-        start_date: jobForm.start_date || undefined
-      })
-      toast.success('Success')
+    const res = await createJobPosting({
+      title: jobForm.title,
+      employer_name: jobForm.employer_name,
+      location: jobForm.location,
+      description: jobForm.description,
+      skills_required: jobForm.skills_required,
+      wage_rate: jobForm.wage_rate,
+      positions_available: Number(jobForm.positions_available),
+      start_date: jobForm.start_date || undefined
+    })
+    if (res?.success) {
+      toast.success('Job posted successfully')
       setIsJobOpen(false)
       setJobForm({ title: '', employer_name: '', location: '', description: '', skills_required: '', wage_rate: '', positions_available: '1', start_date: '' })
-    } catch (e: any) {
-      toast.error('Error')
+    } else {
+      toast.error('Failed', { description: res?.error || 'Could not post job' })
     }
   }
 
   const handleApply = async () => {
     if (!selectedJob) return
-    try {
-      await applyForJob({ job_id: selectedJob, notes: applyNotes })
-      toast.success('Success')
+    const res = await applyForJob({ job_id: selectedJob, notes: applyNotes })
+    if (res?.success) {
+      toast.success('Application submitted successfully')
       setIsApplyOpen(false)
       setApplyNotes('')
       setSelectedJob(null)
-    } catch (e: any) {
-      toast.error('Error')
+    } else {
+      toast.error('Failed', { description: res?.error || 'Could not submit application' })
     }
   }
 
-  const handleAppStatus = async (appId: string, status: any) => {
-    try {
-      await updateApplicationStatus({ application_id: appId, status })
+  const handleAppStatus = async (appId: string, status: 'dispatched' | 'rejected' | 'completed') => {
+    const res = await updateApplicationStatus({ application_id: appId, status })
+    if (res?.success) {
       toast.success('Status Updated', { description: `Application marked as ${status}` })
-    } catch (e: any) {
-      toast.error('Error')
+    } else {
+      toast.error('Failed', { description: res?.error || 'Could not update status' })
     }
   }
 
@@ -136,7 +137,7 @@ export default function JobsClient({
 
       <div className="grid gap-6">
         {jobs.map(job => {
-          const myApp = job.job_applications?.find((a: any) => a.profile_id === profileId)
+          const myApp = job.job_applications?.find((a: JobApplicationWithProfile) => a.profile_id === profileId)
           
           return (
             <Card key={job.id} className="p-6">
@@ -188,11 +189,11 @@ export default function JobsClient({
                   <div className="w-full md:w-80 bg-slate-50 rounded-xl p-4 border">
                     <h3 className="font-semibold text-slate-900 mb-3">Applications ({job.job_applications?.length || 0})</h3>
                     <div className="space-y-3">
-                      {job.job_applications?.map((app: any) => (
+                      {job.job_applications?.map((app: JobApplicationWithProfile) => (
                         <div key={app.id} className="bg-white p-3 rounded-lg border text-sm shadow-sm">
                           <div className="font-medium text-slate-900">{app.profiles?.full_name}</div>
                           {app.profiles?.phone && <div className="text-slate-500 text-xs">{app.profiles.phone}</div>}
-                          {app.notes && <div className="text-slate-600 text-xs mt-1 italic">"{app.notes}"</div>}
+                          {app.notes && <div className="text-slate-600 text-xs mt-1 italic">&quot;{app.notes}&quot;</div>}
                           
                           <div className="flex items-center justify-between mt-3 pt-3 border-t">
                             <span className="text-xs font-semibold capitalize text-slate-600">{app.status}</span>

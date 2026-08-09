@@ -1,66 +1,167 @@
 'use client'
 
-import { MetricCard } from '@/components/analytics/metric-card'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { StatPill } from '@/components/dashboard/stat-pill'
+import { ActionCard } from '@/components/dashboard/action-card'
+import { FeatureTile } from '@/components/dashboard/feature-tile'
+import { EmptyState } from '@/components/ui/empty-state'
 import {
   Calendar, Users, CheckSquare, ArrowRight, UsersRound, Ticket,
-  HandCoins, Building, Wrench, Scale, ScrollText,
-  MessageSquare, Radio, Flag, ShieldCheck, Database, AlertTriangle
+  HandCoins, Wrench, Scale, ScrollText, MessageSquare, Radio,
+  Flag, ShieldCheck, Gift, HeartHandshake, Vote, Database,
+  Megaphone, Landmark, HardHat, AlertCircle, UserCheck, Network,
+  RefreshCw, Sparkles
 } from 'lucide-react'
 import Link from 'next/link'
 import { AdminStats, RecentActivityItem, DashboardEvent } from '@/types/dashboard'
+import { getOrgLabel, OrgColor } from '@/lib/org-types'
 
-function orgLabel(type: string): string {
+type OrgFeature = {
+  icon: React.ElementType
+  title: string
+  subtitle: string
+  href: string
+  color: 'brand' | 'emerald' | 'amber' | 'sky' | 'rose' | 'indigo'
+}
+
+function getOrgFeatures(type: string, lang: string): OrgFeature[] {
   switch (type) {
-    case 'student_union': return 'Student Union'
-    case 'workers_union': return 'Workers Union'
-    case 'rwa': return 'Residents Welfare'
-    case 'ngo': return 'NGO'
-    default: return 'Organisation'
+    case 'ngo':
+      return [
+        { icon: HandCoins, title: 'Donations', subtitle: 'Track contributions', href: `/${lang}/dashboard/donations`, color: 'emerald' },
+        { icon: HeartHandshake, title: 'Volunteers', subtitle: 'Manage teams', href: `/${lang}/dashboard/volunteers`, color: 'brand' },
+        { icon: ScrollText, title: 'Grants', subtitle: 'Find & apply', href: `/${lang}/dashboard/grants`, color: 'indigo' },
+        { icon: ShieldCheck, title: 'Compliance', subtitle: 'Regulatory filings', href: `/${lang}/dashboard/compliance`, color: 'amber' },
+      ]
+    case 'student_union':
+      return [
+        { icon: Vote, title: 'Elections', subtitle: 'Manage polls', href: `/${lang}/dashboard/elections`, color: 'indigo' },
+        { icon: Database, title: 'RTI & ATR', subtitle: 'File & track', href: `/${lang}/dashboard/rti-atr`, color: 'brand' },
+        { icon: Wrench, title: 'Hostel Audit', subtitle: 'Mess & hostel', href: `/${lang}/dashboard/hostel-mess`, color: 'amber' },
+        { icon: Scale, title: 'Legal Aid', subtitle: 'Anti-ragging cell', href: `/${lang}/dashboard/legal-aid`, color: 'rose' },
+      ]
+    case 'workers_union':
+      return [
+        { icon: ScrollText, title: 'CBA Documents', subtitle: 'Collective bargaining', href: `/${lang}/dashboard/cba`, color: 'amber' },
+        { icon: AlertCircle, title: 'Grievances', subtitle: 'File complaints', href: `/${lang}/dashboard/grievances`, color: 'rose' },
+        { icon: Vote, title: 'Strike Votes', subtitle: 'Ballots & polls', href: `/${lang}/dashboard/polls`, color: 'indigo' },
+        { icon: HardHat, title: 'Job Dispatch', subtitle: 'Worker placement', href: `/${lang}/dashboard/jobs`, color: 'brand' },
+      ]
+    case 'rwa':
+      return [
+        { icon: Wrench, title: 'Maintenance', subtitle: 'Track requests', href: `/${lang}/dashboard/maintenance`, color: 'sky' },
+        { icon: Calendar, title: 'Facilities', subtitle: 'Book amenities', href: `/${lang}/dashboard/facilities`, color: 'brand' },
+        { icon: UserCheck, title: 'Visitors', subtitle: 'Log entries', href: `/${lang}/dashboard/visitors`, color: 'indigo' },
+        { icon: Vote, title: 'Polls', subtitle: 'Community votes', href: `/${lang}/dashboard/polls`, color: 'amber' },
+      ]
+    case 'political_party':
+      return [
+        { icon: Flag, title: 'Campaigns', subtitle: 'Petitions & drives', href: `/${lang}/dashboard/campaigns`, color: 'rose' },
+        { icon: Vote, title: 'Elections', subtitle: 'Internal voting', href: `/${lang}/dashboard/polls`, color: 'indigo' },
+        { icon: HeartHandshake, title: 'Volunteers', subtitle: 'Manage cadre', href: `/${lang}/dashboard/volunteers`, color: 'brand' },
+        { icon: HandCoins, title: 'Donations', subtitle: 'Party funds', href: `/${lang}/dashboard/donations`, color: 'emerald' },
+      ]
+    default:
+      return []
   }
 }
 
-function orgFeatures(type: string, lang: string) {
-  const base = { dashboards: [] as { label: string; href: string; icon: React.ElementType; desc: string }[] }
+function getOrgStats(type: string, stats: AdminStats, lang: string): { icon: React.ElementType; value: string | number; label: string; href: string; color: OrgColor }[] {
+  const items: { icon: React.ElementType; value: string | number; label: string; href: string; color: OrgColor }[] = [
+    { icon: Users, value: stats.members, label: 'Members', href: `/${lang}/dashboard/members`, color: 'brand' },
+    { icon: Calendar, value: stats.events, label: 'Events', href: `/${lang}/dashboard/events`, color: 'indigo' },
+    { icon: CheckSquare, value: stats.tasks, label: 'Tasks', href: `/${lang}/dashboard/tasks`, color: 'amber' },
+  ]
 
   if (type === 'ngo') {
-    return {
-      dashboards: [
-        { label: 'Donations', href: `/${lang}/dashboard/donations`, icon: HandCoins, desc: 'Track contributions' },
-        { label: 'Volunteers', href: `/${lang}/dashboard/volunteers`, icon: UsersRound, desc: 'Manage teams' },
-        { label: 'Compliance', href: `/${lang}/dashboard/settings`, icon: ScrollText, desc: 'Regulatory filings' },
-      ]
-    }
+    items.push({ icon: HandCoins, value: `₹${(stats.donations / 1000).toFixed(0)}K`, label: 'Donations', href: `/${lang}/dashboard/donations`, color: 'emerald' })
+  } else if (type === 'student_union') {
+    items.push({ icon: Vote, value: stats.tasks, label: 'Pending', href: `/${lang}/dashboard/elections`, color: 'sky' })
+  } else if (type === 'workers_union') {
+    items.push({ icon: Scale, value: stats.tasks, label: 'Grievances', href: `/${lang}/dashboard/grievances`, color: 'rose' })
+  } else if (type === 'rwa') {
+    items.push({ icon: Wrench, value: stats.tasks, label: 'Tickets', href: `/${lang}/dashboard/maintenance`, color: 'sky' })
+  } else if (type === 'political_party') {
+    items.push({ icon: Flag, value: stats.tasks, label: 'Campaigns', href: `/${lang}/dashboard/campaigns`, color: 'rose' })
   }
+
+  return items
+}
+
+function getPriorityActions(type: string, lang: string, membershipRequests: number) {
+  const actions: { icon: React.ElementType; title: string; description: string; href: string; color: OrgColor }[] = []
+
+  if (membershipRequests > 0) {
+    actions.push({
+      icon: UsersRound,
+      title: `${membershipRequests} नए member requests pending`,
+      description: 'नए सदस्यों को approve करें या reject करें',
+      href: `/${lang}/dashboard/membership-requests`,
+      color: 'amber',
+    })
+  }
+
+  if (type === 'ngo') {
+    actions.push({
+      icon: HandCoins,
+      title: 'Donations verify करें',
+      description: 'नए donations को verify और receipt भेजें',
+      href: `/${lang}/dashboard/donations`,
+      color: 'emerald',
+    })
+  }
+
   if (type === 'student_union') {
-    return {
-      dashboards: [
-        { label: 'Elections', href: `/${lang}/dashboard/polls`, icon: Ticket, desc: 'Manage polls' },
-        { label: 'Members', href: `/${lang}/dashboard/members`, icon: UsersRound, desc: 'Student body' },
-        { label: 'Events', href: `/${lang}/dashboard/events`, icon: Calendar, desc: 'Campus events' },
-      ]
-    }
+    actions.push({
+      icon: Vote,
+      title: 'Election updates देखें',
+      description: 'नामांकन और वोटिंग स्टेटस',
+      href: `/${lang}/dashboard/elections`,
+      color: 'indigo',
+    })
   }
+
   if (type === 'workers_union') {
-    return {
-      dashboards: [
-        { label: 'Grievances', href: `/${lang}/dashboard/grievances`, icon: Scale, desc: 'File complaints' },
-        { label: 'Members', href: `/${lang}/dashboard/members`, icon: UsersRound, desc: 'Worker registry' },
-        { label: 'Meetings', href: `/${lang}/dashboard/meetings`, icon: Calendar, desc: 'Union meetings' },
-      ]
-    }
+    actions.push({
+      icon: AlertCircle,
+      title: 'Grievances check करें',
+      description: 'नई शिकायतें देखें और resolve करें',
+      href: `/${lang}/dashboard/grievances`,
+      color: 'rose',
+    })
   }
+
   if (type === 'rwa') {
-    return {
-      dashboards: [
-        { label: 'Maintenance', href: `/${lang}/dashboard/maintenance`, icon: Wrench, desc: 'Track requests' },
-        { label: 'Complaints', href: `/${lang}/dashboard/complaints`, icon: Scale, desc: 'Resolve issues' },
-        { label: 'Events', href: `/${lang}/dashboard/events`, icon: Calendar, desc: 'Community events' },
-      ]
-    }
+    actions.push({
+      icon: Wrench,
+      title: 'Maintenance tickets देखें',
+      description: 'नए maintenance requests को assign करें',
+      href: `/${lang}/dashboard/maintenance`,
+      color: 'sky',
+    })
   }
-  return base
+
+  if (type === 'political_party') {
+    actions.push({
+      icon: Flag,
+      title: 'Campaign updates देखें',
+      description: 'Active campaigns और petitions की स्थिति',
+      href: `/${lang}/dashboard/campaigns`,
+      color: 'rose',
+    })
+  }
+
+  return actions
+}
+
+function getTimeGreeting(): string {
+  const hour = new Date().getHours()
+  if (hour < 12) return 'सुप्रभात'
+  if (hour < 17) return 'नमस्कार'
+  if (hour < 21) return 'शुभ संध्या'
+  return 'शुभ रात्रि'
 }
 
 export function AdminDashboard({
@@ -70,7 +171,8 @@ export function AdminDashboard({
   upcomingEvents,
   membershipRequests,
   openAppeals,
-  orgType
+  orgType,
+  userName
 }: {
   lang: string
   stats: AdminStats
@@ -79,137 +181,235 @@ export function AdminDashboard({
   membershipRequests: number
   openAppeals: number
   orgType?: string
+  userName?: string
 }) {
   const type = orgType || 'ngo'
-  const features = orgFeatures(type, lang)
-  const label = orgLabel(type)
+  const features = getOrgFeatures(type, lang)
+  const statItems = getOrgStats(type, stats, lang)
+  const priorityActions = getPriorityActions(type, lang, membershipRequests)
+  const [dismissedActions, setDismissedActions] = useState<number[]>([])
 
-  const quickTools = [
-    { label: 'Unified Inbox', href: `/${lang}/dashboard/communications`, icon: MessageSquare, desc: '2-way WhatsApp & Telegram chat desk' },
-    { label: 'Master Channels & QR', href: `/${lang}/dashboard/channels`, icon: Radio, desc: 'Link WhatsApp via QR & Telegram bot' },
-    { label: 'Petitions & Campaigns', href: `/${lang}/dashboard/campaigns`, icon: Flag, desc: 'Public petitions with viral join hooks' },
-    { label: 'Transparency Ledger', href: `/${lang}/dashboard/transparency`, icon: ShieldCheck, desc: 'Public trust & cryptographically hashed expenses' },
-  ]
+  const visibleActions = priorityActions.filter((_, i) => !dismissedActions.includes(i))
 
   return (
     <div className="space-y-6 pb-20 md:pb-0">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">{label} Overview</h1>
-        <p className="text-sm text-muted-foreground">Welcome back. Here is what needs your attention.</p>
+      {/* Hero Welcome */}
+      <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-5 md:p-6 text-white">
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <h1 className="text-xl md:text-2xl font-bold">{getTimeGreeting()}{userName ? `, ${userName}` : ''}! 👋</h1>
+            </div>
+            <p className="text-slate-300 text-sm">{getOrgLabel(type)} • {getOrgLabel(type, 'hi')}</p>
+            <div className="flex items-center gap-3 mt-3">
+              <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full bg-white/10`}>
+                <Sparkles className="h-3 w-3" /> Active
+              </span>
+              <span className="text-xs text-slate-400">Last updated: 2 min ago</span>
+            </div>
+          </div>
+           <button type="button" className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors" aria-label="Refresh dashboard">
+             <RefreshCw className="h-5 w-5" />
+           </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <MetricCard title="Members" value={stats.members} icon={Users} />
-        <MetricCard title="Events" value={stats.events} icon={Calendar} />
-        <MetricCard title="Open Tasks" value={stats.tasks} icon={CheckSquare} />
-        <MetricCard title={type === 'ngo' ? 'Donations' : 'Activity'} value={stats.donations} icon={type === 'ngo' ? HandCoins : Building} />
+      {/* Quick Glance Stats */}
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-semibold text-foreground">Quick Glance</h2>
+        </div>
+        <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:flex-wrap md:overflow-visible snap-x snap-mandatory">
+          {statItems.map((item) => (
+            <StatPill
+              key={item.href}
+              icon={item.icon}
+              value={item.value}
+              label={item.label}
+              href={item.href}
+              color={item.color}
+              className="snap-start"
+            />
+          ))}
+        </div>
       </div>
 
-      {/* Grassroots & Field Tools */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        {quickTools.map((tool) => (
-          <Button key={tool.href} asChild variant="outline" className="h-auto flex-col items-start gap-1 p-3.5 bg-white hover:bg-slate-50/80 border-slate-200 shadow-xs">
-            <Link href={tool.href}>
-              <div className="flex items-center gap-2">
-                <tool.icon className="h-4 w-4 text-indigo-600" />
-                <span className="font-semibold text-xs text-slate-900">{tool.label}</span>
+      {/* Priority Actions */}
+      {visibleActions.length > 0 && (
+        <div>
+          <h2 className="text-sm font-semibold text-foreground mb-3">⚡ आज क्या करना है</h2>
+          <div className="space-y-2">
+            {visibleActions.map((action, i) => {
+              const originalIndex = priorityActions.indexOf(action)
+              return (
+                <ActionCard
+                  key={originalIndex}
+                  icon={action.icon}
+                  title={action.title}
+                  description={action.description}
+                  actionLabel="देखें"
+                  actionHref={action.href}
+                  color={action.color}
+                  onDismiss={() => setDismissedActions([...dismissedActions, originalIndex])}
+                />
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Key Features Grid */}
+      <div>
+        <h2 className="text-sm font-semibold text-foreground mb-3">🎯 मुख्य सुविधाएं</h2>
+        <div className="grid grid-cols-2 gap-3">
+          {features.map((f) => (
+            <FeatureTile
+              key={f.href}
+              icon={f.icon}
+              title={f.title}
+              subtitle={f.subtitle}
+              href={f.href}
+              color={f.color}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Quick Tools */}
+      <div>
+        <h2 className="text-sm font-semibold text-foreground mb-3">🛠️ Quick Tools</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Card className="hover:shadow-md transition-all">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-indigo-100 flex items-center justify-center shrink-0">
+                <MessageSquare className="h-5 w-5 text-indigo-600" />
               </div>
-              <span className="text-[11px] text-slate-500 font-normal line-clamp-1">{tool.desc}</span>
-            </Link>
-          </Button>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {features.dashboards.map((f) => (
-          <Button key={f.href} asChild variant="outline" className="h-auto flex-col items-start gap-1 p-4 shadow-sm hover:shadow-md">
-            <Link href={f.href}>
-              <div className="flex items-center gap-2">
-                <f.icon className="h-5 w-5 text-brand-600" />
-                <span className="font-semibold text-sm">{f.label}</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground">Unified Inbox</p>
+                <p className="text-xs text-muted-foreground">WhatsApp & Telegram</p>
               </div>
-              <span className="text-xs text-muted-foreground font-normal">{f.desc}</span>
-            </Link>
-          </Button>
-        ))}
+              <Button asChild variant="ghost" size="sm" className="shrink-0">
+                <Link href={`/${lang}/dashboard/communications`}>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+          <Card className="hover:shadow-md transition-all">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0">
+                <Radio className="h-5 w-5 text-emerald-600" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground">Master Channels</p>
+                <p className="text-xs text-muted-foreground">QR & Bot setup</p>
+              </div>
+              <Button asChild variant="ghost" size="sm" className="shrink-0">
+                <Link href={`/${lang}/dashboard/channels`}>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
+      {/* Membership & Appeals */}
+      {(membershipRequests > 0 || openAppeals > 0) && (
+        <div className="grid grid-cols-2 gap-3">
+          <Card className={membershipRequests > 0 ? 'border-amber-200 bg-amber-50/50' : ''}>
+            <CardContent className="p-4 text-center">
+              <p className="text-2xl font-bold text-foreground">{membershipRequests}</p>
+              <p className="text-xs text-muted-foreground mt-1">Pending Requests</p>
+              <Button asChild variant="outline" size="sm" className="mt-2 h-7 text-xs">
+                <Link href={`/${lang}/dashboard/membership-requests`}>Review</Link>
+              </Button>
+            </CardContent>
+          </Card>
+          <Card className={openAppeals > 0 ? 'border-rose-200 bg-rose-50/50' : ''}>
+            <CardContent className="p-4 text-center">
+              <p className="text-2xl font-bold text-foreground">{openAppeals}</p>
+              <p className="text-xs text-muted-foreground mt-1">Open Appeals</p>
+              <Button asChild variant="outline" size="sm" className="mt-2 h-7 text-xs">
+                <Link href={`/${lang}/dashboard/appeals`}>Manage</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Upcoming Events & Recent Activity */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Membership Requests</CardTitle>
-          </CardHeader>
-          <CardContent className="flex items-center justify-between px-6 pb-4">
-            <div className="text-3xl font-bold text-foreground">{membershipRequests}</div>
-            <Button asChild variant="outline" size="sm">
-              <Link href={`/${lang}/dashboard/membership-requests`}>Review</Link>
-            </Button>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Open Appeals</CardTitle>
-          </CardHeader>
-          <CardContent className="flex items-center justify-between px-6 pb-4">
-            <div className="text-3xl font-bold text-foreground">{openAppeals}</div>
-            <Button asChild variant="outline" size="sm">
-              <Link href={`/${lang}/dashboard/settings`}>Manage</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-base font-semibold">Upcoming Events</CardTitle>
-            <Button asChild variant="ghost" size="sm" className="text-xs">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-brand-600" />
+              Upcoming Events
+            </CardTitle>
+            <Button asChild variant="ghost" size="sm" className="text-xs h-7">
               <Link href={`/${lang}/dashboard/events`}>View All</Link>
             </Button>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="divide-y divide-border/60">
-              {upcomingEvents.length === 0 ? (
-                <div className="p-6 text-center text-sm text-muted-foreground">No upcoming events scheduled.</div>
-              ) : (
-                upcomingEvents.map((event) => (
-                  <Link key={event.id} href={`/${lang}/dashboard/events/${event.id}`} className="group flex items-center justify-between px-4 py-3 hover:bg-accent transition-colors">
+            {upcomingEvents.length === 0 ? (
+              <div className="p-4">
+                <EmptyState
+                  icon={Calendar}
+                  title="कोई event नहीं है"
+                  description="नया event बनाएं"
+                  actionLabel="Create Event"
+                  actionHref={`/${lang}/dashboard/events/new`}
+                />
+              </div>
+            ) : (
+              <div className="divide-y divide-border/60">
+                {upcomingEvents.map((event) => (
+                  <Link key={event.id} href={`/${lang}/dashboard/events/${event.id}`} className="flex items-center justify-between px-4 py-3 hover:bg-accent transition-colors active:bg-muted">
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate group-hover:text-brand-600 transition-colors">{event.title}</p>
+                      <p className="text-sm font-medium text-foreground truncate">{event.title}</p>
                       <p className="text-xs text-muted-foreground mt-0.5">
                         {new Date(event.start_time).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })} • {event.location || 'Online'}
                       </p>
                     </div>
-                    <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground/40 group-hover:text-brand-600 transition-colors" />
+                    <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground/40" />
                   </Link>
-                ))
-              )}
-            </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-base font-semibold">Recent Activity</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <Database className="h-4 w-4 text-brand-600" />
+              Recent Activity
+            </CardTitle>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="divide-y divide-border/60">
-              {recentActivity.length === 0 ? (
-                 <div className="p-6 text-center text-sm text-muted-foreground">No recent activity found.</div>
-              ) : (
-                 recentActivity.map((item, i) => (
-                   <div key={i} className="flex items-center justify-between px-4 py-3 hover:bg-accent transition-colors">
-                     <div className="min-w-0">
-                       <p className="text-sm font-medium text-foreground truncate">{item.title || 'Untitled'}</p>
-                       <div className="flex items-center gap-2 mt-0.5">
-                         <span className="text-xs font-medium text-muted-foreground capitalize">{item.type.replace('_', ' ')}</span>
-                         <span className="text-xs text-muted-foreground">• {item.created_at}</span>
-                       </div>
-                     </div>
-                   </div>
-                 ))
-              )}
-            </div>
+            {recentActivity.length === 0 ? (
+              <div className="p-4">
+                <EmptyState
+                  emoji="📋"
+                  title="कोई activity नहीं है"
+                  description="शुरू करें!"
+                />
+              </div>
+            ) : (
+              <div className="divide-y divide-border/60">
+                {recentActivity.map((item, i) => (
+                  <div key={i} className="flex items-center justify-between px-4 py-3 hover:bg-accent transition-colors">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">{item.title || 'Untitled'}</p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-xs font-medium text-muted-foreground capitalize">{item.type.replace('_', ' ')}</span>
+                        <span className="text-xs text-muted-foreground">• {item.created_at}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

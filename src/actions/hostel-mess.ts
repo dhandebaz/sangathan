@@ -42,7 +42,7 @@ export async function submitMessRatingAction(input: z.infer<typeof MessRatingSch
         title: `[MESS RATING] ${result.data.hostelName} - ${result.data.mealType} (${result.data.rating}/5★)`,
         description: `Hostel: ${result.data.hostelName}\nMeal: ${result.data.mealType}\nRating: ${result.data.rating}/5\nComments: ${result.data.comments || 'None'}`,
         status: 'open',
-        priority: result.data.rating <= 2 ? 'high' : 'normal',
+        priority: result.data.rating <= 2 ? 'high' : 'medium',
         type: 'grievance'
       })
       .select()
@@ -58,7 +58,7 @@ export async function submitMessRatingAction(input: z.infer<typeof MessRatingSch
           title: `[MESS RATING] ${result.data.hostelName} - ${result.data.mealType} (${result.data.rating}/5★)`,
           description: `Hostel: ${result.data.hostelName}\nMeal: ${result.data.mealType}\nRating: ${result.data.rating}/5\nComments: ${result.data.comments || 'None'}`,
           status: 'open',
-          priority: result.data.rating <= 2 ? 'high' : 'normal',
+          priority: result.data.rating <= 2 ? 'high' : 'medium',
           type: 'grievance'
         })
         .select()

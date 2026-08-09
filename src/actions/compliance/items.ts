@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { COMPLIANCE_RULES, OrgMetrics } from '@/lib/compliance-engine/rules'
+import { z } from 'zod'
 
 export type ComplianceItemRow = {
   id: string
@@ -120,11 +121,18 @@ export async function getComplianceItems(orgId: string): Promise<ComplianceItemR
   return enrichedData || []
 }
 
+const ComplianceStatusSchema = z.enum(['not_started', 'in_progress', 'submitted', 'approved', 'rejected', 'not_applicable'])
+
 export async function updateComplianceItemStatus(
   itemId: string,
   status: string,
   notes?: string | null
 ) {
+  const statusResult = ComplianceStatusSchema.safeParse(status)
+  if (!statusResult.success) {
+    return { success: false, error: `Invalid status: ${status}. Must be one of: not_started, in_progress, submitted, approved, rejected, not_applicable` }
+  }
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { success: false, error: 'Unauthorized' }

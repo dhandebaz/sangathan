@@ -13,9 +13,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { finalizeSignup } from '@/actions/auth'
+import { ORG_TYPES, OrgType } from '@/lib/org-types'
 
 interface OnboardingWizardProps {
   lang: string
+}
+
+const ORG_DESCRIPTIONS: Record<OrgType, string> = {
+  student_union: 'Hostel & Mess audits, RTI/ATR assistant, election tallies & anti-ragging cell',
+  workers_union: 'Collective bargaining (CBA), strike ballots, workplace grievances & dues',
+  ngo: 'Donor CRM, 80G tax receipts, grant matcher & transparency ledger',
+  rwa: 'Maintenance logs, estate operations & community voting',
+  political_party: 'Campaign management, cadre tracking, party funds & internal voting',
 }
 
 export function OnboardingWizard({ lang }: OnboardingWizardProps) {
@@ -172,24 +181,19 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                {[
-                  { id: 'student_union', title: 'Student Union', desc: 'Hostel & Mess audits, RTI/ATR assistant, election tallies & anti-ragging cell' },
-                  { id: 'workers_union', title: 'Workers Union', desc: 'Collective bargaining (CBA), strike ballots, workplace grievances & dues' },
-                  { id: 'ngo', title: 'NGO / Non-Profit', desc: 'Donor CRM, 80G tax receipts, grant matcher & transparency ledger' },
-                  { id: 'rwa', title: 'Resident Welfare (RWA)', desc: 'Maintenance logs, estate operations & community voting' },
-                ].map((blueprint) => (
+                {(Object.entries(ORG_TYPES) as [OrgType, typeof ORG_TYPES[OrgType]][]).map(([id, config]) => (
                   <button
-                    key={blueprint.id}
+                    key={id}
                     type="button"
-                    onClick={() => setOrgData({ ...orgData, type: blueprint.id })}
+                    onClick={() => setOrgData({ ...orgData, type: id })}
                     className={`p-4 text-left border rounded-sm transition-all ${
-                      orgData.type === blueprint.id
+                      orgData.type === id
                         ? 'border-indigo-600 bg-indigo-50/50 shadow-xs'
                         : 'border-slate-200 bg-slate-50 hover:bg-slate-100'
                     }`}
                   >
-                    <div className="text-sm font-bold text-slate-900">{blueprint.title}</div>
-                    <div className="text-xs text-slate-500 mt-1 leading-relaxed">{blueprint.desc}</div>
+                    <div className="text-sm font-bold text-slate-900">{config.en}</div>
+                    <div className="text-xs text-slate-500 mt-1 leading-relaxed">{ORG_DESCRIPTIONS[id]}</div>
                   </button>
                 ))}
               </div>

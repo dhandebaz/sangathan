@@ -82,7 +82,7 @@ export default async function AppealsPage() {
                       <div className="flex items-center justify-end gap-2">
                         <form action={async () => {
                           'use server'
-                          await resolveAppeal({ appealId: appeal.id, resolution: 'approved' })
+                          await resolveAppeal({ appealId: appeal.id, resolution: 'accepted' })
                         }}>
                           <button type="submit" className="min-h-9 rounded-lg bg-green-700 px-3 py-1.5 text-xs font-bold text-white hover:bg-green-800">
                             Approve

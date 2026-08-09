@@ -3,6 +3,7 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { OPEN_GRANT_OPPORTUNITIES, GrantOpportunity } from '@/lib/grants/grant-database'
+import { getOrgLabel } from '@/lib/org-types'
 
 export interface MatchResult {
   opportunity: GrantOpportunity
@@ -38,7 +39,7 @@ export async function matchGrantOpportunitiesAction(): Promise<MatchResult[]> {
 
     if (opp.eligibleOrgTypes.includes(orgType)) {
       score += 18
-      reasons.push(`Direct eligibility for ${orgType.replace('_', ' ').toUpperCase()} collectives`)
+      reasons.push(`Direct eligibility for ${getOrgLabel(orgType)} collectives`)
     } else {
       score -= 15
     }

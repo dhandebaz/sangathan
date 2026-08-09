@@ -60,9 +60,9 @@ export function HelpdeskClient({ orgType, orgId }: HelpdeskClientProps) {
 
   function getTypeColor(type: string) {
     switch (type) {
-      case 'bug': return 'bg-red-50 text-red-700 border-red-200'
-      case 'feature_request': return 'bg-purple-50 text-purple-700 border-purple-200'
-      case 'help': return 'bg-blue-50 text-blue-700 border-blue-200'
+      case 'complaint': return 'bg-red-50 text-red-700 border-red-200'
+      case 'maintenance': return 'bg-purple-50 text-purple-700 border-purple-200'
+      case 'grievance': return 'bg-blue-50 text-blue-700 border-blue-200'
       default: return 'bg-slate-50 text-slate-700'
     }
   }

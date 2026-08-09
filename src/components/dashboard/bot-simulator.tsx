@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -38,6 +39,8 @@ const SAMPLE_COMMANDS = [
 ]
 
 export function BotSimulator({ orgId, orgName }: BotSimulatorProps) {
+  const params = useParams()
+  const lang = (params?.lang as string) || 'en'
   const [channel, setChannel] = useState<'whatsapp' | 'telegram'>('whatsapp')
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -123,7 +126,7 @@ export function BotSimulator({ orgId, orgName }: BotSimulatorProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          <Link href={`/${window?.location?.pathname?.split('/')[1] || 'en'}/dashboard/channels`}>
+          <Link href={`/${lang}/dashboard/channels`}>
             <Button
               size="sm"
               className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-sm shadow-xs"

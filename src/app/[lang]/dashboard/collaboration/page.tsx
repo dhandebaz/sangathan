@@ -40,8 +40,8 @@ export default async function CollaborationPage({ params }: { params: Promise<{ 
       <CollaborationClient
         organisationId={organisationId}
         activePartners={partners || []}
-        pendingIncoming={pending.incoming || []}
-        pendingOutgoing={pending.outgoing || []}
+        pendingIncoming={(pending.incoming || []) as any}
+        pendingOutgoing={(pending.outgoing || []) as any}
         availableOrgs={availableOrgs || []}
       />
     </div>

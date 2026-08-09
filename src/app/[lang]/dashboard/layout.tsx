@@ -211,7 +211,7 @@ export default async function DashboardLayout(props: {
         </main>
       </div>
 
-      <MobileNav lang={lang} />
+      <MobileNav lang={lang} orgType={orgType} />
       <ContextualFAB lang={lang} role={role} capabilities={capabilities} />
     </div>
   )

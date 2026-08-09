@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import { ChevronDown } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
@@ -19,6 +20,7 @@ export function OrgSwitcher({ currentOrgId, organisations }: OrgSwitcherProps) {
   const [open, setOpen] = useState(false)
   const [pending, startTransition] = useTransition()
   const supabase = createClient()
+  const router = useRouter()
 
   const activeOrg = organisations.find((o) => o.id === currentOrgId) || organisations[0]
 
@@ -37,12 +39,7 @@ export function OrgSwitcher({ currentOrgId, organisations }: OrgSwitcherProps) {
 
       if (!error) {
         setOpen(false)
-        
-        // 2. Force hard refresh to clear Router Cache and re-validate user role
-        // router.refresh() might keep some client cache.
-        // We use window.location.href to force a full document reload for security
-        // to prevent "Ghost Access" where old org data might linger in React state.
-        window.location.href = window.location.href
+        router.refresh()
       }
     })
   }

@@ -3,6 +3,7 @@ import { Users } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import { AdminDashboard } from '@/components/dashboard/admin-view'
 import { MemberDashboard } from '@/components/dashboard/member-view'
+import { MemberOnboardingOverlay } from '@/components/dashboard/member-onboarding-overlay'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { DashboardEvent, DashboardTask, DashboardAnnouncement } from '@/types/dashboard'
@@ -18,7 +19,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
 
   const { data: profileData, error: profileError } = await supabase
     .from('profiles')
-    .select('status, role, organisation_id, phone_verified')
+    .select('status, role, organisation_id, phone_verified, onboarding_completed, display_name')
     .eq('id', user.id)
     .single()
 
@@ -46,7 +47,13 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     )
   }
 
-  const profile = profileData as { status: 'active' | 'pending' | 'rejected' | 'removed'; role: string; organisation_id: string | null }
+  const profile = profileData as {
+    status: 'active' | 'pending' | 'rejected' | 'removed'
+    role: string
+    organisation_id: string | null
+    onboarding_completed?: boolean
+    display_name?: string | null
+  }
 
   const onboardingIncomplete = !profile.organisation_id
 
@@ -125,11 +132,11 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
 
   const { data: orgData } = await supabase
     .from('organisations')
-    .select('status, org_type')
+    .select('name, status, org_type')
     .eq('id', profile.organisation_id)
     .single()
 
-  const org = orgData as { status: string; org_type?: string } | null
+  const org = orgData as { name: string; status: string; org_type?: string } | null
 
   if (org?.status === 'suspended') {
     return (
@@ -145,6 +152,8 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
   }
 
   const isAdmin = ['admin', 'editor', 'executive'].includes(profile.role)
+  const showOnboarding = !profile.onboarding_completed
+  const userName = profile.display_name || user.email?.split('@')[0] || ''
 
   if (isAdmin) {
     const now = new Date()
@@ -219,20 +228,29 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     }))
 
     return (
-      <AdminDashboard
-        stats={{
-          members: activeMembers || totalMembers,
-          events: upcomingEvents.length,
-          tasks: openTasks || 0,
-          donations: totalDonations
-        }}
-        recentActivity={recentActivity}
-        upcomingEvents={upcomingEvents}
-        membershipRequests={membershipRequests || 0}
-        openAppeals={openAppeals || 0}
-        lang={lang}
-        orgType={org?.org_type || 'ngo'}
-      />
+      <>
+        <AdminDashboard
+          stats={{
+            members: activeMembers || totalMembers,
+            events: upcomingEvents.length,
+            tasks: openTasks || 0,
+            donations: totalDonations
+          }}
+          recentActivity={recentActivity}
+          upcomingEvents={upcomingEvents}
+          membershipRequests={membershipRequests || 0}
+          openAppeals={openAppeals || 0}
+          lang={lang}
+          orgType={org?.org_type || 'ngo'}
+          userName={userName}
+        />
+        <MemberOnboardingOverlay
+          userId={user.id}
+          orgType={org?.org_type || 'ngo'}
+          orgName={org?.name}
+          initialShow={showOnboarding}
+        />
+      </>
     )
   }
 
@@ -247,12 +265,21 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     .filter(Boolean)
 
   return (
-    <MemberDashboard
-      events={(eventsRes.data || []) as unknown as DashboardEvent[]}
-      tasks={myTasks}
-      announcements={(announcementsRes.data || []) as unknown as DashboardAnnouncement[]}
-      lang={lang}
-      orgType={org?.org_type || 'ngo'}
-    />
+    <>
+      <MemberDashboard
+        events={(eventsRes.data || []) as unknown as DashboardEvent[]}
+        tasks={myTasks}
+        announcements={(announcementsRes.data || []) as unknown as DashboardAnnouncement[]}
+        lang={lang}
+        orgType={org?.org_type || 'ngo'}
+        userName={userName}
+      />
+      <MemberOnboardingOverlay
+        userId={user.id}
+        orgType={org?.org_type || 'ngo'}
+        orgName={org?.name}
+        initialShow={showOnboarding}
+      />
+    </>
   )
 }

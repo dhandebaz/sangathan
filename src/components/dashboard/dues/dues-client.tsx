@@ -19,7 +19,10 @@ export default function DuesClient({
   lang 
 }: { 
   plans: BillingPlan[], 
-  dues: any[], 
+  dues: (MembershipDue & { 
+    profiles?: { full_name?: string | null; email?: string | null };
+    billing_plans?: { name?: string | null };
+  })[], 
   lang: string 
 }) {
   const [isPlanDialogOpen, setIsPlanDialogOpen] = useState(false)
@@ -29,42 +32,42 @@ export default function DuesClient({
   const [generateForm, setGenerateForm] = useState({ plan_id: '', due_date: '', notes: '' })
 
   const handleCreatePlan = async () => {
-    try {
-      await createBillingPlan({
-        name: planForm.name,
-        amount: Number(planForm.amount),
-        currency: 'INR',
-        frequency: planForm.frequency as any
-      })
-      toast.success('Plan Created', { description: 'Billing plan created successfully.'  })
+    const res = await createBillingPlan({
+      name: planForm.name,
+      amount: Number(planForm.amount),
+      currency: 'INR',
+      frequency: planForm.frequency as 'monthly' | 'quarterly' | 'annual' | 'one_time'
+    })
+    if (res?.success) {
+      toast.success('Plan Created', { description: 'Billing plan created successfully.' })
       setIsPlanDialogOpen(false)
       setPlanForm({ name: '', amount: '', frequency: 'monthly' })
-    } catch (e: any) {
-      toast.error('Error')
+    } else {
+      toast.error('Failed', { description: res?.error || 'Could not create plan' })
     }
   }
 
   const handleGenerateDues = async () => {
-    try {
-      const res = await generateDuesForMembers({
-        plan_id: generateForm.plan_id,
-        due_date: generateForm.due_date,
-        notes: generateForm.notes
-      })
-      toast.success('Dues Generated', { description: `Generated dues for ${res.data?.count} members.` })
+    const res = await generateDuesForMembers({
+      plan_id: generateForm.plan_id,
+      due_date: generateForm.due_date,
+      notes: generateForm.notes
+    })
+    if (res?.success) {
+      toast.success('Dues Generated', { description: `Generated dues for ${res.data?.count || 0} members.` })
       setIsGenerateDialogOpen(false)
       setGenerateForm({ plan_id: '', due_date: '', notes: '' })
-    } catch (e: any) {
-      toast.error('Error')
+    } else {
+      toast.error('Failed', { description: res?.error || 'Could not generate dues' })
     }
   }
 
   const handleMarkPaid = async (dueId: string) => {
-    try {
-      await markDueAsPaid({ due_id: dueId })
-      toast.success('Payment Recorded', { description: 'Due marked as paid.'  })
-    } catch (e: any) {
-      toast.error('Error')
+    const res = await markDueAsPaid({ due_id: dueId })
+    if (res?.success) {
+      toast.success('Payment Recorded', { description: 'Due marked as paid.' })
+    } else {
+      toast.error('Failed', { description: res?.error || 'Could not record payment' })
     }
   }
 

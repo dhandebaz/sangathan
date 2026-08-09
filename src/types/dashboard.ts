@@ -426,3 +426,177 @@ export interface JobApplication {
   created_at: string;
   updated_at: string;
 }
+
+export interface ElectionWithPositions {
+  id: string;
+  title: string;
+  description?: string | null;
+  start_time: string;
+  end_time: string;
+  status: 'upcoming' | 'active' | 'completed' | 'cancelled';
+  election_positions?: ElectionPositionWithCandidates[];
+}
+
+export interface ElectionPositionWithCandidates {
+  id: string;
+  election_id: string;
+  title: string;
+  max_votes_per_voter: number;
+  candidates?: CandidateWithProfile[];
+}
+
+export interface CandidateWithProfile {
+  id: string;
+  position_id: string;
+  profile_id: string;
+  manifesto_text?: string | null;
+  votes_count: number;
+  profiles?: {
+    full_name?: string | null;
+    email?: string | null;
+  };
+}
+
+export interface ElectionPositionSimple {
+  id: string;
+  title: string;
+  max_votes_per_voter: number;
+}
+
+export interface ElectionCandidateSimple {
+  id: string;
+  position_id: string;
+  profile_id: string;
+  manifesto_text?: string | null;
+  votes_count: number;
+  profiles?: {
+    full_name?: string | null;
+    email?: string | null;
+  };
+}
+
+export interface FacilityWithOrg {
+  id: string;
+  organisation_id: string;
+  name: string;
+  description?: string | null;
+  capacity?: number | null;
+  hourly_rate?: number | null;
+  status: 'available' | 'maintenance' | 'closed';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BookingWithDetails {
+  id: string;
+  organisation_id: string;
+  facility_id: string;
+  profile_id: string;
+  start_time: string;
+  end_time: string;
+  status: 'pending' | 'approved' | 'rejected' | 'cancelled';
+  notes?: string | null;
+  created_at: string;
+  updated_at: string;
+  facilities?: {
+    name: string;
+  };
+  profiles?: {
+    full_name?: string | null;
+  };
+}
+
+export interface BotLog {
+  id: string;
+  conversation_id: string;
+  channel: string;
+  direction: 'incoming' | 'outgoing';
+  message_text: string;
+  created_at: string;
+}
+
+export interface BotConversation {
+  id: string;
+  channel: string;
+  sender_id: string;
+  sender_name?: string | null;
+  last_command?: string | null;
+  last_state?: string | null;
+  created_at: string;
+  updated_at: string;
+  member?: {
+    id: string;
+    full_name?: string | null;
+    email?: string | null;
+    phone?: string | null;
+    role?: string | null;
+  };
+}
+
+export interface BotChannelConfig {
+  id: string;
+  organisation_id: string;
+  channel: string;
+  credentials: Record<string, unknown>;
+  status: string;
+  connected_phone?: string | null;
+}
+
+export interface TransparencyEntry {
+  id: string;
+  organisation_id: string;
+  title: string;
+  category: string;
+  amount: number;
+  recipient_vendor: string;
+  expense_date: string;
+  receipt_sha256_hash?: string | null;
+}
+
+export interface CollaborationLink {
+  id: string;
+  requester_org_id: string;
+  responder_org_id: string;
+  status: 'pending' | 'active' | 'rejected';
+  created_at: string;
+  requester?: { name: string };
+  responder?: { name: string };
+}
+
+export interface JobPostingWithApps extends JobPosting {
+  job_applications?: JobApplicationWithProfile[];
+}
+
+export interface JobApplicationWithProfile extends JobApplication {
+  profiles?: {
+    full_name?: string | null;
+    phone?: string | null;
+  };
+}
+
+export interface EmergencySOSAlert {
+  id: string;
+  organisation_id: string;
+  user_id: string | null;
+  latitude: string | null;
+  longitude: string | null;
+  location_description: string | null;
+  status: 'active' | 'responding' | 'resolved' | 'cancelled';
+  created_at: string;
+  resolved_at: string | null;
+  profiles?: {
+    full_name?: string | null;
+    phone?: string | null;
+    email?: string | null;
+  };
+}
+
+export interface ElectionVoteTally {
+  id: string;
+  title: string;
+  description?: string | null;
+  created_at: string | null;
+}
+
+export type GrantStatus = 'draft' | 'submitted' | 'awarded' | 'rejected';
+export type CBAStatus = 'active' | 'draft' | 'expired' | 'archived';

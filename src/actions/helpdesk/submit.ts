@@ -17,7 +17,7 @@ export async function submitSupportTicket(message: string, orgId: string, userId
   try {
     const supabase = createServiceClient()
     
-    let intent: 'bug' | 'feature_request' | 'help' = 'help'
+    let rawIntent: 'bug' | 'feature_request' | 'help' = 'help'
     let title = message.slice(0, 50) + (message.length > 50 ? '...' : '')
     let priority: 'low' | 'medium' | 'high' | 'critical' = 'medium'
 
@@ -39,7 +39,7 @@ export async function submitSupportTicket(message: string, orgId: string, userId
         })
 
         if (object) {
-          intent = object.intent
+          rawIntent = object.intent
           title = object.title
           priority = object.priority
         }
@@ -48,11 +48,19 @@ export async function submitSupportTicket(message: string, orgId: string, userId
       }
     }
 
-    // 2. Save to Database
+    // 2. Map AI intent to valid ticket type
+    const intentToType: Record<string, 'grievance' | 'complaint' | 'maintenance'> = {
+      bug: 'complaint',
+      feature_request: 'maintenance',
+      help: 'grievance',
+    }
+    const type = intentToType[rawIntent] || 'grievance'
+
+    // 3. Save to Database
     const { data: ticket, error: dbError } = await supabase.from('tickets').insert({
       title,
       description: message,
-      type: intent,
+      type,
       priority,
       status: 'open',
       organisation_id: orgId,
@@ -64,8 +72,8 @@ export async function submitSupportTicket(message: string, orgId: string, userId
       throw new Error(dbError.message || 'Failed to save ticket')
     }
 
-    // 3. Sentry Logging for Bugs
-    if (intent === 'bug') {
+    // 4. Sentry Logging for Bugs
+    if (rawIntent === 'bug') {
       try {
         Sentry.captureMessage(`Bug Report: ${title}`, { 
           level: 'warning', 
@@ -77,16 +85,16 @@ export async function submitSupportTicket(message: string, orgId: string, userId
       }
     }
 
-    // 4. Send Email Notification via AgentMail (Optional & Safe)
+    // 5. Send Email Notification via AgentMail (Optional & Safe)
     try {
       if (process.env.AGENTMAIL_API_KEY && process.env.AGENTMAIL_INBOX_ID) {
         await agentmail.inboxes.messages.send(INBOX_ID, {
           to: [ADMIN_EMAIL],
-          subject: `[${intent.toUpperCase()}] ${title}`,
-          text: `New Support Ticket\nType: ${intent}\nPriority: ${priority}\nOrganization ID: ${orgId}\nUser ID: ${userId}\nMessage:\n${message}`,
+          subject: `[${rawIntent.toUpperCase()}] ${title}`,
+          text: `New Support Ticket\nType: ${rawIntent} (mapped to ${type})\nPriority: ${priority}\nOrganization ID: ${orgId}\nUser ID: ${userId}\nMessage:\n${message}`,
           html: `
             <h2>New Support Ticket</h2>
-            <p><strong>Type:</strong> ${intent}</p>
+            <p><strong>Type:</strong> ${rawIntent} (mapped to ${type})</p>
             <p><strong>Priority:</strong> ${priority}</p>
             <p><strong>Organization ID:</strong> ${orgId}</p>
             <p><strong>User ID:</strong> ${userId}</p>

@@ -21,12 +21,18 @@ import {
 } from '@/actions/bot-channels'
 import { useRouter } from 'next/navigation'
 
+import { BotChannelConfig, BotLog } from '@/types/dashboard'
+
 interface ChannelsHubProps {
   lang: string
   orgId: string
-  initialConfigs: any[]
-  initialOutboundLogs: any[]
-  initialLatestQR: any
+  initialConfigs: BotChannelConfig[]
+  initialOutboundLogs: BotLog[]
+  initialLatestQR: { 
+    qr_code_data?: string | null; 
+    pairing_numeric_code?: string | null; 
+    session_id?: string | null;
+  } | null
   appUrl: string
 }
 
@@ -46,7 +52,7 @@ export function ChannelsHub({
   const waQrConfig = initialConfigs.find((c) => c.channel === 'whatsapp_qr' || c.channel === 'whatsapp_cloud')
 
   // Telegram Form
-  const [tgToken, setTgToken] = useState(tgConfig?.credentials?.bot_token || '')
+  const [tgToken, setTgToken] = useState<string>((tgConfig?.credentials as any)?.bot_token || '')
   const [tgLoading, setTgLoading] = useState(false)
   const [tgTestChatId, setTgTestChatId] = useState('')
   const [tgTestMsg, setTgTestMsg] = useState('Sangathan Telegram Bot operational!')
@@ -57,7 +63,7 @@ export function ChannelsHub({
   const [pairingCode, setPairingCode] = useState<string | null>(initialLatestQR?.pairing_numeric_code || null)
   const [qrLoading, setQrLoading] = useState(false)
   const [simulatingPairing, setSimulatingPairing] = useState(false)
-  const [simPhone, setSimPhone] = useState(waQrConfig?.credentials?.connected_phone || '919876543210')
+  const [simPhone, setSimPhone] = useState<string>((waQrConfig?.credentials as any)?.connected_phone || '919876543210')
   const [qrTimeLeft, setQrTimeLeft] = useState(60)
 
   // Test WhatsApp Send
@@ -122,7 +128,7 @@ export function ChannelsHub({
     if (!initialLatestQR?.session_id && !qrData) return
     setSimulatingPairing(true)
     const sessionId = initialLatestQR?.session_id || `sess_${orgId.slice(0, 8)}_${Date.now()}`
-    const res = await confirmWhatsAppQRPairedAction(sessionId, simPhone)
+     const res = await confirmWhatsAppQRPairedAction(String(sessionId), String(simPhone))
     setSimulatingPairing(false)
     if (res.success) {
       toast.success(`WhatsApp linked successfully to +${simPhone}!`)
@@ -276,7 +282,7 @@ export function ChannelsHub({
                       </div>
                       <div>
                         <div className="text-sm font-bold text-emerald-950">
-                          Active Master WhatsApp: +{waQrConfig.credentials?.connected_phone || 'Master Phone'}
+                           Active Master WhatsApp: +{(waQrConfig.credentials as any)?.connected_phone || 'Master Phone'}
                         </div>
                         <div className="text-xs text-emerald-700 font-medium">
                           Multi-Device Session Active • Auto-reconnecting • Battery 94%
@@ -439,7 +445,7 @@ export function ChannelsHub({
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="text-xs font-bold text-sky-950">
-                        Active Master Bot: @{tgConfig.credentials.bot_username || 'Bot'}
+                         Active Master Bot: @{(tgConfig.credentials as any)?.bot_username || 'Bot'}
                       </div>
                       <div className="text-[11px] text-sky-700">
                         All member commands routed to this organization
@@ -600,17 +606,17 @@ export function ChannelsHub({
                           {log.channel}
                         </span>
                       </td>
-                      <td className="py-3 px-3 font-mono text-slate-700">
-                        {log.recipient_id}
-                      </td>
-                      <td className="py-3 px-3 text-slate-800 max-w-sm truncate">
-                        {log.message_text}
-                      </td>
-                      <td className="py-3 px-3">
-                        <span className="px-2 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded font-mono text-[10px] font-bold uppercase">
-                          {log.status}
-                        </span>
-                      </td>
+                       <td className="py-3 px-3 font-mono text-slate-700">
+                         {(log as any).recipient_id || log.conversation_id}
+                       </td>
+                       <td className="py-3 px-3 text-slate-800 max-w-sm truncate">
+                         {log.message_text}
+                       </td>
+                       <td className="py-3 px-3">
+                         <span className="px-2 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded font-mono text-[10px] font-bold uppercase">
+                           {(log as any).status || log.direction}
+                         </span>
+                       </td>
                     </tr>
                   ))}
 
