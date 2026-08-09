@@ -35,6 +35,37 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.25.0',
+    titleEn: 'Public Org Portal Polish, Upcoming Events & Full Bilingual Support',
+    titleHi: 'सार्वजनिक संगठन पोर्टल पॉलिश, आगामी कार्यक्रम एवं पूर्ण द्विभाषी समर्थन',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Enhanced public organization profile portals with upcoming event feeds, direct RSVP integration, localized Hindi translations, and streamlined membership applications. Polished mobile navigation bar with dynamic route localization across languages.',
+    descHi: 'आगामी कार्यक्रम फीड, प्रत्यक्ष आरएसवीपी एकीकरण, स्थानीयकृत हिंदी अनुवाद, और सुव्यवस्थित सदस्यता अनुप्रयोगों के साथ सार्वजनिक संगठन प्रोफाइल पोर्टल का संवर्धन। भाषाओं में गतिशील रूट स्थानीयकरण के साथ मोबाइल नेविगेशन बार को पॉलिश किया गया।',
+    color: 'indigo',
+    icon: Building2,
+    features: [
+      {
+        nameEn: 'Public Upcoming Events Feed',
+        nameHi: 'सार्वजनिक आगामी कार्यक्रम फीड',
+        textEn: 'Visitors on public org pages can now view upcoming rallies, general body meetings, and conferences with one-click RSVP links.',
+        textHi: 'सार्वजनिक संगठन पृष्ठों पर आगंतुक अब एक-क्लिक आरएसवीपी लिंक के साथ आगामी रैलियों, आम सभा की बैठकों और सम्मेलनों को देख सकते हैं।',
+      },
+      {
+        nameEn: 'Full Hindi & English Localization',
+        nameHi: 'पूर्ण हिंदी एवं अंग्रेजी स्थानीयकरण',
+        textEn: 'Public organization profiles, membership CTAs, metrics, and navigation bars now dynamically adapt to English and Hindi.',
+        textHi: 'सार्वजनिक संगठन प्रोफाइल, सदस्यता सीटीए, आंकड़े, और नेविगेशन बार अब गतिशील रूप से अंग्रेजी और हिंदी के अनुकूल होते हैं।',
+      },
+      {
+        nameEn: 'Mobile Navigation Enhancements',
+        nameHi: 'मोबाइल नेविगेशन संवर्धन',
+        textEn: 'Fixed language prefix routing for quick action tabs on mobile web and added haptic feedback support for app-like responsiveness.',
+        textHi: 'मोबाइल वेब पर त्वरित एक्शन टैब के लिए भाषा उपसर्ग रूटिंग को ठीक किया गया और ऐप जैसी प्रतिक्रिया के लिए हैप्टिक फीडबैक समर्थन जोड़ा गया।',
+      },
+    ],
+  },
+  {
     version: 'v1.24.0',
     titleEn: 'Streamlined Org Registration, Team Invites & Critical Fixes',
     titleHi: 'सरलीकृत संगठन पंजीकरण, टीम आमंत्रण एवं महत्वपूर्ण सुधार',

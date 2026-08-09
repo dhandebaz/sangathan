@@ -9,10 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.25.0] - 2026-08-09
 ### Added
-- **Features Page Accuracy Audit**: Conducted a comprehensive verification audit of every feature listed on the Features page across all organization types (NGO, Student Union, Workers Union, RWA). Confirmed that all claimed dashboard modules — including Digital Notice Board, Financial Ledger, Forms & Surveys, Elections, Volunteer Coordination, Visitor Management, and more — map directly to implemented routes under `src/app/[lang]/dashboard/`.
-- **Network Directory Page**: Created the missing `/network` index page to fix the broken footer link. Lists all public networks with links to their detail pages.
+- **Public Org Portal Polish & Events Feed**: Enhanced the public organization landing page (`/org/[slug]`) with upcoming public events feeds, direct RSVP integration, localized Hindi translations, and streamlined membership applications.
+- **Features Page Accuracy Audit**: Conducted a comprehensive verification audit of every feature listed on the Features page across all organization types (NGO, Student Union, Workers Union, RWA). Confirmed that all claimed dashboard modules map directly to implemented routes under `src/app/[lang]/dashboard/`.
+- **Network Directory Page**: Created the `/network` index page to list all public networks with direct links to detail profiles.
 ### Changed
-- Updated the landing page "What's New" section from stale v1.19.0 highlights to v1.24.0 features (Streamlined Org Registration, Team Invites, Org-Type Dashboards, Mobile-Native Nav).
+- **Mobile Navigation Polish**: Updated mobile navigation tabs with dynamic language prefixing (`/${lang}/...`) and haptic feedback triggers for responsive mobile app feel.
+- Updated landing page "What's New" section to reflect v1.25.0 features.
 - Expanded `src/app/sitemap.ts` with missing bilingual (/en and /hi) routes for Features, About, Changelog, Network, and Status.
 - Synced version references in `.cursor/active-context.md` and `PROJECT_STATUS.md` to v1.25.0.
 
