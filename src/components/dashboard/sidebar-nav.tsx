@@ -9,7 +9,7 @@ import {
   AlertCircle, Wrench, Gift, Flag, Badge,
   HeartHandshake, Network, Landmark, ScrollText,
   GalleryVerticalEnd, Gavel, UserCog, DollarSign, FileText, UserCheck, HardHat,
-  CalendarCheck, Printer, Zap, ShieldCheck, Smartphone, Database, AlertTriangle, Sparkles, Award, Radio, MessageSquare
+  CalendarCheck, Printer, Zap, ShieldCheck, Smartphone, Database, AlertTriangle, Sparkles, Award, Radio, MessageSquare, CreditCard
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -54,6 +54,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
       id: 'admin',
       title: 'Admin & Guardrails',
       items: [
+        { href: `/${lang}/dashboard/billing`, icon: CreditCard, label: 'Billing & Plans', show: isAdmin },
         { href: `/${lang}/dashboard/automations`, icon: Zap, label: 'Automations', show: isAdmin },
         { href: `/${lang}/dashboard/audit`, icon: ShieldCheck, label: 'Audit & Guardrails', show: isAdmin },
         { href: `/${lang}/dashboard/transparency`, icon: Landmark, label: 'Transparency Ledger', show: true },

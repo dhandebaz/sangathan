@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 import { RazorpayScript } from '@/components/razorpay-script'
@@ -8,25 +9,30 @@ import { RazorpayScript } from '@/components/razorpay-script'
 interface CheckoutButtonProps {
   amount: number
   planName: string
+  planPeriod?: 'monthly' | 'yearly' | 'lifetime'
   labelEn: string
   labelHi: string
   isHindi: boolean
   orgId: string
   className?: string
   children?: React.ReactNode
+  onSuccess?: () => void
 }
 
 export function CheckoutButton({
   amount,
   planName,
+  planPeriod = 'monthly',
   labelEn,
   labelHi,
   isHindi,
   orgId,
   className,
-  children
+  children,
+  onSuccess,
 }: CheckoutButtonProps) {
   const [isProcessing, setIsProcessing] = useState(false)
+  const router = useRouter()
 
   const handleCheckout = async () => {
     try {
@@ -36,7 +42,13 @@ export function CheckoutButton({
       const response = await fetch('/api/razorpay/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount, receipt: `receipt_${planName.toLowerCase()}`, orgId, planName }),
+        body: JSON.stringify({
+          amount,
+          receipt: `rcpt_${planName.toLowerCase().slice(0, 8)}_${Date.now().toString().slice(-6)}`,
+          orgId,
+          planName,
+          planPeriod,
+        }),
       })
 
       const orderData = await response.json()
@@ -49,9 +61,13 @@ export function CheckoutButton({
         amount: orderData.amount,
         currency: orderData.currency,
         name: 'Sangathan',
-        description: `${planName} Plan Purchase`,
+        description: `${planName} Plan (${planPeriod === 'yearly' ? 'Annual' : 'Monthly'})`,
         order_id: orderData.id,
-        handler: async function (paymentResponse: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) {
+        handler: async function (paymentResponse: {
+          razorpay_order_id: string
+          razorpay_payment_id: string
+          razorpay_signature: string
+        }) {
           try {
             // 3. Verify Payment
             const verifyRes = await fetch('/api/razorpay/verify', {
@@ -61,15 +77,31 @@ export function CheckoutButton({
                 razorpay_order_id: paymentResponse.razorpay_order_id,
                 razorpay_payment_id: paymentResponse.razorpay_payment_id,
                 razorpay_signature: paymentResponse.razorpay_signature,
+                orgId,
+                planName,
+                planPeriod,
+                amount,
               }),
             })
 
             const verifyData = await verifyRes.json()
             if (verifyRes.ok && verifyData.success) {
-              toast.success(isHindi ? 'भुगतान सफल रहा। धन्यवाद!' : 'Payment successful. Thank you!')
-              // Optionally redirect to dashboard or onboarding
+              toast.success(
+                isHindi
+                  ? 'भुगतान सफल रहा! आपकी योजना सक्रिय कर दी गई है।'
+                  : 'Payment successful! Your plan is now active.',
+              )
+              if (onSuccess) {
+                onSuccess()
+              } else {
+                router.refresh()
+              }
             } else {
-              toast.error(isHindi ? 'भुगतान सत्यापन विफल रहा' : 'Payment verification failed')
+              toast.error(
+                isHindi
+                  ? verifyData.error || 'भुगतान सत्यापन विफल रहा'
+                  : verifyData.error || 'Payment verification failed',
+              )
             }
           } catch {
             toast.error(isHindi ? 'भुगतान सत्यापन में त्रुटि' : 'Error verifying payment')
@@ -85,10 +117,11 @@ export function CheckoutButton({
         },
       }
 
-      const RazorpayConstructor = (window as unknown as { Razorpay: new (options: unknown) => { open: () => void } }).Razorpay
+      const RazorpayConstructor = (
+        window as unknown as { Razorpay: new (options: unknown) => { open: () => void } }
+      ).Razorpay
       const paymentObject = new RazorpayConstructor(options)
       paymentObject.open()
-
     } catch (error: unknown) {
       console.error(error)
       const message = error instanceof Error ? error.message : 'Something went wrong'
@@ -104,7 +137,10 @@ export function CheckoutButton({
       <button
         onClick={handleCheckout}
         disabled={isProcessing}
-        className={className || "w-full py-4 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-center transition-colors mb-8 disabled:opacity-50"}
+        className={
+          className ||
+          'w-full py-4 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-center transition-colors mb-8 disabled:opacity-50'
+        }
       >
         {isProcessing ? (
           <span className="flex items-center justify-center gap-2">

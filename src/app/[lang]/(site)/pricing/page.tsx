@@ -1,10 +1,10 @@
-import { Check, X, Info, Zap, ShieldCheck, Sparkles, Building2 } from 'lucide-react'
 import { Metadata } from 'next'
-import Link from 'next/link'
-import { CheckoutButton } from '@/components/pricing/checkout-button'
+import { ShieldCheck, HeartHandshake, HelpCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { BreadcrumbJsonLd, FAQJsonLd } from '@/components/seo/json-ld'
 import { PageHeader } from '@/components/public/page-header'
+import { PublicPricingGrid } from '@/components/pricing/public-pricing-grid'
+
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
   const isHindi = lang === 'hi'
@@ -12,12 +12,12 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     title: isHindi ? 'मूल्य निर्धारण | संगठन' : 'Pricing | Sangathan',
     description: isHindi
       ? 'पारदर्शी मूल्य निर्धारण। जमीनी स्तर के समूहों के लिए हमेशा के लिए मुफ्त।'
-      : 'Transparent pricing. Free forever for grassroots collectives.',
+      : 'Transparent pricing. Free forever for grassroots collectives. Affordable for growing institutions.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/pricing`,
       languages: {
-        'en': 'https://sangathan.space/en/pricing',
-        'hi': 'https://sangathan.space/hi/pricing',
+        en: 'https://sangathan.space/en/pricing',
+        hi: 'https://sangathan.space/hi/pricing',
       },
     },
   }
@@ -28,197 +28,116 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
   const isHindi = lang === 'hi'
 
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   let orgId = ''
   if (user) {
-    const { data: profile } = await supabase.from('profiles').select('organisation_id').eq('id', user.id).single()
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('organisation_id')
+      .eq('id', user.id)
+      .single()
     if (profile?.organisation_id) {
       orgId = profile.organisation_id
     }
   }
 
+  const faqs = [
+    {
+      question: isHindi ? 'क्या संगठन का उपयोग मुफ़्त है?' : 'Is Sangathan free to use?',
+      answer: isHindi
+        ? 'हाँ, समुदाय योजना 20 उपयोगकर्ताओं तक के छोटे नागरिक समूहों के लिए हमेशा के लिए मुफ़्त है। सभी मुख्य लोकतांत्रिक शासन सुविधाएँ शामिल हैं।'
+        : 'Yes, the Community plan is free forever for small civic collectives with up to 20 users. All core democratic governance features are included.',
+    },
+    {
+      question: isHindi ? 'यदि हम 20 सदस्यों की सीमा तक पहुँच जाते हैं तो क्या होगा?' : 'What happens if we reach the 20-member limit?',
+      answer: isHindi
+        ? 'आप कभी भी ₹1,000/माह या ₹10,000/वर्ष पर संस्थान योजना में अपग्रेड कर सकते हैं ताकि 1,000 सदस्यों तक और AI सुविधाएं अनलॉक की जा सकें।'
+        : 'You can upgrade at any time to the Institution plan (₹1,000/month or ₹10,000/year) to unlock up to 1,000 members and full AI intelligence tools.',
+    },
+    {
+      question: isHindi ? 'भुगतान के कौन से तरीके स्वीकार किए जाते हैं?' : 'What payment methods are accepted?',
+      answer: isHindi
+        ? 'हम रेज़रपे के माध्यम से यूपीआई (UPI), क्रेडिट/डेबिट कार्ड और नेट बैंकिंग स्वीकार करते हैं। सभी भुगतान भारतीय रुपयों (INR) में होते हैं।'
+        : 'We accept UPI (GPay, PhonePe, Paytm), credit/debit cards, and Net Banking via Razorpay. All payments are processed securely in INR.',
+    },
+    {
+      question: isHindi ? 'क्या धनवापसी नीति उपलब्ध है?' : 'Is there a refund policy?',
+      answer: isHindi
+        ? 'हाँ, यदि आप संतुष्ट नहीं हैं तो हम खरीद के 14 दिनों के भीतर 100% पूर्ण धनवापसी प्रदान करते हैं।'
+        : 'Yes, we offer a full 14-day no-questions-asked money-back guarantee on all paid plan subscriptions.',
+    },
+  ]
+
   return (
     <div className="bg-white min-h-screen">
-      <BreadcrumbJsonLd items={[
-        { name: isHindi ? 'होम' : 'Home', url: `https://sangathan.space/${lang}` },
-        { name: isHindi ? 'मूल्य निर्धारण' : 'Pricing', url: `https://sangathan.space/${lang}/pricing` },
-      ]} />
-      <FAQJsonLd questions={[
-        { question: 'Is Sangathan free to use?', answer: 'Yes, the Community plan is free forever for small civic collectives with up to 20 users. All core governance features are included.' },
-        { question: 'What payment methods are accepted?', answer: 'We accept UPI, credit/debit cards, and net banking through Razorpay. All payments are processed in Indian Rupees (INR).' },
-        { question: 'Can I upgrade or downgrade my plan?', answer: 'Yes, you can upgrade to the Institution plan at any time. Downgrades take effect at the end of your billing cycle.' },
-        { question: 'Is there a refund policy?', answer: 'Yes, we offer a full refund within 14 days of purchase if you are not satisfied with the Institution plan.' },
-      ]} />
-      <PageHeader 
-        title={isHindi ? 'सरल और पारदर्शी मूल्य निर्धारण' : 'Simple, Transparent Pricing'}
-        description={isHindi ? 'जमीनी स्तर के समूहों के लिए हमेशा के लिए मुफ्त। बड़े संगठनों के लिए किफायती।' : 'Free forever for grassroots collectives. Affordable for growing institutions.'}
+      <BreadcrumbJsonLd
+        items={[
+          { name: isHindi ? 'होम' : 'Home', url: `https://sangathan.space/${lang}` },
+          { name: isHindi ? 'मूल्य निर्धारण' : 'Pricing', url: `https://sangathan.space/${lang}/pricing` },
+        ]}
+      />
+      <FAQJsonLd
+        questions={faqs.map((f) => ({
+          question: f.question,
+          answer: f.answer,
+        }))}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        
-        {/* Pricing Cards */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-20">
-          
-          {/* Free Tier */}
-          <div className="relative rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col">
-            <div className="mb-6">
-              <h3 className="text-2xl font-bold text-slate-900 mb-2">{isHindi ? 'समुदाय' : 'Community'}</h3>
-              <p className="text-slate-500">{isHindi ? 'छोटे, अनौपचारिक समूहों के लिए।' : 'For small, informal collectives just getting started.'}</p>
-            </div>
-            
-            <div className="mb-6">
-              <span className="text-5xl font-extrabold text-slate-900">₹0</span>
-              <span className="text-slate-500 font-medium">/{isHindi ? 'हमेशा के लिए' : 'forever'}</span>
-            </div>
+      <PageHeader
+        title={isHindi ? 'सरल और पारदर्शी मूल्य निर्धारण' : 'Simple, Transparent Pricing'}
+        description={
+          isHindi
+            ? 'जमीनी स्तर के समूहों के लिए हमेशा के लिए मुफ्त। बड़े संघों और एनजीओ के लिए किफायती।'
+            : 'Free forever for grassroots collectives. Predictable and affordable for growing institutions.'
+        }
+      />
 
-            <Link 
-              href={`/${lang}/login?tab=signup`}
-              className="w-full py-4 px-6 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-center transition-colors mb-8"
-            >
-              {isHindi ? 'मुफ्त शुरू करें' : 'Start for free'}
-            </Link>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Interactive Pricing Grid */}
+        <PublicPricingGrid orgId={orgId} lang={lang} isHindi={isHindi} />
 
-            <div className="space-y-4 flex-grow">
-              {[
-                isHindi ? '1 संगठन' : '1 Organisation limit',
-                isHindi ? 'कुल 20 उपयोगकर्ता (सदस्य + स्वयंसेवक)' : 'Up to 20 users total (Members + Volunteers)',
-                isHindi ? 'सभी मुख्य शासन सुविधाएँ' : 'All core governance features',
-                isHindi ? 'हमेशा के लिए मुफ़्त' : 'Free to Use',
-                isHindi ? 'मानक समर्थन' : 'Standard community support',
-              ].map((feature, idx) => (
-                <div key={idx} className="flex items-start gap-3">
-                  <div className="mt-1 bg-emerald-100 rounded-full p-0.5">
-                    <Check size={14} className="text-emerald-600 stroke-[3]" />
-                  </div>
-                  <span className="text-slate-700">{feature}</span>
-                </div>
-              ))}
-            </div>
+        {/* Ethical Cross-Subsidy Assurance (Crisp technical light box, no dark blobs) */}
+        <div className="mt-24 max-w-4xl mx-auto rounded-3xl border border-slate-200 bg-slate-50/80 p-8 sm:p-12 text-center space-y-4">
+          <div className="w-14 h-14 mx-auto rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-emerald-600 shadow-sm">
+            <ShieldCheck size={28} />
           </div>
-
-          {/* Pro Tier */}
-          <div className="relative rounded-3xl border-2 border-indigo-500 bg-white p-8 shadow-xl flex flex-col overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-            
-            <div className="mb-6 relative z-10">
-              <h3 className="text-2xl font-bold text-slate-900 mb-2 flex items-center gap-2">
-                {isHindi ? 'संस्थान' : 'Institution'} <Sparkles className="text-indigo-500" size={20} />
-              </h3>
-              <p className="text-slate-500">{isHindi ? 'बड़े संघों और बढ़ते एनजीओ के लिए।' : 'For large unions and scaling NGOs that need more power.'}</p>
-            </div>
-            
-            <div className="mb-6 relative z-10">
-              <span className="text-5xl font-extrabold text-slate-900">₹1,000</span>
-              <span className="text-slate-500 font-medium">/{isHindi ? 'महीना' : 'month'}</span>
-            </div>
-
-            {!orgId ? (
-              <Link 
-                href={`/${lang}/login`}
-                className="relative block w-full py-4 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-center transition-colors mb-8 group overflow-hidden"
-              >
-                <span className="relative z-10">{isHindi ? 'लॉग इन करें' : 'Log in to Upgrade'}</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/0 via-white/20 to-indigo-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-              </Link>
-            ) : (
-              <CheckoutButton 
-                amount={1000}
-                planName="Institution"
-                labelEn="Upgrade to Institution"
-                labelHi="अपग्रेड करें"
-                isHindi={isHindi}
-                orgId={orgId}
-                className="relative w-full py-4 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-center transition-colors mb-8 group overflow-hidden"
-              >
-                <span className="relative z-10">{isHindi ? 'अपग्रेड करें' : 'Upgrade to Institution'}</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/0 via-white/20 to-indigo-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-              </CheckoutButton>
-            )}
-
-            <div className="space-y-4 flex-grow relative z-10">
-              <div className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-2">
-                {isHindi ? 'समुदाय में सब कुछ, और:' : 'Everything in Community, plus:'}
-              </div>
-              {[
-                isHindi ? 'असीमित उपयोगकर्ता और सदस्य' : 'Unlimited users (Members + Volunteers)',
-                isHindi ? '1 संगठन' : '1 Organisation',
-                isHindi ? 'कई संगठनों का प्रबंधन (व्यवस्थापक के रूप में)' : 'Manage multiple orgs (Admin access)',
-                isHindi ? 'AI संचालित बुद्धिमत्ता' : 'AI-Powered Intelligence',
-                isHindi ? 'उन्नत विश्लेषिकी और रिपोर्ट' : 'Advanced analytics & export',
-                isHindi ? 'प्राथमिकता समर्थन' : 'Priority email support',
-              ].map((feature, idx) => (
-                <div key={idx} className="flex items-start gap-3">
-                  <div className="mt-1 bg-indigo-100 rounded-full p-0.5">
-                    <Check size={14} className="text-indigo-600 stroke-[3]" />
-                  </div>
-                  <span className="text-slate-700 font-medium">{feature}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-        </div>
-
-        {/* White Label Addon */}
-        <div className="max-w-3xl mx-auto">
-          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8 sm:p-10 relative overflow-hidden group hover:border-slate-300 transition-colors">
-            <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-transparent to-slate-200/50 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            
-            <div className="flex flex-col sm:flex-row items-center gap-8 relative z-10">
-              <div className="w-20 h-20 shrink-0 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-200">
-                <Building2 size={36} className="text-slate-700" />
-              </div>
-              
-              <div className="flex-grow text-center sm:text-left">
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">{isHindi ? 'व्हाइट-लेबल' : 'White-label Branding'}</h3>
-                <p className="text-slate-600 mb-4 max-w-lg">
-                  {isHindi 
-                    ? 'सभी "Powered by Sangathan" ब्रांडिंग हटाएं।' 
-                    : 'Remove all "Powered by Sangathan" branding across the platform.'}
-                </p>
-                <div className="flex items-center justify-center sm:justify-start gap-2 text-slate-900 font-semibold">
-                  <span className="text-3xl font-extrabold">₹10,000</span>
-                  <span className="text-slate-500 font-normal">({isHindi ? 'एक बार का शुल्क' : 'One-time fee'})</span>
-                </div>
-              </div>
-              
-              <div className="shrink-0 w-full sm:w-auto">
-                {!orgId ? (
-                  <Link 
-                    href={`/${lang}/login`}
-                    className="block w-full sm:w-auto px-8 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-center transition-colors shadow-[0_0_20px_rgb(0,0,0,0.1)] hover:shadow-[0_0_30px_rgb(0,0,0,0.15)]"
-                  >
-                    {isHindi ? 'लॉग इन करें' : 'Log in to Buy'}
-                  </Link>
-                ) : (
-                  <CheckoutButton 
-                    amount={10000}
-                    planName="White-label"
-                    labelEn="Buy Now"
-                    labelHi="अभी खरीदें"
-                    isHindi={isHindi}
-                    orgId={orgId}
-                    className="block w-full sm:w-auto px-8 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-center transition-colors shadow-[0_0_20px_rgb(0,0,0,0.1)] hover:shadow-[0_0_30px_rgb(0,0,0,0.15)]"
-                  />
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* FAQ or Assurance */}
-        <div className="mt-24 max-w-3xl mx-auto text-center">
-          <ShieldCheck size={48} className="mx-auto text-emerald-500 mb-6" />
-          <h2 className="text-3xl font-bold text-slate-900 mb-4">
-            {isHindi ? 'मुफ़्त और सुरक्षित' : 'Free & Secure'}
-          </h2>
-          <p className="text-lg text-slate-600 leading-relaxed">
-            {isHindi 
-              ? 'हम न तो डेटा बेचते हैं और न ही विज्ञापन चलाते हैं। संस्थागत योजना से प्राप्त आय इस प्लेटफ़ॉर्म को छोटे नागरिक समूहों के लिए हमेशा के लिए मुफ़्त रखने के लिए सर्वर लागत को निधि देती है।' 
-              : 'We do not sell data or run ads. The revenue from the Institution plan funds server costs to keep this platform free forever for small civic groups.'}
+          <h3 className="text-2xl font-bold text-slate-900 tracking-tight">
+            {isHindi ? 'निजी, सुरक्षित और आत्मनिर्भर' : 'Private, Sustainable & Mission-Aligned'}
+          </h3>
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
+            {isHindi
+              ? 'हम न तो डेटा बेचते हैं और न ही विज्ञापन चलाते हैं। संस्थागत योजना से प्राप्त राजस्व सर्वर लागतों को निधि देता है, जिससे यह प्लेटफ़ॉर्म छोटे नागरिक समूहों के लिए हमेशा मुफ़्त रहता है।'
+              : 'We never sell user data or run advertisements. Revenue from paid Institution plans funds server infrastructure so grassroots collectives can operate completely free forever.'}
           </p>
         </div>
 
+        {/* FAQ Section */}
+        <div className="mt-24 max-w-4xl mx-auto space-y-8">
+          <div className="text-center">
+            <h3 className="text-2xl font-bold text-slate-900 mb-2">
+              {isHindi ? 'अक्सर पूछे जाने वाले प्रश्न' : 'Frequently Asked Questions'}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-500">
+              {isHindi
+                ? 'मूल्य निर्धारण और सदस्यता के बारे में आपके सभी उत्तर।'
+                : 'Everything you need to know about our billing and plans.'}
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-6">
+            {faqs.map((faq, idx) => (
+              <div
+                key={idx}
+                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-slate-300 transition-colors"
+              >
+                <h4 className="text-base font-bold text-slate-900 mb-2">{faq.question}</h4>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )

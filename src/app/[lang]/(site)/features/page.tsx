@@ -56,6 +56,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'ClipboardList', title: 'Field Forms & Surveys', desc: 'Offline-capable data collection for field workers.' },
         { icon: 'Network', title: 'Chapters & Subgroups', desc: 'Organise large NGOs by city chapters or wings.' },
         { icon: 'ShieldCheck', title: 'Helpdesk Support', desc: 'Centralized inbox for public and beneficiary inquiries.' },
+        { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable tier scaling, live member slot meters, automated receipt archiving, and multi-org enterprise capabilities.' },
         { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests 12A, 80G, FCRA based on actual usage and donations.' }
       ]
     },
@@ -93,6 +94,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'AlertTriangle', title: 'Hostel & Mess Grievances', desc: 'Ticketing system for academic, hostel allotment, mess quality, and campus disputes.' },
         { icon: 'Ticket', title: 'Event Ticketing & RSVPs', desc: 'Manage campus events, QR check-ins, and waitlists.' },
         { icon: 'Wallet', title: 'Club Sub-funding', desc: 'Allow societies to request and track micro-budgets.' },
+        { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable campus scaling, live member slot meters, automated receipt archiving, and multi-org capabilities.' },
         { icon: 'FileText', title: 'Proposals & Bills', desc: 'Draft, debate, and pass union resolutions democratically.' }
       ]
     },
@@ -121,6 +123,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'HardHat', title: 'Worker Dispatch System', desc: 'Match member skills to employer job requirements.' },
         { icon: 'Building2', title: 'Employer Management', desc: 'Monitor contract compliance across signatory companies.' },
         { icon: 'BadgeAlert', title: 'Shop Steward Roles', desc: 'Granular permissions for field representatives.' },
+        { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable union dues budgeting, member slot tracking, and multi-branch federation tools.' },
         { icon: 'ShieldCheck', title: 'Labor Law Compliance', desc: 'Automated checks against union regulations.' }
       ]
     },
@@ -146,6 +149,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Vote', title: 'Community Polls', desc: 'Vote on society upgrades and committee elections.' },
         { icon: 'Bell', title: 'Digital Notice Board', desc: 'Official society announcements with read receipts.' },
         { icon: 'Home', title: 'Resident Directory', desc: 'Verified database of owners, tenants, and emergency contacts.' },
+        { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable society scaling, resident capacity meters, and transparent audit trails.' },
         { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests renewals and NOCs based on maintenance and facility usage.' },
         { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
         { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' },

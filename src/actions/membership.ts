@@ -5,6 +5,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { invalidateUserMembershipsCache } from '@/lib/auth/context'
+import { checkMemberLimit } from '@/lib/plans/limits'
 // Removed custom email dependencies
 
 // --- Schemas ---
@@ -159,8 +160,15 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
         return { success: false, error: 'You are already a member of an organisation.' }
     }
 
-    // 3. Create Profile
-    const status = org.membership_policy === 'open_auto' ? 'active' : 'pending'
+    // 3. Check Plan Capacity Limit if auto-joining
+    let status = org.membership_policy === 'open_auto' ? 'active' : 'pending'
+    if (status === 'active') {
+      const limitCheck = await checkMemberLimit(data.orgId, 1)
+      if (!limitCheck.allowed) {
+        // Fallback to pending status if auto-join capacity is full
+        status = 'pending'
+      }
+    }
     const approved_at = status === 'active' ? new Date().toISOString() : null
     
     // We need user metadata for name/email
@@ -213,8 +221,14 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
       .eq('id', user.id)
       .single()
 
-    if (adminError || !adminProfile || adminProfile.role !== 'admin') {
+    if (adminError || !adminProfile || adminProfile.role !== 'admin' || !adminProfile.organisation_id) {
       return { success: false, error: 'Permission denied' }
+    }
+
+    // Check organisation plan member capacity limit
+    const limitCheck = await checkMemberLimit(adminProfile.organisation_id, 1)
+    if (!limitCheck.allowed) {
+      return { success: false, error: limitCheck.error || 'Plan member limit reached. Please upgrade to approve more members.' }
     }
 
     const supabaseAdmin = createServiceClient()

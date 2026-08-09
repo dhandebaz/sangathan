@@ -17,7 +17,8 @@ export async function POST(request: Request) {
       key_secret,
     })
 
-    const { amount, receipt, currency = 'INR' } = await request.json()
+    const body = await request.json()
+    const { amount, receipt, currency = 'INR', orgId, planName, planPeriod = 'monthly' } = body
 
     if (!amount || amount <= 0) {
       return NextResponse.json({ error: 'Invalid amount' }, { status: 400 })
@@ -27,13 +28,19 @@ export async function POST(request: Request) {
       amount: Math.round(amount * 100),
       currency,
       receipt: receipt || `receipt_${Date.now()}`,
+      notes: {
+        orgId: orgId || '',
+        planName: planName || 'Institution',
+        planPeriod: planPeriod || 'monthly',
+      },
     }
 
     const order = await instance.orders.create(options)
 
     return NextResponse.json(order)
-  } catch (error: any) {
-    logger.error('razorpay', 'Failed to create Razorpay order', { error: error?.message || error })
-    return NextResponse.json({ error: error?.message || 'Failed to create order' }, { status: 500 })
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Failed to create order'
+    logger.error('razorpay', 'Failed to create Razorpay order', { error: errorMessage })
+    return NextResponse.json({ error: errorMessage }, { status: 500 })
   }
 }

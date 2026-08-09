@@ -9,6 +9,8 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { generateSecureString } from '@/lib/utils'
 import { invalidateUserMembershipsCache } from '@/lib/auth/context'
 
+import { checkMemberLimit } from '@/lib/plans/limits'
+
 const CreateInviteSchema = z.object({
   email: z.string().email('Valid email required'),
   role: z.enum(['admin', 'editor', 'viewer', 'member']).default('member'),
@@ -21,6 +23,12 @@ const AcceptInviteSchema = z.object({
 export const createInvite = createSafeAction(
   CreateInviteSchema,
   async (input, context) => {
+    // Check organisation plan member capacity limit
+    const limitCheck = await checkMemberLimit(context.organizationId, 1)
+    if (!limitCheck.allowed) {
+      return { error: limitCheck.error || 'Plan member limit reached. Please upgrade to invite more members.' }
+    }
+
     const supabase = createServiceClient()
     const token = generateSecureString(32)
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)

@@ -10,6 +10,8 @@ import { MemberFilters } from '@/components/members/member-filters'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { Member } from '@/types/dashboard'
+import { getOrgPlanUsage } from '@/lib/plans/limits'
+import { PlanUsageBanner } from '@/components/dashboard/plan-usage-banner'
 
 export const dynamic = 'force-dynamic'
 
@@ -78,6 +80,7 @@ export default async function MembersPage({ searchParams, params }: PageProps & 
 
   const orgType = await getOrgType(supabase, selectedOrgId)
   const { title, description } = getOrgLabels(orgType)
+  const usage = await getOrgPlanUsage(selectedOrgId)
 
   let dbQuery = supabase
     .from('members')
@@ -152,6 +155,8 @@ export default async function MembersPage({ searchParams, params }: PageProps & 
             <AddMemberDialog />
         </div>
       </div>
+
+      <PlanUsageBanner usage={usage} lang={lang} />
 
       <MemberFilters initialQuery={query} initialStatus={status} />
 

@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, CheckCircle2, AlertCircle } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, AlertCircle, CreditCard } from 'lucide-react'
 import { MembershipPolicyForm, TransparencyToggle } from '@/components/settings/membership-policy-form'
 import { CollaborationManager } from '@/components/settings/collaboration-manager'
 import { deleteOrganisation } from '@/actions/compliance/actions'
@@ -127,7 +127,7 @@ export default async function SettingsPage(props: PageProps) {
 
   return (
     <div className="max-w-5xl mx-auto py-8 px-4 space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Link href={`/${lang}/dashboard`} className="text-muted-foreground hover:text-foreground">
             <ArrowLeft className="w-4 h-4" />
@@ -139,6 +139,14 @@ export default async function SettingsPage(props: PageProps) {
             </p>
           </div>
         </div>
+
+        <Link
+          href={`/${lang}/dashboard/billing`}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700 hover:bg-indigo-100 text-xs font-bold transition-colors shadow-sm"
+        >
+          <CreditCard className="w-4 h-4" />
+          <span>Billing & Plan Capacity</span>
+        </Link>
       </div>
 
       <Tabs defaultValue="general" className="w-full">

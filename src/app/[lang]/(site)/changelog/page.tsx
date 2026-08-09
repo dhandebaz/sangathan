@@ -35,6 +35,43 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.26.0',
+    titleEn: 'Subscription Billing Engine, Annual Billing & Plan Capacity Safeguards',
+    titleHi: 'सदस्यता बिलिंग इंजन, वार्षिक बिलिंग एवं योजना क्षमता सुरक्षा उपाय',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Comprehensive billing and subscription upgrade. Added hard-enforced plan capacity limits across member additions and invites to protect the free Community tier, annual billing options with 2 months free discounts, dedicated Dashboard Billing & Subscription Management page, and automated Razorpay plan activation.',
+    descHi: 'व्यापक बिलिंग और सदस्यता अपग्रेड। मुफ्त समुदाय योजना की सुरक्षा के लिए सदस्य परिवर्धन और आमंत्रणों में कठोर योजना क्षमता सीमाएं, 2 महीने की मुफ्त छूट के साथ वार्षिक बिलिंग विकल्प, समर्पित डैशबोर्ड बिलिंग और सदस्यता प्रबंधन पृष्ठ, और स्वचालित रेज़रपे योजना सक्रियण जोड़ा गया।',
+    color: 'indigo',
+    icon: Sparkles,
+    features: [
+      {
+        nameEn: 'Hard-Enforced Plan Capacity Limits',
+        nameHi: 'कठोर योजना क्षमता सीमाएं',
+        textEn: 'Community tier (20 users) and Institution tier (1,000 users) capacity limits are now strictly validated across manual additions, email invites, auto-joins, and batch student inductions.',
+        textHi: 'मैन्युअल परिवर्धन, ईमेल आमंत्रण, ऑटो-जॉइन और बैच छात्र इंडक्शन में समुदाय स्तर (20 उपयोगकर्ता) और संस्थान स्तर (1,000 उपयोगकर्ता) क्षमता सीमाएं अब सख्ती से सत्यापित की जाती हैं।',
+      },
+      {
+        nameEn: 'Annual Billing with 2 Months Free',
+        nameHi: '2 महीने मुफ़्त के साथ वार्षिक बिलिंग',
+        textEn: 'Organizations can now choose between monthly and annual billing with a ₹2,000 yearly discount on the Institution tier (₹10,000/year).',
+        textHi: 'संगठन अब संस्थान स्तर (₹10,000/वर्ष) पर ₹2,000 की वार्षिक छूट के साथ मासिक और वार्षिक बिलिंग के बीच चयन कर सकते हैं।',
+      },
+      {
+        nameEn: 'Dedicated Dashboard Billing & Capacity Page',
+        nameHi: 'समर्पित डैशबोर्ड बिलिंग और क्षमता पृष्ठ',
+        textEn: 'Org admins can view live member slot meters, resource usage, white-label branding status, and complete Razorpay receipt history.',
+        textHi: 'संगठन व्यवस्थापक लाइव सदस्य स्लॉट मीटर, संसाधन उपयोग, व्हाइट-लेबल ब्रांडिंग स्थिति और पूर्ण रेज़रपे रसीद इतिहास देख सकते हैं।',
+      },
+      {
+        nameEn: 'Automated Razorpay Plan & Capability Activation',
+        nameHi: 'स्वचालित रेज़रपे योजना एवं क्षमता सक्रियण',
+        textEn: 'Successful payment verifications now automatically activate plan tiers, unlock AI intelligence features (Llama 3.3 70B), and record audit logs.',
+        textHi: 'सफल भुगतान सत्यापन अब स्वचालित रूप से योजना स्तरों को सक्रिय करते हैं, AI बुद्धिमत्ता सुविधाओं (Llama 3.3 70B) को अनलॉक करते हैं, और ऑडिट लॉग रिकॉर्ड करते हैं।',
+      },
+    ],
+  },
+  {
     version: 'v1.25.0',
     titleEn: 'Public Org Portal Polish, Upcoming Events & Full Bilingual Support',
     titleHi: 'सार्वजनिक संगठन पोर्टल पॉलिश, आगामी कार्यक्रम एवं पूर्ण द्विभाषी समर्थन',

@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { logAction } from '@/lib/audit/log'
+import { checkMemberLimit } from '@/lib/plans/limits'
 
 // --- Schemas ---
 
@@ -31,6 +32,12 @@ const ChangeStatusSchema = z.object({
 export const addMember = createSafeAction(
   AddMemberSchema,
   async (input, context) => {
+    // Check organisation plan member capacity limit
+    const limitCheck = await checkMemberLimit(context.organizationId, 1)
+    if (!limitCheck.allowed) {
+      return { error: limitCheck.error || 'Plan member limit reached. Please upgrade to add more members.' }
+    }
+
     const supabase = await createClient()
 
     // We are adding to the 'members' table
