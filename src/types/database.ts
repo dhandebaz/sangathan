@@ -14,6 +14,53 @@ export type Database = {
   }
   public: {
     Tables: {
+      billing_transactions: {
+        Row: {
+          id: string
+          organisation_id: string
+          amount: number
+          currency: string
+          plan_name: string
+          plan_period: string
+          razorpay_order_id: string | null
+          razorpay_payment_id: string | null
+          status: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          organisation_id: string
+          amount: number
+          currency?: string
+          plan_name: string
+          plan_period?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          status?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          organisation_id?: string
+          amount?: number
+          currency?: string
+          plan_name?: string
+          plan_period?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          status?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "billing_transactions_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       agent_config: {
         Row: {
           auto_classify: boolean
@@ -1567,6 +1614,10 @@ export type Database = {
           updated_at: string
           website: string | null
           plan_name: string | null
+          plan_period: string | null
+          plan_expires_at: string | null
+          plan_status: string | null
+          billing_email: string | null
           whitelabel_enabled: boolean | null
           registration_status: Database["public"]["Enums"]["registration_status"] | null
           registration_number: string | null
@@ -1596,6 +1647,10 @@ export type Database = {
           updated_at?: string
           website?: string | null
           plan_name?: string | null
+          plan_period?: string | null
+          plan_expires_at?: string | null
+          plan_status?: string | null
+          billing_email?: string | null
           whitelabel_enabled?: boolean | null
           registration_status?: Database["public"]["Enums"]["registration_status"] | null
           registration_number?: string | null
@@ -1625,6 +1680,10 @@ export type Database = {
           updated_at?: string
           website?: string | null
           plan_name?: string | null
+          plan_period?: string | null
+          plan_expires_at?: string | null
+          plan_status?: string | null
+          billing_email?: string | null
           whitelabel_enabled?: boolean | null
           registration_status?: Database["public"]["Enums"]["registration_status"] | null
           registration_number?: string | null

@@ -53,8 +53,8 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
     {
       question: isHindi ? 'यदि हम 20 सदस्यों की सीमा तक पहुँच जाते हैं तो क्या होगा?' : 'What happens if we reach the 20-member limit?',
       answer: isHindi
-        ? 'आप कभी भी ₹1,000/माह या ₹10,000/वर्ष पर संस्थान योजना में अपग्रेड कर सकते हैं ताकि 1,000 सदस्यों तक और AI सुविधाएं अनलॉक की जा सकें।'
-        : 'You can upgrade at any time to the Institution plan (₹1,000/month or ₹10,000/year) to unlock up to 1,000 members and full AI intelligence tools.',
+        ? 'आप कभी भी ₹1,000/माह या ₹10,000/वर्ष पर संस्थान योजना में अपग्रेड कर सकते हैं ताकि असीमित सदस्य और AI सुविधाएं अनलॉक की जा सकें।'
+        : 'You can upgrade at any time to the Institution plan (₹1,000/month or ₹10,000/year) to unlock unlimited members and full AI intelligence tools.',
     },
     {
       question: isHindi ? 'भुगतान के कौन से तरीके स्वीकार किए जाते हैं?' : 'What payment methods are accepted?',
