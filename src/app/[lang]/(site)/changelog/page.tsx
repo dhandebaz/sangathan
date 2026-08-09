@@ -35,13 +35,87 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.24.0',
+    titleEn: 'Streamlined Org Registration, Team Invites & Critical Fixes',
+    titleHi: 'सरलीकृत संगठन पंजीकरण, टीम आमंत्रण एवं महत्वपूर्ण सुधार',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Complete overhaul of the organization registration flow. New orgs can now reserve a public URL with live availability checking, configure membership dues, set governance roles, and toggle features — all persisted correctly. Added team invite system with shareable links. Fixed critical bugs including broken member management, rate limiting, and org type validation.',
+    descHi: 'संगठन पंजीकरण प्रवाह का पूर्ण पुनर्निर्माण। नए संगठन अब लाइव उपलब्धता जांच के साथ सार्वजनिक URL आरक्षित कर सकते हैं, सदस्यता शुल्क कॉन्फ़िगर कर सकते हैं, शासन भूमिकाएं निर्धारित कर सकते हैं, और सुविधाएं टॉगल कर सकते हैं — सभी सही ढंग से सहेजी गईं। टीम आमंत्रण प्रणाली शेयर करने योग्य लिंक के साथ जोड़ी गई। महत्वपूर्ण बग्स ठीक किए गए जिनमें टूटा हुआ सदस्य प्रबंधन, दर सीमा, और संगठन प्रकार सत्यापन शामिल हैं।',
+    color: 'emerald',
+    icon: Building2,
+    features: [
+      {
+        nameEn: 'Streamlined Org Registration Wizard',
+        nameHi: 'सरलीकृत संगठन पंजीकरण विज़ार्ड',
+        textEn: 'All 5 steps of the onboarding wizard now persist correctly — name, slug, description, designation, membership policy, and dues are all saved.',
+        textHi: 'ऑनबोर्डिंग विज़ार्ड के सभी 5 चरण अब सही ढंग से सहेजे जाते हैं — नाम, स्लग, विवरण, पदनाम, सदस्यता नीति, और शुल्क सभी सहेजी जाती हैं।',
+      },
+      {
+        nameEn: 'Live Slug Availability Check',
+        nameHi: 'लाइव स्लग उपलब्धता जांच',
+        textEn: 'Organizations can now see in real-time whether their desired public URL is available before submitting.',
+        textHi: 'संगठन अब जमा करने से पहले वास्तविक समय में देख सकते हैं कि उनका वांछित सार्वजनिक URL उपलब्ध है या नहीं।',
+      },
+      {
+        nameEn: 'Team Invite System',
+        nameHi: 'टीम आमंत्रण प्रणाली',
+        textEn: 'Org admins can now invite team members via email with shareable invite links. New members can accept invites and join instantly.',
+        textHi: 'संगठन व्यवस्थापक अब शेयर करने योग्य आमंत्रण लिंक के साथ ईमेल के माध्यम से टीम के सदस्यों को आमंत्रित कर सकते हैं। नए सदस्य आमंत्रण स्वीकार कर सकते हैं और तुरंत शामिल हो सकते हैं।',
+      },
+      {
+        nameEn: 'Fixed Member Management',
+        nameHi: 'सदस्य प्रबंधन ठीक किया गया',
+        textEn: 'Recreated the members table that was accidentally dropped, fixing member addition, status changes, and dashboard member counts.',
+        textHi: 'गलती से हटाई गई सदस्य तालिका को फिर से बनाया गया, जिससे सदस्य जोड़ना, स्थिति परिवर्तन, और डैशबोर्ड सदस्य गणना ठीक हो गई।',
+      },
+      {
+        nameEn: 'Fixed Rate Limiting & Validation',
+        nameHi: 'दर सीमा एवं सत्यापन ठीक किया गया',
+        textEn: 'Org creation rate limiting now works correctly. Signup form password requirements now match server rules (12+ chars).',
+        textHi: 'संगठन निर्माण दर सीमा अब सही ढंग से काम करती है। साइनअप फॉर्म पासवर्ड आवश्यकताएं अब सर्वर नियमों (12+ अक्षर) से मेल खाती हैं।',
+      },
+    ],
+  },
+  {
+    version: 'v1.25.0',
+    titleEn: 'Features Page Accuracy Audit & Feature Verification',
+    titleHi: 'फीचर पेज सटीकता ऑडिट एवं फीचर सत्यापन',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Conducted a comprehensive verification audit of every feature listed on the Features page across all organization types (NGO, Student Union, Workers Union, RWA). Confirmed that all claimed dashboard modules — including Digital Notice Board (announcements), Financial Ledger (financials), Forms & Surveys, Elections, Volunteer Coordination, Visitor Management, and more — map directly to implemented routes in src/app/[lang]/dashboard/. All feature claims on the public Features page are now verified against living code.',
+    descHi: 'नगरों के सभी संगठन प्रकारों (एनजीओ, छात्र संघ, श्रमिक संघ, आरडब्ल्यूए) के सम्मिलित रूप से फीचर पेज पर listing की गई हर सुविधा का एक व्यापक सत्यापन ऑडिट किया गया है। इसमें यह पुष्टि की गई है कि डिजिटल नोटिस बोर्ड (Announcements), वित्तीय बहीखाता (Financials), फॉर्म्स एवं सर्वेक्षण, चुनाव, स्वयंसेवक समन्वय, आगंतुक प्रबंधन और अधिक अन्य रास्तों के साथ मेल खाते हैं। सार्वजनिक फीचर पेज पर किए गए सभी फीचर दावों को अब से src/app/[lang]/dashboard/ में कार्यान्वित मार्गों के विरुद्ध सत्यापित किया गया है।',
+    color: 'slate',
+    icon: ShieldCheck,
+    features: [
+      {
+        nameEn: 'Features Page Verified Against Living Code',
+        nameHi: 'फीचर पेज लीविंग कोड के विरुद्ध सत्यावित',
+        textEn: 'Audited every dashboard route under src/app/[lang]/dashboard/ and cross-referenced it with feature claims on the public Features page. All major claimed features (Digital Notice Board, Financial Ledger, Forms Builder, Elections, Visitor Management, Maintenance Tickets, Volunteer Coordination, Document Management) are confirmed implemented.',
+        textHi: 'src/app/[lang]/dashboard/ के अंतर्गत हर डैशबोर्ड रास्ते का ऑडिट किया गया और इसे सार्वजनिक फीचर पेज पर फीचर दावों के साथ पूरा किया गया। सभी प्रमुख दावों (डिजिटल नोटिस बोर्ड, वित्तीय बहीखाता, फॉर्म बिल्डर, चुनाव, आगंतुक प्रबंधन, रखरखाव टिकट, स्वयंसेवक समन्वय, दस्तावेज़ प्रबंधन) का पुष्टि कार्यान्वयन किया गया है।',
+      },
+      {
+        nameEn: 'Network Directory Page',
+        nameHi: 'नेटवर्क डायरेक्ट्री पृष्ठ',
+        textEn: 'Created the missing /network index page so the footer Network link resolves correctly. Lists all public networks with links to their detail pages.',
+        textHi: 'फुटर नेटवर्क लिंक के सही ढंग से समाधान होने के लिए /network इंडेक्स पृष्ठ बनाया गया। सभी सार्वजनिक नेटवर्क की सूची दी गई है जिनके विवरण पृष्ठों के लिंक हैं।',
+      },
+      {
+        nameEn: 'Sitemap Expanded',
+        nameHi: 'साइटमैप विस्तारित',
+        textEn: 'Added missing bilingual (/en and /hi) routes for Features, About, Changelog, Network, and Status to src/app/sitemap.ts.',
+        textHi: 'फीचर्स, अबाउट, चेंजलॉग, नेटवर्क और स्टेटस के लिए मिसिंग द्विभाषी (/en और /hi) रास्तों को src/app/sitemap.ts में जोड़ा गया।',
+      },
+    ],
+  },
+  {
     version: 'v1.23.0',
     titleEn: 'Redesigned Dashboards, Mobile-Native Feel & New Member Onboarding',
     titleHi: 'नवीनीकृत डैशबोर्ड, मोबाइल-नेटिव अनुभव एवं नए सदस्य ऑनबोर्डिंग',
     dateEn: 'August 2026',
     dateHi: 'अगस्त 2026',
     descEn: 'Complete dashboard redesign tailored for each organization type (NGO, Student Union, Workers Union, RWA) with a mobile-first native app experience. New step-by-step onboarding guide helps first-time digital users get started easily. Bottom navigation adapts to show the most relevant features per organization type.',
-    descHi: 'प्रत्येक संगठन प्रकार (एनजीओ, छात्र संघ, श्रमिक संघ, आरडब्ल्यूए) के अनुरूप पूर्ण डैशबोर्ड पुनर्रचना, मोबाइल-प्रथम नेटिव ऐप अनुभव के साथ। नया चरण-दर-चरण ऑनबोर्डिंग गाइड पहली बार डिजिटल उपयोगकर्ताओं को आसानी से शुरू करने में मदद करता है। निचला नेविगेशन प्रत्येक संगठन प्रकार के लिए सबसे प्रासंगिक सुविधाएं दिखाता है।',
+    descHi: 'प्रत्येक संगठन प्रकार (एनजीओ, छात्र संघ, श्रमिक संघ, आरडब्ल्यूए) के अनुरूप पूर्ण डैशबोर्ड पुनर्रचना, मोबाबाइल-प्रथम नेटिव ऐप अनुभव के साथ। नया चरण-दर-चरण ऑनबोर्डिंग गाइड पहली बार डिजिटल उपयोगकर्ताओं को आसानी से शुरू करने में मदद करता है। निचला नेविगेशन प्रत्येक संगठन प्रकार के लिए सबसे प्रासंगिक सुविधाएं दिखाता है।',
     color: 'indigo',
     icon: Rocket,
     features: [

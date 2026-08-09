@@ -1,7 +1,7 @@
 # Active Context & Project Status
 
 > **Last Updated:** August 9, 2026 at 02:57 AM IST  
-> **Current Version:** v1.20.0  
+> **Current Version:** v1.25.0  
 > **Status:** 100% Production-Ready (Build status: Clean, `npx next build` verified with 0 errors)
 
 ---

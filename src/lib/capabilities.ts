@@ -73,9 +73,6 @@ export function getOrgTypeDefaults(orgType?: string | null): Record<OrgCapabilit
   if (orgType === 'rwa') {
     return { ...BASE_CAPABILITIES, maintenance: true, complaints: true, donations: true, voting_engine: true, events: true, memberships: true, visitors: true, elections: true, grievances: true, compliance: true, meetings: true, subgroups: true }
   }
-  if (orgType === 'political_party') {
-    return { ...BASE_CAPABILITIES, campaigns: true, elections: true, events: true, memberships: true, voting_engine: true, donations: true, volunteers: true, federation_mode: true, grievances: true, compliance: true, meetings: true, subgroups: true }
-  }
 
   return { ...BASE_CAPABILITIES, voting_engine: true, federation_mode: true, volunteer_engine: true }
 }

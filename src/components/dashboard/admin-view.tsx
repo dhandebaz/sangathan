@@ -56,13 +56,6 @@ function getOrgFeatures(type: string, lang: string): OrgFeature[] {
         { icon: UserCheck, title: 'Visitors', subtitle: 'Log entries', href: `/${lang}/dashboard/visitors`, color: 'indigo' },
         { icon: Vote, title: 'Polls', subtitle: 'Community votes', href: `/${lang}/dashboard/polls`, color: 'amber' },
       ]
-    case 'political_party':
-      return [
-        { icon: Flag, title: 'Campaigns', subtitle: 'Petitions & drives', href: `/${lang}/dashboard/campaigns`, color: 'rose' },
-        { icon: Vote, title: 'Elections', subtitle: 'Internal voting', href: `/${lang}/dashboard/polls`, color: 'indigo' },
-        { icon: HeartHandshake, title: 'Volunteers', subtitle: 'Manage cadre', href: `/${lang}/dashboard/volunteers`, color: 'brand' },
-        { icon: HandCoins, title: 'Donations', subtitle: 'Party funds', href: `/${lang}/dashboard/donations`, color: 'emerald' },
-      ]
     default:
       return []
   }
@@ -83,8 +76,6 @@ function getOrgStats(type: string, stats: AdminStats, lang: string): { icon: Rea
     items.push({ icon: Scale, value: stats.tasks, label: 'Grievances', href: `/${lang}/dashboard/grievances`, color: 'rose' })
   } else if (type === 'rwa') {
     items.push({ icon: Wrench, value: stats.tasks, label: 'Tickets', href: `/${lang}/dashboard/maintenance`, color: 'sky' })
-  } else if (type === 'political_party') {
-    items.push({ icon: Flag, value: stats.tasks, label: 'Campaigns', href: `/${lang}/dashboard/campaigns`, color: 'rose' })
   }
 
   return items
@@ -140,16 +131,6 @@ function getPriorityActions(type: string, lang: string, membershipRequests: numb
       description: 'नए maintenance requests को assign करें',
       href: `/${lang}/dashboard/maintenance`,
       color: 'sky',
-    })
-  }
-
-  if (type === 'political_party') {
-    actions.push({
-      icon: Flag,
-      title: 'Campaign updates देखें',
-      description: 'Active campaigns और petitions की स्थिति',
-      href: `/${lang}/dashboard/campaigns`,
-      color: 'rose',
     })
   }
 
@@ -233,6 +214,37 @@ export function AdminDashboard({
           ))}
         </div>
       </div>
+
+      {/* Invite Members CTA - Show for new orgs with few members */}
+      {stats.members <= 1 && (
+        <div className="bg-gradient-to-r from-indigo-50 to-sky-50 border border-indigo-200 rounded-xl p-5">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center shrink-0">
+              <UsersRound className="w-6 h-6 text-indigo-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-sm font-bold text-slate-900 mb-1">Build Your Team</h3>
+              <p className="text-xs text-slate-600 mb-3">
+                Invite your core team members to collaborate. Share an invite link or add them directly.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <Button asChild size="sm" className="gap-2 h-8 text-xs">
+                  <Link href={`/${lang}/dashboard/members`}>
+                    <UsersRound className="w-3.5 h-3.5" />
+                    Invite Members
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="sm" className="gap-2 h-8 text-xs">
+                  <Link href={`/${lang}/dashboard/members/add`}>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                    Add Manually
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Priority Actions */}
       {visibleActions.length > 0 && (

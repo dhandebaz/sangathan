@@ -39,27 +39,25 @@ const triggerHaptic = (type: 'light' | 'medium' | 'heavy' | 'success' | 'warning
   }
 }
 
-function getTab4(orgType: string): { href: string; icon: typeof LayoutDashboard; label: string } {
+function getTab4(lang: string, orgType: string): { href: string; icon: typeof LayoutDashboard; label: string } {
   switch (orgType) {
     case 'ngo':
-      return { href: '/dashboard/donations', icon: HandCoins, label: 'Donations' }
+      return { href: `/${lang}/dashboard/donations`, icon: HandCoins, label: 'Donations' }
     case 'student_union':
-      return { href: '/dashboard/elections', icon: Vote, label: 'Elections' }
+      return { href: `/${lang}/dashboard/elections`, icon: Vote, label: 'Elections' }
     case 'workers_union':
-      return { href: '/dashboard/grievances', icon: Scale, label: 'Grievances' }
+      return { href: `/${lang}/dashboard/grievances`, icon: Scale, label: 'Grievances' }
     case 'rwa':
-      return { href: '/dashboard/maintenance', icon: Wrench, label: 'Maintenance' }
-    case 'political_party':
-      return { href: '/dashboard/campaigns', icon: Flag, label: 'Campaigns' }
+      return { href: `/${lang}/dashboard/maintenance`, icon: Wrench, label: 'Maintenance' }
     default:
-      return { href: '/dashboard/events', icon: Calendar, label: 'Events' }
+      return { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events' }
   }
 }
 
 export function MobileNav({ lang, orgType = 'ngo' }: MobileNavProps) {
   const pathname = usePathname()
   const prevPathnameRef = useRef(pathname)
-  const tab4 = getTab4(orgType)
+  const tab4 = getTab4(lang, orgType)
 
   useEffect(() => {
     if (prevPathnameRef.current !== pathname) {
@@ -77,7 +75,7 @@ export function MobileNav({ lang, orgType = 'ngo' }: MobileNavProps) {
     {
       href: `/${lang}/dashboard/members`,
       icon: Users,
-      label: orgType === 'rwa' ? 'Residents' : orgType === 'political_party' ? 'Cadre' : 'Members',
+      label: orgType === 'rwa' ? 'Residents' : 'Members',
     },
     {
       href: `/${lang}/dashboard/events`,

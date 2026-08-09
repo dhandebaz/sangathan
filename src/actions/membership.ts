@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import { invalidateUserMembershipsCache } from '@/lib/auth/context'
 // Removed custom email dependencies
 
 // --- Schemas ---
@@ -181,23 +182,10 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
 
     if (insertError) throw insertError
 
-    // 4. Notifications
-    if (status === 'pending') {
-      // Notify Admins
-      const { data: admins } = await supabaseAdmin
-        .from('profiles')
-        .select('email, full_name')
-        .eq('organisation_id', data.orgId)
-        .eq('role', 'admin')
-      if (admins) {
-        // Notifications can be handled by in-app system or Supabase webhooks in the future
-      }
-    } else {
-      // Welcome notifications can be handled by in-app system
-    }
+     await invalidateUserMembershipsCache(user.id)
 
-    revalidatePath('/', 'layout')
-    return { success: true, status }
+     revalidatePath('/', 'layout')
+     return { success: true, status }
   } catch (error) {
     console.error('Join Error:', error)
     const message = error instanceof Error ? error.message : 'Unknown error'
@@ -251,7 +239,7 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
     // Update
     const { error: updateError } = await supabaseAdmin
       .from('profiles')
-      .update({ 
+      .update({
         status: 'active',
         approved_at: new Date().toISOString()
       })
@@ -259,8 +247,7 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
 
     if (updateError) throw updateError
 
-    // Notify
-    // In-app notifications or Supabase triggers could go here
+    await invalidateUserMembershipsCache(data.memberId)
 
     revalidatePath('/', 'layout')
     return { success: true }
@@ -301,7 +288,7 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
       .select('email, full_name, organisation_id')
       .eq('id', data.memberId)
       .single()
-      
+
     if (memberError || !member || member.organisation_id !== adminProfile.organisation_id) {
         return { success: false, error: 'Member not found' }
     }
@@ -315,15 +302,14 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
     // Update
     const { error: updateError } = await supabaseAdmin
       .from('profiles')
-      .update({ 
+      .update({
         status: 'rejected'
       })
       .eq('id', data.memberId)
 
     if (updateError) throw updateError
 
-    // Notify
-    // In-app notifications or Supabase triggers could go here
+    await invalidateUserMembershipsCache(data.memberId)
 
     revalidatePath('/', 'layout')
     return { success: true }

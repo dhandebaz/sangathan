@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.25.0] - 2026-08-09
+### Added
+- **Features Page Accuracy Audit**: Conducted a comprehensive verification audit of every feature listed on the Features page across all organization types (NGO, Student Union, Workers Union, RWA). Confirmed that all claimed dashboard modules — including Digital Notice Board, Financial Ledger, Forms & Surveys, Elections, Volunteer Coordination, Visitor Management, and more — map directly to implemented routes under `src/app/[lang]/dashboard/`.
+- **Network Directory Page**: Created the missing `/network` index page to fix the broken footer link. Lists all public networks with links to their detail pages.
+### Changed
+- Updated the landing page "What's New" section from stale v1.19.0 highlights to v1.24.0 features (Streamlined Org Registration, Team Invites, Org-Type Dashboards, Mobile-Native Nav).
+- Expanded `src/app/sitemap.ts` with missing bilingual (/en and /hi) routes for Features, About, Changelog, Network, and Status.
+- Synced version references in `.cursor/active-context.md` and `PROJECT_STATUS.md` to v1.25.0.
+
 ## [1.20.0] - 2026-08-09
 ### Added
 - **India-Targeted SEO Infrastructure**: Expanded `sitemap.ts` to 30+ routes with hreflang alternates (`en`/`hi`), updated `robots.ts` for `https://sangathan.space`, added `json-ld.tsx` server components (Organization, WebSite, SoftwareApplication, Breadcrumb, FAQ), and injected 30+ India-specific keywords into site layout metadata.

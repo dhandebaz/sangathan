@@ -224,7 +224,7 @@ export function ComplianceTracker({
             Compliance Tracker <Sparkles className="w-5 h-5 text-brand-500" />
           </h1>
           <p className="text-muted-foreground mt-2">
-            AI-powered tracker that automatically suggests exact certifications and registrations based on your organisation's usage.
+            AI-powered tracker that automatically suggests exact certifications and registrations based on your organisation&apos;s usage.
           </p>
         </div>
       </div>
@@ -273,7 +273,7 @@ export function ComplianceTracker({
               </div>
               <h3 className="text-lg font-semibold mb-2">Analyzing your organisation...</h3>
               <p className="text-muted-foreground max-w-md text-sm">
-                Our AI engine is currently monitoring your organisation's activity. As you gain members, collect donations, or host events, exact legal and compliance documents will automatically unlock here.
+                Our AI engine is currently monitoring your organisation&apos;s activity. As you gain members, collect donations, or host events, exact legal and compliance documents will automatically unlock here.
               </p>
             </div>
           )}

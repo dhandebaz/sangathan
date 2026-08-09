@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useSyncExternalStore } from 'react'
 import { MemberOnboardingGuide } from '@/components/dashboard/member-onboarding-guide'
 import { markOnboardingCompleted } from '@/actions/auth'
 
@@ -13,45 +13,40 @@ interface MemberOnboardingOverlayProps {
 
 const STORAGE_KEY = 'sangathan_onboarding_done'
 
+function subscribe(callback: () => void) {
+  if (typeof window === 'undefined') return () => {}
+  window.addEventListener('storage', callback)
+  return () => window.removeEventListener('storage', callback)
+}
+
 export function MemberOnboardingOverlay({ userId, orgType, orgName, initialShow }: MemberOnboardingOverlayProps) {
-  const [show, setShow] = useState(initialShow)
+  const [dismissed, setDismissed] = useState(false)
+  const isStoredDone = useSyncExternalStore(
+    subscribe,
+    () => (typeof window !== 'undefined' ? localStorage.getItem(`${STORAGE_KEY}:${userId}`) === 'true' : false),
+    () => false
+  )
 
-  useEffect(() => {
-    if (!initialShow) return
-    const stored = localStorage.getItem(`${STORAGE_KEY}:${userId}`)
-    if (!stored) {
-      setShow(true)
-    }
-  }, [userId, initialShow])
+  if (!initialShow || dismissed || isStoredDone) return null
 
-  const handleComplete = async () => {
-    setShow(false)
-    localStorage.setItem(`${STORAGE_KEY}:${userId}`, 'true')
+  const handleClose = async () => {
+    setDismissed(true)
     try {
-      await markOnboardingCompleted(userId)
-    } catch {
-      // silent fail — localStorage is enough
-    }
-  }
-
-  const handleSkip = async () => {
-    setShow(false)
-    localStorage.setItem(`${STORAGE_KEY}:${userId}`, 'true')
-    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(`${STORAGE_KEY}:${userId}`, 'true')
+      }
       await markOnboardingCompleted(userId)
     } catch {
       // silent fail
     }
   }
 
-  if (!show) return null
-
   return (
     <MemberOnboardingGuide
       orgType={orgType}
       orgName={orgName}
-      onComplete={handleComplete}
-      onSkip={handleSkip}
+      onComplete={handleClose}
+      onSkip={handleClose}
     />
   )
 }

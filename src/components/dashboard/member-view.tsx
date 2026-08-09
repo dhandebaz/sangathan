@@ -17,7 +17,6 @@ function welcomeMessage(type: string): string {
     case 'workers_union': return 'Union meetings और collective actions देखें'
     case 'rwa': return 'Community events और maintenance देखें'
     case 'ngo': return 'Projects और volunteer opportunities देखें'
-    case 'political_party': return 'Party campaigns और cadre updates देखें'
     default: return 'यहाँ देखें क्या नया है'
   }
 }

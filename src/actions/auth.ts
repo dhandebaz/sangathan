@@ -1,15 +1,17 @@
 'use server'
 
 import { generateSecureString } from '@/lib/utils'
-
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
-import { headers } from 'next/headers'
+import { headers, cookies } from 'next/headers'
 import { Database } from '@/types/database'
 import { redis } from '@/lib/redis'
 import { logger } from '@/lib/logger'
+import { invalidateUserMembershipsCache } from '@/lib/auth/context'
+import { checkRateLimit } from '@/lib/rate-limit/db-limiter'
+import { detectOTPRisk } from '@/lib/risk-engine'
 
 type Profile = Database['public']['Tables']['profiles']['Row']
 type Organisation = Database['public']['Tables']['organisations']['Row']
@@ -28,27 +30,27 @@ const passwordSchema = z
 // --- Input Schemas ---
 
 const LoginSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(1, "Password is required"),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(1, 'Password is required'),
 })
 
 const SignupSchema = z.object({
-  fullName: z.string().min(2, "Full Name is required"),
-  email: z.string().email("Invalid email address"),
+  fullName: z.string().min(2, 'Full Name is required'),
+  email: z.string().email('Invalid email address'),
   password: passwordSchema,
-  confirmPassword: z.string().min(1, "Confirm Password is required"),
-  terms: z.boolean().refine(val => val === true, "You must accept the terms"),
+  confirmPassword: z.string().min(1, 'Confirm Password is required'),
+  terms: z.boolean().refine((val) => val === true, 'You must accept the terms'),
 }).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
+  message: 'Passwords do not match',
+  path: ['confirmPassword'],
 })
 
 const OtpLoginSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.string().email('Invalid email address'),
 })
 
 const ForgotPasswordSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.string().email('Invalid email address'),
 })
 
 const ResetPasswordSchema = z.object({
@@ -63,7 +65,7 @@ const LOCKOUT_DURATION = 15 * 60
 
 async function getLockoutKey(email: string): Promise<{ attempts: number; locked: boolean; remaining: number }> {
   const key = `lockout:login:${email.toLowerCase()}`
-  const attempts = await redis.get<number>(key) || 0
+  const attempts = (await redis.get<number>(key)) || 0
   const locked = attempts >= LOCKOUT_THRESHOLD
   return { attempts, locked, remaining: LOCKOUT_DURATION }
 }
@@ -149,27 +151,24 @@ export async function login(input: z.infer<typeof LoginSchema>) {
   redirect(`/${lang}/dashboard`)
 }
 
-import { checkRateLimit } from '@/lib/rate-limit/db-limiter'
-
 export async function signup(input: z.infer<typeof SignupSchema>) {
   try {
-    // 1. Validate Input
     const result = SignupSchema.safeParse(input)
     if (!result.success) {
       return { success: false, error: result.error.issues[0].message }
     }
 
     const { email, password, fullName } = result.data
+
+    const signupKey = `rate_limit:signup:${email.toLowerCase()}`
+    const signupAttempts = (await redis.get<number>(signupKey)) || 0
+    if (signupAttempts >= 3) {
+      return { success: false, error: 'Too many signup attempts for this email. Please try again later.' }
+    }
+
     const supabase = await createClient()
-
-    // 2. Rate Limit (IP based is handled by Supabase Auth).
-    // We can't do much here for IP since we don't have a reliable IP store yet.
-    // We rely on Supabase Auth's built-in protections for now.
-
-    // 3. Sign Up
-    // Prioritize NEXT_PUBLIC_APP_URL for consistent production behavior AND ensure https
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space';
-    const origin = appUrl.startsWith('http') ? appUrl : `https://${appUrl}`;
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space'
+    const origin = appUrl.startsWith('http') ? appUrl : `https://${appUrl}`
 
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -183,6 +182,8 @@ export async function signup(input: z.infer<typeof SignupSchema>) {
     })
 
     if (error) {
+      await redis.set(signupKey, signupAttempts + 1)
+      await redis.expire(signupKey, 3600)
       return { success: false, error: error.message }
     }
 
@@ -190,14 +191,15 @@ export async function signup(input: z.infer<typeof SignupSchema>) {
       return { success: false, error: 'User already registered. Please login.' }
     }
 
+    await redis.set(signupKey, signupAttempts + 1)
+    await redis.expire(signupKey, 3600)
+
     return { success: true, message: 'Check your email to verify your account.' }
   } catch (err: unknown) {
     console.error('Signup Error:', err)
     return { success: false, error: err instanceof Error ? err.message : 'Failed to sign up' }
   }
 }
-
-import { detectOTPRisk } from '@/lib/risk-engine'
 
 export async function otpLogin(input: z.infer<typeof OtpLoginSchema>) {
   const result = OtpLoginSchema.safeParse(input)
@@ -207,18 +209,18 @@ export async function otpLogin(input: z.infer<typeof OtpLoginSchema>) {
   const ip = headersList.get('x-forwarded-for') || 'unknown'
 
   // Risk Check
-  const riskCheck = await detectOTPRisk(result.data.email, ip) // Using email as identifier for now since we don't have phone
+  const riskCheck = await detectOTPRisk(result.data.email, ip)
   if (riskCheck.blocked) return { success: false, error: 'Too many login attempts. Please try again later.' }
 
   const supabase = await createClient()
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space';
-  const origin = appUrl.startsWith('http') ? appUrl : `https://${appUrl}`;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space'
+  const origin = appUrl.startsWith('http') ? appUrl : `https://${appUrl}`
 
   const { error } = await supabase.auth.signInWithOtp({
     email: result.data.email,
     options: {
       emailRedirectTo: `${origin}/auth/callback`,
-      shouldCreateUser: false, // Don't create new users via OTP login
+      shouldCreateUser: false,
     },
   })
 
@@ -248,10 +250,12 @@ export async function resetPassword(input: z.infer<typeof ResetPasswordSchema>) 
   if (!result.success) return { success: false, error: result.error.issues[0].message }
 
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   const { error } = await supabase.auth.updateUser({
-    password: result.data.password
+    password: result.data.password,
   })
 
   if (error) return { success: false, error: error.message }
@@ -277,17 +281,25 @@ type CreateOrganisationAndAdminResult = {
   profile_id: string
 }
 
-export async function finalizeSignup(input: { organizationName: string; organizationType: string; registrationStatus?: string }) {
-  // Get Authenticated User
+export async function finalizeSignup(input: {
+  organizationName: string
+  organizationType: string
+  slug?: string
+  description?: string
+  registrationStatus?: string
+  designation?: string
+  membershipPolicy?: string
+  monthlyDues?: string
+}) {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   if (!user || !user.email) {
     return { success: false, error: 'Session expired. Please login again.' }
   }
 
-  // Check Rate Limit (Org Creation)
-  // Max 2 orgs per user per 24h
   const rateLimit = await checkRateLimit('create_org', user.id, 2, 86400)
   if (!rateLimit.allowed) return { success: false, error: rateLimit.error }
 
@@ -300,16 +312,33 @@ export async function finalizeSignup(input: { organizationName: string; organiza
     return { success: false, error: 'Incomplete registration details. Please provide all required fields.' }
   }
 
-  const baseSlug = orgName.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-  const uniqueSlug = `${baseSlug}-${generateSecureString(5)}`
-
+  let targetSlug = ''
   const supabaseAdmin = createServiceClient()
+
+  if (input.slug && input.slug.trim().length >= 3) {
+    const cleanSlug = input.slug.trim().toLowerCase().replace(/[^a-z0-9-]+/g, '').replace(/(^-|-$)/g, '')
+    const { data: slugCheck } = await supabaseAdmin
+      .from('organisations')
+      .select('id')
+      .eq('slug', cleanSlug)
+      .single()
+    if (!slugCheck) {
+      targetSlug = cleanSlug
+    }
+  }
+
+  if (!targetSlug) {
+    let baseSlug = orgName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+    if (baseSlug.length < 3) baseSlug = 'org'
+    targetSlug = `${baseSlug}-${generateSecureString(5)}`
+  }
+
   const {
     data: rpcData,
     error: rpcError,
   } = await supabaseAdmin.rpc('create_organisation_and_admin', {
     p_org_name: orgName,
-    p_org_slug: uniqueSlug,
+    p_org_slug: targetSlug,
     p_user_id: user.id,
     p_full_name: fullName,
     p_email: user.email,
@@ -317,39 +346,69 @@ export async function finalizeSignup(input: { organizationName: string; organiza
     p_org_type: orgType,
   } as never)
 
-  if (!rpcError && rpcData) {
-    const resultObj = rpcData as CreateOrganisationAndAdminResult;
-
-    // Update profile
-    await supabaseAdmin
-      .from('profiles')
-      .update({
-        status: 'active',
-        approved_at: new Date().toISOString(),
-        phone: null,
-        phone_verified: false,
-      } as never)
-      .eq('id', user.id)
-
-    // Update organisation with registration status if provided
-    if (input.registrationStatus) {
-      await supabaseAdmin
-        .from('organisations')
-        .update({
-          registration_status: input.registrationStatus,
-        } as never)
-        .eq('id', resultObj.organisation_id)
-    }
-  }
-
   if (rpcError || !rpcData) {
     console.error('Signup RPC Error:', rpcError)
-    return { success: false, error: `Database Registration Failed: ${rpcError?.message || 'Unknown Error'} (Code: ${rpcError?.code || 'UNKNOWN'})` }
+    return { success: false, error: 'Failed to create organisation. Please try again.' }
   }
 
-  const result = rpcData as CreateOrganisationAndAdminResult
+  const resultObj = rpcData as CreateOrganisationAndAdminResult
 
-  return { success: true, orgId: result.organisation_id }
+  const { error: profileUpdateError } = await supabaseAdmin
+    .from('profiles')
+    .update({
+      status: 'active',
+      approved_at: new Date().toISOString(),
+      phone: null,
+      phone_verified: false,
+      designation: input.designation || null,
+      onboarding_completed: true,
+    } as never)
+    .eq('id', user.id)
+
+  if (profileUpdateError) {
+    console.error('Profile update error:', profileUpdateError)
+  }
+
+  const orgUpdates: Record<string, unknown> = {
+    created_by: user.id,
+    membership_policy: input.membershipPolicy || 'admin_approval',
+  }
+  if (input.registrationStatus) orgUpdates.registration_status = input.registrationStatus
+  if (input.description) orgUpdates.description = input.description
+  if (input.monthlyDues && Number(input.monthlyDues) > 0) orgUpdates.monthly_dues = Number(input.monthlyDues)
+
+  const { error: orgUpdateError } = await supabaseAdmin
+    .from('organisations')
+    .update(orgUpdates as never)
+    .eq('id', resultObj.organisation_id)
+
+  if (orgUpdateError) {
+    console.error('Org update error:', orgUpdateError)
+  }
+
+  try {
+    await supabaseAdmin.rpc('seed_compliance_items', {
+      p_org_id: resultObj.organisation_id,
+      p_org_type: orgType,
+    } as never)
+  } catch (complianceErr) {
+    console.error('Compliance seeding error:', complianceErr)
+  }
+
+  try {
+    const cookieStore = await cookies()
+    cookieStore.set('sangathan_org_id', resultObj.organisation_id, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30,
+      sameSite: 'lax',
+    })
+  } catch (cookieErr) {
+    console.warn('Could not set cookie during finalizeSignup:', cookieErr)
+  }
+
+  await invalidateUserMembershipsCache(user.id)
+
+  return { success: true, orgId: resultObj.organisation_id, slug: targetSlug }
 }
 
 export async function markOnboardingCompleted(userId: string) {

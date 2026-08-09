@@ -29,15 +29,30 @@ function XIcon(props: React.SVGProps<SVGSVGElement>) {
   )
 }
 
+function getPasswordStrength(password: string): { score: number; label: string; color: string } {
+   let score = 0
+   if (password.length >= 12) score++
+   if (password.length >= 16) score++
+   if (/[A-Z]/.test(password)) score++
+   if (/[a-z]/.test(password)) score++
+   if (/[0-9]/.test(password)) score++
+   if (/[^A-Za-z0-9]/.test(password)) score++
+
+   if (score <= 2) return { score, label: 'Weak', color: 'bg-red-500' }
+   if (score <= 4) return { score, label: 'Medium', color: 'bg-amber-500' }
+   return { score, label: 'Strong', color: 'bg-emerald-500' }
+ }
+
 function AuthForm() {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState<string | null>(null)
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const defaultTab = searchParams.get('tab') === 'signup' ? 'signup' : 'login'
-  
-  const supabase = createClient()
+   const [loading, setLoading] = useState(false)
+   const [error, setError] = useState<string | null>(null)
+   const [success, setSuccess] = useState<string | null>(null)
+   const [passwordValue, setPasswordValue] = useState('')
+   const router = useRouter()
+   const searchParams = useSearchParams()
+   const defaultTab = searchParams.get('tab') === 'signup' ? 'signup' : 'login'
+
+   const supabase = createClient()
 
   async function handleOAuthLogin(provider: 'google' | 'twitter') {
     try {
@@ -312,36 +327,67 @@ function AuthForm() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Password</label>
-                <div className="relative">
-                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                   <input
-                     name="password"
-                     type="password"
-                     required
-                     minLength={8}
-                     className="w-full pl-9 pr-4 py-2.5 bg-slate-50 rounded-sm border border-slate-200 focus:border-slate-400 focus:bg-white focus:ring-1 focus:ring-slate-400 outline-none transition-all text-sm"
-                     placeholder="Min 8 chars"
-                   />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Password</label>
+                  <div className="relative">
+                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                     <input
+                       name="password"
+                       type="password"
+                       required
+                       minLength={12}
+                       value={passwordValue}
+                       onChange={(e) => setPasswordValue(e.target.value)}
+                       className="w-full pl-9 pr-4 py-2.5 bg-slate-50 rounded-sm border border-slate-200 focus:border-slate-400 focus:bg-white focus:ring-1 focus:ring-slate-400 outline-none transition-all text-sm"
+                       placeholder="Min 12 chars"
+                     />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Confirm</label>
+                  <div className="relative">
+                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                     <input
+                       name="confirmPassword"
+                       type="password"
+                       required
+                       minLength={12}
+                       className="w-full pl-9 pr-4 py-2.5 bg-slate-50 rounded-sm border border-slate-200 focus:border-slate-400 focus:bg-white focus:ring-1 focus:ring-slate-400 outline-none transition-all text-sm"
+                       placeholder="Repeat"
+                     />
+                  </div>
                 </div>
               </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Confirm</label>
-                <div className="relative">
-                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                   <input
-                     name="confirmPassword"
-                     type="password"
-                     required
-                     minLength={8}
-                     className="w-full pl-9 pr-4 py-2.5 bg-slate-50 rounded-sm border border-slate-200 focus:border-slate-400 focus:bg-white focus:ring-1 focus:ring-slate-400 outline-none transition-all text-sm"
-                     placeholder="Repeat"
-                   />
+
+              {passwordValue.length > 0 && (
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full transition-all ${getPasswordStrength(passwordValue).color}`}
+                        style={{ width: `${Math.min(100, (getPasswordStrength(passwordValue).score / 6) * 100)}%` }}
+                      />
+                    </div>
+                    <span className="text-xs font-medium text-slate-500 w-16 text-right">
+                      {getPasswordStrength(passwordValue).label}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-x-3 gap-y-1">
+                    {[
+                      { test: passwordValue.length >= 12, label: '12+ chars' },
+                      { test: /[A-Z]/.test(passwordValue), label: 'Uppercase' },
+                      { test: /[a-z]/.test(passwordValue), label: 'Lowercase' },
+                      { test: /[0-9]/.test(passwordValue), label: 'Number' },
+                      { test: /[^A-Za-z0-9]/.test(passwordValue), label: 'Special' },
+                    ].map((req, i) => (
+                      <span key={i} className={`text-[10px] flex items-center gap-0.5 ${req.test ? 'text-emerald-600' : 'text-slate-400'}`}>
+                        {req.test ? '✓' : '○'} {req.label}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </div>
+              )}
 
             <div className="flex items-start gap-2 pt-2">
                <input type="checkbox" name="terms" required id="terms" className="mt-1 w-4 h-4 text-slate-900 bg-slate-50 border-slate-300 rounded-sm focus:ring-slate-900" />

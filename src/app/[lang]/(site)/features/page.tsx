@@ -36,6 +36,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
       features: [
         { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Publish open letters, campaigns, and drives with live signature counters and instant volunteer conversion hooks.' },
         { icon: 'Award', title: 'Sharable Verified Member Badges', desc: 'Generate dynamic, customizable social media graphics for Instagram, Twitter/X, and WhatsApp Stories with cryptographic verification.' },
+        { icon: 'Users', title: 'Team Invite System', desc: 'Invite members via email with shareable links. New members can accept and join instantly with role-based access.' },
         { icon: 'ShieldCheck', title: 'Public Trust & Transparency Ledger', desc: 'Real-time fund utilization, programmatic expenditure bar charts, and SHA-256 verified receipt audit trails with 96/100 A+ rating.' },
         { icon: 'Sparkles', title: 'AI-Powered Grant & CSR Matcher', desc: 'Automatically scan open government schemes and CSR funds, compute match score %, and generate structured grant application drafts.' },
         { icon: 'Smartphone', title: 'WhatsApp & Telegram Conversational Interface', desc: 'Ground-level messaging bot and interactive console allowing supporters to log grievances, submit check-ins, or check dues via text.' },
@@ -69,6 +70,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
       features: [
         { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Publish public campus representations with live signature counters, 1-click volunteer conversion hooks, and inter-union solidarity endorsements.' },
         { icon: 'Award', title: 'Sharable Verified Member Badges', desc: 'Generate dynamic social media graphics for Instagram, Twitter/X, and WhatsApp Stories with verified union designations and cryptographic QR codes.' },
+        { icon: 'Users', title: 'Team Invite System', desc: 'Invite members via email with shareable links. New members can accept and join instantly with role-based access.' },
         { icon: 'Smartphone', title: 'WhatsApp & Telegram Conversational Bot', desc: 'Bilingual messaging bot and console for campus grievances, event attendance, and emergency SOS detention alerts.' },
         { icon: 'Database', title: 'Offline-First Field Organizer PWA', desc: 'Hostel-to-hostel and gate desk onboarding in zero-connectivity environments with automatic background synchronization.' },
         { icon: 'ShieldAlert', title: 'Emergency SOS & Legal Rapid-Response', desc: '1-tap protest detention alert broadcasting GPS coordinates to volunteer advocates with live thana response tracking.' },
@@ -105,6 +107,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
       features: [
         { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Launch wage defense and collective strike petitions with live signature counts and volunteer conversion.' },
         { icon: 'Award', title: 'Sharable Verified Member Badges', desc: 'Verified shop steward and member credentials formatted for WhatsApp and Twitter/X.' },
+        { icon: 'Users', title: 'Team Invite System', desc: 'Invite members via email with shareable links. New members can accept and join instantly with role-based access.' },
         { icon: 'Smartphone', title: 'WhatsApp & Telegram Conversational Bot', desc: 'Bilingual grievance logging, strike ballot casting, and dues status inquiries via messaging.' },
         { icon: 'Database', title: 'Offline-First Field Organizer PWA', desc: 'Factory gate and construction site worker intake in low-connectivity areas with automatic queue sync.' },
         { icon: 'AlertTriangle', title: 'Emergency SOS & Legal Rapid Response', desc: '1-tap emergency alert for unlawful worker detention with GPS broadcast to labor defense advocates.' },
@@ -132,6 +135,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
       features: [
         { icon: 'Receipt', title: 'Maintenance Billing', desc: 'Automated invoices based on flat size and late fees.' },
         { icon: 'Wallet', title: 'Online Payment Gateway', desc: 'Collect dues via UPI/Cards with auto-reconciliation.' },
+        { icon: 'Users', title: 'Team Invite System', desc: 'Invite members via email with shareable links. New members can accept and join instantly with role-based access.' },
         { icon: 'Users', title: 'Digital Visitor Log', desc: 'Gatekeeper app with photo capture and timestamps.' },
         { icon: 'Lock', title: 'Pre-approved Entry', desc: 'Residents approve guests or deliveries via the app.' },
         { icon: 'CheckSquare', title: 'Staff Attendance', desc: 'Biometric/geo-enabled tracking for domestic help.' },

@@ -1,7 +1,7 @@
 # Sangathan — Project Status & Roadmap
 
 > **Sync Date:** August 9, 2026  
-> **Current Version:** v1.20.0  
+> **Current Version:** v1.25.0  
 > **Status:** Production-Ready (Build passes cleanly: `npx next build`)
 
 ---

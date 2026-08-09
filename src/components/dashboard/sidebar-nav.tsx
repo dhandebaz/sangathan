@@ -229,53 +229,6 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
       ]
     }
 
-    if (orgType === 'political_party') {
-      return [
-        {
-          id: 'overview',
-          title: 'Overview',
-          items: [
-            { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Dashboard', show: true },
-            { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
-            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Rallies & Events', show: !!c.events },
-          ].filter(i => i.show)
-        },
-        {
-          id: 'people',
-          title: 'Party Cadre',
-          items: [
-            { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
-            { href: `/${lang}/dashboard/id-card`, icon: Award, label: 'Cadre Badges', show: true },
-            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Wings & Cells', show: !!c.subgroups },
-            { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers', show: !!c.volunteers },
-            { href: `/${lang}/dashboard/networks`, icon: Globe, label: 'Networks', show: !!c.federation_mode },
-          ].filter(i => i.show)
-        },
-        {
-          id: 'campaigns',
-          title: 'Operations',
-          items: [
-            { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns & Petitions', show: true },
-            { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Meetings', show: !!c.meetings },
-            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: !!c.tasks },
-            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Internal Voting', show: !!c.voting_engine },
-            { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Party Funds', show: true },
-            { href: `/${lang}/dashboard/donations`, icon: Gift, label: 'Donations', show: !!c.donations },
-          ].filter(i => i.show)
-        },
-        fieldToolsGroup,
-        {
-          id: 'support',
-          title: 'Support',
-          items: [
-            { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Helpdesk', show: true },
-            { href: `/${lang}/dashboard/grievances`, icon: Scale, label: 'Grievances', show: !!c.grievances },
-          ].filter(i => i.show)
-        },
-        adminGroup
-      ]
-    }
-
     // Default / NGO
     return [
       {

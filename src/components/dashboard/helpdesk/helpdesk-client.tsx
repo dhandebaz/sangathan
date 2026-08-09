@@ -85,7 +85,7 @@ export function HelpdeskClient({ orgType, orgId }: HelpdeskClientProps) {
             Platform Support
           </h1>
           <p className="text-muted-foreground mt-2">
-            Need help? Found a bug? Let us know. We'll route your request to the right team.
+            Need help? Found a bug? Let us know. We&apos;ll route your request to the right team.
           </p>
         </div>
         <TicketDialog orgType={orgType} orgId={orgId} />

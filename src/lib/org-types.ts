@@ -1,4 +1,4 @@
-export type OrgType = 'ngo' | 'student_union' | 'workers_union' | 'rwa' | 'political_party'
+export type OrgType = 'ngo' | 'student_union' | 'workers_union' | 'rwa'
 
 export type OrgColor = 'brand' | 'emerald' | 'amber' | 'sky' | 'rose' | 'indigo'
 
@@ -13,7 +13,6 @@ export const ORG_TYPES: Record<OrgType, OrgTypeConfig> = {
   student_union: { en: 'Student Union', hi: 'छात्र संघ', color: 'indigo' },
   workers_union: { en: 'Workers Union', hi: 'श्रमिक संघ', color: 'amber' },
   rwa: { en: 'RWA', hi: 'आवासीय कल्याण संघ', color: 'sky' },
-  political_party: { en: 'Political Party', hi: 'राजनीतिक पक्ष', color: 'rose' },
 }
 
 export function getOrgLabel(orgType: OrgType | string | undefined, lang: 'en' | 'hi' = 'en'): string {

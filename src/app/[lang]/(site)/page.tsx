@@ -316,7 +316,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
               <div className="border border-slate-200 p-6 bg-white hover:border-indigo-300 transition-colors">
                 <Banknote className="text-indigo-600 mb-4" size={24} strokeWidth={1.5} />
                 <h4 className="text-slate-900 font-bold tracking-tight mb-2">UPI & Razorpay Payments</h4>
-                <p className="text-slate-500 text-sm leading-relaxed">Direct integration with India's payment infrastructure.</p>
+                <p className="text-slate-500 text-sm leading-relaxed">Direct integration with India&apos;s payment infrastructure.</p>
               </div>
               <div className="border border-slate-200 p-6 bg-white hover:border-indigo-300 transition-colors">
                 <Globe className="text-indigo-600 mb-4" size={24} strokeWidth={1.5} />
@@ -342,7 +342,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <p className="text-indigo-600 font-medium text-sm mb-2">v1.19.0</p>
+                <p className="text-indigo-600 font-medium text-sm mb-2">v1.24.0</p>
                 <h2 className="text-2xl font-bold tracking-tight text-slate-900">{isHindi ? 'नया क्या है' : "What's New"}</h2>
               </div>
               <Link href={`/${lang}/changelog`} className="text-sm font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
@@ -352,20 +352,20 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="border border-slate-200 p-5 bg-white">
-                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">🔗 Public Petitions</h4>
-                <p className="text-slate-500 text-sm">Live signature counters & volunteer conversion</p>
+                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">✨ Streamlined Org Registration</h4>
+                <p className="text-slate-500 text-sm">Reserve public URLs, configure dues & roles in one flow</p>
               </div>
               <div className="border border-slate-200 p-5 bg-white">
-                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">📱 WhatsApp & Telegram</h4>
-                <p className="text-slate-500 text-sm">Bilingual messaging for ground-level operations</p>
+                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">👥 Team Invite System</h4>
+                <p className="text-slate-500 text-sm">Shareable invite links for instant role-based onboarding</p>
               </div>
               <div className="border border-slate-200 p-5 bg-white">
-                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">🛡️ Emergency SOS</h4>
-                <p className="text-slate-500 text-sm">1-tap crisis alert with GPS broadcasting</p>
+                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">📊 Org-Type Dashboards</h4>
+                <p className="text-slate-500 text-sm">Tailored stats & features for NGOs, Unions, RWAs</p>
               </div>
               <div className="border border-slate-200 p-5 bg-white">
-                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">🤖 AI Grant Matcher</h4>
-                <p className="text-slate-500 text-sm">Automated matching with govt schemes & CSR</p>
+                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">📱 Mobile-Native Nav</h4>
+                <p className="text-slate-500 text-sm">Bottom tabs that adapt to each organisation type</p>
               </div>
             </div>
           </div>

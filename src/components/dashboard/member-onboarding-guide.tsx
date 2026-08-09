@@ -41,11 +41,6 @@ function getSteps(orgType: string): StepContent[] {
       { icon: Calendar, labelHi: 'Facilities', labelEn: 'Facilities' },
       { icon: Vote, labelHi: 'Polls', labelEn: 'Polls' },
     ],
-    political_party: [
-      { icon: Flag, labelHi: 'Campaigns', labelEn: 'Campaigns' },
-      { icon: Vote, labelHi: 'Voting', labelEn: 'Voting' },
-      { icon: HeartHandshake, labelHi: 'Volunteers', labelEn: 'Volunteers' },
-    ],
   }
 
   return [

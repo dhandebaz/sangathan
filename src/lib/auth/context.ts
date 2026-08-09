@@ -110,6 +110,15 @@ export async function getSelectedOrganisationId(): Promise<string> {
   redirect('/select-organisation')
 }
 
+export async function invalidateUserMembershipsCache(userId: string): Promise<void> {
+  const cacheKey = `user_memberships:${userId}`
+  try {
+    await redis.del(cacheKey)
+  } catch {
+    // Ignore cache delete failures
+  }
+}
+
 export async function setSelectedOrganisationId(organisationId: string): Promise<void> {
   const cookieStore = await cookies()
   cookieStore.set(ORG_COOKIE_NAME, organisationId, {
