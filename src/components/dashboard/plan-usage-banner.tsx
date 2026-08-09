@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Users, ArrowUpRight, AlertCircle, CheckCircle2 } from 'lucide-react'
-import { OrgPlanUsage } from '@/lib/plans/limits'
+import { OrgPlanUsage } from '@/lib/plans/config'
 
 interface PlanUsageBannerProps {
   usage: OrgPlanUsage

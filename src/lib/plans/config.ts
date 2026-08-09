@@ -102,3 +102,18 @@ export function getPlanDetails(planName?: string | null): PlanTier {
   const normalized = (planName || 'Community') as PlanName
   return PLAN_TIERS[normalized] || PLAN_TIERS.Community
 }
+
+export interface OrgPlanUsage {
+  planName: PlanName
+  planTier: PlanTier
+  planPeriod: PlanPeriod
+  planExpiresAt: string | null
+  planStatus: string
+  whitelabelEnabled: boolean
+  memberCount: number
+  maxMembers: number
+  memberUsagePercentage: number
+  isNearMemberLimit: boolean
+  isAtMemberLimit: boolean
+}
+

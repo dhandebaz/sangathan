@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Check, Sparkles, Building2, ShieldCheck, HeartHandshake } from 'lucide-react'
 import { CheckoutButton } from '@/components/pricing/checkout-button'
-import { PLAN_TIERS, WHITE_LABEL_ADDON, PlanName } from '@/lib/plans/limits'
+import { PLAN_TIERS, WHITE_LABEL_ADDON, PlanName } from '@/lib/plans/config'
 
 interface BillingPlanSelectorProps {
   currentPlanName: PlanName

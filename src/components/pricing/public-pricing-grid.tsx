@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Check, Sparkles, Building2, HeartHandshake, ShieldCheck } from 'lucide-react'
 import { CheckoutButton } from '@/components/pricing/checkout-button'
-import { PLAN_TIERS, WHITE_LABEL_ADDON } from '@/lib/plans/limits'
+import { PLAN_TIERS, WHITE_LABEL_ADDON } from '@/lib/plans/config'
 
 interface PublicPricingGridProps {
   orgId: string

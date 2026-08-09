@@ -1,3 +1,4 @@
+import 'server-only'
 import { createServiceClient } from '@/lib/supabase/service'
 import {
   PlanName,
@@ -5,6 +6,7 @@ import {
   PlanTier,
   PLAN_TIERS,
   getPlanDetails,
+  OrgPlanUsage,
 } from './config'
 
 export * from './config'
@@ -82,20 +84,6 @@ export async function checkMemberLimit(
     maxAllowed: tier.maxMembers,
     planName,
   }
-}
-
-export interface OrgPlanUsage {
-  planName: PlanName
-  planTier: PlanTier
-  planPeriod: PlanPeriod
-  planExpiresAt: string | null
-  planStatus: string
-  whitelabelEnabled: boolean
-  memberCount: number
-  maxMembers: number
-  memberUsagePercentage: number
-  isNearMemberLimit: boolean
-  isAtMemberLimit: boolean
 }
 
 export async function getOrgPlanUsage(orgId: string): Promise<OrgPlanUsage> {
