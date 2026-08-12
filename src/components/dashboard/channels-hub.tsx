@@ -240,7 +240,7 @@ export function ChannelsHub({
             <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
             <div>
               <div className="text-xs font-bold text-emerald-950">
-                100% Direct Phone Pairing — No Facebook/Meta API Account Needed
+                100% Direct Phone Pairing (No Facebook/Meta API Account Needed)
               </div>
               <p className="text-[11px] text-emerald-800 mt-0.5">
                 Simply scan the QR code below from WhatsApp on your organization&apos;s master phone (Linked Devices). Sangathan connects directly to your phone session.
@@ -566,7 +566,7 @@ export function ChannelsHub({
                   <li>Open Telegram and message <strong>@BotFather</strong></li>
                   <li>Send <code>/newbot</code> and pick a bot name &amp; username</li>
                   <li>Copy the Token and paste it here</li>
-                  <li>Click &quot;1-Click Link Bot&quot; — Sangathan does the rest!</li>
+                  <li>Click &quot;1-Click Link Bot&quot; and Sangathan does the rest!</li>
                 </ol>
               </div>
             </div>

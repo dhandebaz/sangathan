@@ -252,7 +252,7 @@ export function MemberDashboard({
       <Card className="bg-brand-50/50 border-brand-200">
         <CardContent className="p-4 text-center">
           <p className="text-sm font-medium text-foreground mb-2">कुछ पूछना है? 🤔</p>
-          <p className="text-xs text-muted-foreground mb-3">Help लें — हम यहाँ हैं!</p>
+          <p className="text-xs text-muted-foreground mb-3">Help लें, हम यहाँ हैं!</p>
           <Button asChild variant="outline" className="h-10 text-xs">
             <Link href={`/${lang}/dashboard/helpdesk`}>
               <ExternalLink className="h-3 w-3 mr-1" />

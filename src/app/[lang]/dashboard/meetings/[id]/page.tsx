@@ -64,7 +64,7 @@ export default async function MeetingDetailsPage({ params }: PageProps) {
                        {start.toLocaleString()}
                        {end && (
                          <>
-                           {' – '}
+                           {' to '}
                            {end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                          </>
                        )}

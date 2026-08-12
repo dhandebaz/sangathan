@@ -1,18 +1,36 @@
 import { Metadata } from 'next'
-import { ShieldCheck, HeartHandshake, HelpCircle } from 'lucide-react'
+import {
+  ShieldCheck,
+  HeartHandshake,
+  Server,
+  Lock,
+  Mail,
+  Cpu,
+  RefreshCw,
+  Database,
+  DownloadCloud,
+  CheckCircle2,
+} from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { BreadcrumbJsonLd, FAQJsonLd } from '@/components/seo/json-ld'
 import { PageHeader } from '@/components/public/page-header'
 import { PublicPricingGrid } from '@/components/pricing/public-pricing-grid'
+import { ContributionGoalTracker } from '@/components/pricing/contribution-goal-tracker'
 
-export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'मूल्य निर्धारण | संगठन' : 'Pricing | Sangathan',
+    title: isHindi
+      ? 'योगदान और पहुंच (Pay & Price) | संगठन'
+      : 'Pay & Price: Contribution & Civic Access | Sangathan',
     description: isHindi
-      ? 'पारदर्शी मूल्य निर्धारण। जमीनी स्तर के समूहों के लिए हमेशा के लिए मुफ्त।'
-      : 'Transparent pricing. Free forever for grassroots collectives. Affordable for growing institutions.',
+      ? 'नागरिक डिजिटल बुनियादी ढांचा। स्वैच्छिक सामुदायिक पहुंच और संरक्षक समर्थन।'
+      : 'Civic digital infrastructure by Bahujan Queer Foundation. Voluntary Community Access and Solidarity Sustainer contributions.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/pricing`,
       languages: {
@@ -23,7 +41,11 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   }
 }
 
-export default async function PricingPage({ params }: { params: Promise<{ lang: string }> }) {
+export default async function PricingPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}) {
   const { lang } = await params
   const isHindi = lang === 'hi'
 
@@ -45,28 +67,92 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
 
   const faqs = [
     {
-      question: isHindi ? 'क्या संगठन का उपयोग मुफ़्त है?' : 'Is Sangathan free to use?',
+      question: isHindi
+        ? 'संगठन किस प्रकार का संगठन है?'
+        : 'What kind of organization is Sangathan?',
       answer: isHindi
-        ? 'हाँ, समुदाय योजना 20 उपयोगकर्ताओं तक के छोटे नागरिक समूहों के लिए हमेशा के लिए मुफ़्त है। सभी मुख्य लोकतांत्रिक शासन सुविधाएँ शामिल हैं।'
-        : 'Yes, the Community plan is free forever for small civic collectives with up to 20 users. All core democratic governance features are included.',
+        ? 'संगठन कोई वाणिज्यिक कंपनी या स्टार्टअप नहीं है। यह बहुजन क्वीर फाउंडेशन (सेक्शन 8 गैर-लाभकारी संस्था) की एक डिजिटल नागरिक अवसंरचना पहल है, जो गैर-सरकारी संगठनों और नागरिक समूहों को सशक्त बनाने के लिए समर्पित है।'
+        : 'Sangathan is not a commercial SaaS startup or company. It is a digital civic infrastructure initiative of Bahujan Queer Foundation, a Section 8 non-profit organization registered in India.',
     },
     {
-      question: isHindi ? 'यदि हम 20 सदस्यों की सीमा तक पहुँच जाते हैं तो क्या होगा?' : 'What happens if we reach the 20-member limit?',
+      question: isHindi
+        ? 'सामुदायिक पहुंच (Community Access) के लिए भुगतान कैसे काम करता है?'
+        : 'How does payment work for Community Access?',
       answer: isHindi
-        ? 'आप कभी भी ₹1,000/माह या ₹10,000/वर्ष पर संस्थान योजना में अपग्रेड कर सकते हैं ताकि असीमित सदस्य और AI सुविधाएं अनलॉक की जा सकें।'
-        : 'You can upgrade at any time to the Institution plan (₹1,000/month or ₹10,000/year) to unlock unlimited members and full AI intelligence tools.',
+        ? 'सामुदायिक पहुंच एक स्वैच्छिक योगदान मॉडल पर आधारित है (सुझाए गए विकल्प: ₹5, ₹10, ₹50, ₹100, ₹500 या कोई भी कस्टम राशि)। जमीनी स्तर के नागरिक समूह और छात्र इकाइयां अपनी क्षमता अनुसार योगदान देकर तुरंत पहुंच प्राप्त कर सकते हैं।'
+        : 'Community Access uses a voluntary contribution model (choices: ₹5, ₹10, ₹50, ₹100, ₹500, or custom). Grassroots collectives and student unions can contribute what they wish to access full democratic organizing tools.',
     },
     {
-      question: isHindi ? 'भुगतान के कौन से तरीके स्वीकार किए जाते हैं?' : 'What payment methods are accepted?',
+      question: isHindi
+        ? 'संरक्षक पहुंच (Sustainer Access) क्या है?'
+        : 'What is Sustainer Access?',
       answer: isHindi
-        ? 'हम रेज़रपे के माध्यम से यूपीआई (UPI), क्रेडिट/डेबिट कार्ड और नेट बैंकिंग स्वीकार करते हैं। सभी भुगतान भारतीय रुपयों (INR) में होते हैं।'
-        : 'We accept UPI (GPay, PhonePe, Paytm), credit/debit cards, and Net Banking via Razorpay. All payments are processed securely in INR.',
+        ? 'संरक्षक पहुंच बड़े एनजीओ और पंजीकृत संघों के लिए सुझाया गया ₹1,000/माह का एकजुटता योगदान है। यह आपके संगठन के लिए असीमित सदस्य और संगठन AI क्षमताएं अनलॉक करता है, और साथ ही छोटे नागरिक समूहों के लिए मुफ्त सर्वर अवसंरचना को निधि देता है।'
+        : 'Sustainer Access is a suggested ₹1,000/month (pay-what-you-can) institutional solidarity contribution. It provides unlimited member capacity and Sangathan AI tools while directly cross-subsidizing infrastructure for smaller grassroots movements.',
     },
     {
-      question: isHindi ? 'क्या धनवापसी नीति उपलब्ध है?' : 'Is there a refund policy?',
+      question: isHindi
+        ? 'हमारा योगदान कहां खर्च होता है?'
+        : 'Where does our contribution go?',
       answer: isHindi
-        ? 'हाँ, यदि आप संतुष्ट नहीं हैं तो हम खरीद के 14 दिनों के भीतर 100% पूर्ण धनवापसी प्रदान करते हैं।'
-        : 'Yes, we offer a full 14-day no-questions-asked money-back guarantee on all paid plan subscriptions.',
+        ? '100% योगदान सीधे सर्वर होस्टिंग, एन्क्रिप्टेड डेटाबेस स्टोरेज, SMS/ईमेल डिलीवरी, AI कंप्यूट इंफ्रास्ट्रक्चर और ओपन-सोर्स सॉफ्टवेयर रखरखाव में जाता है। हम कोई लाभ नहीं कमाते हैं।'
+        : '100% of contributions directly cover secure high-availability servers, encrypted backups, email/SMS delivery, privacy-preserving AI compute, and ongoing non-profit software maintenance.',
+    },
+    {
+      question: isHindi
+        ? 'क्या हमारा डेटा कभी बेचा या विज्ञापनों में इस्तेमाल किया जाएगा?'
+        : 'Is our organizational data private and sovereign?',
+      answer: isHindi
+        ? 'बिलकुल नहीं। हम शून्य डेटा साझाकरण नीति का पालन करते हैं। कोई विज्ञापन नहीं, कोई ट्रैकर नहीं, और एक संगठन का डेटा कभी दूसरे संगठन के AI को प्रशिक्षित नहीं करता है। आप कभी भी अपना पूरा डेटा JSON/CSV में निर्यात कर सकते हैं।'
+        : 'Strictly zero commercial monetization. We run no ads and sell no telemetry. Organization data is never used to train external models, and you maintain complete sovereignty with 1-click full data export.',
+    },
+  ]
+
+  const costBreakdown = [
+    {
+      icon: Server,
+      titleEn: 'Secure Cloud & High-Availability Servers',
+      titleHi: 'सुरक्षित क्लाउड व हाई-अवेलेबिलिटी सर्वर',
+      descEn:
+        'Dedicated compute instances and edge nodes ensuring 99.9% uptime for campaigns and continuous voting ballots.',
+      descHi:
+        'अभियानों और निरंतर मतदान मतपत्रों के लिए 99.9% अपटाइम सुनिश्चित करने वाले समर्पित कंप्यूट नोड्स।',
+    },
+    {
+      icon: Database,
+      titleEn: 'Encrypted Storage & Automated Backups',
+      titleHi: 'एन्क्रिप्टेड स्टोरेज व स्वचालित बैकअप',
+      descEn:
+        'AES-256 encrypted file storage for resolution archives, legal evidence, member rosters, and point-in-time database snapshots.',
+      descHi:
+        'प्रस्ताव अभिलेखागार, कानूनी साक्ष्य और सदस्य रोस्टर के लिए AES-256 एन्क्रिप्टेड फ़ाइल संग्रहण।',
+    },
+    {
+      icon: Mail,
+      titleEn: 'Transactional Email & SMS Delivery',
+      titleHi: 'लेन-देन ईमेल व SMS डिलीवरी',
+      descEn:
+        'Guaranteed delivery for emergency SOS alerts, meeting invites, voting OTPs, and statutory notice circulars.',
+      descHi:
+        'आपातकालीन अलर्ट, बैठक आमंत्रण, मतदान OTP और वैधानिक सूचनाओं के लिए विश्वसनीय डिलीवरी।',
+    },
+    {
+      icon: Cpu,
+      titleEn: 'Privacy-First AI Compute Infrastructure',
+      titleHi: 'गोपनीयता-प्रथम AI कंप्यूट अवसंरचना',
+      descEn:
+        'Dedicated inference clusters for Sangathan AI (meeting minutes extraction, grant proposal assistance, ticket triage) with zero third-party training retention.',
+      descHi:
+        'संगठन AI (बैठक कार्यवृत्त, अनुदान मिलान, ट्राइएज) के लिए समर्पित कंप्यूट, जहां डेटा कभी साझा नहीं होता।',
+    },
+    {
+      icon: RefreshCw,
+      titleEn: 'Open Maintenance & Security Audits',
+      titleHi: 'ओपन रखरखाव व सुरक्षा ऑडिट',
+      descEn:
+        'Continuous patching, penetration testing, compliance updates, and dedicated engineering for democratic collective tooling.',
+      descHi:
+        'नियमित सुरक्षा पैचिंग, पेनिट्रेशन टेस्टिंग और नागरिक उपकरणों के लिए समर्पित इंजीनियरिंग।',
     },
   ]
 
@@ -75,7 +161,10 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
       <BreadcrumbJsonLd
         items={[
           { name: isHindi ? 'होम' : 'Home', url: `https://sangathan.space/${lang}` },
-          { name: isHindi ? 'मूल्य निर्धारण' : 'Pricing', url: `https://sangathan.space/${lang}/pricing` },
+          {
+            name: isHindi ? 'योगदान और पहुंच' : 'Pay & Price',
+            url: `https://sangathan.space/${lang}/pricing`,
+          },
         ]}
       />
       <FAQJsonLd
@@ -86,43 +175,130 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
       />
 
       <PageHeader
-        title={isHindi ? 'सरल और पारदर्शी मूल्य निर्धारण' : 'Simple, Transparent Pricing'}
+        title={isHindi ? 'नागरिक अवसंरचना: योगदान और पहुंच' : 'Civic Infrastructure: Pay & Price'}
         description={
           isHindi
-            ? 'जमीनी स्तर के समूहों के लिए हमेशा के लिए मुफ्त। बड़े संघों और एनजीओ के लिए किफायती।'
-            : 'Free forever for grassroots collectives. Predictable and affordable for growing institutions.'
+            ? 'बहुजन क्वीर फाउंडेशन की एक गैर-लाभकारी पहल। सभी लोकतांत्रिक समूहों के लिए सुलभ, पारदर्शी और टिकाऊ डिजिटल मंच।'
+            : 'A non-profit digital initiative of Bahujan Queer Foundation. Accessible, sovereign, and sustainable infrastructure for grassroots collectives and NGOs.'
         }
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Interactive Pricing Grid */}
-        <PublicPricingGrid orgId={orgId} lang={lang} isHindi={isHindi} />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-20">
+        
+        {/* 1. Contribution Goal Tracker (Live API) */}
+        <ContributionGoalTracker lang={lang} isHindi={isHindi} />
 
-        {/* Ethical Cross-Subsidy Assurance (Crisp technical light box, no dark blobs) */}
-        <div className="mt-24 max-w-4xl mx-auto rounded-3xl border border-slate-200 bg-slate-50/80 p-8 sm:p-12 text-center space-y-4">
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-emerald-600 shadow-sm">
-            <ShieldCheck size={28} />
+        {/* 2. Interactive Pricing & Contribution Grid */}
+        <div className="space-y-6">
+          <div className="text-center max-w-3xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+              {isHindi ? 'पहुंच मॉडल चुनें' : 'Choose Your Access Model'}
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 mt-2">
+              {isHindi
+                ? 'स्वैच्छिक सामुदायिक योगदान या संस्थागत संरक्षक समर्थन, हर संगठन को समान संप्रभु तकनीक प्राप्त होती है।'
+                : 'Voluntary community contributions or institutional solidarity, every collective gets identical sovereign democratic tools.'}
+            </p>
           </div>
-          <h3 className="text-2xl font-bold text-slate-900 tracking-tight">
-            {isHindi ? 'निजी, सुरक्षित और आत्मनिर्भर' : 'Private, Sustainable & Mission-Aligned'}
-          </h3>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
-            {isHindi
-              ? 'हम न तो डेटा बेचते हैं और न ही विज्ञापन चलाते हैं। संस्थागत योजना से प्राप्त राजस्व सर्वर लागतों को निधि देता है, जिससे यह प्लेटफ़ॉर्म छोटे नागरिक समूहों के लिए हमेशा मुफ़्त रहता है।'
-              : 'We never sell user data or run advertisements. Revenue from paid Institution plans funds server infrastructure so grassroots collectives can operate completely free forever.'}
-          </p>
+
+          <PublicPricingGrid orgId={orgId} lang={lang} isHindi={isHindi} />
         </div>
 
-        {/* FAQ Section */}
-        <div className="mt-24 max-w-4xl mx-auto space-y-8">
+        {/* 3. Where Your Contribution Goes (Operational Cost Breakdown) */}
+        <div className="rounded-3xl border border-slate-200 bg-slate-50/80 p-6 sm:p-12 space-y-8">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <div className="flex items-center justify-center gap-2 text-indigo-700 font-bold text-xs uppercase tracking-wider">
+              <HeartHandshake className="w-4 h-4" />
+              <span>{isHindi ? '100% पारदर्शी व्यय' : '100% Transparent Utilization'}</span>
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+              {isHindi ? 'आपका योगदान कहाँ जाता है?' : 'Where Your Contribution Goes'}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              {isHindi
+                ? 'हम एक सेक्शन 8 गैर-लाभकारी पहल हैं। सभी योगदान सीधे वास्तविक तकनीकी अवसंरचना और नागरिक सुरक्षा को निधि देते हैं।'
+                : 'As a Section 8 non-profit initiative, every rupee received directly funds real technical operations, reliability, and security for social organizing.'}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {costBreakdown.map((item, idx) => {
+              const Icon = item.icon
+              return (
+                <div
+                  key={idx}
+                  className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-3"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <h4 className="text-base font-bold text-slate-900">
+                    {isHindi ? item.titleHi : item.titleEn}
+                  </h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    {isHindi ? item.descHi : item.descEn}
+                  </p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* 4. Privacy-First & Mirrored Infrastructure Architecture */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+              <Lock className="w-5 h-5" />
+            </div>
+            <h4 className="text-base font-bold text-slate-900">
+              {isHindi ? 'शून्य डेटा मुद्रीकरण' : 'Zero Commercial Monetization'}
+            </h4>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              {isHindi
+                ? 'कोई विज्ञापन नहीं, कोई डेटा ब्रोकर नहीं। आपकी सदस्यता सूची और आंतरिक चर्चाएँ पूरी तरह से गोपनीय और संप्रभु हैं।'
+                : 'No ad networks, no data brokers. Member rosters, votes, and conversations remain completely confidential to your organization.'}
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
+              <Server className="w-5 h-5" />
+            </div>
+            <h4 className="text-base font-bold text-slate-900">
+              {isHindi ? 'लचीला व प्रतिरूपित बुनियादी ढांचा' : 'Resilient Mirrored Infrastructure'}
+            </h4>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              {isHindi
+                ? 'बहु-प्रदाता अतिरेक (Multi-provider fallback) और ऑफ़लाइन-सक्षम PWA ताकि नेटवर्क आउटेज में भी आपका संगठन कार्य कर सके।'
+                : 'Multi-provider router fallback and offline-first PWA sync ensure uninterrupted organizing even during regional network drops.'}
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
+              <DownloadCloud className="w-5 h-5" />
+            </div>
+            <h4 className="text-base font-bold text-slate-900">
+              {isHindi ? '1-क्लिक पूर्ण डेटा संप्रभुता' : '1-Click Full Sovereign Export'}
+            </h4>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              {isHindi
+                ? 'शून्य वेंडर लॉक-इन। आप किसी भी समय अपने संपूर्ण संगठन का डेटा, मतपत्र और दस्तावेज JSON/CSV में डाउनलोड कर सकते हैं।'
+                : 'Zero vendor lock-in. Download your collective’s entire voting records, audit logs, and member data in open formats anytime.'}
+            </p>
+          </div>
+        </div>
+
+        {/* 5. FAQs Section */}
+        <div className="space-y-8 max-w-4xl mx-auto">
           <div className="text-center">
             <h3 className="text-2xl font-bold text-slate-900 mb-2">
               {isHindi ? 'अक्सर पूछे जाने वाले प्रश्न' : 'Frequently Asked Questions'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-500">
               {isHindi
-                ? 'मूल्य निर्धारण और सदस्यता के बारे में आपके सभी उत्तर।'
-                : 'Everything you need to know about our billing and plans.'}
+                ? 'नागरिक पहुंच, स्वैच्छिक योगदान और तकनीकी वास्तुकला के बारे में स्पष्टीकरण।'
+                : 'Clear explanations regarding civic access, voluntary contributions, and non-profit governance.'}
             </p>
           </div>
 
@@ -130,14 +306,17 @@ export default async function PricingPage({ params }: { params: Promise<{ lang: 
             {faqs.map((faq, idx) => (
               <div
                 key={idx}
-                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-slate-300 transition-colors"
+                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs hover:border-slate-300 transition-colors"
               >
-                <h4 className="text-base font-bold text-slate-900 mb-2">{faq.question}</h4>
+                <h4 className="text-sm sm:text-base font-bold text-slate-900 mb-2">
+                  {faq.question}
+                </h4>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{faq.answer}</p>
               </div>
             ))}
           </div>
         </div>
+
       </div>
     </div>
   )

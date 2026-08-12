@@ -30,7 +30,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
 
   const navLinks = [
     { href: `/${lang}/features`, label: isHindi ? 'विशेषताएं' : 'Features' },
-    { href: `/${lang}/pricing`, label: isHindi ? 'मूल्य निर्धारण' : 'Pricing' },
+    { href: `/${lang}/pricing`, label: isHindi ? 'योगदान और पहुंच' : 'Pay & Price' },
     { href: `/${lang}/docs`, label: isHindi ? 'दस्तावेज़ीकरण' : 'Docs' },
     { href: `/${lang}/transparency`, label: isHindi ? 'पारदर्शिता' : 'Transparency' },
   ]

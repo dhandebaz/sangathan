@@ -14,9 +14,11 @@ import {
   AlertCircle,
   Receipt,
   Building2,
+  Sparkles,
 } from 'lucide-react'
 import { getOrgPlanUsage, PLAN_TIERS } from '@/lib/plans/limits'
 import { BillingPlanSelector } from '@/components/dashboard/billing-plan-selector'
+import { SangathanAiModal } from '@/components/ai/sangathan-ai-modal'
 
 export const dynamic = 'force-dynamic'
 
@@ -72,15 +74,22 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
           </Link>
           <div>
             <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-              {isHindi ? 'सदस्यता और बिलिंग प्रबंधन' : 'Subscription & Capacity Management'}
+              {isHindi ? 'नागरिक पहुंच और स्थिरता प्रबंधन' : 'Civic Access & Sustainability Management'}
             </h1>
             <p className="text-xs sm:text-sm text-slate-500">
               {isHindi
-                ? 'अपनी योजना क्षमता, संसाधन उपयोग और सदस्यता विवरण प्रबंधित करें।'
-                : 'Manage your organization plan tier, resource limits, and payment history.'}
+                ? 'अपनी संगठनात्मक पहुंच, सदस्य क्षमता, AI सहायता और योगदान इतिहास प्रबंधित करें।'
+                : 'Manage your organization access model, member capacity, Sangathan AI, and contribution history.'}
             </p>
           </div>
         </div>
+
+        <Link
+          href={`/${lang}/pricing`}
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors"
+        >
+          <span>{isHindi ? 'सार्वजनिक Pay & Price देखें' : 'View Public Pay & Price'}</span>
+        </Link>
       </div>
 
       {/* Hero Overview Card */}
@@ -89,7 +98,7 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
           {/* Plan Status */}
           <div className="space-y-1 md:border-r md:border-slate-100 pr-4">
             <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              {isHindi ? 'वर्तमान योजना' : 'Current Tier'}
+              {isHindi ? 'वर्तमान पहुंच मॉडल' : 'Current Access Model'}
             </div>
             <div className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
               {isHindi ? usage.planTier.nameHi : usage.planTier.name}
@@ -110,7 +119,7 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
           {/* Member Capacity */}
           <div className="space-y-1 md:border-r md:border-slate-100 pr-4">
             <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-              <span>{isHindi ? 'सदस्य स्लॉट' : 'Member Slots'}</span>
+              <span>{isHindi ? 'सक्रिय सदस्य स्लॉट' : 'Active Member Slots'}</span>
               <span className="text-slate-900 font-bold">{usage.memberUsagePercentage}%</span>
             </div>
             <div className="text-2xl font-extrabold text-slate-900">
@@ -131,38 +140,45 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
             </div>
           </div>
 
-          {/* AI Intelligence */}
+          {/* Sangathan AI */}
           <div className="space-y-1 md:border-r md:border-slate-100 pr-4">
-            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              {isHindi ? 'AI बुद्धिमत्ता' : 'AI Intelligence'}
+            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+              <span>Sangathan AI</span>
+              <SangathanAiModal lang={lang} isHindi={isHindi}>
+                <button type="button" className="text-[10px] text-indigo-600 hover:underline">Info</button>
+              </SangathanAiModal>
             </div>
-            <div className="text-2xl font-extrabold text-slate-900">
-              {usage.planTier.aiEnabled ? (isHindi ? 'सक्षम' : 'Active') : isHindi ? 'लॉक' : 'Locked'}
+            <div className="text-2xl font-extrabold text-slate-900 flex items-center gap-1.5">
+              {usage.planTier.aiEnabled ? (
+                <span className="text-emerald-700">{isHindi ? 'सक्रिय' : 'Active'}</span>
+              ) : (
+                <span className="text-slate-500">{isHindi ? 'संरक्षक स्तर' : 'Sustainer'}</span>
+              )}
             </div>
             <div className="text-xs text-slate-500">
               {usage.planTier.aiEnabled
                 ? isHindi
-                  ? 'Llama 3.3 70B द्वारा संचालित'
-                  : 'Llama 3.3 70B Unlocked'
+                  ? 'संप्रभु व निजी सहायता उपलब्ध'
+                  : 'Sovereign AI Suite Unlocked'
                 : isHindi
-                  ? 'संस्थान योजना में उपलब्ध'
-                  : 'Upgrade to Institution'}
+                  ? 'संरक्षक पहुंच में उपलब्ध'
+                  : 'Included in Sustainer Access'}
             </div>
           </div>
 
-          {/* White-label */}
+          {/* Custom Emblem */}
           <div className="space-y-1">
             <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              {isHindi ? 'व्हाइट-लेबल' : 'White-Label Branding'}
+              {isHindi ? 'कस्टम प्रतीक' : 'Custom Emblem'}
             </div>
             <div className="text-2xl font-extrabold text-slate-900">
-              {usage.whitelabelEnabled ? (isHindi ? 'सक्रिय' : 'Enabled') : isHindi ? 'अक्षम' : 'Standard'}
+              {usage.whitelabelEnabled ? (isHindi ? 'सक्रिय' : 'Enabled') : isHindi ? 'मानक' : 'Standard'}
             </div>
             <div className="text-xs text-slate-500">
               {usage.whitelabelEnabled
                 ? isHindi
-                  ? 'कस्टम ब्रांडिंग सक्रिय है'
-                  : 'Custom Branding Active'
+                  ? 'कस्टम पहचान सक्रिय है'
+                  : 'Custom Emblem Active'
                 : isHindi
                   ? '₹10,000 ऐड-ऑन उपलब्ध'
                   : 'Add-on Available'}
@@ -171,16 +187,16 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
         </div>
       </div>
 
-      {/* Plan Selection Matrix */}
+      {/* Access Selection Matrix */}
       <div className="space-y-4">
         <div>
           <h2 className="text-lg font-bold text-slate-900 tracking-tight">
-            {isHindi ? 'योजनाएं और उन्नयन' : 'Available Plans & Upgrades'}
+            {isHindi ? 'पहुंच मॉडल और योगदान' : 'Access Models & Contributions'}
           </h2>
           <p className="text-xs text-slate-500">
             {isHindi
-              ? 'अपनी संस्था की वृद्धि के अनुसार सही योजना चुनें।'
-              : 'Scale your civic group with transparent, predictable pricing.'}
+              ? 'स्वैच्छिक योगदान दें या नागरिक बुनियादी ढांचे को बनाए रखने के लिए संरक्षक बनें।'
+              : 'Support democratic civic infrastructure with voluntary contributions or sustained institutional patronage.'}
           </p>
         </div>
 
@@ -193,18 +209,18 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
         />
       </div>
 
-      {/* Payment & Receipt History */}
+      {/* Contribution & Receipt History */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
               <Receipt className="w-5 h-5 text-slate-700" />
-              {isHindi ? 'भुगतान और रसीद इतिहास' : 'Billing & Payment History'}
+              {isHindi ? 'योगदान और रसीद इतिहास' : 'Contribution & Receipt History'}
             </h2>
             <p className="text-xs text-slate-500">
               {isHindi
-                ? 'रेज़रपे द्वारा संसाधित सभी लेनदेन रिकॉर्ड।'
-                : 'All payment receipts processed via Razorpay.'}
+                ? 'रेज़रपे द्वारा सुरक्षित रूप से संसाधित सभी योगदान और रसीदें।'
+                : 'All contributions processed securely via Razorpay for Bahujan Queer Foundation.'}
             </p>
           </div>
         </div>
@@ -216,10 +232,10 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
                 <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider">
                   <tr>
                     <th className="py-3 px-4">{isHindi ? 'दिनांक' : 'Date'}</th>
-                    <th className="py-3 px-4">{isHindi ? 'योजना' : 'Plan'}</th>
+                    <th className="py-3 px-4">{isHindi ? 'पहुंच प्रकार' : 'Access Tier'}</th>
                     <th className="py-3 px-4">{isHindi ? 'अवधि' : 'Period'}</th>
-                    <th className="py-3 px-4">{isHindi ? 'राशि' : 'Amount'}</th>
-                    <th className="py-3 px-4">{isHindi ? 'लेनदेन आईडी' : 'Payment ID'}</th>
+                    <th className="py-3 px-4">{isHindi ? 'योगदान राशि' : 'Amount'}</th>
+                    <th className="py-3 px-4">{isHindi ? 'लेनदेन संदर्भ' : 'Payment ID'}</th>
                     <th className="py-3 px-4">{isHindi ? 'स्थिति' : 'Status'}</th>
                   </tr>
                 </thead>
@@ -233,7 +249,7 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
                       <td className="py-3.5 px-4 capitalize">{tx.plan_period}</td>
                       <td className="py-3.5 px-4 font-bold text-slate-900">₹{Number(tx.amount).toLocaleString()}</td>
                       <td className="py-3.5 px-4 font-mono text-[11px] text-slate-500">
-                        {tx.razorpay_payment_id || tx.razorpay_order_id || '—'}
+                        {tx.razorpay_payment_id || tx.razorpay_order_id || '-'}
                       </td>
                       <td className="py-3.5 px-4">
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">
@@ -248,11 +264,11 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
           ) : (
             <div className="py-12 text-center text-slate-400 text-xs">
               <CreditCard className="w-8 h-8 mx-auto mb-2 text-slate-300" />
-              <p>{isHindi ? 'कोई पिछला भुगतान रिकॉर्ड नहीं मिला।' : 'No payment records found yet.'}</p>
+              <p>{isHindi ? 'कोई पिछला योगदान रिकॉर्ड नहीं मिला।' : 'No contribution records found yet.'}</p>
               <p className="text-[11px] text-slate-400 mt-0.5">
                 {isHindi
-                  ? 'जब आप अपग्रेड करेंगे, तो आपकी कर रसीदें यहाँ दिखाई देंगी।'
-                  : 'Receipts and invoices will automatically appear here once you upgrade.'}
+                  ? 'जब आप स्वैच्छिक योगदान देंगे, तो आपकी रसीदें यहाँ दिखाई देंगी।'
+                  : 'Receipts will automatically appear here once a voluntary contribution is completed.'}
               </p>
             </div>
           )}

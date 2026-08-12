@@ -182,7 +182,7 @@ export default async function AdminBillingPage() {
                     ₹{Number(tx.amount).toLocaleString('en-IN')}
                   </td>
                   <td className="py-3.5 px-5 font-mono text-[11px] text-slate-500">
-                    {tx.razorpay_payment_id || '—'}
+                    {tx.razorpay_payment_id || '-'}
                   </td>
                   <td className="py-3.5 px-5">
                     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">

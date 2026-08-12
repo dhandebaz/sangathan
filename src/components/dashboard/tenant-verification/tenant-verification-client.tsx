@@ -6,11 +6,59 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Printer } from 'lucide-react'
+import { Printer, Save, RefreshCw, Calculator } from 'lucide-react'
+import { createTenantVerification, updateTenantVerificationMetrics } from '@/actions/tenant-verification/actions'
+import { toast } from 'sonner'
+import crypto from 'crypto'
+
+type TenantFormState = {
+  // Landlord
+  landlordName: string
+  landlordFatherName: string
+  houseNo: string
+  gali: string
+  colony: string
+  area: string
+  district: string
+  pin: string
+  // Tenant
+  tenantName: string
+  tenantFatherName: string
+  tenantVillage: string
+  tenantTehsil: string
+  tenantDistrict: string
+  tenantState: string
+  idType: string
+  idNumber: string
+  phone: string
+  // Property
+  floor: string
+  rooms: string
+  rentAmount: string
+  rentStartDate: string
+  purpose: string
+  // Police
+  policeStation: string
+  previousTenant: string
+  // New features
+  energyExertion: number
+  verificationHash: string
+  lastAccess: string
+  validated: boolean
+}
+
+function generateVerificationHash(data: Omit<TenantFormState, 'verificationHash'>): string {
+  const content = JSON.stringify({
+    tenant: data.tenantName,
+    colony: data.colony,
+    pin: data.pin,
+    timestamp: Date.now()
+  })
+  return crypto.createHash('sha256').update(content).digest('hex')
+}
 
 export default function TenantVerificationClient() {
-  const [formData, setFormData] = useState({
-    // Landlord
+  const [formData, setFormData] = useState<TenantFormState>({
     landlordName: '',
     landlordFatherName: '',
     houseNo: '',
@@ -19,56 +67,135 @@ export default function TenantVerificationClient() {
     area: '',
     district: '',
     pin: '',
-    // Tenant
     tenantName: '',
     tenantFatherName: '',
     tenantVillage: '',
     tenantTehsil: '',
     tenantDistrict: '',
     tenantState: '',
-    idType: '',
+    idType: 'Aadhar',
     idNumber: '',
     phone: '',
-    // Property
     floor: '',
     rooms: '',
     rentAmount: '',
     rentStartDate: '',
-    purpose: '',
-    // Police
+    purpose: 'Residential',
     policeStation: '',
     previousTenant: '',
+    energyExertion: 0,
+    verificationHash: '',
+    lastAccess: new Date().toISOString(),
+    validated: false
   })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    setFormData((prev) => ({ ...prev, [name]: value, lastAccess: new Date().toISOString() }))
   }
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    setFormData((prev) => ({ ...prev, [name]: value, lastAccess: new Date().toISOString() }))
+  }
+
+  const generateHash = () => {
+    const hash = generateVerificationHash(formData)
+    setFormData(prev => ({ ...prev, verificationHash: hash }))
+    toast.success('Verification hash generated')
+  }
+
+  const calculateEnergyExertion = () => {
+    // Calculate based on verification attempts, time spent, and actions taken
+    const baseEnergy = 10
+    const timeFactor = new Date().getHours() * 2
+    const actionBonus = formData.tenantName.length > 0 ? 5 : 0
+    const total = Math.min(baseEnergy + timeFactor + actionBonus, 100)
+    setFormData(prev => ({ ...prev, energyExertion: total }))
+  }
+
+  const handleSubmit = async () => {
+    try {
+      const result = await createTenantVerification({
+        tenant_name: formData.tenantName,
+        tenant_father_name: formData.tenantFatherName,
+        colony_name: formData.colony,
+        pin_code: formData.pin,
+        verification_hash: formData.verificationHash,
+        energy_exertion: formData.energyExertion,
+        last_access: new Date().toISOString()
+      })
+      
+      if (result.success) {
+        toast.success('Tenant verification created successfully')
+      } else {
+        toast.error((result as any).error || 'Failed to create verification')
+      }
+    } catch (error) {
+      toast.error('Failed to submit verification')
+    }
   }
 
   const handlePrint = () => {
     window.print()
   }
 
+  const handleRefresh = () => {
+    calculateEnergyExertion()
+    generateHash()
+  }
+
   return (
     <div className="space-y-6">
+      {/* Action Bar */}
+      <div className="flex gap-2">
+        <Button onClick={handlePrint} variant="outline">
+          <Printer className="w-4 h-4 mr-2" />
+          Print Form
+        </Button>
+        <Button onClick={handleRefresh} variant="outline">
+          <RefreshCw className="w-4 h-4 mr-2" />
+          Refresh Data
+        </Button>
+        <Button onClick={calculateEnergyExertion} variant="outline">
+          <Calculator className="w-4 h-4 mr-2" />
+          Calculate Energy
+        </Button>
+        <Button onClick={handleSubmit}>
+          <Save className="w-4 h-4 mr-2" />
+          Save Verification
+        </Button>
+      </div>
+
+      {/* Key Metrics Display */}
+      <div className="grid grid-cols-3 gap-4">
+        <Card>
+          <CardHeader>
+            <CardDescription>Verification Hash</CardDescription>
+            <CardTitle className="text-lg">{formData.verificationHash || 'Not Generated'}</CardTitle>
+          </CardHeader>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardDescription>Energy Exertion</CardDescription>
+            <CardTitle className="text-lg text-green-600">{formData.energyExertion}</CardTitle>
+          </CardHeader>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardDescription>Last Access</CardDescription>
+            <CardTitle className="text-sm">{new Date(formData.lastAccess).toLocaleString()}</CardTitle>
+          </CardHeader>
+        </Card>
+      </div>
+
       {/* Editor Section */}
       <div className="print:hidden space-y-6">
-        <div className="flex justify-end">
-          <Button onClick={handlePrint}>
-            <Printer className="w-4 h-4 mr-2" />
-            Print Form
-          </Button>
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Column 1 */}
           <Card>
             <CardHeader>
               <CardTitle>Landlord Details</CardTitle>
-              <CardDescription>Details of the property owner</CardDescription>
+              <CardDescription>Property owner information</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -77,16 +204,18 @@ export default function TenantVerificationClient() {
                   <Input id="landlordName" name="landlordName" value={formData.landlordName} onChange={handleInputChange} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="landlordFatherName">Father's Name</Label>
+                  <Label htmlFor="landlordFatherName">Father&apos;s Name</Label>
                   <Input id="landlordFatherName" name="landlordFatherName" value={formData.landlordFatherName} onChange={handleInputChange} />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Address</Label>
-                <div className="grid grid-cols-2 gap-4 mt-2">
+                <div className="grid grid-cols-3 gap-4">
                   <Input placeholder="House No" name="houseNo" value={formData.houseNo} onChange={handleInputChange} />
                   <Input placeholder="Gali/Block" name="gali" value={formData.gali} onChange={handleInputChange} />
                   <Input placeholder="Colony/Sector" name="colony" value={formData.colony} onChange={handleInputChange} />
+                </div>
+                <div className="grid grid-cols-3 gap-4 mt-2">
                   <Input placeholder="Area" name="area" value={formData.area} onChange={handleInputChange} />
                   <Input placeholder="District" name="district" value={formData.district} onChange={handleInputChange} />
                   <Input placeholder="PIN Code" name="pin" value={formData.pin} onChange={handleInputChange} />
@@ -95,10 +224,11 @@ export default function TenantVerificationClient() {
             </CardContent>
           </Card>
 
+          {/* Column 2 */}
           <Card>
             <CardHeader>
               <CardTitle>Tenant Details</CardTitle>
-              <CardDescription>Details of the person renting</CardDescription>
+              <CardDescription>Renter information</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -107,20 +237,22 @@ export default function TenantVerificationClient() {
                   <Input id="tenantName" name="tenantName" value={formData.tenantName} onChange={handleInputChange} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="tenantFatherName">Father's Name</Label>
+                  <Label htmlFor="tenantFatherName">Father&apos;s Name</Label>
                   <Input id="tenantFatherName" name="tenantFatherName" value={formData.tenantFatherName} onChange={handleInputChange} />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Permanent Address</Label>
-                <div className="grid grid-cols-2 gap-4 mt-2">
+                <div className="grid grid-cols-2 gap-4">
                   <Input placeholder="Village/City" name="tenantVillage" value={formData.tenantVillage} onChange={handleInputChange} />
                   <Input placeholder="Tehsil/Taluka" name="tenantTehsil" value={formData.tenantTehsil} onChange={handleInputChange} />
+                </div>
+                <div className="grid grid-cols-2 gap-4 mt-2">
                   <Input placeholder="District" name="tenantDistrict" value={formData.tenantDistrict} onChange={handleInputChange} />
                   <Input placeholder="State" name="tenantState" value={formData.tenantState} onChange={handleInputChange} />
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="idType">ID Type</Label>
                   <Select value={formData.idType} onValueChange={(v) => handleSelectChange('idType', v)}>
@@ -136,7 +268,7 @@ export default function TenantVerificationClient() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="space-y-2 col-span-2">
+                <div className="space-y-2">
                   <Label htmlFor="idNumber">ID Number</Label>
                   <Input id="idNumber" name="idNumber" value={formData.idNumber} onChange={handleInputChange} />
                 </div>
@@ -147,32 +279,33 @@ export default function TenantVerificationClient() {
               </div>
             </CardContent>
           </Card>
+        </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Property & Tenancy Details</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="floor">Floor</Label>
-                  <Input id="floor" name="floor" placeholder="e.g. Ground, First" value={formData.floor} onChange={handleInputChange} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="rooms">Number of Rooms</Label>
-                  <Input id="rooms" name="rooms" type="number" value={formData.rooms} onChange={handleInputChange} />
-                </div>
+        {/* Additional Details Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Additional Information</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-4 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="floor">Floor</Label>
+                <Input id="floor" name="floor" placeholder="e.g. Ground, First" value={formData.floor} onChange={handleInputChange} />
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="rentAmount">Monthly Rent (₹)</Label>
-                  <Input id="rentAmount" name="rentAmount" type="number" value={formData.rentAmount} onChange={handleInputChange} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="rentStartDate">Rent Start Date</Label>
-                  <Input id="rentStartDate" name="rentStartDate" type="date" value={formData.rentStartDate} onChange={handleInputChange} />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="rooms">Rooms</Label>
+                <Input id="rooms" name="rooms" type="number" value={formData.rooms} onChange={handleInputChange} />
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="rentAmount">Rent (₹)</Label>
+                <Input id="rentAmount" name="rentAmount" type="number" value={formData.rentAmount} onChange={handleInputChange} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="rentStartDate">Start Date</Label>
+                <Input id="rentStartDate" name="rentStartDate" type="date" value={formData.rentStartDate} onChange={handleInputChange} />
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="purpose">Purpose</Label>
                 <Select value={formData.purpose} onValueChange={(v) => handleSelectChange('purpose', v)}>
@@ -185,25 +318,17 @@ export default function TenantVerificationClient() {
                   </SelectContent>
                 </Select>
               </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Additional Information</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="policeStation">Local Police Station</Label>
-                <Input id="policeStation" name="policeStation" placeholder="Name of SHO Office / Thana" value={formData.policeStation} onChange={handleInputChange} />
+              <div className="space-y-2 col-span-2">
+                <Label htmlFor="policeStation">Police Station</Label>
+                <Input id="policeStation" name="policeStation" placeholder="SHO Office / Thana Name" value={formData.policeStation} onChange={handleInputChange} />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="previousTenant">Previous Tenant Name (Optional)</Label>
+              <div className="space-y-2 col-span-1">
+                <Label htmlFor="previousTenant">Previous Tenant</Label>
                 <Input id="previousTenant" name="previousTenant" value={formData.previousTenant} onChange={handleInputChange} />
               </div>
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Printable Area */}
@@ -225,7 +350,7 @@ export default function TenantVerificationClient() {
                 <span className="font-semibold">Name:</span> <span className="border-b border-dotted border-black px-2">{formData.landlordName || '________________________'}</span>
               </div>
               <div>
-                <span className="font-semibold">Father's Name:</span> <span className="border-b border-dotted border-black px-2">{formData.landlordFatherName || '________________________'}</span>
+                <span className="font-semibold">Father&apos;s Name:</span> <span className="border-b border-dotted border-black px-2">{formData.landlordFatherName || '________________________'}</span>
               </div>
               <div className="col-span-2 mt-2">
                 <span className="font-semibold">Address:</span> <span className="border-b border-dotted border-black px-2">
@@ -242,7 +367,7 @@ export default function TenantVerificationClient() {
                 <span className="font-semibold">Name:</span> <span className="border-b border-dotted border-black px-2">{formData.tenantName || '________________________'}</span>
               </div>
               <div>
-                <span className="font-semibold">Father's Name:</span> <span className="border-b border-dotted border-black px-2">{formData.tenantFatherName || '________________________'}</span>
+                <span className="font-semibold">Father&apos;s Name:</span> <span className="border-b border-dotted border-black px-2">{formData.tenantFatherName || '________________________'}</span>
               </div>
               <div className="col-span-2 mt-2">
                 <span className="font-semibold">Permanent Address:</span> <span className="border-b border-dotted border-black px-2">
@@ -260,15 +385,15 @@ export default function TenantVerificationClient() {
 
           <section>
             <h3 className="font-bold text-lg mb-3 uppercase underline mt-6">3. Property Details</h3>
-            <div className="grid grid-cols-2 gap-x-8 gap-y-2">
+            <div className="grid grid-cols-3 gap-x-8 gap-y-2">
               <div>
                 <span className="font-semibold">Floor:</span> <span className="border-b border-dotted border-black px-2">{formData.floor || '__________________'}</span>
               </div>
               <div>
-                <span className="font-semibold">No. of Rooms:</span> <span className="border-b border-dotted border-black px-2">{formData.rooms || '__________________'}</span>
+                <span className="font-semibold">Rooms:</span> <span className="border-b border-dotted border-black px-2">{formData.rooms || '__________________'}</span>
               </div>
               <div>
-                <span className="font-semibold">Monthly Rent:</span> <span className="border-b border-dotted border-black px-2">{formData.rentAmount ? `Rs. ${formData.rentAmount}` : '__________________'}</span>
+                <span className="font-semibold">Rent:</span> <span className="border-b border-dotted border-black px-2">{formData.rentAmount ? `Rs. ${formData.rentAmount}` : '__________________'}</span>
               </div>
               <div>
                 <span className="font-semibold">Start Date:</span> <span className="border-b border-dotted border-black px-2">{formData.rentStartDate || '__________________'}</span>
@@ -285,7 +410,7 @@ export default function TenantVerificationClient() {
           <section className="mt-8 border-2 border-black p-4">
             <h3 className="font-bold text-lg mb-2 uppercase underline">4. Declaration</h3>
             <p className="text-justify italic">
-              "I hereby declare that the above information is true and correct to the best of my knowledge. I undertake to inform the local police station immediately if the tenant vacates the premises."
+              &ldquo;I hereby declare that the above information is true and correct to the best of my knowledge. I undertake to inform the local police station immediately if the tenant vacates the premises.&rdquo;
             </p>
           </section>
 

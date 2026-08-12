@@ -66,8 +66,8 @@ export async function checkMemberLimit(
   if (totalAllocated + additionalCount > tier.maxMembers) {
     const isCommunity = planName === 'Community'
     const errorMsg = isCommunity
-      ? `Community plan capacity reached (${activeMembers}/${tier.maxMembers} slots used). Please upgrade to the Institution plan to invite more members.`
-      : `${tier.name} plan capacity reached (${activeMembers}/${tier.maxMembers} slots used). Please upgrade to add more members.`
+      ? `Community Access capacity reached (${activeMembers}/${tier.maxMembers} member slots used). You can increase your contribution to Sustainer Access to expand member capacity and help sustain the platform for smaller collectives.`
+      : `${tier.name} capacity reached (${activeMembers}/${tier.maxMembers} member slots used). Please contact support to expand capacity for your organization.`
 
     return {
       allowed: false,

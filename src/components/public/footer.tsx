@@ -5,18 +5,18 @@ export function Footer({ lang }: { lang: string }) {
   
   const footerLinks = {
     product: {
-      title: isHindi ? 'उत्पाद' : 'Product',
+      title: isHindi ? 'नागरिक उत्पाद' : 'Civic Platform',
       links: [
         { label: isHindi ? 'विशेषताएं' : 'Features', href: `/${lang}/features` },
-        { label: isHindi ? 'मूल्य निर्धारण' : 'Pricing', href: `/${lang}/pricing` },
+        { label: isHindi ? 'योगदान और पहुंच' : 'Pay & Price', href: `/${lang}/pricing` },
         { label: isHindi ? 'दस्तावेज़ीकरण' : 'Documentation', href: `/${lang}/docs` },
         { label: isHindi ? 'परिवर्तन लॉग' : 'Changelog', href: `/${lang}/changelog` },
         { label: isHindi ? 'रोडमैप' : 'Roadmap', href: `/${lang}/roadmap` },
         { label: isHindi ? 'स्थिति' : 'Status', href: `/${lang}/status` },
       ]
     },
-    company: {
-      title: isHindi ? 'कंपनी' : 'Company',
+    initiative: {
+      title: isHindi ? 'पहल और विजन' : 'Initiative',
       links: [
         { label: isHindi ? 'हमारे बारे में' : 'About Us', href: `/${lang}/about` },
         { label: isHindi ? 'विजन' : 'Vision', href: `/${lang}/vision` },
@@ -27,7 +27,7 @@ export function Footer({ lang }: { lang: string }) {
       ]
     },
     trust: {
-      title: isHindi ? 'विश्वास' : 'Trust',
+      title: isHindi ? 'विश्वास' : 'Trust & Openness',
       links: [
         { label: isHindi ? 'पारदर्शिता' : 'Transparency', href: `/${lang}/transparency` },
         { label: isHindi ? 'सुरक्षा' : 'Security', href: `/${lang}/security` },
@@ -61,29 +61,29 @@ export function Footer({ lang }: { lang: string }) {
         className="absolute inset-0 z-0 pointer-events-none opacity-[0.02]"
         style={{ backgroundImage: 'radial-gradient(circle, #0f172a 1px, transparent 1px)', backgroundSize: '24px 24px' }}
       />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12 mb-16">
            {/* Brand Column (Span 2 on LG) */}
            <div className="col-span-2 lg:col-span-2 pr-8">
-              <Link href={`/${lang}`} className="text-2xl font-black tracking-tighter text-slate-900 mb-6 block hover:opacity-90">
+              <Link href={`/${lang}`} className="text-2xl font-black tracking-tighter text-slate-900 mb-4 block hover:opacity-90">
                 Sangathan
               </Link>
-              <p className="text-slate-500 leading-relaxed mb-8 max-w-sm font-medium">
+              <p className="text-slate-500 leading-relaxed mb-6 max-w-sm font-medium text-xs sm:text-sm">
                  {isHindi 
-                   ? 'जमीनी संगठनों के लिए डिजिटल बुनियादी ढांचा। न्यूनतम, शांत और गोपनीयता के लिए निर्मित।' 
-                   : 'Digital infrastructure for grassroots organisations. Built for privacy, autonomy, and absolute institutional integrity.'}
+                   ? 'नागरिक डिजिटल बुनियादी ढांचा, बहुजन क्वीर फाउंडेशन (सेक्शन 8 गैर-लाभकारी संगठन) की एक पहल।' 
+                   : 'Digital civic infrastructure initiative of Bahujan Queer Foundation, a Section 8 non-profit organization.'}
               </p>
-              <div className="flex items-center gap-3 text-sm font-semibold text-slate-500">
-                <span className="w-1.5 h-1.5 bg-green-500 rounded-none animate-pulse" />
-                {isHindi ? 'सभी प्रणालियां काम कर रही हैं' : 'All systems operational'}
+              <div className="flex items-center gap-3 text-xs font-semibold text-slate-500">
+                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                {isHindi ? 'सभी प्रणालियां सामान्य हैं' : 'All systems operational'}
               </div>
            </div>
            
            {/* Links Columns */}
-           {[footerLinks.product, footerLinks.company, footerLinks.trust, footerLinks.legal].map((section, idx) => (
+           {[footerLinks.product, footerLinks.initiative, footerLinks.trust, footerLinks.legal].map((section, idx) => (
              <div key={idx} className="col-span-1">
-                <h4 className="font-bold mb-6 text-slate-900 tracking-tight">{section.title}</h4>
-                <ul className="space-y-4">
+                <h4 className="font-bold mb-5 text-slate-900 tracking-tight text-xs uppercase tracking-wider">{section.title}</h4>
+                <ul className="space-y-3.5 text-xs sm:text-sm">
                    {section.links.map((link) => (
                      <li key={link.href}>
                        <Link href={link.href} className="text-slate-500 hover:text-indigo-600 transition-colors font-medium">
@@ -103,11 +103,11 @@ export function Footer({ lang }: { lang: string }) {
                 {footerLinks.contact.links.map((link) => (
                    <div key={link.href}>
                      {link.href.startsWith('http') || link.href.startsWith('mailto') ? (
-                       <a href={link.href} target={link.href.startsWith('http') ? "_blank" : undefined} rel="noopener noreferrer" className="text-slate-500 hover:text-indigo-600 transition-colors font-medium text-sm">
+                       <a href={link.href} target={link.href.startsWith('http') ? "_blank" : undefined} rel="noopener noreferrer" className="text-slate-500 hover:text-indigo-600 transition-colors font-medium text-xs sm:text-sm">
                          {link.label}
                        </a>
                      ) : (
-                       <Link href={link.href} className="text-slate-500 hover:text-indigo-600 transition-colors font-medium text-sm">
+                       <Link href={link.href} className="text-slate-500 hover:text-indigo-600 transition-colors font-medium text-xs sm:text-sm">
                          {link.label}
                        </Link>
                      )}
@@ -118,22 +118,22 @@ export function Footer({ lang }: { lang: string }) {
         </div>
         
         {/* Bottom Strip */}
-        <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-semibold text-slate-500">
+        <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-semibold text-slate-500">
            <div className="flex items-center gap-1">
               {isHindi ? 'द्वारा संचालित' : 'Powered by'} 
               <a 
                 href="https://ziddi.space" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-slate-600 hover:text-indigo-600 transition-colors font-bold ml-1"
+                className="text-slate-700 hover:text-indigo-600 transition-colors font-bold ml-1"
               >
                 ziddi
               </a>
            </div>
            
            <div className="text-center md:text-right">
-              {isHindi ? 'एक पहल' : 'An Initiative by'} 
-              <span className="text-slate-600 ml-1 font-bold">Bahujan Queer Foundation</span>
+              {isHindi ? 'पहल:' : 'Civic Initiative:'} 
+              <span className="text-slate-800 ml-1 font-bold">Bahujan Queer Foundation (Section 8 Non-Profit)</span>
            </div>
         </div>
       </div>

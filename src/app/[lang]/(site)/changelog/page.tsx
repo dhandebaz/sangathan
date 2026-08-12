@@ -35,13 +35,56 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
-    version: 'v1.31.0',
-    titleEn: 'Grassroots Colony Utility Kit — Chanda, Tenant Verification, Municipal Letters & Local Directory',
-    titleHi: 'ज़मीनी कॉलोनी यूटिलिटी किट — चंदा, किरायेदार सत्यापन, नगरपालिका पत्र एवं स्थानीय निर्देशिका',
+    version: 'v1.32.0',
+    titleEn: 'Civic Pricing, Community Access & Sangathan AI Product Evolution',
+    titleHi: 'नागरिक मूल्य निर्धारण, सामुदायिक पहुंच एवं संगठन AI उत्पाद विस्तार',
     dateEn: 'August 2026',
     dateHi: 'अगस्त 2026',
-    descEn: 'Introduced a practical daily-use utility kit for RWA colonies — especially designed for kacchi colonies, unauthorised areas, and urban villages. Includes a 1-tap cash collection tracker for monthly chowkidari/safai chanda, a printable Delhi Police tenant verification form, pre-formatted municipal letter templates for representations to MLAs, MCD, DJB, BSES, and Police, plus a local services directory with pre-loaded emergency numbers.',
-    descHi: 'RWA कॉलोनियों के लिए रोज़मर्रा के उपयोग वाली व्यावहारिक यूटिलिटी किट पेश की गई — विशेष रूप से कच्ची कॉलोनियों, अनधिकृत क्षेत्रों और शहरी गांवों के लिए डिज़ाइन की गई। मासिक चौकीदारी/सफाई चंदा के लिए 1-टैप कैश कलेक्शन ट्रैकर, प्रिंट करने योग्य दिल्ली पुलिस किरायेदार सत्यापन फॉर्म, विधायकों, MCD, DJB, BSES और पुलिस को प्रतिनिधित्व के लिए पूर्व-स्वरूपित नगरपालिका पत्र टेम्प्लेट, और पूर्व-लोड आपातकालीन नंबरों के साथ स्थानीय सेवा निर्देशिका शामिल है।',
+    descEn: 'Major platform repositioning as digital civic infrastructure under Bahujan Queer Foundation (Section 8 Non-Profit). Introduced voluntary one-time Community Access (₹5 to ₹500 or custom), Sustainer Access pay-what-you-can patronage, dedicated Pay & Price cost breakdown with live mission goal tracking, full support for unregistered civic collectives, and unified Sangathan AI with master organization-level AI control and strict data privacy guarantees.',
+    descHi: 'बहुजन क्वीर फाउंडेशन (सेक्शन 8 गैर-लाभकारी संस्था) के तहत डिजिटल नागरिक बुनियादी ढांचे के रूप में प्रमुख मंच पुनर्गठन। स्वैच्छिक एकमुश्त सामुदायिक पहुंच (₹5 से ₹500 या कस्टम), संरक्षक पहुंच क्षमता अनुसार योगदान, लाइव मिशन लक्ष्य ट्रैकिंग के साथ विस्तृत लागत विश्लेषण, गैर-पंजीकृत नागरिक समूहों के लिए पूर्ण समर्थन, और मास्टर संगठन-स्तरीय नियंत्रण व सख्त डेटा गोपनीयता गारंटी के साथ एकीकृत संगठन AI पेश किया गया।',
+    color: 'indigo',
+    icon: ShieldCheck,
+    features: [
+      {
+        nameEn: 'Non-Profit Civic Infrastructure Identity & Pay & Price',
+        nameHi: 'गैर-लाभकारी नागरिक अवसंरचना पहचान और Pay & Price',
+        textEn: 'Solidified institutional non-profit positioning under Bahujan Queer Foundation. Replaced commercial SaaS terminology with collective organizing concepts. Added transparent operational cost breakdown detailing server, encrypted storage, and communication infrastructure expenses.',
+        textHi: 'बहुजन क्वीर फाउंडेशन के तहत गैर-लाभकारी संस्थागत पहचान स्थापित की गई। वाणिज्यिक SaaS शब्दावली को सामूहिक आयोजन अवधारणाओं से बदला गया। सर्वर, एन्क्रिप्टेड स्टोरेज और संचार खर्चों का पारदर्शी विवरण जोड़ा गया।',
+      },
+      {
+        nameEn: 'Community Access Voluntary Contribution Model',
+        nameHi: 'सामुदायिक पहुंच स्वैच्छिक योगदान मॉडल',
+        textEn: 'Replaced traditional subscription walls with voluntary contribution choices (₹5, ₹10, ₹50, ₹100, ₹500, or Custom amount) giving grassroots groups, mutual-aid collectives, and student cells unrestricted access to core democratic governance tooling.',
+        textHi: 'पारंपरिक सदस्यता शुल्क को स्वैच्छिक योगदान विकल्पों (₹5, ₹10, ₹50, ₹100, ₹500 या कस्टम राशि) से बदल दिया गया, जिससे जमीनी समूहों और छात्र इकाइयों को मुख्य लोकतांत्रिक शासन उपकरणों तक पहुंच मिलती है।',
+      },
+      {
+        nameEn: 'Sustainer Access & Infrastructure Cross-Subsidy',
+        nameHi: 'संरक्षक पहुंच व अवसंरचना क्रॉस-सब्सिडी',
+        textEn: 'Introduced pay-what-you-can Sustainer Access (suggested ₹1,000/month or ₹10,000/year) for scaling NGOs and registered unions to unlock unlimited member capacity and directly cross-subsidize secure hosting for smaller grassroots collectives.',
+        textHi: 'बढ़ते एनजीओ और पंजीकृत संघों के लिए संरक्षक पहुंच (सुझाया गया ₹1,000/माह या ₹10,000/वर्ष) पेश की गई, जिससे असीमित सदस्य क्षमता अनलॉक होती है और छोटे नागरिक समूहों के लिए मुफ्त सर्वर अवसंरचना को निधि मिलती है।',
+      },
+      {
+        nameEn: 'Civic Collectives & Flexible Onboarding',
+        nameHi: 'नागरिक समूह व लचीली ऑनबोर्डिंग',
+        textEn: 'Added first-class support for unregistered civic collectives, social movements, and informal community campaigns across onboarding and capability blueprints without requiring statutory registration numbers.',
+        textHi: 'वैधानिक पंजीकरण संख्या की आवश्यकता के बिना ऑनबोर्डिंग और क्षमता ब्लूप्रिंट में गैर-पंजीकृत नागरिक समूहों, सामाजिक आंदोलनों और अनौपचारिक अभियानों के लिए प्रथम श्रेणी का समर्थन जोड़ा गया।',
+      },
+      {
+        nameEn: 'Sangathan AI Master Control & Reusable Privacy Modal',
+        nameHi: 'संगठन AI मास्टर नियंत्रण व पुन: प्रयोज्य गोपनीयता मॉडल',
+        textEn: 'Standardized AI assistive tools under "Sangathan AI", backed by an enforceable organization master On/Off toggle. Created a reusable AI Info Modal explaining data isolation, human sovereign decision-making, and zero cross-organization model training.',
+        textHi: 'मास्टर On/Off टॉगल के साथ "संगठन AI" के तहत AI उपकरणों का मानकीकरण किया गया। डेटा पृथक्करण, मानव संप्रभु निर्णय और शून्य मॉडल क्रॉस-ट्रेनिंग की व्याख्या करने वाला एक पुन: प्रयोज्य AI सूचना मॉडल बनाया गया।',
+      },
+    ],
+  },
+  {
+    version: 'v1.31.0',
+    titleEn: 'Grassroots Colony Utility Kit: Chanda, Tenant Verification, Municipal Letters & Local Directory',
+    titleHi: 'ज़मीनी कॉलोनी यूटिलिटी किट: चंदा, किरायेदार सत्यापन, नगरपालिका पत्र एवं स्थानीय निर्देशिका',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Introduced a practical daily-use utility kit for RWA colonies, especially designed for kacchi colonies, unauthorised areas, and urban villages. Includes a 1-tap cash collection tracker for monthly chowkidari/safai chanda, a printable Delhi Police tenant verification form, pre-formatted municipal letter templates for representations to MLAs, MCD, DJB, BSES, and Police, plus a local services directory with pre-loaded emergency numbers.',
+    descHi: 'RWA कॉलोनियों के लिए रोज़मर्रा के उपयोग वाली व्यावहारिक यूटिलिटी किट पेश की गई, विशेष रूप से कच्ची कॉलोनियों, अनधिकृत क्षेत्रों और शहरी गांवों के लिए डिज़ाइन की गई। मासिक चौकीदारी/सफाई चंदा के लिए 1-टैप कैश कलेक्शन ट्रैकर, प्रिंट करने योग्य दिल्ली पुलिस किरायेदार सत्यापन फॉर्म, विधायकों, MCD, DJB, BSES और पुलिस को प्रतिनिधित्व के लिए पूर्व-स्वरूपित नगरपालिका पत्र टेम्प्लेट, और पूर्व-लोड आपातकालीन नंबरों के साथ स्थानीय सेवा निर्देशिका शामिल है।',
     color: 'orange',
     icon: Phone,
     features: [
@@ -269,16 +312,16 @@ const changelogData: ChangelogEntry[] = [
     titleHi: 'सरलीकृत संगठन पंजीकरण, टीम आमंत्रण एवं महत्वपूर्ण सुधार',
     dateEn: 'August 2026',
     dateHi: 'अगस्त 2026',
-    descEn: 'Complete overhaul of the organization registration flow. New orgs can now reserve a public URL with live availability checking, configure membership dues, set governance roles, and toggle features — all persisted correctly. Added team invite system with shareable links. Fixed critical bugs including broken member management, rate limiting, and org type validation.',
-    descHi: 'संगठन पंजीकरण प्रवाह का पूर्ण पुनर्निर्माण। नए संगठन अब लाइव उपलब्धता जांच के साथ सार्वजनिक URL आरक्षित कर सकते हैं, सदस्यता शुल्क कॉन्फ़िगर कर सकते हैं, शासन भूमिकाएं निर्धारित कर सकते हैं, और सुविधाएं टॉगल कर सकते हैं — सभी सही ढंग से सहेजी गईं। टीम आमंत्रण प्रणाली शेयर करने योग्य लिंक के साथ जोड़ी गई। महत्वपूर्ण बग्स ठीक किए गए जिनमें टूटा हुआ सदस्य प्रबंधन, दर सीमा, और संगठन प्रकार सत्यापन शामिल हैं।',
+    descEn: 'Complete overhaul of the organization registration flow. New orgs can now reserve a public URL with live availability checking, configure membership dues, set governance roles, and toggle features, with all settings persisted correctly. Added team invite system with shareable links. Fixed critical bugs including broken member management, rate limiting, and org type validation.',
+    descHi: 'संगठन पंजीकरण प्रवाह का पूर्ण पुनर्निर्माण। नए संगठन अब लाइव उपलब्धता जांच के साथ सार्वजनिक URL आरक्षित कर सकते हैं, सदस्यता शुल्क कॉन्फ़िगर कर सकते हैं, शासन भूमिकाएं निर्धारित कर सकते हैं, और सुविधाएं टॉगल कर सकते हैं, सभी सही ढंग से सहेजी गईं। टीम आमंत्रण प्रणाली शेयर करने योग्य लिंक के साथ जोड़ी गई। महत्वपूर्ण बग्स ठीक किए गए जिनमें टूटा हुआ सदस्य प्रबंधन, दर सीमा, और संगठन प्रकार सत्यापन शामिल हैं।',
     color: 'emerald',
     icon: Building2,
     features: [
       {
         nameEn: 'Streamlined Org Registration Wizard',
         nameHi: 'सरलीकृत संगठन पंजीकरण विज़ार्ड',
-        textEn: 'All 5 steps of the onboarding wizard now persist correctly — name, slug, description, designation, membership policy, and dues are all saved.',
-        textHi: 'ऑनबोर्डिंग विज़ार्ड के सभी 5 चरण अब सही ढंग से सहेजे जाते हैं — नाम, स्लग, विवरण, पदनाम, सदस्यता नीति, और शुल्क सभी सहेजी जाती हैं।',
+        textEn: 'All 5 steps of the onboarding wizard now persist correctly: name, slug, description, designation, membership policy, and dues are all saved.',
+        textHi: 'ऑनबोर्डिंग विज़ार्ड के सभी 5 चरण अब सही ढंग से सहेजे जाते हैं: नाम, स्लग, विवरण, पदनाम, सदस्यता नीति, और शुल्क सभी सहेजी जाती हैं।',
       },
       {
         nameEn: 'Live Slug Availability Check',
@@ -312,7 +355,7 @@ const changelogData: ChangelogEntry[] = [
     titleHi: 'फीचर पेज सटीकता ऑडिट एवं फीचर सत्यापन',
     dateEn: 'August 2026',
     dateHi: 'अगस्त 2026',
-    descEn: 'Conducted a comprehensive verification audit of every feature listed on the Features page across all organization types (NGO, Student Union, Workers Union, RWA). Confirmed that all claimed dashboard modules — including Digital Notice Board (announcements), Financial Ledger (financials), Forms & Surveys, Elections, Volunteer Coordination, Visitor Management, and more — map directly to implemented routes in src/app/[lang]/dashboard/. All feature claims on the public Features page are now verified against living code.',
+    descEn: 'Conducted a comprehensive verification audit of every feature listed on the Features page across all organization types (NGO, Student Union, Workers Union, RWA). Confirmed that all claimed dashboard modules (including Digital Notice Board, Financial Ledger, Forms & Surveys, Elections, Volunteer Coordination, Visitor Management, and more) map directly to implemented routes in src/app/[lang]/dashboard/. All feature claims on the public Features page are now verified against living code.',
     descHi: 'नगरों के सभी संगठन प्रकारों (एनजीओ, छात्र संघ, श्रमिक संघ, आरडब्ल्यूए) के सम्मिलित रूप से फीचर पेज पर listing की गई हर सुविधा का एक व्यापक सत्यापन ऑडिट किया गया है। इसमें यह पुष्टि की गई है कि डिजिटल नोटिस बोर्ड (Announcements), वित्तीय बहीखाता (Financials), फॉर्म्स एवं सर्वेक्षण, चुनाव, स्वयंसेवक समन्वय, आगंतुक प्रबंधन और अधिक अन्य रास्तों के साथ मेल खाते हैं। सार्वजनिक फीचर पेज पर किए गए सभी फीचर दावों को अब से src/app/[lang]/dashboard/ में कार्यान्वित मार्गों के विरुद्ध सत्यापित किया गया है।',
     color: 'slate',
     icon: ShieldCheck,
@@ -945,7 +988,7 @@ const changelogData: ChangelogEntry[] = [
     features: [
       {
         nameEn: 'Automated Weekly Summary', nameHi: 'स्वचालित साप्ताहिक सारांश',
-        textEn: 'Upgraded dashboard summary with richer stats — tickets, members, events, and polls. Generates a strategic 3-4 sentence briefing.',
+        textEn: 'Upgraded dashboard summary with richer stats: tickets, members, events, and polls. Generates a strategic 3-4 sentence briefing.',
         textHi: 'टिकट, सदस्य, इवेंट और पोल के साथ उन्नत डैशबोर्ड सारांश। रणनीतिक 3-4 वाक्यों का ब्रीफिंग तैयार करता है।'
       },
       {
@@ -965,8 +1008,8 @@ const changelogData: ChangelogEntry[] = [
       },
       {
         nameEn: 'Smart Notifications', nameHi: 'स्मार्ट नोटिफिकेशन',
-        textEn: 'Personalized push notifications for tasks, events, meetings, milestones, and announcements — generated per member with context-aware messaging.',
-        textHi: 'कार्यों, इवेंट्स, मीटिंग्स, माइलस्टोन और घोषणाओं के लिए वैयक्तिकृत पुश नोटिफिकेशन — संदर्भ-जागरूक मैसेजिंग के साथ प्रति सदस्य उत्पन्न।'
+        textEn: 'Personalized push notifications for tasks, events, meetings, milestones, and announcements, generated per member with context-aware messaging.',
+        textHi: 'कार्यों, इवेंट्स, मीटिंग्स, माइलस्टोन और घोषणाओं के लिए वैयक्तिकृत पुश नोटिफिकेशन, संदर्भ-जागरूक मैसेजिंग के साथ प्रति सदस्य उत्पन्न।'
       },
       {
         nameEn: 'Proposal & Policy Analyzer', nameHi: 'प्रस्ताव और नीति विश्लेषक',
@@ -977,19 +1020,19 @@ const changelogData: ChangelogEntry[] = [
   },
   {
     version: 'v1.9.6',
-    titleEn: 'Compliance Tracker — Real Certificate Management',
-    titleHi: 'कम्प्लायंस ट्रैकर — वास्तविक प्रमाणपत्र प्रबंधन',
+    titleEn: 'Compliance Tracker: Real Certificate Management',
+    titleHi: 'कम्प्लायंस ट्रैकर: वास्तविक प्रमाणपत्र प्रबंधन',
     dateEn: 'June 2026',
     dateHi: 'जून 2026',
-    descEn: 'Replaced the static compliance checklist with a fully editable, database-backed Compliance Tracker. Each certification (12A, 80G, FCRA, Trade Union Registration, etc.) is now a real entity with document uploads, status tracking, and notes. The old page showed hardcoded statuses that never reflected actual progress — now everything is dynamic and editable by org admins.',
+    descEn: 'Replaced the static compliance checklist with a fully editable, database-backed Compliance Tracker. Each certification (12A, 80G, FCRA, Trade Union Registration, etc.) is now a real entity with document uploads, status tracking, and notes. The old page showed hardcoded statuses that never reflected actual progress. Now everything is dynamic and editable by org admins.',
     descHi: 'स्टैटिक कम्प्लायंस चेकलिस्ट को पूरी तरह से एडिट करने योग्य, डेटाबेस-समर्थित कम्प्लायंस ट्रैकर से बदल दिया गया। प्रत्येक प्रमाणपत्र (12A, 80G, FCRA, ट्रेड यूनियन रजिस्ट्रेशन, आदि) अब दस्तावेज़ अपलोड, स्थिति ट्रैकिंग और नोट्स के साथ एक वास्तविक इकाई है।',
     color: 'emerald',
     icon: ShieldCheck,
     features: [
       {
         nameEn: 'Org-Type-Specific Defaults', nameHi: 'संगठन-प्रकार-विशिष्ट डिफ़ॉल्ट',
-        textEn: 'Each organisation type (NGO, RWA, Workers Union, Student Union) gets relevant compliance items pre-seeded — no more one-size-fits-all checklists.',
-        textHi: 'प्रत्येक संगठन प्रकार (NGO, RWA, श्रमिक संघ, छात्र संघ) को प्रासंगिक कम्प्लायंस आइटम पूर्व-निर्धारित मिलते हैं — अब कोई एक-आकार-सभी के लिए चेकलिस्ट नहीं।'
+        textEn: 'Each organisation type (NGO, RWA, Workers Union, Student Union) gets relevant compliance items pre-seeded, with no more one-size-fits-all checklists.',
+        textHi: 'प्रत्येक संगठन प्रकार (NGO, RWA, श्रमिक संघ, छात्र संघ) को प्रासंगिक कम्प्लायंस आइटम पूर्व-निर्धारित मिलते हैं, बिना किसी एक-आकार-सभी के लिए चेकलिस्ट के।'
       },
       {
         nameEn: 'Document Upload & Storage', nameHi: 'दस्तावेज़ अपलोड और भंडारण',
@@ -1026,8 +1069,8 @@ const changelogData: ChangelogEntry[] = [
       },
       {
         nameEn: 'Sidebar Toggle Fix', nameHi: 'साइडबार टॉगल सुधार',
-        textEn: 'Fixed sidebar navigation dropdowns that required two clicks to expand — the toggle function was misreading initial collapsed state, causing the first click to appear to do nothing.',
-        textHi: 'साइडबार नेविगेशन ड्रॉपडाउन को ठीक किया गया जो विस्तार करने के लिए दो क्लिक की आवश्यकता थी — टॉगल फ़ंक्शन प्रारंभिक संक्षिप्त स्थिति को गलत पढ़ रहा था, जिससे पहला क्लिक कुछ नहीं करता दिख रहा था।'
+        textEn: 'Fixed sidebar navigation dropdowns that required two clicks to expand because the toggle function was misreading initial collapsed state, causing the first click to appear to do nothing.',
+        textHi: 'साइडबार नेविगेशन ड्रॉपडाउन को ठीक किया गया जो विस्तार करने के लिए दो क्लिक की आवश्यकता थी, क्योंकि टॉगल फ़ंक्शन प्रारंभिक संक्षिप्त स्थिति को गलत पढ़ रहा था, जिससे पहला क्लिक कुछ नहीं करता दिख रहा था।'
       }
     ]
   },

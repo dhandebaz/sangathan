@@ -12,9 +12,15 @@ import { addServiceContact, removeServiceContact, updateServiceContact } from '@
 import type { Member } from '@/types/dashboard'
 import { toast } from 'sonner'
 
+interface ServiceContact extends Member {
+  notes: string | null
+}
+
 interface LocalDirectoryClientProps {
-  contacts: Member[]
+  contacts: ServiceContact[]
   isAdmin: boolean
+  emergencyContacts?: ServiceContact[]
+  landlordContacts?: ServiceContact[]
 }
 
 const CATEGORIES = [
@@ -48,7 +54,7 @@ function safeJsonParse(str: string | null) {
   }
 }
 
-export default function LocalDirectoryClient({ contacts, isAdmin }: LocalDirectoryClientProps) {
+export default function LocalDirectoryClient({ contacts, isAdmin, emergencyContacts, landlordContacts, isHindi }: LocalDirectoryClientProps & { isHindi?: boolean }) {
   const [isOpen, setIsOpen] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   
@@ -57,10 +63,11 @@ export default function LocalDirectoryClient({ contacts, isAdmin }: LocalDirecto
     phone: '',
     title: '',
     category: 'Electricity',
-    isPinned: false
+    isPinned: false,
+    isEmergencyContact: false
   })
 
-  const handleOpenEdit = (contact: Member) => {
+  const handleOpenEdit = (contact: ServiceContact) => {
     const title = contact.designation?.replace('[SERVICE] ', '') || ''
     const meta = safeJsonParse(contact.notes)
     
@@ -69,7 +76,8 @@ export default function LocalDirectoryClient({ contacts, isAdmin }: LocalDirecto
       phone: contact.phone || '',
       title,
       category: meta.category || 'Electricity',
-      isPinned: meta.isPinned || false
+      isPinned: meta.isPinned || false,
+      isEmergencyContact: meta.isEmergencyContact || false
     })
     setEditingId(contact.id)
     setIsOpen(true)
@@ -81,7 +89,8 @@ export default function LocalDirectoryClient({ contacts, isAdmin }: LocalDirecto
       phone: '',
       title: '',
       category: 'Electricity',
-      isPinned: false
+      isPinned: false,
+      isEmergencyContact: false
     })
     setEditingId(null)
     setIsOpen(true)
@@ -121,6 +130,37 @@ export default function LocalDirectoryClient({ contacts, isAdmin }: LocalDirecto
     }
   }
 
+  const handleOpenEmergencyContact = (contact: ServiceContact) => {
+    const meta = safeJsonParse(contact.notes)
+    const isEmergency = meta.isEmergencyContact
+    
+    setFormData({
+      name: contact.full_name,
+      phone: contact.phone || '',
+      title: isEmergency ? 'EMERGENCY CONTACT' : '',
+      category: meta.category || 'Police',
+      isPinned: meta.isPinned || false,
+      isEmergencyContact: true,
+    })
+    setEditingId(contact.id)
+    setIsOpen(true)
+  }
+
+  const handleOpenLandlordContact = (contact: ServiceContact) => {
+    const meta = safeJsonParse(contact.notes)
+    
+    setFormData({
+      name: contact.full_name,
+      phone: contact.phone || '',
+      title: 'LANDLORD',
+      category: meta.category || 'General',
+      isPinned: meta.isPinned || false,
+      isEmergencyContact: false,
+    })
+    setEditingId(contact.id)
+    setIsOpen(true)
+  }
+
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to remove this contact?')) return
     const res = await removeServiceContact({ id })
@@ -135,8 +175,15 @@ export default function LocalDirectoryClient({ contacts, isAdmin }: LocalDirecto
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Local Directory</h1>
-          <p className="text-sm text-zinc-500 mt-1">Essential service contacts for your community.</p>
+          <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
+            {isHindi ? 'स्थानीय सेवा निर्देशिका' : 'Local Services Directory'}
+          </h1>
+          <p className="text-sm text-zinc-500 mt-1">
+            {isHindi
+              ? 'बिजली, पानी, पुलिस, चिकित्सा और स्थानीय सेवाओं के आवश्यक फ़ोन नंबर। कॉल करने के लिए टैप करें।'
+              : 'Essential phone numbers for electricity, water, police, medical, and local services. Tap to call.'
+            }
+          </p>
         </div>
         {isAdmin && (
           <Button onClick={handleOpenAdd} className="gap-2">
@@ -155,6 +202,7 @@ export default function LocalDirectoryClient({ contacts, isAdmin }: LocalDirecto
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+            {/* Fixed Emergency Numbers */}
             {EMERGENCY_NUMBERS.map(em => (
               <a 
                 key={em.title} 
@@ -168,9 +216,80 @@ export default function LocalDirectoryClient({ contacts, isAdmin }: LocalDirecto
                 </span>
               </a>
             ))}
+            {/* Emergency Contacts from tenant verification */}
+            {emergencyContacts?.map(contact => {
+              const meta = safeJsonParse(contact.notes)
+              const isEmergency = meta?.isEmergencyContact
+              const phone = contact.phone?.trim()
+              
+              if (!isEmergency || !phone) return null
+              
+              return (
+                <a 
+                  key={contact.id} 
+                  href={`tel:${phone}`}
+                  className="flex flex-col p-3 rounded-lg bg-white dark:bg-zinc-900 border border-red-100 dark:border-red-900/30 hover:border-red-300 dark:hover:border-red-800 transition-colors"
+                >
+                  <div className="mb-1">
+                    <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400 line-clamp-1">
+                      {contact.full_name} {meta?.emergencyType || '(EMERGENCY CONTACT)'}
+                    </span>
+                  </div>
+                  <span className="text-lg font-semibold text-red-600 dark:text-red-400 flex items-center justify-between">
+                    {phone}
+                    <PhoneCall className="w-4 h-4 opacity-50" />
+                  </span>
+                </a>
+              )
+            })}
           </div>
         </CardContent>
       </Card>
+
+      {/* Landlord Contacts Section (for Tenant Verification) */}
+      {landlordContacts && landlordContacts.length > 0 && (
+        <Card className="border-green-200 bg-green-50/50 dark:border-green-900/30 dark:bg-green-900/10">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-green-700 dark:text-green-400 text-lg">
+              <PhoneCall className="w-5 h-5" />
+              Landlord Contacts
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {landlordContacts.map(contact => (
+                <div key={contact.id} className="flex items-start justify-between p-3 rounded-lg border bg-zinc-50/50 dark:bg-zinc-800/50">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-medium text-zinc-900 dark:text-zinc-50">{contact.full_name}</h3>
+                      <span className="text-[10px] uppercase font-bold text-green-600 bg-green-100 dark:bg-green-900/30 px-1.5 py-0.5 rounded">LANDLORD</span>
+                    </div>
+                    <p className="text-sm text-zinc-500 mb-2">{contact.area || ''}</p>
+                    
+                    <div className="flex gap-2 mt-2">
+                      <a href={`tel:${contact.phone}`} className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline">
+                        <PhoneCall className="w-3.5 h-3.5" />
+                        {contact.phone}
+                      </a>
+                    </div>
+                  </div>
+                  
+                  {isAdmin && (
+                    <div className="flex items-center gap-1">
+                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleOpenEdit(contact)}>
+                        <Pencil className="w-4 h-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500 hover:text-red-600" onClick={() => handleDelete(contact.id)}>
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Category Sections */}
       <div className="grid md:grid-cols-2 gap-6">
@@ -265,17 +384,17 @@ export default function LocalDirectoryClient({ contacts, isAdmin }: LocalDirecto
               <Label>Service Title / Role (e.g. BSES Lineman)</Label>
               <Input required value={formData.title} onChange={e => setFormData(p => ({ ...p, title: e.target.value }))} />
             </div>
-
+            
             <div className="space-y-2">
-              <Label>Person's Name</Label>
+              <Label>Person&apos;s Name</Label>
               <Input required value={formData.name} onChange={e => setFormData(p => ({ ...p, name: e.target.value }))} />
             </div>
-
+            
             <div className="space-y-2">
               <Label>Phone Number</Label>
               <Input required type="tel" value={formData.phone} onChange={e => setFormData(p => ({ ...p, phone: e.target.value }))} />
             </div>
-
+            
             <div className="flex items-center gap-2 mt-4">
               <input 
                 type="checkbox" 
@@ -286,7 +405,18 @@ export default function LocalDirectoryClient({ contacts, isAdmin }: LocalDirecto
               />
               <Label htmlFor="isPinned">Pin to top of category</Label>
             </div>
-
+            
+            <div className="flex items-center gap-2 mt-4">
+              <input 
+                type="checkbox" 
+                id="isEmergencyContact" 
+                checked={formData.isEmergencyContact}
+                onChange={e => setFormData(p => ({ ...p, isEmergencyContact: e.target.checked }))}
+                className="rounded border-gray-300"
+              />
+              <Label htmlFor="isEmergencyContact">Mark as emergency contact</Label>
+            </div>
+            
             <DialogFooter className="mt-6">
               <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>Cancel</Button>
               <Button type="submit">{editingId ? 'Save Changes' : 'Add Contact'}</Button>

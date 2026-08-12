@@ -36,24 +36,24 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
       <PageHeader 
         title={isHindi ? 'संगठन के बारे में' : 'About Sangathan'}
         description={isHindi 
-          ? 'संगठन कोई स्टार्टअप नहीं है। यह नागरिक क्षेत्र के लिए डिजिटल सार्वजनिक बुनियादी ढांचा है।'
-          : 'Sangathan is not a startup. It is digital public infrastructure for the civic sector.'}
+          ? 'संगठन कोई स्टार्टअप या वाणिज्यिक कंपनी नहीं है। यह बहुजन क्वीर फाउंडेशन (सेक्शन 8 गैर-लाभकारी संगठन) की एक डिजिटल नागरिक अवसंरचना पहल है।'
+          : 'Sangathan is not a startup or commercial enterprise. It is a digital civic infrastructure initiative of Bahujan Queer Foundation, a Section 8 non-profit organization.'}
       />
 
       <div className="max-w-4xl mx-auto py-16 px-6">
-        <div className="prose prose-lg prose-slate  max-w-none space-y-16">
+        <div className="prose prose-lg prose-slate max-w-none space-y-16">
           <section>
-            <h2 className="text-3xl font-bold text-slate-900  mb-6">{isHindi ? 'हम क्यों मौजूद हैं' : 'Why we exist'}</h2>
-            <div className="text-slate-600  space-y-6">
+            <h2 className="text-3xl font-bold text-slate-900 mb-6">{isHindi ? 'हमारा मिशन और पहचान' : 'Our Mission & Identity'}</h2>
+            <div className="text-slate-600 space-y-6">
               <p>
                 {isHindi
-                  ? 'बहुत लंबे समय से, महत्वपूर्ण नागरिक कार्य नाजुक स्प्रेडशीट, अराजक व्हाट्सएप समूहों और महंगे कॉर्पोरेट सॉफ़्टवेयर पर प्रबंधित किए गए हैं। यह विखंडन जमीनी आंदोलनों के पैमाने और प्रभाव को सीमित करता है।'
-                  : 'For too long, vital civic work has been managed on fragile spreadsheets, chaotic WhatsApp groups, and expensive corporate software. This fragmentation limits the scale and impact of grassroots movements.'}
+                  ? 'संगठन नागरिक डिजिटल बुनियादी ढांचा है, जिसे गैर-सरकारी संगठनों (NGOs), पंजीकृत संगठनों और जमीनी स्तर के नागरिक समूहों को अधिक पारदर्शिता, गोपनीयता और जवाबदेही के साथ संगठित करने, शासन करने, संवाद करने और संचालित करने में मदद करने के लिए बनाया गया है।'
+                  : 'Sangathan is civic digital infrastructure built to help NGOs, registered organizations, and grassroots civic collectives organize, govern, communicate, and operate with greater transparency, privacy, and accountability.'}
               </p>
               <p>
                 {isHindi
-                  ? 'हमने संगठन को **उबाऊ, विश्वसनीय रेल** प्रदान करने के लिए बनाया है जो आंदोलनों को ढीले समूहों से स्थायी संस्थानों में बदलने की अनुमति देता है। हमारा मानना ​​है कि मजबूत शासन बुनियादी ढांचा एक लोकतांत्रिक अधिकार है, लक्जरी उत्पाद नहीं।'
-                  : 'We built Sangathan to provide the boring, reliable rails that allow movements to transition from loose groups to lasting institutions. We believe that robust governance infrastructure is a democratic right, not a luxury product.'}
+                  ? 'बहुत लंबे समय से, महत्वपूर्ण सामाजिक कार्य नाजुक स्प्रेडशीट, असुरक्षित मैसेजिंग ऐप और महंगे कॉर्पोरेट सॉफ़्टवेयर पर प्रबंधित किए गए हैं। हमने संगठन को गैर-लाभकारी सिद्धांतों पर बनाया है ताकि हर लोकतांत्रिक समूह को संप्रभु, सुरक्षित और स्वतंत्र तकनीकी उपकरण मिल सकें।'
+                  : 'For too long, vital social work has been managed on fragile spreadsheets, unencrypted messaging groups, and expensive corporate software. We operate under Bahujan Queer Foundation as a non-profit initiative to provide lasting, neutral, and secure digital rails for democratic organizing.'}
               </p>
             </div>
           </section>

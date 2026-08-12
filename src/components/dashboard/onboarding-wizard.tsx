@@ -20,9 +20,10 @@ interface OnboardingWizardProps {
 }
 
 const ORG_DESCRIPTIONS: Record<OrgType, { en: string; hi: string }> = {
+  civic_collective: { en: 'Grassroots campaigns, community mutual-aid, informal collectives & civic movements (No registration required)', hi: 'जमीनी अभियान, सामुदायिक आपसी-सहायता, अनौपचारिक समूह और नागरिक आंदोलन (पंजीकरण की आवश्यकता नहीं)' },
+  ngo: { en: 'Registered trusts, societies, Section 8 non-profits with donor CRM, 80G tax receipts & compliance', hi: 'पंजीकृत ट्रस्ट, सोसायटियां, सेक्शन 8 संस्थाएं (दानदाता CRM, 80G रसीदें और वैधानिक अनुपालन)' },
   student_union: { en: 'Hostel & Mess audits, RTI/ATR assistant, election tallies & anti-ragging cell', hi: 'हॉस्टल और मेस ऑडिट, RTI/ATR सहायक, चुनाव गणना और एंटी-रैगिंग सेल' },
   workers_union: { en: 'Collective bargaining (CBA), strike ballots, workplace grievances & dues', hi: 'सामूहिक सौदेबाजी (CBA), हड़ताल मतदान, कार्यस्थल शिकायतें और शुल्क' },
-  ngo: { en: 'Donor CRM, 80G tax receipts, grant matcher & transparency ledger', hi: 'दानदाता CRM, 80G टैक्स रसीदें, अनुदान मैचर और पारदर्शिता बही' },
   rwa: { en: 'Maintenance logs, estate operations & community voting', hi: 'रखरखाव लॉग, संपत्ति संचालन और सामुदायिक मतदान' },
 }
 

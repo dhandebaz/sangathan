@@ -13,6 +13,8 @@ const ServiceContactSchema = z.object({
   designation: z.string().startsWith('[SERVICE]'),
   area: z.string().optional(),
   notes: z.string().optional(),
+  energy_exertion: z.number().int().optional(),
+  last_access: z.string().optional(),
 })
 
 const DeleteContactSchema = z.object({
@@ -33,6 +35,8 @@ export const addServiceContact = createSafeAction(
         designation: input.designation,
         area: input.area,
         notes: input.notes,
+        energy_exertion: input.energy_exertion || 0,
+        last_access: new Date().toISOString(),
         role: 'viewer', // lowest permission
         status: 'active',
         joining_date: new Date().toISOString()
@@ -75,6 +79,8 @@ export const updateServiceContact = createSafeAction(
         designation: input.designation,
         area: input.area,
         notes: input.notes,
+        energy_exertion: input.energy_exertion,
+        last_access: new Date().toISOString(),
       })
       .eq('id', input.id)
       .eq('organisation_id', context.organizationId)

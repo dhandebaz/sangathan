@@ -9,7 +9,7 @@ import { RazorpayScript } from '@/components/razorpay-script'
 interface CheckoutButtonProps {
   amount: number
   planName: string
-  planPeriod?: 'monthly' | 'yearly' | 'lifetime'
+  planPeriod?: 'monthly' | 'yearly' | 'lifetime' | 'one_time'
   labelEn: string
   labelHi: string
   isHindi: boolean
@@ -60,8 +60,11 @@ export function CheckoutButton({
         key: process.env.NEXT_PUBLIC_RAZORPAY_API_KEY,
         amount: orderData.amount,
         currency: orderData.currency,
-        name: 'Sangathan',
-        description: `${planName} Plan (${planPeriod === 'yearly' ? 'Annual' : 'Monthly'})`,
+        name: 'Sangathan (Bahujan Queer Foundation)',
+        description:
+          planName === 'Community'
+            ? 'Community Access Contribution'
+            : `Sustainer Access (${planPeriod === 'yearly' ? 'Annual' : 'Monthly'})`,
         order_id: orderData.id,
         handler: async function (paymentResponse: {
           razorpay_order_id: string
@@ -88,8 +91,8 @@ export function CheckoutButton({
             if (verifyRes.ok && verifyData.success) {
               toast.success(
                 isHindi
-                  ? 'भुगतान सफल रहा! आपकी योजना सक्रिय कर दी गई है।'
-                  : 'Payment successful! Your plan is now active.',
+                  ? 'योगदान सफल रहा! पहुंच सक्रिय कर दी गई है। नागरिक बुनियादी ढांचे का समर्थन करने के लिए धन्यवाद।'
+                  : 'Contribution successful! Access is now active. Thank you for supporting open civic infrastructure.',
               )
               if (onSuccess) {
                 onSuccess()
@@ -99,12 +102,12 @@ export function CheckoutButton({
             } else {
               toast.error(
                 isHindi
-                  ? verifyData.error || 'भुगतान सत्यापन विफल रहा'
-                  : verifyData.error || 'Payment verification failed',
+                  ? verifyData.error || 'सत्यापन विफल रहा'
+                  : verifyData.error || 'Contribution verification failed',
               )
             }
           } catch {
-            toast.error(isHindi ? 'भुगतान सत्यापन में त्रुटि' : 'Error verifying payment')
+            toast.error(isHindi ? 'सत्यापन में त्रुटि' : 'Error verifying contribution')
           }
         },
         prefill: {

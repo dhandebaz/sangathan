@@ -1,4 +1,4 @@
-export type OrgType = 'ngo' | 'student_union' | 'workers_union' | 'rwa'
+export type OrgType = 'civic_collective' | 'ngo' | 'student_union' | 'workers_union' | 'rwa'
 
 export type OrgColor = 'brand' | 'emerald' | 'amber' | 'sky' | 'rose' | 'indigo'
 
@@ -9,7 +9,8 @@ export interface OrgTypeConfig {
 }
 
 export const ORG_TYPES: Record<OrgType, OrgTypeConfig> = {
-  ngo: { en: 'NGO', hi: 'स्वयंसेवी संस्था', color: 'emerald' },
+  civic_collective: { en: 'Civic Collective', hi: 'नागरिक समूह / मोर्चा', color: 'rose' },
+  ngo: { en: 'Registered NGO', hi: 'पंजीकृत स्वयंसेवी संस्था (NGO)', color: 'emerald' },
   student_union: { en: 'Student Union', hi: 'छात्र संघ', color: 'indigo' },
   workers_union: { en: 'Workers Union', hi: 'श्रमिक संघ', color: 'amber' },
   rwa: { en: 'RWA', hi: 'आवासीय कल्याण संघ', color: 'sky' },

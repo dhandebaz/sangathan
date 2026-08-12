@@ -78,9 +78,9 @@ The residents of ________ Colony respectfully submit this representation regardi
 
 The following areas require urgent attention:
 
-1. Main colony road from Gate No. ________ to ________ — Multiple potholes causing accidents
-2. Gali No. ________ — Complete breakdown of road surface, waterlogging after rain
-3. ________ Chowk — Broken speed breaker creating hazard for two-wheelers
+1. Main colony road from Gate No. ________ to ________: Multiple potholes causing accidents
+2. Gali No. ________: Complete breakdown of road surface, waterlogging after rain
+3. ________ Chowk: Broken speed breaker creating hazard for two-wheelers
 
 The poor road conditions are causing:
 - Frequent vehicle breakdowns and tyre punctures
@@ -147,9 +147,9 @@ Yours faithfully,`,
 We wish to draw your attention to the growing menace of illegal encroachments in ________ Colony that are obstructing public pathways and emergency access routes.
 
 Specific encroachments:
-1. Illegal construction/extension at House No. ________, Gali No. ________ — blocking drain
-2. Unauthorized vendor stalls at ________ Chowk — obstructing pedestrian movement
-3. Construction material dumped on public road near ________ — blocking fire tender access
+1. Illegal construction/extension at House No. ________, Gali No. ________: blocking drain
+2. Unauthorized vendor stalls at ________ Chowk: obstructing pedestrian movement
+3. Construction material dumped on public road near ________: blocking fire tender access
 4. Unauthorized parking of commercial vehicles at ________
 
 These encroachments are in violation of MCD building bylaws and are causing:
@@ -251,8 +251,8 @@ Yours faithfully,`,
 We, the residents of ________ Colony, under the jurisdiction of PS ________, wish to bring to your attention the deteriorating law and order situation in our locality.
 
 Recent incidents:
-1. ________ (Date: ________) — Theft/chain snatching/eve teasing near ________
-2. ________ (Date: ________) — Suspicious persons/vehicles noticed at night
+1. ________ (Date: ________): Theft/chain snatching/eve teasing near ________
+2. ________ (Date: ________): Suspicious persons/vehicles noticed at night
 3. Anti-social elements gathering near ________ causing nuisance
 
 Current security gaps:
@@ -289,9 +289,9 @@ ________ Colony falls under the list of unauthorized colonies identified by the 
 
 Despite being on the regularization list (S. No. ________), our colony still lacks basic civic amenities:
 
-1. No pucca (concrete) internal roads — only kaccha paths
-2. No proper sewer line — open drains causing health hazards
-3. Irregular DJB water supply — dependency on private borewells
+1. No pucca (concrete) internal roads (only kaccha paths)
+2. No proper sewer line (open drains causing health hazards)
+3. Irregular DJB water supply (dependency on private borewells)
 4. No community toilet complex (required for ________ families without individual toilets)
 5. No functioning streetlights
 6. No MCD garbage collection

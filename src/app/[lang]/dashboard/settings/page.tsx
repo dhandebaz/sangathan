@@ -11,6 +11,8 @@ import { OrgSlugForm } from '@/components/settings/org-slug-form'
 import { ImageUpload } from '@/components/settings/image-upload'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ComplianceManager } from '@/components/settings/compliance-manager'
+import { AiSettingsToggle } from '@/components/settings/ai-settings-toggle'
+import { getAiAssistanceState } from '@/lib/ai/nvidia'
 import { Database } from '@/types/database'
 
 interface OrgLink {
@@ -125,6 +127,8 @@ export default async function SettingsPage(props: PageProps) {
     redirect(`/${lang}/goodbye`)
   }
 
+  const aiState = await getAiAssistanceState(orgId)
+
   return (
     <div className="max-w-5xl mx-auto py-8 px-4 space-y-8">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -135,7 +139,7 @@ export default async function SettingsPage(props: PageProps) {
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Organisation Settings</h1>
             <p className="text-sm text-muted-foreground">
-              Manage your organisation identity, compliance, transparency, and collaborations.
+              Manage your organisation identity, compliance, transparency, AI controls, and collaborations.
             </p>
           </div>
         </div>
@@ -150,8 +154,9 @@ export default async function SettingsPage(props: PageProps) {
       </div>
 
       <Tabs defaultValue="general" className="w-full">
-        <TabsList className="grid w-full grid-cols-4 lg:w-[600px] mb-8">
+        <TabsList className="grid w-full grid-cols-5 lg:w-[750px] mb-8">
           <TabsTrigger value="general">General</TabsTrigger>
+          <TabsTrigger value="ai">AI Assistance</TabsTrigger>
           <TabsTrigger value="public">Public Page</TabsTrigger>
           <TabsTrigger value="compliance">Compliance</TabsTrigger>
           <TabsTrigger value="network">Network & Rules</TabsTrigger>
@@ -207,6 +212,16 @@ export default async function SettingsPage(props: PageProps) {
               </form>
             </div>
           )}
+        </TabsContent>
+
+        <TabsContent value="ai" className="space-y-6">
+          <AiSettingsToggle
+            initialEnabled={aiState.isAssistanceEnabled}
+            isPlanSupported={aiState.isPlanSupported}
+            isConfigured={aiState.isConfigured}
+            lang={lang}
+            isHindi={lang === 'hi'}
+          />
         </TabsContent>
 
         <TabsContent value="public" className="space-y-6">

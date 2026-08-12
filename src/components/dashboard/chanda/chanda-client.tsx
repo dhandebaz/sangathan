@@ -89,7 +89,7 @@ export default function ChandaClient({
       })
       if (res?.success) {
         toast.success('Collection Round Created', {
-          description: `${purpose} chanda for ${month} ${year} — ₹${amount}/house × ${res.count || 0} houses`,
+          description: `${purpose} chanda for ${month} ${year}: ₹${amount}/house × ${res.data?.count || 0} houses`,
         })
         setOpenNewRound(false)
       } else {

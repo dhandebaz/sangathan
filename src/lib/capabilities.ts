@@ -61,6 +61,9 @@ export const BASE_CAPABILITIES: Record<OrgCapability, boolean> = {
 }
 
 export function getOrgTypeDefaults(orgType?: string | null): Record<OrgCapability, boolean> {
+  if (orgType === 'civic_collective') {
+    return { ...BASE_CAPABILITIES, volunteers: true, donations: true, campaigns: true, coalition_tools: true, transparency_mode: true, memberships: true, volunteer_engine: true, federation_mode: true, voting_engine: true, events: true, elections: true, dues: true, compliance: false, meetings: true, subgroups: true, tasks: true }
+  }
   if (orgType === 'ngo') {
     return { ...BASE_CAPABILITIES, volunteers: true, donations: true, campaigns: true, coalition_tools: true, transparency_mode: true, memberships: true, volunteer_engine: true, federation_mode: true, grants: true, events: true, elections: true, dues: true, compliance: true, meetings: true, subgroups: true }
   }

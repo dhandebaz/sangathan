@@ -18,20 +18,23 @@ export async function POST(request: Request) {
     })
 
     const body = await request.json()
-    const { amount, receipt, currency = 'INR', orgId, planName, planPeriod = 'monthly' } = body
+    const { amount, receipt, currency = 'INR', orgId, planName, planPeriod = 'one_time' } = body
 
-    if (!amount || amount <= 0) {
-      return NextResponse.json({ error: 'Invalid amount' }, { status: 400 })
+    const numAmount = Number(amount)
+    if (isNaN(numAmount) || numAmount < 1) {
+      return NextResponse.json({ error: 'Invalid contribution amount. Minimum is ₹1.' }, { status: 400 })
     }
 
     const options = {
-      amount: Math.round(amount * 100),
+      amount: Math.round(numAmount * 100),
       currency,
-      receipt: receipt || `receipt_${Date.now()}`,
+      receipt: receipt || `rcpt_sangathan_${Date.now()}`,
       notes: {
+        initiative: 'Sangathan (Bahujan Queer Foundation)',
+        purpose: planName === 'Community' ? 'Community Access Contribution' : 'Sustainer Access Contribution',
         orgId: orgId || '',
-        planName: planName || 'Institution',
-        planPeriod: planPeriod || 'monthly',
+        planName: planName || 'Community',
+        planPeriod: planPeriod || 'one_time',
       },
     }
 
@@ -39,7 +42,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(order)
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Failed to create order'
+    const errorMessage = error instanceof Error ? error.message : 'Failed to create contribution order'
     logger.error('razorpay', 'Failed to create Razorpay order', { error: errorMessage })
     return NextResponse.json({ error: errorMessage }, { status: 500 })
   }

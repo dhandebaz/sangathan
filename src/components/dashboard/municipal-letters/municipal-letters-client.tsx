@@ -32,6 +32,10 @@ const categoryIcons: Record<string, React.ElementType> = {
   revenue: MapPin,
 }
 
+function generateRefNumber(prefix: string): string {
+  return `${prefix}/${new Date().getFullYear()}/${String(Math.floor(Math.random() * 9000) + 1000)}`
+}
+
 export default function MunicipalLettersClient({
   defaultOrgName,
 }: MunicipalLettersClientProps) {
@@ -58,7 +62,7 @@ export default function MunicipalLettersClient({
     setBody(template.body)
     setSignatory1(template.signatory1)
     setSignatory2(template.signatory2)
-    setRefNumber(`${template.refPrefix}/${new Date().getFullYear()}/${String(Math.floor(Math.random() * 9000) + 1000)}`)
+    setRefNumber(generateRefNumber(template.refPrefix))
   }
 
   const handlePrint = () => {

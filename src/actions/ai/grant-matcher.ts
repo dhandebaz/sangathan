@@ -4,6 +4,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { OPEN_GRANT_OPPORTUNITIES, GrantOpportunity } from '@/lib/grants/grant-database'
 import { getOrgLabel } from '@/lib/org-types'
+import { checkAiAccess } from '@/lib/ai/nvidia'
 
 export interface MatchResult {
   opportunity: GrantOpportunity
@@ -73,19 +74,24 @@ export interface GeneratedProposalDraft {
 }
 
 export async function generateGrantProposalDraftAction(opportunityId: string): Promise<{ success: boolean; proposal?: GeneratedProposalDraft; error?: string }> {
+  const orgId = await getSelectedOrganisationId()
+  if (!orgId) return { success: false, error: 'Organisation not selected' }
+
+  const hasAccess = await checkAiAccess(orgId)
+  if (!hasAccess) {
+    return { success: false, error: 'Sangathan AI Assistance is disabled or not available for this organisation.' }
+  }
+
   const opp = OPEN_GRANT_OPPORTUNITIES.find((g) => g.id === opportunityId)
   if (!opp) return { success: false, error: 'Grant opportunity not found' }
 
-  const orgId = await getSelectedOrganisationId()
   let orgName = 'Democratic Action Collective'
-  if (orgId) {
-    try {
-      const adminClient = createServiceClient()
-      const { data } = await adminClient.from('organisations').select('name').eq('id', orgId).single()
-      if (data?.name) orgName = data.name
-    } catch {
-      // fallback
-    }
+  try {
+    const adminClient = createServiceClient()
+    const { data } = await adminClient.from('organisations').select('name').eq('id', orgId).single()
+    if (data?.name) orgName = data.name
+  } catch {
+    // fallback
   }
 
   const requestedAmount = Math.round(opp.maxFundingAmount * 0.85)

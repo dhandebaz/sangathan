@@ -10,20 +10,20 @@ export async function POST(request: Request) {
       razorpay_payment_id,
       razorpay_signature,
       orgId,
-      planName,
-      planPeriod = 'monthly',
-      amount = 1000,
+      planName = 'Community',
+      planPeriod = 'one_time',
+      amount = 50,
     } = await request.json()
 
     const key_secret = process.env.RAZORPAY_KEY_SECRET
 
     if (!key_secret) {
       logger.error('razorpay', 'Razorpay secret missing for verification')
-      return NextResponse.json({ error: 'Configuration error' }, { status: 500 })
+      return NextResponse.json({ error: 'Gateway configuration error' }, { status: 500 })
     }
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-      return NextResponse.json({ error: 'Missing parameters' }, { status: 400 })
+      return NextResponse.json({ error: 'Missing payment parameters' }, { status: 400 })
     }
 
     const body = `${razorpay_order_id}|${razorpay_payment_id}`
@@ -49,12 +49,25 @@ export async function POST(request: Request) {
       planName,
     })
 
-    // If orgId is provided, activate subscription / capabilities in database
+    const supabaseAdmin = createServiceClient()
+
+    // 1. Duplicate transaction protection
+    const { data: existingTx } = await supabaseAdmin
+      .from('billing_transactions')
+      .select('id')
+      .eq('razorpay_payment_id', razorpay_payment_id)
+      .maybeSingle()
+
+    if (existingTx) {
+      logger.warn('razorpay', 'Duplicate payment verification attempt ignored', {
+        paymentId: razorpay_payment_id,
+      })
+      return NextResponse.json({ success: true, message: 'Contribution already processed and recorded.' })
+    }
+
+    // 2. If orgId is provided, update organisation status and tier
     if (orgId) {
       try {
-        const supabaseAdmin = createServiceClient()
-
-        // 1. Fetch current org capabilities
         const { data: org } = await supabaseAdmin
           .from('organisations')
           .select('capabilities, plan_name, whitelabel_enabled')
@@ -71,27 +84,18 @@ export async function POST(request: Request) {
         }
 
         const isWhiteLabelOnly = planName === 'White-label' || planName === 'whitelabel'
-        const isFederation = planName === 'Federation'
+        const isCommunity = planName === 'Community'
+        const isSustainer = planName === 'Institution' || planName === 'Sustainer'
 
         const updatePayload: Record<string, unknown> = {}
 
         if (isWhiteLabelOnly) {
           updatePayload.whitelabel_enabled = true
-        } else if (isFederation) {
-          updatePayload.plan_name = 'Federation'
-          updatePayload.plan_period = isYearly ? 'yearly' : 'monthly'
+        } else if (isCommunity) {
+          updatePayload.plan_name = 'Community'
+          updatePayload.plan_period = 'one_time'
           updatePayload.plan_status = 'active'
-          updatePayload.plan_expires_at = expiresAt.toISOString()
-          updatePayload.whitelabel_enabled = true
-          updatePayload.capabilities = {
-            ...currentCaps,
-            ai_features: true,
-            advanced_analytics: true,
-            federation_mode: true,
-            coalition_tools: true,
-          }
-        } else {
-          // Default: Institution Plan
+        } else if (isSustainer) {
           updatePayload.plan_name = 'Institution'
           updatePayload.plan_period = isYearly ? 'yearly' : 'monthly'
           updatePayload.plan_status = 'active'
@@ -103,46 +107,51 @@ export async function POST(request: Request) {
           }
         }
 
-        // Apply update to organisations
-        await supabaseAdmin
-          .from('organisations')
-          .update(updatePayload)
-          .eq('id', orgId)
+        if (Object.keys(updatePayload).length > 0) {
+          await supabaseAdmin
+            .from('organisations')
+            .update(updatePayload)
+            .eq('id', orgId)
+        }
 
-        // 2. Record in billing_transactions table
+        // 3. Record in billing_transactions table
         await supabaseAdmin.from('billing_transactions').insert({
           organisation_id: orgId,
           amount: Number(amount),
           currency: 'INR',
-          plan_name: planName || 'Institution',
-          plan_period: isYearly ? 'yearly' : 'monthly',
+          plan_name: isCommunity ? 'Community Access' : isSustainer ? 'Sustainer Access' : planName,
+          plan_period: isCommunity ? 'one_time' : isYearly ? 'yearly' : 'monthly',
           razorpay_order_id,
           razorpay_payment_id,
           status: 'completed',
         })
 
-        // 3. Record Audit Log
+        // 4. Record Audit Log
         await supabaseAdmin.from('audit_logs').insert({
           organisation_id: orgId,
-          action: isWhiteLabelOnly ? 'WHITELABEL_ACTIVATED' : 'PLAN_UPGRADED',
+          action: isCommunity ? 'COMMUNITY_ACCESS_CONTRIBUTION' : isWhiteLabelOnly ? 'WHITELABEL_ACTIVATED' : 'SUSTAINER_ACCESS_ACTIVATED',
           resource_table: 'organisations',
           resource_id: orgId,
           details: {
             plan_name: updatePayload.plan_name || org?.plan_name,
-            plan_period: updatePayload.plan_period || 'monthly',
-            amount,
+            plan_period: updatePayload.plan_period || planPeriod,
+            amount: Number(amount),
             razorpay_payment_id,
+            initiative: 'Bahujan Queer Foundation',
           },
           actor_id: '00000000-0000-0000-0000-000000000000',
         })
       } catch (dbError) {
-        logger.error('razorpay', 'Failed to update organisation post-payment', {
+        logger.error('razorpay', 'Failed to update organisation post-contribution', {
           error: dbError instanceof Error ? dbError.message : dbError,
         })
       }
     }
 
-    return NextResponse.json({ success: true, message: 'Payment verified and plan activated successfully' })
+    return NextResponse.json({
+      success: true,
+      message: 'Contribution verified and access activated successfully.',
+    })
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Verification error'
     logger.error('razorpay', 'Payment verification failed', { error: errorMessage })

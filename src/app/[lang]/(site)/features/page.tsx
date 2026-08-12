@@ -6,10 +6,10 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'सुविधाएं | संगठन' : 'Features | Sangathan',
+    title: isHindi ? 'नागरिक सुविधाएं | संगठन' : 'Civic Features | Sangathan',
     description: isHindi
-      ? 'एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए विशेष सुविधाएं। 80G रसीदें, लिंगदोह अनुपालन, RTI सहायक, UPI भुगतान, और ऑफ़लाइन PWA।'
-      : 'Purpose-built features for Indian NGOs, student unions, workers unions, and RWAs. 80G receipts, Lyngdoh compliance, RTI assistant, UPI payments, and offline-first PWA.',
+      ? 'नागरिक समूहों, गैर सरकारी संगठनों, छात्र संघों, श्रमिक संघों और RWA के लिए विशेष डिजिटल बुनियादी ढांचा।'
+      : 'Purpose-built features for civic collectives, NGOs, student unions, workers unions, and RWAs.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/features`,
       languages: {
@@ -26,8 +26,28 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
 
   const orgs = [
     {
+      id: 'civic_collective',
+      title: isHindi ? 'नागरिक समूह व जमीनी आंदोलन' : 'Civic Collectives & Grassroots Movements',
+      icon: 'Megaphone',
+      color: 'rose',
+      description: isHindi
+        ? 'जमीनी अभियान, अनौपचारिक समूह, स्वतंत्र छात्र इकाइयां और आपसी-सहायता नेटवर्क। किसी पंजीकरण संख्या की आवश्यकता नहीं।'
+        : 'Grassroots campaigns, informal collectives, activist coalitions, and mutual-aid networks. No registration number required.',
+      features: [
+        { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Publish open letters, campaigns, and drives with live signature counters and instant volunteer conversion hooks.' },
+        { icon: 'Vote', title: 'Direct Democracy & Secret Voting Engine', desc: 'Secure, cryptographic anonymous secret ballots and leadership elections with instant tamper-evident tallies.' },
+        { icon: 'Network', title: 'Joint Front & Coalition Engine (संयुक्त मोर्चा)', desc: 'Form alliances with other movements, co-sign joint representations, and publish shared public statements.' },
+        { icon: 'ShieldAlert', title: 'Emergency SOS & Legal Rapid Response', desc: '1-tap emergency crisis trigger broadcasting GPS coordinates and detention notes to defense advocates with live response tracking.' },
+        { icon: 'Database', title: 'Offline-First Field Organizer PWA', desc: 'Door-to-door membership intake and field grievance capture in zero-connectivity areas with automatic background queue sync.' },
+        { icon: 'Award', title: 'Sharable Verified Member Badges', desc: 'Dynamic, customizable credentials for Instagram, Twitter/X, and WhatsApp with QR-verified organizational designation.' },
+        { icon: 'Users', title: 'Volunteer & Working Group Desks', desc: 'Coordinate volunteers, assign field actions, and manage decentralized working subgroups and committees.' },
+        { icon: 'Sparkles', title: 'Sangathan AI Assistance & Minutes Extraction', desc: 'Draft meeting minutes, extract action items, and synthesize lengthy policy proposals with absolute data isolation.' },
+        { icon: 'Lock', title: '1-Click Full Sovereign Data Export', desc: 'Export complete resolution records, votes, and member logs in open JSON/CSV formats anytime with zero lock-in.' }
+      ]
+    },
+    {
       id: 'ngo',
-      title: isHindi ? 'गैर सरकारी संगठन (NGO)' : 'Non-Governmental Organisations',
+      title: isHindi ? 'पंजीकृत स्वयंसेवी संगठन (NGO)' : 'Registered Non-Governmental Organisations',
       icon: 'Building2',
       color: 'emerald',
       description: isHindi
@@ -38,7 +58,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Award', title: 'Sharable Verified Member Badges', desc: 'Generate dynamic, customizable social media graphics for Instagram, Twitter/X, and WhatsApp Stories with cryptographic verification.' },
         { icon: 'Users', title: 'Team Invite System', desc: 'Invite members via email with shareable links. New members can accept and join instantly with role-based access.' },
         { icon: 'ShieldCheck', title: 'Public Trust & Transparency Ledger', desc: 'Real-time fund utilization, programmatic expenditure bar charts, and SHA-256 verified receipt audit trails with 96/100 A+ rating.' },
-        { icon: 'Sparkles', title: 'AI-Powered Grant & CSR Matcher', desc: 'Automatically scan open government schemes and CSR funds, compute match score %, and generate structured grant application drafts.' },
+        { icon: 'Sparkles', title: 'Sangathan AI Grant & CSR Matcher', desc: 'Automatically scan open government schemes and CSR funds, compute match score %, and generate structured grant application drafts.' },
         { icon: 'Smartphone', title: 'WhatsApp & Telegram Conversational Interface', desc: 'Ground-level messaging bot and interactive console allowing supporters to log grievances, submit check-ins, or check dues via text.' },
         { icon: 'Database', title: 'Offline-First Field Organizer PWA', desc: 'Door-to-door membership intake and field grievance capture in zero-connectivity areas with automatic background queue sync.' },
         { icon: 'AlertTriangle', title: 'Emergency SOS & Legal Rapid Response', desc: '1-tap emergency crisis trigger broadcasting GPS coordinates and detention notes to defense advocates with live response tracking.' },
@@ -82,7 +102,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Smartphone', title: 'WhatsApp & Telegram Conversational Bot', desc: 'Bilingual messaging bot and console for campus grievances, event attendance, and emergency SOS detention alerts.' },
         { icon: 'Database', title: 'Offline-First Field Organizer PWA', desc: 'Hostel-to-hostel and gate desk onboarding in zero-connectivity environments with automatic background synchronization.' },
         { icon: 'ShieldAlert', title: 'Emergency SOS & Legal Rapid-Response', desc: '1-tap protest detention alert broadcasting GPS coordinates to volunteer advocates with live thana response tracking.' },
-        { icon: 'Sparkles', title: 'AI-Powered Grant & CSR Matcher', desc: 'Scan UGC and government student welfare grants with 1-click structured AI proposal draft generation.' },
+        { icon: 'Sparkles', title: 'Sangathan AI Grant & Welfare Matcher', desc: 'Scan UGC and government student welfare grants with 1-click structured AI proposal draft generation.' },
         { icon: 'Database', title: 'Central Student DB & HEI Directory', desc: 'Pre-populated Indian government institutions database including JMI, JNU, DU, BHU, IITs & NITs with support for both official unions and independent collectives.' },
         { icon: 'Printer', title: 'Official Union Letterhead & PDF Exporter', desc: 'Customizable emblem header, reference number generator (SU/2026/08/XXX), recipient block, and print-ready Gyapan & press release layout.' },
         { icon: 'Vote', title: 'Live Campus Election Counting Tally Desk', desc: 'Round-by-round and booth-by-booth vote count logger with live lead calculations for Central Panel candidates.' },
@@ -169,7 +189,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests renewals and NOCs based on maintenance and facility usage.' },
         { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
         { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' },
-        { icon: 'Zap', title: 'Resilient Smart Intelligence', desc: 'Smart summaries, social content, meeting minutes, form analysis, personalized notifications, and proposal analysis with automatic AI provider failover for dependable availability.' }
+        { icon: 'Zap', title: 'Sangathan AI Assistive Intelligence', desc: 'Smart summaries, meeting minutes extraction, form sentiment analysis, and proposal analysis with master organization control.' }
       ]
     }
   ]
@@ -189,8 +209,8 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
           </h1>
           <p className="text-lg sm:text-xl text-slate-500 max-w-3xl mx-auto leading-relaxed font-normal">
             {isHindi 
-              ? 'एनजीओ, छात्र संघों, श्रमिक संघों और आरडब्ल्यूए को प्रबंधित करने के लिए शक्तिशाली डिजिटल बुनियादी ढांचा।' 
-              : 'Enterprise-grade digital infrastructure designed to empower NGOs, student unions, workers unions, and Resident Welfare Associations.'}
+              ? 'नागरिक समूहों, गैर-सरकारी संगठनों, छात्र संघों, श्रमिक संघों और RWA को सशक्त बनाने के लिए संप्रभु डिजिटल बुनियादी ढांचा।' 
+              : 'Sovereign digital infrastructure designed to empower civic collectives, NGOs, student unions, workers unions, and Resident Welfare Associations.'}
           </p>
         </div>
       </div>

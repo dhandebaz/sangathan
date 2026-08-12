@@ -100,7 +100,7 @@ export default function LyngdohClient({ initialCandidates }: LyngdohClientProps)
             >
               {initialCandidates.map(c => (
                 <option key={c.id} value={c.id}>
-                  {c.profiles?.full_name} — {c.election_positions?.title} ({c.election_positions?.elections?.title})
+                  {c.profiles?.full_name} ({c.election_positions?.title} - {c.election_positions?.elections?.title})
                 </option>
               ))}
             </select>
