@@ -41,6 +41,8 @@ export const docsConfig: DocSection[] = [
     title: { en: 'Specialized Modules', hi: 'विशिष्ट मॉड्यूल' },
     icon: Wrench,
     items: [
+      { title: { en: 'BQF AI Recognition & Verification', hi: 'BQF AI मान्यता व सत्यापन' }, slug: 'bqf-recognition' },
+      { title: { en: 'Government & Municipal Representation Letters', hi: 'सरकारी व नगर निगम प्रतिवेदन पत्र' }, slug: 'municipal-letters' },
       { title: { en: 'Statutory Registers', hi: 'वैधानिक रजिस्टर्स' }, slug: 'statutory-registers' },
       { title: { en: 'Master Reference & Geo Data', hi: 'मास्टर संदर्भ व भौगोलिक डेटा' }, slug: 'master-reference-data' },
       { title: { en: 'Grievances & Complaints', hi: 'शिकायतें' }, slug: 'grievances' },

@@ -35,6 +35,43 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.37.0',
+    titleEn: 'Bahujan Queer Foundation (BQF) AI Recognition Engine, Legal Government Template Grid & Hyper-Personalized Role Onboarding',
+    titleHi: 'बहुजन क्वीर फाउंडेशन (BQF) AI मान्यता इंजन, कानूनी सरकारी टेम्पलेट ग्रिड एवं रोल ऑनबोर्डिंग',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Empowered unregistered civic collectives with official recognition backed by Bahujan Queer Foundation (Delhi Reg. Section 8 NGO • CIN: U88900DL2025NPL452474). Features AI-powered facial & ID document verification, legally binding indemnity agreements, an AI Government Representation Generator for instantly drafting petitions to SDMs, Police Commissioners, and Municipal Bodies, and a streamlined onboarding setup workflow.',
+    descHi: 'बहुजन क्वीर फाउंडेशन (दिल्ली पंजीकृत सेक्शन 8 NGO • CIN: U88900DL2025NPL452474) के तहत अनौपचारिक नागरिक मंचों को आधिकारिक मान्यता प्रदान की। इसमें AI-संचालित चेहरे व दस्तावेज सत्यापन, कानूनी क्षतिपूर्ति अनुबंध, SDM, पुलिस और नगर निगम को तुरंत याचिकाएं भेजने के लिए AI सरकारी प्रतिवेदन जनरेटर, और रोल ऑनबोर्डिंग शामिल है।',
+    color: 'purple',
+    icon: ShieldCheck,
+    features: [
+      {
+        nameEn: 'BQF AI Facial & ID Document Verification',
+        nameHi: 'BQF AI चेहरा व पहचान दस्तावेज सत्यापन',
+        textEn: 'AI verification of lead representatives using scanned Aadhaar/Passport documents and selfie matching, granting recognized civic collective status under BQF with legally binding statutory indemnity.',
+        textHi: 'स्कैन किए गए आधार/पासपोर्ट और सेल्फ़ी मिलान का उपयोग करके AI सत्यापन, BQF के तहत क्षतिपूर्ति शर्तों के साथ मान्यता प्राप्त नागरिक मंच की स्थिति प्रदान करता है।',
+      },
+      {
+        nameEn: 'AI Legal Government Representation Generator',
+        nameHi: 'AI कानूनी सरकारी प्रतिवेदन जनरेटर',
+        textEn: 'Instant AI drafting of legally sound government petitions referencing statutory provisions (DMC Act, Motor Vehicles Act, RTI Act) tailored for SDMs, Police Commissioners, and Municipal Bodies.',
+        textHi: 'SDM, पुलिस आयुक्त और नगर निगम के लिए वैधानिक प्रावधानों (DMC अधिनियम, RTI, आदि) का उल्लेख करते हुए कानूनी रूप से सही सरकारी याचिकाओं का तुरंत AI प्रारूपण।',
+      },
+      {
+        nameEn: 'Expanded Multi-Sector Template Grid',
+        nameHi: 'विस्तारित बहु-क्षेत्रीय टेम्पलेट ग्रिड',
+        textEn: 'Curated official representation templates across BQF Recognized Civic Submissions, Labour Rights & Minimum Wages, Student Campus Facilities, Police Patrolling, and Municipal Services.',
+        textHi: 'BQF मान्यता प्राप्त नागरिक सबमिशन, श्रम अधिकार व न्यूनतम मजदूरी, छात्र परिसर सुविधाएं, पुलिस गश्त और नगर निगम सेवाओं में क्यूरेटेड सरकारी पत्र टेम्पलेट्स।',
+      },
+      {
+        nameEn: 'Master Account & Role Hierarchy Onboarding',
+        nameHi: 'मास्टर अकाउंट एवं रोल पदानुक्रम ऑनबोर्डिंग',
+        textEn: 'Step-by-step setup guide introducing Primary Admin privileges, Second Admin operational delegation, Can Manage, Can Edit, and Can Comment roles.',
+        textHi: 'मास्टर व्यवस्थापक विशेषाधिकार, सेकेंड एडमिन संचालन प्रतिनिधिमंडल, कैन मैनेज, कैन एडिट और कैन कमेंट भूमिकाओं का परिचय देने वाली चरण-दर-चरण ऑनबोर्डिंग गाइड।',
+      },
+    ],
+  },
+  {
     version: 'v1.36.0',
     titleEn: 'Live Google Workspace API Integration — Contacts, Sheets & Forms with Incremental OAuth Consent',
     titleHi: 'लाइव Google Workspace API इंटीग्रेशन — संपर्क, शीट्स व फॉर्म्स, इन्क्रीमेंटल OAuth सहमति सहित',

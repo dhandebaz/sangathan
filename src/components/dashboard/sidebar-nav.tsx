@@ -287,6 +287,8 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
         items: [
           { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Helpdesk', show: true },
           { href: `/${lang}/dashboard/compliance`, icon: ScrollText, label: 'Compliance Tracker', show: !!c.compliance },
+          { href: `/${lang}/dashboard/compliance/bqf-verification`, icon: ShieldCheck, label: 'BQF AI Verification', show: true },
+          { href: `/${lang}/dashboard/municipal-letters`, icon: Printer, label: 'Govt & Civic Letters', show: true },
         ].filter(i => i.show)
       },
       adminGroup

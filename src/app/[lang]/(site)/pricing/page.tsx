@@ -114,6 +114,14 @@ export default async function PricingPage({
         ? 'हाँ, बिल्कुल। संगठन विशेष रूप से अनौपचारिक समूहों, विरोध मंचों, छात्र इकाइयों और नागरिक आंदोलनों का समर्थन करता है। आपको शुरू करने के लिए किसी सरकारी पंजीकरण संख्या की आवश्यकता नहीं है।'
         : 'Yes, absolutely. Sangathan is built for informal collectives, mutual-aid groups, student cells, and grassroots campaigns without requiring statutory registration numbers.',
     },
+    {
+      question: isHindi
+        ? 'बहुजन क्वीर फाउंडेशन (BQF) मान्यता कैसे काम करती है?'
+        : 'How does Bahujan Queer Foundation (BQF) recognition work for collectives?',
+      answer: isHindi
+        ? 'बहुजन क्वीर फाउंडेशन (दिल्ली पंजीकृत सेक्शन 8 NGO • CIN: U88900DL2025NPL452474) अनौपचारिक नागरिक समूहों को AI चेहरा व पहचान पत्र सत्यापन के आधार पर आधिकारिक BQF मान्यता प्रदान करता है। वैधानिक क्षतिपूर्ति शर्तों के तहत, आपका समूह विधायकों, SDM, पुलिस और नगर निगम को आधिकारिक पत्र भेजने के लिए BQF समर्थित मान्यता प्राप्त स्थिति का उपयोग कर सकता है।'
+        : 'Bahujan Queer Foundation (Delhi Reg. Section 8 NGO • CIN: U88900DL2025NPL452474) provides official BQF Recognition for unregistered collectives via AI facial & ID verification. Under statutory legal indemnity terms, your collective can issue official government representations and municipal letters to MLAs, SDMs, Police Commissioners, and Municipal Bodies.',
+    },
   ]
 
   const costBreakdown = [

@@ -4,11 +4,13 @@ import { ZodSchema } from 'zod'
 import { logger } from '@/lib/logger'
 import { checkRateLimitByKey } from '@/lib/ratelimit'
 import { requireCapability, type OrgCapability } from '@/lib/capabilities'
+import { checkUserPermission } from '@/lib/permissions'
 import { logAction } from '@/lib/audit/log'
 import type { Json } from '@/types/database'
 
 export interface ActionOptions {
   allowedRoles?: Role[]
+  allowedPermissions?: string[]
   allowedCapabilities?: OrgCapability[]
   actionName?: string
   rateLimit?: { points: number; duration: number }
@@ -87,6 +89,16 @@ export function createSafeAction<TInput, TOutput>(
             await requireCapability(context.organizationId, cap)
           } catch {
             return { success: false, error: `Access Denied: Capability '${cap}' is not enabled for this organisation.` }
+          }
+        }
+      }
+
+      // Permission check
+      if (options.allowedPermissions?.length) {
+        for (const perm of options.allowedPermissions) {
+          const hasPerm = await checkUserPermission(context.organizationId, context.user.id, perm)
+          if (!hasPerm) {
+            return { success: false, error: `Access Denied: Permission '${perm}' is required.` }
           }
         }
       }

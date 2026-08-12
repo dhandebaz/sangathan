@@ -1,14 +1,14 @@
 /**
- * Municipal Letter Templates for Colony/RWA Representations
+ * Municipal & Government Representation Templates
  * 
- * Common pre-formatted letters used by RWAs and colony associations
- * when writing to elected representatives and civic agencies.
+ * Official pre-formatted letters used by RWAs, Civic Collectives, BQF Recognized Groups,
+ * Workers Unions, and Student Unions when writing to Indian government authorities.
  */
 
 export interface MunicipalLetterTemplate {
   id: string
   /** Display category for grouping */
-  category: 'elected_representative' | 'municipal_civic' | 'utility' | 'police' | 'revenue'
+  category: 'elected_representative' | 'municipal_civic' | 'utility' | 'police' | 'revenue' | 'bqf_official' | 'labour_rights' | 'student_campus'
   /** Template title shown in UI */
   title: string
   /** Hindi title */
@@ -30,6 +30,42 @@ export interface MunicipalLetterTemplate {
 }
 
 export const MUNICIPAL_LETTER_TEMPLATES: MunicipalLetterTemplate[] = [
+  // --- BQF Official Civic Representations ---
+  {
+    id: 'bqf_civic_representation',
+    category: 'bqf_official',
+    title: 'BQF Official Recognized Collective Civic Representation',
+    titleHi: 'BQF मान्यता प्राप्त नागरिक मंच आधिकारिक प्रतिवेदन',
+    description: 'Official representation under Bahujan Queer Foundation (CIN: U88900DL2025NPL452474) recognized civic collective status.',
+    recipient: 'To,\nThe District Magistrate (DM) / Deputy Commissioner,\nOffice of District Magistrate, District ________,\nGovt. of NCT of Delhi / State Govt.',
+    subject: 'OFFICIAL REPRESENTATION REGARDING PUBLIC INFRASTRUCTURE & DISCRIMINATION FREE CIVIC AMENITIES IN ________ AREA',
+    body: `Respected Sir/Madam,
+
+This official representation is submitted on behalf of ________, a grassroots civic collective recognized under the civic empowerment framework of BAHUJAN QUEER FOUNDATION (Section 8 NGO Registered in Delhi, CIN: U88900DL2025NPL452474).
+
+We bring to your urgent attention the pressing civic issues affecting marginalized communities and local residents in ________ locality:
+
+1. Lack of sanitation and basic public convenience facilities in Gali/Block ________
+2. Inadequate streetlight illumination creating safety concerns for women, queer residents, and senior citizens
+3. Delay in municipal repair works despite prior public representations
+
+Constitutional & Statutory Rights Referenced:
+- Article 21 of the Constitution of India (Right to Life & Clean Environment)
+- Delhi Municipal Corporation Act / State Municipal Regulations
+
+We request your office to:
+(a) Order an immediate site inspection by the concerned Nodal Officer
+(b) Issue directions to local civic bodies for immediate resolution within 14 working days
+(c) Provide a copy of the Action Taken Report (ATR) to our collective
+
+Thanking you.
+
+Yours sincerely,`,
+    signatory1: 'Lead Convener, Collective',
+    signatory2: 'BQF Civic Nodal Representative',
+    refPrefix: 'BQF/CIVIC',
+  },
+
   // --- Elected Representatives ---
   {
     id: 'mla_drain_water',
@@ -82,24 +118,16 @@ The following areas require urgent attention:
 2. Gali No. ________: Complete breakdown of road surface, waterlogging after rain
 3. ________ Chowk: Broken speed breaker creating hazard for two-wheelers
 
-The poor road conditions are causing:
-- Frequent vehicle breakdowns and tyre punctures
-- Injury risks for pedestrians, especially during night hours
-- Ambulance and fire tender access difficulty in emergencies
-- Property value depreciation in the area
+The poor road conditions are causing vehicle breakdowns and pedestrian injury risks.
 
-We request you to kindly allocate ward development funds for:
-(a) Re-surfacing of the main colony road
-(b) Repair of broken gali patches
-(c) Installation of proper interlocking tiles in narrow galis where road-roller access is not possible
-
-A delegation of residents is available to accompany you for a site inspection at your convenience.
+We request you to kindly allocate ward development funds for re-surfacing and patch repair.
 
 With warm regards,`,
     signatory1: 'President, RWA',
     signatory2: 'General Secretary, RWA',
     refPrefix: 'RWA/PARSHAD',
   },
+
   // --- Municipal / Civic ---
   {
     id: 'mcd_garbage_collection',
@@ -111,132 +139,21 @@ With warm regards,`,
     subject: 'COMPLAINT REGARDING IRREGULAR GARBAGE COLLECTION & OVERFLOWING DUSTBINS IN ________ COLONY',
     body: `Sir/Madam,
 
-This is to bring to your notice that the daily garbage collection service in ________ Colony has been severely irregular for the past ________ days/weeks.
-
-Issues observed:
-1. The garbage collection vehicle (ठेला/ट्रक) has not visited Gali No. ________ since ________
-2. Community dustbin at ________ Chowk is overflowing and creating health hazard
-3. Stray cattle and dogs are scattering garbage across the streets
-4. Segregated waste (wet/dry) collection is not being followed despite rules
-
-We have registered complaints on the 311 helpline (Reference No. ________) but the situation remains unchanged.
+This is to bring to your notice that the daily garbage collection service in ________ Colony has been severely irregular for the past ________ days.
 
 We request:
 (a) Resumption of daily door-to-door garbage pickup
 (b) Replacement of damaged community dustbins
 (c) Regular sweeping of colony roads and galis
-(d) Action against the contractor if collection norms are being violated
 
-Kindly treat this as urgent and depute your team for immediate resolution.
+Kindly treat this as urgent.
 
 Yours faithfully,`,
     signatory1: 'President, RWA',
     signatory2: 'General Secretary, RWA',
     refPrefix: 'RWA/MCD',
   },
-  {
-    id: 'mcd_encroachment',
-    category: 'municipal_civic',
-    title: 'Encroachment Removal Request to MCD',
-    titleHi: 'MCD को अतिक्रमण हटाने का अनुरोध',
-    description: 'Request removal of illegal encroachments blocking colony roads and drains.',
-    recipient: 'To,\nThe Zonal Deputy Commissioner / Anti-Encroachment Cell,\nMCD Zone ________,\nMunicipal Corporation of Delhi',
-    subject: 'REQUEST FOR REMOVAL OF ILLEGAL ENCROACHMENTS IN ________ COLONY',
-    body: `Sir/Madam,
 
-We wish to draw your attention to the growing menace of illegal encroachments in ________ Colony that are obstructing public pathways and emergency access routes.
-
-Specific encroachments:
-1. Illegal construction/extension at House No. ________, Gali No. ________: blocking drain
-2. Unauthorized vendor stalls at ________ Chowk: obstructing pedestrian movement
-3. Construction material dumped on public road near ________: blocking fire tender access
-4. Unauthorized parking of commercial vehicles at ________
-
-These encroachments are in violation of MCD building bylaws and are causing:
-- Narrowing of already tight galis, making emergency vehicle access impossible
-- Drain blockage leading to waterlogging
-- Traffic congestion and safety hazards
-
-We request an anti-encroachment drive and survey of the above locations.
-
-Yours faithfully,`,
-    signatory1: 'President, RWA',
-    signatory2: 'General Secretary, RWA',
-    refPrefix: 'RWA/ENC',
-  },
-  // --- Utilities ---
-  {
-    id: 'bses_transformer',
-    category: 'utility',
-    title: 'Transformer Overload / Power Failure to BSES',
-    titleHi: 'BSES को ट्रांसफार्मर ओवरलोड / बिजली कटौती शिकायत',
-    description: 'Complaint about frequent power cuts due to overloaded transformer or faulty wiring.',
-    recipient: 'To,\nThe Executive Engineer / SDO,\nBSES Rajdhani Power Ltd. / BSES Yamuna Power Ltd.,\n________ Division, ________ Sub-Division,\nNew Delhi',
-    subject: 'URGENT: FREQUENT POWER FAILURES & TRANSFORMER OVERLOAD IN ________ COLONY',
-    body: `Sir/Madam,
-
-The residents of ________ Colony are facing severe hardship due to frequent and prolonged power failures.
-
-Details of the problem:
-1. Colony transformer (Pole No./ID: ________) is severely overloaded
-2. Power tripping occurs ________ times daily, especially between ________ PM to ________ PM
-3. Low voltage issue affecting ________ houses in Gali No. ________
-4. Exposed/hanging wires near ________ pose electrocution risk
-
-Previous complaints:
-- BSES Complaint No. ________  dated ________
-- 19123/19122 Helpline complaint dated ________
-
-We request:
-(a) Immediate inspection of the colony transformer and augmentation if overloaded
-(b) Replacement of faulty/hanging wires
-(c) Installation of new transformer if the colony load exceeds existing capacity
-(d) Written update on resolution timeline
-
-This is a life-safety issue and requires urgent attention.
-
-Yours faithfully,`,
-    signatory1: 'President, RWA',
-    signatory2: 'General Secretary, RWA',
-    refPrefix: 'RWA/BSES',
-  },
-  {
-    id: 'djb_water_supply',
-    category: 'utility',
-    title: 'Irregular Water Supply to DJB',
-    titleHi: 'DJB को अनियमित जल आपूर्ति शिकायत',
-    description: 'Complaint about insufficient or irregular water supply and tanker requests.',
-    recipient: 'To,\nThe Executive Engineer,\nDelhi Jal Board (DJB),\n________ Water Supply Zone,\nDelhi Jal Board, New Delhi',
-    subject: 'REPRESENTATION REGARDING IRREGULAR WATER SUPPLY IN ________ COLONY',
-    body: `Sir/Madam,
-
-The residents of ________ Colony are facing acute water shortage. We respectfully submit the following:
-
-Current situation:
-1. Pipeline water supply timing: Only ________ minutes per day (morning ________ AM)
-2. Water pressure is extremely low in Gali No. ________ (upper floors get no water)
-3. No supply received on the following dates: ________
-4. DJB tanker was requested but arrived ________ days late / has not arrived
-
-Impact on residents:
-- ________ families (approx. ________ persons) are affected
-- Senior citizens and families with infants are in severe distress
-- Residents are forced to purchase private tankers at ₹________ per tanker
-
-Previous complaints:
-- DJB 1916 Complaint No. ________ dated ________
-
-We request:
-(a) Restoration of regular pipeline water supply for minimum 2 hours daily
-(b) Emergency DJB tanker deployment (2 tankers per day until supply is restored)
-(c) Inspection of the feeder pipeline for leakage/theft
-(d) Installation of a new bore-well/tube-well if the area is chronic water-scarce
-
-Yours faithfully,`,
-    signatory1: 'President, RWA',
-    signatory2: 'General Secretary, RWA',
-    refPrefix: 'RWA/DJB',
-  },
   // --- Police ---
   {
     id: 'police_security',
@@ -248,71 +165,63 @@ Yours faithfully,`,
     subject: 'REQUEST FOR ENHANCED POLICE PATROLLING & SECURITY IN ________ COLONY',
     body: `Respected SHO Sahib,
 
-We, the residents of ________ Colony, under the jurisdiction of PS ________, wish to bring to your attention the deteriorating law and order situation in our locality.
+We, the residents of ________ Colony, under the jurisdiction of PS ________, wish to bring to your attention the safety concerns in our locality.
 
-Recent incidents:
-1. ________ (Date: ________): Theft/chain snatching/eve teasing near ________
-2. ________ (Date: ________): Suspicious persons/vehicles noticed at night
-3. Anti-social elements gathering near ________ causing nuisance
-
-Current security gaps:
-- No beat constable visits at night (last visit: ________)
-- Streetlights non-functional in Gali No. ________
-- No CCTV coverage in colony entry/exit points
-- Unauthorized liquor/gambling dens reported near ________
-
-We request:
-(a) Regular night patrolling by beat constable (PCR/motorcycle)
-(b) Installation of police help booth / patrolling point
-(c) Community policing meeting with residents
-(d) Action against known troublemakers in the area
-
-We assure full cooperation from the residents and RWA.
+We request regular night patrolling by beat constables and installation of a police patrolling point.
 
 With regards,`,
     signatory1: 'President, RWA',
     signatory2: 'General Secretary, RWA',
     refPrefix: 'RWA/PS',
   },
-  // --- Revenue / Land ---
+
+  // --- Labour Rights ---
   {
-    id: 'sdm_unauthorized_colony',
-    category: 'revenue',
-    title: 'Basic Services Request for Unauthorized Colony to SDM',
-    titleHi: 'SDM को अनधिकृत कॉलोनी में बुनियादी सेवा अनुरोध',
-    description: 'Request basic civic amenities for unauthorized/JJ colonies under Delhi government regularization.',
-    recipient: 'To,\nThe Sub-Divisional Magistrate (SDM),\n________ Sub-Division,\nRevenue Department, Govt. of NCT of Delhi',
-    subject: 'REQUEST FOR PROVISION OF BASIC CIVIC AMENITIES IN ________ COLONY (UNAUTHORIZED COLONY LIST S. No. ________)',
+    id: 'labour_wages_safety',
+    category: 'labour_rights',
+    title: 'Labour Commissioner Safety & Minimum Wage Representation',
+    titleHi: 'श्रम आयुक्त को न्यूनतम मजदूरी एवं सुरक्षा प्रतिवेदन',
+    description: 'Petition to Labour Department regarding safety equipment and wage compliance.',
+    recipient: 'To,\nThe Deputy Labour Commissioner,\nOffice of the Labour Commissioner,\nGovernment of NCT of Delhi / State Govt.',
+    subject: 'REPRESENTATION REGARDING SAFETY EQUIPMENT & TIMELY WAGE DISBURSEMENT FOR SANITATION WORKERS',
     body: `Respected Sir/Madam,
 
-________ Colony falls under the list of unauthorized colonies identified by the Delhi Government for regularization under the PM-UDAY scheme / DUSIB notification.
+On behalf of ________ Union, we submit this urgent representation regarding non-compliance with statutory safety standards and wage delays under the Minimum Wages Act and Occupational Safety, Health and Working Conditions Code.
 
-Despite being on the regularization list (S. No. ________), our colony still lacks basic civic amenities:
-
-1. No pucca (concrete) internal roads (only kaccha paths)
-2. No proper sewer line (open drains causing health hazards)
-3. Irregular DJB water supply (dependency on private borewells)
-4. No community toilet complex (required for ________ families without individual toilets)
-5. No functioning streetlights
-6. No MCD garbage collection
-
-Affected population: Approx. ________ families (________ persons)
-
-We request your kind intervention under the provisions of:
-- Delhi Government's regularization policy for unauthorized colonies
-- PM-UDAY (Unauthorized Colonies in Delhi Awas Adhikar Yojana)
-- DUSIB (Delhi Urban Shelter Improvement Board) welfare schemes
-
-Specifically, we request:
-(a) Survey and mapping of the colony for regularization processing
-(b) Interim provision of DJB tanker service and community water point
-(c) Construction of pucca drain and sewer connection
-(d) Installation of solar/LED streetlights
+Demands:
+1. Provision of mandatory PPE kits, masks, and boots for sanitation workers
+2. Immediate release of pending wages for the months of ________
+3. Health checkup camps and insurance enrollment
 
 Yours faithfully,`,
-    signatory1: 'President, Colony Welfare Association',
+    signatory1: 'President, Workers Union',
     signatory2: 'General Secretary',
-    refPrefix: 'CWA/SDM',
+    refPrefix: 'UNION/LABOUR',
+  },
+
+  // --- Student Campus ---
+  {
+    id: 'student_hostel_audit',
+    category: 'student_campus',
+    title: 'University Registrar Campus Hostel & Mess Infrastructure Representation',
+    titleHi: 'कुलसचिव को छात्रावास एवं मेस ढांचागत प्रतिवेदन',
+    description: 'Representation to University administration regarding hostel hygiene and mess facilities.',
+    recipient: 'To,\nThe Registrar / Dean of Students Welfare (DSW),\n________ University / Institute,\nNew Delhi / Regional Campus',
+    subject: 'REPRESENTATION REGARDING HOSTEL INFRASTRUCTURE, MESS HYGIENE & STUDENT SAFETY',
+    body: `Respected Sir/Madam,
+
+We, the elected representatives of ________ Student Union, bring to your attention pressing issues in Hostel No. ________:
+
+1. Substandard food quality and lack of water purifiers in mess
+2. Broken window panes and unmaintained washrooms
+3. Demand for 24/7 library reading room access
+
+We request a joint committee inspection within 3 days.
+
+Sincerely,`,
+    signatory1: 'President, Student Union',
+    signatory2: 'General Secretary',
+    refPrefix: 'STUDENT/DSW',
   },
 ]
 
@@ -321,15 +230,22 @@ Yours faithfully,`,
  */
 export function getTemplatesByCategory() {
   const categories: Record<string, { label: string; labelHi: string; icon: string; templates: MunicipalLetterTemplate[] }> = {
+    bqf_official: { label: 'BQF Recognized Civic Submissions', labelHi: 'BQF मान्यता प्राप्त प्रतिवेदन', icon: 'Shield', templates: [] },
     elected_representative: { label: 'Elected Representatives', labelHi: 'निर्वाचित प्रतिनिधि', icon: 'Landmark', templates: [] },
     municipal_civic: { label: 'Municipal & Civic Services', labelHi: 'नगर निगम एवं नागरिक सेवाएं', icon: 'Building2', templates: [] },
     utility: { label: 'Utility Companies', labelHi: 'बिजली एवं जल बोर्ड', icon: 'Zap', templates: [] },
     police: { label: 'Police & Security', labelHi: 'पुलिस एवं सुरक्षा', icon: 'Shield', templates: [] },
     revenue: { label: 'Revenue & Land', labelHi: 'राजस्व एवं भूमि', icon: 'MapPin', templates: [] },
+    labour_rights: { label: 'Labour Rights & Unions', labelHi: 'श्रम अधिकार एवं यूनियन', icon: 'HardHat', templates: [] },
+    student_campus: { label: 'Student Unions & Campus', labelHi: 'छात्र संघ एवं परिसर', icon: 'GraduationCap', templates: [] },
   }
 
   for (const template of MUNICIPAL_LETTER_TEMPLATES) {
-    categories[template.category]?.templates.push(template)
+    if (categories[template.category]) {
+      categories[template.category].templates.push(template)
+    } else {
+      categories.municipal_civic.templates.push(template)
+    }
   }
 
   return categories

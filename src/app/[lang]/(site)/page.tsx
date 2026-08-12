@@ -342,7 +342,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <p className="text-indigo-600 font-medium text-sm mb-2">v1.24.0</p>
+                <p className="text-indigo-600 font-medium text-sm mb-2">v1.37.0</p>
                 <h2 className="text-2xl font-bold tracking-tight text-slate-900">{isHindi ? 'नया क्या है' : "What's New"}</h2>
               </div>
               <Link href={`/${lang}/changelog`} className="text-sm font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
@@ -352,20 +352,20 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="border border-slate-200 p-5 bg-white">
-                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">✨ Streamlined Org Registration</h4>
-                <p className="text-slate-500 text-sm">Reserve public URLs, configure dues & roles in one flow</p>
+                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">🛡️ BQF AI Recognition</h4>
+                <p className="text-slate-500 text-sm">AI facial & ID verification for unregistered collectives (CIN: U88900DL2025NPL452474)</p>
               </div>
               <div className="border border-slate-200 p-5 bg-white">
-                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">👥 Team Invite System</h4>
-                <p className="text-slate-500 text-sm">Shareable invite links for instant role-based onboarding</p>
+                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">📜 AI Govt Representation Studio</h4>
+                <p className="text-slate-500 text-sm">Draft legally sound petitions to SDMs, Police, and Municipal Bodies</p>
               </div>
               <div className="border border-slate-200 p-5 bg-white">
-                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">📊 Org-Type Dashboards</h4>
-                <p className="text-slate-500 text-sm">Tailored stats & features for NGOs, Unions, RWAs</p>
+                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">👥 Master Role Delegation</h4>
+                <p className="text-slate-500 text-sm">Master Admin, Second Admin, Can Manage, Can Edit & Can Comment roles</p>
               </div>
               <div className="border border-slate-200 p-5 bg-white">
-                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">📱 Mobile-Native Nav</h4>
-                <p className="text-slate-500 text-sm">Bottom tabs that adapt to each organisation type</p>
+                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">📱 Guided Onboarding Flow</h4>
+                <p className="text-slate-500 text-sm">Logo setup, public username reservation & BQF recognition guide</p>
               </div>
             </div>
           </div>

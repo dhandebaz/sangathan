@@ -1234,6 +1234,7 @@ export type Database = {
           organisation_id: string
           reliability_score: number
           role: string
+          role_id: string | null
           status: string
           user_id: string
         }
@@ -1250,6 +1251,7 @@ export type Database = {
           organisation_id: string
           reliability_score?: number
           role: string
+          role_id?: string | null
           status?: string
           user_id: string
         }
@@ -1266,6 +1268,7 @@ export type Database = {
           organisation_id?: string
           reliability_score?: number
           role?: string
+          role_id?: string | null
           status?: string
           user_id?: string
         }
@@ -1876,6 +1879,7 @@ export type Database = {
           global_status: string
           id: string
           is_platform_admin: boolean
+          is_primary_admin: boolean
           organisation_id: string | null
           phone: string | null
           phone_verified: boolean | null
@@ -1893,6 +1897,7 @@ export type Database = {
           global_status?: string
           id: string
           is_platform_admin?: boolean
+          is_primary_admin?: boolean
           organisation_id?: string | null
           phone?: string | null
           phone_verified?: boolean | null
@@ -1910,6 +1915,7 @@ export type Database = {
           global_status?: string
           id?: string
           is_platform_admin?: boolean
+          is_primary_admin?: boolean
           organisation_id?: string | null
           phone?: string | null
           phone_verified?: boolean | null
@@ -2495,6 +2501,59 @@ export type Database = {
           }
         ]
       }
+      authority_contacts: {
+        Row: {
+          id: string
+          organisation_id: string
+          department: string
+          authority_name: string
+          designation: string | null
+          phone: string | null
+          email: string | null
+          address: string | null
+          jurisdiction: string | null
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          organisation_id: string
+          department: string
+          authority_name: string
+          designation?: string | null
+          phone?: string | null
+          email?: string | null
+          address?: string | null
+          jurisdiction?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          organisation_id?: string
+          department?: string
+          authority_name?: string
+          designation?: string | null
+          phone?: string | null
+          email?: string | null
+          address?: string | null
+          jurisdiction?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "authority_contacts_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       tickets: {
         Row: {
           created_at: string | null
@@ -2507,6 +2566,11 @@ export type Database = {
           title: string
           type: string
           updated_at: string | null
+          authority_id: string | null
+          ai_analysis: Json | null
+          printed_at: string | null
+          delivered_at: string | null
+          delivery_method: string | null
         }
         Insert: {
           created_at?: string | null
@@ -2519,6 +2583,11 @@ export type Database = {
           title: string
           type: string
           updated_at?: string | null
+          authority_id?: string | null
+          ai_analysis?: Json | null
+          printed_at?: string | null
+          delivered_at?: string | null
+          delivery_method?: string | null
         }
         Update: {
           created_at?: string | null
@@ -2531,6 +2600,11 @@ export type Database = {
           title?: string
           type?: string
           updated_at?: string | null
+          authority_id?: string | null
+          ai_analysis?: Json | null
+          printed_at?: string | null
+          delivered_at?: string | null
+          delivery_method?: string | null
         }
         Relationships: [
           {

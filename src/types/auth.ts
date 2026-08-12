@@ -7,6 +7,10 @@ export type Role =
   | 'executive'
   | 'editor'
   | 'admin'
+  | 'can_edit'
+  | 'can_comment'
+  | 'can_manage'
+  | 'second_admin'
 
 export type MembershipStatus = 'active' | 'inactive' | 'pending' | 'rejected' | 'removed'
 

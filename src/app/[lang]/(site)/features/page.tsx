@@ -34,6 +34,8 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'जमीनी अभियान, अनौपचारिक समूह, स्वतंत्र छात्र इकाइयां और आपसी-सहायता नेटवर्क। किसी पंजीकरण संख्या की आवश्यकता नहीं।'
         : 'Grassroots campaigns, informal collectives, activist coalitions, and mutual-aid networks. No registration number required.',
       features: [
+        { icon: 'ShieldCheck', title: 'Bahujan Queer Foundation (BQF) AI Recognition', desc: 'AI-powered facial & ID verification granting official recognized status under BQF (Delhi Reg. Section 8 NGO • CIN: U88900DL2025NPL452474) with statutory legal indemnity.' },
+        { icon: 'FileText', title: 'AI Legal Government Representation Generator', desc: 'Instant AI drafting of legally sound government petitions referencing statutory provisions (DMC Act, Motor Vehicles Act, RTI) tailored for SDMs, Police Commissioners, and Municipal Bodies.' },
         { icon: 'Sparkles', title: 'Grassroots Survey & Goal Studio', desc: 'Build 1-click townhall polls, issue prioritization surveys, and volunteer pledges with live Sentiment Matrix and Participant PDF Dossiers.' },
         { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Publish open letters, campaigns, and drives with live signature counters and instant volunteer conversion hooks.' },
         { icon: 'Vote', title: 'Direct Democracy & Secret Voting Engine', desc: 'Secure, cryptographic anonymous secret ballots and leadership elections with instant tamper-evident tallies.' },

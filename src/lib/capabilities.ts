@@ -30,6 +30,158 @@ export type OrgCapability =
   | 'subgroups'
   | 'tasks'
 
+// System role permissions matrix
+export const SYSTEM_ROLE_PERMISSIONS: Record<string, Record<string, boolean>> = {
+  can_edit: {
+    create_complaint: true,
+    edit_own_complaint: true,
+    edit_any_complaint: false,
+    delete_complaint: false,
+    comment_on_complaint: true,
+    vote_on_complaint: true,
+    assign_complaint: false,
+    manage_members: false,
+    manage_roles: false,
+    manage_org_settings: false,
+    change_plan: false,
+    delete_org: false,
+    remove_primary_admin: false,
+    view_analytics: true,
+    export_data: false,
+    print_complaints: true,
+    create_task: true,
+    edit_own_task: true,
+    edit_any_task: false,
+    delete_task: false,
+    create_meeting: true,
+    manage_subgroups: false,
+    manage_campaigns: false,
+    manage_financials: false,
+  },
+  can_comment: {
+    create_complaint: false,
+    edit_own_complaint: false,
+    edit_any_complaint: false,
+    delete_complaint: false,
+    comment_on_complaint: true,
+    vote_on_complaint: true,
+    assign_complaint: false,
+    manage_members: false,
+    manage_roles: false,
+    manage_org_settings: false,
+    change_plan: false,
+    delete_org: false,
+    remove_primary_admin: false,
+    view_analytics: true,
+    export_data: false,
+    print_complaints: true,
+    create_task: false,
+    edit_own_task: false,
+    edit_any_task: false,
+    delete_task: false,
+    create_meeting: false,
+    manage_subgroups: false,
+    manage_campaigns: false,
+    manage_financials: false,
+  },
+  can_manage: {
+    create_complaint: true,
+    edit_own_complaint: true,
+    edit_any_complaint: true,
+    delete_complaint: false,
+    comment_on_complaint: true,
+    vote_on_complaint: true,
+    assign_complaint: true,
+    manage_members: true,
+    manage_roles: false,
+    manage_org_settings: true,
+    change_plan: false,
+    delete_org: false,
+    remove_primary_admin: false,
+    view_analytics: true,
+    export_data: true,
+    print_complaints: true,
+    create_task: true,
+    edit_own_task: true,
+    edit_any_task: true,
+    delete_task: true,
+    create_meeting: true,
+    manage_subgroups: true,
+    manage_campaigns: true,
+    manage_financials: true,
+  },
+  second_admin: {
+    create_complaint: true,
+    edit_own_complaint: true,
+    edit_any_complaint: true,
+    delete_complaint: true,
+    comment_on_complaint: true,
+    vote_on_complaint: true,
+    assign_complaint: true,
+    manage_members: true,
+    manage_roles: true,
+    manage_org_settings: true,
+    change_plan: false,
+    delete_org: false,
+    remove_primary_admin: false,
+    view_analytics: true,
+    export_data: true,
+    print_complaints: true,
+    create_task: true,
+    edit_own_task: true,
+    edit_any_task: true,
+    delete_task: true,
+    create_meeting: true,
+    manage_subgroups: true,
+    manage_campaigns: true,
+    manage_financials: true,
+  },
+}
+
+export function getSystemRolePermissions(role: string): Record<string, boolean> {
+  return SYSTEM_ROLE_PERMISSIONS[role] || {}
+}
+
+export function hasPermission(role: string, permission: string): boolean {
+  const perms = getSystemRolePermissions(role)
+  return perms[permission] === true
+}
+
+// Check if a role can manage another role (hierarchy)
+export const ROLE_HIERARCHY: Record<string, number> = {
+  can_comment: 10,
+  can_edit: 20,
+  can_manage: 30,
+  second_admin: 40,
+  admin: 50,
+  executive: 60,
+}
+
+export function canAssignRole(actorRole: string, targetRole: string): boolean {
+  const actorLevel = ROLE_HIERARCHY[actorRole] || 0
+  const targetLevel = ROLE_HIERARCHY[targetRole] || 0
+  // Can assign roles at or below your level, except primary admin actions
+  return actorLevel >= targetLevel
+}
+
+// Check if role is a system role
+export function isSystemRole(role: string): boolean {
+  return role in SYSTEM_ROLE_PERMISSIONS
+}
+
+// Get available roles for assignment based on actor's role and plan
+export function getAssignableRoles(actorRole: string, planName: string): string[] {
+  const allRoles = ['can_comment', 'can_edit', 'can_manage', 'second_admin']
+  
+  // Community plan: only can_edit and can_comment
+  if (planName === 'Community') {
+    return ['can_comment', 'can_edit']
+  }
+  
+  // Filter by hierarchy
+  return allRoles.filter(r => canAssignRole(actorRole, r))
+}
+
 export const BASE_CAPABILITIES: Record<OrgCapability, boolean> = {
   basic_governance: true,
   advanced_analytics: false,
