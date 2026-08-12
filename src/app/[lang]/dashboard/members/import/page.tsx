@@ -8,10 +8,13 @@ export const dynamic = 'force-dynamic'
 
 export default async function MemberImportPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ lang: string }>
+  searchParams: Promise<{ source?: string }>
 }) {
   const { lang } = await params
+  const { source } = await searchParams
   const supabase = await createClient()
 
   const {
@@ -36,9 +39,16 @@ export default async function MemberImportPage({
   const usage = await getOrgPlanUsage(selectedOrgId)
   const remaining = Math.max(0, usage.maxMembers - usage.memberCount)
 
+  const initialSource = source === 'google' ? 'live_google_contacts' : 'csv'
+
   return (
     <div className="py-4">
-      <ImportWizard lang={lang} orgType={org?.org_type || 'ngo'} remainingCapacity={remaining} />
+      <ImportWizard
+        lang={lang}
+        orgType={org?.org_type || 'ngo'}
+        remainingCapacity={remaining}
+        initialSourceType={initialSource}
+      />
     </div>
   )
 }

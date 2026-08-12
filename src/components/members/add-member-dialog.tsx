@@ -85,14 +85,23 @@ export function AddMemberDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="p-2.5 bg-orange-50 border border-orange-100 rounded-lg text-xs text-orange-950 flex items-center justify-between">
+        <div className="p-2.5 bg-orange-50 border border-orange-100 rounded-lg text-xs text-orange-950 flex flex-wrap items-center justify-between gap-2">
           <span>Adding multiple people?</span>
-          <a
-            href="members/import"
-            className="font-bold underline text-orange-800 hover:text-orange-950 flex items-center gap-1"
-          >
-            Google / Excel Import &rarr;
-          </a>
+          <div className="flex items-center gap-2 font-bold">
+            <a
+              href="members/import?source=csv"
+              className="underline text-slate-700 hover:text-slate-950"
+            >
+              Manual CSV
+            </a>
+            <span>·</span>
+            <a
+              href="members/import?source=google"
+              className="underline text-orange-800 hover:text-orange-950"
+            >
+              Google Contacts &rarr;
+            </a>
+          </div>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
           <div className="grid gap-2">

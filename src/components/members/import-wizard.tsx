@@ -29,6 +29,7 @@ interface ImportWizardProps {
   lang: string
   orgType?: string
   remainingCapacity?: number
+  initialSourceType?: SourceType
 }
 
 type ColumnMapping = {
@@ -43,12 +44,12 @@ type ColumnMapping = {
 
 type SourceType = 'csv' | 'google_sheets' | 'google_contacts' | 'live_google_contacts'
 
-export function ImportWizard({ lang, orgType = 'ngo', remainingCapacity = 1000 }: ImportWizardProps) {
+export function ImportWizard({ lang, orgType = 'ngo', remainingCapacity = 1000, initialSourceType = 'csv' }: ImportWizardProps) {
   const router = useRouter()
   const isHindi = lang === 'hi'
 
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
-  const [sourceType, setSourceType] = useState<SourceType>('csv')
+  const [sourceType, setSourceType] = useState<SourceType>(initialSourceType)
   const [rawText, setRawText] = useState('')
   const [fileName, setFileName] = useState('')
   const [googleSheetUrl, setGoogleSheetUrl] = useState('')
