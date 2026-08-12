@@ -24,9 +24,15 @@ export default async function NewFormPage(props: { params: Promise<{ lang: strin
      return <AccessDenied lang={lang} />
   }
 
+  const { data: org } = await supabase
+    .from('organisations')
+    .select('org_type')
+    .eq('id', profile.organisation_id)
+    .single()
+
   return (
     <div className="space-y-6">
-      <NewFormClient lang={lang} />
+      <NewFormClient lang={lang} orgType={org?.org_type || 'ngo'} />
     </div>
   )
 }

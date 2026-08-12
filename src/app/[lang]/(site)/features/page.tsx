@@ -34,6 +34,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'जमीनी अभियान, अनौपचारिक समूह, स्वतंत्र छात्र इकाइयां और आपसी-सहायता नेटवर्क। किसी पंजीकरण संख्या की आवश्यकता नहीं।'
         : 'Grassroots campaigns, informal collectives, activist coalitions, and mutual-aid networks. No registration number required.',
       features: [
+        { icon: 'Sparkles', title: 'Jotform-Style Grassroots Survey & Goal Studio', desc: 'Build 1-click townhall polls, issue prioritization surveys, and volunteer pledges with live Sentiment Matrix and Participant PDF Dossiers.' },
         { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Publish open letters, campaigns, and drives with live signature counters and instant volunteer conversion hooks.' },
         { icon: 'Vote', title: 'Direct Democracy & Secret Voting Engine', desc: 'Secure, cryptographic anonymous secret ballots and leadership elections with instant tamper-evident tallies.' },
         { icon: 'Network', title: 'Joint Front & Coalition Engine (संयुक्त मोर्चा)', desc: 'Form alliances with other movements, co-sign joint representations, and publish shared public statements.' },
@@ -77,7 +78,9 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Network', title: 'Chapters & Subgroups', desc: 'Organise large NGOs by city chapters or wings.' },
         { icon: 'ShieldCheck', title: 'Helpdesk Support', desc: 'Centralized inbox for public and beneficiary inquiries.' },
         { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable tier scaling, live member slot meters, automated receipt archiving, and multi-org enterprise capabilities.' },
-        { icon: 'FileSpreadsheet', title: 'Universal Excel / CSV Data Importer', desc: '1-click spreadsheet migration with automated column matching, phone number validation, and duplicate conflict reconciliation.' },
+        { icon: 'Sparkles', title: 'Jotform-Style Form & Survey Studio', desc: 'Deploy volunteer skills intake, beneficiary assessments, and donor feedback forms with live Goal Consensus % and Participant PDF Dossiers.' },
+        { icon: 'FileSpreadsheet', title: 'Live Google Workspace & CSV Importer', desc: 'Import members via live Google People API (1-click contact selection), authenticated Google Sheets API (private sheet access), or traditional CSV upload. Includes automated column matching, phone validation, and deduplication.' },
+        { icon: 'FileText', title: 'Live Google Forms API Migrator', desc: 'Import Google Forms directly via the Forms API — auto-pulls form structure (questions, field types, options) and all historical responses. Also supports CSV paste and response sheet link methods.' },
         { icon: 'FolderLock', title: 'Institutional Document & Asset Vault', desc: 'Encrypted cloud storage for Trust Deeds, 12A/80G tax orders, CSR-1 certificates, and property conveyance deeds with role permissions.' },
         { icon: 'Printer', title: 'Statutory PDF Registers & Audit Books', desc: '1-click export of official Form I Member Rolls, Form H Returns, and Double-Entry Cash Books formatted for government inspections.' },
         { icon: 'MapPin', title: 'National Geo Engine (780+ Districts)', desc: 'Pre-populated registry of all 28 Indian States, 8 UTs, and 780+ administrative districts with ISO codes and SDG sector taxonomies.' },
@@ -94,6 +97,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'छात्रों की आवाज़ को संगठित करें। सुरक्षित चुनाव कराएं और कैंपस की समस्याओं को ट्रैक करें।'
         : 'Organise the student voice. Conduct secure elections, track campus grievances, and manage events.',
       features: [
+        { icon: 'Sparkles', title: 'Campus Mess & Grievance Survey Studio', desc: '1-click mess food quality rating scales, academic grievance forms, and student sentiment analytics with executive committee PDF reports.' },
         { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Publish public campus representations with live signature counters, 1-click volunteer conversion hooks, and inter-union solidarity endorsements.' },
         { icon: 'FileSpreadsheet', title: 'Batch Student Roster Importer', desc: 'Instantly import campus batches, hostel rosters, and department lists from CSV/Excel with auto-phone validation.' },
         { icon: 'FolderLock', title: 'Campus Document & MoU Vault', desc: 'Secure repository for university representations, administrative agreements, and legal aid case files.' },
@@ -135,6 +139,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'मज़दूरों के अधिकारों की रक्षा करें। सामूहिक सौदेबाजी (CBA) और हड़तालों का समन्वय करें।'
         : 'Protect worker rights with power. Coordinate collective bargaining, track dues, and organise actions.',
       features: [
+        { icon: 'Sparkles', title: 'Shop-Floor Hazard & CBA Priority Studio', desc: 'Confidential workplace safety complaint forms and collective bargaining priority surveys with instant grievance escalation alerts.' },
         { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Launch wage defense and collective strike petitions with live signature counts and volunteer conversion.' },
         { icon: 'FileSpreadsheet', title: 'Factory Floor CSV / Excel Importer', desc: 'Import thousands of shift workers and shop floor delegates from spreadsheets with automatic duplicate cleansing.' },
         { icon: 'FolderLock', title: 'CBA & Bipartite Document Vault', desc: 'Encrypted storage for Collective Bargaining Agreements, strike notices, and wage settlement deeds.' },
@@ -168,6 +173,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'अपने पड़ोस को बेहतर बनाएं। रखरखाव, आगंतुक और सामुदायिक मतदान प्रबंधित करें।'
         : 'Modernise your neighbourhood. Manage maintenance, visitors, and democratic community polling.',
       features: [
+        { icon: 'Sparkles', title: 'Colony Resident Census & Safai Survey Studio', desc: 'Resident directory census and colony maintenance satisfaction surveys with Likert rating scales and individual flat dossier printouts.' },
         { icon: 'Receipt', title: 'Maintenance Billing', desc: 'Automated invoices based on flat size and late fees.' },
         { icon: 'FileSpreadsheet', title: 'Spreadsheet Flat & Resident Importer', desc: 'Bulk import flat numbers, owner contacts, and tenant directories from Excel in 60 seconds.' },
         { icon: 'FolderLock', title: 'Society Deed & Resolution Vault', desc: 'Centralized repository for builder handover deeds, AGM meeting minutes, fire safety NOCs, and lift licenses.' },

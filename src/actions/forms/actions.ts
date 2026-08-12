@@ -265,18 +265,20 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
   const errors: Record<string, string> = {}
 
   fields.forEach(field => {
+    if (field.type === 'heading') return
+
     const value = safeInput.data[field.id]
 
-    if (field.required && (value === undefined || value === '' || value === null)) {
+    if (field.required && (value === undefined || value === '' || value === null || (Array.isArray(value) && value.length === 0))) {
       errors[field.id] = `${field.label} is required`
     }
 
     // Basic Type Checks
-    if (value) {
-      if (field.type === 'number' && isNaN(Number(value))) {
-        errors[field.id] = 'Invalid number'
+    if (value !== undefined && value !== null && value !== '') {
+      if ((field.type === 'number' || field.type === 'rating' || field.type === 'scale') && isNaN(Number(value))) {
+        errors[field.id] = 'Invalid number or rating value'
       }
-      if (field.type === 'phone' && String(value).length < 10) {
+      if (field.type === 'phone' && String(value).replace(/\D/g, '').length < 10) {
         errors[field.id] = 'Invalid phone number'
       }
     }

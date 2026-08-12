@@ -18,7 +18,11 @@ import {
   RotateCcw,
   Sparkles,
   Users,
-  ShieldCheck
+  ShieldCheck,
+  Globe,
+  Contact,
+  Loader2,
+  ExternalLink
 } from 'lucide-react'
 
 interface ImportWizardProps {
@@ -37,13 +41,23 @@ type ColumnMapping = {
   notes: number
 }
 
+type SourceType = 'csv' | 'google_sheets' | 'google_contacts' | 'live_google_contacts'
+
 export function ImportWizard({ lang, orgType = 'ngo', remainingCapacity = 1000 }: ImportWizardProps) {
   const router = useRouter()
   const isHindi = lang === 'hi'
 
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
+  const [sourceType, setSourceType] = useState<SourceType>('csv')
   const [rawText, setRawText] = useState('')
   const [fileName, setFileName] = useState('')
+  const [googleSheetUrl, setGoogleSheetUrl] = useState('')
+  const [isLoadingGoogleContacts, setIsLoadingGoogleContacts] = useState(false)
+  const [googleContacts, setGoogleContacts] = useState<Array<{ name: string; email: string; phone: string; organization: string; title: string }>>([])
+  const [selectedGoogleContacts, setSelectedGoogleContacts] = useState<Set<number>>(new Set())
+  const [googleContactsError, setGoogleContactsError] = useState<string | null>(null)
+  const [needsGoogleConsent, setNeedsGoogleConsent] = useState(false)
+  const [isFetchingSheet, setIsFetchingSheet] = useState(false)
   const [parsedHeaders, setParsedHeaders] = useState<string[]>([])
   const [parsedRows, setParsedRows] = useState<string[][]>([])
   const [mapping, setMapping] = useState<ColumnMapping>({
@@ -70,16 +84,30 @@ export function ImportWizard({ lang, orgType = 'ngo', remainingCapacity = 1000 }
 
     if (lines.length === 0) return { headers: [], rows: [] }
 
-    // Simple CSV parser supporting comma and tab delimiters
+    // CSV parser with delimiter & quote support
     const delimiter = lines[0].includes('\t') ? '\t' : lines[0].includes(';') ? ';' : ','
-    const parsed = lines.map((line) =>
-      line
-        .split(delimiter)
-        .map((cell) => cell.replace(/^["']|["']$/g, '').trim())
-    )
+    const parsed = lines.map((line) => {
+      const row: string[] = []
+      let inQuotes = false
+      let currentCell = ''
+
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i]
+        if (char === '"' || char === "'") {
+          inQuotes = !inQuotes
+        } else if (char === delimiter && !inQuotes) {
+          row.push(currentCell.trim())
+          currentCell = ''
+        } else {
+          currentCell += char
+        }
+      }
+      row.push(currentCell.trim())
+      return row.map((cell) => cell.replace(/^["']|["']$/g, '').trim())
+    })
 
     const headers = parsed[0]
-    const rows = parsed.slice(1)
+    const rows = parsed.slice(1).filter((r) => r.some((c) => c.length > 0))
     return { headers, rows }
   }
 
@@ -103,6 +131,36 @@ export function ImportWizard({ lang, orgType = 'ngo', remainingCapacity = 1000 }
       return
     }
     processRawData(rawText)
+  }
+
+  async function handleFetchGoogleSheet() {
+    if (!googleSheetUrl.trim()) {
+      toast.error(isHindi ? 'कृपया Google Sheet का URL दर्ज करें' : 'Please enter a Google Sheet URL')
+      return
+    }
+
+    try {
+      setIsFetchingSheet(true)
+      const res = await fetch('/api/import/google-sheet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sheetUrl: googleSheetUrl.trim() }),
+      })
+
+      const data = await res.json()
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to fetch Google Sheet')
+      }
+
+      setRawText(data.csvContent)
+      setFileName('Google Sheet (Live Sync)')
+      toast.success(isHindi ? 'Google Sheet सफलतापूर्वक लोड हो गई!' : 'Google Sheet loaded successfully!')
+      processRawData(data.csvContent)
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Could not fetch Google Sheet')
+    } finally {
+      setIsFetchingSheet(false)
+    }
   }
 
   function processRawData(content: string) {
@@ -129,19 +187,19 @@ export function ImportWizard({ lang, orgType = 'ngo', remainingCapacity = 1000 }
 
     headers.forEach((h, idx) => {
       const norm = h.toLowerCase().replace(/[^a-z0-9]/g, '')
-      if (norm.includes('name') || norm.includes('naam') || norm.includes('member')) {
+      if (norm.includes('name') || norm.includes('naam') || norm.includes('member') || norm.includes('givenname') || norm.includes('firstname')) {
         if (newMapping.full_name === -1) newMapping.full_name = idx
-      } else if (norm.includes('phone') || norm.includes('mobile') || norm.includes('contact') || norm.includes('tel') || norm.includes('whatsapp')) {
+      } else if (norm.includes('phone') || norm.includes('mobile') || norm.includes('contact') || norm.includes('tel') || norm.includes('whatsapp') || norm.includes('phonenumber')) {
         if (newMapping.phone === -1) newMapping.phone = idx
-      } else if (norm.includes('email') || norm.includes('mail')) {
+      } else if (norm.includes('email') || norm.includes('mail') || norm.includes('e-mail')) {
         if (newMapping.email === -1) newMapping.email = idx
-      } else if (norm.includes('designation') || norm.includes('post') || norm.includes('pad') || norm.includes('title')) {
+      } else if (norm.includes('designation') || norm.includes('post') || norm.includes('pad') || norm.includes('title') || norm.includes('job') || norm.includes('role')) {
         if (newMapping.designation === -1) newMapping.designation = idx
-      } else if (norm.includes('area') || norm.includes('flat') || norm.includes('hostel') || norm.includes('unit') || norm.includes('wing') || norm.includes('tower')) {
+      } else if (norm.includes('area') || norm.includes('flat') || norm.includes('hostel') || norm.includes('unit') || norm.includes('wing') || norm.includes('tower') || norm.includes('address') || norm.includes('city')) {
         if (newMapping.area === -1) newMapping.area = idx
       } else if (norm.includes('role') || norm.includes('type')) {
         if (newMapping.role === -1) newMapping.role = idx
-      } else if (norm.includes('note') || norm.includes('comment') || norm.includes('remark')) {
+      } else if (norm.includes('note') || norm.includes('comment') || norm.includes('remark') || norm.includes('description')) {
         if (newMapping.notes === -1) newMapping.notes = idx
       }
     })
@@ -216,28 +274,114 @@ export function ImportWizard({ lang, orgType = 'ngo', remainingCapacity = 1000 }
     }
   }
 
+  async function handleRequestGoogleConsent() {
+    // Re-auth with Google requesting contacts scope
+    const { createClient } = await import('@/lib/supabase/client')
+    const supabase = createClient()
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(window.location.pathname)}`,
+        scopes: 'https://www.googleapis.com/auth/contacts.readonly',
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      },
+    })
+  }
+
+  async function handleFetchGoogleContacts() {
+    setIsLoadingGoogleContacts(true)
+    setGoogleContactsError(null)
+    setNeedsGoogleConsent(false)
+    
+    try {
+      const res = await fetch('/api/import/google-contacts')
+      const data = await res.json()
+      
+      if (!res.ok) {
+        if (data.needsConsent) {
+          setNeedsGoogleConsent(true)
+          setGoogleContactsError(isHindi ? 'Google Contacts का अधिकार दें। नीचे बटन दबाएं।' : 'Please grant Google Contacts permission first.')
+        } else {
+          setGoogleContactsError(data.error || 'Failed to load contacts')
+        }
+        return
+      }
+      
+      setGoogleContacts(data.contacts || [])
+      // Select all by default
+      setSelectedGoogleContacts(new Set((data.contacts || []).map((_: any, i: number) => i)))
+      toast.success(isHindi ? `${data.totalCount} Google Contacts मिले!` : `Found ${data.totalCount} Google Contacts!`)
+    } catch (err: unknown) {
+      setGoogleContactsError(err instanceof Error ? err.message : 'Failed to connect to Google')
+    } finally {
+      setIsLoadingGoogleContacts(false)
+    }
+  }
+
+  async function handleImportSelectedGoogleContacts() {
+    setIsSubmitting(true)
+    
+    const selected = googleContacts.filter((_, i) => selectedGoogleContacts.has(i))
+    const payloadMembers = selected
+      .map((c) => ({
+        full_name: c.name || 'Unnamed Contact',
+        phone: c.phone || '',
+        email: c.email || undefined,
+        designation: c.title || undefined,
+        area: c.organization || undefined,
+        role: 'member' as const,
+        status: 'active' as const,
+      }))
+      .filter((m) => m.phone.trim().length >= 5 || (m.email && m.email.length > 0))
+    
+    if (payloadMembers.length === 0) {
+      setIsSubmitting(false)
+      toast.error(isHindi ? 'कोई मान्य संपर्क नहीं (फ़ोन 5+ अंक आवश्यक)' : 'No valid contacts found (phone must be 5+ digits)')
+      return
+    }
+    
+    const res = await bulkImportMembers({ members: payloadMembers })
+    setIsSubmitting(false)
+    
+    if (res.success && res.data) {
+      setResultSummary({
+        insertedCount: res.data.insertedCount || 0,
+        skippedCount: res.data.skippedCount || 0,
+        skippedDetails: res.data.skippedDetails,
+      })
+      setStep(4)
+      toast.success(isHindi ? `${res.data.insertedCount} सदस्य Google Contacts से आयात!` : `Imported ${res.data.insertedCount} members from Google Contacts!`)
+      router.refresh()
+    } else {
+      toast.error(res.error || 'Failed to import')
+    }
+  }
+
   return (
     <div className="max-w-4xl mx-auto space-y-8 py-6">
       {/* Header */}
       <div className="border-b border-slate-200 pb-5">
         <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-700 mb-1">
           <FileSpreadsheet className="w-4 h-4" />
-          {isHindi ? 'यूनिवर्सल डेटा आयातक' : 'Universal Data Importer & Migration Wizard'}
+          {isHindi ? 'यूनिवर्सल डेटा व गूगल माइग्रेशन हब' : 'Universal Data & Google Workspace Migration Hub'}
         </div>
         <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-          {isHindi ? 'एक्सेल व सीएसवी से सदस्य आयात करें' : 'Import Members from Excel / CSV'}
+          {isHindi ? 'सदस्य व संपर्क आयात करें' : 'Import Members & Contacts'}
         </h1>
         <p className="text-sm text-slate-500 mt-1">
           {isHindi
-            ? 'अपनी मौजूदा स्प्रेडशीट या गूगल शीट से सदस्यों, पदों, फ्लैट नंबरों और संपर्कों को 1 क्लिक में माइग्रेट करें।'
-            : 'Migrate your existing rosters from Excel, Google Sheets, or CSV files into Sangathan with automated column auto-matching and deduplication.'}
+            ? 'अपनी मौजूदा एक्सेल शीट, गूगल शीट या गूगल कॉन्टैक्ट्स से सदस्यों, पदों और संपर्कों को सुरक्षित रूप से माइग्रेट करें।'
+            : 'Migrate your existing rosters from CSV/Excel files, live Google Sheets, or Google Contacts into Sangathan with automated column matching and deduplication.'}
         </p>
       </div>
 
       {/* Progress Steps */}
       <div className="grid grid-cols-4 gap-2">
         {[
-          { num: 1, label: isHindi ? '1. फाइल चुनें' : '1. Upload File' },
+          { num: 1, label: isHindi ? '1. स्रोत चुनें' : '1. Select Source' },
           { num: 2, label: isHindi ? '2. कॉलम मैच करें' : '2. Map Columns' },
           { num: 3, label: isHindi ? '3. पूर्वावलोकन' : '3. Validate' },
           { num: 4, label: isHindi ? '4. पूर्ण' : '4. Complete' },
@@ -257,70 +401,347 @@ export function ImportWizard({ lang, orgType = 'ngo', remainingCapacity = 1000 }
         ))}
       </div>
 
-      {/* STEP 1: Upload or Paste */}
+      {/* STEP 1: Source Selection (CSV / Google Sheets / Google Contacts) */}
       {step === 1 && (
         <Card className="border border-slate-200 shadow-sm bg-white">
           <CardHeader>
+            <div className="flex flex-wrap gap-2 border-b border-slate-100 pb-3 mb-2">
+              <button
+                type="button"
+                onClick={() => setSourceType('csv')}
+                className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+                  sourceType === 'csv'
+                    ? 'bg-orange-700 text-white shadow-sm'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                <FileSpreadsheet className="w-3.5 h-3.5" />
+                {isHindi ? 'CSV / Excel फाइल' : 'CSV / Excel Upload'}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSourceType('google_sheets')}
+                className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+                  sourceType === 'google_sheets'
+                    ? 'bg-orange-700 text-white shadow-sm'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                <Globe className="w-3.5 h-3.5" />
+                {isHindi ? 'Google Sheets लिंक' : 'Google Sheets Link'}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSourceType('google_contacts')}
+                className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+                  sourceType === 'google_contacts'
+                    ? 'bg-orange-700 text-white shadow-sm'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                <Contact className="w-3.5 h-3.5" />
+                {isHindi ? 'Google Contacts / vCard' : 'Google Contacts / Export'}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSourceType('live_google_contacts')}
+                className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+                  sourceType === 'live_google_contacts'
+                    ? 'bg-orange-700 text-white shadow-sm'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                {isHindi ? 'Live Google Contacts API' : 'Live Google Contacts'}
+              </button>
+            </div>
+
             <CardTitle className="text-lg font-bold text-slate-900">
-              {isHindi ? 'चरण 1: अपनी स्प्रेडशीट फाइल अपलोड करें या डेटा पेस्ट करें' : 'Step 1: Upload Spreadsheet or Paste CSV Data'}
+              {sourceType === 'csv' && (isHindi ? 'विकल्प A: CSV / एक्सेल फाइल अपलोड या पेस्ट करें' : 'Option A: Upload Spreadsheet or Paste CSV')}
+              {sourceType === 'google_sheets' && (isHindi ? 'विकल्प B: सीधे Google Sheet से आयात करें' : 'Option B: Import Directly from Google Sheets')}
+              {sourceType === 'google_contacts' && (isHindi ? 'विकल्प C: Google Contacts / vCard से आयात करें' : 'Option C: Import from Google Contacts / vCard')}
+              {sourceType === 'live_google_contacts' && (isHindi ? 'विकल्प D: Google API से सीधे संपर्क लाएं' : 'Option D: Fetch Contacts via Google API')}
             </CardTitle>
             <CardDescription className="text-xs text-slate-500">
-              {isHindi
-                ? 'समर्थित प्रारूप: .csv, .tsv या सीधे एक्सेल/गूगल शीट्स से कॉपी किया गया डेटा।'
-                : 'Supported formats: .csv, .tsv, or tab-delimited text copied directly from Excel / Google Sheets.'}
+              {sourceType === 'csv' && (isHindi ? 'समर्थित प्रारूप: .csv, .tsv या सीधे एक्सेल से कॉपी किया गया टेक्स्ट।' : 'Supported formats: .csv, .tsv, or tab-delimited text copied directly from Excel / Sheets.')}
+              {sourceType === 'google_sheets' && (isHindi ? 'अपनी Google Sheet का लिंक पेस्ट करें (सुनिश्चित करें कि Sharing "Anyone with link can view" पर सेट हो)।' : 'Paste your Google Sheet link (ensure sharing is set to "Anyone with link can view").')}
+              {sourceType === 'google_contacts' && (isHindi ? 'Google Contacts (contacts.google.com) से Export की गई CSV या vCard का डेटा पेस्ट करें।' : 'Export CSV from Google Contacts (contacts.google.com -> Export -> Google CSV) and upload or paste below.')}
+              {sourceType === 'live_google_contacts' && (isHindi ? 'आपके Google खाते से सीधे संपर्कों को एक क्लिक में आयात करें। कोई CSV फ़ाइल डाउनलोड करने की ज़रूरत नहीं।' : 'Import contacts directly from your Google account with a single click. No CSV file download needed.')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* File Dropzone */}
-            <div className="border-2 border-dashed border-slate-200 hover:border-orange-500 rounded-2xl p-8 text-center transition-all bg-slate-50/50 flex flex-col items-center justify-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-700">
-                <Upload className="w-6 h-6" />
+            {/* SOURCE: CSV File Dropzone & Paste */}
+            {sourceType === 'csv' && (
+              <>
+                <div className="border-2 border-dashed border-slate-200 hover:border-orange-500 rounded-2xl p-8 text-center transition-all bg-slate-50/50 flex flex-col items-center justify-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-700">
+                    <Upload className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <Label htmlFor="csv-file" className="cursor-pointer font-bold text-sm text-orange-700 hover:underline">
+                      {fileName ? fileName : isHindi ? 'फाइल चुनने के लिए क्लिक करें' : 'Click to browse and upload CSV'}
+                    </Label>
+                    <p className="text-xs text-slate-400 mt-1">
+                      {isHindi ? 'अधिकतम 5,000 पंक्तियाँ प्रति बैच' : 'Up to 5,000 member rows per batch upload'}
+                    </p>
+                  </div>
+                  <input
+                    id="csv-file"
+                    type="file"
+                    accept=".csv,.txt,.tsv"
+                    className="hidden"
+                    onChange={handleFileUpload}
+                  />
+                </div>
+
+                <div className="relative flex py-2 items-center">
+                  <div className="flex-grow border-t border-slate-200"></div>
+                  <span className="flex-shrink mx-4 text-xs font-bold text-slate-400 uppercase">
+                    {isHindi ? 'या सीधे टेक्स्ट पेस्ट करें' : 'OR PASTE RAW CSV / TABULAR TEXT'}
+                  </span>
+                  <div className="flex-grow border-t border-slate-200"></div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs font-bold text-slate-700">
+                    {isHindi ? 'CSV / स्प्रेडशीट टेक्स्ट' : 'Paste Rows Here'}
+                  </Label>
+                  <textarea
+                    value={rawText}
+                    onChange={(e) => setRawText(e.target.value)}
+                    placeholder="Full Name, Phone, Email, Designation, Unit/Area&#10;Aarav Sharma, 9876543210, aarav@example.com, Coordinator, Wing A&#10;Fatima Khan, 9811223344, fatima@example.com, Member, Tower 2"
+                    rows={6}
+                    className="w-full font-mono text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-600 leading-relaxed"
+                  />
+                </div>
+
+                <Button
+                  onClick={handlePasteProcess}
+                  className="w-full bg-orange-700 hover:bg-orange-800 text-white font-bold py-2.5 rounded-xl text-sm transition-all"
+                >
+                  {isHindi ? 'डेटा प्रोसेस करें और आगे बढ़ें' : 'Process Data & Match Columns'}{' '}
+                  <ArrowRight className="w-4 h-4 ml-1.5" />
+                </Button>
+              </>
+            )}
+
+            {/* SOURCE: Google Sheets URL Fetch */}
+            {sourceType === 'google_sheets' && (
+              <div className="space-y-4">
+                <div className="p-4 rounded-xl border border-blue-200 bg-blue-50/50 text-xs text-blue-900 leading-relaxed">
+                  <p className="font-bold mb-1">{isHindi ? 'Google Sheet कैसे कनेक्ट करें:' : 'How to connect your Google Sheet:'}</p>
+                  <ol className="list-decimal list-inside space-y-1 text-slate-600">
+                    <li>Open your Google Sheet $\rightarrow$ Click <strong>Share</strong> (top right).</li>
+                    <li>Change General access to <strong>"Anyone with the link can view"</strong>.</li>
+                    <li>Copy the sheet URL and paste it below.</li>
+                  </ol>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs font-bold text-slate-700">
+                    {isHindi ? 'Google Sheet URL' : 'Google Sheet URL'}
+                  </Label>
+                  <Input
+                    type="url"
+                    placeholder="https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit"
+                    value={googleSheetUrl}
+                    onChange={(e) => setGoogleSheetUrl(e.target.value)}
+                    className="text-xs font-mono"
+                  />
+                </div>
+
+                <Button
+                  onClick={handleFetchGoogleSheet}
+                  disabled={isFetchingSheet}
+                  className="w-full bg-orange-700 hover:bg-orange-800 text-white font-bold py-2.5 rounded-xl text-sm transition-all"
+                >
+                  {isFetchingSheet ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      {isHindi ? 'Google Sheet लोड हो रही है...' : 'Fetching Google Sheet Data...'}
+                    </>
+                  ) : (
+                    <>
+                      {isHindi ? 'Google Sheet फेच करें और आगे बढ़ें' : 'Fetch Sheet & Match Columns'}{' '}
+                      <ArrowRight className="w-4 h-4 ml-1.5" />
+                    </>
+                  )}
+                </Button>
               </div>
-              <div>
-                <Label htmlFor="csv-file" className="cursor-pointer font-bold text-sm text-orange-700 hover:underline">
-                  {fileName ? fileName : isHindi ? 'फाइल चुनने के लिए क्लिक करें' : 'Click to browse and upload CSV'}
-                </Label>
-                <p className="text-xs text-slate-400 mt-1">
-                  {isHindi ? 'अधिकतम 5,000 पंक्तियाँ प्रति बैच' : 'Up to 5,000 member rows per batch upload'}
-                </p>
+            )}
+
+            {/* SOURCE: Google Contacts / vCard */}
+            {sourceType === 'google_contacts' && (
+              <div className="space-y-4">
+                <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 text-xs text-slate-600 leading-relaxed">
+                  <p className="font-bold text-slate-800 mb-1">{isHindi ? 'Google Contacts एक्सपोर्ट गाइड:' : 'Google Contacts Export Guide:'}</p>
+                  <p>
+                    Go to{' '}
+                    <a
+                      href="https://contacts.google.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-orange-700 font-bold underline inline-flex items-center gap-1"
+                    >
+                      contacts.google.com <ExternalLink className="w-3 h-3" />
+                    </a>{' '}
+                    $\rightarrow$ click <strong>Export</strong> $\rightarrow$ select <strong>"Google CSV"</strong>. Then drop that file or paste its contents below.
+                  </p>
+                </div>
+
+                <div className="border-2 border-dashed border-slate-200 hover:border-orange-500 rounded-2xl p-6 text-center transition-all bg-white flex flex-col items-center justify-center gap-2">
+                  <Contact className="w-8 h-8 text-orange-700" />
+                  <Label htmlFor="contacts-csv-file" className="cursor-pointer font-bold text-xs text-orange-700 hover:underline">
+                    {fileName ? fileName : isHindi ? 'Google Contacts CSV अपलोड करें' : 'Upload Google Contacts .CSV'}
+                  </Label>
+                  <input
+                    id="contacts-csv-file"
+                    type="file"
+                    accept=".csv,.txt"
+                    className="hidden"
+                    onChange={handleFileUpload}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs font-bold text-slate-700">
+                    {isHindi ? 'या Contacts CSV का डेटा यहाँ पेस्ट करें' : 'Or Paste Contacts CSV Data'}
+                  </Label>
+                  <textarea
+                    value={rawText}
+                    onChange={(e) => setRawText(e.target.value)}
+                    placeholder="Name,Given Name,Family Name,E-mail 1 - Value,Phone 1 - Value,Organization 1 - Title&#10;Dr. Ambedkar,Ambedkar,Dr,ambedkar@org.in,+919876543210,Chief Patron"
+                    rows={4}
+                    className="w-full font-mono text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-600 leading-relaxed"
+                  />
+                </div>
+
+                <Button
+                  onClick={handlePasteProcess}
+                  className="w-full bg-orange-700 hover:bg-orange-800 text-white font-bold py-2.5 rounded-xl text-sm transition-all"
+                >
+                  {isHindi ? 'Contacts प्रोसेस करें' : 'Process Contacts & Match Columns'}{' '}
+                  <ArrowRight className="w-4 h-4 ml-1.5" />
+                </Button>
               </div>
-              <input
-                id="csv-file"
-                type="file"
-                accept=".csv,.txt,.tsv"
-                className="hidden"
-                onChange={handleFileUpload}
-              />
-            </div>
+            )}
 
-            <div className="relative flex py-2 items-center">
-              <div className="flex-grow border-t border-slate-200"></div>
-              <span className="flex-shrink mx-4 text-xs font-bold text-slate-400 uppercase">
-                {isHindi ? 'या सीधे टेक्स्ट पेस्ट करें' : 'OR PASTE RAW CSV / TABULAR TEXT'}
-              </span>
-              <div className="flex-grow border-t border-slate-200"></div>
-            </div>
+            {/* SOURCE: Live Google Contacts API */}
+            {sourceType === 'live_google_contacts' && (
+              <div className="space-y-4">
+                <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/50 text-xs text-emerald-900 leading-relaxed">
+                  <p className="font-bold mb-1">{isHindi ? 'Google Contacts API से सीधे आयात' : 'Import Directly from Google Contacts API'}</p>
+                  <p className="text-slate-600">
+                    {isHindi
+                      ? 'एक क्लिक में अपने Google खाते के सभी संपर्कों को सीधे खींचें। कोई CSV डाउनलोड ज़रूरी नहीं!'
+                      : 'Pull all your contacts directly from Google with one click. No CSV download required!'}
+                  </p>
+                </div>
 
-            <div className="space-y-2">
-              <Label className="text-xs font-bold text-slate-700">
-                {isHindi ? 'CSV / स्प्रेडशीट टेक्स्ट' : 'Paste Rows Here'}
-              </Label>
-              <textarea
-                value={rawText}
-                onChange={(e) => setRawText(e.target.value)}
-                placeholder="Full Name, Phone, Email, Designation, Unit/Area&#10;Aarav Sharma, 9876543210, aarav@example.com, Coordinator, Wing A&#10;Fatima Khan, 9811223344, fatima@example.com, Member, Tower 2"
-                rows={6}
-                className="w-full font-mono text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-600 leading-relaxed"
-              />
-            </div>
+                {googleContactsError && (
+                  <div className="p-3 rounded-xl border border-red-200 bg-red-50/50 text-xs text-red-800">
+                    {googleContactsError}
+                  </div>
+                )}
 
-            <Button
-              onClick={handlePasteProcess}
-              className="w-full bg-orange-700 hover:bg-orange-800 text-white font-bold py-2.5 rounded-xl text-sm transition-all"
-            >
-              {isHindi ? 'डेटा प्रोसेस करें और आगे बढ़ें' : 'Process Data & Match Columns'}{' '}
-              <ArrowRight className="w-4 h-4 ml-1.5" />
-            </Button>
+                {needsGoogleConsent ? (
+                  <Button
+                    onClick={handleRequestGoogleConsent}
+                    className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl text-sm"
+                  >
+                    <ShieldCheck className="w-4 h-4 mr-2" />
+                    {isHindi ? 'Google Contacts का अधिकार दें' : 'Grant Google Contacts Permission'}
+                  </Button>
+                ) : googleContacts.length === 0 ? (
+                  <Button
+                    onClick={handleFetchGoogleContacts}
+                    disabled={isLoadingGoogleContacts}
+                    className="w-full bg-orange-700 hover:bg-orange-800 text-white font-bold py-3 rounded-xl text-sm"
+                  >
+                    {isLoadingGoogleContacts ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" />{isHindi ? 'Google Contacts लोड हो रहे हैं...' : 'Loading Google Contacts...'}</>
+                    ) : (
+                      <><Contact className="w-4 h-4 mr-2" />{isHindi ? 'मेरे Google Contacts लाएं' : 'Fetch My Google Contacts'}</>
+                    )}
+                  </Button>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-bold text-slate-800">
+                        {googleContacts.length} {isHindi ? 'संपर्क मिले' : 'contacts found'} — {selectedGoogleContacts.size} {isHindi ? 'चयनित' : 'selected'}
+                      </p>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedGoogleContacts(new Set(googleContacts.map((_, i) => i)))}
+                          className="text-xs text-orange-700 font-bold hover:underline"
+                        >
+                          {isHindi ? 'सभी चुनें' : 'Select All'}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedGoogleContacts(new Set())}
+                          className="text-xs text-slate-500 font-bold hover:underline"
+                        >
+                          {isHindi ? 'सभी हटाएं' : 'Deselect All'}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="max-h-72 overflow-y-auto border border-slate-200 rounded-xl divide-y divide-slate-100">
+                      {googleContacts.map((c, i) => (
+                        <label
+                          key={i}
+                          className={`flex items-center gap-3 px-3 py-2.5 text-xs cursor-pointer transition-colors ${
+                            selectedGoogleContacts.has(i) ? 'bg-orange-50/60' : 'bg-white hover:bg-slate-50'
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedGoogleContacts.has(i)}
+                            onChange={() => {
+                              const next = new Set(selectedGoogleContacts)
+                              if (next.has(i)) next.delete(i)
+                              else next.add(i)
+                              setSelectedGoogleContacts(next)
+                            }}
+                            className="w-3.5 h-3.5 text-orange-700 rounded border-slate-300"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="font-bold text-slate-900 truncate">{c.name || 'No Name'}</p>
+                            <p className="text-slate-500 truncate">
+                              {[c.phone, c.email, c.organization].filter(Boolean).join(' · ')}
+                            </p>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+
+                    <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-600">
+                      <strong>{isHindi ? 'अगले चरण पर:' : 'On import:'}</strong>{' '}
+                      {isHindi
+                        ? 'चयनित संपर्क सीधे सदस्य सूची में जुड़ जाएंगे। डुप्लीकेट फ़ोन नंबर स्वतः छोड़ दिए जाएंगे।'
+                        : 'Selected contacts will be added directly to your member directory. Duplicate phone numbers are auto-skipped.'}
+                    </div>
+
+                    <Button
+                      onClick={handleImportSelectedGoogleContacts}
+                      disabled={selectedGoogleContacts.size === 0 || isSubmitting}
+                      className="w-full bg-orange-700 hover:bg-orange-800 text-white font-bold py-2.5 rounded-xl text-sm"
+                    >
+                      {isSubmitting ? (
+                        <><Loader2 className="w-4 h-4 mr-2 animate-spin" />{isHindi ? 'आयात हो रहा है...' : 'Importing...'}</>
+                      ) : (
+                        <>{isHindi ? `${selectedGoogleContacts.size} संपर्क आयात करें` : `Import ${selectedGoogleContacts.size} Contacts`} <ArrowRight className="w-4 h-4 ml-1.5" /></>
+                      )}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
           </CardContent>
         </Card>
       )}
@@ -639,6 +1060,7 @@ export function ImportWizard({ lang, orgType = 'ngo', remainingCapacity = 1000 }
                   setStep(1)
                   setRawText('')
                   setFileName('')
+                  setGoogleSheetUrl('')
                   setParsedRows([])
                 }}
                 className="text-xs font-bold"

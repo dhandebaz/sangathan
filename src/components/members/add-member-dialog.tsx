@@ -84,6 +84,16 @@ export function AddMemberDialog({
             Enter the details of the new member here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
+
+        <div className="p-2.5 bg-orange-50 border border-orange-100 rounded-lg text-xs text-orange-950 flex items-center justify-between">
+          <span>Adding multiple people?</span>
+          <a
+            href="members/import"
+            className="font-bold underline text-orange-800 hover:text-orange-950 flex items-center gap-1"
+          >
+            Google / Excel Import &rarr;
+          </a>
+        </div>
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
           <div className="grid gap-2">
             <Label htmlFor="full_name">Full Name *</Label>

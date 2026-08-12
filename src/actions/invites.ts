@@ -64,6 +64,107 @@ export const createInvite = createSafeAction(
   { allowedRoles: ['admin', 'editor'] }
 )
 
+const BatchInviteSchema = z.object({
+  invites: z.array(
+    z.object({
+      email: z.string().email('Valid email required'),
+      role: z.enum(['admin', 'editor', 'viewer', 'member']).default('member'),
+      name: z.string().optional(),
+    })
+  ).min(1, 'At least one invite is required'),
+})
+
+export const batchCreateInvites = createSafeAction(
+  BatchInviteSchema,
+  async (input, context) => {
+    const rawInvites = input.invites
+    const orgId = context.organizationId
+
+    // Check capacity limit
+    const limitCheck = await checkMemberLimit(orgId, rawInvites.length)
+    if (!limitCheck.allowed) {
+      return { error: limitCheck.error || `Plan limit exceeded. Cannot invite ${rawInvites.length} members.` }
+    }
+
+    const supabase = createServiceClient()
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space'
+    const origin = appUrl.startsWith('http') ? appUrl : `https://${appUrl}`
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+
+    // Fetch existing active invites to avoid duplicates
+    const { data: existing } = await supabase
+      .from('org_invites')
+      .select('email')
+      .eq('organisation_id', orgId)
+      .eq('used', false)
+
+    const existingEmails = new Set((existing || []).map((i) => i.email.toLowerCase()))
+
+    const toInsert: Array<{
+      organisation_id: string
+      invited_by: string
+      email: string
+      role: 'admin' | 'editor' | 'viewer' | 'member'
+      token: string
+      expires_at: string
+      used: boolean
+    }> = []
+
+    const skipped: string[] = []
+    const seen = new Set<string>()
+
+    for (const inv of rawInvites) {
+      const email = inv.email.toLowerCase().trim()
+      if (seen.has(email) || existingEmails.has(email)) {
+        skipped.push(email)
+        continue
+      }
+      seen.add(email)
+      toInsert.push({
+        organisation_id: orgId,
+        invited_by: context.user.id,
+        email,
+        role: inv.role,
+        token: generateSecureString(32),
+        expires_at: expiresAt,
+        used: false,
+      })
+    }
+
+    if (toInsert.length === 0) {
+      return {
+        success: false,
+        error: 'All selected contacts already have pending invitations.',
+        skipped,
+      }
+    }
+
+    const { data: inserted, error } = await supabase
+      .from('org_invites')
+      .insert(toInsert)
+      .select('id, email, token, role')
+
+    if (error) {
+      return { error: error.message || 'Failed to create batch invites' }
+    }
+
+    const createdLinks = (inserted || []).map((i) => ({
+      email: i.email,
+      role: i.role,
+      inviteLink: `${origin}/invite/${i.token}`,
+    }))
+
+    revalidatePath('/', 'layout')
+    return {
+      success: true,
+      createdCount: toInsert.length,
+      skippedCount: skipped.length,
+      invites: createdLinks,
+    }
+  },
+  { allowedRoles: ['admin', 'editor'], actionName: 'batch_create_invites' }
+)
+
 export const revokeInvite = createSafeAction(
   z.object({ inviteId: z.string().uuid() }),
   async (input, context) => {

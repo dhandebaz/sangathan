@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 
 interface CsvExportButtonProps {
-  data: Record<string, unknown>[]
+  data: Array<{ id?: string; created_at?: string; data?: any; [key: string]: any }>
   filename?: string
 }
 
