@@ -50,10 +50,10 @@ export function ContributionGoalTracker({
   const stretchGoalPercent = Math.min(100, Math.round((data.totalRaised / data.stretchGoal) * 100))
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 shadow-sm space-y-6">
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 shadow-xs space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-6">
         <div>
-          <div className="flex items-center gap-2 text-indigo-700 font-bold text-xs uppercase tracking-wider mb-1">
+          <div className="flex items-center gap-2 text-indigo-700 font-semibold text-xs mb-1">
             <Target className="w-4 h-4" />
             <span>{isHindi ? 'पारदर्शी मिशन फंडिंग लक्ष्य' : 'Transparent Mission Funding Goal'}</span>
           </div>
@@ -90,7 +90,7 @@ export function ContributionGoalTracker({
           <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
             <div
               className="h-full bg-indigo-600 rounded-full transition-all duration-1000 ease-out"
-              style={{ width: `${initialGoalPercent}%` }}
+              style={{ width: `${Math.max(initialGoalPercent, data.totalRaised > 0 ? 2 : 0)}%` }}
             />
           </div>
         </div>
@@ -101,12 +101,12 @@ export function ContributionGoalTracker({
             <span>
               {isHindi ? 'विस्तारित सुरक्षा व बैकअप लक्ष्य:' : 'Phase 2 Stretch Resilience Goal:'} ₹{data.stretchGoal.toLocaleString('en-IN')}
             </span>
-            <span className="text-slate-600 font-bold">{stretchGoalPercent}%</span>
+            <span className="text-slate-600 font-bold">{stretchGoalPercent}% Funded</span>
           </div>
           <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
             <div
               className="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-out"
-              style={{ width: `${stretchGoalPercent}%` }}
+              style={{ width: `${Math.max(stretchGoalPercent, data.totalRaised > 0 ? 1 : 0)}%` }}
             />
           </div>
         </div>

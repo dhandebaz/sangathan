@@ -178,7 +178,7 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
         <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
-            className="relative inline-flex h-9 w-9 items-center justify-center rounded-sm border border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+            className="relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-2xs active:scale-95"
             aria-label="Notifications"
           >
             <Bell className="h-4 w-4" />
@@ -193,8 +193,8 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
             <button
               type="button"
               className={cn(
-                'flex items-center gap-2 rounded-sm border border-border bg-card px-2.5 py-1.5 hover:bg-accent transition-colors',
-                'h-9'
+                'flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 hover:bg-slate-50 transition-all shadow-2xs active:scale-95',
+                'h-10'
               )}
               aria-haspopup="menu"
               aria-expanded={open}
@@ -203,74 +203,74 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
                 setOpen((prev) => !prev)
               }}
             >
-              <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-primary text-primary-foreground text-xs font-bold">
+              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-indigo-600 text-white text-xs font-bold shadow-2xs">
                 {orgInitials}
               </div>
               <div className="hidden sm:flex flex-col items-start leading-tight">
-                <span className="text-xs font-semibold text-foreground truncate max-w-[150px]">{displayOrgName}</span>
-                <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider flex items-center gap-1">
+                <span className="text-xs font-bold text-slate-900 truncate max-w-[160px]">{displayOrgName}</span>
+                <span className="text-[10px] text-slate-500 font-semibold flex items-center gap-1">
                   {orgTypeLabel}
                   {planName === 'Institution' && (
-                    <span className="bg-indigo-100 text-indigo-700 px-1 py-0.5 rounded flex items-center gap-0.5 ml-1">
-                      <Sparkles className="w-2.5 h-2.5" /> Inst
+                    <span className="bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded-full text-[9px] font-bold flex items-center gap-0.5 border border-indigo-200">
+                      <Sparkles className="w-2.5 h-2.5" /> Sustainer
                     </span>
                   )}
                 </span>
               </div>
-              <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+              <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
             </button>
 
             {open && (
               <div
                 role="menu"
                 aria-label="Profile menu"
-                className="absolute right-0 mt-2 w-56 overflow-hidden rounded-sm border border-border bg-card shadow-lg py-1.5 z-50 animate-in fade-in zoom-in-95 duration-200"
+                className="absolute right-0 mt-2 w-60 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150"
               >
-                <div className="px-3 py-3 border-b border-border flex items-center gap-3">
-                  <div className="flex items-center justify-center h-9 w-9 rounded-sm bg-accent text-brand-700 font-bold text-sm shrink-0">
+                <div className="px-3.5 py-3 border-b border-slate-100 flex items-center gap-3">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-indigo-50 text-indigo-700 font-bold text-sm shrink-0 border border-indigo-100">
                     {initials}
                   </div>
                   <div className="flex flex-col min-w-0">
-                    <span className="text-sm font-semibold text-foreground truncate">{username}</span>
-                    <span className="text-xs text-muted-foreground truncate">{userEmail}</span>
+                    <span className="text-sm font-bold text-slate-900 truncate">{username}</span>
+                    <span className="text-xs text-slate-500 truncate">{userEmail}</span>
                   </div>
                 </div>
-                <div className="p-1.5">
+                <div className="p-1.5 space-y-0.5">
                   <button
                     type="button"
-                    className="w-full flex items-center gap-2.5 rounded-sm px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors"
+                    className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors text-left"
                     role="menuitem"
                     onClick={() => {
                       router.push(`/${lang}/profile`)
                       setOpen(false)
                     }}
                   >
-                    <User className="h-4 w-4 text-muted-foreground" />
-                    View Profile
+                    <User className="h-4 w-4 text-slate-400" />
+                    View Profile (प्रोफ़ाइल)
                   </button>
                   <button
                     type="button"
-                    className="w-full flex items-center gap-2.5 rounded-sm px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors"
+                    className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors text-left"
                     role="menuitem"
                     onClick={() => {
                       router.push(`/${lang}/dashboard/settings`)
                       setOpen(false)
                     }}
                   >
-                    <Settings className="h-4 w-4 text-muted-foreground" />
-                    Organisation Settings
+                    <Settings className="h-4 w-4 text-slate-400" />
+                    Workspace Settings (सेटिंग्स)
                   </button>
                 </div>
-                <div className="border-t border-border p-1.5">
+                <div className="border-t border-slate-100 p-1.5">
                   <button
                     type="button"
-                    className="w-full flex items-center gap-2.5 rounded-sm px-3 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors"
+                    className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 transition-colors text-left"
                     role="menuitem"
                     onClick={handleSignOut}
                     disabled={isSigningOut}
                   >
                     <LogOut className="h-4 w-4" />
-                    {isSigningOut ? 'Signing out\u2026' : 'Sign Out'}
+                    {isSigningOut ? 'Signing out...' : 'Sign Out (लॉग आउट)'}
                   </button>
                 </div>
               </div>

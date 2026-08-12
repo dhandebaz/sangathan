@@ -9,7 +9,7 @@ import {
   RefreshCw,
   Database,
   DownloadCloud,
-  CheckCircle2,
+  Network,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { BreadcrumbJsonLd, FAQJsonLd } from '@/components/seo/json-ld'
@@ -106,6 +106,14 @@ export default async function PricingPage({
         ? 'बिलकुल नहीं। हम शून्य डेटा साझाकरण नीति का पालन करते हैं। कोई विज्ञापन नहीं, कोई ट्रैकर नहीं, और एक संगठन का डेटा कभी दूसरे संगठन के AI को प्रशिक्षित नहीं करता है। आप कभी भी अपना पूरा डेटा JSON/CSV में निर्यात कर सकते हैं।'
         : 'Strictly zero commercial monetization. We run no ads and sell no telemetry. Organization data is never used to train external models, and you maintain complete sovereignty with 1-click full data export.',
     },
+    {
+      question: isHindi
+        ? 'क्या गैर-पंजीकृत नागरिक समूह या जमीनी आंदोलन संगठन का उपयोग कर सकते हैं?'
+        : 'Can unregistered grassroots movements and civic collectives join?',
+      answer: isHindi
+        ? 'हाँ, बिल्कुल। संगठन विशेष रूप से अनौपचारिक समूहों, विरोध मंचों, छात्र इकाइयों और नागरिक आंदोलनों का समर्थन करता है। आपको शुरू करने के लिए किसी सरकारी पंजीकरण संख्या की आवश्यकता नहीं है।'
+        : 'Yes, absolutely. Sangathan is built for informal collectives, mutual-aid groups, student cells, and grassroots campaigns without requiring statutory registration numbers.',
+    },
   ]
 
   const costBreakdown = [
@@ -144,6 +152,15 @@ export default async function PricingPage({
         'Dedicated inference clusters for Sangathan AI (meeting minutes extraction, grant proposal assistance, ticket triage) with zero third-party training retention.',
       descHi:
         'संगठन AI (बैठक कार्यवृत्त, अनुदान मिलान, ट्राइएज) के लिए समर्पित कंप्यूट, जहां डेटा कभी साझा नहीं होता।',
+    },
+    {
+      icon: Network,
+      titleEn: 'Network Resilience & Offline PWA Sync',
+      titleHi: 'नेटवर्क लचीलापन व ऑफलाइन PWA सिंक',
+      descEn:
+        'Multi-provider router fallback and offline-first PWA sync ensuring uninterrupted collective organizing during connectivity drops.',
+      descHi:
+        'बहु-प्रदाता अतिरेक और ऑफ़लाइन PWA सिंक ताकि नेटवर्क ड्रॉप के दौरान भी संगठन बिना बाधा कार्य कर सके।',
     },
     {
       icon: RefreshCw,
@@ -207,7 +224,7 @@ export default async function PricingPage({
         {/* 3. Where Your Contribution Goes (Operational Cost Breakdown) */}
         <div className="rounded-3xl border border-slate-200 bg-slate-50/80 p-6 sm:p-12 space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
-            <div className="flex items-center justify-center gap-2 text-indigo-700 font-bold text-xs uppercase tracking-wider">
+            <div className="flex items-center justify-center gap-1.5 text-indigo-700 font-medium text-xs">
               <HeartHandshake className="w-4 h-4" />
               <span>{isHindi ? '100% पारदर्शी व्यय' : '100% Transparent Utilization'}</span>
             </div>
@@ -246,7 +263,7 @@ export default async function PricingPage({
 
         {/* 4. Privacy-First & Mirrored Infrastructure Architecture */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3 shadow-xs">
             <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
               <Lock className="w-5 h-5" />
             </div>
@@ -260,7 +277,7 @@ export default async function PricingPage({
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3 shadow-xs">
             <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
               <Server className="w-5 h-5" />
             </div>
@@ -274,7 +291,7 @@ export default async function PricingPage({
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3 shadow-xs">
             <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
               <DownloadCloud className="w-5 h-5" />
             </div>

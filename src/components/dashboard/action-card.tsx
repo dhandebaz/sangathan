@@ -1,4 +1,3 @@
-import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { ArrowRight, X } from 'lucide-react'
@@ -17,45 +16,70 @@ interface ActionCardProps {
 }
 
 const iconBgMap: Record<OrgColor, string> = {
-  brand: 'bg-brand-100 text-brand-600',
-  emerald: 'bg-emerald-100 text-emerald-600',
-  amber: 'bg-amber-100 text-amber-600',
-  sky: 'bg-sky-100 text-sky-600',
-  rose: 'bg-rose-100 text-rose-600',
-  indigo: 'bg-indigo-100 text-indigo-600',
+  brand: 'bg-indigo-50 text-indigo-600 border border-indigo-100',
+  emerald: 'bg-emerald-50 text-emerald-600 border border-emerald-100',
+  amber: 'bg-amber-50 text-amber-600 border border-amber-100',
+  sky: 'bg-sky-50 text-sky-600 border border-sky-100',
+  rose: 'bg-rose-50 text-rose-600 border border-rose-100',
+  indigo: 'bg-indigo-50 text-indigo-600 border border-indigo-100',
 }
 
-export function ActionCard({ icon: Icon, title, description, actionLabel, actionHref, color = 'brand', onDismiss, className }: ActionCardProps) {
+export function ActionCard({
+  icon: Icon,
+  title,
+  description,
+  actionLabel,
+  actionHref,
+  color = 'brand',
+  onDismiss,
+  className,
+}: ActionCardProps) {
   return (
-    <Card className={cn('overflow-hidden', className)}>
-      <CardContent className="p-4">
-        <div className="flex items-start gap-3">
-          <div className={cn('w-10 h-10 rounded-lg flex items-center justify-center shrink-0', iconBgMap[color])}>
-            <Icon className="h-5 w-5" />
+    <div
+      className={cn(
+        'rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-xs transition-all hover:shadow-sm',
+        className
+      )}
+    >
+      <div className="flex items-start gap-3.5">
+        <div
+          className={cn(
+            'w-11 h-11 rounded-xl flex items-center justify-center shrink-0 shadow-2xs',
+            iconBgMap[color]
+          )}
+        >
+          <Icon className="h-5 w-5" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-2">
+            <p className="text-xs sm:text-sm font-bold text-slate-900 leading-tight">{title}</p>
+            {onDismiss && (
+              <button
+                type="button"
+                onClick={onDismiss}
+                className="text-slate-400 hover:text-slate-700 transition-colors shrink-0 p-1 -mr-1 -mt-1 rounded-full hover:bg-slate-100"
+                aria-label="Dismiss task"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
           </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <p className="text-sm font-semibold text-foreground leading-tight">{title}</p>
-              {onDismiss && (
-                <button
-                  onClick={onDismiss}
-                  className="text-muted-foreground hover:text-foreground transition-colors shrink-0 p-0.5"
-                  aria-label="Dismiss"
-                >
-                  <X className="h-3.5 w-3.5" />
-                </button>
-              )}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{description}</p>
-            <Button asChild variant="ghost" className="h-10 px-0 mt-2 text-xs font-medium">
+          <p className="text-xs text-slate-600 mt-1 leading-relaxed">{description}</p>
+          <div className="mt-3">
+            <Button
+              asChild
+              size="sm"
+              className="h-8 px-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-all active:scale-95 shadow-xs"
+            >
               <Link href={actionHref}>
                 {actionLabel}
-                <ArrowRight className="h-3 w-3 ml-1" />
+                <ArrowRight className="h-3 w-3 ml-1.5" />
               </Link>
             </Button>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }
+

@@ -69,15 +69,16 @@ export function ContextualFAB({ lang, role, capabilities }: ContextualFABProps) 
   if (!action) return null
 
   return (
-    <div className="fixed bottom-20 right-4 z-50 md:hidden">
+    <div className="fixed bottom-[76px] right-4 z-40 md:hidden">
       <Button 
         asChild 
-        className="h-16 w-16 rounded-full shadow-xl hover:shadow-2xl bg-brand-600 hover:bg-brand-700 text-white transition-all active:scale-95"
+        className="h-14 w-14 rounded-2xl shadow-lg hover:shadow-xl bg-indigo-600 hover:bg-indigo-700 text-white transition-all active:scale-90 flex items-center justify-center p-0 border border-indigo-500/30"
       >
         <Link href={action.href} aria-label={action.label}>
-          <action.icon className="h-7 w-7" />
+          <action.icon className="h-6 w-6" />
         </Link>
       </Button>
     </div>
   )
 }
+

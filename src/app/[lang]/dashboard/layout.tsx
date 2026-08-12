@@ -185,9 +185,9 @@ export default async function DashboardLayout(props: {
           <div className="px-3 pb-3">
             <Link
               href={`/${lang}/dashboard/support`}
-              className="flex items-center justify-center gap-2 rounded-lg bg-foreground px-3 py-2.5 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+              className="flex items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50/60 px-3 py-2.5 text-xs font-bold text-rose-700 hover:bg-rose-100/70 transition-all active:scale-[0.98] shadow-2xs"
             >
-              <Heart className="h-4 w-4 text-brand-300" />
+              <Heart className="h-4 w-4 text-rose-600 fill-rose-100" />
               Support Sangathan
             </Link>
           </div>
@@ -197,16 +197,16 @@ export default async function DashboardLayout(props: {
 
       <div className="flex min-w-0 flex-1 flex-col md:pl-64">
         {maintenanceMessage && (
-          <div className="flex flex-wrap items-center gap-2 border-b border-warning/30 bg-warning-bg px-4 py-3 text-sm text-warning-text sm:px-6 lg:px-8">
-            <span className="font-semibold">Maintenance mode</span>
-            <span className="opacity-80">{maintenanceMessage}</span>
+          <div className="flex flex-wrap items-center gap-2 border-b border-amber-200 bg-amber-50 px-4 py-3 text-xs font-medium text-amber-900 sm:px-6 lg:px-8">
+            <span className="font-bold">Maintenance mode</span>
+            <span className="opacity-90">{maintenanceMessage}</span>
           </div>
         )}
-        <header className="sticky top-0 z-40 flex h-16 items-center border-b border-border bg-card/95 px-4 shadow-sm backdrop-blur-sm sm:px-6 lg:px-8">
+        <header className="sticky top-0 z-40 flex h-16 items-center border-b border-slate-200 bg-white/95 px-4 shadow-xs backdrop-blur-md sm:px-6 lg:px-8">
           <DashboardTopBar lang={lang} userEmail={user?.email ?? null} role={role} orgName={orgName} orgLogoUrl={orgLogoUrl} orgType={orgType} planName={planName} />
         </header>
 
-        <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-8xl flex-1 animate-fade-in px-4 pb-24 pt-6 sm:px-6 lg:px-8 lg:pb-10 lg:pt-8">
+        <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-8xl flex-1 animate-fade-in px-4 pb-28 pt-6 sm:px-6 sm:pb-24 lg:px-8 lg:pb-12 lg:pt-8">
           {children}
         </main>
       </div>

@@ -554,3 +554,28 @@ a,
 .animate-stagger > *:nth-child(10) { animation-delay: 360ms; }
 .animate-stagger > *:nth-child(11) { animation-delay: 400ms; }
 .animate-stagger > *:nth-child(12) { animation-delay: 440ms; }
+
+/* ── Mobile PWA & Touch UX Optimizations ── */
+@layer base {
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+.touch-target {
+  min-height: 48px;
+  min-width: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.safe-bottom {
+  padding-bottom: max(env(safe-area-inset-bottom), 16px);
+}
+

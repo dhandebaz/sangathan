@@ -28,11 +28,15 @@ export function PublicPricingGrid({ orgId = '', lang, isHindi }: PublicPricingGr
       <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
         
         {/* Tier 1: Community Access */}
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs hover:shadow-sm transition-shadow flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between gap-2 mb-4">
-              <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">
+                <Coins className="w-3.5 h-3.5 text-slate-600" />
                 {isHindi ? 'जमीनी समूह और नागरिक आंदोलन' : 'Grassroots & Civic Collectives'}
+              </span>
+              <span className="text-xs font-medium text-slate-500">
+                {isHindi ? 'स्वैच्छिक पहुंच' : 'Voluntary Access'}
               </span>
             </div>
 
@@ -115,21 +119,21 @@ export function PublicPricingGrid({ orgId = '', lang, isHindi }: PublicPricingGr
                   labelHi={`₹${effectiveCommunityAmount} योगदान दें और पहुंचें`}
                   isHindi={isHindi}
                   orgId={orgId}
-                  className="w-full py-3.5 px-6 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-center text-xs sm:text-sm transition-colors shadow-sm"
+                  className="w-full py-3.5 px-6 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-center text-xs sm:text-sm transition-colors shadow-xs"
                 />
               </div>
             ) : (
               <Link
-                href={`/${lang}/login?tab=signup`}
-                className="block w-full py-3.5 px-6 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-center text-xs sm:text-sm transition-colors mb-6 shadow-sm"
+                href={`/${lang}/login?tab=signup&plan=community&amount=${effectiveCommunityAmount}`}
+                className="block w-full py-3.5 px-6 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-center text-xs sm:text-sm transition-colors mb-6 shadow-xs"
               >
-                {isHindi ? 'योगदान और पहुंच शुरू करें' : 'Contribute & Access Workspace'}
+                {isHindi ? `₹${effectiveCommunityAmount} योगदान दें और शुरू करें` : `Contribute ₹${effectiveCommunityAmount} & Access`}
               </Link>
             )}
 
             {/* Features List */}
             <div className="space-y-2.5 mb-6">
-              <div className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+              <div className="text-xs font-bold text-slate-900">
                 {isHindi ? 'शामिल लोकतांत्रिक उपकरण:' : 'Included Democratic Capabilities:'}
               </div>
               {(isHindi ? PLAN_TIERS.Community.featuresHi : PLAN_TIERS.Community.featuresEn).map((feature, idx) => (
@@ -150,14 +154,19 @@ export function PublicPricingGrid({ orgId = '', lang, isHindi }: PublicPricingGr
         </div>
 
         {/* Tier 2: Sustainer Access */}
-        <div className="relative rounded-3xl border-2 border-indigo-600 bg-white p-6 sm:p-8 shadow-xl flex flex-col justify-between">
-          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-[11px] font-bold bg-indigo-600 text-white uppercase tracking-wider shadow-sm flex items-center gap-1.5">
-            <HeartHandshake className="w-3.5 h-3.5" />
-            {isHindi ? 'नागरिक अवसंरचना संरक्षक' : 'Civic Infrastructure Sustainer'}
-          </div>
-
+        <div className="rounded-3xl border-2 border-indigo-600 bg-white p-6 sm:p-8 shadow-md flex flex-col justify-between">
           <div>
-            <div className="mb-4 mt-2">
+            <div className="flex items-center justify-between gap-2 mb-4">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-100 text-indigo-800">
+                <HeartHandshake className="w-3.5 h-3.5 text-indigo-700" />
+                {isHindi ? 'नागरिक अवसंरचना संरक्षक' : 'Civic Infrastructure Sustainer'}
+              </span>
+              <span className="text-xs font-semibold text-indigo-600">
+                {isHindi ? 'एकजुटता मॉडल' : 'Solidarity Model'}
+              </span>
+            </div>
+
+            <div className="mb-4">
               <h3 className="text-2xl font-bold text-slate-900 mb-1 flex items-center gap-2">
                 {isHindi ? PLAN_TIERS.Institution.nameHi : PLAN_TIERS.Institution.name}
                 <Sparkles className="w-5 h-5 text-indigo-500" />
@@ -217,21 +226,23 @@ export function PublicPricingGrid({ orgId = '', lang, isHindi }: PublicPricingGr
                   labelHi={billingCycle === 'yearly' ? '₹10,000/वर्ष योगदान दें और समर्थन करें' : '₹1,000/माह योगदान दें और समर्थन करें'}
                   isHindi={isHindi}
                   orgId={orgId}
-                  className="w-full py-3.5 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-center text-xs sm:text-sm transition-colors shadow-sm"
+                  className="w-full py-3.5 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-center text-xs sm:text-sm transition-colors shadow-xs"
                 />
               </div>
             ) : (
               <Link
-                href={`/${lang}/login?tab=signup`}
-                className="block w-full py-3.5 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-center text-xs sm:text-sm transition-colors mb-6 shadow-sm"
+                href={`/${lang}/login?tab=signup&plan=institution&cycle=${billingCycle}`}
+                className="block w-full py-3.5 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-center text-xs sm:text-sm transition-colors mb-6 shadow-xs"
               >
-                {isHindi ? 'संरक्षक पहुंच शुरू करें' : 'Support & Access Workspace'}
+                {billingCycle === 'yearly'
+                  ? (isHindi ? '₹10,000/वर्ष योगदान दें और समर्थन करें' : 'Contribute ₹10,000/yr & Sustain')
+                  : (isHindi ? '₹1,000/माह योगदान दें और समर्थन करें' : 'Contribute ₹1,000/mo & Sustain')}
               </Link>
             )}
 
             {/* Features List */}
             <div className="space-y-2.5 mb-6">
-              <div className="text-xs font-bold text-indigo-950 uppercase tracking-wider">
+              <div className="text-xs font-bold text-indigo-950">
                 {isHindi ? 'सामुदायिक पहुंच की सभी सुविधाएं, और:' : 'Everything in Community Access, plus:'}
               </div>
               {(isHindi ? PLAN_TIERS.Institution.featuresHi : PLAN_TIERS.Institution.featuresEn).map((feature, idx) => (
@@ -255,7 +266,7 @@ export function PublicPricingGrid({ orgId = '', lang, isHindi }: PublicPricingGr
       {/* Custom Emblem Add-on */}
       <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 max-w-5xl mx-auto">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 shrink-0 shadow-sm">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 shrink-0 shadow-xs">
             <Building2 className="w-6 h-6 sm:w-7 sm:h-7" />
           </div>
           <div>
@@ -278,17 +289,17 @@ export function PublicPricingGrid({ orgId = '', lang, isHindi }: PublicPricingGr
             <CheckoutButton
               amount={10000}
               planName="White-label"
-              planPeriod="lifetime"
+              planPeriod="one_time"
               labelEn="Enable Custom Emblem"
               labelHi="कस्टम प्रतीक सक्रिय करें"
               isHindi={isHindi}
               orgId={orgId}
-              className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm transition-colors"
+              className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm transition-colors shadow-xs"
             />
           ) : (
             <Link
-              href={`/${lang}/login?tab=signup`}
-              className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm transition-colors"
+              href={`/${lang}/login?tab=signup&addon=custom-emblem`}
+              className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm transition-colors shadow-xs"
             >
               {isHindi ? 'शुरू करें' : 'Get Started'}
             </Link>
@@ -309,7 +320,7 @@ export function PublicPricingGrid({ orgId = '', lang, isHindi }: PublicPricingGr
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-sm">
+        <div className="rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-xs">
           <table className="w-full text-left text-xs sm:text-sm">
             <thead className="bg-slate-50 border-b border-slate-200">
               <tr>
@@ -318,7 +329,7 @@ export function PublicPricingGrid({ orgId = '', lang, isHindi }: PublicPricingGr
                   {isHindi ? 'सामुदायिक पहुंच (Community)' : 'Community Access (Voluntary)'}
                 </th>
                 <th className="p-4 font-bold text-indigo-900 text-center w-1/3 bg-indigo-50/50">
-                  {isHindi ? 'संरक्षक पहुंच (Sustainer)' : 'Sustainer Access (Suggested ₹1k)'}
+                  {isHindi ? 'संरक्षक पहुंच (Sustainer)' : 'Sustainer Access (Suggested ₹1,000/mo)'}
                 </th>
               </tr>
             </thead>
@@ -334,7 +345,7 @@ export function PublicPricingGrid({ orgId = '', lang, isHindi }: PublicPricingGr
                 <td className="p-4 text-center text-emerald-600 font-bold bg-indigo-50/20">{isHindi ? '✓ शामिल है' : '✓ Included'}</td>
               </tr>
               <tr>
-                <td className="p-4 font-medium text-slate-700">{isHindi ? 'महासंघ और गठबंधन उपकरण (संयुक्त मोर्चा)' : 'Coalition & Federation Tools (संयुक्त मोर्चा)'}</td>
+                <td className="p-4 font-medium text-slate-700">{isHindi ? 'महासंघ और गठबंधन उपकरण (संयुक्त मोर्चा)' : 'Coalition & Federation Tools (Joint Front)'}</td>
                 <td className="p-4 text-center text-emerald-600 font-bold">{isHindi ? '✓ शामिल है' : '✓ Included'}</td>
                 <td className="p-4 text-center text-emerald-600 font-bold bg-indigo-50/20">{isHindi ? '✓ शामिल है' : '✓ Included'}</td>
               </tr>
@@ -351,7 +362,7 @@ export function PublicPricingGrid({ orgId = '', lang, isHindi }: PublicPricingGr
               <tr>
                 <td className="p-4 font-medium text-slate-700">{isHindi ? 'संगठन AI बुद्धिमत्ता सुइट' : 'Sangathan AI Intelligence Suite'}</td>
                 <td className="p-4 text-center text-slate-400">-</td>
-                <td className="p-4 text-center font-bold text-indigo-900 bg-indigo-50/20">{isHindi ? 'शामिल (कार्यवृत्त, अनुदान, विश्लेषण)' : 'Included (Minutes, Grants, Triage)'}</td>
+                <td className="p-4 text-center font-bold text-indigo-900 bg-indigo-50/20">{isHindi ? 'शामिल (कार्यवृत्त, अनुदान, ट्राइएज)' : 'Included (Minutes, Grants, Triage)'}</td>
               </tr>
               <tr>
                 <td className="p-4 font-medium text-slate-700">{isHindi ? 'बहु-शाखा / बहु-सामूहिक प्रबंधन' : 'Multi-Chapter / Federation Management'}</td>

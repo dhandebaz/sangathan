@@ -35,6 +35,37 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.33.0',
+    titleEn: 'Native Mobile Touch UX, Instant Tools Drawer & Crisp Light Dashboards',
+    titleHi: 'नेटिव मोबाइल टच UX, त्वरित उपकरण दराज़ एवं स्पष्ट लाइट डैशबोर्ड्स',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Comprehensive mobile-first design overhaul for seamless daily smartphone usage across India. Introduced a 5-tab mobile bottom navigation bar with an instant-access drawer searching all 20+ civic tools, enlarged tap targets (≥48px), haptic touch states, pure light theme civic hero cards across Admin & Member dashboards, and intuitive bilingual Hinglish microcopy across all 4 organization types.',
+    descHi: 'पूरे भारत में स्मार्टफोन पर सुगम दैनिक उपयोग के लिए व्यापक मोबाइल-प्रथम डिज़ाइन उन्नयन। सभी 20+ नागरिक उपकरणों को खोजने वाले त्वरित-पहुंच दराज़ के साथ 5-टैब मोबाइल निचला नेविगेशन बार, बड़े टैप लक्ष्य (≥48px), हैप्टिक टच फीडबैक, एडमिन और सदस्य डैशबोर्ड पर स्वच्छ लाइट थीम हीरो कार्ड और सभी 4 संगठन प्रकारों में सहज द्विभाषी हिंग्लिश शब्दावली पेश की गई।',
+    color: 'emerald',
+    icon: Rocket,
+    features: [
+      {
+        nameEn: 'Mobile Bottom Navigation & Instant Tools Drawer',
+        nameHi: 'मोबाइल बॉटम नेविगेशन व त्वरित उपकरण दराज़',
+        textEn: 'Engineered a native 5-tab bottom navigation bar for Android and iOS PWA installs with an instant slide-up drawer featuring real-time search across all 20+ governance tools, statutory registers, and community utilities.',
+        textHi: 'Android और iOS PWA इंस्टॉल के लिए एक नेटिव 5-टैब बॉटम नेविगेशन बार विकसित किया गया, जिसमें सभी 20+ प्रशासनिक उपकरणों, वैधानिक रजिस्टरों और सामुदायिक उपयोगिताओं में वास्तविक समय में खोज करने वाला स्लाइड-अप दराज़ शामिल है।',
+      },
+      {
+        nameEn: 'Crisp Light Civic Dashboard Surfaces',
+        nameHi: 'स्वच्छ लाइट नागरिक डैशबोर्ड सतहें',
+        textEn: 'Eliminated heavy dark blocks in favor of crisp, geometric, light-themed civic surfaces with Indian time-of-day greetings, active workspace status badges, and 1-tap quick action shortcuts for adding members, issuing notices, and logging chanda.',
+        textHi: 'पारंपरिक भारी डार्क ब्लॉक की जगह स्वच्छ, ज्यामितीय, लाइट-थीम नागरिक सतहें पेश की गईं, जिनमें समय-आधारित अभिवादन, सक्रिय कार्यक्षेत्र स्थिति बैज, और सदस्य जोड़ने, सूचना जारी करने व चंदा दर्ज करने के लिए 1-टैप शॉर्टकट शामिल हैं।',
+      },
+      {
+        nameEn: 'India-First Bilingual Microcopy & Zero Learning Curve',
+        nameHi: 'भारत-प्रथम द्विभाषी शब्दावली और शून्य सीखने का समय',
+        textEn: 'Standardized natural dual-language labels (दान व चंदा • Donations, सदस्य व काडर • Members, सूचनाएं • Notices, दस्तावेज वॉल्ट) across NGOs, Student Unions, Workers Unions, and RWAs to ensure anyone can organize with zero training.',
+        textHi: 'एनजीओ, छात्र संघों, मज़दूर यूनियनों और आरडब्ल्यूए में प्राकृतिक द्विभाषी लेबलों (दान व चंदा, सदस्य व काडर, सूचनाएं, दस्तावेज वॉल्ट) का मानकीकरण किया गया ताकि कोई भी बिना किसी प्रशिक्षण के आसानी से काम कर सके।',
+      },
+    ],
+  },
+  {
     version: 'v1.32.0',
     titleEn: 'Civic Pricing, Community Access & Sangathan AI Product Evolution',
     titleHi: 'नागरिक मूल्य निर्धारण, सामुदायिक पहुंच एवं संगठन AI उत्पाद विस्तार',
@@ -74,6 +105,12 @@ const changelogData: ChangelogEntry[] = [
         nameHi: 'संगठन AI मास्टर नियंत्रण व पुन: प्रयोज्य गोपनीयता मॉडल',
         textEn: 'Standardized AI assistive tools under "Sangathan AI", backed by an enforceable organization master On/Off toggle. Created a reusable AI Info Modal explaining data isolation, human sovereign decision-making, and zero cross-organization model training.',
         textHi: 'मास्टर On/Off टॉगल के साथ "संगठन AI" के तहत AI उपकरणों का मानकीकरण किया गया। डेटा पृथक्करण, मानव संप्रभु निर्णय और शून्य मॉडल क्रॉस-ट्रेनिंग की व्याख्या करने वाला एक पुन: प्रयोज्य AI सूचना मॉडल बनाया गया।',
+      },
+      {
+        nameEn: 'Technical UI Refinements & Balanced Grid Architecture',
+        nameHi: 'तकनीकी UI परिष्करण और संतुलित ग्रिड वास्तुकला',
+        textEn: 'Refined Pay & Price page typography, replacing decorative floating pill tags with clean in-card status badges. Balanced the operational cost breakdown into a 6-item matrix and expanded FAQs to 6 structured entries for symmetric layout.',
+        textHi: 'Pay & Price पेज के टाइपोग्राफी को परिष्कृत किया गया, जिससे फ्लोटिंग पिल टैग हटकर साफ इन-कार्ड बैज में बदल गए। परिचालन लागत विवरण को 6-मद मैट्रिक्स में संतुलित किया गया और अक्सर पूछे जाने वाले प्रश्नों को 6 संरचित प्रविष्टियों तक विस्तारित किया गया।',
       },
     ],
   },

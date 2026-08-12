@@ -18,8 +18,11 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Sangathan",
-  description: "Infrastructure for grassroots organizations",
+  title: {
+    template: "%s | Sangathan",
+    default: "Sangathan — Civic Digital Infrastructure for Collectives & NGOs",
+  },
+  description: "Civic digital infrastructure built by Bahujan Queer Foundation (Section 8 Non-Profit) to help NGOs, student unions, workers unions, and civic collectives govern, communicate, and operate with transparency, privacy, and accountability.",
   applicationName: "Sangathan",
   appleWebApp: {
     capable: true,

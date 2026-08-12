@@ -356,19 +356,19 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           >
             <button
               onClick={() => toggleGroup(group.id)}
-              className="flex items-center justify-between w-full px-3 py-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors group"
+              className="flex items-center justify-between w-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-400 hover:text-slate-900 transition-colors group"
             >
               <span>{group.title}</span>
               <ChevronDown
                 className={cn(
-                  'h-3.5 w-3.5 transition-transform duration-200 text-muted-foreground group-hover:text-foreground',
+                  'h-3.5 w-3.5 transition-transform duration-200 text-slate-400 group-hover:text-slate-900',
                   isCollapsed && '-rotate-90'
                 )}
               />
             </button>
 
             {!isCollapsed && (
-              <div className="mt-1 space-y-1">
+              <div className="mt-1 space-y-0.5">
                 {group.items.map((item) => {
                   const Icon = item.icon
                   const active = isActive(item.href)
@@ -377,13 +377,13 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        'flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                        'flex items-center gap-3 px-3 py-2 text-xs font-semibold rounded-xl transition-all',
                         active
-                          ? 'bg-accent text-accent-foreground font-semibold shadow-xs'
-                          : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                          ? 'bg-indigo-50 text-indigo-900 font-bold border border-indigo-100/80 shadow-2xs'
+                          : 'text-slate-600 hover:bg-slate-100/60 hover:text-slate-900'
                       )}
                     >
-                      <Icon className={cn('h-4 w-4 shrink-0', active ? 'text-foreground' : 'text-muted-foreground')} />
+                      <Icon className={cn('h-4 w-4 shrink-0', active ? 'text-indigo-600' : 'text-slate-400')} />
                       <span className="truncate">{item.label}</span>
                     </Link>
                   )

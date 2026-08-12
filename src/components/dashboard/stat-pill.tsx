@@ -11,30 +11,22 @@ interface StatPillProps {
   className?: string
 }
 
-type StatPillItem = {
-  icon: React.ElementType
-  value: string | number
-  label: string
-  href: string
-  color: 'brand' | 'emerald' | 'amber' | 'sky' | 'rose' | 'indigo'
-}
-
 const colorMap: Record<OrgColor, string> = {
-  brand: 'border-brand-200 bg-brand-50 text-brand-700',
-  emerald: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-  amber: 'border-amber-200 bg-amber-50 text-amber-700',
-  sky: 'border-sky-200 bg-sky-50 text-sky-700',
-  rose: 'border-rose-200 bg-rose-50 text-rose-700',
-  indigo: 'border-indigo-200 bg-indigo-50 text-indigo-700',
+  brand: 'border-indigo-200 bg-white hover:bg-indigo-50/40 text-indigo-900',
+  emerald: 'border-emerald-200 bg-white hover:bg-emerald-50/40 text-emerald-900',
+  amber: 'border-amber-200 bg-white hover:bg-amber-50/40 text-amber-900',
+  sky: 'border-sky-200 bg-white hover:bg-sky-50/40 text-sky-900',
+  rose: 'border-rose-200 bg-white hover:bg-rose-50/40 text-rose-900',
+  indigo: 'border-indigo-200 bg-white hover:bg-indigo-50/40 text-indigo-900',
 }
 
-const iconColorMap: Record<OrgColor, string> = {
-  brand: 'text-brand-600',
-  emerald: 'text-emerald-600',
-  amber: 'text-amber-600',
-  sky: 'text-sky-600',
-  rose: 'text-rose-600',
-  indigo: 'text-indigo-600',
+const iconWrapMap: Record<OrgColor, string> = {
+  brand: 'bg-indigo-50 text-indigo-600 border border-indigo-100',
+  emerald: 'bg-emerald-50 text-emerald-600 border border-emerald-100',
+  amber: 'bg-amber-50 text-amber-600 border border-amber-100',
+  sky: 'bg-sky-50 text-sky-600 border border-sky-100',
+  rose: 'bg-rose-50 text-rose-600 border border-rose-100',
+  indigo: 'bg-indigo-50 text-indigo-600 border border-indigo-100',
 }
 
 export function StatPill({ icon: Icon, value, label, href, color = 'brand', className }: StatPillProps) {
@@ -42,16 +34,19 @@ export function StatPill({ icon: Icon, value, label, href, color = 'brand', clas
     <Link
       href={href}
       className={cn(
-        'flex items-center gap-3 px-4 py-3 rounded-xl border transition-all hover:shadow-md active:scale-[0.98] min-w-[140px] shrink-0',
+        'flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl border transition-all hover:shadow-xs active:scale-[0.98] min-h-[64px]',
         colorMap[color],
         className
       )}
     >
-      <Icon className={cn('h-5 w-5 shrink-0', iconColorMap[color])} />
+      <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-2xs', iconWrapMap[color])}>
+        <Icon className="h-5 w-5" />
+      </div>
       <div className="min-w-0">
-        <div className="text-lg font-bold leading-tight">{value}</div>
-        <div className="text-[11px] font-medium opacity-80 truncate">{label}</div>
+        <div className="text-lg sm:text-xl font-extrabold leading-tight text-slate-900">{value}</div>
+        <div className="text-[11px] font-semibold text-slate-500 truncate mt-0.5">{label}</div>
       </div>
     </Link>
   )
 }
+

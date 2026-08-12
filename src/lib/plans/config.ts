@@ -47,7 +47,7 @@ export const PLAN_TIERS: Record<PlanName, PlanTier> = {
       'Dedicated collective organizing workspace',
       'All core democratic & governance tools',
       'Voting engine & anonymous secret ballots',
-      'Coalition & Federation tools (संयुक्त मोर्चा)',
+      'Coalition & Federation tools (Joint Front)',
       'Meetings, Tasks & Subgroup modules',
       'Public Petitions & Verified Member Badges',
       'Direct peer & community support',
