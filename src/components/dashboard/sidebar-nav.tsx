@@ -63,7 +63,6 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
         { href: `/${lang}/dashboard/audit`, icon: ShieldCheck, label: 'Audit & Guardrails', show: isAdmin },
         { href: `/${lang}/dashboard/transparency`, icon: Landmark, label: 'Transparency Ledger', show: true },
         { href: `/${lang}/dashboard/analytics`, icon: BarChart, label: 'Analytics', show: !!c.advanced_analytics && isAdmin },
-        { href: `/${lang}/dashboard/forms`, icon: GalleryVerticalEnd, label: 'Forms', show: isAdmin },
         { href: `/${lang}/dashboard/roles`, icon: UserCog, label: 'Custom Roles', show: isAdmin },
         { href: `/${lang}/dashboard/settings`, icon: Settings, label: 'Settings', show: isAdmin },
       ].filter(i => i.show)
@@ -73,6 +72,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
       id: 'field_ops',
       title: 'Field & Grassroots',
       items: [
+        { href: `/${lang}/dashboard/forms`, icon: Sparkles, label: 'Forms & Survey Studio', show: true },
         { href: `/${lang}/dashboard/communications`, icon: MessageSquare, label: 'Unified Communications', show: true },
         { href: `/${lang}/dashboard/channels`, icon: Radio, label: 'Master Channels & QR', show: true },
         { href: `/${lang}/dashboard/field-mode`, icon: Database, label: 'Offline Field Mode', show: true },

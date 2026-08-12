@@ -61,7 +61,7 @@ export default async function FormsPage(props: { params: Promise<{ lang: string 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div className="space-y-1">
            <h1 className="text-3xl font-black tracking-tight text-foreground">Forms & Survey Studio</h1>
-           <p className="text-muted-foreground text-xs">Build Jotform-like surveys, capture civic intelligence, and generate instant executive reports.</p>
+           <p className="text-muted-foreground text-xs">Build custom civic surveys, capture ground intelligence, and generate instant executive reports.</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Button variant="outline" asChild className="text-xs font-bold border-orange-200 bg-orange-50/50 text-orange-950 hover:bg-orange-100">

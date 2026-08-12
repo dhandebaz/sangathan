@@ -8,7 +8,7 @@ import {
   AlertTriangle, Flag, Award, HeartHandshake, ScrollText, DollarSign,
   Printer, Scale, Wrench, UserCheck, HardHat, Landmark, Settings,
   CreditCard, ShieldCheck, Zap, BarChart, GalleryVerticalEnd, UserCog,
-  BookOpenText, FileSignature, Phone, HelpCircle, ChevronRight, LogOut
+  BookOpenText, FileSignature, Phone, HelpCircle, ChevronRight, LogOut, Sparkles
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -139,6 +139,16 @@ export function MobileToolsDrawer({
       },
 
       // Field & Grassroots Ops
+      {
+        href: `/${lang}/dashboard/forms`,
+        icon: Sparkles,
+        titleEn: 'Forms & Survey Studio',
+        titleHi: 'फॉर्म व सर्वे स्टूडियो',
+        descEn: 'Build custom polls & sentiment reports',
+        descHi: 'प्रश्नावली बनाएं व रिपोर्ट देखें',
+        category: 'field',
+        color: 'bg-orange-50 text-orange-700 border-orange-200',
+      },
       {
         href: `/${lang}/dashboard/communications`,
         icon: MessageSquare,

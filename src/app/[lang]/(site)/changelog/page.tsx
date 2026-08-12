@@ -73,12 +73,12 @@ const changelogData: ChangelogEntry[] = [
   },
   {
     version: 'v1.35.0',
-    titleEn: 'Jotform-Style Form & Survey Studio with Live Executive Intelligence & Participant PDF Dossiers',
-    titleHi: 'जॉटफॉर्म-शैली फॉर्म व सर्वे स्टूडियो, लाइव कार्यकारी बुद्धिमत्ता एवं प्रतिभागी PDF डोजियर',
+    titleEn: 'Civic Form & Survey Studio with Live Executive Intelligence & Participant PDF Dossiers',
+    titleHi: 'नागरिक फॉर्म व सर्वे स्टूडियो, लाइव कार्यकारी बुद्धिमत्ता एवं प्रतिभागी PDF डोजियर',
     dateEn: 'August 2026',
     dateHi: 'अगस्त 2026',
-    descEn: 'Transformed Sangathan into an ultra-intuitive, Jotform-grade civic questionnaire and polling platform. Features curated 1-click templates tailored specifically for each organization archetype (NGOs, Student Unions, Workers Unions, RWAs, and Civic Collectives), 13 purpose-built field types including 1-5 Star Ratings and Likert Satisfaction Scales, real-time Goal Consensus and Sentiment Matrix analysis, automated executive synthesis, and 1-click Participant PDF Dossier exports.',
-    descHi: 'संगठन को एक अत्यंत सहज, जॉटफॉर्म-ग्रेड नागरिक प्रश्नावली और पोलिंग प्लेटफॉर्म में तब्दील किया गया। इसमें प्रत्येक संगठन प्रकार (NGO, छात्र संघ, श्रमिक संघ, RWA और नागरिक समूह) के लिए विशेष रूप से तैयार किए गए 1-क्लिक टेम्पलेट्स, 1-5 स्टार रेटिंग और लिकर्ट संतुष्टि स्केल सहित 13 उद्देश्य-निर्मित फ़ील्ड प्रकार, रीयल-टाइम लक्ष्य सहमति और भावना विश्लेषण (Sentiment Matrix), स्वचालित कार्यकारी निष्कर्ष, और 1-क्लिक व्यक्तिगत प्रतिभागी PDF डोजियर निर्यात शामिल हैं।',
+    descEn: 'Transformed Sangathan into an ultra-intuitive, enterprise-grade civic questionnaire and polling platform. Features curated 1-click templates tailored specifically for each organization archetype (NGOs, Student Unions, Workers Unions, RWAs, and Civic Collectives), 13 purpose-built field types including 1-5 Star Ratings and Likert Satisfaction Scales, real-time Goal Consensus and Sentiment Matrix analysis, automated executive synthesis, and 1-click Participant PDF Dossier exports.',
+    descHi: 'संगठन को एक अत्यंत सहज, उच्च-स्तरीय नागरिक प्रश्नावली और पोलिंग प्लेटफॉर्म में तब्दील किया गया। इसमें प्रत्येक संगठन प्रकार (NGO, छात्र संघ, श्रमिक संघ, RWA और नागरिक समूह) के लिए विशेष रूप से तैयार किए गए 1-क्लिक टेम्पलेट्स, 1-5 स्टार रेटिंग और लिकर्ट संतुष्टि स्केल सहित 13 उद्देश्य-निर्मित फ़ील्ड प्रकार, रीयल-टाइम लक्ष्य सहमति और भावना विश्लेषण (Sentiment Matrix), स्वचालित कार्यकारी निष्कर्ष, और 1-क्लिक व्यक्तिगत प्रतिभागी PDF डोजियर निर्यात शामिल हैं।',
     color: 'orange',
     icon: Sparkles,
     features: [

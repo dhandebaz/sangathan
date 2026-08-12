@@ -34,7 +34,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'जमीनी अभियान, अनौपचारिक समूह, स्वतंत्र छात्र इकाइयां और आपसी-सहायता नेटवर्क। किसी पंजीकरण संख्या की आवश्यकता नहीं।'
         : 'Grassroots campaigns, informal collectives, activist coalitions, and mutual-aid networks. No registration number required.',
       features: [
-        { icon: 'Sparkles', title: 'Jotform-Style Grassroots Survey & Goal Studio', desc: 'Build 1-click townhall polls, issue prioritization surveys, and volunteer pledges with live Sentiment Matrix and Participant PDF Dossiers.' },
+        { icon: 'Sparkles', title: 'Grassroots Survey & Goal Studio', desc: 'Build 1-click townhall polls, issue prioritization surveys, and volunteer pledges with live Sentiment Matrix and Participant PDF Dossiers.' },
         { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Publish open letters, campaigns, and drives with live signature counters and instant volunteer conversion hooks.' },
         { icon: 'Vote', title: 'Direct Democracy & Secret Voting Engine', desc: 'Secure, cryptographic anonymous secret ballots and leadership elections with instant tamper-evident tallies.' },
         { icon: 'Network', title: 'Joint Front & Coalition Engine (संयुक्त मोर्चा)', desc: 'Form alliances with other movements, co-sign joint representations, and publish shared public statements.' },
@@ -78,7 +78,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Network', title: 'Chapters & Subgroups', desc: 'Organise large NGOs by city chapters or wings.' },
         { icon: 'ShieldCheck', title: 'Helpdesk Support', desc: 'Centralized inbox for public and beneficiary inquiries.' },
         { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable tier scaling, live member slot meters, automated receipt archiving, and multi-org enterprise capabilities.' },
-        { icon: 'Sparkles', title: 'Jotform-Style Form & Survey Studio', desc: 'Deploy volunteer skills intake, beneficiary assessments, and donor feedback forms with live Goal Consensus % and Participant PDF Dossiers.' },
+        { icon: 'Sparkles', title: 'Civic Form & Survey Studio', desc: 'Deploy volunteer skills intake, beneficiary assessments, and donor feedback forms with live Goal Consensus % and Participant PDF Dossiers.' },
         { icon: 'FileSpreadsheet', title: 'Live Google Workspace & CSV Importer', desc: 'Import members via live Google People API (1-click contact selection), authenticated Google Sheets API (private sheet access), or traditional CSV upload. Includes automated column matching, phone validation, and deduplication.' },
         { icon: 'FileText', title: 'Live Google Forms API Migrator', desc: 'Import Google Forms directly via the Forms API — auto-pulls form structure (questions, field types, options) and all historical responses. Also supports CSV paste and response sheet link methods.' },
         { icon: 'FolderLock', title: 'Institutional Document & Asset Vault', desc: 'Encrypted cloud storage for Trust Deeds, 12A/80G tax orders, CSR-1 certificates, and property conveyance deeds with role permissions.' },

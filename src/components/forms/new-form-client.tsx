@@ -456,7 +456,7 @@ export function NewFormClient({ lang, orgType = 'ngo' }: NewFormClientProps) {
       {/* BUILDER MODE */}
       {activeMode === 'build' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* LEFT PALETTE: Quick Field Insertion (Jotform style) */}
+          {/* LEFT PALETTE: Quick Field Insertion */}
           <div className="lg:col-span-4 space-y-4 lg:sticky lg:top-4">
             <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 pb-2">
