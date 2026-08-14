@@ -33,13 +33,15 @@ export async function generateMetadata(props: {
 
   const isHindi = lang === 'hi'
   const typeLabel =
-    org.org_type === 'ngo'
-      ? isHindi ? 'गैर-सरकारी संगठन (NGO)' : 'Non-Governmental Organisation'
-      : org.org_type === 'student_union'
-        ? isHindi ? 'छात्र संघ' : 'Student Union'
-        : org.org_type === 'workers_union'
-          ? isHindi ? 'कर्मचारी संघ' : 'Workers Union'
-          : isHindi ? 'रेजिडेंट वेलफेयर एसोसिएशन' : 'Resident Welfare Association'
+    org.org_type === 'civic_collective'
+      ? isHindi ? 'नागरिक समूह व जमीनी आंदोलन' : 'Civic Collective & Movement'
+      : org.org_type === 'ngo'
+        ? isHindi ? 'गैर-सरकारी संगठन (NGO)' : 'Non-Governmental Organisation'
+        : org.org_type === 'student_union'
+          ? isHindi ? 'छात्र संघ' : 'Student Union'
+          : org.org_type === 'workers_union'
+            ? isHindi ? 'कर्मचारी व ट्रेड संघ' : 'Workers Union'
+            : isHindi ? 'रेजिडेंट वेलफेयर एसोसिएशन' : 'Resident Welfare Association'
 
   const title = `${org.name} | ${typeLabel} | Sangathan`
   const description =
@@ -119,6 +121,7 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
     .single()
 
   const org = orgData as (Organisation & {
+    org_type: string | null
     membership_policy: string
     created_at: string
     public_transparency_enabled: boolean
@@ -251,7 +254,15 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-slate-900">
                 {org.name}
               </h1>
-              {org.registration_status === 'registered' && (
+              {org.org_type === 'civic_collective' ? (
+                <span
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-200"
+                  title="Recognized Grassroots Collective under BQF Section 8 Non-Profit Umbrella (CIN: U88900DL2025NPL452474)"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-rose-600" />
+                  {isHindi ? 'बीक्यूएफ मान्यता प्राप्त नागरिक समूह' : 'BQF Recognized Civic Collective'}
+                </span>
+              ) : org.registration_status === 'registered' ? (
                 <span
                   className="inline-flex items-center gap-1 px-3 py-1 rounded-sm text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"
                   title={`Reg No: ${org.registration_number || 'N/A'}`}
@@ -259,7 +270,7 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
                   <BadgeCheck className="w-3.5 h-3.5 text-emerald-600" />
                   {isHindi ? 'पंजीकृत संगठन' : 'Registered Organisation'}
                 </span>
-              )}
+              ) : null}
             </div>
 
             {org.description && (

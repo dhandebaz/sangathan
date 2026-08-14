@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import {
   LayoutDashboard, Calendar, Users,
-  HandCoins, Vote, Wrench, Scale, Grid
+  HandCoins, Vote, Wrench, Scale, Grid, Activity
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useEffect, useRef, useState } from 'react'
@@ -42,6 +42,8 @@ const triggerHaptic = (type: 'light' | 'medium' | 'heavy' | 'success' | 'warning
 
 function getTab4(lang: string, orgType: string): { href: string; icon: typeof LayoutDashboard; labelEn: string; labelHi: string } {
   switch (orgType) {
+    case 'civic_collective':
+      return { href: `/${lang}/dashboard/field-audits`, icon: Activity, labelEn: 'Field Audits', labelHi: 'फील्ड जांच' }
     case 'ngo':
       return { href: `/${lang}/dashboard/donations`, icon: HandCoins, labelEn: 'Donations', labelHi: 'दान/चंदा' }
     case 'student_union':

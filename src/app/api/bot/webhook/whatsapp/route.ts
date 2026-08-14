@@ -12,9 +12,9 @@ export async function GET(request: Request) {
   const token = searchParams.get('hub.verify_token')
   const challenge = searchParams.get('hub.challenge')
 
-  const expectedVerifyToken = process.env.WHATSAPP_VERIFY_TOKEN || 'sangathan_bot_secret'
+  const expectedVerifyToken = process.env.WHATSAPP_VERIFY_TOKEN
 
-  if (mode === 'subscribe' && token === expectedVerifyToken) {
+  if (mode === 'subscribe' && expectedVerifyToken && token === expectedVerifyToken) {
     return new Response(challenge, {
       status: 200,
       headers: { 'Content-Type': 'text/plain' },
@@ -30,7 +30,15 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const url = new URL(request.url)
-    const orgId = url.searchParams.get('orgId') || process.env.DEFAULT_ORG_ID || '00000000-0000-0000-0000-000000000000'
+    const adminClient = createServiceClient()
+
+    // Dynamically resolve organization ID
+    let orgId = url.searchParams.get('orgId') || process.env.DEFAULT_ORG_ID
+    if (!orgId) {
+      const { data: firstOrg } = await adminClient.from('organisations').select('id').limit(1).maybeSingle()
+      orgId = firstOrg?.id || ''
+    }
+
     const body = await request.json()
 
     // 1. Check if Meta WhatsApp Cloud Webhook format
@@ -58,16 +66,16 @@ export async function POST(request: Request) {
 
     // 2. Process message through Sangathan NLP & action engine
     const result = await processIncomingBotMessage({
-      organisationId: orgId,
+      organisationId: orgId || '',
       channel: 'whatsapp',
       senderId,
       senderName,
       messageText,
     })
 
-    // 3. If WhatsApp Cloud API credentials exist, dispatch real reply back to user's phone!
+    // 3. If WhatsApp Cloud API credentials exist, dispatch real reply back to user's phone
     const phoneNumberId = changes?.metadata?.phone_number_id || process.env.WHATSAPP_PHONE_NUMBER_ID
-    const apiToken = process.env.WHATSAPP_API_TOKEN
+    const apiToken = process.env.WHATSAPP_API_TOKEN || process.env.WHATSAPP_ACCESS_TOKEN
 
     if (phoneNumberId && apiToken && senderId) {
       await sendWhatsAppCloudDirectMessage({
@@ -91,6 +99,6 @@ export async function POST(request: Request) {
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : 'Unknown webhook error'
     console.error('WhatsApp Webhook Error:', err)
-    return NextResponse.json({ success: false, error: errorMsg }, { status: 500 })
+    return NextResponse.json({ success: false, error: 'Internal processing error' }, { status: 500 })
   }
 }

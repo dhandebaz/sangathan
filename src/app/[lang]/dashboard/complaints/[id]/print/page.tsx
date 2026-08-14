@@ -22,7 +22,7 @@ export default async function ComplaintPrintPage({ params }: Props) {
     .eq('id', user.id)
     .single()
 
-  let orgId = profile?.organisation_id
+  const orgId = profile?.organisation_id
   const role = profile?.role || 'member'
 
   if (!orgId) {

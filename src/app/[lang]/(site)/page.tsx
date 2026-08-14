@@ -1,5 +1,11 @@
 import Link from 'next/link'
-import { ArrowRight, ShieldCheck, Video, Banknote, Activity, Globe, Vote, Megaphone, Lock, Users, Fingerprint, Layers, Cpu, Check, FileText, Building2, GraduationCap, HardHat, Home, Smartphone, Zap } from 'lucide-react'
+import Image from 'next/image'
+import { 
+  ArrowRight, ShieldCheck, Video, Banknote, Activity, Globe, 
+  Vote, Megaphone, Lock, Users, Fingerprint, Layers, Cpu, Check, 
+  FileText, Building2, GraduationCap, HardHat, Home, Smartphone, 
+  Zap, Clock, Printer, Scale, AlertTriangle, Sparkles, MessageSquare, Newspaper 
+} from 'lucide-react'
 import { Metadata } from 'next'
 import { WebSiteJsonLd, BreadcrumbJsonLd } from '@/components/seo/json-ld'
 
@@ -9,10 +15,12 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'नागरिक समूहों के लिए ऑपरेटिंग सिस्टम | संगठन' : 'The Operating System for Civic Collectives | Sangathan',
+    title: isHindi 
+      ? 'नागरिक समूहों व आंदोलनों के लिए ऑपरेटिंग सिस्टम | संगठन' 
+      : 'The Operating System for Civic Collectives & Grassroots Movements | Sangathan',
     description: isHindi
-      ? 'एनजीओ, छात्र संघों, श्रमिक संघों और आवास समितियों के लिए सदस्यों, निधियों, चुनावों और शासन का प्रबंधन करने के लिए डिजिटल बुनियादी ढांचा। भारत के लिए निर्मित।'
-      : 'Digital infrastructure for NGOs, student unions, workers unions, and housing societies to manage members, funds, elections, and governance. Built for India.',
+      ? 'नागरिक समूहों, पर्यावरण शोधकर्ताओं (जैसे दिल्ली सांस), एनजीओ, छात्र संघों और आरडब्ल्यूए के लिए डिजिटल बुनियादी ढांचा। फील्ड ऑडिट, ₹1 पर्चा, 15-दिवसीय आरटीआई ट्रैकर एवं विधिक सुरक्षा।'
+      : 'Digital infrastructure for civic collectives, citizen scientists (Delhi Saans model), NGOs, student unions, and RWAs. Spot sensor audits, ₹1 printable Parchas, 15-day RTI tracker, and BQF legal indemnity.',
     alternates: {
       canonical: `https://sangathan.space/${lang}`,
       languages: {
@@ -28,12 +36,13 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
   const isHindi = lang === 'hi'
   
   return (
-    <div className="bg-white min-h-screen relative font-sans text-slate-900 selection:bg-indigo-100">
+    <div className="bg-white min-h-screen relative font-sans text-slate-900 selection:bg-indigo-100 overflow-x-hidden">
       <WebSiteJsonLd />
       <BreadcrumbJsonLd items={[
         { name: isHindi ? 'होम' : 'Home', url: `https://sangathan.space/${lang}` },
       ]} />
-      {/* Background Dot Pattern (Technical Aesthetic) */}
+      
+      {/* Background Dot Pattern (Technical Minimalist) */}
       <div 
         className="absolute inset-0 z-0 pointer-events-none opacity-[0.03]"
         style={{ backgroundImage: 'radial-gradient(circle, #0f172a 1px, transparent 1px)', backgroundSize: '24px 24px' }}
@@ -41,395 +50,601 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
 
       <div className="relative z-10">
         
-        {/* 1. HERO SECTION - Premium Minimalist */}
-        <section className="pt-32 pb-24 sm:pt-40 sm:pb-32 px-4 max-w-7xl mx-auto flex flex-col items-center text-center border-b border-slate-200">
-          
-          <h1 className="text-6xl sm:text-8xl lg:text-[7.5rem] font-black tracking-tighter mb-8 text-slate-900 leading-[1.1]">
-            {isHindi ? 'नागरिक समूहों के लिए' : 'The operating system'} <br className="hidden sm:block" />
-            <span className="text-indigo-600">
-              {isHindi ? 'ऑपरेटिंग सिस्टम' : 'for civic collectives.'}
-            </span>
-          </h1>
-          
-          <p className="text-xl sm:text-2xl text-slate-500 max-w-3xl mx-auto mb-12 leading-snug tracking-tight font-medium">
-            {isHindi
-              ? 'एनजीओ, छात्र संघों, श्रमिक संघों और आवास समितियों के लिए सुरक्षित बुनियादी ढांचा। सदस्यों, धन और शासन का प्रबंधन करें बिना अराजकता के।'
-              : 'Secure infrastructure for NGOs, Student Unions, Workers Unions, and Housing Societies. Manage members, funds, and governance without the chaos.'}
-          </p>
-          
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
-            <Link 
-              href={`/${lang}/login?tab=signup`} 
-              className="w-full sm:w-auto bg-slate-900 text-white px-8 py-4 font-bold text-sm transition-all hover:bg-indigo-600 flex items-center justify-center gap-3 border border-slate-900 rounded-md"
-            >
-              {isHindi ? 'संगठन बनाएं' : 'Start your Organisation'} <ArrowRight size={16} />
-            </Link>
-            <Link 
-              href={`/${lang}/docs`} 
-              className="w-full sm:w-auto bg-transparent text-slate-900 px-8 py-4 font-bold text-sm border border-slate-200 hover:border-slate-400 hover:bg-slate-50 transition-all text-center rounded-md"
-            >
-              {isHindi ? 'दस्तावेज़ पढ़ें' : 'Read the Docs'}
-            </Link>
-          </div>
-        </section>
-
-        {/* 2. BENTO BOX FEATURES - Sharp Technical Grid */}
-        <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-16 gap-6">
-              <div>
-                 <p className="text-indigo-600 font-medium text-sm mb-3">{isHindi ? 'मूल प्रणाली' : 'Core System'}</p>
-                 <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900">{isHindi ? 'शासन बुनियादी ढांचा' : 'Governance Infrastructure'}</h2>
-              </div>
-              <p className="text-slate-500 max-w-md text-sm leading-relaxed">
-                {isHindi ? 'अनौपचारिक समूहों को संरचित संस्थानों में बदलें।' : 'Everything you need to transform informal groups into structured, transparent institutions. Built for absolute accountability.'}
-              </p>
-           </div>
-
-           {/* Technical CSS Grid */}
-           <div className="grid grid-cols-1 lg:grid-cols-3 gap-1">
+        {/* 1. HERO SECTION - High-Energy Activist-Anchored & Mobile-First */}
+        <section className="pt-28 pb-16 sm:pt-36 sm:pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-slate-200">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            
+            {/* Left Column: Mission & Core Value */}
+            <div className="lg:col-span-7 text-center lg:text-left space-y-6">
               
-              {/* Box 1 */}
-              <div className="lg:col-span-2 bg-white border border-slate-200 p-10 lg:p-14 group hover:border-indigo-300 transition-colors relative overflow-hidden flex flex-col justify-between min-h-[360px]">
-                 <div className="relative z-10">
-                   <div className="flex items-center gap-4 mb-6">
-                     <Users className="text-indigo-600" size={28} strokeWidth={1.5} />
-                     <h3 className="text-2xl font-bold tracking-tight text-slate-900">Role-based Registry</h3>
-                   </div>
-                   <p className="text-slate-500 max-w-md text-lg leading-relaxed mb-8">
-                     Secure member directories with granular access controls and identity verification. Isolate internal data silos securely.
-                   </p>
-                 </div>
-                 {/* Technical wireframe decoration */}
-                 <div className="absolute -bottom-8 -right-8 w-64 h-64 border border-slate-100 rounded-full opacity-50 group-hover:scale-110 transition-transform duration-700" />
-                 <div className="absolute -bottom-16 -right-16 w-96 h-96 border border-slate-100 rounded-full opacity-50 group-hover:scale-110 transition-transform duration-1000 delay-75" />
-                 
-                 <div className="mt-auto">
-                    <div className="w-full flex border-t border-slate-100 pt-4 gap-8">
-                      <div>
-                        <p className="text-sm font-medium text-slate-500 mb-1">Status</p>
-                        <p className="text-sm font-bold text-slate-700">Encrypted</p>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-slate-500 mb-1">Access</p>
-                        <p className="text-sm font-bold text-slate-700">Granular (RBAC)</p>
-                      </div>
+              {/* Technical Indicator */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-rose-50 border border-rose-200 rounded text-rose-800 text-[11px] sm:text-xs font-bold uppercase tracking-wider font-mono">
+                <span className="w-2 h-2 rounded-full bg-rose-600 animate-pulse"></span>
+                <span>{isHindi ? 'जमीनी संघर्ष से जन-सशक्तिकरण तक' : 'Infrastructure for Ground Battles & Resistance'}</span>
+              </div>
+
+              {/* Main Headline */}
+              <h1 className="text-4xl sm:text-6xl lg:text-[4.25rem] font-black tracking-tight text-slate-900 leading-[1.08]">
+                {isHindi ? (
+                  <>
+                    अपनी बस्ती के लिए अनुमति नहीं, <br className="hidden sm:inline" />
+                    <span className="text-rose-600">संगठन चाहिए।</span>
+                  </>
+                ) : (
+                  <>
+                    You Don&apos;t Need Permission to Fix Your Colony. <br className="hidden sm:inline" />
+                    <span className="text-rose-600">You Need Sangathan.</span>
+                  </>
+                )}
+              </h1>
+              
+              {/* Subheading */}
+              <p className="text-base sm:text-lg lg:text-xl text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
+                {isHindi
+                  ? 'नागरिक समूहों, पर्यावरण शोधकर्ताओं (जैसे दिल्ली सांस), छात्र संघों और आरडब्ल्यूए के लिए पूर्ण डिजिटल हथियार। 1-टैप प्रदूषण जांच, ₹1 फोटोस्टेट पर्चे, 15-दिवसीय आरटीआई ट्रैकर एवं बीक्यूएफ विधिक सुरक्षा।'
+                  : 'The zero-tech, mobile-first operating system for civic collectives, citizen scientists (Delhi Saans model), student unions, and RWAs. 1-tap spot audits, ₹1 printable Parchas, 15-day RTI countdowns, and official BQF legal protection.'}
+              </p>
+              
+              {/* Primary Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3.5 pt-2">
+                <Link 
+                  href={`/${lang}/login?tab=signup`} 
+                  className="bg-slate-900 hover:bg-slate-800 text-white px-7 py-4 font-bold text-sm transition-all flex items-center justify-center gap-2.5 rounded-md shadow-sm min-h-[48px]"
+                >
+                  <span>{isHindi ? 'संगठन शुरू करें (निःशुल्क)' : 'Start Your Collective (Free)'}</span>
+                  <ArrowRight size={16} />
+                </Link>
+                <Link 
+                  href={`/${lang}/features`} 
+                  className="bg-white text-slate-800 px-6 py-4 font-bold text-sm border border-slate-300 hover:border-slate-400 hover:bg-slate-50 transition-all flex items-center justify-center gap-2 rounded-md min-h-[48px]"
+                >
+                  <Sparkles size={16} className="text-rose-600" />
+                  <span>{isHindi ? 'सभी 5 संगठन प्रकार देखें' : 'Explore 5 Movement Archetypes'}</span>
+                </Link>
+              </div>
+
+              {/* Mobile-Friendly Micro-Proof Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-4 border-t border-slate-200/80 text-[11px] font-semibold text-slate-600 text-left">
+                <div className="flex items-center gap-1.5">
+                  <Smartphone className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>100% Mobile & PWA</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Printer className="w-4 h-4 text-rose-600 shrink-0" />
+                  <span>₹1 A4 Photostat Parcha</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 text-amber-600 shrink-0" />
+                  <span>15-Day RTI Guard</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-indigo-600 shrink-0" />
+                  <span>BQF Sec 8 Indemnity</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Charismatic Activist Leader Anchor */}
+            <div className="lg:col-span-5 flex flex-col items-center relative">
+              <div className="relative w-full max-w-md bg-gradient-to-b from-rose-50/60 via-slate-50/40 to-white border border-slate-200 rounded-xl p-4 sm:p-6 shadow-xs overflow-hidden">
+                
+                {/* Background Tech Geometry */}
+                <div className="absolute top-0 right-0 w-32 h-32 border-b border-l border-rose-200/60 pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-24 h-24 border-t border-r border-slate-200 pointer-events-none" />
+                
+                {/* Main Leader Image */}
+                <div className="relative w-full h-[360px] sm:h-[440px] flex items-end justify-center">
+                  <Image
+                    src="/images/activist-leader.png"
+                    alt="Civic Activist and Grassroots Leader - Sangathan"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                    className="object-contain object-bottom drop-shadow-md"
+                    priority
+                  />
+                </div>
+
+                {/* Floating Live Ground Badges */}
+                <div className="absolute top-4 left-4 right-4 flex flex-col gap-2 pointer-events-none">
+                  <div className="bg-white/95 backdrop-blur-xs border border-amber-300 rounded p-2 text-left shadow-xs flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping shrink-0" />
+                    <div className="text-[10px] font-mono leading-tight">
+                      <strong className="text-amber-900 block">15-Day Statutory Countdown Active</strong>
+                      <span className="text-slate-500">MCD Ward 42 • Diary No. 1492</span>
                     </div>
-                 </div>
-              </div>
-
-              {/* Box 2 */}
-              <div className="bg-white border border-slate-200 p-10 lg:p-14 group hover:border-indigo-300 transition-colors relative overflow-hidden flex flex-col min-h-[360px]">
-                 <div className="mb-auto">
-                   <Vote className="text-indigo-600 mb-6" size={28} strokeWidth={1.5} />
-                   <h3 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">Resolutions</h3>
-                   <p className="text-slate-500 text-lg leading-relaxed">
-                     Cryptographically verifiable voting and polls for decisive governance.
-                   </p>
-                 </div>
-              </div>
-
-              {/* Box 3 */}
-              <div className="bg-white border border-slate-200 p-10 lg:p-14 group hover:border-indigo-300 transition-colors relative overflow-hidden flex flex-col min-h-[360px]">
-                 <div className="mb-auto">
-                   <Banknote className="text-indigo-600 mb-6" size={28} strokeWidth={1.5} />
-                   <h3 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">Ledgers</h3>
-                   <p className="text-slate-500 text-lg leading-relaxed">
-                     Automated financial logging and transparent receipt tracking.
-                   </p>
-                 </div>
-              </div>
-
-              {/* Box 4 */}
-              <div className="lg:col-span-2 bg-white border border-slate-200 p-10 lg:p-14 group hover:border-indigo-300 transition-colors relative overflow-hidden flex flex-col min-h-[360px]">
-                 <div className="flex items-center gap-4 mb-6">
-                   <ShieldCheck className="text-indigo-600" size={28} strokeWidth={1.5} />
-                   <h3 className="text-2xl font-bold tracking-tight text-slate-900">Immutable Audit Logs</h3>
-                 </div>
-                 <p className="text-slate-500 max-w-xl text-lg leading-relaxed mb-8">
-                   Every administrative action is securely logged to prevent abuse of power and ensure absolute accountability across your collective.
-                 </p>
-                 <div className="mt-auto">
-                    <div className="w-full flex border-t border-slate-100 pt-4 gap-8">
-                      <div>
-                        <p className="text-sm font-medium text-slate-500 mb-1">Integrity</p>
-                        <p className="text-sm font-bold text-slate-700">WORM Storage</p>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-slate-500 mb-1">Retention</p>
-                        <p className="text-sm font-bold text-slate-700">Permanent</p>
-                      </div>
-                    </div>
-                 </div>
-              </div>
-
-           </div>
-        </section>
-
-        {/* 3. CAPABILITIES GRID (Data Grid Style) */}
-        <section className="py-24 border-t border-b border-slate-200 bg-slate-50/50">
-           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-             <div className="mb-16">
-                <p className="text-indigo-600 font-medium text-sm mb-3">{isHindi ? 'प्लेटफ़ॉर्म मॉड्यूल' : 'Platform Modules'}</p>
-                <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">{isHindi ? 'मुख्य क्षमताएं' : 'Capabilities'}</h2>
-             </div>
-
-             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0 border-l border-t border-slate-200">
-                {[
-                  { icon: Users, title: 'Membership', desc: 'Secure Registry & CRM' },
-                  { icon: Video, title: 'Events', desc: 'RSVP & Attendance' },
-                  { icon: Check, title: 'Tasks', desc: 'Volunteer Management' },
-                  { icon: Megaphone, title: 'Broadcast', desc: 'Mass Announcements' },
-                  { icon: Vote, title: 'Elections', desc: 'Secure Polling' },
-                  { icon: Activity, title: 'Analytics', desc: 'Growth Insights' },
-                  { icon: Layers, title: 'Transparency', desc: 'Public Mode Data' },
-                  { icon: Globe, title: 'Federation', desc: 'Network Connectivity' },
-                ].map((item, idx) => (
-                  <div key={idx} className="p-8 border-r border-b border-slate-200 bg-white hover:bg-slate-50 transition-colors">
-                     <item.icon className="text-slate-400 mb-6" size={24} strokeWidth={1.5} />
-                     <h3 className="text-lg font-bold text-slate-900 tracking-tight mb-2">{item.title}</h3>
-                     <p className="text-slate-500 text-sm font-medium">{item.desc}</p>
                   </div>
-                ))}
-             </div>
-           </div>
-        </section>
+                </div>
 
-        {/* WHO USES SANGATHAN */}
-        <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="mb-16">
-            <p className="text-indigo-600 font-medium text-sm mb-3">{isHindi ? 'किसके लिए' : 'Built For'}</p>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">{isHindi ? 'हर नागरिक समूह के लिए' : 'Every Civic Collective'}</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* NGO */}
-            <Link href={`/${lang}/features#ngo`} className="group bg-white border border-slate-200 p-8 hover:border-indigo-300 hover:shadow-sm transition-all flex flex-col h-full">
-              <div className="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Building2 className="text-indigo-600" size={24} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">
-                {isHindi ? 'एनजीओ और गैर-लाभकारी' : 'NGOs & Non-Profits'}
-              </h3>
-              <p className="text-slate-500 text-sm mb-6 flex-grow leading-relaxed">
-                {isHindi ? 'स्वयंसेवकों का प्रबंधन करें, 80G रसीदों के साथ दान ट्रैक करें और फंडर्स को प्रभाव दिखाएं।' : 'Manage volunteers, track donations with 80G receipts, and demonstrate impact to funders.'}
-              </p>
-              <ul className="space-y-2 mb-6">
-                {['80G Tax Receipts', 'FCRA Compliance', 'Donor CRM', 'Grant Matcher'].map((feature, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
-                    <Check className="text-indigo-500 shrink-0 mt-0.5" size={16} />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-auto text-sm font-bold text-indigo-600 flex items-center gap-1 group-hover:gap-2 transition-all">
-                {isHindi ? 'अधिक जानें' : 'Learn more'} <ArrowRight size={14} />
-              </div>
-            </Link>
+                <div className="absolute bottom-4 left-4 right-4 pointer-events-none">
+                  <div className="bg-slate-900/90 text-white backdrop-blur-xs border border-slate-700 rounded p-2.5 text-left shadow-xs flex items-center justify-between">
+                    <div className="text-[11px] leading-tight">
+                      <span className="font-bold text-rose-400 block">Spot Air Quality Audit</span>
+                      <span className="text-[10px] text-slate-300">PM2.5: 485 µg/m³ • Hazardous</span>
+                    </div>
+                    <span className="text-[9px] font-mono font-bold bg-rose-900/80 text-rose-200 px-1.5 py-0.5 rounded border border-rose-700">
+                      DPCC Notice Ready
+                    </span>
+                  </div>
+                </div>
 
-            {/* Student Unions */}
-            <Link href={`/${lang}/features#student`} className="group bg-white border border-slate-200 p-8 hover:border-emerald-300 hover:shadow-sm transition-all flex flex-col h-full">
-              <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <GraduationCap className="text-emerald-600" size={24} strokeWidth={1.5} />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">
-                {isHindi ? 'छात्र संघ' : 'Student Unions'}
-              </h3>
-              <p className="text-slate-500 text-sm mb-6 flex-grow leading-relaxed">
-                {isHindi ? 'लिंगदोह अनुपालन के साथ परिसर चुनाव चलाएं, RTI दायर करें और छात्रों को जुटाएं।' : 'Run campus elections with Lyngdoh compliance, file RTIs, and mobilize students across hostels.'}
-              </p>
-              <ul className="space-y-2 mb-6">
-                {['Lyngdoh Compliance', 'Gyapan Builder', 'Campus Elections', 'Hostel Audit'].map((feature, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
-                    <Check className="text-emerald-500 shrink-0 mt-0.5" size={16} />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-auto text-sm font-bold text-emerald-600 flex items-center gap-1 group-hover:gap-2 transition-all">
-                {isHindi ? 'अधिक जानें' : 'Learn more'} <ArrowRight size={14} />
-              </div>
-            </Link>
 
-            {/* Workers Unions */}
-            <Link href={`/${lang}/features#worker`} className="group bg-white border border-slate-200 p-8 hover:border-orange-300 hover:shadow-sm transition-all flex flex-col h-full">
-              <div className="w-12 h-12 bg-orange-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <HardHat className="text-orange-600" size={24} strokeWidth={1.5} />
+              <div className="mt-3 text-center">
+                <p className="text-xs font-bold text-slate-700">
+                  {isHindi ? '“अधिकारियों से मौखिक शिकायत नहीं, लिखित वैधानिक रिकॉर्ड से काम कराएं।”' : '“Don’t beg authorities verbally. Force action with stamped receiving and RTI countdowns.”'}
+                </p>
+                <span className="text-[11px] text-slate-400 font-mono">
+                  Ground Movement Standard • Delhi Saans & Civic Collectives
+                </span>
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">
-                {isHindi ? 'श्रमिक संघ' : 'Workers Unions'}
-              </h3>
-              <p className="text-slate-500 text-sm mb-6 flex-grow leading-relaxed">
-                {isHindi ? 'सामूहिक सौदेबाजी का समन्वय करें, हड़ताल कार्यों का प्रबंधन करें और शिकायतों को ट्रैक करें।' : 'Coordinate collective bargaining, manage strike actions, and track grievances through arbitration.'}
-              </p>
-              <ul className="space-y-2 mb-6">
-                {['CBA Tracking', 'Strike Coordination', 'Dues Collection', 'Grievance Mgmt'].map((feature, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
-                    <Check className="text-orange-500 shrink-0 mt-0.5" size={16} />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-auto text-sm font-bold text-orange-600 flex items-center gap-1 group-hover:gap-2 transition-all">
-                {isHindi ? 'अधिक जानें' : 'Learn more'} <ArrowRight size={14} />
-              </div>
-            </Link>
+            </div>
 
-            {/* RWAs */}
-            <Link href={`/${lang}/features#rwa`} className="group bg-white border border-slate-200 p-8 hover:border-cyan-300 hover:shadow-sm transition-all flex flex-col h-full">
-              <div className="w-12 h-12 bg-cyan-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Home className="text-cyan-600" size={24} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">
-                {isHindi ? 'रेजिडेंट वेलफेयर' : 'Resident Welfare'}
-              </h3>
-              <p className="text-slate-500 text-sm mb-6 flex-grow leading-relaxed">
-                {isHindi ? 'रखरखाव बिलिंग को स्वचालित करें, आगंतुकों का प्रबंधन करें और सोसायटी चुनाव आयोजित करें।' : 'Automate maintenance billing, manage visitors, book facilities, and conduct society elections.'}
-              </p>
-              <ul className="space-y-2 mb-6">
-                {['Maintenance Billing', 'Visitor Management', 'Facility Booking', 'Society Polls'].map((feature, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
-                    <Check className="text-cyan-500 shrink-0 mt-0.5" size={16} />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-auto text-sm font-bold text-cyan-600 flex items-center gap-1 group-hover:gap-2 transition-all">
-                {isHindi ? 'अधिक जानें' : 'Learn more'} <ArrowRight size={14} />
-              </div>
-            </Link>
           </div>
         </section>
 
-        {/* BUILT FOR INDIA */}
-        <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        {/* 2. ACTIVIST MANIFESTO & THE 4 PILLARS OF GROUND ACTION */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 mb-6">
-                {isHindi ? 'भारतीय संगठनों के लिए निर्मित' : 'Built for Indian Organizations'}
-              </h2>
-              <p className="text-lg text-slate-500 mb-8 leading-relaxed">
-                {isHindi 
-                  ? 'संगठन को भारत की जटिल नागरिक संरचनाओं के लिए डिज़ाइन किया गया है। UPI भुगतान, क्षेत्रीय भाषाओं और भारतीय वैधानिक नियमों के अनुपालन के साथ गहराई से एकीकृत।' 
-                  : 'Sangathan is designed ground-up for the complexities of Indian civic structures. Deeply integrated with UPI payments, regional languages, and compliance for Indian statutory rules.'}
+              <p className="text-rose-600 font-bold text-xs uppercase tracking-widest font-mono mb-2">
+                {isHindi ? 'जमीनी हकीकत' : 'Ground Reality vs Verbal Pleas'}
               </p>
+              <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900">
+                {isHindi ? 'भारतीय प्रशासनिक तंत्र में काम कैसे होता है?' : 'Why Verbal Complaints Fail & How Sangathan Forces Action'}
+              </h2>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="border border-slate-200 p-6 bg-white hover:border-indigo-300 transition-colors">
-                <Banknote className="text-indigo-600 mb-4" size={24} strokeWidth={1.5} />
-                <h4 className="text-slate-900 font-bold tracking-tight mb-2">UPI & Razorpay Payments</h4>
-                <p className="text-slate-500 text-sm leading-relaxed">Direct integration with India&apos;s payment infrastructure.</p>
+            <p className="text-slate-500 max-w-md text-xs sm:text-sm leading-relaxed">
+              {isHindi
+                ? 'सरकारी बाबू और निगम अधिकारी व्हाट्सएप ग्रुप की बातों को नजरअंदाज करते हैं। वे केवल लिखित, स्टैम्प्ड और वैधानिक रिकॉर्ड से डरते हैं।'
+                : 'Babus and politicians ignore verbal pleas and casual tweets. They only act when faced with physical stamped receiving and statutory RTI penalties.'}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            {/* Pillar 1: Field Audits */}
+            <div className="bg-white border border-slate-200 rounded-lg p-6 hover:border-rose-300 transition-colors shadow-xs flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded bg-rose-50 text-rose-700 flex items-center justify-center font-bold">
+                  <Activity className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-slate-900">
+                  1-Tap Spot Sensor Audits
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Log geotagged PM2.5, PM10, TDS water readings, and waste burning on the spot. Generate instant DPCC/CPCB violation notices citing the Air Act 1981 and CAQM GRAP.
+                </p>
               </div>
-              <div className="border border-slate-200 p-6 bg-white hover:border-indigo-300 transition-colors">
-                <Globe className="text-indigo-600 mb-4" size={24} strokeWidth={1.5} />
-                <h4 className="text-slate-900 font-bold tracking-tight mb-2">Hindi & Regional Languages</h4>
-                <p className="text-slate-500 text-sm leading-relaxed">Full bilingual interface with 6 regional dictionaries.</p>
+              <div className="pt-4 mt-4 border-t border-slate-100 text-[11px] font-mono text-rose-700 font-bold">
+                Delhi Saans Model
               </div>
-              <div className="border border-slate-200 p-6 bg-white hover:border-indigo-300 transition-colors">
-                <ShieldCheck className="text-indigo-600 mb-4" size={24} strokeWidth={1.5} />
-                <h4 className="text-slate-900 font-bold tracking-tight mb-2">Indian Compliance</h4>
-                <p className="text-slate-500 text-sm leading-relaxed">80G, FCRA, Lyngdoh Committee, RTI Act 2005.</p>
+            </div>
+
+            {/* Pillar 2: Printable Parchas */}
+            <div className="bg-white border border-slate-200 rounded-lg p-6 hover:border-rose-300 transition-colors shadow-xs flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded bg-slate-100 text-slate-900 flex items-center justify-center font-bold">
+                  <Printer className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-slate-900">
+                  ₹1 Photostat Parchas
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  1-page high-contrast A4 leaflets for cheap colony photocopy machines, paired with pen-and-paper resident signature sheets for park meetings and chai stalls.
+                </p>
               </div>
-              <div className="border border-slate-200 p-6 bg-white hover:border-indigo-300 transition-colors">
-                <Zap className="text-indigo-600 mb-4" size={24} strokeWidth={1.5} />
-                <h4 className="text-slate-900 font-bold tracking-tight mb-2">Offline-First PWA</h4>
-                <p className="text-slate-500 text-sm leading-relaxed">Works on low-end Android devices and zero-connectivity areas.</p>
+              <div className="pt-4 mt-4 border-t border-slate-100 text-[11px] font-mono text-slate-700 font-bold">
+                Photostat & Chai Stall Ready
+              </div>
+            </div>
+
+            {/* Pillar 3: Stamped Receiving & RTI */}
+            <div className="bg-white border border-slate-200 rounded-lg p-6 hover:border-amber-300 transition-colors shadow-xs flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded bg-amber-50 text-amber-800 flex items-center justify-center font-bold">
+                  <Clock className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-slate-900">
+                  Stamped Receiving & RTI Guard
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Upload photos of stamped ward diary numbers. If the authority ignores the 15-day Citizens&apos; Charter deadline, auto-generate Section 6(1) RTI applications with ₹250/day officer fines.
+                </p>
+              </div>
+              <div className="pt-4 mt-4 border-t border-slate-100 text-[11px] font-mono text-amber-800 font-bold">
+                Citizens&apos; Charter Guard
+              </div>
+            </div>
+
+            {/* Pillar 4: BQF Legal Shield */}
+            <div className="bg-white border border-slate-200 rounded-lg p-6 hover:border-indigo-300 transition-colors shadow-xs flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-slate-900">
+                  BQF Section 8 Legal Protection
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  AI facial & ID verification granting recognized status under Bahujan Queer Foundation (Delhi Reg. Section 8 NGO • CIN: U88900DL2025NPL452474) with statutory legal indemnity.
+                </p>
+              </div>
+              <div className="pt-4 mt-4 border-t border-slate-100 text-[11px] font-mono text-indigo-700 font-bold">
+                No Registration Needed
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* 3. THE 5 MOVEMENT ARCHETYPES */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
+          <div className="mb-12">
+            <p className="text-indigo-600 font-bold text-xs uppercase tracking-widest font-mono mb-2">
+              {isHindi ? 'संगठन प्रकार' : '5 Movement Archetypes'}
+            </p>
+            <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900">
+              {isHindi ? 'हर प्रकार के नागरिक समूह के लिए समर्पित व्यवस्था' : 'Choose Your Battlefield & Launch Your Workspace'}
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            
+            {/* 1. Civic Collectives */}
+            <Link 
+              href={`/${lang}/features#civic_collective`} 
+              className="bg-white border-2 border-rose-200 rounded-lg p-6 hover:border-rose-400 hover:shadow-xs transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 bg-rose-50 text-rose-700 rounded flex items-center justify-center">
+                    <Megaphone className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-mono font-bold bg-rose-100 text-rose-800 px-2 py-0.5 rounded">
+                    Unregistered Friendly
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-1">
+                  {isHindi ? 'नागरिक समूह व जमीनी आंदोलन' : 'Civic Collectives & Movements'}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  Neighborhood action groups, environmental researchers (Delhi Saans), basti committees, and mutual aid collectives.
+                </p>
+                <ul className="space-y-1.5 text-xs text-slate-700 font-medium mb-4">
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-rose-600" /> Spot Sensor Audits (PM2.5/TDS)</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-rose-600" /> Printable A4 Parchas & Signatures</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-rose-600" /> Stamped Receiving & RTI Tracker</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-rose-600" /> BQF Section 8 Recognition</li>
+                </ul>
+              </div>
+              <span className="text-xs font-bold text-rose-700 flex items-center gap-1">
+                Explore Civic Suite <ArrowRight size={14} />
+              </span>
+            </Link>
+
+            {/* 2. NGOs */}
+            <Link 
+              href={`/${lang}/features#ngo`} 
+              className="bg-white border border-slate-200 rounded-lg p-6 hover:border-emerald-300 hover:shadow-xs transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 bg-emerald-50 text-emerald-700 rounded flex items-center justify-center">
+                    <Building2 className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">
+                    Registered Trusts
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-1">
+                  {isHindi ? 'पंजीकृत स्वयंसेवी संगठन (NGO)' : 'Registered NGOs & Trusts'}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  Non-profits managing field staff, donors, and state compliance.
+                </p>
+                <ul className="space-y-1.5 text-xs text-slate-700 font-medium mb-4">
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-emerald-600" /> Automated 80G Tax Receipts</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-emerald-600" /> Grant Tranche Accounting</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-emerald-600" /> AI CSR Scheme Matcher</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-emerald-600" /> Volunteer Hour Certificates</li>
+                </ul>
+              </div>
+              <span className="text-xs font-bold text-emerald-700 flex items-center gap-1">
+                Explore NGO Suite <ArrowRight size={14} />
+              </span>
+            </Link>
+
+            {/* 3. Student Unions */}
+            <Link 
+              href={`/${lang}/features#student_union`} 
+              className="bg-white border border-slate-200 rounded-lg p-6 hover:border-indigo-300 hover:shadow-xs transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 bg-indigo-50 text-indigo-700 rounded flex items-center justify-center">
+                    <GraduationCap className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-mono font-bold bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded">
+                    Campus & Youth
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-1">
+                  {isHindi ? 'छात्र संघ व युवा संगठन' : 'Student Unions & Youth Fronts'}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  Campus elections, hostel committees, and student rights collectives.
+                </p>
+                <ul className="space-y-1.5 text-xs text-slate-700 font-medium mb-4">
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-indigo-600" /> Lyngdoh Committee Compliance</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-indigo-600" /> VC & Registrar Gyapan Builder</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-indigo-600" /> Secret Anonymous Voting</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-indigo-600" /> Hostel Grievance Ledger</li>
+                </ul>
+              </div>
+              <span className="text-xs font-bold text-indigo-700 flex items-center gap-1">
+                Explore Student Suite <ArrowRight size={14} />
+              </span>
+            </Link>
+
+            {/* 4. Workers Unions */}
+            <Link 
+              href={`/${lang}/features#workers_union`} 
+              className="bg-white border border-slate-200 rounded-lg p-6 hover:border-amber-300 hover:shadow-xs transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 bg-amber-50 text-amber-700 rounded flex items-center justify-center">
+                    <HardHat className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-mono font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded">
+                    Labour & Gig
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-1">
+                  {isHindi ? 'श्रमिक व ट्रेड यूनियन' : 'Workers & Trade Unions'}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  Gig workers, factory units, transport unions, and informal labour fronts.
+                </p>
+                <ul className="space-y-1.5 text-xs text-slate-700 font-medium mb-4">
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-amber-600" /> Collective Bargaining (CBA)</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-amber-600" /> Strike & Dharna Coordinator</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-amber-600" /> Monthly Chanda & Dues Ledger</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-amber-600" /> Legal Aid & Detention SOS</li>
+                </ul>
+              </div>
+              <span className="text-xs font-bold text-amber-700 flex items-center gap-1">
+                Explore Workers Suite <ArrowRight size={14} />
+              </span>
+            </Link>
+
+            {/* 5. RWAs */}
+            <Link 
+              href={`/${lang}/features#rwa`} 
+              className="bg-white border border-slate-200 rounded-lg p-6 hover:border-sky-300 hover:shadow-xs transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 bg-sky-50 text-sky-700 rounded flex items-center justify-center">
+                    <Home className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-mono font-bold bg-sky-100 text-sky-800 px-2 py-0.5 rounded">
+                    Societies & Colonies
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-1">
+                  {isHindi ? 'रेजिडेंट वेलफेयर एसोसिएशन (RWA)' : 'Resident Welfare (RWA)'}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  Apartment management committees, gated societies, and plotted colonies.
+                </p>
+                <ul className="space-y-1.5 text-xs text-slate-700 font-medium mb-4">
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-sky-600" /> Batch Maintenance UPI Invoicing</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-sky-600" /> Domestic Staff & Gate Passes</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-sky-600" /> Society AMC & Lift NOC Tracker</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-sky-600" /> Form I Statutory Register</li>
+                </ul>
+              </div>
+              <span className="text-xs font-bold text-sky-700 flex items-center gap-1">
+                Explore RWA Suite <ArrowRight size={14} />
+              </span>
+            </Link>
+
+            {/* 6. Quick Start Box */}
+            <div className="bg-slate-900 text-white rounded-lg p-6 flex flex-col justify-between">
+              <div>
+                <span className="text-[10px] font-mono text-rose-400 font-bold uppercase tracking-wider block mb-2">
+                  Zero Technical Barriers
+                </span>
+                <h3 className="text-lg font-bold mb-2">
+                  Ready to Start in 60 Seconds?
+                </h3>
+                <p className="text-xs text-slate-300 leading-relaxed mb-4">
+                  No server setups, no complex IT knowledge. Just select your organization focus, invite your members, and start organizing.
+                </p>
+              </div>
+              <Link 
+                href={`/${lang}/login?tab=signup`} 
+                className="w-full bg-rose-600 hover:bg-rose-700 text-white py-3 rounded font-bold text-xs flex items-center justify-center gap-2 transition-colors min-h-[44px]"
+              >
+                <span>Launch Workspace</span>
+                <ArrowRight size={14} />
+              </Link>
+            </div>
+
+          </div>
+        </section>
+
+        {/* 4. CORE TECHNICAL CAPABILITIES (Grid) */}
+        <section className="py-20 border-t border-slate-200 bg-slate-50/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-12">
+              <p className="text-indigo-600 font-bold text-xs uppercase tracking-widest font-mono mb-2">
+                {isHindi ? 'प्लेटफ़ॉर्म मॉड्यूल' : 'Platform Engineering'}
+              </p>
+              <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900">
+                {isHindi ? 'पूर्ण संप्रभु व सुरक्षित बुनियादी ढांचा' : 'Built for Sovereign Data & High-Stakes Governance'}
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                { icon: Users, title: 'Granular Role RBAC', desc: 'Can Comment, Can Edit, Can Manage, and Second Admin roles.' },
+                { icon: Vote, title: 'Secret Anonymous Ballots', desc: 'Cryptographic voting with instant tamper-evident tallies.' },
+                { icon: Banknote, title: 'Transparent Ledgers', desc: 'Auto-reconciled UPI donations and public expenditure books.' },
+                { icon: ShieldCheck, title: 'Immutable Audit Logs', desc: 'WORM log storage ensuring absolute administrative accountability.' },
+                { icon: Smartphone, title: 'Offline-First PWA', desc: 'Zero-connectivity door-to-door data capture with auto-sync.' },
+                { icon: MessageSquare, title: 'WhatsApp Media Dispatch', desc: '1-click formatted statements for journalists and colony groups.' },
+                { icon: Lock, title: 'Tenant Data Isolation', desc: 'PostgreSQL Row Level Security (RLS) across all tables.' },
+                { icon: Globe, title: 'Public Movement Portal', desc: 'Discoverable campaign hubs and verified member badges.' },
+              ].map((item, idx) => (
+                <div key={idx} className="bg-white border border-slate-200 p-5 rounded-lg shadow-2xs hover:border-slate-300 transition-colors">
+                  <item.icon className="text-slate-700 mb-3" size={22} strokeWidth={1.75} />
+                  <h3 className="text-sm font-bold text-slate-900 mb-1">{item.title}</h3>
+                  <p className="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 5. BUILT FOR INDIA & WHATSAPP GENERATION */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="text-rose-600 font-bold text-xs uppercase tracking-widest font-mono mb-2">
+                {isHindi ? 'भारतीय संदर्भ' : 'Built for Indian Ground Reality'}
+              </p>
+              <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900 mb-4">
+                {isHindi ? 'भारतीय प्रशासनिक व सामाजिक संरचनाओं के अनुरूप' : 'Engineered for Indian Wards, Bastis & Campuses'}
+              </h2>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-6 font-normal">
+                {isHindi 
+                  ? 'संगठन को भारत की जमीनी चुनौतियों के लिए तैयार किया गया है। कम कीमत वाले स्मार्टफोन, धीमे 2G/3G नेटवर्क, और हिंदी तथा क्षेत्रीय भाषाओं में सहजता से काम करता है।' 
+                  : 'Sangathan is engineered from the ground up for Indian civic realities: low-cost smartphones, poor connectivity, bilingual workflows, and statutory legal accountability.'}
+              </p>
+              <div className="space-y-3 text-xs text-slate-700 font-medium">
+                <div className="flex items-center gap-2">
+                  <Check className="text-rose-600 w-4 h-4" />
+                  <span>Direct UPI & QR Code integration for chanda and membership fees</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="text-rose-600 w-4 h-4" />
+                  <span>Full Hindi & English bilingual user experience across all modules</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="text-rose-600 w-4 h-4" />
+                  <span>Compliant with RTI Act 2005, Air Act 1981, and DMC Municipal Rules</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div className="border border-slate-200 p-5 bg-white rounded-lg">
+                <Smartphone className="text-rose-600 mb-2.5" size={22} />
+                <h4 className="text-slate-900 font-bold text-xs mb-1">Low-End Android Ready</h4>
+                <p className="text-slate-500 text-xs">Lightweight bundle loading instantly even on ₹6,000 devices.</p>
+              </div>
+              <div className="border border-slate-200 p-5 bg-white rounded-lg">
+                <Globe className="text-rose-600 mb-2.5" size={22} />
+                <h4 className="text-slate-900 font-bold text-xs mb-1">Hindi & Regional Plurality</h4>
+                <p className="text-slate-500 text-xs">Zero English jargon barrier for colony and basti members.</p>
+              </div>
+              <div className="border border-slate-200 p-5 bg-white rounded-lg">
+                <Scale className="text-rose-600 mb-2.5" size={22} />
+                <h4 className="text-slate-900 font-bold text-xs mb-1">Statutory Legal Indemnity</h4>
+                <p className="text-slate-500 text-xs">Protective umbrella under BQF Section 8 Non-Profit registration.</p>
+              </div>
+              <div className="border border-slate-200 p-5 bg-white rounded-lg">
+                <Printer className="text-rose-600 mb-2.5" size={22} />
+                <h4 className="text-slate-900 font-bold text-xs mb-1">A4 Printable Dispatch</h4>
+                <p className="text-slate-500 text-xs">1-click black & white print layouts for ₹1 photostat shops.</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* WHAT'S NEW */}
+        {/* 6. WHAT'S NEW V1.42.0 */}
         <section className="py-16 border-t border-b border-slate-200 bg-slate-50/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <p className="text-indigo-600 font-medium text-sm mb-2">v1.37.0</p>
-                <h2 className="text-2xl font-bold tracking-tight text-slate-900">{isHindi ? 'नया क्या है' : "What's New"}</h2>
+                <p className="text-rose-600 font-bold text-xs font-mono mb-1">v1.42.0 UPDATE</p>
+                <h2 className="text-2xl font-black tracking-tight text-slate-900">
+                  {isHindi ? 'हालिया सुविधाएं (दिल्ली सांस मॉडल)' : 'Latest Ground Features (Delhi Saans Model)'}
+                </h2>
               </div>
-              <Link href={`/${lang}/changelog`} className="text-sm font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
-                {isHindi ? 'सभी अपडेट देखें' : 'View all updates'} <ArrowRight size={14} />
+              <Link href={`/${lang}/changelog`} className="text-xs font-bold text-rose-700 hover:text-rose-900 flex items-center gap-1">
+                {isHindi ? 'सभी अपडेट देखें' : 'View Full Changelog'} <ArrowRight size={14} />
               </Link>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="border border-slate-200 p-5 bg-white">
-                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">🛡️ BQF AI Recognition</h4>
-                <p className="text-slate-500 text-sm">AI facial & ID verification for unregistered collectives (CIN: U88900DL2025NPL452474)</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+              <div className="border border-slate-200 p-4 bg-white rounded-lg">
+                <h4 className="text-slate-900 font-bold text-xs mb-1 flex items-center gap-1.5">
+                  <Activity className="w-3.5 h-3.5 text-rose-600" />
+                  <span>Spot Sensor Audits</span>
+                </h4>
+                <p className="text-slate-500 text-xs leading-relaxed">Geotagged PM2.5, PM10, and TDS field testing desk</p>
               </div>
-              <div className="border border-slate-200 p-5 bg-white">
-                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">📜 AI Govt Representation Studio</h4>
-                <p className="text-slate-500 text-sm">Draft legally sound petitions to SDMs, Police, and Municipal Bodies</p>
+              <div className="border border-slate-200 p-4 bg-white rounded-lg">
+                <h4 className="text-slate-900 font-bold text-xs mb-1 flex items-center gap-1.5">
+                  <Printer className="w-3.5 h-3.5 text-rose-600" />
+                  <span>1-Page A4 Parchas</span>
+                </h4>
+                <p className="text-slate-500 text-xs leading-relaxed">Printable monochrome flyers and physical signature sheets</p>
               </div>
-              <div className="border border-slate-200 p-5 bg-white">
-                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">👥 Master Role Delegation</h4>
-                <p className="text-slate-500 text-sm">Master Admin, Second Admin, Can Manage, Can Edit & Can Comment roles</p>
+              <div className="border border-slate-200 p-4 bg-white rounded-lg">
+                <h4 className="text-slate-900 font-bold text-xs mb-1 flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-rose-600" />
+                  <span>15-Day RTI Tracker</span>
+                </h4>
+                <p className="text-slate-500 text-xs leading-relaxed">Track stamped ward receiving with Section 6(1) RTI escalation</p>
               </div>
-              <div className="border border-slate-200 p-5 bg-white">
-                <h4 className="text-slate-900 font-bold tracking-tight mb-1 flex items-center gap-2">📱 Guided Onboarding Flow</h4>
-                <p className="text-slate-500 text-sm">Logo setup, public username reservation & BQF recognition guide</p>
+              <div className="border border-slate-200 p-4 bg-white rounded-lg">
+                <h4 className="text-slate-900 font-bold text-xs mb-1 flex items-center gap-1.5">
+                  <Newspaper className="w-3.5 h-3.5 text-rose-600" />
+                  <span>Press Dispatch Studio</span>
+                </h4>
+                <p className="text-slate-500 text-xs leading-relaxed">Bilingual media releases with 1-click WhatsApp press copy</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* 4. PRIVACY & SECURITY - Redesigned as Technical Lines instead of Blob */}
-        <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div>
-                 <p className="text-indigo-600 font-medium text-sm mb-3">{isHindi ? 'डेटा संप्रभुता' : 'Data Sovereignty'}</p>
-                 <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 mb-6">
-                    {isHindi ? 'तटस्थ बुनियादी ढांचा' : 'Privacy & Neutrality First'}
-                 </h2>
-                 <p className="text-lg text-slate-500 mb-8 leading-relaxed">
-                    {isHindi 
-                      ? 'हम डेटा नहीं बेचते हैं। हम विज्ञापन नहीं चलाते हैं। आपका सदस्य डेटा आपका है।' 
-                      : 'Sangathan is a platform, not a publisher. We provide the structure, you provide the ideology. We do not sell data or run ads.'}
-                 </p>
-                 <Link href={`/${lang}/transparency`} className="text-sm font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-2">
-                   {isHindi ? 'हमारी डेटा नीति पढ़ें' : 'Read our data policy'} <ArrowRight size={16} />
-                 </Link>
-              </div>
-
-              <div className="space-y-6">
-                 {/* Minimalist Data Cards */}
-                 <div className="border border-slate-200 p-6 bg-white flex items-start gap-4 hover:border-indigo-300 transition-colors">
-                    <Lock className="text-slate-400 shrink-0" size={24} strokeWidth={1.5} />
-                    <div>
-                       <h4 className="text-slate-900 font-bold tracking-tight mb-2">End-to-End Isolation</h4>
-                       <p className="text-slate-500 text-sm leading-relaxed">Tenant data is strictly separated at the database level with RLS (Row Level Security) policies.</p>
-                    </div>
-                 </div>
-                 <div className="border border-slate-200 p-6 bg-white flex items-start gap-4 hover:border-indigo-300 transition-colors">
-                    <Fingerprint className="text-slate-400 shrink-0" size={24} strokeWidth={1.5} />
-                    <div>
-                       <h4 className="text-slate-900 font-bold tracking-tight mb-2">Zero Tracking</h4>
-                       <p className="text-slate-500 text-sm leading-relaxed">No tracking pixels. No cross-site profiling. Your members are not targeted for behavioral advertising.</p>
-                    </div>
-                 </div>
-              </div>
-           </div>
-        </section>
-
-        {/* 5. FINAL CTA - Minimalist & Sharp */}
-        <section className="border-t border-slate-200 bg-white relative overflow-hidden">
-           <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.02]"
-                style={{ backgroundImage: 'linear-gradient(slate-900 1px, transparent 1px), linear-gradient(90deg, slate-900 1px, transparent 1px)', backgroundSize: '40px 40px' }}
-           />
-           <div className="py-32 px-4 text-center max-w-4xl mx-auto relative z-10">
-             <h2 className="text-4xl sm:text-6xl font-black tracking-tighter text-slate-900 mb-6">
-                {isHindi ? 'एक स्थायी संस्थान बनाएं।' : 'Build a lasting institution.'}
-             </h2>
-             <p className="text-xl text-slate-500 mb-12 font-medium">
-                {isHindi
-                  ? 'संगठन के साथ शक्ति बनाने वाले एनजीओ, यूनियनों और समूहों के समुदाय में शामिल हों।'
-                  : 'Join the community of NGOs, unions, and collectives building power with Sangathan.'}
-             </p>
-             <Link 
+        {/* 7. FINAL CALL TO ACTION - Light, Crisp, Geometric Technical Design */}
+        <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
+          <div className="border-2 border-slate-900 p-8 sm:p-14 bg-white rounded-lg space-y-6 shadow-sm">
+            <div className="w-12 h-12 bg-rose-50 text-rose-700 rounded-full mx-auto flex items-center justify-center">
+              <Megaphone className="w-6 h-6" />
+            </div>
+            
+            <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900">
+              {isHindi ? 'अपनी कॉलोनी का पहला संगठन आज ही शुरू करें।' : 'Build Power in Your Colony Today.'}
+            </h2>
+            
+            <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal">
+              {isHindi
+                ? 'निःशुल्क कार्यक्षेत्र बनाएं। अपने पड़ोसियों और कार्यकर्ताओं को जोड़ें। कागजी पर्चे प्रिंट करें और अधिकारियों से जवाबदेही सुनिश्चित करें।'
+                : 'Claim your free movement workspace. Mobilize your neighbors and comrades. Print physical Parchas and enforce statutory administrative accountability.'}
+            </p>
+            
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link 
                 href={`/${lang}/login?tab=signup`} 
-                className="inline-flex items-center gap-3 bg-slate-900 hover:bg-indigo-600 text-white px-10 py-5 font-bold text-sm transition-colors border border-slate-900 rounded-md"
-             >
-                {isHindi ? 'अभी शुरू करें' : 'Deploy Infrastructure'} <ArrowRight size={16} />
-             </Link>
-           </div>
+                className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 font-bold text-xs sm:text-sm transition-colors rounded shadow-xs min-h-[48px] flex items-center justify-center gap-2"
+              >
+                <span>{isHindi ? 'संगठन शुरू करें (100% निःशुल्क)' : 'Start Your Collective (100% Free)'}</span>
+                <ArrowRight size={16} />
+              </Link>
+              <Link 
+                href={`/${lang}/docs`} 
+                className="w-full sm:w-auto bg-white text-slate-900 px-6 py-4 font-bold text-xs sm:text-sm border border-slate-300 hover:border-slate-400 hover:bg-slate-50 transition-colors rounded min-h-[48px] flex items-center justify-center"
+              >
+                {isHindi ? 'दस्तावेज़ पढ़ें' : 'Read Documentation'}
+              </Link>
+            </div>
+          </div>
         </section>
         
       </div>

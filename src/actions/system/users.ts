@@ -33,13 +33,18 @@ export async function togglePlatformAdmin(input: z.infer<typeof UpdateUserRoleSc
 
   if (error) return { success: false, error: error.message }
 
-  await logAction({
-    organisation_id: '00000000-0000-0000-0000-000000000000',
-    user_id: user.id,
-    action: result.data.isPlatformAdmin ? 'USER_PROMOTED_ADMIN' : 'USER_DEMOTED_ADMIN',
-    resource_table: 'profiles',
-    resource_id: result.data.userId,
-  })
+  const { data: firstOrg } = await supabase.from('organisations').select('id').limit(1).maybeSingle()
+  const orgId = process.env.DEFAULT_ORG_ID || firstOrg?.id
+
+  if (orgId) {
+    await logAction({
+      organisation_id: orgId,
+      user_id: user.id,
+      action: result.data.isPlatformAdmin ? 'USER_PROMOTED_ADMIN' : 'USER_DEMOTED_ADMIN',
+      resource_table: 'profiles',
+      resource_id: result.data.userId,
+    })
+  }
 
   revalidatePath('/admin/users', 'page')
   return { success: true }
@@ -65,13 +70,18 @@ export async function deleteUser(userId: string) {
 
   if (error) return { success: false, error: error.message }
 
-  await logAction({
-    organisation_id: '00000000-0000-0000-0000-000000000000',
-    user_id: user.id,
-    action: 'USER_DELETED',
-    resource_table: 'profiles',
-    resource_id: userId,
-  })
+  const { data: firstOrg } = await supabase.from('organisations').select('id').limit(1).maybeSingle()
+  const orgId = process.env.DEFAULT_ORG_ID || firstOrg?.id
+
+  if (orgId) {
+    await logAction({
+      organisation_id: orgId,
+      user_id: user.id,
+      action: 'USER_DELETED',
+      resource_table: 'profiles',
+      resource_id: userId,
+    })
+  }
 
   revalidatePath('/admin/users', 'page')
   return { success: true }

@@ -22,32 +22,45 @@ export async function processIncomingBotMessage(input: ProcessBotInput): Promise
   const adminClient = createServiceClient()
   const parsed = parseBotMessage(input.messageText)
 
+  // Dynamically resolve organization ID
+  let orgId = input.organisationId
+  if (!orgId) {
+    if (process.env.DEFAULT_ORG_ID) {
+      orgId = process.env.DEFAULT_ORG_ID
+    } else {
+      const { data: firstOrg } = await adminClient.from('organisations').select('id').limit(1).maybeSingle()
+      orgId = firstOrg?.id || ''
+    }
+  }
+
   // 1. Find or create conversation
   let conversationId: string | null = null
   try {
-    const { data: conv } = await adminClient
-      .from('bot_conversations')
-      .select('id, member_id')
-      .eq('organisation_id', input.organisationId)
-      .eq('channel', input.channel)
-      .eq('sender_id', input.senderId)
-      .maybeSingle()
-
-    if (conv) {
-      conversationId = conv.id
-    } else {
-      const { data: newConv } = await adminClient
+    if (orgId) {
+      const { data: conv } = await adminClient
         .from('bot_conversations')
-        .insert({
-          organisation_id: input.organisationId,
-          channel: input.channel,
-          sender_id: input.senderId,
-          sender_name: input.senderName || 'Volunteer',
-          last_command: parsed.command,
-        })
-        .select('id')
-        .single()
-      conversationId = newConv?.id || null
+        .select('id, member_id')
+        .eq('organisation_id', orgId)
+        .eq('channel', input.channel)
+        .eq('sender_id', input.senderId)
+        .maybeSingle()
+
+      if (conv) {
+        conversationId = conv.id
+      } else {
+        const { data: newConv } = await adminClient
+          .from('bot_conversations')
+          .insert({
+            organisation_id: orgId,
+            channel: input.channel,
+            sender_id: input.senderId,
+            sender_name: input.senderName || 'Volunteer',
+            last_command: parsed.command,
+          })
+          .select('id')
+          .single()
+        conversationId = newConv?.id || null
+      }
     }
   } catch {
     // continue
@@ -56,12 +69,14 @@ export async function processIncomingBotMessage(input: ProcessBotInput): Promise
   // 2. Fetch org details
   let orgName = 'Sangathan Collective'
   try {
-    const { data: org } = await adminClient
-      .from('organisations')
-      .select('name')
-      .eq('id', input.organisationId)
-      .single()
-    if (org?.name) orgName = org.name
+    if (orgId) {
+      const { data: org } = await adminClient
+        .from('organisations')
+        .select('name')
+        .eq('id', orgId)
+        .single()
+      if (org?.name) orgName = org.name
+    }
   } catch {
     // continue
   }

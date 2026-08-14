@@ -43,7 +43,7 @@ export async function detectOTPRisk(phone: string, ip: string) {
   if ((phoneCount || 0) > MAX_OTP_PER_PHONE_HOUR || (ipCount || 0) > MAX_OTP_PER_IP_HOUR) {
     await logRiskEvent({
       entity_type: 'user',
-      entity_id: '00000000-0000-0000-0000-000000000000',
+      entity_id: phone || ip || 'anonymous_sender',
       risk_type: 'otp_abuse',
       severity: 'high',
       metadata: { phone, ip, phoneCount, ipCount },

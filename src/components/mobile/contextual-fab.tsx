@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import {
   Plus, UserPlus, CheckCircle, Vote, Megaphone, Calendar,
   HeartHandshake, Scale, AlertCircle, Wrench, Gift, Network,
-  Badge, Users, HelpCircle
+  Badge, Users, HelpCircle, Activity, Clock, Newspaper, Printer
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -62,6 +62,14 @@ export function ContextualFAB({ lang, role, capabilities }: ContextualFABProps) 
     action = { href: `/${lang}/dashboard/networks/new`, icon: Network, label: 'Add Network' }
   } else if (pathname.endsWith('/dashboard/student-ids') && isAdmin && capabilities.student_ids) {
     action = { href: `/${lang}/dashboard/student-ids`, icon: Badge, label: 'Issue ID' }
+  } else if (pathname.endsWith('/dashboard/field-audits') && isAdmin) {
+    action = { href: `/${lang}/dashboard/field-audits`, icon: Activity, label: 'Log Spot Audit' }
+  } else if (pathname.endsWith('/dashboard/parcha') && isAdmin) {
+    action = { href: `/${lang}/dashboard/parcha`, icon: Printer, label: 'Generate Parcha' }
+  } else if (pathname.endsWith('/dashboard/receiving-tracker') && isAdmin) {
+    action = { href: `/${lang}/dashboard/receiving-tracker`, icon: Clock, label: 'Log Receiving' }
+  } else if (pathname.endsWith('/dashboard/press-releases') && isAdmin) {
+    action = { href: `/${lang}/dashboard/press-releases`, icon: Newspaper, label: 'New Press Release' }
   } else if (pathname.endsWith('/dashboard') && pathname === `/${lang}/dashboard`) {
     action = { href: `/${lang}/dashboard/helpdesk`, icon: HelpCircle, label: 'Need Help?' }
   }

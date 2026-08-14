@@ -3,6 +3,7 @@ import { ShieldAlert, Users, Building, Activity, Scale, Gavel } from 'lucide-rea
 import Link from 'next/link'
 import { SystemAdminOrganisation } from '@/types/dashboard'
 import { requirePlatformAdmin } from '@/lib/auth/context'
+import { DigestTriggerCard } from '@/components/admin/digest-trigger-card'
 
 export const dynamic = 'force-dynamic'
 
@@ -40,7 +41,10 @@ export default async function SystemAdminDashboard() {
                </h1>
                <p className="mt-2 text-sm text-slate-600">Monitor organisations, access, moderation, and platform integrity.</p>
             </div>
-               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+
+            <DigestTriggerCard />
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                   <Link href="/admin/organisations" className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:border-orange-500 transition-colors block">
                      <div className="flex items-center gap-2 text-gray-500 mb-2 text-sm font-bold uppercase">
                         <Building size={16} /> Organisations

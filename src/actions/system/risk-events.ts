@@ -33,10 +33,10 @@ export async function getAllRiskEvents() {
       .limit(100)
     return (data || []).map(log => ({
       id: log.id,
-      entity_type: log.metadata?.entity_type || 'unknown',
-      entity_id: log.metadata?.entity_id || '',
-      risk_type: log.metadata?.risk_type || 'unknown',
-      severity: log.metadata?.severity || 'low',
+      entity_type: (log.metadata as Record<string, string>)?.entity_type || 'unknown',
+      entity_id: (log.metadata as Record<string, string>)?.entity_id || '',
+      risk_type: (log.metadata as Record<string, string>)?.risk_type || 'unknown',
+      severity: (log.metadata as Record<string, string>)?.severity || 'low',
       detected_at: log.created_at,
       resolved: false,
       metadata: log.metadata,
@@ -58,7 +58,19 @@ export async function updateRiskEvent(input: z.infer<typeof UpdateRiskEventSchem
 
   const supabase = createServiceClient()
 
+  let eventOrgId: string | null = null
+
   try {
+    const { data: eventData } = await supabase
+      .from('risk_events')
+      .select('organisation_id')
+      .eq('id', result.data.eventId)
+      .maybeSingle()
+    
+    if (eventData?.organisation_id) {
+      eventOrgId = eventData.organisation_id
+    }
+
     const { error } = await supabase
       .from('risk_events')
       .update({
@@ -69,16 +81,27 @@ export async function updateRiskEvent(input: z.infer<typeof UpdateRiskEventSchem
 
     if (error) throw error
   } catch {
-    // risk_events table might not exist; just return success for system_logs-based records
+    // Fallback for system_logs-based records
   }
 
-  await logAction({
-    organisation_id: '00000000-0000-0000-0000-000000000000',
-    user_id: user.id,
-    action: 'RISK_EVENT_' + result.data.status.toUpperCase(),
-    resource_table: 'risk_events',
-    resource_id: result.data.eventId,
-  })
+  if (!eventOrgId) {
+    if (process.env.DEFAULT_ORG_ID) {
+      eventOrgId = process.env.DEFAULT_ORG_ID
+    } else {
+      const { data: firstOrg } = await supabase.from('organisations').select('id').limit(1).maybeSingle()
+      eventOrgId = firstOrg?.id || null
+    }
+  }
+
+  if (eventOrgId) {
+    await logAction({
+      organisation_id: eventOrgId,
+      user_id: user.id,
+      action: 'RISK_EVENT_' + result.data.status.toUpperCase(),
+      resource_table: 'risk_events',
+      resource_id: result.data.eventId,
+    })
+  }
 
   revalidatePath('/admin/risk-events', 'page')
   revalidatePath('/admin/health', 'page')

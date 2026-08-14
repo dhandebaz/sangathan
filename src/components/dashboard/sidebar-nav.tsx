@@ -10,7 +10,8 @@ import {
   HeartHandshake, Network, Landmark, ScrollText,
   GalleryVerticalEnd, Gavel, UserCog, DollarSign, FileText, UserCheck, HardHat,
   CalendarCheck, Printer, Zap, ShieldCheck, Smartphone, Database, AlertTriangle, Sparkles, Award, Radio, MessageSquare, CreditCard,
-  FolderLock, BookOpen, Layers, Phone, BookOpenText, MapPinHouse, FileSignature
+  FolderLock, BookOpen, Layers, Phone, BookOpenText, MapPinHouse, FileSignature,
+  Activity, Clock, Newspaper
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -165,6 +166,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           id: 'union_actions',
           title: 'Union Actions',
           items: [
+            { href: `/${lang}/dashboard/disputes`, icon: Scale, label: 'Trade Disputes & ALC', show: true },
             { href: `/${lang}/dashboard/cba`, icon: FileText, label: 'CBA Documents', show: !!c.cba_documents },
             { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns & Petitions', show: true },
             { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Strike Votes & Polls', show: !!c.voting_engine },
@@ -204,6 +206,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           title: 'Community',
           items: [
             { href: `/${lang}/dashboard/members`, icon: Users, label: 'Residents', show: true },
+            { href: `/${lang}/dashboard/domestic-staff`, icon: UserCheck, label: 'Domestic Staff & Passes', show: true },
             { href: `/${lang}/dashboard/id-card`, icon: Award, label: 'Resident IDs', show: true },
             { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Committees', show: !!c.subgroups },
             { href: `/${lang}/dashboard/visitors`, icon: UserCheck, label: 'Visitor Logs', show: !!c.visitors },
@@ -213,7 +216,8 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           id: 'estate_ops',
           title: 'Estate Ops',
           items: [
-            { href: `/${lang}/dashboard/maintenance`, icon: Wrench, label: 'Maintenance', show: !!c.maintenance },
+            { href: `/${lang}/dashboard/maintenance`, icon: Wrench, label: 'Maintenance Billing', show: !!c.maintenance },
+            { href: `/${lang}/dashboard/assets`, icon: Wrench, label: 'Asset AMC & NOCs', show: true },
             { href: `/${lang}/dashboard/facilities`, icon: Calendar, label: 'Facility Booking', show: true },
             { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: !!c.tasks },
             { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financials & Bills', show: true },
@@ -244,6 +248,68 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
       ]
     }
 
+    if (orgType === 'civic_collective') {
+      return [
+        {
+          id: 'overview',
+          title: 'Overview',
+          items: [
+            { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Overview', show: true },
+            { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
+            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Actions & Events', show: !!c.events },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'movement_base',
+          title: 'Movement & Cadre',
+          items: [
+            { href: `/${lang}/dashboard/members`, icon: Users, label: 'Cadre & Members', show: true },
+            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Working Groups', show: !!c.subgroups },
+            { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers & Allies', show: !!c.volunteers },
+            { href: `/${lang}/members/badge`, icon: Award, label: 'Verified Member Badges', show: true },
+            { href: `/${lang}/dashboard/collaboration`, icon: Network, label: 'Joint Front (संयुक्त मोर्चा)', show: true },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'field_evidence',
+          title: 'Field & Evidence Desk',
+          items: [
+            { href: `/${lang}/dashboard/field-audits`, icon: Activity, label: 'Field Audits (जैसे Delhi Saans)', show: true },
+            { href: `/${lang}/dashboard/parcha`, icon: Printer, label: 'Printable Parcha & Signatures', show: true },
+            { href: `/${lang}/dashboard/receiving-tracker`, icon: Clock, label: 'Stamped Receiving & RTI', show: true },
+            { href: `/${lang}/dashboard/forms`, icon: Sparkles, label: 'Forms & Surveys', show: true },
+            { href: `/${lang}/dashboard/field-mode`, icon: Database, label: 'Offline Field Mode PWA', show: true },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'direct_action',
+          title: 'Direct Action & Campaigns',
+          items: [
+            { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Petitions & Campaigns', show: true },
+            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Direct Democracy & Voting', show: !!c.voting_engine },
+            { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Proposals & Demands', show: true },
+            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Field Tasks', show: !!c.tasks },
+            { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Coordination Meetings', show: !!c.meetings },
+            { href: `/${lang}/dashboard/chanda`, icon: BookOpenText, label: 'Chanda & Mutual Aid', show: true },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'legal_defense',
+          title: 'Legal Defense & Media',
+          items: [
+            { href: `/${lang}/dashboard/compliance/bqf-verification`, icon: ShieldCheck, label: 'BQF AI Recognition', show: true },
+            { href: `/${lang}/dashboard/press-releases`, icon: Newspaper, label: 'Press Release Studio', show: true },
+            { href: `/${lang}/dashboard/municipal-letters`, icon: Printer, label: 'Govt & Civic Letters', show: true },
+            { href: `/${lang}/dashboard/emergency-sos`, icon: AlertTriangle, label: 'Emergency Legal SOS', show: true },
+            { href: `/${lang}/dashboard/complaints`, icon: AlertCircle, label: 'Public Grievance Desk', show: true },
+            { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Allies Helpdesk', show: true },
+          ].filter(i => i.show)
+        },
+        fieldToolsGroup,
+        adminGroup
+      ]
+    }
+
     // Default / NGO
     return [
       {
@@ -263,6 +329,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           { href: `/${lang}/dashboard/id-card`, icon: Award, label: 'Member Badges', show: true },
           { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Teams & Committees', show: !!c.subgroups },
           { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers', show: !!c.volunteers },
+          { href: `/${lang}/dashboard/volunteers/certificates`, icon: Award, label: 'Volunteer Certificates', show: true },
           { href: `/${lang}/dashboard/networks`, icon: Globe, label: 'Networks', show: !!c.federation_mode },
         ].filter(i => i.show)
       },

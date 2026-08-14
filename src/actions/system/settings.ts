@@ -6,7 +6,6 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { logAction } from '@/lib/audit/log'
 import { requirePlatformAdmin } from '@/lib/auth/context'
-import type { Json } from '@/types/database'
 
 const UpdateSettingSchema = z.object({
   key: z.string().min(1),
@@ -58,13 +57,18 @@ export async function updateSystemSetting(input: z.infer<typeof UpdateSettingSch
 
   if (error) return { success: false, error: error.message }
 
-  await logAction({
-    organisation_id: '00000000-0000-0000-0000-000000000000',
-    user_id: user.id,
-    action: 'SYSTEM_SETTING_UPDATED',
-    resource_table: 'system_settings',
-    resource_id: result.data.key,
-  })
+  const { data: firstOrg } = await supabase.from('organisations').select('id').limit(1).maybeSingle()
+  const orgId = process.env.DEFAULT_ORG_ID || firstOrg?.id
+
+  if (orgId) {
+    await logAction({
+      organisation_id: orgId,
+      user_id: user.id,
+      action: 'SYSTEM_SETTING_UPDATED',
+      resource_table: 'system_settings',
+      resource_id: result.data.key,
+    })
+  }
 
   revalidatePath('/admin/settings', 'page')
   return { success: true }
@@ -89,13 +93,18 @@ export async function deleteSystemSetting(key: string) {
 
   if (error) return { success: false, error: error.message }
 
-  await logAction({
-    organisation_id: '00000000-0000-0000-0000-000000000000',
-    user_id: user.id,
-    action: 'SYSTEM_SETTING_DELETED',
-    resource_table: 'system_settings',
-    resource_id: key,
-  })
+  const { data: firstOrg } = await supabase.from('organisations').select('id').limit(1).maybeSingle()
+  const orgId = process.env.DEFAULT_ORG_ID || firstOrg?.id
+
+  if (orgId) {
+    await logAction({
+      organisation_id: orgId,
+      user_id: user.id,
+      action: 'SYSTEM_SETTING_DELETED',
+      resource_table: 'system_settings',
+      resource_id: key,
+    })
+  }
 
   revalidatePath('/admin/settings', 'page')
   return { success: true }

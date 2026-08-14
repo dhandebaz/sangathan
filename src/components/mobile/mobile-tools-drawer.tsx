@@ -8,7 +8,8 @@ import {
   AlertTriangle, Flag, Award, HeartHandshake, ScrollText, DollarSign,
   Printer, Scale, Wrench, UserCheck, HardHat, Landmark, Settings,
   CreditCard, ShieldCheck, Zap, BarChart, GalleryVerticalEnd, UserCog,
-  BookOpenText, FileSignature, Phone, HelpCircle, ChevronRight, LogOut, Sparkles
+  BookOpenText, FileSignature, Phone, HelpCircle, ChevronRight, LogOut, Sparkles,
+  Activity, Clock, Newspaper
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -139,6 +140,46 @@ export function MobileToolsDrawer({
       },
 
       // Field & Grassroots Ops
+      {
+        href: `/${lang}/dashboard/field-audits`,
+        icon: Activity,
+        titleEn: 'Field Spot Audits (जैसे Delhi Saans)',
+        titleHi: 'फील्ड स्पॉट जांच व प्रदूषण नोटिस',
+        descEn: 'PM2.5, water TDS & statutory notice generator',
+        descHi: 'प्रदूषण जांच व वैधानिक कानूनी नोटिस',
+        category: 'field',
+        color: 'bg-rose-50 text-rose-700 border-rose-200',
+      },
+      {
+        href: `/${lang}/dashboard/parcha`,
+        icon: Printer,
+        titleEn: '1-Page Printable Parcha & Signatures',
+        titleHi: '1-पेज आंदोलन पर्चा व हस्ताक्षर पत्र',
+        descEn: 'Monochrome A4 photostat flyers & petition tables',
+        descHi: '₹1 फोटोस्टेट पर्चे व कॉलोनी हस्ताक्षर पत्र',
+        category: 'field',
+        color: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+      },
+      {
+        href: `/${lang}/dashboard/receiving-tracker`,
+        icon: Clock,
+        titleEn: 'Stamped Receiving & 15-Day RTI',
+        titleHi: 'स्टैम्प्ड रिसीविंग व 15-दिन RTI',
+        descEn: 'Track ward stamps & auto-draft Section 6(1) RTIs',
+        descHi: 'वार्ड रिसीविंग डायरी व आरटीआई एस्केलेटर',
+        category: 'field',
+        color: 'bg-amber-50 text-amber-700 border-amber-200',
+      },
+      {
+        href: `/${lang}/dashboard/press-releases`,
+        icon: Newspaper,
+        titleEn: 'Press Release & Media Dispatch',
+        titleHi: 'प्रेस विज्ञप्ति व मीडिया डिस्पैच',
+        descEn: 'Bilingual media statements & WhatsApp text',
+        descHi: 'द्विभाषी प्रेस रिलीज व व्हाट्सएप कॉपी',
+        category: 'field',
+        color: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+      },
       {
         href: `/${lang}/dashboard/forms`,
         icon: Sparkles,

@@ -193,7 +193,7 @@ export async function seedDefaultAuthorities(organisationId: string, city?: stri
   return { success: true, count: defaultAuthorities.length }
 }
 
-function getDefaultAuthorities(city?: string): Array<{
+function getDefaultAuthorities(_city?: string): Array<{
   department: string
   authority_name: string
   designation: string

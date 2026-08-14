@@ -5,7 +5,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(request: Request) {
+export async function GET() {
   return NextResponse.json({
     status: 'online',
     engine: 'grammY Telegram Webhook Engine',
@@ -16,7 +16,15 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const url = new URL(request.url)
-    const orgId = url.searchParams.get('orgId') || process.env.DEFAULT_ORG_ID || '00000000-0000-0000-0000-000000000000'
+    const adminClient = createServiceClient()
+
+    // Dynamically resolve organization ID
+    let orgId = url.searchParams.get('orgId') || process.env.DEFAULT_ORG_ID
+    if (!orgId) {
+      const { data: firstOrg } = await adminClient.from('organisations').select('id').limit(1).maybeSingle()
+      orgId = firstOrg?.id || ''
+    }
+
     const secretToken = request.headers.get('x-telegram-bot-api-secret-token')
 
     // Optional secret verification
@@ -30,7 +38,6 @@ export async function POST(request: Request) {
     let botToken = process.env.TELEGRAM_BOT_TOKEN
 
     if (!botToken && orgId) {
-      const adminClient = createServiceClient()
       const { data: config } = await adminClient
         .from('bot_channel_configs')
         .select('credentials')
@@ -58,7 +65,7 @@ export async function POST(request: Request) {
       const messageText = update.callback_query?.data || message.text || 'HELP'
 
       const result = await processIncomingBotMessage({
-        organisationId: orgId,
+        organisationId: orgId || '',
         channel: 'telegram',
         senderId,
         senderName,
@@ -76,6 +83,6 @@ export async function POST(request: Request) {
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : 'Webhook update processing failed'
     console.error('Telegram Webhook Error:', err)
-    return NextResponse.json({ success: false, error: errorMsg }, { status: 500 })
+    return NextResponse.json({ success: false, error: 'Internal processing error' }, { status: 500 })
   }
 }

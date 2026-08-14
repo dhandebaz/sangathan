@@ -19,7 +19,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
 
   const { data: profileData, error: profileError } = await supabase
     .from('profiles')
-    .select('status, role, organisation_id, phone_verified, onboarding_completed, display_name')
+    .select('status, role, organisation_id, phone_verified, onboarding_completed, display_name, designation')
     .eq('id', user.id)
     .single()
 
@@ -53,6 +53,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     organisation_id: string | null
     onboarding_completed?: boolean
     display_name?: string | null
+    designation?: string | null
   }
 
   const onboardingIncomplete = !profile.organisation_id
@@ -132,11 +133,12 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
 
   const { data: orgData } = await supabase
     .from('organisations')
-    .select('name, status, org_type')
+    .select('name, status, org_type, slug, capabilities')
     .eq('id', profile.organisation_id)
     .single()
 
-  const org = orgData as { name: string; status: string; org_type?: string } | null
+  const org = orgData as { name: string; status: string; org_type?: string; slug?: string; capabilities?: Record<string, unknown> } | null
+  const focusBlueprint = (org?.capabilities?.focus_blueprint as string) || undefined
 
   if (org?.status === 'suspended') {
     return (
@@ -243,6 +245,10 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
           lang={lang}
           orgType={org?.org_type || 'ngo'}
           userName={userName}
+          orgName={org?.name}
+          slug={org?.slug}
+          focusBlueprint={focusBlueprint}
+          designation={profile.designation || undefined}
         />
         <MemberOnboardingOverlay
           userId={user.id}
@@ -273,6 +279,10 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
         lang={lang}
         orgType={org?.org_type || 'ngo'}
         userName={userName}
+        userRole={profile.role}
+        designation={profile.designation || undefined}
+        focusBlueprint={focusBlueprint}
+        orgName={org?.name}
       />
       <MemberOnboardingOverlay
         userId={user.id}

@@ -27,6 +27,288 @@ const ORG_DESCRIPTIONS: Record<OrgType, { en: string; hi: string }> = {
   rwa: { en: 'Maintenance logs, estate operations & community voting', hi: 'रखरखाव लॉग, संपत्ति संचालन और सामुदायिक मतदान' },
 }
 
+export interface FocusBlueprint {
+  id: string
+  titleEn: string
+  titleHi: string
+  descEn: string
+  descHi: string
+  recommendedRoles: { value: string; labelEn: string; labelHi: string }[]
+}
+
+export const FOCUS_BLUEPRINTS: Record<OrgType, FocusBlueprint[]> = {
+  civic_collective: [
+    {
+      id: 'colony_civic',
+      titleEn: '1. Neighborhood & Colony Action',
+      titleHi: '1. कॉलोनी व मोहल्ला सुधार',
+      descEn: 'Roads, water, sanitation, 1-page signature sheets, physical parchas, and local Chanda.',
+      descHi: 'सड़क, पानी, सीवर, सफाई, 1-पेज हस्ताक्षर पत्र, पर्चा और चंदा बहीखाता।',
+      recommendedRoles: [
+        { value: 'Lead Organizer', labelEn: 'Lead Organizer (मुख्य संयोजक)', labelHi: 'मुख्य संयोजक' },
+        { value: 'Colony In-Charge', labelEn: 'Colony / Area In-Charge (इलाका प्रमुख)', labelHi: 'इलाका प्रमुख' },
+        { value: 'Treasurer', labelEn: 'Treasurer / Chanda Custodian (कोषाध्यक्ष)', labelHi: 'कोषाध्यक्ष' },
+        { value: 'Field Volunteer', labelEn: 'Field Volunteer (जमीनी स्वयंसेवक)', labelHi: 'जमीनी स्वयंसेवक' },
+      ],
+    },
+    {
+      id: 'citizen_science',
+      titleEn: '2. Environmental & Citizen Science (Delhi Saans)',
+      titleHi: '2. पर्यावरण व प्रदूषण जांच (जैसे Delhi Saans)',
+      descEn: 'PM2.5 sensor testing, water TDS, DPCC/CPCB/NGT legal notices, and public health advisories.',
+      descHi: 'PM2.5 सेंसर डेटा, जल गुणवत्ता, DPCC/CPCB/NGT वैधानिक नोटिस व जन स्वास्थ्य बुलेटिन।',
+      recommendedRoles: [
+        { value: 'Lead Researcher', labelEn: 'Lead Researcher / Scientist (मुख्य शोधकर्ता)', labelHi: 'मुख्य शोधकर्ता' },
+        { value: 'Field Auditor', labelEn: 'Sensor & Field Auditor (फील्ड ऑडिटर)', labelHi: 'फील्ड ऑडिटर' },
+        { value: 'Legal Convener', labelEn: 'Legal & NGT Convener (कानूनी संयोजक)', labelHi: 'कानूनी संयोजक' },
+        { value: 'Media Spokesperson', labelEn: 'Media Spokesperson (मीडिया प्रवक्ता)', labelHi: 'मीडिया प्रवक्ता' },
+      ],
+    },
+    {
+      id: 'legal_defense',
+      titleEn: '3. Human Rights & Legal Defense',
+      titleHi: '3. मानवाधिकार व कानूनी सहायता',
+      descEn: 'Protest SOS, thana detention logs, advocate dispatch, and BQF Section 8 recognition.',
+      descHi: 'विरोध प्रदर्शन एसओएस, पुलिस थाना हिरासत ट्रैकर, वकील सहायता व BQF मान्यता।',
+      recommendedRoles: [
+        { value: 'Legal Cell Head', labelEn: 'Legal Defense In-Charge (कानूनी सेल प्रमुख)', labelHi: 'कानूनी सेल प्रमुख' },
+        { value: 'Rights Advocate', labelEn: 'Advocate on Record (अधिवक्ता)', labelHi: 'अधिवक्ता' },
+        { value: 'Emergency Coordinator', labelEn: 'Emergency SOS Dispatcher (आपातकालीन संयोजक)', labelHi: 'आपातकालीन संयोजक' },
+        { value: 'Fact Finder', labelEn: 'Fact-Finding Researcher (तथ्यान्वेषी शोधकर्ता)', labelHi: 'तथ्यान्वेषी शोधकर्ता' },
+      ],
+    },
+    {
+      id: 'mass_campaigns',
+      titleEn: '4. Mass Movements & Public Campaigns',
+      titleHi: '4. जन आंदोलन व सार्वजनिक अभियान',
+      descEn: '1-click public petitions, secret ballots, joint front coalitions, and media releases.',
+      descHi: '1-क्लिक ऑनलाइन याचिकाएं, गुप्त मतदान, संयुक्त मोर्चा (गठबंधन) व प्रेस विज्ञप्ति।',
+      recommendedRoles: [
+        { value: 'Movement Convener', labelEn: 'Movement Convener (आंदोलन संयोजक)', labelHi: 'आंदोलन संयोजक' },
+        { value: 'Campaign Lead', labelEn: 'Public Campaign Lead (अभियान प्रमुख)', labelHi: 'अभियान प्रमुख' },
+        { value: 'Cadre In-Charge', labelEn: 'Cadre & Mobilization Head (काडर प्रमुख)', labelHi: 'काडर प्रमुख' },
+        { value: 'Communications Head', labelEn: 'Press & Media Head (प्रचार प्रमुख)', labelHi: 'प्रचार प्रमुख' },
+      ],
+    },
+  ],
+  ngo: [
+    {
+      id: 'welfare_relief',
+      titleEn: '1. Education, Health & Relief Welfare',
+      titleHi: '1. शिक्षा, स्वास्थ्य व राहत कल्याण',
+      descEn: 'Donor CRM, 80G tax receipts, volunteer hours, ration & medical aid distribution.',
+      descHi: 'दानदाता CRM, 80G टैक्स रसीदें, स्वयंसेवक घंटे, राशन व चिकित्सा सहायता वितरण।',
+      recommendedRoles: [
+        { value: 'Executive Director', labelEn: 'Executive Director (प्रबंध निदेशक)', labelHi: 'प्रबंध निदेशक' },
+        { value: 'Program Manager', labelEn: 'Program Manager (कार्यक्रम प्रबंधक)', labelHi: 'कार्यक्रम प्रबंधक' },
+        { value: 'Volunteer Head', labelEn: 'Volunteer Coordinator (स्वयंसेवक समन्वयक)', labelHi: 'स्वयंसेवक समन्वयक' },
+        { value: 'Finance Manager', labelEn: 'Finance / 80G Compliance Lead (वित्त प्रमुख)', labelHi: 'वित्त प्रमुख' },
+      ],
+    },
+    {
+      id: 'policy_thinktank',
+      titleEn: '2. Policy Research & Advocacy Think-Tank',
+      titleHi: '2. नीति अनुसंधान व लोक परामर्श',
+      descEn: 'Research whitepapers, stakeholder submissions, policy consultation portals, and media.',
+      descHi: 'शोध पत्र, हितधारक परामर्श, नीति मसौदे व मीडिया विज्ञप्तियां।',
+      recommendedRoles: [
+        { value: 'Research Director', labelEn: 'Research Director (शोध निदेशक)', labelHi: 'शोध निदेशक' },
+        { value: 'Policy Fellow', labelEn: 'Senior Policy Fellow (नीति विशेषज्ञ)', labelHi: 'नीति विशेषज्ञ' },
+        { value: 'Advocacy Lead', labelEn: 'Advocacy & Outreach Lead (परामर्श प्रमुख)', labelHi: 'परामर्श प्रमुख' },
+        { value: 'Communications Lead', labelEn: 'Editorial & Media Lead (संपादकीय प्रमुख)', labelHi: 'संपादकीय प्रमुख' },
+      ],
+    },
+    {
+      id: 'livelihoods_shg',
+      titleEn: '3. Community Development & SHGs',
+      titleHi: '3. ग्रामीण विकास व स्वयं सहायता समूह (SHG)',
+      descEn: 'Micro-grants, artisan & skill workshops, field surveys, and beneficiary tracking.',
+      descHi: 'सूक्ष्म-अनुदान, कौशल प्रशिक्षण, फील्ड सर्वेक्षण और लाभार्थी सूची।',
+      recommendedRoles: [
+        { value: 'SHG Project Head', labelEn: 'SHG Project Head (परियोजना प्रमुख)', labelHi: 'परियोजना प्रमुख' },
+        { value: 'Field Coordinator', labelEn: 'Field Coordinator (क्षेत्र समन्वयक)', labelHi: 'क्षेत्र समन्वयक' },
+        { value: 'Community Organizer', labelEn: 'Community Mobilizer (सामुदायिक प्रेरक)', labelHi: 'सामुदायिक प्रेरक' },
+        { value: 'Accounts Officer', labelEn: 'Accounts Officer (लेखा अधिकारी)', labelHi: 'लेखा अधिकारी' },
+      ],
+    },
+    {
+      id: 'animal_green',
+      titleEn: '4. Animal Welfare & Green Action',
+      titleHi: '4. पशु कल्याण व हरित पर्यावरण',
+      descEn: 'Animal rescue emergency dispatch, shelter care logs, tree plantation audits, and vet records.',
+      descHi: 'पशु बचाव आपातकालीन डिस्पैच, आश्रय लॉग, वृक्षारोपण ऑडिट व चिकित्सा रिकॉर्ड।',
+      recommendedRoles: [
+        { value: 'Shelter Manager', labelEn: 'Shelter / Rescue Manager (आश्रय प्रबंधक)', labelHi: 'आश्रय प्रबंधक' },
+        { value: 'Rescue Lead', labelEn: 'Rescue Team Lead (बचाव दल प्रमुख)', labelHi: 'बचाव दल प्रमुख' },
+        { value: 'Veterinary Coordinator', labelEn: 'Veterinary Coordinator (पशु चिकित्सा समन्वयक)', labelHi: 'पशु चिकित्सा समन्वयक' },
+        { value: 'Adoption Lead', labelEn: 'Adoption & Foster Lead (गोद समन्वय)', labelHi: 'गोद समन्वय' },
+      ],
+    },
+  ],
+  student_union: [
+    {
+      id: 'campus_elections',
+      titleEn: '1. Campus Elections & Lyngdoh Compliance',
+      titleHi: '1. छात्र संघ चुनाव व लिंगदोह अनुपालन',
+      descEn: 'Candidate nomination verification, expenditure caps, debate Q&A, and encrypted secret ballots.',
+      descHi: 'उम्मीदवार नामांकन जांच, चुनावी खर्च सीमा, डिबेट प्रश्नोत्तरी और गुप्त मतदान।',
+      recommendedRoles: [
+        { value: 'Union President', labelEn: 'Student Union President (अध्यक्ष)', labelHi: 'अध्यक्ष' },
+        { value: 'Election Commissioner', labelEn: 'Chief Election Commissioner (मुख्य चुनाव आयुक्त)', labelHi: 'मुख्य चुनाव आयुक्त' },
+        { value: 'General Secretary', labelEn: 'General Secretary (महासचिव)', labelHi: 'महासचिव' },
+        { value: 'Returning Officer', labelEn: 'Returning Officer (निर्वाचन अधिकारी)', labelHi: 'निर्वाचन अधिकारी' },
+      ],
+    },
+    {
+      id: 'hostel_mess',
+      titleEn: '2. Hostel, Mess & Campus Welfare',
+      titleHi: '2. हॉस्टल, मेस व कैम्पस कल्याण',
+      descEn: 'Mess food quality spot audits, hostel maintenance tickets, warden resolution tracking.',
+      descHi: 'मेस भोजन गुणवत्ता ऑडिट, हॉस्टल शिकायत टिकट, वार्डन समाधान ट्रैकर।',
+      recommendedRoles: [
+        { value: 'Mess Secretary', labelEn: 'Mess Secretary (मेस सचिव)', labelHi: 'मेस सचिव' },
+        { value: 'Hostel Representative', labelEn: 'Hostel Representative (हॉस्टल प्रतिनिधि)', labelHi: 'हॉस्टल प्रतिनिधि' },
+        { value: 'Welfare Convener', labelEn: 'Student Welfare Convener (कल्याण संयोजक)', labelHi: 'कल्याण संयोजक' },
+        { value: 'Health Inspector', labelEn: 'Campus Health In-Charge (स्वास्थ्य निरीक्षक)', labelHi: 'स्वास्थ्य निरीक्षक' },
+      ],
+    },
+    {
+      id: 'academic_antiragging',
+      titleEn: '3. Academic Rights & Anti-Ragging Cell',
+      titleHi: '3. शैक्षणिक अधिकार व एंटी-रैगिंग सेल',
+      descEn: 'Curriculum & exam petitions, anonymous ragging reporting, legal defense, and counseling.',
+      descHi: 'परीक्षा याचिकाएं, गोपनीय एंटी-रैगिंग रिपोर्टिंग, कानूनी व मानसिक स्वास्थ्य सहायता।',
+      recommendedRoles: [
+        { value: 'Anti-Ragging In-Charge', labelEn: 'Anti-Ragging Cell In-Charge (एंटी-रैगिंग प्रमुख)', labelHi: 'एंटी-रैगिंग प्रमुख' },
+        { value: 'Academic Secretary', labelEn: 'Academic Affairs Secretary (शैक्षणिक सचिव)', labelHi: 'शैक्षणिक सचिव' },
+        { value: 'Counseling Lead', labelEn: 'Peer Counseling Lead (परामर्श प्रमुख)', labelHi: 'परामर्श प्रमुख' },
+        { value: 'Faculty Liaison', labelEn: 'Faculty Liaison Delegate (संकाय प्रतिनिधि)', labelHi: 'संकाय प्रतिनिधि' },
+      ],
+    },
+    {
+      id: 'student_movement',
+      titleEn: '4. Student Activism & Fee Agitations',
+      titleHi: '4. छात्र आंदोलन व फीस वृद्धि विरोध',
+      descEn: 'Campus Parchas, student general bodies (GBM), strike ballots, and national solidarity.',
+      descHi: 'कैम्पस पर्चे, छात्र आम सभा (GBM), हड़ताल मतदान और एकजुटता मोर्चा।',
+      recommendedRoles: [
+        { value: 'Movement Convener', labelEn: 'Campus Movement Convener (आंदोलन संयोजक)', labelHi: 'आंदोलन संयोजक' },
+        { value: 'Agitation Lead', labelEn: 'Direct Action Lead (आंदोलन प्रमुख)', labelHi: 'आंदोलन प्रमुख' },
+        { value: 'Publications Secretary', labelEn: 'Parcha & Press Secretary (प्रचार सचिव)', labelHi: 'प्रचार सचिव' },
+        { value: 'Solidarity Coordinator', labelEn: 'Inter-University Liaison (अंतर-विश्वविद्यालय संयोजक)', labelHi: 'अंतर-विश्वविद्यालय संयोजक' },
+      ],
+    },
+  ],
+  workers_union: [
+    {
+      id: 'cba_negotiations',
+      titleEn: '1. Collective Bargaining (CBA) & Wage Talks',
+      titleHi: '1. सामूहिक सौदेबाजी (CBA) व वेतन वार्ता',
+      descEn: 'Charter of demands, strike authorization ballots, wage agreement tracking, and legal terms.',
+      descHi: 'मांग पत्र, हड़ताल अधिकार मतदान, वेतन समझौता ट्रैकिंग और कानूनी शर्तें।',
+      recommendedRoles: [
+        { value: 'General Secretary', labelEn: 'Union General Secretary (महासचिव)', labelHi: 'महासचिव' },
+        { value: 'CBA Negotiator', labelEn: 'Chief CBA Negotiator (मुख्य वार्ताकार)', labelHi: 'मुख्य वार्ताकार' },
+        { value: 'Legal Counsel', labelEn: 'Labor Law Counsel (श्रम कानून सलाहकार)', labelHi: 'श्रम कानून सलाहकार' },
+        { value: 'Treasurer', labelEn: 'Union Treasurer (कोषाध्यक्ष)', labelHi: 'कोषाध्यक्ष' },
+      ],
+    },
+    {
+      id: 'safety_inspectorate',
+      titleEn: '2. Workplace Safety & Factory Audits',
+      titleHi: '2. कार्यस्थल सुरक्षा व कारखाना जांच',
+      descEn: 'Hazard logging, factory inspectorate statutory letters, accident claims, and PPE audits.',
+      descHi: 'खतरा लॉगिंग, कारखाना निरीक्षक कानूनी पत्र, दुर्घटना मुआवजा और सुरक्षा जांच।',
+      recommendedRoles: [
+        { value: 'Safety Steward', labelEn: 'Workplace Safety Steward (सुरक्षा प्रतिनिधि)', labelHi: 'सुरक्षा प्रतिनिधि' },
+        { value: 'Factory Auditor', labelEn: 'Factory Compliance Auditor (कारखाना ऑडिटर)', labelHi: 'कारखाना ऑडिटर' },
+        { value: 'Compensation Officer', labelEn: 'ESIC & Compensation Officer (मुआवजा अधिकारी)', labelHi: 'मुआवजा अधिकारी' },
+        { value: 'Health Representative', labelEn: 'Occupational Health Rep (स्वास्थ्य प्रतिनिधि)', labelHi: 'स्वास्थ्य प्रतिनिधि' },
+      ],
+    },
+    {
+      id: 'gig_informal',
+      titleEn: '3. Gig Worker & Informal Labor Solidarity',
+      titleHi: '3. गिग वर्कर व असंगठित मजदूर एकता',
+      descEn: 'Delivery rider mutual-aid fund, accident SOS alerts, digital union badges, and rate campaigns.',
+      descHi: 'राइडर आपसी-सहायता फंड, दुर्घटना SOS अलर्ट, डिजिटल यूनियन पहचान व रेट कार्ड अभियान।',
+      recommendedRoles: [
+        { value: 'Gig Convener', labelEn: 'Gig Union Convener (गिग यूनियन संयोजक)', labelHi: 'गिग यूनियन संयोजक' },
+        { value: 'Hub Leader', labelEn: 'Hub / Delivery Zone In-Charge (हब प्रमुख)', labelHi: 'हब प्रमुख' },
+        { value: 'Welfare Head', labelEn: 'Mutual Aid Fund Head (कल्याण फंड प्रमुख)', labelHi: 'कल्याण फंड प्रमुख' },
+        { value: 'Emergency Dispatcher', labelEn: 'Roadside Accident Dispatcher (आपातकालीन डिस्पैच)', labelHi: 'आपातकालीन डिस्पैच' },
+      ],
+    },
+    {
+      id: 'cadre_delegate',
+      titleEn: '4. Shop-Floor Stewards & Unit Delegates',
+      titleHi: '4. शॉप-फ्लोर प्रतिनिधि व काडर नेटवर्क',
+      descEn: 'Plant-level units, monthly union dues via UPI, gate meeting circulars, and delegate elections.',
+      descHi: 'प्लांट यूनिट्स, मासिक यूनियन चंदा UPI, गेट मीटिंग परिपत्र और प्रतिनिधि चुनाव।',
+      recommendedRoles: [
+        { value: 'Chief Shop Steward', labelEn: 'Chief Shop Steward (मुख्य शॉप प्रतिनिधि)', labelHi: 'मुख्य शॉप प्रतिनिधि' },
+        { value: 'Unit Delegate', labelEn: 'Unit Delegate (प्लांट प्रतिनिधि)', labelHi: 'प्लांट प्रतिनिधि' },
+        { value: 'Dues Collector', labelEn: 'Dues & Membership In-Charge (चंदा प्रभारी)', labelHi: 'चंदा प्रभारी' },
+        { value: 'Meeting Secretary', labelEn: 'Gate Meeting Coordinator (बैठक सचिव)', labelHi: 'बैठक सचिव' },
+      ],
+    },
+  ],
+  rwa: [
+    {
+      id: 'estate_maintenance',
+      titleEn: '1. Gated Society & Estate Operations',
+      titleHi: '1. गेटेड सोसायटी व मेंटेनेंस संचालन',
+      descEn: 'Lift, DG, water pump workorders, technician assignment, and AMC equipment tracking.',
+      descHi: 'लिफ्ट, डीजी, वाटर पंप वर्कऑर्डर, तकनीशियन कार्य और AMC उपकरण ट्रैकिंग।',
+      recommendedRoles: [
+        { value: 'RWA President', labelEn: 'RWA President (अध्यक्ष)', labelHi: 'अध्यक्ष' },
+        { value: 'Maintenance Secretary', labelEn: 'Maintenance Secretary (रखरखाव सचिव)', labelHi: 'रखरखाव सचिव' },
+        { value: 'Estate Manager', labelEn: 'Estate Manager (सोसायटी प्रबंधक)', labelHi: 'सोसायटी प्रबंधक' },
+        { value: 'Facility Supervisor', labelEn: 'Facility Supervisor (सुपरवाइजर)', labelHi: 'सुपरवाइजर' },
+      ],
+    },
+    {
+      id: 'municipal_civic',
+      titleEn: '2. Colony & Ward Municipal Action',
+      titleHi: '2. कॉलोनी व वार्ड नगर निगम कार्रवाई',
+      descEn: 'Potholes, sewers, streetlights, stamped representation letters to MCD, and councillor RTI.',
+      descHi: 'सड़क, सीवर, स्ट्रीट लाइट, नगर निगम को स्टैम्प्ड पत्र और पार्षद आरटीआई।',
+      recommendedRoles: [
+        { value: 'Civic In-Charge', labelEn: 'Colony Civic Affairs Lead (नागरिक कार्य प्रमुख)', labelHi: 'नागरिक कार्य प्रमुख' },
+        { value: 'Ward Liaison', labelEn: 'MCD / Councillor Liaison (निगम प्रतिनिधि)', labelHi: 'निगम प्रतिनिधि' },
+        { value: 'Sanitation Lead', labelEn: 'Sanitation & Waste Lead (सफाई प्रमुख)', labelHi: 'सफाई प्रमुख' },
+        { value: 'General Secretary', labelEn: 'General Secretary (महासचिव)', labelHi: 'महासचिव' },
+      ],
+    },
+    {
+      id: 'security_amenities',
+      titleEn: '3. Security, Parking & Community Facilities',
+      titleHi: '3. सुरक्षा, पार्किंग व क्लबहाउस प्रबंधन',
+      descEn: 'Security guard rosters, parking slot allocation, clubhouse booking, and visitor logs.',
+      descHi: 'गार्ड रोस्टर, पार्किंग स्लॉट आवंटन, क्लबहाउस बुकिंग और आगंतुक लॉग।',
+      recommendedRoles: [
+        { value: 'Security Secretary', labelEn: 'Security Secretary (सुरक्षा सचिव)', labelHi: 'सुरक्षा सचिव' },
+        { value: 'Amenity Manager', labelEn: 'Clubhouse & Sports In-Charge (क्लब प्रबंधक)', labelHi: 'क्लब प्रबंधक' },
+        { value: 'Parking In-Charge', labelEn: 'Parking Officer (पार्किंग प्रभारी)', labelHi: 'पार्किंग प्रभारी' },
+        { value: 'Executive Member', labelEn: 'Executive Committee Member (कार्यकारिणी सदस्य)', labelHi: 'कार्यकारिणी सदस्य' },
+      ],
+    },
+    {
+      id: 'agm_billing',
+      titleEn: '4. Annual AGM Elections & Bill Collection',
+      titleHi: '4. वार्षिक AGM चुनाव व मासिक बिलिंग',
+      descEn: 'Online AGM secret ballots, automated maintenance bill generation, UPI dues, and transparency audit.',
+      descHi: 'ऑनलाइन एजीएम गुप्त मतदान, स्वचालित मेंटेनेंस बिल, UPI भुगतान व वित्तीय पारदर्शिता।',
+      recommendedRoles: [
+        { value: 'RWA Treasurer', labelEn: 'Treasurer / Finance Lead (कोषाध्यक्ष)', labelHi: 'कोषाध्यक्ष' },
+        { value: 'Returning Officer', labelEn: 'AGM Election Returning Officer (चुनाव अधिकारी)', labelHi: 'चुनाव अधिकारी' },
+        { value: 'Audit Convener', labelEn: 'Internal Auditor (आंतरिक ऑडिटर)', labelHi: 'आंतरिक ऑडिटर' },
+        { value: 'Accounts Lead', labelEn: 'Billing & Collection In-Charge (बिलिंग प्रभारी)', labelHi: 'बिलिंग प्रभारी' },
+      ],
+    },
+  ],
+}
+
 const UI = {
   en: {
     step1Title: 'Organisation Identity & Public Web Address',
@@ -134,11 +416,12 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
   const [orgData, setOrgData] = useState({
     name: '',
     slug: '',
-    type: 'ngo',
-    registrationStatus: 'registered',
+    type: 'civic_collective' as OrgType,
+    focusBlueprint: 'colony_civic',
+    registrationStatus: 'unregistered',
     registrationNumber: '',
     description: '',
-    primaryRole: 'General Secretary',
+    primaryRole: 'Lead Organizer',
     duesType: 'free',
     monthlyDues: '0',
     enablePublicPetitions: true,
@@ -192,6 +475,10 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
         designation: orgData.primaryRole,
         membershipPolicy: orgData.duesType === 'free' ? 'open_auto' : 'admin_approval',
         monthlyDues: orgData.monthlyDues,
+        focusBlueprint: orgData.focusBlueprint,
+        enablePublicPetitions: orgData.enablePublicPetitions,
+        enableTransparencyLedger: orgData.enableTransparencyLedger,
+        enableEmergencySos: orgData.enableEmergencySos,
       })
 
       if (res.success) {
@@ -312,7 +599,16 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
                    <button
                      key={id}
                      type="button"
-                     onClick={() => setOrgData({ ...orgData, type: id })}
+                     onClick={() => {
+                       const firstBlueprint = FOCUS_BLUEPRINTS[id]?.[0]
+                       setOrgData({
+                         ...orgData,
+                         type: id,
+                         focusBlueprint: firstBlueprint ? firstBlueprint.id : 'default',
+                         primaryRole: firstBlueprint?.recommendedRoles[0]?.value || 'Leader',
+                         registrationStatus: id === 'civic_collective' ? 'unregistered' : 'registered',
+                       })
+                     }}
                      className={`p-4 text-left border rounded-sm transition-all ${
                        orgData.type === id
                          ? 'border-indigo-600 bg-indigo-50/50 shadow-xs'
@@ -323,6 +619,51 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
                      <div className="text-xs text-slate-500 mt-1 leading-relaxed">{ORG_DESCRIPTIONS[id][lang === 'hi' ? 'hi' : 'en']}</div>
                    </button>
                  ))}
+               </div>
+
+               {/* Tailored Focus Blueprints for Selected Org Type */}
+               <div className="mt-4 p-4 border border-indigo-200 bg-indigo-50/30 rounded-sm space-y-3">
+                 <div className="flex items-center gap-2 text-xs font-bold text-indigo-950 uppercase tracking-wide">
+                   <Sparkles className="w-4 h-4 text-indigo-600" />
+                   <span>{lang === 'hi' ? 'विशेष फोकस व कार्यक्षेत्र (Focus Blueprint)' : 'Select Your Specialized Focus Blueprint'}</span>
+                 </div>
+                 <p className="text-xs text-slate-600">
+                   {lang === 'hi'
+                     ? 'अपने संगठन के प्राथमिक उद्देश्य के अनुसार टूल्स, पदनाम और डैशबोर्ड को कस्टमाइज़ करें:'
+                     : 'Pre-configure tailored tools, roles, and dashboard workflows for your specific mission:'}
+                 </p>
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                   {FOCUS_BLUEPRINTS[orgData.type]?.map((bp) => {
+                     const isSelected = orgData.focusBlueprint === bp.id
+                     return (
+                       <div
+                         key={bp.id}
+                         onClick={() => {
+                           setOrgData({
+                             ...orgData,
+                             focusBlueprint: bp.id,
+                             primaryRole: bp.recommendedRoles[0]?.value || orgData.primaryRole,
+                           })
+                         }}
+                         className={`p-3 border rounded-sm cursor-pointer text-left transition-all ${
+                           isSelected
+                             ? 'bg-white border-indigo-600 ring-2 ring-indigo-500/20 shadow-xs'
+                             : 'bg-white/80 border-slate-200 hover:border-slate-300'
+                         }`}
+                       >
+                         <div className="flex items-center justify-between">
+                           <div className="font-bold text-xs text-slate-900">
+                             {lang === 'hi' ? bp.titleHi : bp.titleEn}
+                           </div>
+                           {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600 shrink-0" />}
+                         </div>
+                         <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                           {lang === 'hi' ? bp.descHi : bp.descEn}
+                         </div>
+                       </div>
+                     )
+                   })}
+                 </div>
                </div>
              </div>
            )}
@@ -345,12 +686,19 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
                      <SelectValue placeholder={t('roleLabel')} />
                    </SelectTrigger>
                    <SelectContent>
+                     {/* Blueprint Specific Recommended Roles */}
+                     {FOCUS_BLUEPRINTS[orgData.type]
+                       ?.find((bp) => bp.id === orgData.focusBlueprint)
+                       ?.recommendedRoles.map((r) => (
+                         <SelectItem key={r.value} value={r.value}>
+                           {lang === 'hi' ? r.labelHi : r.labelEn} (Recommended)
+                         </SelectItem>
+                       ))}
                      <SelectItem value="President">President (अध्यक्ष)</SelectItem>
                      <SelectItem value="Vice President">Vice President (उपाध्यक्ष)</SelectItem>
                      <SelectItem value="General Secretary">General Secretary (महासचिव)</SelectItem>
                      <SelectItem value="Convener">Convener / Coordinator (संयोजक)</SelectItem>
-                     <SelectItem value="Legal Aid Head">Legal Aid Cell In-Charge</SelectItem>
-                     <SelectItem value="Treasurer">Treasurer / Finance Lead</SelectItem>
+                     <SelectItem value="Treasurer">Treasurer / Finance Lead (कोषाध्यक्ष)</SelectItem>
                    </SelectContent>
                  </Select>
                </div>

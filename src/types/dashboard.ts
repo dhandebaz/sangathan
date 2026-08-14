@@ -314,6 +314,7 @@ export interface Invoice {
   created_at: string;
   updated_at: string;
 }
+
 export interface BillingPlan {
   id: string;
   organisation_id: string;
@@ -600,3 +601,203 @@ export interface ElectionVoteTally {
 
 export type GrantStatus = 'draft' | 'submitted' | 'awarded' | 'rejected';
 export type CBAStatus = 'active' | 'draft' | 'expired' | 'archived';
+
+// ==========================================
+// 4 ORG TYPES OPERATIONAL SUITE INTERFACES
+// ==========================================
+
+export interface GrantMilestone {
+  id: string;
+  grant_id: string;
+  organisation_id: string;
+  title: string;
+  tranche_amount: number;
+  target_date?: string | null;
+  disbursed_at?: string | null;
+  status: 'pending' | 'in_progress' | 'completed' | 'verified';
+  deliverables?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface GrantExpense {
+  id: string;
+  grant_id: string;
+  organisation_id: string;
+  milestone_id?: string | null;
+  budget_line_item: string;
+  amount: number;
+  expense_date: string;
+  vendor_name?: string | null;
+  receipt_url?: string | null;
+  notes?: string | null;
+  created_at: string;
+}
+
+export interface VolunteerCertificate {
+  id: string;
+  organisation_id: string;
+  volunteer_profile_id: string;
+  certificate_number: string;
+  service_hours_recognized: number;
+  issue_date: string;
+  issued_by?: string | null;
+  citation_text?: string | null;
+  verification_hash: string;
+  pdf_url?: string | null;
+  created_at: string;
+  volunteer?: {
+    full_name?: string | null;
+    email?: string | null;
+    phone?: string | null;
+  };
+}
+
+export interface ElectionBoothTally {
+  id: string;
+  election_id: string;
+  position_id: string;
+  candidate_id: string;
+  booth_name: string;
+  round_number: number;
+  votes_count: number;
+  recorded_by?: string | null;
+  created_at: string;
+  candidates?: {
+    manifesto_text?: string | null;
+    profiles?: {
+      full_name?: string | null;
+    };
+  };
+  election_positions?: {
+    title?: string | null;
+  };
+}
+
+export interface HostelMessAudit {
+  id: string;
+  organisation_id: string;
+  hostel_name: string;
+  inspection_type: 'mess_quality' | 'room_allotment' | 'sanitation_hygiene' | 'study_hall';
+  meal_type?: 'breakfast' | 'lunch' | 'snacks' | 'dinner' | null;
+  rating?: number | null;
+  student_name?: string | null;
+  roll_number?: string | null;
+  remarks?: string | null;
+  photo_url?: string | null;
+  action_taken?: string | null;
+  status: 'open' | 'under_investigation' | 'resolved' | 'escalated_to_warden';
+  created_by?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CandidateExpense {
+  id: string;
+  election_id: string;
+  candidate_id: string;
+  item_description: string;
+  amount: number;
+  vendor_name?: string | null;
+  receipt_url?: string | null;
+  expense_date: string;
+  is_lyngdoh_compliant: boolean;
+  created_at: string;
+}
+
+export interface TradeDispute {
+  id: string;
+  organisation_id: string;
+  dispute_ref: string;
+  employer_name: string;
+  worker_count: number;
+  dispute_nature: 'wage_theft' | 'unlawful_termination' | 'safety_hazard' | 'cba_violation' | 'lockout' | 'pension_gratuity';
+  stage: 'shop_floor' | 'works_committee' | 'alc_conciliation' | 'labour_court' | 'industrial_tribunal' | 'settled';
+  lead_shop_steward_id?: string | null;
+  next_hearing_date?: string | null;
+  summary: string;
+  settlement_terms?: string | null;
+  status: 'active' | 'pending_hearing' | 'settled' | 'appealed' | 'dismissed';
+  created_at: string;
+  updated_at: string;
+  lead_steward?: {
+    full_name?: string | null;
+    phone?: string | null;
+  };
+}
+
+export interface CBAClause {
+  id: string;
+  cba_id: string;
+  organisation_id: string;
+  clause_number: string;
+  topic: 'basic_wages' | 'da_allowances' | 'working_hours' | 'shift_timing' | 'occupational_safety' | 'overtime_rates' | 'medical_insurance' | 'bonus_gratuity' | 'grievance_procedure';
+  current_clause_text: string;
+  union_demand_text: string;
+  management_counter_offer?: string | null;
+  status: 'in_negotiation' | 'agreed' | 'deadlocked' | 'referred_to_arbitration';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface StrikeRosterEntry {
+  id: string;
+  organisation_id: string;
+  strike_name: string;
+  plant_location: string;
+  picket_date: string;
+  shift_name: string;
+  steward_in_charge?: string | null;
+  workers_present: number;
+  relief_disbursed: number;
+  notes?: string | null;
+  created_at: string;
+}
+
+export interface DomesticStaff {
+  id: string;
+  organisation_id: string;
+  full_name: string;
+  phone: string;
+  role: 'maid' | 'cook' | 'driver' | 'gardener' | 'car_cleaner' | 'electrician' | 'plumber' | 'security_guard';
+  flat_units: string[];
+  photo_url?: string | null;
+  police_verified: boolean;
+  aadhar_last4?: string | null;
+  pass_code: string;
+  status: 'active' | 'suspended' | 'barred';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SocietyAsset {
+  id: string;
+  organisation_id: string;
+  asset_name: string;
+  category: 'lift_elevator' | 'dg_generator' | 'fire_fighting' | 'water_pumps' | 'cctv_security' | 'swimming_pool' | 'gym_equipment' | 'transformer';
+  location_block?: string | null;
+  vendor_name: string;
+  vendor_phone?: string | null;
+  amc_start_date?: string | null;
+  amc_expiry_date: string;
+  statutory_noc_expiry?: string | null;
+  last_service_date?: string | null;
+  next_service_due: string;
+  annual_amc_cost?: number | null;
+  status: 'operational' | 'service_due' | 'under_breakdown' | 'noc_pending';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BatchMaintenanceRun {
+  id: string;
+  organisation_id: string;
+  billing_month: string;
+  rate_type: 'per_sqft' | 'flat_rate';
+  rate_amount: number;
+  total_units_billed: number;
+  total_invoiced_amount: number;
+  due_date: string;
+  created_by?: string | null;
+  created_at: string;
+}

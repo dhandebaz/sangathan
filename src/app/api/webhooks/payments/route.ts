@@ -4,9 +4,9 @@ import { logger } from '@/lib/logger'
 
 export async function POST(request: Request) {
   try {
-    const secret = process.env.PAYMENT_WEBHOOK_SECRET || process.env.GITHUB_WEBHOOK_SECRET
+    const secret = process.env.STRIPE_WEBHOOK_SECRET || process.env.RAZORPAY_WEBHOOK_SECRET || process.env.PAYMENT_WEBHOOK_SECRET
     if (!secret) {
-      logger.warn('webhook', 'Payments webhook called but no webhook secret configured')
+      logger.warn('webhook', 'Payments webhook called but no payment webhook secret configured')
       return webhookErrorResponse(500, 'Webhook not configured')
     }
 

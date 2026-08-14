@@ -191,20 +191,84 @@ export function MemberOnboardingGuide({ orgType, orgName = 'Your Organisation', 
               <div className="w-14 h-14 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 mx-auto">
                 <CheckCircle2 className="w-7 h-7" />
               </div>
-              <p className="text-xs text-slate-700 font-semibold">Your organisation is fully set up!</p>
+              <p className="text-xs text-slate-700 font-semibold">Your organization is fully configured!</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 text-xs">
-                <Link
-                  href="/dashboard/compliance/bqf-verification"
-                  className="p-3 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded text-purple-900 font-semibold flex items-center justify-center gap-2"
-                >
-                  <ShieldCheck className="w-4 h-4" /> BQF AI Verification
-                </Link>
-                <Link
-                  href="/dashboard/municipal-letters"
-                  className="p-3 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded text-slate-900 font-semibold flex items-center justify-center gap-2"
-                >
-                  <FileText className="w-4 h-4" /> Print Government Letter
-                </Link>
+                {orgType === 'civic_collective' ? (
+                  <>
+                    <Link
+                      href="/dashboard/field-audits"
+                      className="p-3 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded text-rose-900 font-semibold flex items-center justify-center gap-2"
+                    >
+                      <Sparkles className="w-4 h-4 text-rose-600" /> Log Spot Sensor Audit
+                    </Link>
+                    <Link
+                      href="/dashboard/parcha"
+                      className="p-3 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded text-indigo-900 font-semibold flex items-center justify-center gap-2"
+                    >
+                      <FileText className="w-4 h-4 text-indigo-600" /> Print ₹1 Parcha & Sheet
+                    </Link>
+                  </>
+                ) : orgType === 'student_union' ? (
+                  <>
+                    <Link
+                      href="/dashboard/elections"
+                      className="p-3 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded text-indigo-900 font-semibold flex items-center justify-center gap-2"
+                    >
+                      <ShieldCheck className="w-4 h-4 text-indigo-600" /> Campus Elections Desk
+                    </Link>
+                    <Link
+                      href="/dashboard/grievances"
+                      className="p-3 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded text-slate-900 font-semibold flex items-center justify-center gap-2"
+                    >
+                      <FileText className="w-4 h-4" /> Mess & Hostel Grievance
+                    </Link>
+                  </>
+                ) : orgType === 'workers_union' ? (
+                  <>
+                    <Link
+                      href="/dashboard/cba-documents"
+                      className="p-3 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded text-rose-900 font-semibold flex items-center justify-center gap-2"
+                    >
+                      <FileText className="w-4 h-4 text-rose-600" /> CBA & Collective Demands
+                    </Link>
+                    <Link
+                      href="/dashboard/grievances"
+                      className="p-3 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded text-slate-900 font-semibold flex items-center justify-center gap-2"
+                    >
+                      <ShieldCheck className="w-4 h-4" /> File Workplace Grievance
+                    </Link>
+                  </>
+                ) : orgType === 'rwa' ? (
+                  <>
+                    <Link
+                      href="/dashboard/maintenance"
+                      className="p-3 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded text-sky-900 font-semibold flex items-center justify-center gap-2"
+                    >
+                      <Sparkles className="w-4 h-4 text-sky-600" /> Maintenance Tickets
+                    </Link>
+                    <Link
+                      href="/dashboard/events"
+                      className="p-3 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded text-slate-900 font-semibold flex items-center justify-center gap-2"
+                    >
+                      <FileText className="w-4 h-4" /> Society Events & AGM
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/dashboard/compliance/bqf-verification"
+                      className="p-3 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded text-purple-900 font-semibold flex items-center justify-center gap-2"
+                    >
+                      <ShieldCheck className="w-4 h-4 text-purple-600" /> BQF AI Verification
+                    </Link>
+                    <Link
+                      href="/dashboard/donations"
+                      className="p-3 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded text-slate-900 font-semibold flex items-center justify-center gap-2"
+                    >
+                      <FileText className="w-4 h-4" /> Donor CRM & Receipts
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           )}

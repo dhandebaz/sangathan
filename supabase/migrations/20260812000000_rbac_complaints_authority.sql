@@ -1,10 +1,7 @@
 -- Migration: RBAC System, Authority Contacts, Complaint Enhancements
 -- Date: 2026-08-12
 
--- 1. Add role_id foreign key to members table (keep role string for backward compat)
-ALTER TABLE members ADD COLUMN IF NOT EXISTS role_id UUID REFERENCES org_roles(id);
-
--- 2. Create authority_contacts table
+-- 1. Create authority_contacts table
 CREATE TABLE IF NOT EXISTS authority_contacts (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     organisation_id UUID NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
@@ -25,14 +22,14 @@ CREATE INDEX IF NOT EXISTS idx_authority_contacts_org ON authority_contacts(orga
 CREATE INDEX IF NOT EXISTS idx_authority_contacts_dept ON authority_contacts(department);
 CREATE INDEX IF NOT EXISTS idx_authority_contacts_active ON authority_contacts(is_active);
 
--- 3. Enhance tickets table for complaints
+-- 2. Enhance tickets table for complaints
 ALTER TABLE tickets ADD COLUMN IF NOT EXISTS authority_id UUID REFERENCES authority_contacts(id);
 ALTER TABLE tickets ADD COLUMN IF NOT EXISTS ai_analysis JSONB;
 ALTER TABLE tickets ADD COLUMN IF NOT EXISTS printed_at TIMESTAMPTZ;
 ALTER TABLE tickets ADD COLUMN IF NOT EXISTS delivered_at TIMESTAMPTZ;
 ALTER TABLE tickets ADD COLUMN IF NOT EXISTS delivery_method TEXT CHECK (delivery_method IN ('hand', 'post', 'email', 'portal'));
 
--- 4. Add constraint: Community plan ONLY for unregistered orgs
+-- 3. Add constraint: Community plan ONLY for unregistered orgs
 ALTER TABLE organisations DROP CONSTRAINT IF EXISTS plan_registration_check;
 ALTER TABLE organisations ADD CONSTRAINT plan_registration_check 
 CHECK (
@@ -41,19 +38,16 @@ CHECK (
     (plan_name IS NULL)
 );
 
--- 5. Add is_primary_admin flag to profiles for identifying the org creator
+-- 4. Add is_primary_admin flag to profiles for identifying the org creator
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS is_primary_admin BOOLEAN DEFAULT false;
 
--- 6. RLS Policies for authority_contacts
+-- 5. RLS Policies for authority_contacts
 ALTER TABLE authority_contacts ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Members can view active authority contacts" ON authority_contacts;
 CREATE POLICY "Members can view active authority contacts" ON authority_contacts
     FOR SELECT USING (
-        organisation_id IN (
-            SELECT organisation_id FROM members 
-            WHERE user_id = auth.uid() AND status = 'active'
-        )
+        organisation_id = public.get_auth_org_id()
         AND is_active = true
     );
 
@@ -61,19 +55,19 @@ DROP POLICY IF EXISTS "Admins can manage authority contacts" ON authority_contac
 CREATE POLICY "Admins can manage authority contacts" ON authority_contacts
     FOR ALL USING (
         organisation_id IN (
-            SELECT organisation_id FROM members 
-            WHERE user_id = auth.uid() AND status = 'active' 
-            AND role IN ('admin', 'executive', 'can_manage')
+            SELECT organisation_id FROM profiles 
+            WHERE id = auth.uid() 
+            AND role IN ('admin', 'executive', 'can_manage', 'second_admin', 'owner', 'convenor', 'president', 'general_secretary')
         )
     ) WITH CHECK (
         organisation_id IN (
-            SELECT organisation_id FROM members 
-            WHERE user_id = auth.uid() AND status = 'active' 
-            AND role IN ('admin', 'executive', 'can_manage')
+            SELECT organisation_id FROM profiles 
+            WHERE id = auth.uid() 
+            AND role IN ('admin', 'executive', 'can_manage', 'second_admin', 'owner', 'convenor', 'president', 'general_secretary')
         )
     );
 
--- 7. Function to get system role permissions
+-- 6. Function to get system role permissions
 CREATE OR REPLACE FUNCTION get_system_role_permissions(role_name TEXT)
 RETURNS JSONB AS $$
 DECLARE
@@ -193,9 +187,9 @@ BEGIN
     END CASE;
     RETURN perms;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
--- 8. Function to seed system roles for an organisation
+-- 7. Function to seed system roles for an organisation
 CREATE OR REPLACE FUNCTION seed_system_roles(p_org_id UUID)
 RETURNS VOID AS $$
 DECLARE
@@ -225,10 +219,11 @@ BEGIN
             is_system = EXCLUDED.is_system;
     END LOOP;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
--- 9. Update create_organisation_and_admin to seed system roles and set is_primary_admin
+-- 8. Update create_organisation_and_admin to seed system roles and set is_primary_admin
 DROP FUNCTION IF EXISTS public.create_organisation_and_admin(TEXT, TEXT, UUID, TEXT, TEXT, TEXT, TEXT, TEXT);
+DROP FUNCTION IF EXISTS public.create_organisation_and_admin(TEXT, TEXT, UUID, TEXT, TEXT, TEXT, TEXT);
 
 CREATE OR REPLACE FUNCTION create_organisation_and_admin(
   p_org_name TEXT,
@@ -243,6 +238,7 @@ CREATE OR REPLACE FUNCTION create_organisation_and_admin(
 RETURNS JSON
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = public
 AS $$
 DECLARE
   v_org_id UUID;

@@ -6,6 +6,7 @@ import { processIncomingBotMessage } from '@/actions/bot'
  */
 export function getTelegramBot(botToken: string, organisationId?: string) {
   const bot = new Bot(botToken)
+  const resolvedOrgId = organisationId || process.env.DEFAULT_ORG_ID || ''
 
   // Configure command menu & handlers
   bot.command('start', async (ctx) => {
@@ -39,7 +40,7 @@ export function getTelegramBot(botToken: string, organisationId?: string) {
   bot.command(['grievance', 'shikayat'], async (ctx) => {
     const text = ctx.match || 'Campus / Workplace Issue'
     const res = await processIncomingBotMessage({
-      organisationId: organisationId || process.env.DEFAULT_ORG_ID || '00000000-0000-0000-0000-000000000000',
+      organisationId: resolvedOrgId,
       channel: 'telegram',
       senderId: String(ctx.from?.id),
       senderName: [ctx.from?.first_name, ctx.from?.last_name].filter(Boolean).join(' ') || 'Telegram User',
@@ -51,7 +52,7 @@ export function getTelegramBot(botToken: string, organisationId?: string) {
   bot.command(['checkin', 'hajiri'], async (ctx) => {
     const text = ctx.match || 'GENERAL_RALLY'
     const res = await processIncomingBotMessage({
-      organisationId: organisationId || process.env.DEFAULT_ORG_ID || '00000000-0000-0000-0000-000000000000',
+      organisationId: resolvedOrgId,
       channel: 'telegram',
       senderId: String(ctx.from?.id),
       senderName: [ctx.from?.first_name, ctx.from?.last_name].filter(Boolean).join(' ') || 'Telegram User',
@@ -62,7 +63,7 @@ export function getTelegramBot(botToken: string, organisationId?: string) {
 
   bot.command(['dues', 'bakaya'], async (ctx) => {
     const res = await processIncomingBotMessage({
-      organisationId: organisationId || process.env.DEFAULT_ORG_ID || '00000000-0000-0000-0000-000000000000',
+      organisationId: resolvedOrgId,
       channel: 'telegram',
       senderId: String(ctx.from?.id),
       senderName: [ctx.from?.first_name, ctx.from?.last_name].filter(Boolean).join(' ') || 'Telegram User',
@@ -74,7 +75,7 @@ export function getTelegramBot(botToken: string, organisationId?: string) {
   bot.command(['vote', 'matdan'], async (ctx) => {
     const text = ctx.match || 'YES'
     const res = await processIncomingBotMessage({
-      organisationId: organisationId || process.env.DEFAULT_ORG_ID || '00000000-0000-0000-0000-000000000000',
+      organisationId: resolvedOrgId,
       channel: 'telegram',
       senderId: String(ctx.from?.id),
       senderName: [ctx.from?.first_name, ctx.from?.last_name].filter(Boolean).join(' ') || 'Telegram User',
@@ -86,7 +87,7 @@ export function getTelegramBot(botToken: string, organisationId?: string) {
   bot.command(['sos', 'madad', 'help'], async (ctx) => {
     const text = ctx.match || 'Protest Detention / Urgent Legal Aid'
     const res = await processIncomingBotMessage({
-      organisationId: organisationId || process.env.DEFAULT_ORG_ID || '00000000-0000-0000-0000-000000000000',
+      organisationId: resolvedOrgId,
       channel: 'telegram',
       senderId: String(ctx.from?.id),
       senderName: [ctx.from?.first_name, ctx.from?.last_name].filter(Boolean).join(' ') || 'Telegram User',
@@ -97,7 +98,7 @@ export function getTelegramBot(botToken: string, organisationId?: string) {
 
   bot.command(['status', 'sthiti'], async (ctx) => {
     const res = await processIncomingBotMessage({
-      organisationId: organisationId || process.env.DEFAULT_ORG_ID || '00000000-0000-0000-0000-000000000000',
+      organisationId: resolvedOrgId,
       channel: 'telegram',
       senderId: String(ctx.from?.id),
       senderName: [ctx.from?.first_name, ctx.from?.last_name].filter(Boolean).join(' ') || 'Telegram User',
@@ -120,7 +121,7 @@ export function getTelegramBot(botToken: string, organisationId?: string) {
     if (data === 'cmd_status') cmdText = 'STATUS'
 
     const res = await processIncomingBotMessage({
-      organisationId: organisationId || process.env.DEFAULT_ORG_ID || '00000000-0000-0000-0000-000000000000',
+      organisationId: resolvedOrgId,
       channel: 'telegram',
       senderId: String(ctx.from?.id),
       senderName: [ctx.from?.first_name, ctx.from?.last_name].filter(Boolean).join(' ') || 'Telegram User',
@@ -136,7 +137,7 @@ export function getTelegramBot(botToken: string, organisationId?: string) {
     if (text.startsWith('/')) return // Already handled above
 
     const res = await processIncomingBotMessage({
-      organisationId: organisationId || process.env.DEFAULT_ORG_ID || '00000000-0000-0000-0000-000000000000',
+      organisationId: resolvedOrgId,
       channel: 'telegram',
       senderId: String(ctx.from?.id),
       senderName: [ctx.from?.first_name, ctx.from?.last_name].filter(Boolean).join(' ') || 'Telegram User',
@@ -150,6 +151,72 @@ export function getTelegramBot(botToken: string, organisationId?: string) {
 }
 
 /**
+ * Verifies a Telegram Bot Token by calling getMe API
+ */
+export async function testTelegramBotToken(botToken: string): Promise<{
+  success: boolean
+  bot?: {
+    id: number
+    username?: string
+    firstName?: string
+    isBot: boolean
+  }
+  error?: string
+}> {
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${botToken}/getMe`)
+    const data = await res.json()
+    if (data.ok && data.result) {
+      return {
+        success: true,
+        bot: {
+          id: data.result.id,
+          username: data.result.username,
+          firstName: data.result.first_name,
+          isBot: data.result.is_bot ?? true,
+        },
+      }
+    }
+    return { success: false, error: data.description || 'Invalid Telegram Bot Token' }
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Network failure validating Telegram bot token'
+    return { success: false, error: errorMsg }
+  }
+}
+
+/**
+ * Registers Webhook URL with Telegram API
+ */
+export async function registerTelegramWebhookUrl(params: {
+  botToken: string
+  webhookUrl: string
+  secretToken?: string
+}): Promise<{
+  success: boolean
+  description?: string
+  error?: string
+}> {
+  try {
+    const body: Record<string, string> = { url: params.webhookUrl }
+    if (params.secretToken) body.secret_token = params.secretToken
+
+    const res = await fetch(`https://api.telegram.org/bot${params.botToken}/setWebhook`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+    const data = await res.json()
+    if (data.ok) {
+      return { success: true, description: data.description }
+    }
+    return { success: false, error: data.description || 'Failed to register webhook' }
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Failed to register webhook'
+    return { success: false, error: errorMsg }
+  }
+}
+
+/**
  * Sends a real message to a Telegram Chat / User
  */
 export async function sendTelegramDirectMessage(params: {
@@ -159,66 +226,18 @@ export async function sendTelegramDirectMessage(params: {
   parseMode?: 'HTML' | 'MarkdownV2'
 }) {
   try {
-    const bot = new Bot(params.botToken)
-    const result = await bot.api.sendMessage(params.chatId, params.text, {
-      parse_mode: params.parseMode || 'HTML',
+    const res = await fetch(`https://api.telegram.org/bot${params.botToken}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: params.chatId,
+        text: params.text,
+        parse_mode: params.parseMode || 'HTML',
+      }),
     })
-    return { success: true, messageId: result.message_id }
-  } catch (err: unknown) {
-    const errorMsg = err instanceof Error ? err.message : 'Failed to send Telegram message'
-    return { success: false, error: errorMsg }
-  }
-}
-
-/**
- * Validates bot token and returns details from Telegram getMe
- */
-export async function testTelegramBotToken(botToken: string) {
-  try {
-    const bot = new Bot(botToken)
-    const me = await bot.api.getMe()
-    const webhookInfo = await bot.api.getWebhookInfo()
-    return {
-      success: true,
-      bot: {
-        id: me.id,
-        username: me.username,
-        firstName: me.first_name,
-        canJoinGroups: me.can_join_groups,
-      },
-      webhook: {
-        url: webhookInfo.url,
-        hasCustomCertificate: webhookInfo.has_custom_certificate,
-        pendingUpdateCount: webhookInfo.pending_update_count,
-        lastErrorDate: webhookInfo.last_error_date,
-        lastErrorMessage: webhookInfo.last_error_message,
-      },
-    }
-  } catch (err: unknown) {
-    const errorMsg = err instanceof Error ? err.message : 'Invalid Bot Token'
-    return { success: false, error: errorMsg }
-  }
-}
-
-/**
- * Registers Sangathan webhook URL directly with Telegram Bot API
- */
-export async function registerTelegramWebhookUrl(params: {
-  botToken: string
-  webhookUrl: string
-  secretToken?: string
-}) {
-  try {
-    const bot = new Bot(params.botToken)
-    await bot.api.setWebhook(params.webhookUrl, {
-      secret_token: params.secretToken,
-      drop_pending_updates: false,
-      allowed_updates: ['message', 'callback_query'],
-    })
-    const info = await bot.api.getWebhookInfo()
-    return { success: true, webhookUrl: info.url }
-  } catch (err: unknown) {
-    const errorMsg = err instanceof Error ? err.message : 'Failed to set Telegram webhook'
-    return { success: false, error: errorMsg }
+    return await res.json()
+  } catch (err) {
+    console.error('Failed to send Telegram message:', err)
+    return { ok: false, error: err }
   }
 }

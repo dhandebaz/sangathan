@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { formatDistanceToNow } from 'date-fns'
 import { SystemLog } from '@/types/dashboard'
 import { requirePlatformAdmin } from '@/lib/auth/context'
+import { DigestTriggerCard } from '@/components/admin/digest-trigger-card'
  
 export const dynamic = 'force-dynamic'
 
@@ -93,6 +94,8 @@ export default async function SystemLogsPage({ searchParams }: PageProps) {
           Page {currentPage} of {totalPages}
         </div>
       </div>
+
+      <DigestTriggerCard />
 
       <form className="section-card grid gap-4 p-4 text-sm sm:grid-cols-2 xl:grid-cols-5">
         <div className="flex min-w-0 flex-col">

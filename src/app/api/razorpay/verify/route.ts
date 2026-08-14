@@ -139,7 +139,6 @@ export async function POST(request: Request) {
             razorpay_payment_id,
             initiative: 'Bahujan Queer Foundation',
           },
-          actor_id: '00000000-0000-0000-0000-000000000000',
         })
       } catch (dbError) {
         logger.error('razorpay', 'Failed to update organisation post-contribution', {
@@ -155,6 +154,6 @@ export async function POST(request: Request) {
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Verification error'
     logger.error('razorpay', 'Payment verification failed', { error: errorMessage })
-    return NextResponse.json({ success: false, error: errorMessage }, { status: 500 })
+    return NextResponse.json({ success: false, error: 'Payment verification could not be completed.' }, { status: 500 })
   }
 }

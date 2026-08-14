@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { getAssignableRolesForUser, checkCanAssignRole } from '@/lib/permissions'
-import { getSystemRolePermissions, isSystemRole } from '@/lib/capabilities'
+import { getSystemRolePermissions } from '@/lib/capabilities'
 
 const CreateRoleSchema = z.object({
   organisationId: z.string().uuid(),

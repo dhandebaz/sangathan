@@ -12,8 +12,10 @@ import {
   HandCoins, Wrench, Scale, ScrollText, MessageSquare, Radio,
   Flag, ShieldCheck, Gift, HeartHandshake, Vote, Database,
   Megaphone, Landmark, HardHat, AlertCircle, UserCheck, Network,
-  RefreshCw, Sparkles, FolderLock, Printer, FileSpreadsheet, Layers, Plus
+  RefreshCw, Sparkles, FolderLock, Printer, FileSpreadsheet, Layers, Plus,
+  Activity, Clock, Newspaper, Share2, Copy, Check, ExternalLink
 } from 'lucide-react'
+import { toast } from 'sonner'
 import Link from 'next/link'
 import { AdminStats, RecentActivityItem, DashboardEvent } from '@/types/dashboard'
 import { getOrgLabel, OrgColor } from '@/lib/org-types'
@@ -29,6 +31,37 @@ type OrgFeature = {
 function getOrgFeatures(type: string, lang: string): OrgFeature[] {
   const isHindi = lang === 'hi'
   switch (type) {
+    case 'civic_collective':
+      return [
+        {
+          icon: Activity,
+          title: isHindi ? 'फील्ड स्पॉट जांच (Sensor Desk)' : 'Field Spot Audits (Sensor Desk)',
+          subtitle: isHindi ? 'PM2.5, जल व प्रदूषण नोटिस (Delhi Saans)' : 'Spot tests & statutory notices',
+          href: `/${lang}/dashboard/field-audits`,
+          color: 'rose',
+        },
+        {
+          icon: Printer,
+          title: isHindi ? '1-पेज आंदोलन पर्चा व हस्ताक्षर' : 'Printable Parcha & Signatures',
+          subtitle: isHindi ? '₹1 फोटोस्टेट पर्चे व बैठक पत्र' : 'Monochrome flyers & physical sheets',
+          href: `/${lang}/dashboard/parcha`,
+          color: 'indigo',
+        },
+        {
+          icon: Clock,
+          title: isHindi ? 'स्टैम्प्ड रिसीविंग व 15-दिन RTI' : 'Stamped Receiving & RTI',
+          subtitle: isHindi ? 'वार्ड डायरी व आरटीआई एस्केलेटर' : '15-day countdown & Sec 6(1) RTI',
+          href: `/${lang}/dashboard/receiving-tracker`,
+          color: 'amber',
+        },
+        {
+          icon: MessageSquare,
+          title: isHindi ? 'प्रेस विज्ञप्ति व मीडिया डिस्पैच' : 'Press Release Studio',
+          subtitle: isHindi ? 'द्विभाषी मीडिया वक्तव्य व व्हाट्सएप' : 'Bilingual statements & media copy',
+          href: `/${lang}/dashboard/press-releases`,
+          color: 'emerald',
+        },
+      ]
     case 'ngo':
       return [
         {
@@ -220,6 +253,14 @@ function getOrgStats(
       href: `/${lang}/dashboard/maintenance`,
       color: 'sky',
     })
+  } else if (type === 'civic_collective') {
+    items.push({
+      icon: Activity,
+      value: 'Live',
+      label: isHindi ? 'फील्ड एक्शन डेस्क (Field Desk)' : 'Ground Action Desk',
+      href: `/${lang}/dashboard/field-audits`,
+      color: 'rose',
+    })
   }
 
   return items
@@ -279,15 +320,24 @@ function getPriorityActions(type: string, lang: string, membershipRequests: numb
     })
   }
 
-  if (type === 'rwa') {
+  if (type === 'civic_collective') {
     actions.push({
-      icon: Wrench,
-      title: isHindi ? 'सोसायटी रखरखाव अनुरोधों को असाइन करें' : 'Assign Pending Maintenance Requests',
+      icon: Activity,
+      title: isHindi ? 'फील्ड स्पॉट जांच या पर्चा बनाएं' : 'Log Spot Sensor Audit or Print Parcha',
       description: isHindi
-        ? 'प्लंबिंग, लिफ्ट व सामान्य मरम्मत कार्यों को तकनीशियन को सौंपें'
-        : 'Dispatch technicians for lift, plumbing, and electrical repairs',
-      href: `/${lang}/dashboard/maintenance`,
-      color: 'sky',
+        ? 'प्रदूषण जांच दर्ज करें, DPCC नोटिस ड्राफ्ट करें या बैठक पर्चे प्रिंट करें'
+        : 'Log ground pollution tests, draft DPCC notices, or print ₹1 colony leaflets',
+      href: `/${lang}/dashboard/field-audits`,
+      color: 'rose',
+    })
+    actions.push({
+      icon: Clock,
+      title: isHindi ? 'स्टैम्प्ड रिसीविंग डायरी नंबर दर्ज करें' : 'Track Stamped Receiving & RTI Timers',
+      description: isHindi
+        ? 'वार्ड कार्यालय की रिसीविंग पर 15-दिवसीय वैधानिक काउंटडाउन शुरू करें'
+        : 'Enforce Citizens\' Charter 15-day countdown on municipal representations',
+      href: `/${lang}/dashboard/receiving-tracker`,
+      color: 'amber',
     })
   }
 
@@ -311,6 +361,10 @@ export function AdminDashboard({
   openAppeals,
   orgType,
   userName,
+  orgName,
+  slug,
+  focusBlueprint,
+  designation,
 }: {
   lang: string
   stats: AdminStats
@@ -320,6 +374,10 @@ export function AdminDashboard({
   openAppeals: number
   orgType?: string
   userName?: string
+  orgName?: string
+  slug?: string
+  focusBlueprint?: string
+  designation?: string
 }) {
   const type = orgType || 'ngo'
   const isHindi = lang === 'hi'
@@ -327,8 +385,24 @@ export function AdminDashboard({
   const statItems = getOrgStats(type, stats, lang)
   const priorityActions = getPriorityActions(type, lang, membershipRequests)
   const [dismissedActions, setDismissedActions] = useState<number[]>([])
+  const [copiedInvite, setCopiedInvite] = useState(false)
 
   const visibleActions = priorityActions.filter((_, i) => !dismissedActions.includes(i))
+
+  const publicOrgUrl = typeof window !== 'undefined'
+    ? `${window.location.origin}/${lang}/org/${slug || 'demo'}`
+    : `https://sangathan.space/${lang}/org/${slug || 'demo'}`
+
+  const whatsappMessage = isHindi
+    ? `नमस्कार! हमारे संगठन "${orgName || 'संगठन'}" से जुड़ें, बैठकें आयोजित करें, प्रस्तावों पर मतदान करें और परिपत्र प्राप्त करें:\n${publicOrgUrl}`
+    : `Greetings! Join our collective "${orgName || 'Sangathan Collective'}" to organize ground meetings, vote on proposals, and access official circulars:\n${publicOrgUrl}`
+
+  const copyInviteLink = () => {
+    navigator.clipboard.writeText(`${whatsappMessage}`)
+    setCopiedInvite(true)
+    toast.success(isHindi ? 'व्हाट्सएप आमंत्रण संदेश कॉपी किया गया!' : 'WhatsApp invite message copied!')
+    setTimeout(() => setCopiedInvite(false), 2500)
+  }
 
   return (
     <div className="space-y-6 pb-24 md:pb-8">
@@ -343,15 +417,19 @@ export function AdminDashboard({
             </div>
             <p className="text-xs sm:text-sm text-slate-600 font-medium">
               {getOrgLabel(type)} • {getOrgLabel(type, 'hi')}
+              {designation && <span className="text-slate-400"> ({designation})</span>}
             </p>
-            <div className="flex items-center gap-2.5 pt-1">
+            <div className="flex flex-wrap items-center gap-2 pt-1">
               <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 {isHindi ? 'सक्रिय कार्यक्षेत्र' : 'Active Workspace'}
               </span>
-              <span className="text-[11px] text-slate-400">
-                {isHindi ? 'सुरक्षित संप्रभु डेटा' : 'Sovereign Civic Data'}
-              </span>
+              {focusBlueprint && (
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                  <Sparkles className="w-3 h-3 text-indigo-600" />
+                  {isHindi ? 'फोकस:' : 'Focus:'} {focusBlueprint.replace(/_/g, ' ')}
+                </span>
+              )}
             </div>
           </div>
 
@@ -392,6 +470,114 @@ export function AdminDashboard({
           </div>
         </div>
       </div>
+
+      {/* Smart Ground Quickstart Hub (If members <= 2 or events == 0) */}
+      {(stats.members <= 2 || upcomingEvents.length === 0) && (
+        <div className="rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50/60 via-white to-indigo-50/30 p-5 shadow-xs space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-xs">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-xs sm:text-sm font-bold text-slate-900">
+                  {isHindi ? 'जमीनी संगठन त्वरित शुरुआत (Smart Quickstart Hub)' : 'Ground Collective Smart Quickstart Hub'}
+                </h3>
+                <p className="text-[11px] text-slate-500">
+                  {isHindi ? 'अपने समूह को 1-मिनट में मजबूत और सक्रिय बनाएं' : 'Activate and mobilize your collective in under 1 minute'}
+                </p>
+              </div>
+            </div>
+            {slug && (
+              <a
+                href={publicOrgUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="hidden sm:inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:underline"
+              >
+                <span>{isHindi ? 'सार्वजनिक प्रोफ़ाइल' : 'Public Profile'}</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+            {/* Step A: WhatsApp Member Invite */}
+            <div className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-2">
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
+                <Share2 className="w-4 h-4 text-emerald-600" />
+                <span>{isHindi ? '1. सदस्य जोड़ें (WhatsApp)' : '1. Invite Cadre via WhatsApp'}</span>
+              </div>
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                {isHindi
+                  ? 'कॉलोनी व साथियों को 1-टैप में सार्वजनिक ज्वाइन लिंक भेजें।'
+                  : 'Broadcast a pre-filled join invite directly to your WhatsApp group.'}
+              </p>
+              <div className="flex items-center gap-2 pt-1">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={copyInviteLink}
+                  className="h-8 text-xs font-bold w-full border-slate-300"
+                >
+                  {copiedInvite ? <Check className="w-3.5 h-3.5 mr-1 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 mr-1" />}
+                  {copiedInvite ? (isHindi ? 'कॉपी हो गया' : 'Copied!') : (isHindi ? 'लिंक कॉपी करें' : 'Copy Invite')}
+                </Button>
+                <a
+                  href={`https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="h-8 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center shrink-0 transition-colors"
+                >
+                  WhatsApp →
+                </a>
+              </div>
+            </div>
+
+            {/* Step B: Schedule First Assembly / Event */}
+            <div className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-2">
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
+                <Calendar className="w-4 h-4 text-indigo-600" />
+                <span>{isHindi ? '2. पहली सभा / बैठक बुलाएं' : '2. Call First Assembly / GBM'}</span>
+              </div>
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                {isHindi
+                  ? 'मुद्दों पर चर्चा और मांग पत्र तैयार करने के लिए बैठक तय करें।'
+                  : 'Set a date, location, and agenda for your inaugural neighborhood assembly.'}
+              </p>
+              <div className="pt-1">
+                <Button asChild size="sm" variant="outline" className="h-8 text-xs font-bold w-full border-slate-300">
+                  <Link href={`/${lang}/dashboard/events/new`}>
+                    <Plus className="w-3.5 h-3.5 mr-1" />
+                    {isHindi ? 'सभा शेड्यूल करें' : 'Schedule Assembly'}
+                  </Link>
+                </Button>
+              </div>
+            </div>
+
+            {/* Step C: First Document / Parcha */}
+            <div className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-2">
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
+                <Printer className="w-4 h-4 text-rose-600" />
+                <span>{isHindi ? '3. पहला पर्चा या नोटिस बनाएं' : '3. Print Parcha / Notice'}</span>
+              </div>
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                {isHindi
+                  ? '₹1 फोटोस्टेट आंदोलन पर्चा बनाएं या वार्ड कार्यालय को कानूनी नोटिस भेजें।'
+                  : 'Generate a 1-page monochrome flyer or statutory notice for authorities.'}
+              </p>
+              <div className="pt-1">
+                <Button asChild size="sm" variant="outline" className="h-8 text-xs font-bold w-full border-slate-300">
+                  <Link href={type === 'civic_collective' ? `/${lang}/dashboard/parcha` : `/${lang}/dashboard/announcements`}>
+                    <Printer className="w-3.5 h-3.5 mr-1" />
+                    {isHindi ? 'पर्चा जनरेटर' : 'Open Parcha Desk'}
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Quick Glance Stats (Touch-Friendly Horizontal Scroll / Grid) */}
       <div>

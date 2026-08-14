@@ -29,6 +29,16 @@ export type OrgCapability =
   | 'meetings'
   | 'subgroups'
   | 'tasks'
+  | 'disputes'
+  | 'domestic_staff'
+  | 'assets_amc'
+  | 'volunteer_certificates'
+  | 'hostel_mess'
+  | 'election_counting'
+  | 'field_audits'
+  | 'press_releases'
+  | 'receiving_tracker'
+  | 'parcha_generator'
 
 // System role permissions matrix
 export const SYSTEM_ROLE_PERMISSIONS: Record<string, Record<string, boolean>> = {
@@ -210,23 +220,33 @@ export const BASE_CAPABILITIES: Record<OrgCapability, boolean> = {
   meetings: true,
   subgroups: true,
   tasks: true,
+  disputes: false,
+  domestic_staff: false,
+  assets_amc: false,
+  volunteer_certificates: false,
+  hostel_mess: false,
+  election_counting: false,
+  field_audits: false,
+  press_releases: false,
+  receiving_tracker: false,
+  parcha_generator: false,
 }
 
 export function getOrgTypeDefaults(orgType?: string | null): Record<OrgCapability, boolean> {
   if (orgType === 'civic_collective') {
-    return { ...BASE_CAPABILITIES, volunteers: true, donations: true, campaigns: true, coalition_tools: true, transparency_mode: true, memberships: true, volunteer_engine: true, federation_mode: true, voting_engine: true, events: true, elections: true, dues: true, compliance: false, meetings: true, subgroups: true, tasks: true }
+    return { ...BASE_CAPABILITIES, volunteers: true, volunteer_certificates: true, donations: true, campaigns: true, coalition_tools: true, transparency_mode: true, memberships: true, volunteer_engine: true, federation_mode: true, voting_engine: true, events: true, elections: true, dues: true, compliance: false, meetings: true, subgroups: true, tasks: true, field_audits: true, press_releases: true, receiving_tracker: true, parcha_generator: true }
   }
   if (orgType === 'ngo') {
-    return { ...BASE_CAPABILITIES, volunteers: true, donations: true, campaigns: true, coalition_tools: true, transparency_mode: true, memberships: true, volunteer_engine: true, federation_mode: true, grants: true, events: true, elections: true, dues: true, compliance: true, meetings: true, subgroups: true }
+    return { ...BASE_CAPABILITIES, volunteers: true, volunteer_certificates: true, donations: true, campaigns: true, coalition_tools: true, transparency_mode: true, memberships: true, volunteer_engine: true, federation_mode: true, grants: true, events: true, elections: true, dues: true, compliance: true, meetings: true, subgroups: true, press_releases: true, field_audits: true, receiving_tracker: true, parcha_generator: true }
   }
   if (orgType === 'student_union') {
-    return { ...BASE_CAPABILITIES, student_ids: true, events: true, voting_engine: true, grievances: true, federation_mode: true, campaigns: true, memberships: true, elections: true, subgroups: true, compliance: true, meetings: true, dues: true }
+    return { ...BASE_CAPABILITIES, student_ids: true, events: true, voting_engine: true, grievances: true, federation_mode: true, campaigns: true, memberships: true, elections: true, election_counting: true, hostel_mess: true, subgroups: true, compliance: true, meetings: true, dues: true }
   }
   if (orgType === 'workers_union') {
-    return { ...BASE_CAPABILITIES, grievances: true, voting_engine: true, federation_mode: true, campaigns: true, memberships: true, cba_documents: true, jobs: true, dues: true, elections: true, events: true, compliance: true, meetings: true, subgroups: true }
+    return { ...BASE_CAPABILITIES, grievances: true, disputes: true, voting_engine: true, federation_mode: true, campaigns: true, memberships: true, cba_documents: true, jobs: true, dues: true, elections: true, events: true, compliance: true, meetings: true, subgroups: true }
   }
   if (orgType === 'rwa') {
-    return { ...BASE_CAPABILITIES, maintenance: true, complaints: true, donations: true, voting_engine: true, events: true, memberships: true, visitors: true, elections: true, grievances: true, compliance: true, meetings: true, subgroups: true }
+    return { ...BASE_CAPABILITIES, maintenance: true, domestic_staff: true, assets_amc: true, complaints: true, donations: true, voting_engine: true, events: true, memberships: true, visitors: true, elections: true, grievances: true, compliance: true, meetings: true, subgroups: true }
   }
 
   return { ...BASE_CAPABILITIES, voting_engine: true, federation_mode: true, volunteer_engine: true }
@@ -283,7 +303,6 @@ export async function unlockCapabilities(orgId: string) {
       resource_table: 'organisations',
       resource_id: orgId,
       details: updates as Json,
-      actor_id: '00000000-0000-0000-0000-000000000000' // System
     })
   }
 }

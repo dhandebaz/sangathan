@@ -1,5 +1,4 @@
 import { createServiceClient } from '@/lib/supabase/service'
-import type { Json } from '@/types/database'
 import { hasPermission, canAssignRole, getAssignableRoles, isSystemRole, getSystemRolePermissions } from './capabilities'
 
 /**

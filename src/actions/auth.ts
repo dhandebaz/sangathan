@@ -281,6 +281,8 @@ type CreateOrganisationAndAdminResult = {
   profile_id: string
 }
 
+import { getOrgTypeDefaults } from '@/lib/capabilities'
+
 export async function finalizeSignup(input: {
   organizationName: string
   organizationType: string
@@ -290,6 +292,10 @@ export async function finalizeSignup(input: {
   designation?: string
   membershipPolicy?: string
   monthlyDues?: string
+  focusBlueprint?: string
+  enablePublicPetitions?: boolean
+  enableTransparencyLedger?: boolean
+  enableEmergencySos?: boolean
 }) {
   const supabase = await createClient()
   const {
@@ -369,9 +375,20 @@ export async function finalizeSignup(input: {
     console.error('Profile update error:', profileUpdateError)
   }
 
+  const defaultCaps = getOrgTypeDefaults(orgType)
+  const customizedCaps: Record<string, unknown> = {
+    ...defaultCaps,
+    focus_blueprint: input.focusBlueprint || null,
+  }
+
+  if (input.enablePublicPetitions !== undefined) customizedCaps.campaigns = input.enablePublicPetitions
+  if (input.enableTransparencyLedger !== undefined) customizedCaps.transparency_mode = input.enableTransparencyLedger
+  if (input.enableEmergencySos !== undefined) customizedCaps.emergency_sos = input.enableEmergencySos
+
   const orgUpdates: Record<string, unknown> = {
     created_by: user.id,
     membership_policy: input.membershipPolicy || 'admin_approval',
+    capabilities: customizedCaps,
   }
   if (input.registrationStatus) orgUpdates.registration_status = input.registrationStatus
   if (input.description) orgUpdates.description = input.description

@@ -8,6 +8,7 @@ import { logAction } from '@/lib/audit/log'
 import { checkMemberLimit } from '@/lib/plans/limits'
 import { getAssignableRolesForUser, checkCanAssignRole } from '@/lib/permissions'
 import { isSystemRole } from '@/lib/capabilities'
+import { randomBytes } from 'crypto'
 
 // --- Schemas ---
 
@@ -149,8 +150,7 @@ export const inviteMember = createSafeAction(
     }
 
     // Create invite token
-    const crypto = require('crypto')
-    const token = crypto.randomBytes(32).toString('hex')
+    const token = randomBytes(32).toString('hex')
     const expiresAt = new Date()
     expiresAt.setDate(expiresAt.getDate() + 7) // 7 days expiry
 

@@ -30,8 +30,23 @@ export async function createPlatformBroadcast(input: z.infer<typeof CreateBroadc
 
   const supabase = createServiceClient()
 
+  // Resolve target organisation ID dynamically
+  let targetOrgId = result.data.target_org_id
+  if (!targetOrgId) {
+    if (process.env.DEFAULT_ORG_ID) {
+      targetOrgId = process.env.DEFAULT_ORG_ID
+    } else {
+      const { data: firstOrg } = await supabase.from('organisations').select('id').limit(1).maybeSingle()
+      targetOrgId = firstOrg?.id
+    }
+  }
+
+  if (!targetOrgId) {
+    return { success: false, error: 'No target organisation available to receive broadcast.' }
+  }
+
   const { error } = await supabase.from('announcements').insert({
-    organisation_id: result.data.target_org_id || '00000000-0000-0000-0000-000000000000',
+    organisation_id: targetOrgId,
     title: result.data.title,
     content: result.data.content,
     is_pinned: result.data.priority === 'critical' || result.data.priority === 'high',
@@ -43,12 +58,12 @@ export async function createPlatformBroadcast(input: z.infer<typeof CreateBroadc
   if (error) return { success: false, error: error.message }
 
   await logAction({
-    organisation_id: '00000000-0000-0000-0000-000000000000',
+    organisation_id: targetOrgId,
     user_id: user.id,
     action: 'PLATFORM_BROADCAST_CREATED',
     resource_table: 'announcements',
     resource_id: result.data.title,
-    details: { priority: result.data.priority, target_org: result.data.target_org_id },
+    details: { priority: result.data.priority, target_org: targetOrgId },
   })
 
   revalidatePath('/admin/broadcasts', 'page')

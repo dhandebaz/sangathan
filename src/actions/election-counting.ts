@@ -1,5 +1,6 @@
 'use server'
 
+import { createSafeAction } from '@/lib/auth/actions'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
@@ -7,6 +8,9 @@ import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { z } from 'zod'
 
 const TallySchema = z.object({
+  electionId: z.string().uuid().optional(),
+  positionId: z.string().uuid().optional(),
+  candidateId: z.string().uuid().optional(),
   boothName: z.string().min(2, "Booth name required"),
   roundNumber: z.number().min(1),
   candidateName: z.string().min(2, "Candidate name required"),
@@ -14,41 +18,57 @@ const TallySchema = z.object({
   votesCount: z.number().min(0),
 })
 
-export async function logBoothVoteTallyAction(input: z.infer<typeof TallySchema>) {
-  try {
-    const result = TallySchema.safeParse(input)
-    if (!result.success) return { success: false, error: result.error.issues[0].message }
-
+export const logBoothVoteTallyAction = createSafeAction(
+  TallySchema,
+  async (input, context) => {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return { success: false, error: 'Unauthorized' }
+    const orgId = context.organizationId
+    const userId = context.user.id
 
-    const orgId = await getSelectedOrganisationId()
-    if (!orgId) return { success: false, error: 'Organisation not found' }
+    // 1. If explicit relational IDs exist, insert into election_booth_tallies
+    if (input.electionId && input.positionId && input.candidateId) {
+      const { data, error } = await supabase
+        .from('election_booth_tallies')
+        .upsert({
+          election_id: input.electionId,
+          position_id: input.positionId,
+          candidate_id: input.candidateId,
+          booth_name: input.boothName,
+          round_number: input.roundNumber,
+          votes_count: input.votesCount,
+          recorded_by: userId,
+        }, { onConflict: 'election_id, position_id, candidate_id, booth_name, round_number' })
+        .select()
+        .single()
 
+      if (!error && data) {
+        revalidatePath('/[lang]/dashboard/election-counting', 'page')
+        return { success: true, data }
+      }
+    }
+
+    // 2. Backward compatible logging to tasks for fast multi-booth tally
     const adminClient = createServiceClient()
     const { data, error } = await adminClient
       .from('tasks')
       .insert({
         organisation_id: orgId,
-        created_by: user.id,
-        title: `[ELECTION TALLY] ${result.data.postTitle}: ${result.data.candidateName} (+${result.data.votesCount} votes)`,
-        description: `Post: ${result.data.postTitle}\nCandidate: ${result.data.candidateName}\nBooth: ${result.data.boothName}\nRound: ${result.data.roundNumber}\nVotes: ${result.data.votesCount}`,
+        created_by: userId,
+        title: `[ELECTION TALLY] ${input.postTitle}: ${input.candidateName} (+${input.votesCount} votes)`,
+        description: `Post: ${input.postTitle}\nCandidate: ${input.candidateName}\nBooth: ${input.boothName}\nRound: ${input.roundNumber}\nVotes: ${input.votesCount}`,
         status: 'completed',
         priority: 'high'
       })
       .select()
       .single()
 
-    if (error) throw error
+    if (error) throw new Error(error.message)
 
     revalidatePath('/[lang]/dashboard/election-counting', 'page')
     return { success: true, data }
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Failed to log vote tally'
-    return { success: false, error: message }
-  }
-}
+  },
+  { allowedRoles: ['admin', 'executive', 'can_manage', 'second_admin', 'editor'] }
+)
 
 export async function getElectionTallyLogs(organisationId: string) {
   try {
