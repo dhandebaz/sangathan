@@ -1,5 +1,7 @@
 import { MetadataRoute } from 'next'
 import { createServiceClient } from '@/lib/supabase/service'
+import { SOLUTIONS_DATA } from '@/lib/solutions-data'
+import { COMPARISONS_DATA } from '@/lib/comparisons-data'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://sangathan.space'
@@ -17,6 +19,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/vision',
     '/faq',
     '/network',
+    '/solutions',
+    '/compare',
     '/privacy',
     '/terms',
     '/data-rights',
@@ -40,7 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: isRoot ? baseUrl : `${baseUrl}/en${route}`,
       lastModified: new Date(),
       changeFrequency: isRoot ? 'daily' : route === '/pricing' || route === '/changelog' ? 'weekly' : 'monthly',
-      priority: isRoot ? 1.0 : route === '/pricing' || route === '/features' ? 0.9 : 0.7,
+      priority: isRoot ? 1.0 : route === '/pricing' || route === '/features' || route === '/solutions' || route === '/compare' ? 0.9 : 0.7,
       alternates: {
         languages: {
           en: isRoot ? `${baseUrl}/en` : `${baseUrl}/en${route}`,
@@ -54,7 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: `${baseUrl}/hi${route}`,
         lastModified: new Date(),
         changeFrequency: route === '/pricing' || route === '/changelog' ? 'weekly' : 'monthly',
-        priority: route === '/pricing' || route === '/features' ? 0.9 : 0.7,
+        priority: route === '/pricing' || route === '/features' || route === '/solutions' || route === '/compare' ? 0.9 : 0.7,
         alternates: {
           languages: {
             en: `${baseUrl}/en${route}`,
@@ -65,7 +69,92 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // 2. Dynamic Organisations Public Pages
+  // 2. Programmatic Solutions (5 Org Types + 20 Focus Blueprints)
+  for (const [typeKey, orgType] of Object.entries(SOLUTIONS_DATA)) {
+    // Org Type Solution Pages
+    sitemapEntries.push({
+      url: `${baseUrl}/en/solutions/${typeKey}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+      alternates: {
+        languages: {
+          en: `${baseUrl}/en/solutions/${typeKey}`,
+          hi: `${baseUrl}/hi/solutions/${typeKey}`,
+        },
+      },
+    })
+    sitemapEntries.push({
+      url: `${baseUrl}/hi/solutions/${typeKey}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+      alternates: {
+        languages: {
+          en: `${baseUrl}/en/solutions/${typeKey}`,
+          hi: `${baseUrl}/hi/solutions/${typeKey}`,
+        },
+      },
+    })
+
+    // Subtypes / Focus Blueprints
+    for (const subtype of orgType.subtypes) {
+      sitemapEntries.push({
+        url: `${baseUrl}/en/solutions/${typeKey}/${subtype.slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.85,
+        alternates: {
+          languages: {
+            en: `${baseUrl}/en/solutions/${typeKey}/${subtype.slug}`,
+            hi: `${baseUrl}/hi/solutions/${typeKey}/${subtype.slug}`,
+          },
+        },
+      })
+      sitemapEntries.push({
+        url: `${baseUrl}/hi/solutions/${typeKey}/${subtype.slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.85,
+        alternates: {
+          languages: {
+            en: `${baseUrl}/en/solutions/${typeKey}/${subtype.slug}`,
+            hi: `${baseUrl}/hi/solutions/${typeKey}/${subtype.slug}`,
+          },
+        },
+      })
+    }
+  }
+
+  // 3. Standalone Competitor Comparisons (7 Comparisons)
+  for (const comp of Object.values(COMPARISONS_DATA)) {
+    sitemapEntries.push({
+      url: `${baseUrl}/en/compare/${comp.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.85,
+      alternates: {
+        languages: {
+          en: `${baseUrl}/en/compare/${comp.slug}`,
+          hi: `${baseUrl}/hi/compare/${comp.slug}`,
+        },
+      },
+    })
+    sitemapEntries.push({
+      url: `${baseUrl}/hi/compare/${comp.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.85,
+      alternates: {
+        languages: {
+          en: `${baseUrl}/en/compare/${comp.slug}`,
+          hi: `${baseUrl}/hi/compare/${comp.slug}`,
+        },
+      },
+    })
+  }
+
+  // 4. Dynamic Organisations Public Pages
   try {
     const supabase = createServiceClient()
     const { data: organisations } = await supabase
@@ -107,7 +196,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }
     }
 
-    // 3. Dynamic Public Events
+    // 5. Dynamic Public Events
     const { data: events } = await supabase
       .from('events')
       .select('id, start_time, created_at, organisation:organisations(slug)')
@@ -148,7 +237,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }
     }
 
-    // 4. Dynamic Public Networks / Federations
+    // 6. Dynamic Public Networks / Federations
     const { data: networks } = await supabase
       .from('networks')
       .select('slug, created_at')

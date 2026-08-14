@@ -11,6 +11,22 @@ const withSerwist = withSerwistInit({
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   serverExternalPackages: ['@sentry/nextjs'],
+  experimental: {
+    optimizePackageImports: [
+      'lucide-react',
+      'date-fns',
+      '@radix-ui/react-accordion',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-label',
+      '@radix-ui/react-select',
+      '@radix-ui/react-slot',
+      '@radix-ui/react-tabs',
+      'class-variance-authority',
+      'clsx',
+      'tailwind-merge',
+    ],
+  },
   images: {
     remotePatterns: [
       {
@@ -41,30 +57,16 @@ const nextConfig: NextConfig = {
   },
 };
 
+const hasSentryAuth = Boolean(process.env.SENTRY_AUTH_TOKEN || process.env.SENTRY_DSN);
+
 export default withSentryConfig(withSerwist(nextConfig), {
-  // For all available options, see:
-  // https://github.com/getsentry/sentry-webpack-plugin#options
-
-  // Suppresses source map uploading logs during build
   silent: true,
-
-  // Vercel injected vars will populate these
   org: process.env.SENTRY_ORG,
   project: process.env.SENTRY_PROJECT,
-
-  // For all available options, see:
-  // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-
-  // Upload a larger set of source maps for prettier stack traces (increases build time)
-  widenClientFileUpload: true,
-
-  // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
-  // This can increase your server load as well as your hosting bill.
-  // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
-  // side errors will fail.
+  widenClientFileUpload: Boolean(process.env.SENTRY_WIDEN_UPLOAD === 'true'),
   tunnelRoute: "/monitoring",
-  
   sourcemaps: {
-    disable: false,
-  }
+    disable: !hasSentryAuth,
+  },
+  disableLogger: true,
 });

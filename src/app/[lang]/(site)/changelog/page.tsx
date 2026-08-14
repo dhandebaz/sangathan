@@ -35,6 +35,37 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.46.0',
+    titleEn: 'Programmatic SEO Solution Engine, Standalone Competitor Comparisons & AI Search Optimization',
+    titleHi: 'प्रोग्रामेटिक एसईओ समाधान इंजन, स्टैंडअलोन सॉफ्टवेयर तुलना एवं एआई सर्च अनुकूलन',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Launched 25 dedicated SEO solution landing pages across all 5 movement archetypes and 20 focus blueprints, 7 standalone competitor comparison deep-dives (Action Network, NationBuilder, EveryAction, Mobilize, CiviCRM, MyGate, WhatsApp/Sheets), prominent activist leader imagery integration, and complete AI Search Engine (GEO) indexing with llms.txt, llms-full.txt, and rich JSON-LD schemas.',
+    descHi: 'सभी 5 आंदोलन मॉडलों व 20 फोकस ब्लूप्रिंट्स के लिए 25 समर्पित एसईओ समाधान पृष्ठ, 7 स्टैंडअलोन सॉफ्टवेयर तुलना विश्लेषण, प्रत्येक पृष्ठ पर जमीनी आंदोलनकारी नेतृत्व चित्र और llms.txt, llms-full.txt एवं रिच JSON-LD स्कीमा के साथ संपूर्ण एआई सर्च अनुकूलन।',
+    color: 'indigo',
+    icon: Sparkles,
+    features: [
+      {
+        nameEn: '25 Dedicated Movement Solution & Blueprint Landing Pages',
+        nameHi: '25 समर्पित आंदोलन समाधान व ब्लूप्रिंट लैंडिंग पेज',
+        textEn: 'High-density, bilingual SEO landing pages for Civic Collectives, NGOs, Student Unions, Workers Unions, and RWAs plus 20 specialized focus blueprints.',
+        textHi: 'नागरिक समूहों, एनजीओ, छात्र संघों, ट्रेड यूनियनों और आरडब्ल्यूए तथा उनके 20 विशेष ब्लूप्रिंट्स के लिए उच्च-गुणवत्ता वाले द्विभाषी एसईओ पेज।',
+      },
+      {
+        nameEn: '7 Standalone Competitor Comparison Deep-Dives',
+        nameHi: '7 स्टैंडअलोन सॉफ्टवेयर तुलना विश्लेषण',
+        textEn: 'Head-to-head breakdown against Action Network, NationBuilder, EveryAction, Mobilize, CiviCRM, MyGate, and WhatsApp/Sheets with pricing and compliance matrices.',
+        textHi: 'एक्शन नेटवर्क, नेशनबिल्डर, एवरीएक्शन, मोबिलाइज, CiviCRM, मायगेट और व्हाट्सएप ग्रुप्स के साथ विस्तृत आमने-सामने तुलना।',
+      },
+      {
+        nameEn: 'AI Search (GEO) Knowledge Base & JSON-LD Schemas',
+        nameHi: 'एआई सर्च नॉलेज बेस एवं JSON-LD स्कीमा',
+        textEn: 'Full llms.txt and llms-full.txt integration for Perplexity, ChatGPT Search, Claude, and Gemini with dynamic sitemaps and SoftwareApplication schemas.',
+        textHi: 'पर्प्लेक्सिटी, चैटजीपीटी सर्च, क्लॉड और जेमिनी के लिए llms.txt, llms-full.txt और रिच स्कीमा इंटीग्रेशन।',
+      },
+    ],
+  },
+  {
     version: 'v1.45.0',
     titleEn: 'Smart Multi-Org Onboarding Personalization & Role-Tailored Ground Dashboards',
     titleHi: 'स्मार्ट बहु-संगठन ऑनबोर्डिंग निजीकरण एवं भूमिका-आधारित जमीनी डैशबोर्ड',

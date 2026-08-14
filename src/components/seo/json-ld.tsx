@@ -333,3 +333,134 @@ export function NetworkJsonLd({ network, memberOrgs, totalMembers, lang }: Netwo
     />
   )
 }
+
+export function SolutionJsonLd({
+  title,
+  description,
+  url,
+  category,
+  features,
+  faqs,
+}: {
+  title: string
+  description: string
+  url: string
+  category: string
+  features: { name: string; description: string }[]
+  faqs: { question: string; answer: string }[]
+}) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: title,
+    alternateName: 'संगठन',
+    url,
+    description,
+    applicationCategory: category || 'CivicGovernanceApplication',
+    operatingSystem: 'Web, Progressive Web App (PWA), iOS, Android',
+    offers: [
+      {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'INR',
+        name: 'Community Plan (Free Forever)',
+        description: '₹0 forever civic infrastructure for grassroots collectives and community activists.',
+      },
+      {
+        '@type': 'Offer',
+        price: '1000',
+        priceCurrency: 'INR',
+        name: 'Institution Plan',
+        description: 'Patronage tier for funded NGOs, trade unions, and formal institutions.',
+      },
+    ],
+    featureList: features.map((f) => `${f.name}: ${f.description}`),
+  }
+
+  const faqJsonLd = faqs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((q) => ({
+      '@type': 'Question',
+      name: q.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: q.answer,
+      },
+    })),
+  } : null
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
+    </>
+  )
+}
+
+export function ComparisonJsonLd({
+  title,
+  description,
+  url,
+  competitorName,
+  faqs,
+}: {
+  title: string
+  description: string
+  url: string
+  competitorName: string
+  faqs: { question: string; answer: string }[]
+}) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: `Sangathan vs ${competitorName}`,
+    url,
+    description,
+    applicationCategory: 'CivicGovernanceApplication',
+    operatingSystem: 'Web, Progressive Web App (PWA)',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'INR',
+      name: 'Sangathan Community Tier',
+      description: '₹0 Forever Free for Grassroots Collectives',
+    },
+  }
+
+  const faqJsonLd = faqs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((q) => ({
+      '@type': 'Question',
+      name: q.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: q.answer,
+      },
+    })),
+  } : null
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
+    </>
+  )
+}

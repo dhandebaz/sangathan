@@ -310,6 +310,55 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
         <InteractiveFeatures orgs={orgs} isHindi={isHindi} lang={lang} />
       </div>
+
+      {/* Internal SEO Solutions & Comparisons Discovery Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 flex flex-col justify-between">
+            <div>
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-indigo-600 mb-2 block">
+                {isHindi ? '5 मॉडल • 20 ब्लूप्रिंट्स' : '5 Archetypes • 20 Blueprints'}
+              </span>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">
+                {isHindi ? 'विशेष संगठन समाधान व ब्लूप्रिंट्स' : 'Specialized Movement Solutions'}
+              </h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed mb-4">
+                {isHindi
+                  ? 'नागरिक समूहों, एनजीओ, छात्र संघों, ट्रेड यूनियनों और आरडब्ल्यूए के लिए पूर्ण वैधानिक समाधान और टूल्स।'
+                  : 'Explore purpose-built landing pages and step-by-step ground playbooks for each organization archetype.'}
+              </p>
+            </div>
+            <Link
+              href={`/${lang}/solutions`}
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-colors"
+            >
+              <span>{isHindi ? 'सभी समाधान एक्सप्लोर करें →' : 'Explore All Solutions →'}</span>
+            </Link>
+          </div>
+
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 flex flex-col justify-between">
+            <div>
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-indigo-600 mb-2 block">
+                {isHindi ? 'निष्पक्ष तुलना' : 'Honest Comparisons'}
+              </span>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">
+                {isHindi ? 'संगठन बनाम अन्य सॉफ्टवेयर' : 'Sangathan vs Other Platforms'}
+              </h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed mb-4">
+                {isHindi
+                  ? 'देखें कि संगठन कैसे एक्शन नेटवर्क, नेशनबिल्डर, एवरीएक्शन, मोबिलाइज, CiviCRM और मायगेट से बेहतर है।'
+                  : 'Compare Sangathan against Action Network, NationBuilder, EveryAction, Mobilize, CiviCRM, MyGate, and WhatsApp.'}
+              </p>
+            </div>
+            <Link
+              href={`/${lang}/compare`}
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-colors"
+            >
+              <span>{isHindi ? 'सभी तुलनाएं देखें →' : 'View Head-to-Head Comparisons →'}</span>
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
