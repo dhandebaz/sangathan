@@ -87,8 +87,16 @@ export default async function PricingPage({
         ? 'संरक्षक पहुंच (Sustainer Access) क्या है?'
         : 'What is Sustainer Access?',
       answer: isHindi
-        ? 'संरक्षक पहुंच बड़े एनजीओ और पंजीकृत संघों के लिए सुझाया गया ₹1,000/माह का एकजुटता योगदान है। यह आपके संगठन के लिए असीमित सदस्य और संगठन AI क्षमताएं अनलॉक करता है, और साथ ही छोटे नागरिक समूहों के लिए मुफ्त सर्वर अवसंरचना को निधि देता है।'
-        : 'Sustainer Access is a suggested ₹1,000/month (pay-what-you-can) institutional solidarity contribution. It provides unlimited member capacity and Sangathan AI tools while directly cross-subsidizing infrastructure for smaller grassroots movements.',
+        ? 'संरक्षक पहुंच बड़े एनजीओ और पंजीकृत संघों के लिए सुझाया गया ₹1,000/माह का एकजुटता योगदान है। इसमें 500 सक्रिय काडर स्लॉट और संपूर्ण संगठन AI सुइट शामिल हैं, और साथ ही यह छोटे नागरिक समूहों के लिए मुफ्त सर्वर अवसंरचना को निधि देता है।'
+        : 'Sustainer Access is a suggested ₹1,000/month institutional solidarity contribution. It includes 500 active cadre slots and the full Sangathan AI suite while directly cross-subsidizing infrastructure for smaller grassroots movements.',
+    },
+    {
+      question: isHindi
+        ? 'काडर क्षमता का पैमाना (Scale Capacity @ ₹11/सदस्य) कैसे काम करता है?'
+        : 'How does cadre scale capacity (₹11/member) work?',
+      answer: isHindi
+        ? '500 सदस्यों तक बेस ₹1,000/माह में शामिल हैं। 500 से अधिक सदस्यों के लिए, वास्तविक डेटाबेस स्टोरेज, बैकअप और SMS/OTP डिलीवरी लागत को कवर करने के लिए ₹11 प्रति सदस्य प्रति माह का पारदर्शी परिचालन शुल्क लगता है।'
+        : '500 active member slots are included in the base ₹1,000/mo Sustainer plan. Beyond 500, capacity expands at ₹11/member/month to cover high-volume database compute, daily encrypted backups, and transactional OTP/email delivery.',
     },
     {
       question: isHindi
@@ -230,13 +238,9 @@ export default async function PricingPage({
         </div>
 
         {/* 3. Where Your Contribution Goes (Operational Cost Breakdown) */}
-        <div className="rounded-3xl border border-slate-200 bg-slate-50/80 p-6 sm:p-12 space-y-8">
+        <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-6 sm:p-10 space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
-            <div className="flex items-center justify-center gap-1.5 text-indigo-700 font-medium text-xs">
-              <HeartHandshake className="w-4 h-4" />
-              <span>{isHindi ? '100% पारदर्शी व्यय' : '100% Transparent Utilization'}</span>
-            </div>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            <h3 className="text-2xl sm:text-3xl font-black text-slate-900">
               {isHindi ? 'आपका योगदान कहाँ जाता है?' : 'Where Your Contribution Goes'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -252,9 +256,9 @@ export default async function PricingPage({
               return (
                 <div
                   key={idx}
-                  className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-3"
+                  className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs space-y-3"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
+                  <div className="w-10 h-10 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
                     <Icon className="w-5 h-5" />
                   </div>
                   <h4 className="text-base font-bold text-slate-900">
@@ -271,8 +275,8 @@ export default async function PricingPage({
 
         {/* 4. Privacy-First & Mirrored Infrastructure Architecture */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3 shadow-xs">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+          <div className="rounded-xl border border-slate-200 bg-white p-6 space-y-3 shadow-xs">
+            <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
               <Lock className="w-5 h-5" />
             </div>
             <h4 className="text-base font-bold text-slate-900">
@@ -285,8 +289,8 @@ export default async function PricingPage({
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3 shadow-xs">
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
+          <div className="rounded-xl border border-slate-200 bg-white p-6 space-y-3 shadow-xs">
+            <div className="w-10 h-10 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
               <Server className="w-5 h-5" />
             </div>
             <h4 className="text-base font-bold text-slate-900">
@@ -299,8 +303,8 @@ export default async function PricingPage({
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3 shadow-xs">
-            <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
+          <div className="rounded-xl border border-slate-200 bg-white p-6 space-y-3 shadow-xs">
+            <div className="w-10 h-10 rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
               <DownloadCloud className="w-5 h-5" />
             </div>
             <h4 className="text-base font-bold text-slate-900">
@@ -331,7 +335,7 @@ export default async function PricingPage({
             {faqs.map((faq, idx) => (
               <div
                 key={idx}
-                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs hover:border-slate-300 transition-colors"
+                className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs hover:border-slate-300 transition-colors"
               >
                 <h4 className="text-sm sm:text-base font-bold text-slate-900 mb-2">
                   {faq.question}

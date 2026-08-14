@@ -14,6 +14,7 @@ export type OrgMetrics = {
   eventCount: number
   hasForeignDonations: boolean
   hasPaidTickets: boolean
+  legalEntityType?: string | null
 }
 
 export const COMPLIANCE_RULES: ComplianceRule[] = [
@@ -176,5 +177,123 @@ export const COMPLIANCE_RULES: ComplianceRule[] = [
     registration_link: 'https://www.epfindia.gov.in/',
     orgTypes: ['all'],
     condition: (metrics) => metrics.memberCount >= 20
+  },
+
+  // --- LEGAL ENTITY TYPE-SPECIFIC COMPLIANCE ---
+  {
+    id: 'section_8_mca_aoc4',
+    title: 'MCA Annual Filing — Form AOC-4 (Financial Statements)',
+    category: 'MCA Compliance',
+    description: 'Section 8 Companies must file annual financial statements with the Registrar of Companies (MCA) within 30 days of AGM.',
+    registration_link: 'https://www.mca.gov.in/',
+    orgTypes: ['ngo'],
+    condition: (metrics) => metrics.legalEntityType === 'section_8_company'
+  },
+  {
+    id: 'section_8_mca_mgt7',
+    title: 'MCA Annual Return — Form MGT-7',
+    category: 'MCA Compliance',
+    description: 'Section 8 Companies must file annual return within 60 days of AGM with Registrar of Companies.',
+    registration_link: 'https://www.mca.gov.in/',
+    orgTypes: ['ngo'],
+    condition: (metrics) => metrics.legalEntityType === 'section_8_company'
+  },
+  {
+    id: 'section_8_dir3_kyc',
+    title: 'Director KYC — Form DIR-3 KYC',
+    category: 'MCA Compliance',
+    description: 'All directors of Section 8 Companies must file annual KYC with MCA by September 30.',
+    registration_link: 'https://www.mca.gov.in/',
+    orgTypes: ['ngo'],
+    condition: (metrics) => metrics.legalEntityType === 'section_8_company'
+  },
+  {
+    id: 'trust_charity_commissioner_return',
+    title: 'Charity Commissioner Annual Return',
+    category: 'Statutory Filing',
+    description: 'Public Charitable Trusts must file annual change report with the state Charity Commissioner.',
+    orgTypes: ['ngo'],
+    condition: (metrics) => metrics.legalEntityType === 'trust'
+  },
+  {
+    id: 'society_ros_annual_list',
+    title: 'Annual List of Managing Committee (Form V)',
+    category: 'Statutory Filing',
+    description: 'Registered Societies must file annual list of managing committee members with the Registrar of Societies within 14 days of AGM.',
+    orgTypes: ['ngo'],
+    condition: (metrics) => metrics.legalEntityType === 'society'
+  },
+  {
+    id: 'cooperative_statutory_audit',
+    title: 'Cooperative Society Statutory Audit',
+    category: 'Statutory Audit',
+    description: 'Cooperative Housing Societies must undergo annual statutory audit by a panel auditor appointed by the Registrar of Cooperative Societies.',
+    orgTypes: ['rwa'],
+    condition: (metrics) => metrics.legalEntityType === 'cooperative_housing'
+  },
+  // Additional legal entity type rules
+  {
+    id: 'society_ros_managing_committee',
+    title: 'Registrar of Societies — Annual Managing Committee List',
+    category: 'Statutory Filing',
+    description: 'Registered Societies must file annual list of managing committee members with the Registrar of Societies within 14 days of AGM.',
+    orgTypes: ['ngo'],
+    condition: (metrics) => metrics.legalEntityType === 'society'
+  },
+  {
+    id: 'trust_annual_change_report',
+    title: 'Charity Commissioner — Annual Change Report',
+    category: 'Statutory Filing',
+    description: 'Public Charitable Trusts must file annual change report with the state Charity Commissioner.',
+    orgTypes: ['ngo'],
+    condition: (metrics) => metrics.legalEntityType === 'trust'
+  },
+  {
+    id: 'cooperative_annual_audit',
+    title: 'Cooperative Society — Annual Statutory Audit',
+    category: 'Statutory Audit',
+    description: 'Cooperative Housing Societies must undergo annual statutory audit by a panel auditor appointed by the Registrar of Cooperative Societies.',
+    orgTypes: ['rwa'],
+    condition: (metrics) => metrics.legalEntityType === 'cooperative_housing'
+  },
+  {
+    id: 'apartment_association_annual_list',
+    title: 'Apartment Association — Annual Member List',
+    category: 'Statutory Filing',
+    description: 'Apartment Associations must file annual list of unit owners with the Registrar under State Apartment Ownership Acts.',
+    orgTypes: ['rwa'],
+    condition: (metrics) => metrics.legalEntityType === 'apartment_association'
+  },
+  {
+    id: 'trade_union_form_b',
+    title: 'Trade Unions Act — Form B Registration',
+    category: 'Statutory Registration',
+    description: 'Initial registration certificate filed with the State Registrar of Trade Unions under Section 5 of the Trade Unions Act 1926.',
+    orgTypes: ['workers_union'],
+    condition: (metrics) => metrics.legalEntityType === 'registered_trade_union'
+  },
+  {
+    id: 'trade_union_annual_return',
+    title: 'Trade Unions Act — Annual Return',
+    category: 'Statutory Filing',
+    description: 'Annual return of income and expenditure filed with the State Registrar of Trade Unions.',
+    orgTypes: ['workers_union'],
+    condition: (metrics) => metrics.legalEntityType === 'registered_trade_union'
+  },
+  {
+    id: 'university_constitution_compliance',
+    title: 'University Statute Compliance',
+    category: 'Governance',
+    description: ' adherence to university statutes governing student union elections, representation, and financial oversight.',
+    orgTypes: ['student_union'],
+    condition: (metrics) => metrics.legalEntityType === 'university_body'
+  },
+  {
+    id: 'independent_student_org_darpan',
+    title: 'NITI Aayog NGO Darpan Registration (Independent Front)',
+    category: 'Legal & Grants',
+    description: 'Unique Darpan ID issued by NITI Aayog required for government grant applications and CSR eligibility for independent student fronts.',
+    orgTypes: ['student_union'],
+    condition: (metrics) => metrics.legalEntityType === 'independent_front'
   }
 ]

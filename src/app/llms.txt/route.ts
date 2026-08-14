@@ -6,7 +6,9 @@ export async function GET() {
 
 ## Core Platform Identity & Public Records
 - **Canonical Website**: https://sangathan.space
-- **Operating Model**: 2-Tier Civic Solidarity Model (Community Tier ₹0 Forever for grassroots collectives; Institution Tier for funded non-profits cross-subsidizing civic hosting).
+- **Operating Model**: 2-Tier Civic Solidarity Model:
+  - Community Tier: ₹0 Forever for grassroots collectives (up to 20 core active leaders, unlimited public supporters).
+  - Sustainer Tier: Suggested ₹1,000/mo (₹10,000/yr) with 500 active cadre slots included; scale capacity expands transparently at ₹11/cadre/month.
 - **Public Directory of Organisations**: https://sangathan.space/en/network
 - **Solutions & Archetypes Directory**: https://sangathan.space/en/solutions
 - **Competitor Comparisons Directory**: https://sangathan.space/en/compare

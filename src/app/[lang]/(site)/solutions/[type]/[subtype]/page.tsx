@@ -167,12 +167,6 @@ export default async function SolutionSubtypePage({ params }: SubtypePageProps) 
             
             {/* Left Column: Subtype Focus */}
             <div className="lg:col-span-7 text-center lg:text-left space-y-6">
-              
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 border border-slate-300 rounded text-slate-800 text-[11px] sm:text-xs font-bold uppercase tracking-wider font-mono">
-                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-                <span>{isHindi ? orgType.titleHi : orgType.titleEn} • {isHindi ? 'विशेष ब्लूप्रिंट' : 'Specialized Blueprint'}</span>
-              </div>
-
               <h1 className="text-3xl sm:text-5xl lg:text-[3.5rem] font-black tracking-tight text-slate-900 leading-[1.08]">
                 {isHindi ? st.titleHi : st.titleEn}
               </h1>
@@ -231,13 +225,16 @@ export default async function SolutionSubtypePage({ params }: SubtypePageProps) 
                   />
                 </div>
 
+                {/* Ground Status Cards */}
                 <div className="absolute top-4 left-4 right-4 flex flex-col gap-2 pointer-events-none">
-                  <div className="bg-white/95 backdrop-blur-xs border border-slate-300 rounded p-2 text-left shadow-xs flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
+                  <div className="bg-white/95 backdrop-blur-xs border border-slate-300 rounded p-2 text-left shadow-xs flex items-center justify-between">
                     <div className="text-[10px] font-mono leading-tight">
                       <strong className="text-slate-900 block">{isHindi ? st.titleHi : st.titleEn}</strong>
                       <span className="text-slate-500">{isHindi ? 'सक्रिय जमीनी कार्यप्रणाली' : 'Active Ground Playbook'}</span>
                     </div>
+                    <span className="text-[9px] font-mono font-bold bg-emerald-100 text-emerald-900 px-1.5 py-0.5 rounded border border-emerald-300">
+                      Active
+                    </span>
                   </div>
                 </div>
 
@@ -272,9 +269,6 @@ export default async function SolutionSubtypePage({ params }: SubtypePageProps) 
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-rose-50/60 border border-rose-200 rounded-2xl p-8">
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-rose-700 mb-2 block">
-                {isHindi ? 'जमीनी समस्या व प्रशासनिक बाधा' : 'The Ground Reality & Problem'}
-              </span>
               <h3 className="text-2xl font-black text-slate-900 mb-4">
                 {isHindi ? 'बिना संगठित डिजिटल रिकॉर्ड के क्या होता है?' : 'What Fails in Conventional Organizing?'}
               </h3>
@@ -284,9 +278,6 @@ export default async function SolutionSubtypePage({ params }: SubtypePageProps) 
             </div>
 
             <div className="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-8">
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-700 mb-2 block">
-                {isHindi ? 'संगठन का ठोस समाधान' : 'The Sangathan Solution'}
-              </span>
               <h3 className="text-2xl font-black text-slate-900 mb-4">
                 {isHindi ? 'संगठन प्रशासनिक बदलाव कैसे लाता है?' : 'How Sangathan Forces Action'}
               </h3>
@@ -330,9 +321,6 @@ export default async function SolutionSubtypePage({ params }: SubtypePageProps) 
         {/* 4. STEP-BY-STEP EXECUTION WORKFLOW */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
           <div className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-indigo-600 mb-2 block">
-              {isHindi ? 'जमीनी कार्यप्रणाली' : 'Step-by-Step Execution Playbook'}
-            </span>
             <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mb-4">
               {isHindi ? 'जमीन पर काम कैसे होता है?' : 'How Leaders Execute on Ground'}
             </h2>
@@ -359,9 +347,6 @@ export default async function SolutionSubtypePage({ params }: SubtypePageProps) 
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
           <div className="bg-slate-50 border border-slate-200 rounded-2xl p-8 sm:p-12">
             <div className="max-w-3xl mb-8">
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-indigo-600 mb-2 block">
-                {isHindi ? 'वैधानिक आधार' : 'Statutory & Constitutional Provisions'}
-              </span>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-3">
                 {isHindi ? 'कानूनी प्रावधान व अदालती आदेश' : 'Legal Provisions & Court Mandates'}
               </h2>

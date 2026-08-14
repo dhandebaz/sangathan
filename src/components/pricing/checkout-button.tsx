@@ -10,6 +10,8 @@ interface CheckoutButtonProps {
   amount: number
   planName: string
   planPeriod?: 'monthly' | 'yearly' | 'lifetime' | 'one_time'
+  additionalSlots?: number
+  targetMemberCount?: number
   labelEn: string
   labelHi: string
   isHindi: boolean
@@ -23,6 +25,8 @@ export function CheckoutButton({
   amount,
   planName,
   planPeriod = 'monthly',
+  additionalSlots = 0,
+  targetMemberCount = 0,
   labelEn,
   labelHi,
   isHindi,
@@ -48,6 +52,8 @@ export function CheckoutButton({
           orgId,
           planName,
           planPeriod,
+          additionalSlots,
+          targetMemberCount,
         }),
       })
 
@@ -64,7 +70,7 @@ export function CheckoutButton({
         description:
           planName === 'Community'
             ? 'Community Access Contribution'
-            : `Sustainer Access (${planPeriod === 'yearly' ? 'Annual' : 'Monthly'})`,
+            : `Sustainer Access (${planPeriod === 'yearly' ? 'Annual' : 'Monthly'}${additionalSlots > 0 ? ` • +${additionalSlots} Slots` : ''})`,
         order_id: orderData.id,
         handler: async function (paymentResponse: {
           razorpay_order_id: string
@@ -84,6 +90,7 @@ export function CheckoutButton({
                 planName,
                 planPeriod,
                 amount,
+                additionalSlots,
               }),
             })
 
@@ -148,7 +155,7 @@ export function CheckoutButton({
         {isProcessing ? (
           <span className="flex items-center justify-center gap-2">
             <Loader2 className="w-5 h-5 animate-spin" />
-            {isHindi ? 'प्रतीक्षा करें...' : 'Processing...'}
+            <span>{isHindi ? 'प्रसंस्करण...' : 'Processing...'}</span>
           </span>
         ) : (
           children || (isHindi ? labelHi : labelEn)

@@ -13,6 +13,7 @@ export async function POST(request: Request) {
       planName = 'Community',
       planPeriod = 'one_time',
       amount = 50,
+      additionalSlots = 0,
     } = await request.json()
 
     const key_secret = process.env.RAZORPAY_KEY_SECRET
@@ -47,6 +48,7 @@ export async function POST(request: Request) {
       paymentId: razorpay_payment_id,
       orgId,
       planName,
+      additionalSlots,
     })
 
     const supabaseAdmin = createServiceClient()
@@ -74,7 +76,7 @@ export async function POST(request: Request) {
           .eq('id', orgId)
           .single()
 
-        const currentCaps = (org?.capabilities as Record<string, boolean>) || {}
+        const currentCaps = (org?.capabilities as Record<string, unknown>) || {}
         const isYearly = planPeriod === 'yearly'
         const expiresAt = new Date()
         if (isYearly) {
@@ -96,6 +98,10 @@ export async function POST(request: Request) {
           updatePayload.plan_period = 'one_time'
           updatePayload.plan_status = 'active'
         } else if (isSustainer) {
+          const numExtraSlots = Number(additionalSlots) || 0
+          const existingExtraSlots = typeof currentCaps.additional_member_slots === 'number' ? currentCaps.additional_member_slots : 0
+          const finalExtraSlots = numExtraSlots > 0 ? numExtraSlots : existingExtraSlots
+
           updatePayload.plan_name = 'Institution'
           updatePayload.plan_period = isYearly ? 'yearly' : 'monthly'
           updatePayload.plan_status = 'active'
@@ -104,6 +110,7 @@ export async function POST(request: Request) {
             ...currentCaps,
             ai_features: true,
             advanced_analytics: true,
+            additional_member_slots: finalExtraSlots,
           }
         }
 

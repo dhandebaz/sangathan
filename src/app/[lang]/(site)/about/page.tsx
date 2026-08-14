@@ -59,47 +59,47 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
           </section>
 
           <section>
-            <h2 className="text-3xl font-bold text-slate-900  mb-8">{isHindi ? 'डिजाइन सिद्धांत' : 'Design Principles'}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 not-prose">
-              <div className="p-8 bg-slate-50  rounded-3xl border border-slate-200  hover:border-indigo-500/50 transition-colors">
-                <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-6">
-                  <Shield className="w-6 h-6 text-indigo-500" />
+            <h2 className="text-3xl font-black text-slate-900 mb-8">{isHindi ? 'डिजाइन सिद्धांत' : 'Design Principles'}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose">
+              <div className="p-6 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center mb-4 text-slate-800">
+                  <Shield className="w-5 h-5 text-indigo-600" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-slate-900 ">{isHindi ? 'संप्रभुता (स्वाभिमान)' : 'Sovereignty (Swabhiman)'}</h3>
-                <p className="text-slate-500 ">
+                <h3 className="text-lg font-bold mb-2 text-slate-900">{isHindi ? 'संप्रभुता (स्वाभिमान)' : 'Sovereignty (Swabhiman)'}</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
                   {isHindi
                     ? 'आपका डेटा आपका है। हम संरक्षक हैं, मालिक नहीं। आप किसी भी समय अपना पूरा डेटाबेस निर्यात कर सकते हैं।'
                     : 'Your data belongs to you. We are custodians, not owners. You can export your entire database at any time.'}
                 </p>
               </div>
-              <div className="p-8 bg-slate-50  rounded-3xl border border-slate-200  hover:border-cyan-500/50 transition-colors">
-                <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-6">
-                  <Lock className="w-6 h-6 text-cyan-500" />
+              <div className="p-6 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center mb-4 text-slate-800">
+                  <Lock className="w-5 h-5 text-cyan-600" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-slate-900 ">{isHindi ? 'निष्ठा' : 'Integrity (Nishtha)'}</h3>
-                <p className="text-slate-500 ">
+                <h3 className="text-lg font-bold mb-2 text-slate-900">{isHindi ? 'निष्ठा' : 'Integrity (Nishtha)'}</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
                   {isHindi
                     ? 'विश्वास समूहों की मुद्रा है। हमारा सिस्टम अपरिवर्तनीय ऑडिट लॉग और सत्यापित पहचान के माध्यम से इसे लागू करता है।'
                     : 'Trust is the currency of collectives. Our system enforces it through immutable audit logs and verified identities.'}
                 </p>
               </div>
-              <div className="p-8 bg-slate-50  rounded-3xl border border-slate-200  hover:border-emerald-500/50 transition-colors">
-                <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-6">
-                  <Globe className="w-6 h-6 text-emerald-500" />
+              <div className="p-6 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center mb-4 text-slate-800">
+                  <Globe className="w-5 h-5 text-emerald-600" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-slate-900 ">{isHindi ? 'लचीलापन (दृढ़ता)' : 'Resilience (Drudhta)'}</h3>
-                <p className="text-slate-500 ">
+                <h3 className="text-lg font-bold mb-2 text-slate-900">{isHindi ? 'लचीलापन (दृढ़ता)' : 'Resilience (Drudhta)'}</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
                   {isHindi
                     ? 'आंदोलनों को बाहरी दबाव का सामना करना पड़ता है। हमारा बुनियादी ढांचा पकड़ बनाए रखने के लिए बनाया गया है, जिसमें अतिरेक और ऑफ़लाइन-प्रथम सोच है।'
                     : 'Movements face external pressure. Our infrastructure is built to hold, with redundancy and offline-first thinking.'}
                 </p>
               </div>
-              <div className="p-8 bg-slate-50  rounded-3xl border border-slate-200  hover:border-purple-500/50 transition-colors">
-                <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-6">
-                  <Heart className="w-6 h-6 text-purple-500" />
+              <div className="p-6 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center mb-4 text-slate-800">
+                  <Heart className="w-5 h-5 text-purple-600" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-slate-900 ">{isHindi ? 'पहुंच' : 'Accessibility'}</h3>
-                <p className="text-slate-500 ">
+                <h3 className="text-lg font-bold mb-2 text-slate-900">{isHindi ? 'पहुंच' : 'Accessibility'}</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
                   {isHindi
                     ? 'प्रौद्योगिकी को बाहर नहीं करना चाहिए। हम सरल इंटरफेस, स्थानीय भाषाओं और कम-अंत वाले उपकरणों पर प्रदर्शन को प्राथमिकता देते हैं।'
                     : 'Technology should not exclude. We prioritize simple interfaces, local languages, and performance on low-end devices.'}

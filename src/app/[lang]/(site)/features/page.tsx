@@ -57,7 +57,8 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Sparkles', title: 'AI Complaint Photo Analysis', desc: 'Instant AI detection of issue type, affected department, and urgency from complaint photos with a confidence score.' },
         { icon: 'Printer', title: 'Formal Complaint Print & Delivery Tracking', desc: 'Generate official print-ready complaint letters addressed to the relevant authority, with hand or email delivery tracking.' },
         { icon: 'Sparkles', title: 'Sangathan AI Assistance & Minutes Extraction', desc: 'Draft meeting minutes, extract action items, and synthesize lengthy policy proposals with absolute data isolation.' },
-        { icon: 'Lock', title: '1-Click Full Sovereign Data Export', desc: 'Export complete resolution records, votes, and member logs in open JSON/CSV formats anytime with zero lock-in.' }
+        { icon: 'Lock', title: '1-Click Full Sovereign Data Export', desc: 'Export complete resolution records, votes, and member logs in open JSON/CSV formats anytime with zero lock-in.' },
+        { icon: 'ShieldCheck', title: 'Statutory Compliance & Government Readiness', desc: 'Legal entity sub-classification, validated statutory ID fields, compliance filings tracker, government API endpoints, and civic collective statutory knowledge hub.' }
       ]
     },
     {
@@ -96,6 +97,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'ClipboardList', title: 'Field Forms & Surveys', desc: 'Offline-capable data collection for field workers.' },
         { icon: 'Network', title: 'Chapters & Subgroups', desc: 'Organise large NGOs by city chapters or wings.' },
         { icon: 'ShieldCheck', title: 'Helpdesk Support', desc: 'Centralized inbox for public and beneficiary inquiries.' },
+        { icon: 'CreditCard', title: 'Scalable Cadre Capacity & Pay-As-You-Grow (₹11/Cadre)', desc: '500 active cadre slots included in base Sustainer plan with transparent ₹11/cadre/month capacity expansion for large movements and federations.' },
         { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable tier scaling, live member slot meters, automated receipt archiving, and multi-org enterprise capabilities.' },
         { icon: 'Sparkles', title: 'Civic Form & Survey Studio', desc: 'Deploy volunteer skills intake, beneficiary assessments, and donor feedback forms with live Goal Consensus % and Participant PDF Dossiers.' },
         { icon: 'FileSpreadsheet', title: 'Live Google Workspace & CSV Importer', desc: 'Import members via live Google People API (1-click contact selection), authenticated Google Sheets API (private sheet access), or traditional CSV upload. Includes automated column matching, phone validation, and deduplication.' },
@@ -104,7 +106,9 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Printer', title: 'Statutory PDF Registers & Audit Books', desc: '1-click export of official Form I Member Rolls, Form H Returns, and Double-Entry Cash Books formatted for government inspections.' },
         { icon: 'MapPin', title: 'National Geo Engine (780+ Districts)', desc: 'Pre-populated registry of all 28 Indian States, 8 UTs, and 780+ administrative districts with ISO codes and SDG sector taxonomies.' },
         { icon: 'Globe', title: 'Public SEO & AI Search Engine Citability', desc: 'Schema.org JSON-LD structured data, dynamic Edge OpenGraph image previews, and high-signal public profiles indexed across Google, Bing, and AI answer engines.' },
-        { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests 12A, 80G, FCRA based on actual usage and donations.' }
+        { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests 12A, 80G, FCRA based on actual usage and donations.' },
+        { icon: 'ShieldCheck', title: 'Legal Identity & Compliance Engine', desc: 'Manage statutory registrations (PAN, CIN, GSTIN) and compliance filings with upcoming direct Government API integrations.' },
+        { icon: 'ShieldCheck', title: 'Statutory Compliance & Government Readiness', desc: 'Legal entity sub-classification, validated statutory ID fields, compliance filings tracker, government API endpoints, and statutory knowledge hub.' }
       ]
     },
     {
@@ -149,7 +153,8 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Wallet', title: 'Club Sub-funding', desc: 'Allow societies to request and track micro-budgets.' },
         { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable campus scaling, live member slot meters, automated receipt archiving, and multi-org capabilities.' },
         { icon: 'Globe', title: 'Public SEO & OpenGraph Social Previews', desc: 'Schema.org structured data, dynamic 1200x630 social preview cards for WhatsApp/Twitter, and high-signal public profiles.' },
-        { icon: 'FileText', title: 'Proposals & Bills', desc: 'Draft, debate, and pass union resolutions democratically.' }
+        { icon: 'FileText', title: 'Proposals & Bills', desc: 'Draft, debate, and pass union resolutions democratically.' },
+        { icon: 'ShieldCheck', title: 'Statutory Compliance & Government Readiness', desc: 'Legal entity sub-classification, validated statutory ID fields, compliance filings tracker, government API endpoints, and statutory knowledge hub.' }
       ]
     },
     {
@@ -188,7 +193,8 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'BadgeAlert', title: 'Shop Steward Roles', desc: 'Granular permissions for field representatives.' },
         { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable union dues budgeting, member slot tracking, and multi-branch federation tools.' },
         { icon: 'Globe', title: 'Public Union Directory & Schema.org Graph', desc: 'Indexed union representations, public solidarity petitions, and verified collective bargaining records.' },
-        { icon: 'ShieldCheck', title: 'Labor Law Compliance', desc: 'Automated checks against union regulations.' }
+        { icon: 'ShieldCheck', title: 'Labor Law Compliance', desc: 'Automated checks against union regulations.' },
+        { icon: 'ShieldCheck', title: 'Statutory Compliance & Government Readiness', desc: 'Legal entity sub-classification, validated statutory ID fields, compliance filings tracker, government API endpoints, and statutory knowledge hub.' }
       ]
     },
     {
@@ -229,7 +235,8 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests renewals and NOCs based on maintenance and facility usage.' },
         { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
         { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' },
-        { icon: 'Zap', title: 'Sangathan AI Assistive Intelligence', desc: 'Smart summaries, meeting minutes extraction, form sentiment analysis, and proposal analysis with master organization control.' }
+        { icon: 'Zap', title: 'Sangathan AI Assistive Intelligence', desc: 'Smart summaries, meeting minutes extraction, form sentiment analysis, and proposal analysis with master organization control.' },
+        { icon: 'ShieldCheck', title: 'Statutory Compliance & Government Readiness', desc: 'Legal entity sub-classification, validated statutory ID fields, compliance filings tracker, government API endpoints, and statutory knowledge hub.' }
       ]
     }
   ]
@@ -249,11 +256,6 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
             
             {/* Left Content */}
             <div className="lg:col-span-8 text-center lg:text-left space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-rose-50 border border-rose-200 rounded text-rose-800 text-xs font-bold uppercase tracking-wider font-mono">
-                <Sparkles className="w-3.5 h-3.5 text-rose-600" />
-                <span>{isHindi ? '5 आंदोलन प्रकार • संपूर्ण डिजिटल हथियार' : '5 Movement Archetypes • Complete Ground Suite'}</span>
-              </div>
-
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
                 {isHindi 
                   ? 'हर आंदोलनकारी और नागरिक समूह की डिजिटल ताकत' 
@@ -316,9 +318,6 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 flex flex-col justify-between">
             <div>
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-indigo-600 mb-2 block">
-                {isHindi ? '5 मॉडल • 20 ब्लूप्रिंट्स' : '5 Archetypes • 20 Blueprints'}
-              </span>
               <h3 className="text-xl font-bold text-slate-900 mb-2">
                 {isHindi ? 'विशेष संगठन समाधान व ब्लूप्रिंट्स' : 'Specialized Movement Solutions'}
               </h3>
@@ -338,9 +337,6 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
 
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 flex flex-col justify-between">
             <div>
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-indigo-600 mb-2 block">
-                {isHindi ? 'निष्पक्ष तुलना' : 'Honest Comparisons'}
-              </span>
               <h3 className="text-xl font-bold text-slate-900 mb-2">
                 {isHindi ? 'संगठन बनाम अन्य सॉफ्टवेयर' : 'Sangathan vs Other Platforms'}
               </h3>

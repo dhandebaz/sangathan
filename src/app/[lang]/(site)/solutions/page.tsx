@@ -50,11 +50,6 @@ export default async function SolutionsDirectoryPage({ params }: { params: Promi
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             
             <div className="lg:col-span-7 text-center lg:text-left space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 border border-slate-300 rounded text-slate-800 text-[11px] sm:text-xs font-bold uppercase tracking-wider font-mono">
-                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-                <span>{isHindi ? '5 आंदोलन मॉडल • 20 विशेष ब्लूप्रिंट्स' : '5 Movement Archetypes • 20 Focus Blueprints'}</span>
-              </div>
-
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.08]">
                 {isHindi ? (
                   <>

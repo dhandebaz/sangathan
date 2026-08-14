@@ -1,26 +1,24 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { 
-  ArrowRight, ShieldCheck, Video, Banknote, Activity, Globe, 
-  Vote, Megaphone, Lock, Users, Fingerprint, Layers, Cpu, Check, 
-  FileText, Building2, GraduationCap, HardHat, Home, Smartphone, 
-  Zap, Clock, Printer, Scale, AlertTriangle, Sparkles, MessageSquare, Newspaper 
-} from 'lucide-react'
 import { Metadata } from 'next'
-import { WebSiteJsonLd, BreadcrumbJsonLd } from '@/components/seo/json-ld'
-
-export const dynamic = 'force-dynamic'
+import { 
+  ArrowRight, ShieldCheck, Activity, Printer, Clock, FileText, 
+  Receipt, Wallet, Users, Vote, Scale, AlertTriangle, CheckSquare, 
+  Building2, HardHat, Check, Megaphone, GraduationCap, Home,
+  Smartphone, MessageSquare, Banknote, Globe, Newspaper, Sparkles, Lock
+} from 'lucide-react'
+import { SoftwareApplicationJsonLd, BreadcrumbJsonLd } from '@/components/seo/json-ld'
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
     title: isHindi 
-      ? 'नागरिक समूहों व आंदोलनों के लिए ऑपरेटिंग सिस्टम | संगठन' 
-      : 'The Operating System for Civic Collectives & Grassroots Movements | Sangathan',
+      ? 'संगठन - नागरिक समूहों, एनजीओ और यूनियनों के लिए डिजिटल बुनियादी ढांचा'
+      : 'Sangathan - Digital Operating System for Civic Movements & Collectives',
     description: isHindi
-      ? 'नागरिक समूहों, पर्यावरण शोधकर्ताओं (जैसे दिल्ली सांस), एनजीओ, छात्र संघों और आरडब्ल्यूए के लिए डिजिटल बुनियादी ढांचा। फील्ड ऑडिट, ₹1 पर्चा, 15-दिवसीय आरटीआई ट्रैकर एवं विधिक सुरक्षा।'
-      : 'Digital infrastructure for civic collectives, citizen scientists (Delhi Saans model), NGOs, student unions, and RWAs. Spot sensor audits, ₹1 printable Parchas, 15-day RTI tracker, and BQF legal indemnity.',
+      ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं (जैसे दिल्ली सांस), एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए जमीनी डिजिटल हथियार। 1-टैप फील्ड जांच, ₹1 पर्चे, आरटीआई ट्रैकर एवं विधिक सुरक्षा।'
+      : 'The zero-tech, mobile-first operating system for civic collectives, citizen scientists (Delhi Saans model), NGOs, student unions, workers unions, and RWAs. 1-tap spot audits, ₹1 printable Parchas, 15-day RTI countdowns, and official BQF legal protection.',
     alternates: {
       canonical: `https://sangathan.space/${lang}`,
       languages: {
@@ -28,21 +26,36 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
         'hi': 'https://sangathan.space/hi',
       },
     },
+    openGraph: {
+      title: isHindi ? 'संगठन - नागरिक डिजिटल बुनियादी ढांचा' : 'Sangathan - Movement Infrastructure',
+      description: isHindi ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं और यूनियनों के लिए शक्तिशाली मंच।' : 'Purpose-built operating system for Indian civic collectives, NGOs, and unions.',
+      url: `https://sangathan.space/${lang}`,
+      siteName: 'Sangathan',
+      images: [
+        {
+          url: '/images/activist-leader.png',
+          width: 800,
+          height: 600,
+          alt: 'Sangathan Movement Leader',
+        },
+      ],
+      type: 'website',
+    },
   }
 }
 
 export default async function LandingPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   const isHindi = lang === 'hi'
-  
+
   return (
-    <div className="bg-white min-h-screen relative font-sans text-slate-900 selection:bg-indigo-100 overflow-x-hidden">
-      <WebSiteJsonLd />
+    <div className="bg-white min-h-screen relative font-sans text-slate-900 selection:bg-rose-100 overflow-x-hidden">
+      <SoftwareApplicationJsonLd />
       <BreadcrumbJsonLd items={[
         { name: isHindi ? 'होम' : 'Home', url: `https://sangathan.space/${lang}` },
       ]} />
       
-      {/* Background Dot Pattern (Technical Minimalist) */}
+      {/* Background Dot Pattern */}
       <div 
         className="absolute inset-0 z-0 pointer-events-none opacity-[0.03]"
         style={{ backgroundImage: 'radial-gradient(circle, #0f172a 1px, transparent 1px)', backgroundSize: '24px 24px' }}
@@ -57,12 +70,6 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
             {/* Left Column: Mission & Core Value */}
             <div className="lg:col-span-7 text-center lg:text-left space-y-6">
               
-              {/* Technical Indicator */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-rose-50 border border-rose-200 rounded text-rose-800 text-[11px] sm:text-xs font-bold uppercase tracking-wider font-mono">
-                <span className="w-2 h-2 rounded-full bg-rose-600 animate-pulse"></span>
-                <span>{isHindi ? 'जमीनी संघर्ष से जन-सशक्तिकरण तक' : 'Infrastructure for Ground Battles & Resistance'}</span>
-              </div>
-
               {/* Main Headline */}
               <h1 className="text-4xl sm:text-6xl lg:text-[4.25rem] font-black tracking-tight text-slate-900 leading-[1.08]">
                 {isHindi ? (
@@ -95,16 +102,16 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                   <ArrowRight size={16} />
                 </Link>
                 <Link 
-                  href={`/${lang}/features`} 
+                  href={`/${lang}/solutions`} 
                   className="bg-white text-slate-800 px-6 py-4 font-bold text-sm border border-slate-300 hover:border-slate-400 hover:bg-slate-50 transition-all flex items-center justify-center gap-2 rounded-md min-h-[48px]"
                 >
                   <Sparkles size={16} className="text-rose-600" />
-                  <span>{isHindi ? 'सभी 5 संगठन प्रकार देखें' : 'Explore 5 Movement Archetypes'}</span>
+                  <span>{isHindi ? 'सभी समाधान व ब्लूप्रिंट्स देखें' : 'Explore All Solutions & Blueprints'}</span>
                 </Link>
               </div>
 
               {/* Mobile-Friendly Micro-Proof Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-4 border-t border-slate-200/80 text-[11px] font-semibold text-slate-600 text-left">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-4 border-t border-slate-200 text-[11px] font-semibold text-slate-600 text-left">
                 <div className="flex items-center gap-1.5">
                   <Smartphone className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>100% Mobile & PWA</span>
@@ -126,10 +133,10 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
 
             {/* Right Column: Charismatic Activist Leader Anchor */}
             <div className="lg:col-span-5 flex flex-col items-center relative">
-              <div className="relative w-full max-w-md bg-gradient-to-b from-rose-50/60 via-slate-50/40 to-white border border-slate-200 rounded-xl p-4 sm:p-6 shadow-xs overflow-hidden">
+              <div className="relative w-full max-w-md bg-gradient-to-b from-slate-50 via-slate-50/50 to-white border border-slate-200 rounded-xl p-4 sm:p-6 shadow-xs overflow-hidden">
                 
                 {/* Background Tech Geometry */}
-                <div className="absolute top-0 right-0 w-32 h-32 border-b border-l border-rose-200/60 pointer-events-none" />
+                <div className="absolute top-0 right-0 w-32 h-32 border-b border-l border-slate-200 pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-24 h-24 border-t border-r border-slate-200 pointer-events-none" />
                 
                 {/* Main Leader Image */}
@@ -144,14 +151,16 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                   />
                 </div>
 
-                {/* Floating Live Ground Badges */}
+                {/* Ground Status Cards */}
                 <div className="absolute top-4 left-4 right-4 flex flex-col gap-2 pointer-events-none">
-                  <div className="bg-white/95 backdrop-blur-xs border border-amber-300 rounded p-2 text-left shadow-xs flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping shrink-0" />
+                  <div className="bg-white/95 backdrop-blur-xs border border-slate-300 rounded p-2 text-left shadow-xs flex items-center justify-between">
                     <div className="text-[10px] font-mono leading-tight">
-                      <strong className="text-amber-900 block">15-Day Statutory Countdown Active</strong>
+                      <strong className="text-slate-900 block">15-Day Statutory Countdown</strong>
                       <span className="text-slate-500">MCD Ward 42 • Diary No. 1492</span>
                     </div>
+                    <span className="text-[9px] font-mono font-bold bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded border border-amber-300">
+                      Live
+                    </span>
                   </div>
                 </div>
 
@@ -186,16 +195,13 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
-              <p className="text-rose-600 font-bold text-xs uppercase tracking-widest font-mono mb-2">
-                {isHindi ? 'जमीनी हकीकत' : 'Ground Reality vs Verbal Pleas'}
-              </p>
               <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900">
                 {isHindi ? 'भारतीय प्रशासनिक तंत्र में काम कैसे होता है?' : 'Why Verbal Complaints Fail & How Sangathan Forces Action'}
               </h2>
             </div>
             <p className="text-slate-500 max-w-md text-xs sm:text-sm leading-relaxed">
               {isHindi
-                ? 'सरकारी बाबू और निगम अधिकारी व्हाट्सएप ग्रुप की बातों को नजरअंदाज करते हैं। वे केवल लिखित, स्टैम्प्ड और वैधानिक रिकॉर्ड से डरते हैं।'
+                ? 'सरकारी बाबू और निगम अधिकारी मौखिक बातों को नजरअंदाज करते हैं। वे केवल लिखित, स्टैम्प्ड और वैधानिक रिकॉर्ड से जवाबदेह बनते हैं।'
                 : 'Babus and politicians ignore verbal pleas and casual tweets. They only act when faced with physical stamped receiving and statutory RTI penalties.'}
             </p>
           </div>
@@ -280,19 +286,19 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
         {/* 3. THE 5 MOVEMENT ARCHETYPES */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
           <div className="mb-12">
-            <p className="text-indigo-600 font-bold text-xs uppercase tracking-widest font-mono mb-2">
-              {isHindi ? 'संगठन प्रकार' : '5 Movement Archetypes'}
-            </p>
-            <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900">
+            <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900 mb-2">
               {isHindi ? 'हर प्रकार के नागरिक समूह के लिए समर्पित व्यवस्था' : 'Choose Your Battlefield & Launch Your Workspace'}
             </h2>
+            <p className="text-slate-600 text-sm">
+              {isHindi ? '5 मुख्य संगठन मॉडल और 20 विशेष कार्यक्षेत्र ब्लूप्रिंट्स।' : '5 movement archetypes and 20 specialized focus blueprints.'}
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             
             {/* 1. Civic Collectives */}
             <Link 
-              href={`/${lang}/features#civic_collective`} 
+              href={`/${lang}/solutions/civic-collective`} 
               className="bg-white border-2 border-rose-200 rounded-lg p-6 hover:border-rose-400 hover:shadow-xs transition-all flex flex-col justify-between"
             >
               <div>
@@ -300,9 +306,6 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                   <div className="w-10 h-10 bg-rose-50 text-rose-700 rounded flex items-center justify-center">
                     <Megaphone className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-mono font-bold bg-rose-100 text-rose-800 px-2 py-0.5 rounded">
-                    Unregistered Friendly
-                  </span>
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 mb-1">
                   {isHindi ? 'नागरिक समूह व जमीनी आंदोलन' : 'Civic Collectives & Movements'}
@@ -318,13 +321,13 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                 </ul>
               </div>
               <span className="text-xs font-bold text-rose-700 flex items-center gap-1">
-                Explore Civic Suite <ArrowRight size={14} />
+                Explore Civic Solutions <ArrowRight size={14} />
               </span>
             </Link>
 
             {/* 2. NGOs */}
             <Link 
-              href={`/${lang}/features#ngo`} 
+              href={`/${lang}/solutions/ngo`} 
               className="bg-white border border-slate-200 rounded-lg p-6 hover:border-emerald-300 hover:shadow-xs transition-all flex flex-col justify-between"
             >
               <div>
@@ -332,9 +335,6 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                   <div className="w-10 h-10 bg-emerald-50 text-emerald-700 rounded flex items-center justify-center">
                     <Building2 className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">
-                    Registered Trusts
-                  </span>
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 mb-1">
                   {isHindi ? 'पंजीकृत स्वयंसेवी संगठन (NGO)' : 'Registered NGOs & Trusts'}
@@ -350,13 +350,13 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                 </ul>
               </div>
               <span className="text-xs font-bold text-emerald-700 flex items-center gap-1">
-                Explore NGO Suite <ArrowRight size={14} />
+                Explore NGO Solutions <ArrowRight size={14} />
               </span>
             </Link>
 
             {/* 3. Student Unions */}
             <Link 
-              href={`/${lang}/features#student_union`} 
+              href={`/${lang}/solutions/student-union`} 
               className="bg-white border border-slate-200 rounded-lg p-6 hover:border-indigo-300 hover:shadow-xs transition-all flex flex-col justify-between"
             >
               <div>
@@ -364,9 +364,6 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                   <div className="w-10 h-10 bg-indigo-50 text-indigo-700 rounded flex items-center justify-center">
                     <GraduationCap className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-mono font-bold bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded">
-                    Campus & Youth
-                  </span>
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 mb-1">
                   {isHindi ? 'छात्र संघ व युवा संगठन' : 'Student Unions & Youth Fronts'}
@@ -382,13 +379,13 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                 </ul>
               </div>
               <span className="text-xs font-bold text-indigo-700 flex items-center gap-1">
-                Explore Student Suite <ArrowRight size={14} />
+                Explore Student Solutions <ArrowRight size={14} />
               </span>
             </Link>
 
             {/* 4. Workers Unions */}
             <Link 
-              href={`/${lang}/features#workers_union`} 
+              href={`/${lang}/solutions/workers-union`} 
               className="bg-white border border-slate-200 rounded-lg p-6 hover:border-amber-300 hover:shadow-xs transition-all flex flex-col justify-between"
             >
               <div>
@@ -396,9 +393,6 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                   <div className="w-10 h-10 bg-amber-50 text-amber-700 rounded flex items-center justify-center">
                     <HardHat className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-mono font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded">
-                    Labour & Gig
-                  </span>
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 mb-1">
                   {isHindi ? 'श्रमिक व ट्रेड यूनियन' : 'Workers & Trade Unions'}
@@ -414,13 +408,13 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                 </ul>
               </div>
               <span className="text-xs font-bold text-amber-700 flex items-center gap-1">
-                Explore Workers Suite <ArrowRight size={14} />
+                Explore Workers Solutions <ArrowRight size={14} />
               </span>
             </Link>
 
             {/* 5. RWAs */}
             <Link 
-              href={`/${lang}/features#rwa`} 
+              href={`/${lang}/solutions/rwa`} 
               className="bg-white border border-slate-200 rounded-lg p-6 hover:border-sky-300 hover:shadow-xs transition-all flex flex-col justify-between"
             >
               <div>
@@ -428,9 +422,6 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                   <div className="w-10 h-10 bg-sky-50 text-sky-700 rounded flex items-center justify-center">
                     <Home className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-mono font-bold bg-sky-100 text-sky-800 px-2 py-0.5 rounded">
-                    Societies & Colonies
-                  </span>
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 mb-1">
                   {isHindi ? 'रेजिडेंट वेलफेयर एसोसिएशन (RWA)' : 'Resident Welfare (RWA)'}
@@ -446,28 +437,27 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                 </ul>
               </div>
               <span className="text-xs font-bold text-sky-700 flex items-center gap-1">
-                Explore RWA Suite <ArrowRight size={14} />
+                Explore RWA Solutions <ArrowRight size={14} />
               </span>
             </Link>
 
-            {/* 6. Quick Start Box */}
-            <div className="bg-slate-900 text-white rounded-lg p-6 flex flex-col justify-between">
+            {/* 6. Quick Start Box (Clean, Light, Technical Design) */}
+            <div className="bg-slate-50 border border-slate-300 rounded-lg p-6 flex flex-col justify-between">
               <div>
-                <span className="text-[10px] font-mono text-rose-400 font-bold uppercase tracking-wider block mb-2">
-                  Zero Technical Barriers
-                </span>
-                <h3 className="text-lg font-bold mb-2">
-                  Ready to Start in 60 Seconds?
+                <h3 className="text-lg font-bold text-slate-900 mb-2">
+                  {isHindi ? '60 सेकंड में शुरू करें' : 'Ready in 60 Seconds'}
                 </h3>
-                <p className="text-xs text-slate-300 leading-relaxed mb-4">
-                  No server setups, no complex IT knowledge. Just select your organization focus, invite your members, and start organizing.
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  {isHindi
+                    ? 'कोई सर्वर सेटअप नहीं। बस अपना संगठन प्रकार चुनें, साथियों को आमंत्रित करें और जमीनी काम शुरू करें।'
+                    : 'No complex IT setups. Select your movement archetype, invite comrades, and deploy ground tools immediately.'}
                 </p>
               </div>
               <Link 
                 href={`/${lang}/login?tab=signup`} 
-                className="w-full bg-rose-600 hover:bg-rose-700 text-white py-3 rounded font-bold text-xs flex items-center justify-center gap-2 transition-colors min-h-[44px]"
+                className="w-full bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-md font-bold text-xs flex items-center justify-center gap-2 transition-colors min-h-[44px]"
               >
-                <span>Launch Workspace</span>
+                <span>{isHindi ? 'नया संगठन शुरू करें' : 'Launch Workspace'}</span>
                 <ArrowRight size={14} />
               </Link>
             </div>
@@ -479,12 +469,12 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
         <section className="py-20 border-t border-slate-200 bg-slate-50/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-12">
-              <p className="text-indigo-600 font-bold text-xs uppercase tracking-widest font-mono mb-2">
-                {isHindi ? 'प्लेटफ़ॉर्म मॉड्यूल' : 'Platform Engineering'}
-              </p>
-              <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900">
+              <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900 mb-2">
                 {isHindi ? 'पूर्ण संप्रभु व सुरक्षित बुनियादी ढांचा' : 'Built for Sovereign Data & High-Stakes Governance'}
               </h2>
+              <p className="text-slate-600 text-sm">
+                {isHindi ? 'लोकतांत्रिक पारदर्शिता, अपरिवर्तनीय ऑडिट लॉग्स और पूर्ण डेटा स्वायत्तता।' : 'Democratic transparency, immutable audit logs, and complete data autonomy.'}
+              </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -512,9 +502,6 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="text-rose-600 font-bold text-xs uppercase tracking-widest font-mono mb-2">
-                {isHindi ? 'भारतीय संदर्भ' : 'Built for Indian Ground Reality'}
-              </p>
               <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900 mb-4">
                 {isHindi ? 'भारतीय प्रशासनिक व सामाजिक संरचनाओं के अनुरूप' : 'Engineered for Indian Wards, Bastis & Campuses'}
               </h2>
@@ -564,12 +551,11 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
           </div>
         </section>
 
-        {/* 6. WHAT'S NEW V1.42.0 */}
+        {/* 6. LATEST GROUND RELEASE */}
         <section className="py-16 border-t border-b border-slate-200 bg-slate-50/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <p className="text-rose-600 font-bold text-xs font-mono mb-1">v1.42.0 UPDATE</p>
                 <h2 className="text-2xl font-black tracking-tight text-slate-900">
                   {isHindi ? 'हालिया सुविधाएं (दिल्ली सांस मॉडल)' : 'Latest Ground Features (Delhi Saans Model)'}
                 </h2>
@@ -614,8 +600,8 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
 
         {/* 7. FINAL CALL TO ACTION - Light, Crisp, Geometric Technical Design */}
         <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
-          <div className="border-2 border-slate-900 p-8 sm:p-14 bg-white rounded-lg space-y-6 shadow-sm">
-            <div className="w-12 h-12 bg-rose-50 text-rose-700 rounded-full mx-auto flex items-center justify-center">
+          <div className="border border-slate-300 p-8 sm:p-14 bg-slate-50 rounded-xl space-y-6 shadow-xs">
+            <div className="w-12 h-12 bg-white border border-slate-200 text-slate-800 rounded-lg mx-auto flex items-center justify-center shadow-2xs">
               <Megaphone className="w-6 h-6" />
             </div>
             
@@ -632,14 +618,14 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link 
                 href={`/${lang}/login?tab=signup`} 
-                className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 font-bold text-xs sm:text-sm transition-colors rounded shadow-xs min-h-[48px] flex items-center justify-center gap-2"
+                className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 font-bold text-xs sm:text-sm transition-colors rounded-md shadow-xs min-h-[48px] flex items-center justify-center gap-2"
               >
                 <span>{isHindi ? 'संगठन शुरू करें (100% निःशुल्क)' : 'Start Your Collective (100% Free)'}</span>
                 <ArrowRight size={16} />
               </Link>
               <Link 
                 href={`/${lang}/docs`} 
-                className="w-full sm:w-auto bg-white text-slate-900 px-6 py-4 font-bold text-xs sm:text-sm border border-slate-300 hover:border-slate-400 hover:bg-slate-50 transition-colors rounded min-h-[48px] flex items-center justify-center"
+                className="w-full sm:w-auto bg-white text-slate-900 px-6 py-4 font-bold text-xs sm:text-sm border border-slate-300 hover:border-slate-400 hover:bg-slate-50 transition-colors rounded-md min-h-[48px] flex items-center justify-center"
               >
                 {isHindi ? 'दस्तावेज़ पढ़ें' : 'Read Documentation'}
               </Link>

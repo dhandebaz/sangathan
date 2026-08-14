@@ -132,12 +132,6 @@ export default async function CompetitorComparisonPage({ params }: ComparisonPag
             
             {/* Left Column: Comparison Focus */}
             <div className="lg:col-span-7 text-center lg:text-left space-y-6">
-              
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 border border-slate-300 rounded text-slate-800 text-[11px] sm:text-xs font-bold uppercase tracking-wider font-mono">
-                <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
-                <span>Sangathan vs {comp.competitorName} • {isHindi ? 'विस्तृत विश्लेषण' : 'In-Depth Analysis'}</span>
-              </div>
-
               <h1 className="text-3xl sm:text-5xl lg:text-[3.5rem] font-black tracking-tight text-slate-900 leading-[1.08]">
                 {isHindi ? comp.heroHeadlineHi : comp.heroHeadlineEn}
               </h1>
@@ -197,12 +191,14 @@ export default async function CompetitorComparisonPage({ params }: ComparisonPag
                 </div>
 
                 <div className="absolute top-4 left-4 right-4 flex flex-col gap-2 pointer-events-none">
-                  <div className="bg-white/95 backdrop-blur-xs border border-slate-300 rounded p-2 text-left shadow-xs flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
+                  <div className="bg-white/95 backdrop-blur-xs border border-slate-300 rounded p-2 text-left shadow-xs flex items-center justify-between">
                     <div className="text-[10px] font-mono leading-tight">
                       <strong className="text-slate-900 block">Sangathan vs {comp.competitorName}</strong>
                       <span className="text-slate-500">{isHindi ? 'नागरिक संप्रभुता बनाम कॉरपोरेट SaaS' : 'Civic Sovereignty vs Closed SaaS'}</span>
                     </div>
+                    <span className="text-[9px] font-mono font-bold bg-indigo-100 text-indigo-900 px-1.5 py-0.5 rounded border border-indigo-300">
+                      Comparison
+                    </span>
                   </div>
                 </div>
 
@@ -236,9 +232,6 @@ export default async function CompetitorComparisonPage({ params }: ComparisonPag
         {/* 2. SUMMARY VERDICT */}
         <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
           <div className="bg-slate-50 border border-slate-200 rounded-2xl p-8 sm:p-10">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-indigo-600 mb-2 block">
-              {isHindi ? 'निष्कर्ष व मुख्य अंतर' : 'Executive Verdict & Core Difference'}
-            </span>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mb-4">
               {isHindi ? 'संगठन क्यों बेहतर विकल्प है?' : `The Verdict: Sangathan vs ${comp.competitorName}`}
             </h2>

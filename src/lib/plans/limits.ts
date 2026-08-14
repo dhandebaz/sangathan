@@ -5,6 +5,7 @@ import {
   PlanPeriod,
   PlanTier,
   PLAN_TIERS,
+  BASE_SUSTAINER_MEMBERS,
   getPlanDetails,
   OrgPlanUsage,
 } from './config'
@@ -34,17 +35,23 @@ export async function checkMemberLimit(
     return { allowed: true, currentCount: 0, maxAllowed: 20, planName: 'Community' }
   }
 
-  // 1. Fetch Org Plan
+  // 1. Fetch Org Plan and Capabilities
   const { data: org } = await supabase
     .from('organisations')
-    .select('plan_name')
+    .select('plan_name, capabilities')
     .eq('id', orgId)
     .single()
 
   const planName = (org?.plan_name || 'Community') as PlanName
   const tier = getPlanDetails(planName)
+  const caps = (org?.capabilities as Record<string, unknown>) || {}
+  const additionalSlots = typeof caps.additional_member_slots === 'number' ? Math.max(0, caps.additional_member_slots) : 0
 
-  // 2. Fetch Active Members Count from both members table and active profiles
+  const maxAllowed = planName === 'Institution' 
+    ? BASE_SUSTAINER_MEMBERS + additionalSlots 
+    : tier.maxMembers
+
+  // 2. Fetch Active Members Count from both members table and pending active invites
   const [membersRes, invitesRes] = await Promise.all([
     supabase
       .from('members')
@@ -63,16 +70,16 @@ export async function checkMemberLimit(
   const pendingInvites = invitesRes.count || 0
   const totalAllocated = activeMembers + pendingInvites
 
-  if (totalAllocated + additionalCount > tier.maxMembers) {
+  if (totalAllocated + additionalCount > maxAllowed) {
     const isCommunity = planName === 'Community'
     const errorMsg = isCommunity
-      ? `Community Access capacity reached (${activeMembers}/${tier.maxMembers} member slots used). You can increase your contribution to Sustainer Access to expand member capacity and help sustain the platform for smaller collectives.`
-      : `${tier.name} capacity reached (${activeMembers}/${tier.maxMembers} member slots used). Please contact support to expand capacity for your organization.`
+      ? `Community Access capacity reached (${activeMembers}/${maxAllowed} member slots used). You can increase your contribution to Sustainer Access (500 member slots included) to expand capacity.`
+      : `Sustainer Access capacity reached (${activeMembers}/${maxAllowed} member slots used). You can easily expand your capacity for ₹11/cadre/month in Org Settings & Billing.`
 
     return {
       allowed: false,
       currentCount: totalAllocated,
-      maxAllowed: tier.maxMembers,
+      maxAllowed,
       planName,
       error: errorMsg,
     }
@@ -81,7 +88,7 @@ export async function checkMemberLimit(
   return {
     allowed: true,
     currentCount: totalAllocated,
-    maxAllowed: tier.maxMembers,
+    maxAllowed,
     planName,
   }
 }
@@ -101,6 +108,7 @@ export async function getOrgPlanUsage(orgId: string): Promise<OrgPlanUsage> {
       whitelabelEnabled: false,
       memberCount: 0,
       maxMembers: tier.maxMembers,
+      additionalSlots: 0,
       memberUsagePercentage: 0,
       isNearMemberLimit: false,
       isAtMemberLimit: false,
@@ -110,7 +118,7 @@ export async function getOrgPlanUsage(orgId: string): Promise<OrgPlanUsage> {
   const [{ data: org }, { count: memberCount }] = await Promise.all([
     supabase
       .from('organisations')
-      .select('plan_name, plan_period, plan_expires_at, plan_status, whitelabel_enabled')
+      .select('plan_name, plan_period, plan_expires_at, plan_status, whitelabel_enabled, capabilities')
       .eq('id', orgId)
       .single(),
     supabase
@@ -122,10 +130,13 @@ export async function getOrgPlanUsage(orgId: string): Promise<OrgPlanUsage> {
 
   const planName = (org?.plan_name || 'Community') as PlanName
   const tier = getPlanDetails(planName)
+  const caps = (org?.capabilities as Record<string, unknown>) || {}
+  const additionalSlots = typeof caps.additional_member_slots === 'number' ? Math.max(0, caps.additional_member_slots) : 0
+  const maxMembers = planName === 'Institution' ? BASE_SUSTAINER_MEMBERS + additionalSlots : tier.maxMembers
+
   const currentMembers = memberCount || 0
-  const maxMembers = tier.maxMembers
   const memberUsagePercentage = Math.min(100, Math.round((currentMembers / maxMembers) * 100))
-  const isNearMemberLimit = memberUsagePercentage >= 80 && planName === 'Community'
+  const isNearMemberLimit = memberUsagePercentage >= 80
   const isAtMemberLimit = currentMembers >= maxMembers
 
   return {
@@ -137,6 +148,7 @@ export async function getOrgPlanUsage(orgId: string): Promise<OrgPlanUsage> {
     whitelabelEnabled: org?.whitelabel_enabled ?? false,
     memberCount: currentMembers,
     maxMembers,
+    additionalSlots,
     memberUsagePercentage,
     isNearMemberLimit,
     isAtMemberLimit,

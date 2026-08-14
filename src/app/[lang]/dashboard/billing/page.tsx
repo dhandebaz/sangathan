@@ -93,7 +93,7 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
       </div>
 
       {/* Hero Overview Card */}
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
+      <div className="rounded-xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {/* Plan Status */}
           <div className="space-y-1 md:border-r md:border-slate-100 pr-4">

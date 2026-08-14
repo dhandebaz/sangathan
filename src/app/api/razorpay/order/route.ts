@@ -18,7 +18,16 @@ export async function POST(request: Request) {
     })
 
     const body = await request.json()
-    const { amount, receipt, currency = 'INR', orgId, planName, planPeriod = 'one_time' } = body
+    const { 
+      amount, 
+      receipt, 
+      currency = 'INR', 
+      orgId, 
+      planName, 
+      planPeriod = 'one_time',
+      additionalSlots = 0,
+      targetMemberCount = 0,
+    } = body
 
     const numAmount = Number(amount)
     if (isNaN(numAmount) || numAmount < 1) {
@@ -35,6 +44,8 @@ export async function POST(request: Request) {
         orgId: orgId || '',
         planName: planName || 'Community',
         planPeriod: planPeriod || 'one_time',
+        additionalSlots: String(additionalSlots || 0),
+        targetMemberCount: String(targetMemberCount || 0),
       },
     }
 

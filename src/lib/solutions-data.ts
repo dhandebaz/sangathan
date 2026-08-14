@@ -361,8 +361,8 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
       {
         questionEn: 'Is Sangathan completely free for grassroots groups?',
         questionHi: 'क्या संगठन जमीनी समूहों के लिए पूरी तरह निःशुल्क है?',
-        answerEn: 'Yes. Under our 2-tier Civic Solidarity model, the Community Tier is ₹0 Forever for all grassroots collectives, informal groups, and community volunteers up to 20 core leaders with unlimited public supporters.',
-        answerHi: 'हाँ। हमारे नागरिक एकजुटता मॉडल के तहत, कम्युनिटी टियर सभी जमीनी समूहों, कार्यकर्ताओं और 20 कोर सदस्यों के लिए हमेशा ₹0 (पूर्णतः निःशुल्क) है।'
+        answerEn: 'Yes. Under our 2-tier Civic Solidarity model, the Community Tier is ₹0 Forever for all grassroots collectives, informal groups, and community volunteers up to 20 core leaders with unlimited public supporters and petition signers. For scaling movements, Sustainer Access provides 500 active cadre slots at ₹1,000/mo with transparent ₹11/cadre/month capacity expansion.',
+        answerHi: 'हाँ। हमारे नागरिक एकजुटता मॉडल के तहत, कम्युनिटी टियर सभी जमीनी समूहों, कार्यकर्ताओं और 20 कोर सदस्यों के लिए हमेशा ₹0 (पूर्णतः निःशुल्क) है। बड़े आंदोलनों के लिए संरक्षक योजना 500 सक्रिय काडर ₹1,000/माह में देती है और अतिरिक्त काडर केवल ₹11/माह पर बढ़ते हैं।'
       },
       {
         questionEn: 'Does Sangathan work offline in zero-connectivity field conditions?',
@@ -621,6 +621,12 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
       }
     ],
     faqs: [
+      {
+        questionEn: 'How does pricing work for registered NGOs and trusts?',
+        questionHi: 'पंजीकृत एनजीओ और ट्रस्टों के लिए मूल्य निर्धारण कैसे काम करता है?',
+        answerEn: 'NGOs can start on the Community Tier (₹0 / voluntary) or access the Sustainer Plan for ₹1,000/month (or ₹10,000/year) which includes 500 active staff/volunteer slots, Sangathan AI intelligence, and scalable expansion at ₹11/member/month.',
+        answerHi: 'एनजीओ कम्युनिटी टियर (₹0 स्वैच्छिक) से शुरुआत कर सकते हैं या संरक्षक योजना (₹1,000/माह या ₹10,000/वर्ष) चुन सकते हैं जिसमें 500 सक्रिय स्टाफ/स्वयंसेवक स्लॉट, संगठन AI और ₹11/अतिरिक्त सदस्य का पारदर्शी पैमाना शामिल है।'
+      },
       {
         questionEn: 'How does Sangathan help with NGO audit compliance?',
         questionHi: 'संगठन एनजीओ ऑडिट अनुपालन में कैसे मदद करता है?',
@@ -885,6 +891,12 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
         questionHi: 'क्या संगठन का उपयोग विभागीय चुनावों के लिए किया जा सकता है?',
         answerEn: 'Yes. Sangathan supports elections at every scale, from small departmental student councils (50 voters) to university-wide presidential elections (50,000+ voters).',
         answerHi: 'हाँ। संगठन छोटे विभागीय छात्र संघों से लेकर 50,000+ छात्रों वाले केंद्रीय विश्वविद्यालय चुनावों तक सभी स्तरों पर काम करता है।'
+      },
+      {
+        questionEn: 'Is Sangathan free for university student unions and candidate panels?',
+        questionHi: 'क्या छात्र संघों व पैनलों के लिए संगठन निःशुल्क है?',
+        answerEn: 'Yes! Student panels and independent unions can use Sangathan for ₹0 Forever on the Community Tier (up to 20 elected council leaders with unlimited voting students and petition signers). Sustainer access provides 500 active council slots at ₹1,000/mo.',
+        answerHi: 'हाँ! छात्र पैनल और स्वतंत्र यूनियन कम्युनिटी टियर पर हमेशा ₹0 में उपयोग कर सकते हैं (20 निर्वाचित पदाधिकारी, असीमित छात्र मतदाता व समर्थक)।'
       }
     ]
   },
@@ -1139,6 +1151,12 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
         questionHi: 'संगठन फॉर्म H रिटर्न कैसे तैयार करता है?',
         answerEn: 'Sangathan automatically aggregates all monthly member levy payments, expenditures, and asset additions into the exact format prescribed by the State Registrar of Trade Unions under Form H.',
         answerHi: 'संगठन पूरे साल के चंदे, खर्च और संपत्ति के ब्योरे को ट्रेड यूनियन एक्ट के तहत निर्धारित फॉर्म H प्रारूप में स्वतः तैयार करता है।'
+      },
+      {
+        questionEn: 'How does cadre pricing scale for large factory units and gig-worker federations?',
+        questionHi: 'फैक्ट्री यूनिटों और गिग-वर्कर महासंघों के लिए सदस्यता क्षमता कैसे बढ़ती है?',
+        answerEn: 'Unions start free with 20 delegate seats on the Community Tier. For growing shop-floor units and federations, Sustainer Access provides 500 active union delegates for ₹1,000/mo, expanding at ₹11/delegate/month. Strike authorization voters and solidarity signers are completely unlimited.',
+        answerHi: 'यूनियन 20 प्रतिनिधि सीटों के साथ निःशुल्क शुरू कर सकती हैं। बड़े महासंघों के लिए संरक्षक योजना ₹1,000/माह में 500 सक्रिय प्रतिनिधि देती है (₹11/अतिरिक्त प्रतिनिधि/माह)। हड़ताल समर्थक व आम श्रमिक असीमित संख्या में भाग ले सकते हैं।'
       }
     ]
   },
@@ -1390,8 +1408,8 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
       {
         questionEn: 'How does Sangathan differ from MyGate, ADDA, or NobrokerHood?',
         questionHi: 'संगठन अन्य कमर्शियल गेट ऐप (जैसे MyGate, ADDA) से कैसे अलग है?',
-        answerEn: 'Commercial apps monetize resident phone numbers with advertisements and charge expensive per-flat monthly fees. Sangathan is built by a non-profit foundation (BQF) with zero ads, zero data harvesting, and a ₹0 Forever Community Tier for resident collectives.',
-        answerHi: 'कमर्शियल ऐप निवासियों को विज्ञापन दिखाते हैं और उनका डेटा बेचते हैं। संगठन एक गैर-लाभकारी पहल है जो 100% विज्ञापन-मुक्त है, कभी डेटा नहीं बेचती और जमीनी समूहों के लिए ₹0 निःशुल्क टियर देती है।'
+        answerEn: 'Commercial apps monetize resident phone numbers with advertisements and charge expensive per-flat monthly fees. Sangathan is built by a non-profit foundation (BQF) with zero ads, zero data harvesting, and a ₹0 Forever Community Tier for resident collectives (up to 20 committee members, unlimited resident voters). Sustainer access covers 500 active units/cadres for ₹1,000/mo with ₹11/unit scaling.',
+        answerHi: 'कमर्शियल ऐप निवासियों को विज्ञापन दिखाते हैं और उनका डेटा बेचते हैं। संगठन 100% विज्ञापन-मुक्त है, कभी डेटा नहीं बेचती और सोसायटियों के लिए ₹0 निःशुल्क कम्युनिटी टियर (20 समिति सदस्य, असीमित निवासी मतदाता) तथा 500 फ्लैटों के लिए ₹1,000/माह संरक्षक टियर (₹11/अतिरिक्त फ्लैट) देती है।'
       }
     ]
   }

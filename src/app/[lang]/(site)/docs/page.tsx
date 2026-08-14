@@ -68,8 +68,7 @@ export default async function DocsIndex({ params }: { params: Promise<{ lang: st
     <div className="max-w-5xl">
       <section className="border-b border-slate-200 pb-10">
         <div className="max-w-3xl">
-          <p className="mb-3 text-sm font-bold uppercase tracking-[0.16em] text-orange-700">{isHindi ? 'संगठन हैंडबुक' : 'Sangathan handbook'}</p>
-          <h1 className="text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">{isHindi ? 'उत्तर खोजें और आगे बढ़ते रहें।' : 'Find an answer and keep moving.'}</h1>
+          <h1 className="text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">{isHindi ? 'उत्तर खोजें और आगे बढ़ते रहें।' : 'Find an answer and keep moving.'}</h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
             {isHindi ? 'ग्राहक सहायता की प्रतीक्षा किए बिना संगठन को स्थापित करने, संचालित करने, शासन करने और समस्या निवारण के लिए व्यावहारिक मार्गदर्शन।' : 'Practical guidance for setting up, operating, governing, and troubleshooting Sangathan without waiting for customer support.'}
           </p>

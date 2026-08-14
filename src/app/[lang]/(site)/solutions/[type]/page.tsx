@@ -149,12 +149,6 @@ export default async function SolutionOrgTypePage({ params }: SolutionPageProps)
             {/* Left Column: Mission & Core Value */}
             <div className="lg:col-span-7 text-center lg:text-left space-y-6">
               
-              {/* Category Indicator */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 border border-slate-300 rounded text-slate-800 text-[11px] sm:text-xs font-bold uppercase tracking-wider font-mono">
-                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-                <span>{isHindi ? solution.categoryBadgeHi : solution.categoryBadgeEn}</span>
-              </div>
-
               {/* Main Headline */}
               <h1 className="text-4xl sm:text-5xl lg:text-[3.75rem] font-black tracking-tight text-slate-900 leading-[1.08]">
                 {isHindi ? solution.heroHeadlineHi : solution.heroHeadlineEn}
@@ -223,14 +217,16 @@ export default async function SolutionOrgTypePage({ params }: SolutionPageProps)
                   />
                 </div>
 
-                {/* Live Ground Status Badges */}
+                {/* Ground Status Cards */}
                 <div className="absolute top-4 left-4 right-4 flex flex-col gap-2 pointer-events-none">
-                  <div className="bg-white/95 backdrop-blur-xs border border-slate-300 rounded p-2 text-left shadow-xs flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
+                  <div className="bg-white/95 backdrop-blur-xs border border-slate-300 rounded p-2 text-left shadow-xs flex items-center justify-between">
                     <div className="text-[10px] font-mono leading-tight">
                       <strong className="text-slate-900 block">{isHindi ? 'सत्यापित आंदोलन अवसंरचना' : 'Verified Movement Infrastructure'}</strong>
                       <span className="text-slate-500">{isHindi ? solution.titleHi : solution.titleEn}</span>
                     </div>
+                    <span className="text-[9px] font-mono font-bold bg-emerald-100 text-emerald-900 px-1.5 py-0.5 rounded border border-emerald-300">
+                      Active
+                    </span>
                   </div>
                 </div>
 
@@ -295,9 +291,6 @@ export default async function SolutionOrgTypePage({ params }: SolutionPageProps)
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-indigo-600 mb-2 block">
-                {isHindi ? 'विशिष्ट कार्यक्षेत्र ब्लूप्रिंट्स' : 'Specialized Focus Blueprints'}
-              </span>
               <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
                 {isHindi ? 'अपने कार्यक्षेत्र का ब्लूप्रिंट चुनें' : 'Tailored for Your Exact Ground Focus'}
               </h2>
@@ -385,9 +378,6 @@ export default async function SolutionOrgTypePage({ params }: SolutionPageProps)
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
           <div className="bg-slate-50 border border-slate-200 rounded-2xl p-8 sm:p-12">
             <div className="max-w-3xl mb-8">
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-indigo-600 mb-2 block">
-                {isHindi ? 'भारतीय विधिक ढांचा' : 'Indian Statutory Framework'}
-              </span>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-3">
                 {isHindi ? 'कानूनी अनुपालन व ऑडिट सुरक्षा' : 'Legal Compliance & Audit Shield'}
               </h2>

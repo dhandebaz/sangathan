@@ -10,7 +10,8 @@ export interface PlanTier {
   suggestedContributionYearly: number
   priceMonthly: number
   priceYearly: number
-  maxMembers: number
+  maxMembers: number // Base included member slots
+  additionalMemberPricePerMonth: number // ₹ per additional user beyond base
   maxStorageMb: number
   aiEnabled: boolean
   maxAiRequestsPerMonth: number
@@ -23,6 +24,8 @@ export interface PlanTier {
 }
 
 export const COMMUNITY_CONTRIBUTION_PRESETS = [5, 10, 50, 100, 500] as const
+export const BASE_SUSTAINER_MEMBERS = 500
+export const ADDITIONAL_MEMBER_PRICE_PER_MONTH = 11
 
 export const PLAN_TIERS: Record<PlanName, PlanTier> = {
   Community: {
@@ -35,6 +38,7 @@ export const PLAN_TIERS: Record<PlanName, PlanTier> = {
     priceMonthly: 0,
     priceYearly: 0,
     maxMembers: 20,
+    additionalMemberPricePerMonth: 0,
     maxStorageMb: 500,
     aiEnabled: false,
     maxAiRequestsPerMonth: 0,
@@ -43,7 +47,7 @@ export const PLAN_TIERS: Record<PlanName, PlanTier> = {
     descriptionEn: 'Voluntary one-time contribution of your choice. Built for grassroots collectives, civic campaigns, independent student cells, and mutual-aid groups.',
     descriptionHi: 'आपकी पसंद का एकमुश्त स्वैच्छिक योगदान। जमीनी नागरिक समूहों, छात्र इकाइयों, अभियानों और आपसी-सहायता समूहों के लिए निर्मित।',
     featuresEn: [
-      'Up to 20 active member & volunteer slots',
+      'Up to 20 active member & volunteer slots included',
       'BQF AI Verification & Recognized Civic Collective status (CIN: U88900DL2025NPL452474)',
       'AI Government Representation Letter Generator & Official Printouts',
       'All core democratic & governance tools',
@@ -53,7 +57,7 @@ export const PLAN_TIERS: Record<PlanName, PlanTier> = {
       'Public Petitions & Verified Member Badges',
     ],
     featuresHi: [
-      '20 सक्रिय सदस्य और स्वयंसेवक स्लॉट तक',
+      '20 सक्रिय सदस्य और स्वयंसेवक स्लॉट शामिल',
       'BQF AI सत्यापन और मान्यता प्राप्त नागरिक मंच स्थिति (CIN: U88900DL2025NPL452474)',
       'AI सरकारी प्रतिवेदन पत्र जनरेटर और आधिकारिक प्रिंटआउट',
       'सभी मुख्य लोकतांत्रिक और शासन उपकरण',
@@ -72,16 +76,17 @@ export const PLAN_TIERS: Record<PlanName, PlanTier> = {
     suggestedContributionYearly: 10000, // 2 months subsidized
     priceMonthly: 1000,
     priceYearly: 10000,
-    maxMembers: 100000, // Unlimited
+    maxMembers: 500, // 500 base active cadres included
+    additionalMemberPricePerMonth: 11, // ₹11 per extra user per month beyond 500
     maxStorageMb: 50000,
     aiEnabled: true,
     maxAiRequestsPerMonth: 1000,
     multiOrg: true,
     whiteLabelIncluded: false,
-    descriptionEn: 'Suggested ₹1,000/month (Pay what you can). For scaling NGOs, registered unions, and established associations sustaining civic infrastructure.',
-    descriptionHi: 'सुझाया गया योगदान: ₹1,000/माह (क्षमता अनुसार योगदान करें)। बढ़ते एनजीओ, पंजीकृत संघों और नागरिक बुनियादी ढांचे को बनाए रखने वाले संस्थानों के लिए।',
+    descriptionEn: 'Suggested ₹1,000/month (Pay what you can). 500 active cadres included, with scale capacity at ₹11/member/month.',
+    descriptionHi: 'सुझाया गया योगदान: ₹1,000/माह (क्षमता अनुसार योगदान)। 500 सक्रिय काडर शामिल, बड़े पैमाने के लिए ₹11/सदस्य/माह।',
     featuresEn: [
-      'Unlimited members & cadre capacity',
+      '500 active cadre & member slots included (Scale at ₹11/cadre/mo)',
       'Sangathan AI Intelligence Suite (Minutes, Triage, Grants & Analysis)',
       'Multi-chapter / Multi-collective management with Admin controls',
       'Advanced analytics, custom filters & full data export',
@@ -90,7 +95,7 @@ export const PLAN_TIERS: Record<PlanName, PlanTier> = {
       'Priority email & organizational onboarding assistance',
     ],
     featuresHi: [
-      'असीमित सदस्य और काडर क्षमता',
+      '500 सक्रिय काडर और सदस्य स्लॉट शामिल (₹11/काडर/माह पर विस्तार योग्य)',
       'संगठन AI बुद्धिमत्ता सुइट (कार्यवृत्त, ट्राइएज, अनुदान और विश्लेषण)',
       'व्यवस्थापक नियंत्रण के साथ बहु-शाखा / बहु-सामूहिक प्रबंधन',
       'उन्नत विश्लेषिकी, कस्टम फ़िल्टर और पूर्ण डेटा निर्यात',
@@ -114,6 +119,51 @@ export function getPlanDetails(planName?: string | null): PlanTier {
   return PLAN_TIERS[normalized] || PLAN_TIERS.Community
 }
 
+/**
+ * Calculates accurate monthly/annual cost based on requested member count
+ */
+export function calculateSustainerPricing(
+  memberCount: number,
+  billingCycle: 'monthly' | 'yearly' = 'monthly'
+): {
+  baseMembers: number
+  extraMembers: number
+  basePrice: number
+  extraPrice: number
+  totalPrice: number
+  monthlyEquivalent: number
+} {
+  const baseMembers = BASE_SUSTAINER_MEMBERS // 500
+  const extraMembers = Math.max(0, memberCount - baseMembers)
+  
+  if (billingCycle === 'yearly') {
+    const basePrice = PLAN_TIERS.Institution.priceYearly // 10,000
+    // Yearly extra members get 2 months discount (10 months billing)
+    const extraPrice = extraMembers * ADDITIONAL_MEMBER_PRICE_PER_MONTH * 10
+    const totalPrice = basePrice + extraPrice
+    return {
+      baseMembers,
+      extraMembers,
+      basePrice,
+      extraPrice,
+      totalPrice,
+      monthlyEquivalent: Math.round(totalPrice / 12),
+    }
+  }
+
+  const basePrice = PLAN_TIERS.Institution.priceMonthly // 1,000
+  const extraPrice = extraMembers * ADDITIONAL_MEMBER_PRICE_PER_MONTH
+  const totalPrice = basePrice + extraPrice
+  return {
+    baseMembers,
+    extraMembers,
+    basePrice,
+    extraPrice,
+    totalPrice,
+    monthlyEquivalent: totalPrice,
+  }
+}
+
 export interface OrgPlanUsage {
   planName: PlanName
   planTier: PlanTier
@@ -123,8 +173,8 @@ export interface OrgPlanUsage {
   whitelabelEnabled: boolean
   memberCount: number
   maxMembers: number
+  additionalSlots: number
   memberUsagePercentage: number
   isNearMemberLimit: boolean
   isAtMemberLimit: boolean
 }
-

@@ -29,6 +29,48 @@ interface StatutoryFramework {
 }
 
 const STATUTORY_DATA: Record<string, StatutoryFramework> = {
+  civic_collective: {
+    primaryActs: [
+      {
+        name: { en: 'Constitution of India — Article 19(1)(c): Right to Form Associations', hi: 'भारत का संविधान — अनुच्छेद 19(1)(c): संघ बनाने का अधिकार' },
+        authority: { en: 'Fundamental Right — Supreme Court of India', hi: 'मौलिक अधिकार — भारत का सर्वोच्च न्यायालय' },
+        description: { en: 'Constitutional guarantee of citizens\' right to form associations and unions, subject to reasonable restrictions under Article 19(4).', hi: 'अनुच्छेद 19(4) के तहत उचित प्रतिबंधों के अधीन नागरिकों को संघ बनाने का संवैधानिक गारंटी।' },
+        link: 'https://legislative.gov.in/constitution-of-india/',
+      },
+      {
+        name: { en: 'Right to Information Act, 2005 (RTI)', hi: 'सूचना का अधिकार अधिनियम, 2005 (RTI)' },
+        authority: { en: 'Central Information Commission (CIC)', hi: 'केंद्रीय सूचना आयोग (CIC)' },
+        description: { en: 'Empowers citizens to access government information. Civic collectives can file RTI applications to hold public authorities accountable.', hi: 'नागरिकों को सरकारी जानकारी तक पहुंचने का अधिकार देता है। नागरिक समूह सार्वजनिक प्राधिकरणों को जवाबदेह ठहराने के लिए RTI आवेदन दाखिल कर सकते हैं।' },
+        link: 'https://rtionline.gov.in/',
+      },
+      {
+        name: { en: 'Gram Sabha & Ward Sabha Provisions (Panchayati Raj / Municipal Acts)', hi: 'ग्राम सभा व वार्ड सभा प्रावधान (पंचायती राज / नगरपालिका अधिनियम)' },
+        authority: { en: 'State Panchayati Raj / Urban Local Bodies', hi: 'राज्य पंचायती राज / शहरी स्थानीय निकाय' },
+        description: { en: 'Citizens have statutory right to participate in Gram Sabha / Ward Sabha meetings for local governance and budget allocation oversight.', hi: 'नागरिकों को स्थानीय शासन और बजट आवंटन निगरानी के लिए ग्राम सभा / वार्ड सभा बैठकों में भाग लेने का वैधानिक अधिकार है।' },
+        link: 'https://panchayat.gov.in/',
+      },
+    ],
+    docSlug: 'civic-collective-playbook',
+    docTitle: { en: 'Civic Collective & Grassroots Handbook', hi: 'नागरिक समूह व जमीनी संगठन हैंडबुक' },
+    keyProvisions: [
+      { en: 'No statutory registration required. Civic collectives operate as informal associations under constitutional freedom of association.', hi: 'कोई वैधानिक पंजीकरण आवश्यक नहीं। नागरिक समूह संघ बनाने की संवैधानिक स्वतंत्रता के तहत अनौपचारिक संगठनों के रूप में कार्य करते हैं।' },
+      { en: 'Can upgrade to formal registration (Society/Trust/Section 8) via BQF umbrella recognition for access to bank accounts and grant eligibility.', hi: 'बैंक खातों और अनुदान पात्रता तक पहुंच के लिए BQF छत्र मान्यता के माध्यम से औपचारिक पंजीकरण (सोसायटी/ट्रस्ट/धारा 8) में अपग्रेड कर सकते हैं।' },
+      { en: 'RTI applications, public hearings (jan sunwai), and social audit participation are key tools for civic accountability.', hi: 'RTI आवेदन, सार्वजनिक सुनवाई (जन सुनवाई), और सामाजिक ऑडिट भागीदारी नागरिक जवाबदेही के प्रमुख उपकरण हैं।' },
+      { en: 'BQF Recognition: Bajrang Queer Foundation (BQF) Section 8 umbrella provides formal recognition for civic collectives seeking grant access and legal entity status.', hi: 'BQF मान्यता: बजरंग क्वीयर फाउंडेशन (BQF) सेक्शन 8 छत्र मान्यता नागरिक समूहों को अनुदान पहुंच और कानूनी entidad status के लिए औपचारिक मान्यता प्रदान करती है।' },
+    ],
+    templates: [
+      {
+        title: { en: 'RTI Application Format (Hindi/English)', hi: 'RTI आवेदन प्रारूप (हिन्दी/अंग्रेज़ी)' },
+        description: { en: 'Standardized Right to Information application format with proper addressing, fee details, and first appeal instructions.', hi: 'उचित पता, शुल्क विवरण और प्रथम अपील निर्देशों के साथ मानकीकृत सूचना का अधिकार आवेदन प्रारूप।' },
+        type: 'Citizen Advocacy',
+      },
+      {
+        title: { en: 'Gram Sabha / Ward Sabha Demand Letter', hi: 'ग्राम सभा / वार्ड सभा मांग पत्र' },
+        description: { en: 'Formal representation letter for placing civic demands on the Gram Sabha/Ward Sabha agenda with signature roster.', hi: 'हस्ताक्षर सूची के साथ ग्राम सभा/वार्ड सभा एजेंडा पर नागरिक मांगें रखने के लिए औपचारिक प्रतिनिधित्व पत्र।' },
+        type: 'Local Governance',
+      },
+    ],
+  },
   ngo: {
     primaryActs: [
       {
