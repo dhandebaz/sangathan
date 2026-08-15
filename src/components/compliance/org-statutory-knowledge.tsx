@@ -56,7 +56,7 @@ const STATUTORY_DATA: Record<string, StatutoryFramework> = {
       { en: 'No statutory registration required. Civic collectives operate as informal associations under constitutional freedom of association.', hi: 'कोई वैधानिक पंजीकरण आवश्यक नहीं। नागरिक समूह संघ बनाने की संवैधानिक स्वतंत्रता के तहत अनौपचारिक संगठनों के रूप में कार्य करते हैं।' },
       { en: 'Can upgrade to formal registration (Society/Trust/Section 8) via BQF umbrella recognition for access to bank accounts and grant eligibility.', hi: 'बैंक खातों और अनुदान पात्रता तक पहुंच के लिए BQF छत्र मान्यता के माध्यम से औपचारिक पंजीकरण (सोसायटी/ट्रस्ट/धारा 8) में अपग्रेड कर सकते हैं।' },
       { en: 'RTI applications, public hearings (jan sunwai), and social audit participation are key tools for civic accountability.', hi: 'RTI आवेदन, सार्वजनिक सुनवाई (जन सुनवाई), और सामाजिक ऑडिट भागीदारी नागरिक जवाबदेही के प्रमुख उपकरण हैं।' },
-      { en: 'BQF Recognition: Bajrang Queer Foundation (BQF) Section 8 umbrella provides formal recognition for civic collectives seeking grant access and legal entity status.', hi: 'BQF मान्यता: बजरंग क्वीयर फाउंडेशन (BQF) सेक्शन 8 छत्र मान्यता नागरिक समूहों को अनुदान पहुंच और कानूनी entidad status के लिए औपचारिक मान्यता प्रदान करती है।' },
+      { en: 'BQF Recognition: Bahujan Queer Foundation (BQF) Section 8 umbrella provides formal recognition for civic collectives seeking grant access and legal entity status.', hi: 'BQF मान्यता: बहुजन क्वीयर फाउंडेशन (BQF) सेक्शन 8 छत्र मान्यता नागरिक समूहों को अनुदान पहुंच और कानूनी इकाई स्थिति के लिए औपचारिक मान्यता प्रदान करती है।' },
     ],
     templates: [
       {

@@ -293,6 +293,7 @@ export async function finalizeSignup(input: {
   membershipPolicy?: string
   monthlyDues?: string
   focusBlueprint?: string
+  legalEntityType?: string | null
   enablePublicPetitions?: boolean
   enableTransparencyLedger?: boolean
   enableEmergencySos?: boolean
@@ -391,6 +392,7 @@ export async function finalizeSignup(input: {
     capabilities: customizedCaps,
   }
   if (input.registrationStatus) orgUpdates.registration_status = input.registrationStatus
+  if (input.legalEntityType) orgUpdates.legal_entity_type = input.legalEntityType
   if (input.description) orgUpdates.description = input.description
   if (input.monthlyDues && Number(input.monthlyDues) > 0) orgUpdates.monthly_dues = Number(input.monthlyDues)
 

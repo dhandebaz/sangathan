@@ -667,8 +667,11 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
                        </div>
                      )
                    })}
-                 </div>
-               </div>
+                  </div>
+                </div>
+
+              </div>
+            )}
 
 {step === 3 && (
               <div className="space-y-4">
@@ -1062,18 +1065,7 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
 
            {/* Navigation Controls */}
            <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-             {step > 1 ? (
-               <Button
-                 type="button"
-                 variant="outline"
-                 size="sm"
-                 onClick={() => setStep((s) => s - 1)}
-                 className="text-xs border-slate-300"
-               >
-                 <ArrowLeft className="w-3.5 h-3.5 mr-1" />
-                 {t('back')}
-               </Button>
-             {step > 1 ? (
+              {step > 1 ? (
                 <Button
                   type="button"
                   variant="outline"
@@ -1087,6 +1079,7 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
               ) : (
                 <div />
               )}
+              {step < 6 ? (
                 <Button
                   type="button"
                   size="sm"

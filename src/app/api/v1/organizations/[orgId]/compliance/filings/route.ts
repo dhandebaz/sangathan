@@ -16,7 +16,7 @@ export async function GET(
   let query = supabase
     .from('compliance_filings')
     .select('*')
-    .eq('org_id', orgId)
+    .eq('organisation_id', orgId)
 
   if (status) {
     query = query.eq('status', status)
@@ -46,7 +46,7 @@ export async function POST(
     const { data, error } = await supabase
       .from('compliance_filings')
       .insert({
-        org_id: orgId,
+        organisation_id: orgId,
         ...body
       })
       .select()

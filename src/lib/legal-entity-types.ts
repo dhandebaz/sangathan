@@ -40,7 +40,7 @@ export const VALID_LEGAL_TYPES: Record<string, LegalEntityType[]> = {
 export const REQUIRED_STATUTORY_IDS: Record<LegalEntityType, StatutoryIdType[]> = {
   society: ['pan', 'cin', 'society_registration', 'darpan_uid'],
   trust: ['pan', 'darpan_uid', 'certificate_12a', 'certificate_80g'],
-  'section_8_company': ['pan', 'tan', 'gstin', 'cin', 'llpin', 'udaam_registration'],
+  'section_8_company': ['pan', 'tan', 'gstin', 'cin', 'llpin', 'udyam_registration'],
   'registered_trade_union': ['pan', 'trade_union_registration', 'epfo_code', 'esic_code'],
   'informal_collective': ['pan'],
   'registered_society': ['pan', 'society_registration', 'darpan_uid'],
@@ -107,4 +107,32 @@ export const GOVT_PORTAL_LINKS: Record<StatutoryIdType, string> = {
   aishe_code: 'https://aishe.gov.in/',
   udise_code: 'https://udiseplus.gov.in/',
   lgd_code: 'https://lgd.gov.in/',
+}
+
+// DB column, display label, and example format per statutory ID type
+export const STATUTORY_ID_CONFIG: Record<
+  StatutoryIdType,
+  { dbColumn: string; en: string; example: string }
+> = {
+  pan: { dbColumn: 'tax_id', en: 'PAN', example: 'ABCDE1234F' },
+  tan: { dbColumn: 'tan', en: 'TAN', example: 'DELC1234567' },
+  gstin: { dbColumn: 'gstin', en: 'GSTIN', example: '27ABCDE1234F1Z5' },
+  cin: { dbColumn: 'cin', en: 'CIN', example: 'ABCDE123456' },
+  llpin: { dbColumn: 'llpin', en: 'LLPIN', example: 'ABCDE1234F' },
+  darpan_uid: { dbColumn: 'darpan_id', en: 'NGO Darpan UID', example: 'UP20123456' },
+  certificate_12a: { dbColumn: 'certificate_12a', en: 'Section 12A Certificate', example: '12ABC789' },
+  certificate_80g: { dbColumn: 'certificate_80g', en: 'Section 80G Certificate', example: '80GABC123' },
+  fcra_registration: { dbColumn: 'fcra_registration', en: 'FCRA Registration', example: 'FCRA123456' },
+  csr_registration: { dbColumn: 'csr_registration', en: 'CSR Registration', example: 'CSR-1234567' },
+  eci_registration: { dbColumn: 'eci_registration', en: 'ECI Registration', example: 'ECI-12345678' },
+  trade_union_registration: { dbColumn: 'trade_union_registration', en: 'Trade Union Registration', example: 'TU-123456' },
+  cooperative_registration: { dbColumn: 'cooperative_registration', en: 'Cooperative Registration', example: 'COOP-123456' },
+  society_registration: { dbColumn: 'society_registration', en: 'Society Registration', example: 'SOC-123456' },
+  trust_registration: { dbColumn: 'trust_registration', en: 'Trust Registration', example: 'TRUST-123456' },
+  epfo_code: { dbColumn: 'epfo_code', en: 'EPFO Code', example: 'EPFODL12345678' },
+  esic_code: { dbColumn: 'esic_code', en: 'ESIC Code', example: 'ESICDL12345678' },
+  udyam_registration: { dbColumn: 'udyam_registration', en: 'Udyam Registration', example: 'UDYAM12AB34CD' },
+  aishe_code: { dbColumn: 'aishe_code', en: 'AISHE Code', example: 'AISHE12AB34' },
+  udise_code: { dbColumn: 'udise_code', en: 'UDISE Code', example: 'UDISE1234567890' },
+  lgd_code: { dbColumn: 'lgd_code', en: 'LGD Code', example: 'LGD-DL123456' },
 }

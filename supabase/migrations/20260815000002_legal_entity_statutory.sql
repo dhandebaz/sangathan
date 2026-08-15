@@ -15,7 +15,7 @@ ALTER TABLE public.organisations
   ADD COLUMN IF NOT EXISTS registrar_authority TEXT,
   ADD COLUMN IF NOT EXISTS registration_state TEXT;
 
--- Add a comment for documentation
+-- Add comments for documentation
 COMMENT ON COLUMN public.organisations.legal_entity_type IS 
   'Legal sub-classification within org_type (e.g., society/trust/section_8_company for NGO). See src/lib/legal-entity-types.ts for valid values.';
 COMMENT ON COLUMN public.organisations.registration_state IS 
@@ -89,6 +89,7 @@ CREATE INDEX IF NOT EXISTS idx_compliance_filings_due
 ALTER TABLE public.compliance_filings ENABLE ROW LEVEL SECURITY;
 
 -- Org members can view their compliance filings
+DROP POLICY IF EXISTS "Members can view org compliance filings" ON public.compliance_filings;
 CREATE POLICY "Members can view org compliance filings"
   ON public.compliance_filings FOR SELECT TO authenticated
   USING (
@@ -100,6 +101,7 @@ CREATE POLICY "Members can view org compliance filings"
   );
 
 -- Only admins/executives can manage compliance filings
+DROP POLICY IF EXISTS "Admins can manage org compliance filings" ON public.compliance_filings;
 CREATE POLICY "Admins can manage org compliance filings"
   ON public.compliance_filings FOR ALL TO authenticated
   USING (
@@ -135,3 +137,26 @@ CREATE TRIGGER trg_compliance_filings_updated_at
   BEFORE UPDATE ON public.compliance_filings
   FOR EACH ROW
   EXECUTE FUNCTION public.update_compliance_filings_updated_at();
+
+-- ============================================================================
+-- 6. Backfill: set default legal_entity_type for existing orgs
+-- ============================================================================
+UPDATE public.organisations
+SET legal_entity_type = 'unregistered'
+WHERE legal_entity_type IS NULL AND org_type = 'civic_collective';
+
+UPDATE public.organisations
+SET legal_entity_type = 'society'
+WHERE legal_entity_type IS NULL AND org_type = 'ngo';
+
+UPDATE public.organisations
+SET legal_entity_type = 'university_body'
+WHERE legal_entity_type IS NULL AND org_type = 'student_union';
+
+UPDATE public.organisations
+SET legal_entity_type = 'registered_trade_union'
+WHERE legal_entity_type IS NULL AND org_type = 'workers_union';
+
+UPDATE public.organisations
+SET legal_entity_type = 'registered_society'
+WHERE legal_entity_type IS NULL AND org_type = 'rwa';
