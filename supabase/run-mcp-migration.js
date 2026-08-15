@@ -3,8 +3,8 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const PROJECT_ID = 'isddyfisvxpoyglkyzfw';
-const ACCESS_TOKEN = 'sbp_b2e20c6463b60c57f93f4f4715c113acbaa74906';
+const PROJECT_ID = process.env.SUPABASE_PROJECT_REF || 'isddyfisvxpoyglkyzfw';
+const ACCESS_TOKEN = process.env.SUPABASE_ACCESS_TOKEN;
 const MIGRATION_FILE = path.join(__dirname, 'migrations', '20260617000002_legal_entity_statutory.sql');
 
 // Read migration SQL

@@ -40,6 +40,8 @@ export function getDocContent(slug: string, lang: string = 'en'): string | null 
       'document-vault': 'Section 28: Sovereign Document & Asset Cloud Vault',
       'statutory-registers': 'Section 29: Statutory PDF Registers & Government Inspection Rolls',
       'master-reference-data': 'Section 30: Master Reference Data & National Geographical Standards',
+      'civic-collective-playbook': 'Section 31: Civic Collective & Citizen Science Field Suite',
+      'statutory-compliance': 'Section 32: Statutory Framework & Legal Sub-Classification',
       'bqf-recognition': 'Section 1: Getting Started',
       'municipal-letters': 'Section 11: Grievances & Complaints',
     }
@@ -75,6 +77,8 @@ export function getDocContent(slug: string, lang: string = 'en'): string | null 
       'document-vault': 'अनुभाग 28: संप्रभु दस्तावेज़ एवं परिसंपत्ति क्लाउड वॉल्ट',
       'statutory-registers': 'अनुभाग 29: वैधानिक PDF रजिस्टर व सरकारी निरीक्षण बहीखाता',
       'master-reference-data': 'अनुभाग 30: मास्टर संदर्भ डेटा व राष्ट्रीय भौगोलिक मानक',
+      'civic-collective-playbook': 'अनुभाग 31: नागरिक समूह व सिटीजन साइंस फील्ड सूट',
+      'statutory-compliance': 'अनुभाग 32: वैधानिक ढांचा व कानूनी उप-वर्गीकरण',
       'bqf-recognition': 'अनुभाग 1: शुरू करना',
       'municipal-letters': 'अनुभाग 11: शिकायतें',
     }

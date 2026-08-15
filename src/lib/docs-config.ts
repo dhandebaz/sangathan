@@ -41,6 +41,7 @@ export const docsConfig: DocSection[] = [
     title: { en: 'Specialized Modules', hi: 'विशिष्ट मॉड्यूल' },
     icon: Wrench,
     items: [
+      { title: { en: 'Statutory Framework & Compliance Filings', hi: 'वैधानिक ढांचा व अनुपालन फाइलिंग' }, slug: 'statutory-compliance' },
       { title: { en: 'BQF AI Recognition & Verification', hi: 'BQF AI मान्यता व सत्यापन' }, slug: 'bqf-recognition' },
       { title: { en: 'Government & Municipal Representation Letters', hi: 'सरकारी व नगर निगम प्रतिवेदन पत्र' }, slug: 'municipal-letters' },
       { title: { en: 'Statutory Registers', hi: 'वैधानिक रजिस्टर्स' }, slug: 'statutory-registers' },
@@ -72,6 +73,7 @@ export const docsConfig: DocSection[] = [
     title: { en: 'Organisation Playbooks', hi: 'संगठन नियमावली व दिशानिर्देश' },
     icon: Shield,
     items: [
+      { title: { en: 'Civic Collective & Citizen Science Handbook', hi: 'नागरिक समूह व जमीनी संगठन हैंडबुक' }, slug: 'civic-collective-playbook' },
       { title: { en: 'NGO & Civil Society Handbook', hi: 'एनजीओ व नागरिक समाज हैंडबुक' }, slug: 'ngo-playbook' },
       { title: { en: 'Student Union & Campus Guild', hi: 'छात्र संघ व विश्वविद्यालय परिषद' }, slug: 'student-union-playbook' },
       { title: { en: 'Trade Union & Labor Collective', hi: 'श्रमिक संघ व ट्रेड यूनियन' }, slug: 'workers-union-playbook' },

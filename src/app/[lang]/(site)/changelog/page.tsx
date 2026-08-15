@@ -71,9 +71,15 @@ const changelogData: ChangelogEntry[] = [
       },
       {
         nameEn: 'Onboarding Wizard Legal Entity Step',
-        nameHi: 'ऑनबोर्डिंग वाइज़ार legal entity step',
+        nameHi: 'ऑनबोर्डिंग विज़ार्ड कानूनी इकाई चयन चरण',
         textEn: 'Added optional "How is your organization registered?" step after org type selection. Shows LegalEntityType options valid for selected org type. For civic_collective, auto-sets to unregistered and skips the step. For NGOs shows Society/Trust/Section 8 Company options. Full Hindi translations included.',
-        textHi: 'ऑनबोर्डिंग वाइज़ार org type selection के बाद "आपका संगठन कैसे पंजीकृत है?" वैकल्पिक step added। Selected org type के लिए valid LegalEntityType options दिखाता है। civic_collective के लिए auto-unregistered set करता है और step को skip करता है। NGO के लिए Society/Trust/Section 8 Company options दिखाता है। पूर्ण Hindi translations शामिल।',
+        textHi: 'ऑनबोर्डिंग विज़ार्ड में संगठन चयन के बाद "आपका संगठन कैसे पंजीकृत है?" वैकल्पिक चरण जोड़ा गया। एनजीओ के लिए सोसायटी/ट्रस्ट/धारा 8 कंपनी और नागरिक समूहों के लिए अनौपचारिक विकल्प प्रस्तुत करता है।',
+      },
+      {
+        nameEn: 'Operational Documentation & Playbooks Synchronized',
+        nameHi: 'परिचालन नियमावली व हैंडबुक का समग्र अद्यतनीकरण',
+        textEn: 'Added Section 31 (Civic Collective & Citizen Science Field Suite) and Section 32 (Statutory Framework & Legal Sub-Classification) across English and Hindi Operational Manuals. All 5 Movement Archetypes now have dedicated operational playbooks.',
+        textHi: 'अंग्रेजी और हिंदी दोनों परिचालन नियमावलियों में अनुभाग 31 (नागरिक समूह व सिटीजन साइंस) और अनुभाग 32 (वैधानिक ढांचा व कानूनी उप-वर्गीकरण) जोड़े गए। अब सभी 5 आंदोलन प्रकारों के पास समर्पित हैंडबुक उपलब्ध हैं।',
       },
     ],
   },

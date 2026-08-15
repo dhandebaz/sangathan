@@ -1,7 +1,7 @@
 const https = require('https');
 
-const ACCESS_TOKEN = 'sbp_b2e20c6463b60c57f93f4f4715c113acbaa74906';
-const PROJECT_REF = 'isddyfisvxpoyglkyzfw';
+const ACCESS_TOKEN = process.env.SUPABASE_ACCESS_TOKEN;
+const PROJECT_REF = process.env.SUPABASE_PROJECT_REF || 'isddyfisvxpoyglkyzfw';
 
 function supabaseSqlRaw(query) {
   return new Promise((resolve, reject) => {

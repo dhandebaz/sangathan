@@ -15,6 +15,7 @@ import {
   generateWhatsAppQRPairingPayload,
   sendWhatsAppLinkedSessionMessage,
 } from '@/lib/bot/whatsapp-client'
+import { generateSecureString } from '@/lib/utils'
 
 function getAppBaseUrl() {
   if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL
@@ -44,7 +45,7 @@ export async function connectTelegramBotAction(botToken: string) {
     // 2. Set Webhook URL
     const baseUrl = getAppBaseUrl()
     const webhookUrl = `${baseUrl}/api/bot/webhook/telegram?orgId=${orgId}`
-    const secretToken = process.env.TELEGRAM_WEBHOOK_SECRET || 'sangathan_tg_secret'
+    const secretToken = process.env.TELEGRAM_WEBHOOK_SECRET || generateSecureString(32)
 
     const webhookRes = await registerTelegramWebhookUrl({
       botToken: botToken.trim(),
@@ -106,7 +107,7 @@ export async function connectWhatsAppCloudAction(params: {
 
     const baseUrl = getAppBaseUrl()
     const webhookUrl = `${baseUrl}/api/bot/webhook/whatsapp?orgId=${orgId}`
-    const verifyToken = params.verifyToken || process.env.WHATSAPP_VERIFY_TOKEN || 'sangathan_bot_secret'
+    const verifyToken = params.verifyToken || process.env.WHATSAPP_VERIFY_TOKEN || generateSecureString(32)
 
     const adminClient = createServiceClient()
     await adminClient.from('bot_channel_configs').upsert({

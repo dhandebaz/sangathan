@@ -536,5 +536,71 @@ Sangathan includes a pre-populated, verified master registry covering the entire
    * *Residential Unit Formats:* 1BHK, 2BHK, 3BHK, 4BHK, Penthouse/Duplex, Independent Villa, Society Retail Shop.
    * *Standardized Maintenance Heads:* Common Grid Power, Security Agency Contract, Housekeeping & Waste Segregation, Elevator AMC, Generator Diesel Fuel, Fire Safety AMC, Capital Sinking Fund.
 
+---
+
+## Section 31: Civic Collective & Citizen Science Field Suite
+
+### 31.1 Constitutional Freedom of Association & Informal Collectives
+Civic Collectives in Sangathan operate under the fundamental constitutional right guaranteed by **Article 19(1)(c)** of the Constitution of India (Right to form associations or unions). Informal grassroots groups, youth climate collectives, citizen action forums, and community basti sabhas require zero mandatory prior registration to build membership, run verified democratic polls, or conduct public campaigns.
+
+### 31.2 Bahujan Queer Foundation (BQF) Section 8 Umbrella Recognition
+For civic collectives requiring formal corporate identity to open institutional bank accounts, receive CSR grants, or enter bilateral MoUs with government bodies, Sangathan provides direct AI verification and endorsement under the **Bahujan Queer Foundation (BQF)** umbrella (Section 8 Company under Companies Act 2013, CIN: `U88900DL2025NPL452474`).
+* Collectives submit their founding charter, core volunteer registry, and resolution logs.
+* BQF AI Verification audits democratic governance standards and issues a cryptographic umbrella affiliation certificate with a verifiable verification hash.
+
+### 31.3 Citizen Science Field Spot Audits (`/[lang]/dashboard/field-audits`)
+Field volunteers can log hyper-local environmental and municipal infraction audits with GPS geocoding and photo attachments:
+* **Audit Categories:** Air Quality (PM2.5 / PM10), Water Quality (TDS / Turbidity), Waste Burning, Industrial Emissions, Construction Dust Infractions, Unauthorized Tree Felling, and Broken Civic Infrastructure.
+* **Statutory Notice Dispatch:** Automatically drafts official inspection notices to State Pollution Control Boards (SPCB), Municipal Commissioners, or District Magistrates.
+* **Public Bulletin & NGT Escalation:** 1-click sharing of open field bulletins and automated escalation dossiers for National Green Tribunal (NGT) applications.
+
+### 31.4 Bilingual Media Press Releases (`/[lang]/dashboard/press-releases`)
+Publish standardized bilingual press statements with official location headers, embargo management (`immediate` or `timed`), spokesperson contact blocks, and print-ready PDF exports formatted for national and regional media houses.
+
+### 31.5 Civic Receiving Trackers (`/[lang]/dashboard/receiving-trackers`)
+Track physical representation letters submitted to government departments with photo uploads of stamped receiving seals and an automated **15-Day Statutory Response Countdown**. If officials fail to respond within the deadline, the system automatically drafts a follow-up **Right to Information (RTI)** application citing the stamped receiving number.
+
+---
+
+## Section 32: Statutory Framework & Legal Sub-Classification
+
+### 32.1 Legal Entity Sub-Classification Architecture
+Sangathan preserves 5 distinct Movement Archetypes while providing deep legal sub-classification according to Indian statutory enactments:
+1. **Registered NGO (`ngo`):**
+   * *Registered Society:* Under Societies Registration Act, 1860 (State Registrar of Societies).
+   * *Public Charitable Trust:* Under Indian Trusts Act, 1882 / Bombay Public Trust Act, 1950 (Charity Commissioner).
+   * *Section 8 Company:* Under Companies Act, 2013 (Ministry of Corporate Affairs / Registrar of Companies).
+2. **Workers Union (`workers_union`):**
+   * *Registered Trade Union:* Under Trade Unions Act, 1926 (State Registrar of Trade Unions).
+   * *Informal Worker Collective:* Gig workers, domestic labor, or self-employed collective.
+3. **Resident Welfare Association (`rwa`):**
+   * *Registered Society (RWA):* Under Societies Registration Act, 1860.
+   * *Cooperative Housing Society:* Under State Cooperative Societies Acts.
+   * *Apartment Owners Association:* Under State Apartment Ownership Acts / RERA 2016.
+4. **Student Union (`student_union`):**
+   * *University-Constituted Body:* Operating under university statutes and Dean of Students Welfare (DSW).
+   * *Independent Student Front:* Independent organization registered under Societies Registration Act.
+5. **Civic Collective (`civic_collective`):**
+   * *Unregistered Collective:* Informal constitutional association under Article 19(1)(c).
+   * *BQF Recognized:* Endorsed under Bahujan Queer Foundation Section 8 umbrella.
+
+### 32.2 16+ Validated Statutory ID Fields
+Organisations can record validated statutory registration numbers with regex verification and instant links to official government portals:
+* **Tax & Corporate:** PAN (`tax_id`), TAN (`tan`), GSTIN (`gstin`), CIN (`cin`), Udyam MSME Registration.
+* **Exemptions & Grants:** NGO Darpan UID (`darpan_id`), Section 12A URN, Section 80G URN, MCA Form CSR-1, MHA FCRA Registration.
+* **Labor & Social Security:** Trade Union Registration Number, EPFO Establishment Code, ESIC Code Number.
+* **Cooperative & Institutional:** Society Registration Number, Trust Deed Registration Number, Cooperative Registration Number, Local Government Directory (LGD) Code, AISHE Code.
+
+### 32.3 Periodic Compliance Filings Tracker (`/[lang]/dashboard/compliance`)
+Tracks recurring regulatory obligations with automated countdowns, filing references, and document archiving:
+* **Income Tax Returns:** ITR-7 (NGOs, Trusts, Unions), ITR-5 (RWAs as AOP), Form 10BD (Statement of Donations).
+* **Corporate & MCA:** Form AOC-4 (Financial Statements), Form MGT-7 (Annual Return), Form DIR-3 KYC (Director KYC).
+* **Labor & Society:** Form H (Trade Union General Return), State RoS Managing Committee List (Form V), Cooperative Statutory Audit.
+* **Safety & Foreign Inflows:** Form FC-4 (FCRA Annual Return), Fire Safety NOC Renewal, Lift Inspection Certificate.
+
+### 32.4 Government Service Integration Endpoints
+REST API v1 endpoints (`/api/v1/organizations/[orgId]/govt-services/[service]`) are architected for seamless direct synchronization with Government of India portals (PAN Verification, GSTIN Status, MCA CIN Lookup, NGO Darpan Sync, FCRA Active Status, LGD Lookup, DigiLocker Cloud Connect, and EPFO Establishment Verification).
+
+
 
 
