@@ -89,12 +89,12 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
     categoryBadgeHi: 'अनौपचारिक व जमीनी नागरिक समूह',
     metaTitleEn: 'Civic Collective Management Software India | Grassroots Movement Tools | Sangathan',
     metaTitleHi: 'नागरिक समूह सॉफ्टवेयर | जमीनी आंदोलन व जन अधिकार टूल्स | संगठन',
-    metaDescEn: 'Purpose-built digital operating system for informal civic groups, colony activists, citizen science teams, and legal defense networks. 1-tap spot audits, ₹1 printable Parchas, 15-day RTI tracker, and BQF legal indemnity.',
-    metaDescHi: 'अनौपचारिक नागरिक समूहों, कॉलोनी कार्यकर्ताओं, पर्यावरण जांच दलों और विधिक रक्षा नेटवर्क के लिए विशेष डिजिटल ऑपरेटिंग सिस्टम। फील्ड जांच, ₹1 पर्चा, 15-दिवसीय आरटीआई ट्रैकर एवं बीक्यूएफ विधिक सुरक्षा।',
+    metaDescEn: 'Purpose-built digital operating system for informal civic groups, colony activists, citizen science teams, and legal defense networks. 1-tap spot audits, ₹1 printable Parchas, 15-day RTI tracker, and BQF verification pathway for active collectives.',
+    metaDescHi: 'अनौपचारिक नागरिक समूहों, कॉलोनी कार्यकर्ताओं, पर्यावरण जांच दलों और विधिक रक्षा नेटवर्क के लिए विशेष डिजिटल ऑपरेटिंग सिस्टम। फील्ड जांच, ₹1 पर्चा, 15-दिवसीय आरटीआई ट्रैकर एवं सक्रिय समूहों के लिए BQF सत्यापन मार्ग।',
     keywords: [
       'civic collective software India', 'grassroots movement management', 'colony action tool',
       'citizen science air pollution app Delhi', 'RTI 15-day tracker', 'printable A4 parcha generator',
-      'legal defense rapid response', 'BQF Section 8 recognition', 'unregistered group management software',
+      'legal defense rapid response', 'BQF verification pathway', 'unregistered group management software',
       'citizen grievance escalation MCD', 'public petition studio India'
     ],
     heroHeadlineEn: 'You Don\'t Need Registration to Organize. You Need Sangathan.',
@@ -128,10 +128,10 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
         icon: 'Activity'
       },
       {
-        titleEn: 'BQF Section 8 Legal Indemnity',
-        titleHi: 'BQF धारा 8 विधिक सुरक्षा',
-        descEn: 'Official institutional recognition from Bahujan Queer Foundation (Delhi Section 8 NGO) providing statutory legal shielding to grassroots activists.',
-        descHi: 'बहुजन क्वीर फाउंडेशन (सेक्शन 8 गैर-लाभकारी संस्था) से आधिकारिक विधिक मान्यता एवं ग्राउंड कार्यकर्ताओं को सुरक्षा।',
+        titleEn: 'BQF Milestone Verification Pathway',
+        titleHi: 'BQF सत्यापन व संस्थागत संबद्धता मार्ग',
+        descEn: 'Milestone-based institutional verification from Bahujan Queer Foundation (Delhi Section 8 NGO) for active grassroots collectives meeting verified ground audit and community criteria.',
+        descHi: 'सत्यापित जमीनी कार्य और नागरिक ऑडिट पूरा करने वाले सक्रिय समूहों के लिए बहुजन क्वीर फाउंडेशन द्वारा संस्थागत सत्यापन एवं मार्गदर्शन।',
         icon: 'ShieldCheck'
       }
     ],
@@ -265,13 +265,13 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
         slug: 'legal-defense',
         titleEn: 'Human Rights & Legal Defense Network',
         titleHi: 'मानवाधिकार व कानूनी सहायता नेटवर्क',
-        taglineEn: 'Emergency SOS broadcasts, police thana custody tracker, advocate dispatch, and BQF Section 8 recognition.',
-        taglineHi: 'थाना हिरासत ट्रैकर, आपातकालीन SOS प्रसारण, वकील सहायता और BQF धारा 8 आधिकारिक सत्यापन।',
+        taglineEn: 'Emergency SOS broadcasts, police thana custody tracker, advocate dispatch, and BQF verification pathway.',
+        taglineHi: 'थाना हिरासत ट्रैकर, आपातकालीन SOS प्रसारण, वकील सहायता और सक्रिय समूहों हेतु BQF सत्यापन मार्ग।',
         metaTitleEn: 'Activist Legal Defense & Emergency SOS App | Rights Protection | Sangathan',
         metaTitleHi: 'कार्यकर्ता विधिक सुरक्षा व आपातकालीन SOS ऐप | कानूनी सहायता | संगठन',
-        metaDescEn: 'Protect grassroots organizers with 1-tap emergency custody alerts, detention loggers, panel advocate dispatches, and statutory legal shielding.',
-        metaDescHi: '1-टैप आपातकालीन हिरासत अलर्ट, थाना ट्रैकर, पैनल वकील सहायता और आधिकारिक विधिक सुरक्षा से जमीनी कार्यकर्ताओं की रक्षा करें।',
-        keywords: ['activist legal defense software', 'emergency SOS thana custody tracker', 'protest legal aid app India', 'Section 8 NGO indemnity', 'DK Basu guidelines tracker'],
+        metaDescEn: 'Protect grassroots organizers with 1-tap emergency custody alerts, detention loggers, panel advocate dispatches, and milestone-based BQF verification.',
+        metaDescHi: '1-टैप आपातकालीन हिरासत अलर्ट, थाना ट्रैकर, पैनल वकील सहायता और सक्रिय समूहों के लिए BQF सत्यापन मार्ग से जमीनी कार्यकर्ताओं की रक्षा करें।',
+        keywords: ['activist legal defense software', 'emergency SOS thana custody tracker', 'protest legal aid app India', 'Section 8 NGO verification', 'DK Basu guidelines tracker'],
         activistQuoteEn: '“When an activist is detained, the first 60 minutes determine their safety. Sangathan alerts 10 defense advocates before police even enter the thana.”',
         activistQuoteHi: '“हिरासत के शुरुआती 60 मिनट सबसे महत्वपूर्ण होते हैं। संगठन पुलिस के थाने पहुंचने से पहले 10 वकीलों को अलर्ट भेज देता है।”',
         groundChallengeEn: 'During protests or field actions, activists face sudden detentions without immediate legal representation or family notifications.',
@@ -281,7 +281,7 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
         keyTools: [
           { nameEn: '1-Tap Rapid Response SOS', nameHi: '1-टैप त्वरित SOS', descEn: 'Instantly broadcast GPS location and audio notes to pre-configured legal defense teams.', descHi: 'कानूनी टीम को तुरंत जीपीएस लोकेशन और ऑडियो संदेश प्रसारित करें।', icon: 'ShieldAlert' },
           { nameEn: 'Thana Custody & D.K. Basu Tracker', nameHi: 'थाना हिरासत व डी.के. बसु ट्रैकर', descEn: 'Log detention time, inspecting officer name, and generate habeas corpus documentation.', descHi: 'हिरासत का समय, जांच अधिकारी का नाम दर्ज करें और बंदी प्रत्यक्षीकरण दस्तावेज बनाएं।', icon: 'Scale' },
-          { nameEn: 'BQF Section 8 Verified Id Card', nameHi: 'BQF धारा 8 डिजिटल पहचान पत्र', descEn: 'Cryptographically verifiable digital credential proving affiliation with registered non-profit.', descHi: 'पंजीकृत सेक्शन 8 गैर-लाभकारी संगठन से संबद्धता प्रमाणित करने वाला डिजिटल आईडी।', icon: 'ShieldCheck' }
+          { nameEn: 'BQF Section 8 Verification Pathway', nameHi: 'BQF धारा 8 सत्यापन कार्यक्रम', descEn: 'Milestone-based verification review proving active grassroots standing under registered non-profit governance.', descHi: 'पंजीकृत सेक्शन 8 गैर-लाभकारी संगठन के तहत सक्रिय जमीनी कार्य का सत्यापन।', icon: 'ShieldCheck' }
         ],
         statutoryActs: [
           { titleEn: 'Supreme Court D.K. Basu Guidelines on Arrest (1997)', titleHi: 'सुप्रीम कोर्ट डी.के. बसु गिरफ्तारी दिशा-निर्देश (1997)', descEn: 'Mandates arrest memo, informing next of kin within 12 hours, and physical safety of detainees.', descHi: 'गिरफ्तारी मेमो, 12 घंटे में परिजनों को सूचना और हिरासत में शारीरिक सुरक्षा का वैधानिक अधिकार।', provision: 'AIR 1997 SC 610' },
@@ -294,10 +294,10 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
         ],
         faqs: [
           {
-            questionEn: 'How does BQF Section 8 recognition help on the ground?',
-            questionHi: 'BQF सेक्शन 8 मान्यता जमीनी स्तर पर कैसे मदद करती है?',
-            answerEn: 'Bahujan Queer Foundation is an officially incorporated Section 8 NGO in Delhi (CIN: U88900DL2025NPL452474). Recognized collectives carry institutional standing, protecting activists against frivolous illegal assembly allegations.',
-            answerHi: 'बहुजन क्वीर फाउंडेशन दिल्ली में पंजीकृत सेक्शन 8 गैर-लाभकारी संस्था है। इससे संबद्ध कार्यकर्ताओं को संस्थागत मान्यता मिलती है जिससे मनमाने पुलिस उत्पीड़न से बचाव होता है।'
+            questionEn: 'How does BQF Section 8 verification & recognition work?',
+            questionHi: 'BQF सेक्शन 8 सत्यापन व मान्यता कैसे मिलती है?',
+            answerEn: 'Bahujan Queer Foundation is an officially incorporated Section 8 NGO in Delhi (CIN: U88900DL2025NPL452474). Unregistered collectives that achieve verified milestones of active community groundwork, field spot audits, and transparent governance can apply for reviewed institutional verification.',
+            answerHi: 'बहुजन क्वीर फाउंडेशन दिल्ली में पंजीकृत सेक्शन 8 गैर-लाभकारी संस्था है। अनौपचारिक नागरिक समूह जब सक्रिय जमीनी कार्य, फील्ड स्पॉट ऑडिट और पारदर्शी सदस्यता के मानदंड पूरे करते हैं, तो वे समीक्षा-आधारित संस्थागत सत्यापन के लिए आवेदन कर सकते हैं।'
           }
         ]
       },

@@ -142,10 +142,10 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
         sangathanAdvantage: true
       },
       {
-        featureNameEn: 'Legal Indemnity for Activists',
-        featureNameHi: 'कार्यकर्ताओं को विधिक सुरक्षा',
-        sangathanValueEn: 'Bahujan Queer Foundation (Section 8 NGO) Recognition',
-        sangathanValueHi: 'बहुजन क्वीर फाउंडेशन (सेक्शन 8 NGO) आधिकारिक मान्यता',
+        featureNameEn: 'Institutional Verification & Solidarity Pathway',
+        featureNameHi: 'संस्थागत सत्यापन व विधिक मार्गदर्शन',
+        sangathanValueEn: 'Bahujan Queer Foundation (Section 8 NGO) Verification Pathway for Active Collectives',
+        sangathanValueHi: 'सक्रिय समूहों के लिए बहुजन क्वीर फाउंडेशन (सेक्शन 8 NGO) सत्यापन कार्यक्रम',
         competitorValueEn: 'None',
         competitorValueHi: 'कोई नहीं',
         category: 'privacy',

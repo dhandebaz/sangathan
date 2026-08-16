@@ -35,6 +35,37 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.47.7',
+    titleEn: 'SEO Discovery Architecture, Directory Verification & High-Intent Landing Hubs',
+    titleHi: 'एसईओ खोज अवसंरचना, निर्देशिका सत्यापन व उद्देश्य-आधारित लैंडिंग हब',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Expanded Sangathan discovery with dedicated high-intent SEO landing pages for Community Management, NGO Management, Grassroots Organizing, Member Rolls, Campaign Action, and Collective Decision Making. Launched verified directory indexing across Product Hunt, SaaSHub, Peerlist, Indie Hackers, and Uneed with an authentic trust bar, enhanced schema.org Knowledge Graph linkages, and clear brand identity disambiguation.',
+    descHi: 'कम्युनिटी मैनेजमेंट, एनजीओ प्रबंधन, जमीनी आंदोलन, सदस्यता पंजी, अभियान संचालन और सामूहिक निर्णय के लिए विशेष एसईओ लैंडिंग पेजों के साथ संगठन की वैश्विक खोज का विस्तार। प्रोडक्ट हंट, SaaSHub, Peerlist, Indie Hackers और Uneed पर सत्यापित निर्देशिका सूचीकरण, नॉलेज ग्राफ लिंक और स्पष्ट ब्रांड पहचान दिशानिर्देश जारी।',
+    color: 'emerald',
+    icon: Globe,
+    features: [
+      {
+        nameEn: '7 High-Intent SEO Landing Pages & Direct Comparison Aliases',
+        nameHi: '७ उद्देश्य-आधारित एसईओ लैंडिंग पेज व सीधी तुलना यूआरएल',
+        textEn: 'Deployed dedicated bilingual routes (/community-management, /ngo-management, /grassroots-organizing, /campaign-management, /member-management, /collective-decision-making, /sangathan-vs-whatsapp, etc.) with schema.org SoftwareApplication, Breadcrumb, and FAQ rich snippets.',
+        textHi: 'स्कीमा मार्कअप और एफएक्यू रिच स्निपेट्स के साथ द्विभाषी लैंडिंग पेज (/community-management, /ngo-management, /grassroots-organizing आदि) सक्रिय किए गए।',
+      },
+      {
+        nameEn: 'Premier Tech & Software Discovery Trust Bar',
+        nameHi: 'प्रमुख तकनीकी व सॉफ्टवेयर निर्देशिका ट्रस्ट बार',
+        textEn: 'Integrated verified directory links across SaaSHub, Peerlist, Indie Hackers, Uneed, and Product Hunt directly above the platform footer for public transparency.',
+        textHi: 'सार्वजनिक पारदर्शिता और सत्यापन के लिए फुटर के ऊपर SaaSHub, Peerlist, Indie Hackers, Uneed और Product Hunt के सत्यापित डायरेक्टरी लिंक जोड़े गए।',
+      },
+      {
+        nameEn: 'Milestone-Based BQF Verification & Integrity Policy',
+        nameHi: 'माइलस्टोन-आधारित BQF सत्यापन व विश्वसनीयता नीति',
+        textEn: 'Refined public verification and institutional backing communications across all solution blueprints. BQF recognition is strictly positioned as an earned, review-based pathway for active collectives meeting verified groundwork and community audit milestones.',
+        textHi: 'सभी समाधान पृष्ठों पर संस्थागत सत्यापन नीति को स्पष्ट किया गया—BQF मान्यता केवल उन सक्रिय नागरिक समूहों को समीक्षा के बाद प्रदान की जाती है जो प्रमाणित जमीनी कार्य और ऑडिट मानदंड पूरा करते हैं।',
+      },
+    ],
+  },
+  {
     version: 'v1.47.6',
     titleEn: 'AI & Vector Official Emblem Studio with 2048px High-Res Export',
     titleHi: 'आधिकारिक संगठन लोगो व मोहर स्टूडियो (2048px उच्च रिज़ॉल्यूशन डाउनलोड)',

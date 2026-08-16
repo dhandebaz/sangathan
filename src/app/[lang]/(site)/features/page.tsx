@@ -37,7 +37,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'जमीनी अभियान, अनौपचारिक समूह, स्वतंत्र छात्र इकाइयां और आपसी-सहायता नेटवर्क। किसी पंजीकरण संख्या की आवश्यकता नहीं।'
         : 'Grassroots campaigns, informal collectives, activist coalitions, and mutual-aid networks. No registration number required.',
       features: [
-        { icon: 'ShieldCheck', title: 'Bahujan Queer Foundation (BQF) AI Recognition', desc: 'AI-powered facial & ID verification granting official recognized status under BQF (Delhi Reg. Section 8 NGO • CIN: U88900DL2025NPL452474) with statutory legal indemnity.' },
+        { icon: 'ShieldCheck', title: 'Bahujan Queer Foundation (BQF) Verification Pathway', desc: 'Milestone-based institutional verification from Bahujan Queer Foundation (Delhi Reg. Section 8 NGO • CIN: U88900DL2025NPL452474) for active grassroots collectives meeting verified ground audit and community criteria.' },
         { icon: 'Activity', title: 'Field Spot Audits & Sensor Logger', desc: 'Ground evidence and citizen science testing desk for air quality (PM2.5/PM10), water TDS, waste fires, and industrial emissions with GPS geotagging.' },
         { icon: 'Scale', title: 'Statutory Environmental Violation Notice Generator', desc: 'Instant AI drafting of formal legal representations citing the Air Act 1981, Water Act 1974, CAQM GRAP directives, and NGT compliance orders for DPCC, CPCB, and SDMs.' },
         { icon: 'Printer', title: '1-Page Printable Parcha & Physical Signature Sheets', desc: 'Generate high-contrast black-and-white flyers (पर्चे) formatted for ₹1 photostat/photocopy machines and physical pen-and-paper signature tables for colony chai stalls and parks.' },

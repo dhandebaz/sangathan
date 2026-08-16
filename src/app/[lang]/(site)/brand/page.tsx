@@ -80,6 +80,27 @@ export default async function BrandPage({ params }: { params: Promise<{ lang: st
              &quot;Partnered with Sangathan&quot; - <span className="text-red-600">{isHindi ? 'अनुमति नहीं है (बिना अनुमति के)' : 'Not Allowed (without permission)'}</span>
           </p>
         </section>
+
+        <section className="bg-slate-50 border border-slate-200 rounded-xl p-6 not-prose">
+          <h2 className="text-xl font-bold text-gray-900 mb-3">
+            {isHindi ? 'पहचान, डोमेन व स्पष्टीकरण (Disambiguation)' : 'Identity, Domain & Disambiguation'}
+          </h2>
+          <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+            {isHindi
+              ? 'संगठन (Sangathan) एक स्वतंत्र डिजिटल सार्वजनिक बुनियादी ढांचा मंच है जो बहुजन क्वीर फाउंडेशन (सेक्शन 8 गैर-लाभकारी संगठन) द्वारा संचालित है और केवल आधिकारिक डोमेन sangathan.space पर उपलब्ध है।'
+              : 'Sangathan is an independent digital civic infrastructure platform operated as a non-profit initiative of Bahujan Queer Foundation (Section 8 Non-Profit), exclusively accessible at sangathan.space.'}
+          </p>
+          <div className="text-xs text-gray-500 space-y-2 border-t border-slate-200 pt-3 font-mono">
+            <p>
+              • <strong>Official Domain:</strong> https://sangathan.space
+            </p>
+            <p>
+              • <strong>Distinct Entity:</strong> {isHindi 
+                ? 'संगठन किसी अन्य पार्टी या ऐप स्टोर पर मौजूद "Sangathan Setu" अथवा सरकारी पोर्टलों से संबद्ध नहीं है।' 
+                : 'Sangathan is completely unaffiliated with "Sangathan Setu" (Apple App Store) or any proprietary political party software.'}
+            </p>
+          </div>
+        </section>
       </div>
     </div>
   )

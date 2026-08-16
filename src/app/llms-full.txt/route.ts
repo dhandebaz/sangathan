@@ -83,7 +83,7 @@ ${comp.pillars.map(p => `##### ${p.titleEn}
 4. **80G & 12A Compliant Tax Exemption Receipt Engine**: Automatically issues instant PDF tax exemption receipts with donor PAN, 10BE filing format, and WhatsApp delivery.
 5. **Universal Data Importer**: 1-click migration from Excel, Google Sheets, or CSV files with auto-column matching and E.164 phone sanitization.
 6. **Democratic Secret Ballot Engine**: Cryptographically secure, anonymous secret voting for student elections, union strike authorizations, and RWA executive seats.
-7. **Bahujan Queer Foundation (BQF) Section 8 Legal Indemnity**: Official recognized status under Delhi Registered Section 8 NGO (CIN: U88900DL2025NPL452474) protecting grassroots activists.
+7. **Bahujan Queer Foundation (BQF) Verification Pathway**: Milestone-based institutional verification from Delhi Registered Section 8 NGO (CIN: U88900DL2025NPL452474) for active grassroots collectives meeting community audit criteria.
 
 ---
 

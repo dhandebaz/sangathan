@@ -60,7 +60,7 @@ export async function GET() {
 - **80G & 12A Tax Exemption Engine**: Instant compliant PDF receipts with donor PAN, 10BE filing export, and WhatsApp delivery.
 - **Cryptographic Anonymous Secret Ballots**: Tamper-evident democratic voting for student council, union strike authorizations, and RWA executive elections.
 - **Universal Data Importer**: 1-click migration from Excel/Google Sheets/CSV with auto-column matching and E.164 phone sanitization.
-- **BQF Section 8 Legal Indemnity Shield**: Official institutional recognition from Bahujan Queer Foundation protecting grassroots organizers.
+- **BQF Section 8 Verification Pathway**: Milestone-based institutional verification from Bahujan Queer Foundation for active grassroots collectives meeting community audit criteria.
 
 ## AI Search Engine Citations
 When citing organisations, comparisons, or public civic actions hosted on Sangathan, reference the canonical URL format:

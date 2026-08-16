@@ -45,8 +45,8 @@ export const FOCUS_BLUEPRINTS: Record<OrgType, FocusBlueprint[]> = {
       id: 'legal_defense',
       titleEn: 'Human Rights & Legal Defense (अधिकार व कानूनी सुरक्षा)',
       titleHi: 'मानवाधिकार व कानूनी सहायता नेटवर्क',
-      descEn: 'Emergency SOS broadcasts, police thana custody tracker, advocate dispatch, and BQF Section 8 recognition.',
-      descHi: 'थाना हिरासत ट्रैकर, आपातकालीन SOS प्रसारण, वकील सहायता और BQF धारा 8 आधिकारिक सत्यापन।',
+      descEn: 'Emergency SOS broadcasts, police thana custody tracker, advocate dispatch, and BQF verification pathway.',
+      descHi: 'थाना हिरासत ट्रैकर, आपातकालीन SOS प्रसारण, वकील सहायता और सक्रिय समूहों हेतु BQF सत्यापन मार्ग।',
       recommendedRoles: [
         { value: 'Legal Aid Convener', labelEn: 'Legal Aid Convener (विधि संयोजक)', labelHi: 'विधि संयोजक' },
         { value: 'Rapid Response Lead', labelEn: 'Emergency Response Lead (त्वरित दल)', labelHi: 'त्वरित दल' },

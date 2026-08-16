@@ -33,6 +33,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/data-practices',
     '/governance/platform-charter',
     '/admin-accountability',
+    '/community-management',
+    '/ngo-management',
+    '/organization-management',
+    '/grassroots-organizing',
+    '/campaign-management',
+    '/member-management',
+    '/collective-decision-making',
+    '/sangathan-vs-whatsapp',
+    '/sangathan-vs-nationbuilder',
+    '/sangathan-vs-action-network',
   ]
 
   const sitemapEntries: MetadataRoute.Sitemap = []

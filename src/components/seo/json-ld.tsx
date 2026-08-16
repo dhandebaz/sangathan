@@ -23,7 +23,14 @@ export function OrganizationJsonLd() {
       postalCode: '110025',
       addressCountry: 'IN',
     },
-    sameAs: ['https://twitter.com/areynetaji', 'https://instagram.com/areynetaji'],
+    sameAs: [
+      'https://twitter.com/areynetaji',
+      'https://instagram.com/areynetaji',
+      'https://peerlist.io/areynetaji/project/sangathan',
+      'https://www.indiehackers.com/product/sangathan',
+      'https://www.saashub.com/sangathan-alternatives',
+      'https://www.uneed.best/tool/sangathan',
+    ],
   }
 
   return (

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { FeaturedOn } from './featured-on'
 
 export function Footer({ lang }: { lang: string }) {
   const isHindi = lang === 'hi'
@@ -57,6 +58,7 @@ export function Footer({ lang }: { lang: string }) {
 
   return (
     <footer className="bg-white border-t border-slate-200 mt-auto relative overflow-hidden text-sm">
+      <FeaturedOn lang={lang} />
       <div 
         className="absolute inset-0 z-0 pointer-events-none opacity-[0.02]"
         style={{ backgroundImage: 'radial-gradient(circle, #0f172a 1px, transparent 1px)', backgroundSize: '24px 24px' }}
