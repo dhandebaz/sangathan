@@ -36,7 +36,7 @@ function getOrgFeatures(type: string, lang: string): OrgFeature[] {
         {
           icon: Activity,
           title: isHindi ? 'फील्ड स्पॉट जांच (Sensor Desk)' : 'Field Spot Audits (Sensor Desk)',
-          subtitle: isHindi ? 'PM2.5, जल व प्रदूषण नोटिस (Delhi Saans)' : 'Spot tests & statutory notices',
+          subtitle: isHindi ? 'PM2.5, जल व प्रदूषण विधिक नोटिस' : 'Spot tests & statutory notices',
           href: `/${lang}/dashboard/field-audits`,
           color: 'rose',
         },

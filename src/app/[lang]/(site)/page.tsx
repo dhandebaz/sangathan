@@ -17,8 +17,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       ? 'संगठन - नागरिक समूहों, एनजीओ और यूनियनों के लिए डिजिटल बुनियादी ढांचा'
       : 'Sangathan - Digital Operating System for Civic Movements & Collectives',
     description: isHindi
-      ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं (जैसे दिल्ली सांस), एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए जमीनी डिजिटल हथियार। 1-टैप फील्ड जांच, ₹1 पर्चे, आरटीआई ट्रैकर एवं विधिक सुरक्षा।'
-      : 'The zero-tech, mobile-first operating system for civic collectives, citizen scientists (Delhi Saans model), NGOs, student unions, workers unions, and RWAs. 1-tap spot audits, ₹1 printable Parchas, 15-day RTI countdowns, and official BQF legal protection.',
+      ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं, एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए जमीनी डिजिटल हथियार। 1-टैप फील्ड जांच, ₹1 पर्चे, आरटीआई ट्रैकर एवं विधिक सुरक्षा।'
+      : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs. 1-tap spot audits, ₹1 printable Parchas, 15-day RTI countdowns, and official BQF legal protection.',
     alternates: {
       canonical: `https://sangathan.space/${lang}`,
       languages: {
@@ -88,8 +88,8 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
               {/* Subheading */}
               <p className="text-base sm:text-lg lg:text-xl text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
                 {isHindi
-                  ? 'नागरिक समूहों, पर्यावरण शोधकर्ताओं (जैसे दिल्ली सांस), छात्र संघों और आरडब्ल्यूए के लिए पूर्ण डिजिटल हथियार। 1-टैप प्रदूषण जांच, ₹1 फोटोस्टेट पर्चे, 15-दिवसीय आरटीआई ट्रैकर एवं बीक्यूएफ विधिक सुरक्षा।'
-                  : 'The zero-tech, mobile-first operating system for civic collectives, citizen scientists (Delhi Saans model), student unions, and RWAs. 1-tap spot audits, ₹1 printable Parchas, 15-day RTI countdowns, and official BQF legal protection.'}
+                  ? 'नागरिक समूहों, पर्यावरण शोधकर्ताओं, छात्र संघों और आरडब्ल्यूए के लिए पूर्ण डिजिटल हथियार। 1-टैप प्रदूषण जांच, ₹1 फोटोस्टेट पर्चे, 15-दिवसीय आरटीआई ट्रैकर एवं बीक्यूएफ विधिक सुरक्षा।'
+                  : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, student unions, and RWAs. 1-tap spot audits, ₹1 printable Parchas, 15-day RTI countdowns, and official BQF legal protection.'}
               </p>
               
               {/* Primary Action Buttons */}
@@ -183,7 +183,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                   {isHindi ? '“अधिकारियों से मौखिक शिकायत नहीं, लिखित वैधानिक रिकॉर्ड से काम कराएं।”' : '“Don’t beg authorities verbally. Force action with stamped receiving and RTI countdowns.”'}
                 </p>
                 <span className="text-[11px] text-slate-400 font-mono">
-                  Ground Movement Standard • Delhi Saans & Civic Collectives
+                  Ground Movement Standard • Citizen Science & Civic Collectives
                 </span>
               </div>
             </div>
@@ -222,7 +222,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                 </p>
               </div>
               <div className="pt-4 mt-4 border-t border-slate-100 text-[11px] font-mono text-rose-700 font-bold">
-                Delhi Saans Model
+                Citizen Science Model
               </div>
             </div>
 
@@ -311,7 +311,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                   {isHindi ? 'नागरिक समूह व जमीनी आंदोलन' : 'Civic Collectives & Movements'}
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                  Neighborhood action groups, environmental researchers (Delhi Saans), basti committees, and mutual aid collectives.
+                  Neighborhood action groups, environmental & citizen science researchers, basti committees, and mutual aid collectives.
                 </p>
                 <ul className="space-y-1.5 text-xs text-slate-700 font-medium mb-4">
                   <li className="flex items-center gap-1.5"><Check size={14} className="text-rose-600" /> Spot Sensor Audits (PM2.5/TDS)</li>
@@ -557,7 +557,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-2xl font-black tracking-tight text-slate-900">
-                  {isHindi ? 'हालिया सुविधाएं (दिल्ली सांस मॉडल)' : 'Latest Ground Features (Delhi Saans Model)'}
+                  {isHindi ? 'हालिया नागरिक विज्ञान व फील्ड सुविधाएं' : 'Latest Citizen Science & Ground Features'}
                 </h2>
               </div>
               <Link href={`/${lang}/changelog`} className="text-xs font-bold text-rose-700 hover:text-rose-900 flex items-center gap-1">

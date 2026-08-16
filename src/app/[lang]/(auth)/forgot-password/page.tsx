@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 import { forgotPassword } from '@/actions/auth'
 import { Loader2, Mail, ArrowLeft, ShieldAlert } from 'lucide-react'
 
@@ -9,6 +10,8 @@ export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
+  const params = useParams()
+  const lang = (params?.lang as string) || 'en'
 
   async function handleSubmit(formData: FormData) {
     setLoading(true)
@@ -31,7 +34,7 @@ export default function ForgotPasswordPage() {
   return (
     <div className="w-full">
       <div className="mb-8">
-        <Link href="/login" className="text-sm text-slate-500 hover:text-slate-900 flex items-center gap-1 mb-6 transition-colors">
+        <Link href={`/${lang}/login`} className="text-sm text-slate-500 hover:text-slate-900 flex items-center gap-1 mb-6 transition-colors">
            <ArrowLeft size={16} /> Back to Login
         </Link>
         <h2 className="text-2xl font-semibold text-slate-900 tracking-tight">Reset Password</h2>

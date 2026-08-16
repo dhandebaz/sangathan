@@ -11,8 +11,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   return {
     title: isHindi ? 'नागरिक सुविधाएं | संगठन' : 'Features & Movement Tools | Sangathan',
     description: isHindi
-      ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं (जैसे दिल्ली सांस), एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए विशेष डिजिटल बुनियादी ढांचा।'
-      : 'Purpose-built features for civic collectives, citizen scientists (Delhi Saans model), NGOs, student unions, workers unions, and RWAs.',
+      ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं, एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए विशेष डिजिटल बुनियादी ढांचा।'
+      : 'Purpose-built features for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/features`,
       languages: {
@@ -38,7 +38,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         : 'Grassroots campaigns, informal collectives, activist coalitions, and mutual-aid networks. No registration number required.',
       features: [
         { icon: 'ShieldCheck', title: 'Bahujan Queer Foundation (BQF) AI Recognition', desc: 'AI-powered facial & ID verification granting official recognized status under BQF (Delhi Reg. Section 8 NGO • CIN: U88900DL2025NPL452474) with statutory legal indemnity.' },
-        { icon: 'Activity', title: 'Field Spot Audits & Sensor Logger (जैसे Delhi Saans)', desc: 'Ground evidence and citizen science testing desk for air quality (PM2.5/PM10), water TDS, waste fires, and industrial emissions with GPS geotagging.' },
+        { icon: 'Activity', title: 'Field Spot Audits & Sensor Logger', desc: 'Ground evidence and citizen science testing desk for air quality (PM2.5/PM10), water TDS, waste fires, and industrial emissions with GPS geotagging.' },
         { icon: 'Scale', title: 'Statutory Environmental Violation Notice Generator', desc: 'Instant AI drafting of formal legal representations citing the Air Act 1981, Water Act 1974, CAQM GRAP directives, and NGT compliance orders for DPCC, CPCB, and SDMs.' },
         { icon: 'Printer', title: '1-Page Printable Parcha & Physical Signature Sheets', desc: 'Generate high-contrast black-and-white flyers (पर्चे) formatted for ₹1 photostat/photocopy machines and physical pen-and-paper signature tables for colony chai stalls and parks.' },
         { icon: 'Clock', title: 'Stamped Receiving & 15-Day RTI Escalation Tracker', desc: 'Track stamped physical receiving copies from municipal ward offices with live countdown timers and 1-click Section 6(1) RTI application generator when authorities delay.' },
@@ -58,6 +58,8 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Printer', title: 'Formal Complaint Print & Delivery Tracking', desc: 'Generate official print-ready complaint letters addressed to the relevant authority, with hand or email delivery tracking.' },
         { icon: 'Sparkles', title: 'Sangathan AI Assistance & Minutes Extraction', desc: 'Draft meeting minutes, extract action items, and synthesize lengthy policy proposals with absolute data isolation.' },
         { icon: 'Lock', title: '1-Click Full Sovereign Data Export', desc: 'Export complete resolution records, votes, and member logs in open JSON/CSV formats anytime with zero lock-in.' },
+        { icon: 'Smartphone', title: 'All-In-One Public Portal & Native PWA Installation', desc: 'Transform public org profiles into complete standalone web portals with native tabbed feeds, 1-tap UPI Chanda donation sheets, and instant Android/iOS homescreen app installation.' },
+        { icon: 'Sparkles', title: 'AI & Vector Official Emblem Studio (2048px Export)', desc: 'Generate mathematically aligned circular statutory seals, modern crests, and letterhead-ready ink stamps with 1-click apply and 2048px high-resolution PNG downloads.' },
         { icon: 'ShieldCheck', title: 'Statutory Compliance & Government Readiness', desc: 'Legal entity sub-classification, validated statutory ID fields, compliance filings tracker, government API endpoints, and civic collective statutory knowledge hub.' }
       ]
     },
@@ -108,6 +110,8 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Globe', title: 'Public SEO & AI Search Engine Citability', desc: 'Schema.org JSON-LD structured data, dynamic Edge OpenGraph image previews, and high-signal public profiles indexed across Google, Bing, and AI answer engines.' },
         { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests 12A, 80G, FCRA based on actual usage and donations.' },
         { icon: 'ShieldCheck', title: 'Legal Identity & Compliance Engine', desc: 'Manage statutory registrations (PAN, CIN, GSTIN) and compliance filings with upcoming direct Government API integrations.' },
+        { icon: 'Smartphone', title: 'All-In-One Public Portal & Native PWA Installation', desc: 'Transform public org profiles into complete standalone web portals with native tabbed feeds, 1-tap UPI Chanda donation sheets, and instant Android/iOS homescreen app installation.' },
+        { icon: 'Sparkles', title: 'AI & Vector Official Emblem Studio (2048px Export)', desc: 'Generate mathematically aligned circular statutory seals, modern crests, and letterhead-ready ink stamps with 1-click apply and 2048px high-resolution PNG downloads.' },
         { icon: 'ShieldCheck', title: 'Statutory Compliance & Government Readiness', desc: 'Legal entity sub-classification, validated statutory ID fields, compliance filings tracker, government API endpoints, and statutory knowledge hub.' }
       ]
     },
@@ -154,6 +158,8 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable campus scaling, live member slot meters, automated receipt archiving, and multi-org capabilities.' },
         { icon: 'Globe', title: 'Public SEO & OpenGraph Social Previews', desc: 'Schema.org structured data, dynamic 1200x630 social preview cards for WhatsApp/Twitter, and high-signal public profiles.' },
         { icon: 'FileText', title: 'Proposals & Bills', desc: 'Draft, debate, and pass union resolutions democratically.' },
+        { icon: 'Smartphone', title: 'All-In-One Public Portal & Native PWA Installation', desc: 'Transform public org profiles into complete standalone web portals with native tabbed feeds, 1-tap UPI Chanda donation sheets, and instant Android/iOS homescreen app installation.' },
+        { icon: 'Sparkles', title: 'AI & Vector Official Emblem Studio (2048px Export)', desc: 'Generate mathematically aligned circular statutory seals, modern crests, and letterhead-ready ink stamps with 1-click apply and 2048px high-resolution PNG downloads.' },
         { icon: 'ShieldCheck', title: 'Statutory Compliance & Government Readiness', desc: 'Legal entity sub-classification, validated statutory ID fields, compliance filings tracker, government API endpoints, and statutory knowledge hub.' }
       ]
     },
@@ -194,6 +200,8 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable union dues budgeting, member slot tracking, and multi-branch federation tools.' },
         { icon: 'Globe', title: 'Public Union Directory & Schema.org Graph', desc: 'Indexed union representations, public solidarity petitions, and verified collective bargaining records.' },
         { icon: 'ShieldCheck', title: 'Labor Law Compliance', desc: 'Automated checks against union regulations.' },
+        { icon: 'Smartphone', title: 'All-In-One Public Portal & Native PWA Installation', desc: 'Transform public org profiles into complete standalone web portals with native tabbed feeds, 1-tap UPI Chanda donation sheets, and instant Android/iOS homescreen app installation.' },
+        { icon: 'Sparkles', title: 'AI & Vector Official Emblem Studio (2048px Export)', desc: 'Generate mathematically aligned circular statutory seals, modern crests, and letterhead-ready ink stamps with 1-click apply and 2048px high-resolution PNG downloads.' },
         { icon: 'ShieldCheck', title: 'Statutory Compliance & Government Readiness', desc: 'Legal entity sub-classification, validated statutory ID fields, compliance filings tracker, government API endpoints, and statutory knowledge hub.' }
       ]
     },
@@ -236,6 +244,8 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
         { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' },
         { icon: 'Zap', title: 'Sangathan AI Assistive Intelligence', desc: 'Smart summaries, meeting minutes extraction, form sentiment analysis, and proposal analysis with master organization control.' },
+        { icon: 'Smartphone', title: 'All-In-One Public Portal & Native PWA Installation', desc: 'Transform public org profiles into complete standalone web portals with native tabbed feeds, 1-tap UPI Chanda donation sheets, and instant Android/iOS homescreen app installation.' },
+        { icon: 'Sparkles', title: 'AI & Vector Official Emblem Studio (2048px Export)', desc: 'Generate mathematically aligned circular statutory seals, modern crests, and letterhead-ready ink stamps with 1-click apply and 2048px high-resolution PNG downloads.' },
         { icon: 'ShieldCheck', title: 'Statutory Compliance & Government Readiness', desc: 'Legal entity sub-classification, validated statutory ID fields, compliance filings tracker, government API endpoints, and statutory knowledge hub.' }
       ]
     }
@@ -264,8 +274,8 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
 
               <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
                 {isHindi 
-                  ? 'नागरिक समूहों (जैसे दिल्ली सांस), पंजीकृत एनजीओ, छात्र संघों, श्रमिक संघों और आरडब्ल्यूए के लिए विशेष मॉड्यूल — 1-टैप फील्ड जांच व ₹1 पर्चे से लेकर गुप्त मतदान और वैधानिक 80G लेजर तक।' 
-                  : 'Purpose-built for civic collectives (Delhi Saans model), NGOs, student unions, workers unions, and RWAs. From 1-tap spot audits and ₹1 printable Parchas to secret ballots and 80G tax receipts.'}
+                  ? 'नागरिक समूहों, पंजीकृत एनजीओ, छात्र संघों, श्रमिक संघों और आरडब्ल्यूए के लिए विशेष मॉड्यूल — 1-टैप फील्ड जांच व ₹1 पर्चे से लेकर गुप्त मतदान और वैधानिक 80G लेजर तक।' 
+                  : 'Purpose-built for civic collectives, NGOs, student unions, workers unions, and RWAs. From 1-tap spot audits and ₹1 printable Parchas to secret ballots and 80G tax receipts.'}
               </p>
 
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 pt-2 text-xs font-medium text-slate-600">

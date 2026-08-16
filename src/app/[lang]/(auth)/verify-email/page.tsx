@@ -2,10 +2,12 @@
 
 import { Mail } from 'lucide-react'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useParams } from 'next/navigation'
 
 export default function VerifyEmailPage() {
   const searchParams = useSearchParams()
+  const params = useParams()
+  const lang = (params?.lang as string) || 'en'
   const email = searchParams.get('email')
 
   return (
@@ -21,7 +23,7 @@ export default function VerifyEmailPage() {
       
       <div className="text-sm text-gray-400">
          <p>Did not receive the email?</p>
-         <p>Check your spam folder or <Link href="/login" className="text-orange-600 hover:underline">try logging in</Link> to resend.</p>
+         <p>Check your spam folder or <Link href={`/${lang}/login`} className="text-orange-600 hover:underline">try logging in</Link> to resend.</p>
       </div>
     </div>
   )

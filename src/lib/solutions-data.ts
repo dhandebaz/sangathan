@@ -103,8 +103,8 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
     heroSubheadlineHi: 'अनौपचारिक नागरिक समूहों, मोहल्ला कार्यकर्ताओं और जन अभियानों के लिए पूर्ण डिजिटल प्लेटफॉर्म। मौखिक शिकायतों के बजाय स्टैम्प्ड रिसीविंग, जमीनी सबूत और 15-दिवसीय आरटीआई काउंटडाउन से काम कराएं।',
     activistQuoteEn: '“Babus ignore verbal complaints and WhatsApp forwards. They only act when faced with physical stamped receiving and statutory RTI penalties.”',
     activistQuoteHi: '“सरकारी अधिकारी मौखिक बातों और व्हाट्सएप ग्रुपों को अनदेखा करते हैं। वे केवल लिखित, स्टैम्प्ड और वैधानिक आरटीआई नोटिस से डरते हैं।”',
-    quoteAttributionEn: 'Delhi Saans & Citizen Action Front Leader',
-    quoteAttributionHi: 'दिल्ली सांस व नागरिक संघर्ष मोर्चा',
+    quoteAttributionEn: 'Citizen Science & Clean Air Collective Leader',
+    quoteAttributionHi: 'नागरिक विज्ञान व स्वच्छ हवा समूह',
     groundPillars: [
       {
         titleEn: '₹1 Photostat Parcha Engine',
@@ -142,7 +142,7 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
         descEn: 'Ground data collection for air quality, sewer overflow, and uncollected waste with instant statutory notice generation for DPCC/CPCB.',
         descHi: 'वायु गुणवत्ता, सीवर ओवरफ्लो और कचरा शिकायतों पर जमीनी डेटा और DPCC/CPCB को तुरंत कानूनी नोटिस।',
         icon: 'Activity',
-        badge: 'Delhi Saans Model'
+        badge: 'Citizen Science Model'
       },
       {
         nameEn: 'A4 Printable Parcha Studio',
@@ -222,14 +222,14 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
         id: 'citizen_science',
         slug: 'citizen-science',
         titleEn: 'Environmental & Citizen Science',
-        titleHi: 'पर्यावरण व वायु प्रदूषण निगरानी (Delhi Saans Model)',
+        titleHi: 'पर्यावरण व वायु प्रदूषण निगरानी (नागरिक विज्ञान मॉडल)',
         taglineEn: 'Deploy ground air PM2.5 and water testing teams, log GPS-tagged spot sensor readings, and send statutory notices to DPCC/CPCB.',
         taglineHi: 'जमीनी प्रदूषण व पानी जांच डेटा दर्ज करें और DPCC/CPCB को तत्काल वैधानिक नोटिस व RTI भेजें।',
-        metaTitleEn: 'Citizen Science & Air Quality Monitoring App | Delhi Saans Model | Sangathan',
-        metaTitleHi: 'पर्यावरण व वायु गुणवत्ता निगरानी सॉफ्टवेयर | दिल्ली सांस मॉडल | संगठन',
+        metaTitleEn: 'Citizen Science & Air Quality Monitoring App | Ground Audits | Sangathan',
+        metaTitleHi: 'पर्यावरण व वायु गुणवत्ता निगरानी सॉफ्टवेयर | नागरिक विज्ञान मॉडल | संगठन',
         metaDescEn: 'Empower ground activists to log PM2.5/PM10 air sensor data, water TDS, and industrial pollution spots with GPS geotagging and instant statutory notices.',
         metaDescHi: 'कार्यकर्ताओं को PM2.5/PM10 वायु सेंसर डेटा, पानी TDS और प्रदूषण हॉटस्पॉट दर्ज करने और वैधानिक नोटिस जारी करने की शक्ति दें।',
-        keywords: ['air quality monitoring app India', 'citizen science environmental app', 'Delhi Saans model', 'PM2.5 sensor logger', 'DPCC CPCB legal notice generator', 'industrial pollution whistleblower tool'],
+        keywords: ['air quality monitoring app India', 'citizen science environmental app', 'PM2.5 sensor logger', 'DPCC CPCB legal notice generator', 'industrial pollution whistleblower tool'],
         activistQuoteEn: '“Pollution data in government hands is sanitized. Independent citizen science logs on Sangathan force the High Court and NGT to act.”',
         activistQuoteHi: '“सरकारी प्रदूषण आंकड़े वास्तविक स्थिति छिपाते हैं। संगठन पर दर्ज स्वतंत्र नागरिक डेटा से एनजीटी व अदालतों में ठोस कार्रवाई होती है।”',
         groundChallengeEn: 'Community pollution hotspots (smog towers, waste burning, industrial smoke) go unmonitored by government stations located miles away.',

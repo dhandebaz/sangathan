@@ -67,9 +67,9 @@ export default async function AuthLayout({
         </div>
       </div>
 
-      <div className="relative flex flex-col items-center justify-center px-4 py-10 sm:px-8 lg:px-16 bg-white">
-        <div className="w-full max-w-md bg-white">
-           <div className="lg:hidden text-center mb-8">
+      <div className="relative flex flex-col items-center justify-center px-4 py-8 sm:px-6 lg:px-10 xl:px-14 bg-white overflow-y-auto">
+        <div className="w-full max-w-md lg:max-w-xl xl:max-w-2xl bg-white my-auto">
+           <div className="lg:hidden text-center mb-6">
               <Link href="/" className="inline-block mb-3" aria-label="Sangathan Home">
                 <Image
                   src="/logo/logo.png"
@@ -85,7 +85,7 @@ export default async function AuthLayout({
 
            {children}
 
-           <div className="mt-8 text-center text-sm text-slate-500">
+           <div className="mt-8 text-center text-xs text-slate-500">
               By continuing, you agree to our <Link href="/terms" className="underline decoration-slate-300 hover:text-slate-900 transition-colors">Terms</Link> and <Link href="/privacy" className="underline decoration-slate-300 hover:text-slate-900 transition-colors">Privacy Policy</Link>.
            </div>
         </div>

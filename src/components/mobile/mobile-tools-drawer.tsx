@@ -143,7 +143,7 @@ export function MobileToolsDrawer({
       {
         href: `/${lang}/dashboard/field-audits`,
         icon: Activity,
-        titleEn: 'Field Spot Audits (जैसे Delhi Saans)',
+        titleEn: 'Field Spot Audits & Sensor Desk',
         titleHi: 'फील्ड स्पॉट जांच व प्रदूषण नोटिस',
         descEn: 'PM2.5, water TDS & statutory notice generator',
         descHi: 'प्रदूषण जांच व वैधानिक कानूनी नोटिस',

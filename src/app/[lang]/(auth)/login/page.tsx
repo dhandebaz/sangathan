@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams, useParams } from 'next/navigation'
 import { login, otpLogin, signup } from '@/actions/auth'
 import { Loader2, Mail, Lock, ArrowRight, ShieldAlert, User } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
@@ -49,6 +49,8 @@ function AuthForm() {
    const [success, setSuccess] = useState<string | null>(null)
    const [passwordValue, setPasswordValue] = useState('')
    const router = useRouter()
+   const params = useParams()
+   const lang = (params?.lang as string) || 'en'
    const searchParams = useSearchParams()
    const defaultTab = searchParams.get('tab') === 'signup' ? 'signup' : 'login'
 
@@ -110,7 +112,7 @@ function AuthForm() {
       const res = await signup({ fullName, email, password, confirmPassword, terms })
       if (!res.success) throw new Error(res.error)
 
-      router.push(`/verify-email?email=${encodeURIComponent(email)}`)
+      router.push(`/${lang}/verify-email?email=${encodeURIComponent(email)}`)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Signup failed')
     } finally {
@@ -200,7 +202,7 @@ function AuthForm() {
                 <div>
                   <div className="flex justify-between items-center mb-1.5">
                     <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">Password</label>
-                    <Link href="/forgot-password" className="text-xs text-brand-600 hover:text-brand-700 font-medium">
+                    <Link href={`/${lang}/forgot-password`} className="text-xs text-brand-600 hover:text-brand-700 font-medium">
                       Forgot?
                     </Link>
                   </div>
@@ -392,7 +394,7 @@ function AuthForm() {
             <div className="flex items-start gap-2 pt-2">
                <input type="checkbox" name="terms" required id="terms" className="mt-1 w-4 h-4 text-slate-900 bg-slate-50 border-slate-300 rounded-sm focus:ring-slate-900" />
                <label htmlFor="terms" className="text-sm text-slate-600">
-                  I agree to the <Link href="/terms" className="underline decoration-slate-300 text-slate-900">Terms of Service</Link> and <Link href="/privacy" className="underline decoration-slate-300 text-slate-900">Privacy Policy</Link>.
+                  I agree to the <Link href={`/${lang}/terms`} className="underline decoration-slate-300 text-slate-900">Terms of Service</Link> and <Link href={`/${lang}/privacy`} className="underline decoration-slate-300 text-slate-900">Privacy Policy</Link>.
                </label>
             </div>
 

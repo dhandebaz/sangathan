@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
-import { Bell, ChevronDown, LogOut, Settings, User, Sparkles } from 'lucide-react'
+import { Bell, ChevronDown, LogOut, Settings, User, Sparkles, CreditCard } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { getOrgLabel } from '@/lib/org-types'
@@ -241,24 +241,24 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
                     className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors text-left"
                     role="menuitem"
                     onClick={() => {
-                      router.push(`/${lang}/profile`)
-                      setOpen(false)
-                    }}
-                  >
-                    <User className="h-4 w-4 text-slate-400" />
-                    View Profile (प्रोफ़ाइल)
-                  </button>
-                  <button
-                    type="button"
-                    className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors text-left"
-                    role="menuitem"
-                    onClick={() => {
                       router.push(`/${lang}/dashboard/settings`)
                       setOpen(false)
                     }}
                   >
                     <Settings className="h-4 w-4 text-slate-400" />
                     Workspace Settings (सेटिंग्स)
+                  </button>
+                  <button
+                    type="button"
+                    className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors text-left"
+                    role="menuitem"
+                    onClick={() => {
+                      router.push(`/${lang}/dashboard/billing`)
+                      setOpen(false)
+                    }}
+                  >
+                    <CreditCard className="h-4 w-4 text-slate-400" />
+                    Billing & Plans (बिलिंग)
                   </button>
                 </div>
                 <div className="border-t border-slate-100 p-1.5">

@@ -32,7 +32,7 @@ export const FOCUS_BLUEPRINTS: Record<OrgType, FocusBlueprint[]> = {
     {
       id: 'citizen_science',
       titleEn: 'Environmental & Citizen Science (पर्यावरण व वायु)',
-      titleHi: 'पर्यावरण व वायु प्रदूषण निगरानी (Delhi Saans Model)',
+      titleHi: 'पर्यावरण व वायु प्रदूषण निगरानी (नागरिक विज्ञान मॉडल)',
       descEn: 'Deploy ground air PM2.5 and water testing teams, log GPS-tagged spot sensor readings, and send statutory notices to DPCC/CPCB.',
       descHi: 'जमीनी प्रदूषण व पानी जांच डेटा दर्ज करें और DPCC/CPCB को तत्काल वैधानिक नोटिस व RTI भेजें।',
       recommendedRoles: [

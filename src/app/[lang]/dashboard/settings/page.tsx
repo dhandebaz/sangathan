@@ -15,6 +15,8 @@ import { AiSettingsToggle } from '@/components/settings/ai-settings-toggle'
 import { getAiAssistanceState } from '@/lib/ai/nvidia'
 import { Database } from '@/types/database'
 
+import { OrgType } from '@/lib/org-types'
+
 interface OrgLink {
   id: string
   status: string
@@ -52,7 +54,7 @@ export default async function SettingsPage(props: PageProps) {
 
   const { data: orgData } = await supabase
     .from('organisations')
-    .select('id, name, slug, membership_policy, public_transparency_enabled, description, logo_url, cover_url, contact_email, contact_phone, website, social_links, address, registration_status, registration_number, incorporation_date, tax_id, darpan_id, compliance_documents')
+    .select('id, name, slug, org_type, membership_policy, public_transparency_enabled, description, logo_url, cover_url, contact_email, contact_phone, website, social_links, address, registration_status, registration_number, incorporation_date, tax_id, darpan_id, compliance_documents')
     .eq('id', orgId)
     .single()
 
@@ -60,6 +62,7 @@ export default async function SettingsPage(props: PageProps) {
     id: string
     name: string
     slug: string
+    org_type: OrgType | null
     membership_policy: 'open_auto' | 'admin_approval' | 'invite_only'
     public_transparency_enabled: boolean
     description: string | null
@@ -154,12 +157,12 @@ export default async function SettingsPage(props: PageProps) {
       </div>
 
       <Tabs defaultValue="general" className="w-full">
-        <TabsList className="grid w-full grid-cols-5 lg:w-[750px] mb-8">
-          <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="ai">AI Assistance</TabsTrigger>
-          <TabsTrigger value="public">Public Page</TabsTrigger>
-          <TabsTrigger value="compliance">Compliance</TabsTrigger>
-          <TabsTrigger value="network">Network & Rules</TabsTrigger>
+        <TabsList className="flex overflow-x-auto no-scrollbar w-full sm:grid sm:grid-cols-5 lg:w-[750px] mb-8 gap-1 sm:gap-0">
+          <TabsTrigger value="general" className="shrink-0 text-xs sm:text-sm">General</TabsTrigger>
+          <TabsTrigger value="ai" className="shrink-0 text-xs sm:text-sm">AI Assistance</TabsTrigger>
+          <TabsTrigger value="public" className="shrink-0 text-xs sm:text-sm">Public Page</TabsTrigger>
+          <TabsTrigger value="compliance" className="shrink-0 text-xs sm:text-sm">Compliance</TabsTrigger>
+          <TabsTrigger value="network" className="shrink-0 text-xs sm:text-sm">Network & Rules</TabsTrigger>
         </TabsList>
 
         <TabsContent value="general" className="space-y-6">
@@ -167,7 +170,15 @@ export default async function SettingsPage(props: PageProps) {
             <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Organisation Identity & Branding</h2>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-              <ImageUpload type="logo" currentUrl={organisation.logo_url} orgId={organisation.id} />
+              <ImageUpload
+                type="logo"
+                currentUrl={organisation.logo_url}
+                orgId={organisation.id}
+                orgName={organisation.name}
+                orgType={(organisation.org_type || 'civic_collective') as OrgType}
+                orgSlug={organisation.slug}
+                lang={lang}
+              />
               <ImageUpload type="cover" currentUrl={organisation.cover_url} orgId={organisation.id} />
             </div>
 

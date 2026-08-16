@@ -78,8 +78,8 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
     summaryVerdictHi: 'एक्शन नेटवर्क केवल ईमेल और विदेशी कार्ड भुगतानों (₹9,000+/माह) पर निर्भर है। संगठन भारत की जमीनी वास्तविकताओं के अनुरूप है: भौतिक पर्चे, व्हाट्सएप समन्वय, ऑफलाइन डेटा सिंक और ₹0 निःशुल्क नागरिक टियर।',
     activistQuoteEn: '“In Indian bastis, email campaigns don’t work. You need ₹1 photostat leaflets on chai stalls, stamped ward receiving copies, and UPI. That’s why we use Sangathan.”',
     activistQuoteHi: '“भारतीय बस्तियों में ईमेल काम नहीं करते। वहां चाय की दुकानों पर ₹1 पर्चे, नगर निगम की मुहर लगी रिसीविंग और यूपीआई चाहिए। इसीलिए हम संगठन चुनते हैं।”',
-    quoteAttributionEn: 'Delhi Saans & Citizen Action Front Convener',
-    quoteAttributionHi: 'दिल्ली सांस व नागरिक संघर्ष मोर्चा संयोजक',
+    quoteAttributionEn: 'Clean Air & Citizen Action Front Convener',
+    quoteAttributionHi: 'स्वच्छ हवा व नागरिक संघर्ष मोर्चा संयोजक',
     comparisonMatrix: [
       {
         featureNameEn: 'Pricing for Grassroots & Institutions',

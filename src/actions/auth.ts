@@ -288,6 +288,7 @@ export async function finalizeSignup(input: {
   organizationType: string
   slug?: string
   description?: string
+  logoUrl?: string | null
   registrationStatus?: string
   designation?: string
   membershipPolicy?: string
@@ -310,13 +311,13 @@ export async function finalizeSignup(input: {
   const rateLimit = await checkRateLimit('create_org', user.id, 2, 86400)
   if (!rateLimit.allowed) return { success: false, error: rateLimit.error }
 
-  const orgName = input.organizationName
-  const orgType = input.organizationType
+  const orgName = input.organizationName?.trim()
+  const orgType = input.organizationType || 'civic_collective'
   const metadata = user.user_metadata || {}
-  const fullName = metadata.full_name as string
+  const fullName = ((metadata.full_name as string) || (metadata.name as string) || user.email.split('@')[0] || 'Administrator').trim()
 
-  if (!orgName || !fullName || !orgType) {
-    return { success: false, error: 'Incomplete registration details. Please provide all required fields.' }
+  if (!orgName) {
+    return { success: false, error: 'Organisation name is required.' }
   }
 
   let targetSlug = ''
@@ -340,6 +341,8 @@ export async function finalizeSignup(input: {
     targetSlug = `${baseSlug}-${generateSecureString(5)}`
   }
 
+  const regStatus = input.registrationStatus || (orgType === 'civic_collective' ? 'unregistered' : 'registered')
+
   const {
     data: rpcData,
     error: rpcError,
@@ -351,11 +354,18 @@ export async function finalizeSignup(input: {
     p_email: user.email,
     p_phone: null,
     p_org_type: orgType,
+    p_registration_status: regStatus,
   } as never)
 
   if (rpcError || !rpcData) {
     console.error('Signup RPC Error:', rpcError)
-    return { success: false, error: 'Failed to create organisation. Please try again.' }
+    await logger.error('auth', 'Signup RPC Error during finalizeSignup', {
+      error: rpcError,
+      userId: user.id,
+      orgName,
+      orgType,
+    })
+    return { success: false, error: rpcError?.message || 'Failed to create organisation. Please try again.' }
   }
 
   const resultObj = rpcData as CreateOrganisationAndAdminResult
@@ -395,6 +405,32 @@ export async function finalizeSignup(input: {
   if (input.legalEntityType) orgUpdates.legal_entity_type = input.legalEntityType
   if (input.description) orgUpdates.description = input.description
   if (input.monthlyDues && Number(input.monthlyDues) > 0) orgUpdates.monthly_dues = Number(input.monthlyDues)
+
+  if (input.logoUrl) {
+    if (input.logoUrl.startsWith('data:image/')) {
+      try {
+        const base64Prefix = input.logoUrl.split(';base64,').pop()
+        if (base64Prefix) {
+          const buffer = Buffer.from(base64Prefix, 'base64')
+          const filePath = `${resultObj.organisation_id}/logo_${Date.now()}.png`
+          const { error: logoUploadErr } = await supabaseAdmin.storage
+            .from('organisation_assets')
+            .upload(filePath, buffer, { contentType: 'image/png', upsert: true })
+          
+          if (!logoUploadErr) {
+            const { data: publicUrlData } = supabaseAdmin.storage
+              .from('organisation_assets')
+              .getPublicUrl(filePath)
+            orgUpdates.logo_url = publicUrlData.publicUrl
+          }
+        }
+      } catch (uploadErr) {
+        console.error('Logo upload error:', uploadErr)
+      }
+    } else {
+      orgUpdates.logo_url = input.logoUrl
+    }
+  }
 
   const { error: orgUpdateError } = await supabaseAdmin
     .from('organisations')

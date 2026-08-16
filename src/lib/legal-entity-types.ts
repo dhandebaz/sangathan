@@ -36,6 +36,25 @@ export const VALID_LEGAL_TYPES: Record<string, LegalEntityType[]> = {
   civic_collective: ['unregistered', 'bqf_recognized'],
 }
 
+// Display metadata for legal entity types
+export const LEGAL_ENTITY_TYPE_CONFIG: Record<
+  LegalEntityType,
+  { en: string; hi: string; lawEn: string; lawHi: string }
+> = {
+  society: { en: 'Registered Society', hi: 'पंजीकृत सोसाइटी', lawEn: 'Societies Registration Act, 1860', lawHi: 'सोसाइटी पंजीकरण अधिनियम, 1860' },
+  trust: { en: 'Public Charitable Trust', hi: 'सार्वजनिक धर्मार्थ ट्रस्ट', lawEn: 'Indian Trusts Act, 1882', lawHi: 'भारतीय ट्रस्ट अधिनियम, 1882' },
+  section_8_company: { en: 'Section 8 Non-Profit Company', hi: 'धारा 8 गैर-लाभकारी कंपनी', lawEn: 'Companies Act, 2013 (Section 8)', lawHi: 'कंपनी अधिनियम, 2013 (धारा 8)' },
+  registered_trade_union: { en: 'Registered Trade Union', hi: 'पंजीकृत ट्रेड यूनियन', lawEn: 'Trade Unions Act, 1926', lawHi: 'ट्रेड यूनियन अधिनियम, 1926' },
+  informal_collective: { en: 'Informal Workers Collective', hi: 'असंगठित श्रमिक मोर्चा', lawEn: 'Informal Collective Association', lawHi: 'अनौपचारिक श्रमिक संघ' },
+  registered_society: { en: 'Registered Residents Society', hi: 'पंजीकृत निवासी सोसाइटी', lawEn: 'Societies Registration Act, 1860', lawHi: 'सोसाइटी पंजीकरण अधिनियम, 1860' },
+  cooperative_housing: { en: 'Cooperative Housing Society', hi: 'सहकारी आवास समिति', lawEn: 'State Cooperative Societies Act', lawHi: 'राज्य सहकारी समिति अधिनियम' },
+  apartment_association: { en: 'Apartment Owners Association', hi: 'अपार्टमेंट ओनर्स एसोसिएशन', lawEn: 'State Apartment Ownership Act', lawHi: 'राज्य अपार्टमेंट स्वामित्व अधिनियम' },
+  university_body: { en: 'Recognized University Body', hi: 'विश्वविद्यालय मान्यता प्राप्त छात्र संघ', lawEn: 'University Statutes / UGC Lyngdoh Mandate', lawHi: 'विश्वविद्यालय नियम / UGC लिंगदोह आदेश' },
+  independent_front: { en: 'Independent Student Front', hi: 'स्वतंत्र छात्र मोर्चा', lawEn: 'Independent Student Collective', lawHi: 'स्वतंत्र छात्र संगठन' },
+  unregistered: { en: 'Informal Grassroots Collective', hi: 'अनौपचारिक नागरिक समूह', lawEn: 'Constitution of India — Article 19(1)(c)', lawHi: 'भारत का संविधान — अनुच्छेद 19(1)(c)' },
+  bqf_recognized: { en: 'BQF Section 8 Umbrella Recognized', hi: 'BQF धारा 8 मान्यता प्राप्त समूह', lawEn: 'Bahujan Queer Foundation Section 8 Umbrella', lawHi: 'बहुजन क्वीयर फाउंडेशन धारा 8 छत्र मान्यता' },
+}
+
 // Mapping: which statutory IDs are applicable per legal entity type
 export const REQUIRED_STATUTORY_IDS: Record<LegalEntityType, StatutoryIdType[]> = {
   society: ['pan', 'cin', 'society_registration', 'darpan_uid'],

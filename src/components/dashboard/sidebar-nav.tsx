@@ -274,7 +274,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
           id: 'field_evidence',
           title: 'Field & Evidence Desk',
           items: [
-            { href: `/${lang}/dashboard/field-audits`, icon: Activity, label: 'Field Audits (जैसे Delhi Saans)', show: true },
+            { href: `/${lang}/dashboard/field-audits`, icon: Activity, label: 'Field Audits & Sensor Desk', show: true },
             { href: `/${lang}/dashboard/parcha`, icon: Printer, label: 'Printable Parcha & Signatures', show: true },
             { href: `/${lang}/dashboard/receiving-tracker`, icon: Clock, label: 'Stamped Receiving & RTI', show: true },
             { href: `/${lang}/dashboard/forms`, icon: Sparkles, label: 'Forms & Surveys', show: true },

@@ -257,7 +257,7 @@ export function PressReleasesClient({ orgId, orgName, initialReleases }: PressRe
                   <Textarea
                     required
                     rows={3}
-                    placeholder="e.g. Delhi Saans releases ground audit exposing 8x hazardous PM2.5 in Anand Vihar and serves formal notice to DPCC..."
+                    placeholder="e.g. Citizen Air Action Collective releases ground audit exposing 8x hazardous PM2.5 in Anand Vihar and serves formal notice to DPCC..."
                     value={topic}
                     onChange={e => setTopic(e.target.value)}
                     className="mt-1 text-xs"

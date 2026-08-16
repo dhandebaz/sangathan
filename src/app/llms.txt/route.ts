@@ -20,7 +20,7 @@ export async function GET() {
 ## 5 Movement Archetypes & 20 Specialized Focus Blueprints
 1. **Civic Collectives & Grassroots Movements**: https://sangathan.space/en/solutions/civic-collective
    - Neighborhood & Colony Action: https://sangathan.space/en/solutions/civic-collective/colony-civic
-   - Citizen Science & Air Pollution Monitoring (Delhi Saans Model): https://sangathan.space/en/solutions/civic-collective/citizen-science
+   - Citizen Science & Air Pollution Monitoring: https://sangathan.space/en/solutions/civic-collective/citizen-science
    - Human Rights & Legal Defense Network: https://sangathan.space/en/solutions/civic-collective/legal-defense
    - Mass Movements & Public Campaigns: https://sangathan.space/en/solutions/civic-collective/mass-campaigns
 2. **Registered NGOs & Non-Profits**: https://sangathan.space/en/solutions/ngo

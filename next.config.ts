@@ -10,7 +10,15 @@ const withSerwist = withSerwistInit({
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  serverExternalPackages: ['@sentry/nextjs'],
+  turbopack: {},
+  serverExternalPackages: [
+    '@sentry/nextjs',
+    'pg',
+    'web-push',
+    'agentmail',
+    'grammy',
+    'sharp',
+  ],
   experimental: {
     optimizePackageImports: [
       'lucide-react',
@@ -25,6 +33,7 @@ const nextConfig: NextConfig = {
       'class-variance-authority',
       'clsx',
       'tailwind-merge',
+      'sonner',
     ],
   },
   images: {
@@ -57,16 +66,19 @@ const nextConfig: NextConfig = {
   },
 };
 
-const hasSentryAuth = Boolean(process.env.SENTRY_AUTH_TOKEN || process.env.SENTRY_DSN);
+const hasSentryAuth = Boolean(process.env.SENTRY_AUTH_TOKEN);
 
-export default withSentryConfig(withSerwist(nextConfig), {
-  silent: true,
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
-  widenClientFileUpload: Boolean(process.env.SENTRY_WIDEN_UPLOAD === 'true'),
-  tunnelRoute: "/monitoring",
-  sourcemaps: {
-    disable: !hasSentryAuth,
-  },
-  disableLogger: true,
-});
+const configWithSerwist = withSerwist(nextConfig);
+
+export default hasSentryAuth
+  ? withSentryConfig(configWithSerwist, {
+      silent: true,
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      widenClientFileUpload: Boolean(process.env.SENTRY_WIDEN_UPLOAD === 'true'),
+      tunnelRoute: "/monitoring",
+      sourcemaps: {
+        disable: false,
+      },
+    })
+  : configWithSerwist;

@@ -1,9 +1,11 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
 import {
   CheckCircle2, ArrowRight, ArrowLeft, Sparkles,
-  ShieldCheck
+  ShieldCheck, Building2, Users, Scale, CreditCard,
+  Rocket, Globe, Check, AlertCircle, Loader2, UploadCloud
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -15,17 +17,33 @@ import { useRouter } from 'next/navigation'
 import { finalizeSignup } from '@/actions/auth'
 import { ORG_TYPES, OrgType } from '@/lib/org-types'
 import { LegalEntityType, VALID_LEGAL_TYPES } from '@/lib/legal-entity-types'
+import { LogoGeneratorModal } from '@/components/logo-generator/logo-generator-modal'
 
 interface OnboardingWizardProps {
   lang: string
 }
 
 const ORG_DESCRIPTIONS: Record<OrgType, { en: string; hi: string }> = {
-  civic_collective: { en: 'Grassroots campaigns, community mutual-aid, informal collectives & civic movements (No registration required)', hi: 'जमीनी अभियान, सामुदायिक आपसी-सहायता, अनौपचारिक समूह और नागरिक आंदोलन (पंजीकरण की आवश्यकता नहीं)' },
-  ngo: { en: 'Registered trusts, societies, Section 8 non-profits with donor CRM, 80G tax receipts & compliance', hi: 'पंजीकृत ट्रस्ट, सोसायटियां, सेक्शन 8 संस्थाएं (दानदाता CRM, 80G रसीदें और वैधानिक अनुपालन)' },
-  student_union: { en: 'Hostel & Mess audits, RTI/ATR assistant, election tallies & anti-ragging cell', hi: 'हॉस्टल और मेस ऑडिट, RTI/ATR सहायक, चुनाव गणना और एंटी-रैगिंग सेल' },
-  workers_union: { en: 'Collective bargaining (CBA), strike ballots, workplace grievances & dues', hi: 'सामूहिक सौदेबाजी (CBA), हड़ताल मतदान, कार्यस्थल शिकायतें और शुल्क' },
-  rwa: { en: 'Maintenance logs, estate operations & community voting', hi: 'रखरखाव लॉग, संपत्ति संचालन और सामुदायिक मतदान' },
+  civic_collective: {
+    en: 'Grassroots campaigns, community mutual-aid, informal collectives & civic movements (Protected under Article 19(1)(c))',
+    hi: 'जमीनी अभियान, सामुदायिक आपसी-सहायता, अनौपचारिक समूह और नागरिक आंदोलन (अनुच्छेद 19(1)(c) के तहत संरक्षित)',
+  },
+  ngo: {
+    en: 'Registered trusts, societies, Section 8 non-profits with donor CRM, 80G tax receipts & compliance',
+    hi: 'पंजीकृत ट्रस्ट, सोसायटियां, सेक्शन 8 संस्थाएं (दानदाता CRM, 80G रसीदें और वैधानिक अनुपालन)',
+  },
+  student_union: {
+    en: 'Hostel & Mess audits, RTI/ATR assistant, election tallies & anti-ragging cell',
+    hi: 'हॉस्टल और मेस ऑडिट, RTI/ATR सहायक, चुनाव गणना और एंटी-रैगिंग सेल',
+  },
+  workers_union: {
+    en: 'Collective bargaining (CBA), strike ballots, workplace grievances & dues',
+    hi: 'सामूहिक सौदेबाजी (CBA), हड़ताल मतदान, कार्यस्थल शिकायतें और शुल्क',
+  },
+  rwa: {
+    en: 'Maintenance logs, estate operations, apartment management & community voting',
+    hi: 'रखरखाव लॉग, संपत्ति संचालन, अपार्टमेंट प्रबंधन और सामुदायिक मतदान',
+  },
 }
 
 export interface FocusBlueprint {
@@ -54,8 +72,8 @@ export const FOCUS_BLUEPRINTS: Record<OrgType, FocusBlueprint[]> = {
     },
     {
       id: 'citizen_science',
-      titleEn: '2. Environmental & Citizen Science (Delhi Saans)',
-      titleHi: '2. पर्यावरण व प्रदूषण जांच (जैसे Delhi Saans)',
+      titleEn: '2. Environmental & Citizen Science',
+      titleHi: '2. पर्यावरण व प्रदूषण जांच',
       descEn: 'PM2.5 sensor testing, water TDS, DPCC/CPCB/NGT legal notices, and public health advisories.',
       descHi: 'PM2.5 सेंसर डेटा, जल गुणवत्ता, DPCC/CPCB/NGT वैधानिक नोटिस व जन स्वास्थ्य बुलेटिन।',
       recommendedRoles: [
@@ -202,50 +220,50 @@ export const FOCUS_BLUEPRINTS: Record<OrgType, FocusBlueprint[]> = {
   ],
   workers_union: [
     {
-      id: 'cba_negotiations',
-      titleEn: '1. Collective Bargaining (CBA) & Wage Talks',
-      titleHi: '1. सामूहिक सौदेबाजी (CBA) व वेतन वार्ता',
-      descEn: 'Charter of demands, strike authorization ballots, wage agreement tracking, and legal terms.',
-      descHi: 'मांग पत्र, हड़ताल अधिकार मतदान, वेतन समझौता ट्रैकिंग और कानूनी शर्तें।',
+      id: 'trade_union_cba',
+      titleEn: '1. Collective Bargaining & Wage Accords',
+      titleHi: '1. सामूहिक सौदेबाजी व वेतन समझौता (CBA)',
+      descEn: 'Charter of demands, wage negotiations tracker, strike ballot verification, and labour court logs.',
+      descHi: 'मांग पत्र (Charter of Demands), वेतन वार्ता, हड़ताल मतदान और लेबर कोर्ट ट्रैकर।',
       recommendedRoles: [
-        { value: 'General Secretary', labelEn: 'Union General Secretary (महासचिव)', labelHi: 'महासचिव' },
-        { value: 'CBA Negotiator', labelEn: 'Chief CBA Negotiator (मुख्य वार्ताकार)', labelHi: 'मुख्य वार्ताकार' },
-        { value: 'Legal Counsel', labelEn: 'Labor Law Counsel (श्रम कानून सलाहकार)', labelHi: 'श्रम कानून सलाहकार' },
-        { value: 'Treasurer', labelEn: 'Union Treasurer (कोषाध्यक्ष)', labelHi: 'कोषाध्यक्ष' },
+        { value: 'Union President', labelEn: 'Union President (अध्यक्ष)', labelHi: 'अध्यक्ष' },
+        { value: 'General Secretary', labelEn: 'General Secretary (महासचिव)', labelHi: 'महासचिव' },
+        { value: 'Negotiations Convener', labelEn: 'CBA Negotiations Lead (समझौता संयोजक)', labelHi: 'समझौता संयोजक' },
+        { value: 'Legal Advisor', labelEn: 'Labour Law Legal Advisor (कानूनी सलाहकार)', labelHi: 'कानूनी सलाहकार' },
       ],
     },
     {
-      id: 'safety_inspectorate',
-      titleEn: '2. Workplace Safety & Factory Audits',
-      titleHi: '2. कार्यस्थल सुरक्षा व कारखाना जांच',
-      descEn: 'Hazard logging, factory inspectorate statutory letters, accident claims, and PPE audits.',
-      descHi: 'खतरा लॉगिंग, कारखाना निरीक्षक कानूनी पत्र, दुर्घटना मुआवजा और सुरक्षा जांच।',
+      id: 'workplace_safety',
+      titleEn: '2. Factory Safety, OSHA & Compensation',
+      titleHi: '2. कारखाना सुरक्षा, OSHA व मुआवजा सहायता',
+      descEn: 'Workplace accident reporting, ESIC/EPFO claims, hazardous duty spot inspections.',
+      descHi: 'कार्यस्थल दुर्घटना रिपोर्टिंग, ESIC/EPFO दावा सहायता और सुरक्षा निरीक्षण।',
       recommendedRoles: [
-        { value: 'Safety Steward', labelEn: 'Workplace Safety Steward (सुरक्षा प्रतिनिधि)', labelHi: 'सुरक्षा प्रतिनिधि' },
-        { value: 'Factory Auditor', labelEn: 'Factory Compliance Auditor (कारखाना ऑडिटर)', labelHi: 'कारखाना ऑडिटर' },
-        { value: 'Compensation Officer', labelEn: 'ESIC & Compensation Officer (मुआवजा अधिकारी)', labelHi: 'मुआवजा अधिकारी' },
-        { value: 'Health Representative', labelEn: 'Occupational Health Rep (स्वास्थ्य प्रतिनिधि)', labelHi: 'स्वास्थ्य प्रतिनिधि' },
+        { value: 'Safety Secretary', labelEn: 'Workplace Safety Secretary (सुरक्षा सचिव)', labelHi: 'सुरक्षा सचिव' },
+        { value: 'ESIC Claim Officer', labelEn: 'ESIC & Welfare Officer (कल्याण अधिकारी)', labelHi: 'कल्याण अधिकारी' },
+        { value: 'Works Inspector', labelEn: 'Shop-Floor Safety Auditor (सुरक्षा ऑडिटर)', labelHi: 'सुरक्षा ऑडिटर' },
+        { value: 'Grievance Officer', labelEn: 'Workplace Grievance Officer (शिकायत अधिकारी)', labelHi: 'शिकायत अधिकारी' },
       ],
     },
     {
       id: 'gig_informal',
-      titleEn: '3. Gig Worker & Informal Labor Solidarity',
-      titleHi: '3. गिग वर्कर व असंगठित मजदूर एकता',
-      descEn: 'Delivery rider mutual-aid fund, accident SOS alerts, digital union badges, and rate campaigns.',
-      descHi: 'राइडर आपसी-सहायता फंड, दुर्घटना SOS अलर्ट, डिजिटल यूनियन पहचान व रेट कार्ड अभियान।',
+      titleEn: '3. Gig, Platform & Informal Workers',
+      titleHi: '3. गिग, डिलीवरी व असंगठित श्रमिक मोर्चा',
+      descEn: 'App delivery rate cards, police harassment SOS, informal mutual-aid fund, and strikes.',
+      descHi: 'रेट-कार्ड विसंगति, पुलिस प्रताड़ना SOS, आपसी सहायता कोष और त्वरित हड़ताल।',
       recommendedRoles: [
-        { value: 'Gig Convener', labelEn: 'Gig Union Convener (गिग यूनियन संयोजक)', labelHi: 'गिग यूनियन संयोजक' },
-        { value: 'Hub Leader', labelEn: 'Hub / Delivery Zone In-Charge (हब प्रमुख)', labelHi: 'हब प्रमुख' },
-        { value: 'Welfare Head', labelEn: 'Mutual Aid Fund Head (कल्याण फंड प्रमुख)', labelHi: 'कल्याण फंड प्रमुख' },
-        { value: 'Emergency Dispatcher', labelEn: 'Roadside Accident Dispatcher (आपातकालीन डिस्पैच)', labelHi: 'आपातकालीन डिस्पैच' },
+        { value: 'Gig Collective Lead', labelEn: 'Gig Workers Lead (गिग मोर्चा प्रमुख)', labelHi: 'गिग मोर्चा प्रमुख' },
+        { value: 'Hub Coordinator', labelEn: 'Delivery Hub In-Charge (हब प्रभारी)', labelHi: 'हब प्रभारी' },
+        { value: 'Mutual-Aid Custodian', labelEn: 'Mutual-Aid Fund In-Charge (राहत कोष प्रमुख)', labelHi: 'राहत कोष प्रमुख' },
+        { value: 'Field Mobilizer', labelEn: 'Field Mobilizer (फील्ड प्रेरक)', labelHi: 'फील्ड प्रेरक' },
       ],
     },
     {
-      id: 'cadre_delegate',
-      titleEn: '4. Shop-Floor Stewards & Unit Delegates',
-      titleHi: '4. शॉप-फ्लोर प्रतिनिधि व काडर नेटवर्क',
-      descEn: 'Plant-level units, monthly union dues via UPI, gate meeting circulars, and delegate elections.',
-      descHi: 'प्लांट यूनिट्स, मासिक यूनियन चंदा UPI, गेट मीटिंग परिपत्र और प्रतिनिधि चुनाव।',
+      id: 'plant_stewards',
+      titleEn: '4. Plant Cadre & Shop-Floor Stewards',
+      titleHi: '4. प्लांट काडर व शॉप-फ्लोर प्रतिनिधि',
+      descEn: 'Shift steward assignments, gate meetings, member dues collection, and discipline defense.',
+      descHi: 'शिफ्ट प्रतिनिधि रोस्टर, गेट मीटिंग, सदस्यता चंदा संग्रह और अनुशासन जांच बचाव।',
       recommendedRoles: [
         { value: 'Chief Shop Steward', labelEn: 'Chief Shop Steward (मुख्य शॉप प्रतिनिधि)', labelHi: 'मुख्य शॉप प्रतिनिधि' },
         { value: 'Unit Delegate', labelEn: 'Unit Delegate (प्लांट प्रतिनिधि)', labelHi: 'प्लांट प्रतिनिधि' },
@@ -310,10 +328,167 @@ export const FOCUS_BLUEPRINTS: Record<OrgType, FocusBlueprint[]> = {
   ],
 }
 
+interface LegalOptionDetail {
+  type: LegalEntityType
+  titleEn: string
+  titleHi: string
+  subEn: string
+  subHi: string
+  descEn: string
+  descHi: string
+  actEn: string
+  actHi: string
+}
+
+const LEGAL_ENTITY_OPTIONS: Record<OrgType, LegalOptionDetail[]> = {
+  civic_collective: [
+    {
+      type: 'unregistered',
+      titleEn: 'Unregistered / Informal Collective',
+      titleHi: 'अनौपचारिक नागरिक समूह',
+      subEn: 'Constitution of India — Article 19(1)(c)',
+      subHi: 'भारत का संविधान — अनुच्छेद 19(1)(c)',
+      descEn: 'Operates as an unincorporated grassroots association under the constitutional right to form associations. No government registration or renewal needed.',
+      descHi: 'संघ बनाने के संवैधानिक अधिकार के तहत कार्य करता है। किसी सरकारी पंजीकरण या नवीनीकरण की आवश्यकता नहीं।',
+      actEn: 'Article 19(1)(c) Right to Freedom of Association',
+      actHi: 'अनुच्छेद 19(1)(c) संघ बनाने की स्वतंत्रता',
+    },
+    {
+      type: 'bqf_recognized',
+      titleEn: 'BQF Umbrella Recognized Collective',
+      titleHi: 'BQF छत्र मान्यता प्राप्त समूह',
+      subEn: 'Section 8 Umbrella Recognition & Verification',
+      subHi: 'धारा 8 छत्र मान्यता व सत्यापन',
+      descEn: 'Affiliated with Bahujan Queer Foundation (Section 8 Non-Profit) for grant eligibility, legal protection, and audited bank routing.',
+      descHi: 'अनुदान पात्रता, कानूनी संरक्षण और ऑडिटेड बैंक रूटिंग के लिए बहुजन क्वीर फाउंडेशन से संबद्ध।',
+      actEn: 'Companies Act, 2013 (Section 8 Institutional Umbrella)',
+      actHi: 'कंपनी अधिनियम, 2013 (धारा 8 संस्थागत छत्र)',
+    },
+  ],
+  ngo: [
+    {
+      type: 'society',
+      titleEn: 'Registered Society',
+      titleHi: 'पंजीकृत सोसाइटी',
+      subEn: 'Societies Registration Act, 1860',
+      subHi: 'सोसाइटी पंजीकरण अधिनियम, 1860',
+      descEn: 'Democratic governing body with general body members and annual list filings (Form V) to Registrar of Societies.',
+      descHi: 'रजिस्ट्रार ऑफ सोसाइटीज को वार्षिक सूची फाइलिंग और आम सभा सदस्यों के साथ लोकतांत्रिक निकाय।',
+      actEn: 'Societies Registration Act, 1860 / State Society Acts',
+      actHi: 'सोसाइटी पंजीकरण अधिनियम, 1860 / राज्य सोसाइटी अधिनियम',
+    },
+    {
+      type: 'trust',
+      titleEn: 'Public Charitable Trust',
+      titleHi: 'सार्वजनिक धर्मार्थ ट्रस्ट',
+      subEn: 'Indian Trusts Act, 1882 / Bombay Public Trusts Act',
+      subHi: 'भारतीय ट्रस्ट अधिनियम, 1882 / सार्वजनिक ट्रस्ट अधिनियम',
+      descEn: 'Administered by a Board of Trustees under a registered Trust Deed with annual Charity Commissioner audit requirements.',
+      descHi: 'वार्षिक चैरिटी कमिश्नर ऑडिट आवश्यकताओं के साथ पंजीकृत ट्रस्ट डीड के तहत ट्रस्टियों द्वारा संचालित।',
+      actEn: 'Indian Trusts Act, 1882 / State Public Trusts Acts',
+      actHi: 'भारतीय ट्रस्ट अधिनियम, 1882 / राज्य ट्रस्ट अधिनियम',
+    },
+    {
+      type: 'section_8_company',
+      titleEn: 'Section 8 Non-Profit Company',
+      titleHi: 'धारा 8 गैर-लाभकारी कंपनी',
+      subEn: 'Companies Act, 2013 (Section 8)',
+      subHi: 'कंपनी अधिनियम, 2013 (धारा 8)',
+      descEn: 'Corporate non-profit entity governed by Ministry of Corporate Affairs (MCA) with CIN, DIN, AOC-4 and MGT-7 filings.',
+      descHi: 'CIN, DIN, AOC-4 और MGT-7 फाइलिंग के साथ कॉर्पोरेट मामलों के मंत्रालय (MCA) द्वारा शासित।',
+      actEn: 'Companies Act, 2013 (Section 8 MCA Framework)',
+      actHi: 'कंपनी अधिनियम, 2013 (धारा 8 MCA ढांचा)',
+    },
+  ],
+  student_union: [
+    {
+      type: 'university_body',
+      titleEn: 'Constituted University / College Body',
+      titleHi: 'मान्यता प्राप्त विश्वविद्यालय / कॉलेज निकाय',
+      subEn: 'University Statutes & Lyngdoh Committee Framework',
+      subHi: 'विश्वविद्यालय नियम व लिंगदोह समिति दिशानिर्देश',
+      descEn: 'Official student body governed by Dean of Students Welfare (DSW), university act statutes, and election code.',
+      descHi: 'विश्वविद्यालय प्रशासन (DSW), विश्वविद्यालय अधिनियम और चुनाव आचार संहिता द्वारा शासित।',
+      actEn: 'University Central/State Acts & UGC Guidelines',
+      actHi: 'विश्वविद्यालय केंद्रीय/राज्य अधिनियम व UGC दिशानिर्देश',
+    },
+    {
+      type: 'independent_front',
+      titleEn: 'Independent Student Guild / Front',
+      titleHi: 'स्वतंत्र छात्र मंच / फ्रंट',
+      subEn: 'Autonomous Student Movement Association',
+      subHi: 'स्वायत्त छात्र आंदोलन व संघ',
+      descEn: 'Autonomous, democratic student association independent of university administration restrictions.',
+      descHi: 'विश्वविद्यालय प्रशासन के प्रतिबंधों से स्वतंत्र, स्वायत्त एवं लोकतांत्रिक छात्र संगठन।',
+      actEn: 'Article 19(1)(c) / Societies Registration Act',
+      actHi: 'अनुच्छेद 19(1)(c) / सोसाइटी पंजीकरण अधिनियम',
+    },
+  ],
+  workers_union: [
+    {
+      type: 'registered_trade_union',
+      titleEn: 'Registered Trade Union',
+      titleHi: 'पंजीकृत ट्रेड यूनियन',
+      subEn: 'Trade Unions Act, 1926',
+      subHi: 'ट्रेड यूनियन अधिनियम, 1926',
+      descEn: 'Statutory registered union with strike notice rights, collective bargaining mandate, and annual Form H returns.',
+      descHi: 'हड़ताल नोटिस अधिकार, सामूहिक सौदेबाजी जनादेश और वार्षिक फॉर्म H रिटर्न के साथ पंजीकृत यूनियन।',
+      actEn: 'Trade Unions Act, 1926 (State Labour Commissioner)',
+      actHi: 'ट्रेड यूनियन अधिनियम, 1926 (राज्य श्रम आयुक्त)',
+    },
+    {
+      type: 'informal_collective',
+      titleEn: 'Informal / Gig Workers Collective',
+      titleHi: 'असंगठित / गिग वर्कर्स मोर्चा',
+      subEn: 'Platform & Informal Labor Front',
+      subHi: 'प्लेटफॉर्म व असंगठित श्रम मंच',
+      descEn: 'Grassroots collective of gig, platform, or contract workers for mutual protection and spot agitation.',
+      descHi: 'पारस्परिक सुरक्षा और त्वरित मांग अभियान के लिए गिग, प्लेटफॉर्म या अनुबंध श्रमिकों का जमीनी संगठन।',
+      actEn: 'Article 19(1)(c) & Unorganised Workers Social Security Act',
+      actHi: 'अनुच्छेद 19(1)(c) व असंगठित कर्मकार सामाजिक सुरक्षा अधिनियम',
+    },
+  ],
+  rwa: [
+    {
+      type: 'registered_society',
+      titleEn: 'Registered Society (RWA)',
+      titleHi: 'पंजीकृत सोसाइटी (RWA)',
+      subEn: 'Societies Registration Act, 1860',
+      subHi: 'सोसाइटी पंजीकरण अधिनियम, 1860',
+      descEn: 'Standard resident welfare association registered with Registrar of Societies for maintenance and civic representation.',
+      descHi: 'रखरखाव और नागरिक प्रतिनिधित्व के लिए रजिस्ट्रार ऑफ सोसाइटीज के साथ पंजीकृत आरडब्ल्यूए।',
+      actEn: 'Societies Registration Act, 1860',
+      actHi: 'सोसाइटी पंजीकरण अधिनियम, 1860',
+    },
+    {
+      type: 'cooperative_housing',
+      titleEn: 'Cooperative Housing Society (CHS)',
+      titleHi: 'सहकारी आवास सोसाइटी (CHS)',
+      subEn: 'State Cooperative Societies Act',
+      subHi: 'राज्य सहकारी सोसाइटी अधिनियम',
+      descEn: 'Cooperative housing entity with share certificates, panel statutory audits, and mandatory AGM elections.',
+      descHi: 'शेयर सर्टिफिकेट, पैनल वैधानिक ऑडिट और अनिवार्य एजीएम चुनावों के साथ सहकारी आवास निकाय।',
+      actEn: 'State Cooperative Societies Acts (Registrar of Cooperatives)',
+      actHi: 'राज्य सहकारी समिति अधिनियम (सहकारी रजिस्ट्रार)',
+    },
+    {
+      type: 'apartment_association',
+      titleEn: 'Apartment Owners Association (AOA)',
+      titleHi: 'अपार्टमेंट ओनर्स एसोसिएशन (AOA)',
+      subEn: 'State Apartment Ownership Act / RERA Rules',
+      subHi: 'राज्य अपार्टमेंट स्वामित्व अधिनियम / RERA नियम',
+      descEn: 'Formed by deed of declaration under Apartment Ownership Act for common area deeds and builder handovers.',
+      descHi: 'कॉमन एरिया डीड और बिल्डर हैंडओवर के लिए अपार्टमेंट ओनरशिप एक्ट के तहत गठित।',
+      actEn: 'State Apartment Ownership Acts & Real Estate (RERA) Act',
+      actHi: 'राज्य अपार्टमेंट स्वामित्व अधिनियम व रेरा (RERA) अधिनियम',
+    },
+  ],
+}
+
 const UI = {
   en: {
     step1Title: 'Organisation Identity & Public Web Address',
-    step1Desc: 'Choose your organization name and reserve your unique public slug on Sangathan.',
+    step1Desc: 'Choose your organisation name and reserve your unique public slug on Sangathan.',
     nameLabel: 'Official Collective Name *',
     namePlaceholder: 'e.g. All India Student Solidarity Front',
     slugLabel: 'Unique Public URL Slug *',
@@ -321,34 +496,36 @@ const UI = {
     descPlaceholder: 'Brief summary of your collective demands, causes, and democratic objectives...',
     step2Title: 'Collective Sector Blueprint',
     step2Desc: 'Select your organizational archetype to auto-configure compliant workflows, modules, and governance desks.',
-    step3Title: 'Governance & Tiered Leadership',
-    step3Desc: 'Define executive committee roles and administrative designations.',
+    step3Title: 'Legal Entity Sub-Classification',
+    step3Desc: 'Specify your statutory registration form under Indian constitutional and regulatory frameworks.',
+    step4Title: 'Governance & Tiered Leadership',
+    step4Desc: 'Define executive committee roles and administrative designations.',
     roleLabel: 'Your Initial Designation *',
     dualApproval: 'Dual-Approval Security Enabled',
     dualApprovalDesc: 'High-risk operations (such as broadcasting announcements to >1000 members or ledger adjustments) require dual executive approvals.',
-    step4Title: 'Membership Policy & Dues Structure',
-    step4Desc: 'Configure open grassroots membership or monthly dues collection.',
+    step5Title: 'Membership Policy & Dues Structure',
+    step5Desc: 'Configure open grassroots membership or monthly dues collection.',
     freeMembership: 'Free Open Membership',
-    freeMembershipDesc: 'No mandatory fee for cadre/students',
+    freeMembershipDesc: 'No mandatory fee for cadre/students/citizens. Open democratic participation.',
     paidDues: 'Monthly Contribution / Dues',
-    paidDuesDesc: 'Automated UPI subscription & receipts',
-    monthlyDuesLabel: 'Monthly Dues (INR)',
-    monthlyDuesPlaceholder: '₹ 100',
-    step5Title: 'Activate Growth & Governance Engines',
-    step5Desc: 'Toggle the features you want to enable for your organisation.',
+    paidDuesDesc: 'Automated UPI collection, recurring member ledgers & automated receipt generation.',
+    monthlyDuesLabel: 'Monthly Dues Amount (INR) *',
+    monthlyDuesPlaceholder: 'e.g. 100',
+    step6Title: 'Growth Engines & Final Launch',
+    step6Desc: 'Activate mission modules and review your collective configuration before launch.',
     petitionTitle: '1-Click Public Petition Studio',
-    petitionDesc: 'Live signature counter & volunteer conversion',
+    petitionDesc: 'Live signature counter & volunteer conversion engine',
     transparencyTitle: 'Public Transparency & Trust Ledger',
-    transparencyDesc: 'SHA-256 verified real-time fund utilization',
+    transparencyDesc: 'SHA-256 verified real-time fund utilization and public receipts',
     sosTitle: 'Emergency SOS & Legal Defense Network',
-    sosDesc: '1-tap protest detention broadcast & advocate dispatch',
+    sosDesc: '1-tap protest detention broadcast & emergency advocate dispatch',
     back: 'Back',
     continue: 'Continue',
     launching: 'Initializing Collective...',
     launch: 'Launch Sangathan OS',
     nameRequired: 'Please enter your organization name.',
     slugRequired: 'Please enter a valid slug (at least 3 characters).',
-    slugTaken: 'Please choose a different URL slug.',
+    slugTaken: 'This URL slug is already taken. Please choose another.',
     orgCreated: 'Organisation initialized and live on Sangathan!',
     setupFailed: 'Failed to complete setup.',
     unexpectedError: 'An unexpected error occurred.',
@@ -357,6 +534,12 @@ const UI = {
     slugUnavailable: 'This URL is already taken',
     enabled: 'Enabled',
     disabled: 'Disabled',
+    reviewSummary: 'Configuration Review Summary',
+    selectedArchetype: 'Movement Archetype',
+    legalClassification: 'Legal Entity Form',
+    adminDesignation: 'Admin Designation',
+    membershipPlan: 'Membership Dues',
+    growthEngines: 'Active Engines',
   },
   hi: {
     step1Title: 'संगठन पहचान और सार्वजनिक वेब पता',
@@ -368,47 +551,56 @@ const UI = {
     descPlaceholder: 'अपनी सामूहिक मांगों, कारणों और लोकतांत्रिक उद्देश्यों का संक्षिप्त सारांश...',
     step2Title: 'सामूहिक क्षेत्र ब्लूप्रिंट',
     step2Desc: 'स्वतः-कॉन्फ़िगर अनुपालन वर्कफ़्लो, मॉड्यूल और शासन डेस्क के लिए अपना संगठनात्मक आदर्श चुनें।',
-    step3Title: 'शासन और स्तरीय नेतृत्व',
-    step3Desc: 'कार्यकारी समिति भूमिकाओं और प्रशासनिक पदनामों को परिभाषित करें।',
+    step3Title: 'कानूनी इकाई उप-वर्गीकरण',
+    step3Desc: 'भारतीय संवैधानिक और नियामक ढांचे के तहत अपना सटीक कानूनी पंजीकरण प्रकार चुनें।',
+    step4Title: 'शासन और स्तरीय नेतृत्व',
+    step4Desc: 'कार्यकारी समिति भूमिकाओं और प्रशासनिक पदनामों को परिभाषित करें।',
     roleLabel: 'आपका प्रारंभिक पदनाम *',
     dualApproval: 'दोहरी-अनुमोदन सुरक्षा सक्षम',
     dualApprovalDesc: 'उच्च-जोखिम संचालन (जैसे >1000 सदस्यों को घोषणाएं प्रसारित करना या बही समायोजन) के लिए दोहरी कार्यकारी अनुमोदन आवश्यक हैं।',
-    step4Title: 'सदस्यता नीति और शुल्क संरचना',
-    step4Desc: 'खुली जमीनी सदस्यता या मासिक शुल्क संग्रह कॉन्फ़िगर करें।',
+    step5Title: 'सदस्यता नीति और शुल्क संरचना',
+    step5Desc: 'खुली जमीनी सदस्यता या मासिक शुल्क संग्रह कॉन्फ़िगर करें।',
     freeMembership: 'मुफ्त खुली सदस्यता',
-    freeMembershipDesc: 'काडर/छात्रों के लिए कोई अनिवार्य शुल्क नहीं',
+    freeMembershipDesc: 'काडर/छात्रों/नागरिकों के लिए कोई अनिवार्य शुल्क नहीं। खुली लोकतांत्रिक भागीदारी।',
     paidDues: 'मासिक योगदान / शुल्क',
-    paidDuesDesc: 'स्वचालित UPI सदस्यता और रसीदें',
-    monthlyDuesLabel: 'मासिक शुल्क (INR)',
-    monthlyDuesPlaceholder: '₹ 100',
-    step5Title: 'विकास और शासन इंजन सक्रिय करें',
-    step5Desc: 'अपने संगठन के लिए सक्षम करने के लिए सुविधाओं को टॉगल करें।',
+    paidDuesDesc: 'स्वचालित UPI सदस्यता, मासिक बहीखाता और स्वचालित रसीद उत्पादन।',
+    monthlyDuesLabel: 'मासिक शुल्क राशि (INR) *',
+    monthlyDuesPlaceholder: 'जैसे 100',
+    step6Title: 'विकास इंजन व अंतिम लॉन्च',
+    step6Desc: 'मिशन मॉड्यूल सक्रिय करें और लॉन्च से पहले अपने संगठन के विन्यास की समीक्षा करें।',
     petitionTitle: '1-क्लिक सार्वजनिक याचिका स्टूडियो',
-    petitionDesc: 'लाइव हस्ताक्षर काउंटर और स्वयंसेवक रूपांतरण',
+    petitionDesc: 'लाइव हस्ताक्षर काउंटर और स्वयंसेवक रूपांतरण इंजन',
     transparencyTitle: 'सार्वजनिक पारदर्शिता और विश्वास बही',
-    transparencyDesc: 'SHA-256 सत्यापित रियल-टाइम फंड उपयोग',
+    transparencyDesc: 'SHA-256 सत्यापित रियल-टाइम फंड उपयोग व रसीदें',
     sosTitle: 'आपातकालीन SOS और कानूनी रक्षा नेटवर्क',
-    sosDesc: '1-टैप विरोध बंदीगृह प्रसारण और वकिल डिस्पैच',
+    sosDesc: '1-टैप विरोध बंदीगृह प्रसारण और आपातकालीन वकील सहायता',
     back: 'वापस',
     continue: 'जारी रखें',
-    launching: 'सामूहिक प्रारंBBI कर रहा है...',
+    launching: 'संगठन प्रारंभ हो रहा है...',
     launch: 'Sangathan OS लॉन्च करें',
     nameRequired: 'कृपया अपने संगठन का नाम दर्ज करें।',
     slugRequired: 'कृपया एक मान्य स्लग दर्ज करें (कम से कम 3 अक्षर)।',
-    slugTaken: 'कृपया एक अलग URL स्लग चुनें।',
-    orgCreated: 'संगठन प्रारंभ और Sangathan पर लाइव!',
+    slugTaken: 'यह URL स्लग पहले से लिया हुआ है। कृपया दूसरा चुनें।',
+    orgCreated: 'संगठन सफलतापूर्वक प्रारंभ हुआ और Sangathan पर लाइव है!',
     setupFailed: 'सेटअप पूरा करने में विफल।',
     unexpectedError: 'एक अप्रत्याशित त्रुटि हुई।',
-    checkingSlug: 'उपलब्धता जांच रहा है...',
-    slugAvailable: 'या URL उपलब्ध है',
-    slugUnavailable: 'या URL पहले से ही लिया गया है',
+    checkingSlug: 'उपलब्धता जांची जा रही है...',
+    slugAvailable: 'यह URL उपलब्ध है',
+    slugUnavailable: 'यह URL पहले से ही लिया गया है',
     enabled: 'सक्षम',
     disabled: 'अक्षम',
+    reviewSummary: 'विन्यास समीक्षा सारांश',
+    selectedArchetype: 'आंदोलन प्रकार',
+    legalClassification: 'कानूनी ढांचा',
+    adminDesignation: 'प्रशासक पदनाम',
+    membershipPlan: 'सदस्यता शुल्क',
+    growthEngines: 'सक्रिय इंजन',
   },
 }
 
 export function OnboardingWizard({ lang }: OnboardingWizardProps) {
-   const t = (key: keyof typeof UI['en']) => UI[lang === 'hi' ? 'hi' : 'en'][key]
+  const isHi = lang === 'hi'
+  const t = (key: keyof typeof UI['en']) => UI[isHi ? 'hi' : 'en'][key]
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -419,12 +611,13 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
     slug: '',
     type: 'civic_collective' as OrgType,
     focusBlueprint: 'colony_civic',
-    legalEntityType: 'unregistered' as LegalEntityType | null,
+    legalEntityType: 'unregistered' as LegalEntityType,
     registrationStatus: 'unregistered',
     registrationNumber: '',
     description: '',
+    logoUrl: '',
     primaryRole: 'Lead Organizer',
-    duesType: 'free',
+    duesType: 'free' as 'free' | 'paid',
     monthlyDues: '0',
     enablePublicPetitions: true,
     enableTransparencyLedger: true,
@@ -433,8 +626,32 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
 
   const [slugChecking, setSlugChecking] = useState(false)
   const [slugAvailable, setSlugAvailable] = useState<boolean | null>(null)
+  const [isGeneratorOpen, setIsGeneratorOpen] = useState(false)
+  const logoInputRef = useRef<HTMLInputElement>(null)
   const appUrl = typeof window !== 'undefined' ? window.location.origin : 'https://sangathan.space'
 
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (!file.type.startsWith('image/')) {
+      toast.error(isHi ? 'कृपया एक वैध छवि फ़ाइल चुनें।' : 'Please select a valid image file.')
+      return
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error(isHi ? 'छवि 5MB से कम होनी चाहिए।' : 'Image must be under 5MB.')
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (reader.result) {
+        setOrgData((prev) => ({ ...prev, logoUrl: reader.result as string }))
+        toast.success(isHi ? 'लोगो अपलोड हो गया!' : 'Logo uploaded successfully!')
+      }
+    }
+    reader.readAsDataURL(file)
+  }
+
+  // Debounced slug check
   async function checkSlugAvailability(slug: string) {
     if (slug.length < 3) {
       setSlugAvailable(null)
@@ -452,32 +669,50 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
     }
   }
 
+  // Update default legal entity when org type changes
+  const handleOrgTypeChange = (id: OrgType) => {
+    const firstBlueprint = FOCUS_BLUEPRINTS[id]?.[0]
+    const validLegalTypes = VALID_LEGAL_TYPES[id] || ['unregistered']
+    const defaultLegalType = validLegalTypes[0] as LegalEntityType
+
+    setOrgData((prev) => ({
+      ...prev,
+      type: id,
+      focusBlueprint: firstBlueprint ? firstBlueprint.id : 'default',
+      primaryRole: firstBlueprint?.recommendedRoles[0]?.value || 'Lead Organizer',
+      legalEntityType: defaultLegalType,
+      registrationStatus: defaultLegalType === 'unregistered' ? 'unregistered' : 'registered',
+    }))
+  }
+
   const steps = [
-    { number: 1, title: 'Identity & Slug' },
-    { number: 2, title: 'Sector Blueprint' },
-    { number: 3, title: 'Legal Entity Type' },
-    { number: 4, title: 'Governance Roles' },
-    { number: 5, title: 'Membership & Dues' },
-    { number: 6, title: 'Launch Engine' },
+    { number: 1, title: isHi ? 'पहचान व स्लग' : 'Identity & Slug', icon: Globe },
+    { number: 2, title: isHi ? 'क्षेत्र ब्लूप्रिंट' : 'Sector Blueprint', icon: Building2 },
+    { number: 3, title: isHi ? 'कानूनी ढांचा' : 'Legal Entity Type', icon: Scale },
+    { number: 4, title: isHi ? 'शासन पदनाम' : 'Governance Roles', icon: Users },
+    { number: 5, title: isHi ? 'सदस्यता व शुल्क' : 'Membership & Dues', icon: CreditCard },
+    { number: 6, title: isHi ? 'समीक्षा व लॉन्च' : 'Review & Launch', icon: Rocket },
   ]
 
   async function handleFinalSubmit() {
-    if (!orgData.name) {
-      toast.error('Organisation name is required.')
+    if (!orgData.name.trim()) {
+      toast.error(t('nameRequired'))
+      setStep(1)
       return
     }
 
     setLoading(true)
     try {
       const res = await finalizeSignup({
-        organizationName: orgData.name,
+        organizationName: orgData.name.trim(),
         organizationType: orgData.type,
-        slug: orgData.slug,
-        description: orgData.description,
-        registrationStatus: orgData.registrationStatus,
+        slug: orgData.slug.trim(),
+        description: orgData.description.trim(),
+        logoUrl: orgData.logoUrl || undefined,
+        registrationStatus: orgData.legalEntityType === 'unregistered' ? 'unregistered' : 'registered',
         designation: orgData.primaryRole,
         membershipPolicy: orgData.duesType === 'free' ? 'open_auto' : 'admin_approval',
-        monthlyDues: orgData.monthlyDues,
+        monthlyDues: orgData.duesType === 'paid' ? orgData.monthlyDues : '0',
         focusBlueprint: orgData.focusBlueprint,
         legalEntityType: orgData.legalEntityType,
         enablePublicPetitions: orgData.enablePublicPetitions,
@@ -498,637 +733,677 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
     }
   }
 
+  const handleNext = () => {
+    if (step === 1) {
+      if (!orgData.name.trim()) {
+        toast.error(t('nameRequired'))
+        return
+      }
+      if (!orgData.slug.trim() || orgData.slug.trim().length < 3) {
+        toast.error(t('slugRequired'))
+        return
+      }
+      if (slugAvailable === false) {
+        toast.error(t('slugTaken'))
+        return
+      }
+    }
+
+    if (step === 5 && orgData.duesType === 'paid') {
+      const dues = Number(orgData.monthlyDues)
+      if (isNaN(dues) || dues <= 0) {
+        toast.error(isHi ? 'कृपया एक वैध मासिक शुल्क राशि दर्ज करें।' : 'Please enter a valid monthly dues amount.')
+        return
+      }
+    }
+
+    setStep((s) => Math.min(s + 1, 6))
+  }
+
+  const handleBack = () => {
+    setStep((s) => Math.max(s - 1, 1))
+  }
+
+  const currentOrgConfig = ORG_TYPES[orgData.type]
+  const currentBlueprint = FOCUS_BLUEPRINTS[orgData.type]?.find((b) => b.id === orgData.focusBlueprint)
+  const currentLegalOption = LEGAL_ENTITY_OPTIONS[orgData.type]?.find((l) => l.type === orgData.legalEntityType)
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 py-12 px-4 sm:px-6 flex flex-col justify-center">
-      <div className="max-w-3xl mx-auto w-full space-y-8">
-        {/* Step Progress Bar */}
-        <div className="bg-white border border-slate-200 p-4 rounded-sm shadow-sm">
-          <div className="flex items-center justify-between">
-            {steps.map((s) => (
-              <div key={s.number} className="flex items-center gap-2">
+    <div className="w-full space-y-6">
+      {/* Step Progress Bar Header */}
+      <div className="bg-white border border-slate-200 p-3 sm:p-4 rounded-sm shadow-xs">
+        {/* Desktop Stepper */}
+        <div className="hidden sm:grid sm:grid-cols-6 gap-2 items-center">
+          {steps.map((s) => {
+            const isCompleted = step > s.number
+            const isCurrent = step === s.number
+            return (
+              <div key={s.number} className="flex flex-col items-center text-center">
                 <div
                   className={`w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center transition-all ${
-                    step === s.number
-                      ? 'bg-slate-900 text-white'
-                      : step > s.number
+                    isCurrent
+                      ? 'bg-slate-900 text-white ring-2 ring-slate-900/10'
+                      : isCompleted
                       ? 'bg-emerald-600 text-white'
-                      : 'bg-slate-100 text-slate-400'
+                      : 'bg-slate-100 text-slate-400 border border-slate-200'
                   }`}
                 >
-                  {step > s.number ? <CheckCircle2 className="w-4 h-4" /> : s.number}
+                  {isCompleted ? <Check className="w-3.5 h-3.5" /> : s.number}
                 </div>
                 <span
-                  className={`text-xs font-semibold hidden md:inline ${
-                    step === s.number ? 'text-slate-900' : 'text-slate-400'
+                  className={`text-[11px] font-medium mt-1.5 truncate max-w-full ${
+                    isCurrent ? 'text-slate-900 font-semibold' : isCompleted ? 'text-slate-700' : 'text-slate-400'
                   }`}
                 >
                   {s.title}
                 </span>
               </div>
-            ))}
+            )
+          })}
+        </div>
+
+        {/* Mobile Stepper */}
+        <div className="sm:hidden space-y-2">
+          <div className="flex items-center justify-between text-xs">
+            <span className="font-bold text-slate-900">
+              {isHi ? `चरण ${step} / 6: ` : `Step ${step} of 6: `}
+              <span className="text-brand-600">{steps[step - 1].title}</span>
+            </span>
+            <span className="text-slate-400 font-mono text-[11px]">{Math.round((step / 6) * 100)}%</span>
+          </div>
+          <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden border border-slate-200">
+            <div
+              className="bg-emerald-600 h-full transition-all duration-300 rounded-full"
+              style={{ width: `${(step / 6) * 100}%` }}
+            />
           </div>
         </div>
+      </div>
 
-        {/* Wizard Form Container */}
-        <div className="bg-white border border-slate-200 p-8 rounded-sm shadow-sm space-y-6">
-           {/* STEP 1: IDENTITY & SLUG */}
-           {step === 1 && (
-             <div className="space-y-4">
-               <div className="border-b border-slate-100 pb-3">
-                 <h2 className="text-xl font-bold text-slate-900">Step 1: {t('step1Title')}</h2>
-                 <p className="text-xs text-slate-500 mt-0.5">{t('step1Desc')}</p>
-               </div>
+      {/* Main Form Box */}
+      <div className="bg-white border border-slate-200 p-5 sm:p-7 rounded-sm shadow-xs space-y-6">
+        {/* STEP 1: IDENTITY & SLUG */}
+        {step === 1 && (
+          <div className="space-y-4">
+            <div className="border-b border-slate-100 pb-3">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900">{t('step1Title')}</h2>
+              <p className="text-xs text-slate-500 mt-0.5">{t('step1Desc')}</p>
+            </div>
 
-               <div>
-                 <Label className="text-xs font-semibold text-slate-700">{t('nameLabel')}</Label>
-                 <Input
-                   required
-                   placeholder={t('namePlaceholder')}
-                   value={orgData.name}
-                   onChange={(e) => {
-                     const name = e.target.value
-                     const generatedSlug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
-                     setOrgData({ ...orgData, name, slug: orgData.slug || generatedSlug })
-                   }}
-                   className="mt-1 h-10 text-sm rounded-sm"
-                 />
-               </div>
+            <div>
+              <Label className="text-xs font-semibold text-slate-700">{t('nameLabel')}</Label>
+              <Input
+                required
+                placeholder={t('namePlaceholder')}
+                value={orgData.name}
+                onChange={(e) => {
+                  const name = e.target.value
+                  const generatedSlug = name
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/(^-|-$)/g, '')
+                  setOrgData({
+                    ...orgData,
+                    name,
+                    slug: orgData.slug && orgData.slug !== '' ? orgData.slug : generatedSlug,
+                  })
+                  if (!orgData.slug || orgData.slug === '') {
+                    checkSlugAvailability(generatedSlug)
+                  }
+                }}
+                className="mt-1 h-10 text-sm rounded-sm"
+              />
+            </div>
 
-               <div>
-                 <Label className="text-xs font-semibold text-slate-700">{t('slugLabel')}</Label>
-                 <div className="flex items-center mt-1">
-                  <span className="bg-slate-100 text-slate-500 text-xs px-3 h-10 flex items-center border border-r-0 border-slate-200 rounded-l-sm font-mono">
-                    {appUrl.replace(/^https?:\/\//, '')}/
-                  </span>
-                  <Input
-                    required
-                    placeholder="student-front"
-                    value={orgData.slug}
-                    onChange={(e) => {
-                      const newSlug = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')
-                      setOrgData({ ...orgData, slug: newSlug })
-                      checkSlugAvailability(newSlug)
-                    }}
-                    className="h-10 text-xs font-mono rounded-r-sm rounded-l-none"
-                  />
+            <div>
+              <Label className="text-xs font-semibold text-slate-700">{t('slugLabel')}</Label>
+              <div className="flex items-center mt-1">
+                <span className="bg-slate-100 text-slate-500 text-xs px-3 h-10 flex items-center border border-r-0 border-slate-200 rounded-l-sm font-mono select-none">
+                  {appUrl.replace(/^https?:\/\//, '')}/
+                </span>
+                <Input
+                  required
+                  placeholder="student-front"
+                  value={orgData.slug}
+                  onChange={(e) => {
+                    const newSlug = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')
+                    setOrgData({ ...orgData, slug: newSlug })
+                    checkSlugAvailability(newSlug)
+                  }}
+                  className="h-10 text-xs font-mono rounded-r-sm rounded-l-none"
+                />
+              </div>
+              {slugChecking && <p className="text-xs text-slate-400 mt-1 flex items-center gap-1"><Loader2 className="w-3 h-3 animate-spin" /> {t('checkingSlug')}</p>}
+              {slugAvailable === true && (
+                <p className="text-xs text-emerald-600 mt-1 flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5" /> {t('slugAvailable')}
+                </p>
+              )}
+              {slugAvailable === false && (
+                <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5" /> {t('slugUnavailable')}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <Label className="text-xs font-semibold text-slate-700">{t('descLabel')}</Label>
+              <Textarea
+                rows={3}
+                placeholder={t('descPlaceholder')}
+                value={orgData.description}
+                onChange={(e) => setOrgData({ ...orgData, description: e.target.value })}
+                className="mt-1 text-xs rounded-sm resize-none"
+              />
+            </div>
+
+            {/* Logo Setup & AI Generator */}
+            <div className="pt-2">
+              <Label className="text-xs font-semibold text-slate-700">
+                {isHi ? 'संगठन का लोगो / मोहर (Logo & Official Emblem)' : 'Organisation Logo & Official Emblem'}
+              </Label>
+              <div className="mt-2 flex flex-col sm:flex-row items-start sm:items-center gap-3.5 p-3 bg-slate-50 border border-slate-200 rounded-sm">
+                <div className="h-14 w-14 rounded-xl bg-white border border-slate-300 p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+                  {orgData.logoUrl ? (
+                    <Image
+                      src={orgData.logoUrl}
+                      alt="Org Logo Preview"
+                      width={48}
+                      height={48}
+                      className="object-contain rounded-lg"
+                      unoptimized
+                    />
+                  ) : (
+                    <span className="text-sm font-black text-slate-400">
+                      {orgData.name ? orgData.name.slice(0, 2).toUpperCase() : 'SG'}
+                    </span>
+                  )}
                 </div>
-                {slugChecking && <p className="text-xs text-slate-400 mt-1">{t('checkingSlug')}</p>}
-                {slugAvailable === true && <p className="text-xs text-emerald-600 mt-1">{t('slugAvailable')}</p>}
-                {slugAvailable === false && <p className="text-xs text-red-500 mt-1">{t('slugUnavailable')}</p>}
-              </div>
 
-               <div>
-                 <Label className="text-xs font-semibold text-slate-700">{t('descLabel')}</Label>
-                 <Textarea
-                   rows={2}
-                   placeholder={t('descPlaceholder')}
-                   value={orgData.description}
-                   onChange={(e) => setOrgData({ ...orgData, description: e.target.value })}
-                   className="mt-1 text-xs rounded-sm"
-                 />
-              </div>
-             </div>
-           )}
-
-           {/* STEP 2: SECTOR BLUEPRINT */}
-           {step === 2 && (
-             <div className="space-y-4">
-               <div className="border-b border-slate-100 pb-3">
-                 <h2 className="text-xl font-bold text-slate-900">Step 2: {t('step2Title')}</h2>
-                 <p className="text-xs text-slate-500 mt-0.5">{t('step2Desc')}</p>
-               </div>
-
-               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                 {(Object.entries(ORG_TYPES) as [OrgType, typeof ORG_TYPES[OrgType]][]).map(([id, config]) => (
-                   <button
-                     key={id}
-                     type="button"
-                     onClick={() => {
-                       const firstBlueprint = FOCUS_BLUEPRINTS[id]?.[0]
-                       setOrgData({
-                         ...orgData,
-                         type: id,
-                         focusBlueprint: firstBlueprint ? firstBlueprint.id : 'default',
-                         primaryRole: firstBlueprint?.recommendedRoles[0]?.value || 'Leader',
-                         registrationStatus: id === 'civic_collective' ? 'unregistered' : 'registered',
-                       })
-                     }}
-                     className={`p-4 text-left border rounded-sm transition-all ${
-                       orgData.type === id
-                         ? 'border-indigo-600 bg-indigo-50/50 shadow-xs'
-                         : 'border-slate-200 bg-slate-50 hover:bg-slate-100'
-                     }`}
-                   >
-                     <div className="text-sm font-bold text-slate-900">{lang === 'hi' ? config.hi : config.en}</div>
-                     <div className="text-xs text-slate-500 mt-1 leading-relaxed">{ORG_DESCRIPTIONS[id][lang === 'hi' ? 'hi' : 'en']}</div>
-                   </button>
-                 ))}
-               </div>
-
-               {/* Tailored Focus Blueprints for Selected Org Type */}
-               <div className="mt-4 p-4 border border-indigo-200 bg-indigo-50/30 rounded-sm space-y-3">
-                 <div className="flex items-center gap-2 text-xs font-bold text-indigo-950 uppercase tracking-wide">
-                   <Sparkles className="w-4 h-4 text-indigo-600" />
-                   <span>{lang === 'hi' ? 'विशेष फोकस व कार्यक्षेत्र (Focus Blueprint)' : 'Select Your Specialized Focus Blueprint'}</span>
-                 </div>
-                 <p className="text-xs text-slate-600">
-                   {lang === 'hi'
-                     ? 'अपने संगठन के प्राथमिक उद्देश्य के अनुसार टूल्स, पदनाम और डैशबोर्ड को कस्टमाइज़ करें:'
-                     : 'Pre-configure tailored tools, roles, and dashboard workflows for your specific mission:'}
-                 </p>
-                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
-                   {FOCUS_BLUEPRINTS[orgData.type]?.map((bp) => {
-                     const isSelected = orgData.focusBlueprint === bp.id
-                     return (
-                       <div
-                         key={bp.id}
-                         onClick={() => {
-                           setOrgData({
-                             ...orgData,
-                             focusBlueprint: bp.id,
-                             primaryRole: bp.recommendedRoles[0]?.value || orgData.primaryRole,
-                           })
-                         }}
-                         className={`p-3 border rounded-sm cursor-pointer text-left transition-all ${
-                           isSelected
-                             ? 'bg-white border-indigo-600 ring-2 ring-indigo-500/20 shadow-xs'
-                             : 'bg-white/80 border-slate-200 hover:border-slate-300'
-                         }`}
-                       >
-                         <div className="flex items-center justify-between">
-                           <div className="font-bold text-xs text-slate-900">
-                             {lang === 'hi' ? bp.titleHi : bp.titleEn}
-                           </div>
-                           {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600 shrink-0" />}
-                         </div>
-                         <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                           {lang === 'hi' ? bp.descHi : bp.descEn}
-                         </div>
-                       </div>
-                     )
-                   })}
+                <div className="space-y-1 min-w-0 flex-1">
+                  <div className="text-xs font-bold text-slate-800">
+                    {orgData.logoUrl
+                      ? (isHi ? 'लोगो चुना गया' : 'Official Emblem Configured')
+                      : (isHi ? 'लोगो अपलोड करें या तुरंत जनरेट करें' : 'Upload custom logo or generate one with AI')}
                   </div>
-                </div>
-
-              </div>
-            )}
-
-{step === 3 && (
-              <div className="space-y-4">
-                <div className="border-b border-slate-100 pb-3">
-                  <h2 className="text-xl font-bold text-slate-900">Step 3: {t('step3Title')}</h2>
-                  <p className="text-xs text-slate-500 mt-0.5">{t('step3Desc')}</p>
-                </div>
-
-                <div className="p-4 bg-slate-50 border border-slate-200 rounded-sm">
-                  <h3 className="text-sm font-semibold text-slate-800 mb-4">
-                    {lang === 'hi'
-                      ? 'आपका संगठन कैसे पंजीकृत है?'
-                      : 'How is your organization registered?'}
-                  </h3>
-                  <p className="text-xs text-slate-500 mb-4">
-                    {lang === 'hi'
-                      ? 'कृपया अपने संगठन के कानूनी पंजीकरण प्रकार का चयन करें। इस चरण को छोड़ सकते हैं।'
-                      : 'Please select your organization\'s legal registration type. You can skip this step.'}
+                  <p className="text-[11px] text-slate-500">
+                    {isHi
+                      ? 'लेटरहेड, ज्ञापन व आधिकारिक पत्रों पर उपयोग हेतु'
+                      : 'Ready for official letterheads, Gyapan memorandums & public portal'}
                   </p>
 
-                  <div className="space-y-2">
-                    {orgData.type === 'civic_collective' && (
-                      <div
-                        onClick={() => {
-                          setOrgData({
-                            ...orgData,
-                            legalEntityType: 'unregistered' as LegalEntityType,
-                          })
-                        }}
-                        className={`p-3 border rounded-sm cursor-pointer text-left transition-all ${
-                          orgData.legalEntityType === 'unregistered'
-                            ? 'bg-white border-emerald-600 ring-emerald-500/20 shadow-xs'
-                            : 'bg-white/80 border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="font-bold text-xs text-slate-900">
-                            {lang === 'hi' ? 'Unregistered (नहीं पंजीकृत)' : 'Unregistered'}
-                          </div>
-                          {orgData.legalEntityType === 'unregistered' && (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                          )}
-                        </div>
-                        <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                          {lang === 'hi'
-                            ? 'कोई कानूनी पंजीकरण आवश्यक नहीं। नागरिक समूह संघ बनाने की संवैधानिक स्वतंत्रता के तहत अनौपचारिक संगठनों के रूप में कार्य करते हैं।'
-                            : 'No legal registration required. Civic collectives operate as informal associations under constitutional freedom of association.'}
-                        </div>
-                      </div>
-                    )}
+                  <div className="flex flex-wrap items-center gap-2 pt-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      ref={logoInputRef}
+                      onChange={handleLogoUpload}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => logoInputRef.current?.click()}
+                      className="text-xs font-semibold h-8 rounded-sm"
+                    >
+                      <UploadCloud className="w-3.5 h-3.5 mr-1" />
+                      {orgData.logoUrl ? (isHi ? 'छवि बदलें' : 'Change Image') : (isHi ? 'अपलोड करें' : 'Upload Image')}
+                    </Button>
 
-                    {orgData.type === 'ngo' && orgData.legalEntityType !== 'unregistered' && (
-                      <div
-                        onClick={() => setOrgData({ ...orgData, legalEntityType: 'society' as LegalEntityType })}
-                        className={`p-3 border rounded-sm cursor-pointer text-left transition-all ${
-                          orgData.legalEntityType === 'society'
-                            ? 'bg-white border-emerald-600 ring-emerald-500/20 shadow-xs'
-                            : 'bg-white/80 border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="font-bold text-xs text-slate-900">Society</div>
-                          {orgData.legalEntityType === 'society' && (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                          )}
-                        </div>
-                        <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                          Society - Registered under Societies Registration Act 1860
-                        </div>
-                      </div>
-                    )}
-
-                    {orgData.type === 'ngo' && orgData.legalEntityType !== 'unregistered' && (
-                      <div
-                        onClick={() => setOrgData({ ...orgData, legalEntityType: 'trust' as LegalEntityType })}
-                        className={`p-3 border rounded-sm cursor-pointer text-left transition-all ${
-                          orgData.legalEntityType === 'trust'
-                            ? 'bg-white border-emerald-600 ring-emerald-500/20 shadow-xs'
-                            : 'bg-white/80 border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="font-bold text-xs text-slate-900">Trust</div>
-                          {orgData.legalEntityType === 'trust' && (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                          )}
-                        </div>
-                        <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                          Trust - Registered under Indian Trusts Act 1882
-                        </div>
-                      </div>
-                    )}
-
-                    {orgData.type === 'ngo' && orgData.legalEntityType !== 'unregistered' && (
-                      <div
-                        onClick={() => setOrgData({ ...orgData, legalEntityType: 'section_8_company' as LegalEntityType })}
-                        className={`p-3 border rounded-sm cursor-pointer text-left transition-all ${
-                          orgData.legalEntityType === 'section_8_company'
-                            ? 'bg-white border-emerald-600 ring-emerald-500/20 shadow-xs'
-                            : 'bg-white/80 border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="font-bold text-xs text-slate-900">Section 8 Company</div>
-                          {orgData.legalEntityType === 'section_8_company' && (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                          )}
-                        </div>
-                        <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                          Section 8 Company - Registered under Companies Act 2013
-                        </div>
-                      </div>
-                    )}
-
-                    {orgData.type === 'workers_union' && orgData.legalEntityType !== 'unregistered' && (
-                      <div
-                        onClick={() => setOrgData({ ...orgData, legalEntityType: 'registered_trade_union' as LegalEntityType })}
-                        className={`p-3 border rounded-sm cursor-pointer text-left transition-all ${
-                          orgData.legalEntityType === 'registered_trade_union'
-                            ? 'bg-white border-amber-600 ring-amber-500/20 shadow-xs'
-                            : 'bg-white/80 border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="font-bold text-xs text-slate-900">Registered Trade Union</div>
-                          {orgData.legalEntityType === 'registered_trade_union' && (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                          )}
-                        </div>
-                        <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                          Registered Trade Union - Under Trade Unions Act 1926
-                        </div>
-                      </div>
-                    )}
-
-                    {orgData.type === 'workers_union' && orgData.legalEntityType !== 'unregistered' && (
-                      <div
-                        onClick={() => setOrgData({ ...orgData, legalEntityType: 'informal_collective' as LegalEntityType })}
-                        className={`p-3 border rounded-sm cursor-pointer text-left transition-all ${
-                          orgData.legalEntityType === 'informal_collective'
-                            ? 'bg-white border-amber-600 ring-amber-500/20 shadow-xs'
-                            : 'bg-white/80 border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="font-bold text-xs text-slate-900">Informal Collective</div>
-                          {orgData.legalEntityType === 'informal_collective' && (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                          )}
-                        </div>
-                        <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                          Informal Collective - Unregistered gig worker / informal group
-                        </div>
-                      </div>
-                    )}
-
-                    {orgData.type === 'rwa' && orgData.legalEntityType !== 'unregistered' && (
-                      <div
-                        onClick={() => setOrgData({ ...orgData, legalEntityType: 'registered_society' as LegalEntityType })}
-                        className={`p-3 border rounded-sm cursor-pointer text-left transition-all ${
-                          orgData.legalEntityType === 'registered_society'
-                            ? 'bg-white border-sky-600 ring-sky-500/20 shadow-xs'
-                            : 'bg-white/80 border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="font-bold text-xs text-slate-900">Registered Society</div>
-                          {orgData.legalEntityType === 'registered_society' && (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-sky-600 shrink-0" />
-                          )}
-                        </div>
-                        <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                          Registered Society - Under Societies Registration Act 1860
-                        </div>
-                      </div>
-                    )}
-
-                    {orgData.type === 'rwa' && orgData.legalEntityType !== 'unregistered' && (
-                      <div
-                        onClick={() => setOrgData({ ...orgData, legalEntityType: 'cooperative_housing' as LegalEntityType })}
-                        className={`p-3 border rounded-sm cursor-pointer text-left transition-all ${
-                          orgData.legalEntityType === 'cooperative_housing'
-                            ? 'bg-white border-sky-600 ring-sky-500/20 shadow-xs'
-                            : 'bg-white/80 border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="font-bold text-xs text-slate-900">Cooperative Housing</div>
-                          {orgData.legalEntityType === 'cooperative_housing' && (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-sky-600 shrink-0" />
-                          )}
-                        </div>
-                        <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                          Cooperative Housing - Under State Cooperative Housing Acts
-                        </div>
-                      </div>
-                    )}
-
-                    {orgData.type === 'rwa' && orgData.legalEntityType !== 'unregistered' && (
-                      <div
-                        onClick={() => setOrgData({ ...orgData, legalEntityType: 'apartment_association' as LegalEntityType })}
-                        className={`p-3 border rounded-sm cursor-pointer text-left transition-all ${
-                          orgData.legalEntityType === 'apartment_association'
-                            ? 'bg-white border-sky-600 ring-sky-500/20 shadow-xs'
-                            : 'bg-white/80 border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="font-bold text-xs text-slate-900">Apartment Association</div>
-                          {orgData.legalEntityType === 'apartment_association' && (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-sky-600 shrink-0" />
-                          )}
-                        </div>
-                        <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                          Apartment Association - Under State Apartment Ownership Acts
-                        </div>
-                      </div>
-                    )}
-
-                    {orgData.type === 'student_union' && orgData.legalEntityType !== 'unregistered' && (
-                      <div
-                        onClick={() => setOrgData({ ...orgData, legalEntityType: 'university_body' as LegalEntityType })}
-                        className={`p-3 border rounded-sm cursor-pointer text-left transition-all ${
-                          orgData.legalEntityType === 'university_body'
-                            ? 'bg-white border-indigo-600 ring-indigo-500/20 shadow-xs'
-                            : 'bg-white/80 border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="font-bold text-xs text-slate-900">University Body</div>
-                          {orgData.legalEntityType === 'university_body' && (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
-                          )}
-                        </div>
-                        <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                          University Body - Constituted under university statute
-                        </div>
-                      </div>
-                    )}
-
-                    {orgData.type === 'student_union' && orgData.legalEntityType !== 'unregistered' && (
-                      <div
-                        onClick={() => setOrgData({ ...orgData, legalEntityType: 'independent_front' as LegalEntityType })}
-                        className={`p-3 border rounded-sm cursor-pointer text-left transition-all ${
-                          orgData.legalEntityType === 'independent_front'
-                            ? 'bg-white border-indigo-600 ring-indigo-500/20 shadow-xs'
-                            : 'bg-white/80 border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="font-bold text-xs text-slate-900">Independent Front</div>
-                          {orgData.legalEntityType === 'independent_front' && (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
-                          )}
-                        </div>
-                        <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                          Independent Front - Independent student organization (may be society)
-                        </div>
-                      </div>
-                    )}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setIsGeneratorOpen(true)}
+                      className="text-xs font-bold bg-white hover:bg-slate-50 text-slate-900 border-slate-300 h-8 rounded-sm gap-1.5"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                      <span>{isHi ? 'लोगो बनाएं (Generate Logo)' : 'Generate My Logo'}</span>
+                    </Button>
                   </div>
-
-                  <div className="mt-4 p-3 bg-slate-100 rounded-sm text-xs text-slate-700">
-                    <div className="flex items-center gap-2">
-                      <small className="text-orange-600">
-                        {lang === 'hi'
-                          ? '* Civic Collective automatically set to Unregistered (this step is skipped)'
-                          : '* Civic Collective automatically set to Unregistered (this step is skipped)'}
-                      </small>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={() => setStep((s) => s + 1)}
-                    className="w-full bg-slate-900 text-white font-semibold text-xs h-9 rounded-sm"
-                  >
-                    <span>{t('continue')}</span>
-                  </Button>
-                </div>
-</div>
-            )}
-
-            {/* STEP 4: GOVERNANCE ROLES */}
-            {step === 4 && (
-              <div className="space-y-4">
-                <div className="border-b border-slate-100 pb-3">
-                  <h2 className="text-xl font-bold text-slate-900">Step 4: {t('step4Title')}</h2>
-                  <p className="text-xs text-slate-500 mt-0.5">{t('step4Desc')}</p>
-                </div>
-
-                <div>
-                  <Label className="text-xs font-semibold text-slate-700">{t('roleLabel')}</Label>
-                  <Select
-                    value={orgData.primaryRole}
-                    onValueChange={(val) => setOrgData({ ...orgData, primaryRole: val })}
-                  >
-                    <SelectTrigger className="mt-1 h-10 text-xs rounded-sm">
-                      <SelectValue placeholder={t('roleLabel')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {/* Blueprint Specific Recommended Roles */}
-                      {FOCUS_BLUEPRINTS[orgData.type]
-                        ?.find((bp) => bp.id === orgData.focusBlueprint)
-                        ?.recommendedRoles.map((r) => (
-                          <SelectItem key={r.value} value={r.value}>
-                            {lang === 'hi' ? r.labelHi : r.labelEn} (Recommended)
-                          </SelectItem>
-                        ))}
-                      <SelectItem value="President">President (अध्यक्ष)</SelectItem>
-                      <SelectItem value="Vice President">Vice President (उपाध्यक्ष)</SelectItem>
-                      <SelectItem value="General Secretary">General Secretary (महासचिव)</SelectItem>
-                      <SelectItem value="Convener">Convener / Coordinator (संयोजक)</SelectItem>
-                      <SelectItem value="Treasurer">Treasurer / Finance Lead (कोषाध्यक्ष)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="p-4 bg-slate-50 border border-slate-200 rounded-sm text-xs text-slate-600 space-y-1.5">
-                  <div className="font-bold text-slate-800 flex items-center gap-1.5">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    <span>{t('dualApproval')}</span>
-                  </div>
-                  <p>{t('dualApprovalDesc')}</p>
                 </div>
               </div>
-            )}
+            </div>
+          </div>
+        )}
 
-            {/* STEP 5: MEMBERSHIP & DUES */}
-            {step === 5 && (
-             <div className="space-y-4">
-               <div className="border-b border-slate-100 pb-3">
-                 <h2 className="text-xl font-bold text-slate-900">Step 5: {t('step5Title')}</h2>
-                 <p className="text-xs text-slate-500 mt-0.5">{t('step5Desc')}</p>
-               </div>
+        {/* STEP 2: SECTOR BLUEPRINT */}
+        {step === 2 && (
+          <div className="space-y-4">
+            <div className="border-b border-slate-100 pb-3">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900">{t('step2Title')}</h2>
+              <p className="text-xs text-slate-500 mt-0.5">{t('step2Desc')}</p>
+            </div>
 
-               <div className="space-y-3">
-                 <button
-                   type="button"
-                   onClick={() => setOrgData({ ...orgData, enablePublicPetitions: !orgData.enablePublicPetitions })}
-                   className={`p-3.5 w-full text-left border rounded-sm flex items-center justify-between transition-all ${
-                     orgData.enablePublicPetitions ? 'border-indigo-600 bg-indigo-50/50' : 'border-slate-200 bg-slate-50'
-                   }`}
-                 >
-                   <div>
-                     <div className="text-xs font-bold text-slate-900">{t('petitionTitle')}</div>
-                     <div className="text-[11px] text-slate-500">{t('petitionDesc')}</div>
-                   </div>
-                   <span className={`text-xs font-bold ${orgData.enablePublicPetitions ? 'text-emerald-600' : 'text-slate-400'}`}>
-                     {orgData.enablePublicPetitions ? t('enabled') : t('disabled')}
-                   </span>
-                 </button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+              {(Object.entries(ORG_TYPES) as [OrgType, typeof ORG_TYPES[OrgType]][]).map(([id, config]) => {
+                const isSelected = orgData.type === id
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => handleOrgTypeChange(id)}
+                    className={`p-3.5 text-left border rounded-sm transition-all ${
+                      isSelected
+                        ? 'border-slate-900 bg-slate-50 ring-1 ring-slate-900 shadow-xs'
+                        : 'border-slate-200 bg-white hover:bg-slate-50/70'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs font-bold text-slate-900">{isHi ? config.hi : config.en}</div>
+                      {isSelected && <CheckCircle2 className="w-4 h-4 text-slate-900 shrink-0" />}
+                    </div>
+                    <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                      {ORG_DESCRIPTIONS[id][isHi ? 'hi' : 'en']}
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
 
-                 <button
-                   type="button"
-                   onClick={() => setOrgData({ ...orgData, enableTransparencyLedger: !orgData.enableTransparencyLedger })}
-                   className={`p-3.5 w-full text-left border rounded-sm flex items-center justify-between transition-all ${
-                     orgData.enableTransparencyLedger ? 'border-indigo-600 bg-indigo-50/50' : 'border-slate-200 bg-slate-50'
-                   }`}
-                 >
-                   <div>
-                     <div className="text-xs font-bold text-slate-900">{t('transparencyTitle')}</div>
-                     <div className="text-[11px] text-slate-500">{t('transparencyDesc')}</div>
-                   </div>
-                   <span className={`text-xs font-bold ${orgData.enableTransparencyLedger ? 'text-emerald-600' : 'text-slate-400'}`}>
-                     {orgData.enableTransparencyLedger ? t('enabled') : t('disabled')}
-                   </span>
-                 </button>
+            {/* Specialized Focus Blueprints */}
+            <div className="mt-4 p-3.5 border border-slate-200 bg-slate-50/60 rounded-sm space-y-2.5">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900 uppercase tracking-wide">
+                <Sparkles className="w-3.5 h-3.5 text-slate-700" />
+                <span>{isHi ? 'विशेष फोकस व कार्यक्षेत्र (Focus Blueprint)' : 'Specialized Focus Blueprint'}</span>
+              </div>
+              <p className="text-[11px] text-slate-600">
+                {isHi
+                  ? 'अपने संगठन के प्राथमिक उद्देश्य के अनुसार टूल्स, पदनाम और डैशबोर्ड को कस्टमाइज़ करें:'
+                  : 'Pre-configure tailored workflows, designation roles, and dashboards for your mission:'}
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                {FOCUS_BLUEPRINTS[orgData.type]?.map((bp) => {
+                  const isSelected = orgData.focusBlueprint === bp.id
+                  return (
+                    <button
+                      key={bp.id}
+                      type="button"
+                      onClick={() => {
+                        setOrgData({
+                          ...orgData,
+                          focusBlueprint: bp.id,
+                          primaryRole: bp.recommendedRoles[0]?.value || orgData.primaryRole,
+                        })
+                      }}
+                      className={`p-3 border rounded-sm text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 ${
+                        isSelected
+                          ? 'bg-white border-slate-900 ring-1 ring-slate-900 shadow-xs'
+                          : 'bg-white/80 border-slate-200 hover:border-slate-300'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="font-bold text-xs text-slate-900">
+                          {isHi ? bp.titleHi : bp.titleEn}
+                        </div>
+                        {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-slate-900 shrink-0" />}
+                      </div>
+                      <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                        {isHi ? bp.descHi : bp.descEn}
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        )}
 
-                 <button
-                   type="button"
-                   onClick={() => setOrgData({ ...orgData, enableEmergencySos: !orgData.enableEmergencySos })}
-                   className={`p-3.5 w-full text-left border rounded-sm flex items-center justify-between transition-all ${
-                     orgData.enableEmergencySos ? 'border-indigo-600 bg-indigo-50/50' : 'border-slate-200 bg-slate-50'
-                   }`}
-                 >
-                   <div>
-                     <div className="text-xs font-bold text-slate-900">{t('sosTitle')}</div>
-                     <div className="text-[11px] text-slate-500">{t('sosDesc')}</div>
-                   </div>
-                   <span className={`text-xs font-bold ${orgData.enableEmergencySos ? 'text-emerald-600' : 'text-slate-400'}`}>
-                     {orgData.enableEmergencySos ? t('enabled') : t('disabled')}
-                   </span>
-                 </button>
-               </div>
-             </div>
-           )}
+        {/* STEP 3: LEGAL ENTITY TYPE */}
+        {step === 3 && (
+          <div className="space-y-4">
+            <div className="border-b border-slate-100 pb-3">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900">{t('step3Title')}</h2>
+              <p className="text-xs text-slate-500 mt-0.5">{t('step3Desc')}</p>
+            </div>
 
-           {/* Navigation Controls */}
-           <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-              {step > 1 ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setStep((s) => s - 1)}
-                  className="text-xs border-slate-300"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5 mr-1" />
-                  {t('back')}
-                </Button>
-              ) : (
-                <div />
-              )}
-              {step < 6 ? (
-                <Button
-                  type="button"
-                  size="sm"
-                  onClick={() => {
-                    // If on step 2 (Sector Blueprint) and org is civic_collective,
-                    // auto-set legal entity type to unregistered and skip to step 4
-                    if (step === 2 && orgData.type === 'civic_collective') {
+            <div className="space-y-2.5">
+              {LEGAL_ENTITY_OPTIONS[orgData.type]?.map((opt) => {
+                const isSelected = orgData.legalEntityType === opt.type
+                return (
+                  <button
+                    type="button"
+                    key={opt.type}
+                    onClick={() => {
                       setOrgData({
                         ...orgData,
-                        legalEntityType: 'unregistered' as LegalEntityType,
+                        legalEntityType: opt.type,
+                        registrationStatus: opt.type === 'unregistered' ? 'unregistered' : 'registered',
                       })
-                      setStep((s) => s + 2) // Skip to step 4 (Governance Roles)
-                      return
-                    }
-                    if (step === 1) {
-                      if (!orgData.name) {
-                        toast.error(t('nameRequired'))
-                        return
-                      }
-                      if (!orgData.slug || orgData.slug.length < 3) {
-                        toast.error(t('slugRequired'))
-                        return
-                      }
-                      if (slugAvailable === false) {
-                        toast.error(t('slugTaken'))
-                        return
-                      }
-                    }
-                    setStep((s) => s + 1)
-                  }}
-                  className="bg-slate-900 text-white font-semibold text-xs h-9 px-4 rounded-sm"
-                >
-                  <span>{t('continue')}</span>
-                  <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                </Button>
+                    }}
+                    className={`w-full p-3.5 border rounded-sm text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 ${
+                      isSelected
+                        ? 'bg-white border-slate-900 ring-1 ring-slate-900 shadow-xs'
+                        : 'bg-white border-slate-200 hover:border-slate-300'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-bold text-xs text-slate-900">
+                          {isHi ? opt.titleHi : opt.titleEn}
+                        </div>
+                        <div className="text-[11px] font-medium text-slate-600 mt-0.5">
+                          {isHi ? opt.subHi : opt.subEn}
+                        </div>
+                      </div>
+                      {isSelected && <CheckCircle2 className="w-4 h-4 text-slate-900 shrink-0 ml-2" />}
+                    </div>
+                    <div className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
+                      {isHi ? opt.descHi : opt.descEn}
+                    </div>
+                    <div className="mt-2 text-[10px] text-slate-600 font-mono bg-slate-50 p-1.5 rounded-xs border border-slate-200">
+                      ⚖️ {isHi ? opt.actHi : opt.actEn}
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
+
+            {orgData.type === 'civic_collective' && (
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-sm text-xs text-slate-600">
+                <p className="leading-relaxed">
+                  💡 <strong>{isHi ? 'संवैधानिक सूचना:' : 'Constitutional Note:'}</strong>{' '}
+                  {isHi
+                    ? 'नागरिक समूहों को अनौपचारिक रूप से कार्य करने का पूर्ण संवैधानिक अधिकार है। भविष्य में यदि औपचारिक खाता या 80G रसीद की आवश्यकता हो, तो BQF मान्यता या सोसायटी पंजीकरण में अपग्रेड किया जा सकता है।'
+                    : 'Civic collectives operate lawfully as informal associations under Article 19(1)(c). If your collective later requires grant access or 80G tax benefits, you can link with BQF Section 8 umbrella recognition anytime.'}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* STEP 4: GOVERNANCE ROLES */}
+        {step === 4 && (
+          <div className="space-y-4">
+            <div className="border-b border-slate-100 pb-3">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900">{t('step4Title')}</h2>
+              <p className="text-xs text-slate-500 mt-0.5">{t('step4Desc')}</p>
+            </div>
+
+            <div>
+              <Label className="text-xs font-semibold text-slate-700">{t('roleLabel')}</Label>
+              <Select
+                value={orgData.primaryRole}
+                onValueChange={(val) => setOrgData({ ...orgData, primaryRole: val })}
+              >
+                <SelectTrigger className="mt-1 h-10 text-xs rounded-sm">
+                  <SelectValue placeholder={t('roleLabel')} />
+                </SelectTrigger>
+                <SelectContent>
+                  {/* Blueprint Specific Recommended Roles */}
+                  {FOCUS_BLUEPRINTS[orgData.type]
+                    ?.find((bp) => bp.id === orgData.focusBlueprint)
+                    ?.recommendedRoles.map((r) => (
+                      <SelectItem key={r.value} value={r.value}>
+                        {isHi ? r.labelHi : r.labelEn} (★ Recommended)
+                      </SelectItem>
+                    ))}
+                  <SelectItem value="President">President (अध्यक्ष)</SelectItem>
+                  <SelectItem value="General Secretary">General Secretary (महासचिव)</SelectItem>
+                  <SelectItem value="Convener">Convener / Coordinator (संयोजक)</SelectItem>
+                  <SelectItem value="Treasurer">Treasurer / Finance Lead (कोषाध्यक्ष)</SelectItem>
+                  <SelectItem value="Executive Member">Executive Member (कार्यकारिणी सदस्य)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-sm text-xs text-slate-600 space-y-1">
+              <div className="font-bold text-slate-800 flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span>{t('dualApproval')}</span>
+              </div>
+              <p className="text-[11px] leading-relaxed">{t('dualApprovalDesc')}</p>
+            </div>
+          </div>
+        )}
+
+        {/* STEP 5: MEMBERSHIP & DUES */}
+        {step === 5 && (
+          <div className="space-y-4">
+            <div className="border-b border-slate-100 pb-3">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900">{t('step5Title')}</h2>
+              <p className="text-xs text-slate-500 mt-0.5">{t('step5Desc')}</p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              {/* Option A: Free Open Membership */}
+              <button
+                type="button"
+                onClick={() => setOrgData({ ...orgData, duesType: 'free', monthlyDues: '0' })}
+                className={`p-3.5 text-left border rounded-sm transition-all ${
+                  orgData.duesType === 'free'
+                    ? 'border-slate-900 bg-slate-50 ring-1 ring-slate-900 shadow-xs'
+                    : 'border-slate-200 bg-white hover:bg-slate-50/70'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="text-xs font-bold text-slate-900">{t('freeMembership')}</div>
+                  {orgData.duesType === 'free' && <CheckCircle2 className="w-4 h-4 text-slate-900 shrink-0" />}
+                </div>
+                <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                  {t('freeMembershipDesc')}
+                </div>
+              </button>
+
+              {/* Option B: Paid Monthly Dues */}
+              <button
+                type="button"
+                onClick={() => setOrgData({ ...orgData, duesType: 'paid', monthlyDues: orgData.monthlyDues === '0' ? '100' : orgData.monthlyDues })}
+                className={`p-3.5 text-left border rounded-sm transition-all ${
+                  orgData.duesType === 'paid'
+                    ? 'border-slate-900 bg-slate-50 ring-1 ring-slate-900 shadow-xs'
+                    : 'border-slate-200 bg-white hover:bg-slate-50/70'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="text-xs font-bold text-slate-900">{t('paidDues')}</div>
+                  {orgData.duesType === 'paid' && <CheckCircle2 className="w-4 h-4 text-slate-900 shrink-0" />}
+                </div>
+                <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                  {t('paidDuesDesc')}
+                </div>
+              </button>
+            </div>
+
+            {/* Dues Amount Input if paid is selected */}
+            {orgData.duesType === 'paid' && (
+              <div className="mt-4 p-3.5 border border-slate-200 bg-slate-50/50 rounded-sm space-y-2">
+                <Label className="text-xs font-semibold text-slate-700">{t('monthlyDuesLabel')}</Label>
+                <div className="flex items-center">
+                  <span className="bg-slate-100 text-slate-600 text-xs px-3 h-9 flex items-center border border-r-0 border-slate-200 rounded-l-sm font-semibold">
+                    ₹
+                  </span>
+                  <Input
+                    type="number"
+                    min="1"
+                    placeholder={t('monthlyDuesPlaceholder')}
+                    value={orgData.monthlyDues}
+                    onChange={(e) => setOrgData({ ...orgData, monthlyDues: e.target.value })}
+                    className="h-9 text-xs rounded-r-sm rounded-l-none"
+                  />
+                </div>
+                <p className="text-[11px] text-slate-500">
+                  {isHi
+                    ? 'सदस्यों के लिए मासिक सदस्यता शुल्क स्वतः UPI द्वारा संग्रह करने के लिए निर्धारित किया जाएगा।'
+                    : 'Members will be prompted for this recurring monthly contribution via automated UPI subscriptions.'}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* STEP 6: GROWTH ENGINES & LAUNCH REVIEW */}
+        {step === 6 && (
+          <div className="space-y-5">
+            <div className="border-b border-slate-100 pb-3">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900">{t('step6Title')}</h2>
+              <p className="text-xs text-slate-500 mt-0.5">{t('step6Desc')}</p>
+            </div>
+
+            {/* Feature Toggles */}
+            <div className="space-y-2.5">
+              <button
+                type="button"
+                onClick={() => setOrgData({ ...orgData, enablePublicPetitions: !orgData.enablePublicPetitions })}
+                className={`p-3 w-full text-left border rounded-sm flex items-center justify-between transition-all ${
+                  orgData.enablePublicPetitions ? 'border-slate-900 bg-slate-50/80 shadow-xs' : 'border-slate-200 bg-white'
+                }`}
+              >
+                <div>
+                  <div className="text-xs font-bold text-slate-900">{t('petitionTitle')}</div>
+                  <div className="text-[11px] text-slate-500">{t('petitionDesc')}</div>
+                </div>
+                <span className={`text-xs font-bold ${orgData.enablePublicPetitions ? 'text-emerald-700' : 'text-slate-400'}`}>
+                  {orgData.enablePublicPetitions ? t('enabled') : t('disabled')}
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setOrgData({ ...orgData, enableTransparencyLedger: !orgData.enableTransparencyLedger })}
+                className={`p-3 w-full text-left border rounded-sm flex items-center justify-between transition-all ${
+                  orgData.enableTransparencyLedger ? 'border-slate-900 bg-slate-50/80 shadow-xs' : 'border-slate-200 bg-white'
+                }`}
+              >
+                <div>
+                  <div className="text-xs font-bold text-slate-900">{t('transparencyTitle')}</div>
+                  <div className="text-[11px] text-slate-500">{t('transparencyDesc')}</div>
+                </div>
+                <span className={`text-xs font-bold ${orgData.enableTransparencyLedger ? 'text-emerald-700' : 'text-slate-400'}`}>
+                  {orgData.enableTransparencyLedger ? t('enabled') : t('disabled')}
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setOrgData({ ...orgData, enableEmergencySos: !orgData.enableEmergencySos })}
+                className={`p-3 w-full text-left border rounded-sm flex items-center justify-between transition-all ${
+                  orgData.enableEmergencySos ? 'border-slate-900 bg-slate-50/80 shadow-xs' : 'border-slate-200 bg-white'
+                }`}
+              >
+                <div>
+                  <div className="text-xs font-bold text-slate-900">{t('sosTitle')}</div>
+                  <div className="text-[11px] text-slate-500">{t('sosDesc')}</div>
+                </div>
+                <span className={`text-xs font-bold ${orgData.enableEmergencySos ? 'text-emerald-700' : 'text-slate-400'}`}>
+                  {orgData.enableEmergencySos ? t('enabled') : t('disabled')}
+                </span>
+              </button>
+            </div>
+
+            {/* Configuration Review Summary Card */}
+            <div className="border border-slate-200 bg-slate-50 p-4 rounded-sm space-y-3">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900 uppercase tracking-wide">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>{t('reviewSummary')}</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                <div className="bg-white p-2.5 border border-slate-200 rounded-xs">
+                  <div className="text-[10px] uppercase font-bold text-slate-500">{isHi ? 'संगठन नाम व वेब पता' : 'Organisation & URL'}</div>
+                  <div className="font-bold text-slate-900 mt-0.5 truncate">{orgData.name}</div>
+                  <div className="text-[11px] text-slate-500 font-mono mt-0.5 truncate">{appUrl.replace(/^https?:\/\//, '')}/{orgData.slug}</div>
+                </div>
+
+                <div className="bg-white p-2.5 border border-slate-200 rounded-xs">
+                  <div className="text-[10px] uppercase font-bold text-slate-500">{t('selectedArchetype')}</div>
+                  <div className="font-bold text-slate-900 mt-0.5">{isHi ? currentOrgConfig?.hi : currentOrgConfig?.en}</div>
+                  <div className="text-[11px] text-slate-500 mt-0.5">{isHi ? currentBlueprint?.titleHi : currentBlueprint?.titleEn}</div>
+                </div>
+
+                <div className="bg-white p-2.5 border border-slate-200 rounded-xs">
+                  <div className="text-[10px] uppercase font-bold text-slate-500">{t('legalClassification')}</div>
+                  <div className="font-bold text-slate-900 mt-0.5">{isHi ? currentLegalOption?.titleHi : currentLegalOption?.titleEn}</div>
+                  <div className="text-[11px] text-slate-500 mt-0.5 truncate">{isHi ? currentLegalOption?.actHi : currentLegalOption?.actEn}</div>
+                </div>
+
+                <div className="bg-white p-2.5 border border-slate-200 rounded-xs">
+                  <div className="text-[10px] uppercase font-bold text-slate-500">{t('adminDesignation')} & {t('membershipPlan')}</div>
+                  <div className="font-bold text-slate-900 mt-0.5">{orgData.primaryRole}</div>
+                  <div className="text-[11px] text-slate-500 mt-0.5">
+                    {orgData.duesType === 'free'
+                      ? (isHi ? 'मुफ्त खुली सदस्यता' : 'Free Open Membership')
+                      : (isHi ? `मासिक शुल्क: ₹ ${orgData.monthlyDues}` : `Monthly Dues: ₹ ${orgData.monthlyDues}`)}
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-2.5 bg-indigo-50/50 border border-indigo-100 rounded-xs flex items-center gap-2 text-[11px] text-indigo-900">
+                <span className="text-sm">📱</span>
+                <span>
+                  {isHi
+                    ? 'लॉन्च के बाद संगठन को सीधे Android या iPhone होमस्क्रीन पर 1-टैप ऐप के रूप में इंस्टॉल किया जा सकता है।'
+                    : 'Your organization portal is 100% PWA-ready for instant 1-tap installation on Android & iOS homescreens.'}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Footer Navigation Controls */}
+        <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+          {step > 1 ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleBack}
+              disabled={loading}
+              className="text-xs border-slate-300 h-9 px-3 rounded-sm"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 mr-1" />
+              {t('back')}
+            </Button>
+          ) : (
+            <div />
+          )}
+
+          {step < 6 ? (
+            <Button
+              type="button"
+              size="sm"
+              onClick={handleNext}
+              className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs h-9 px-5 rounded-sm shadow-xs"
+            >
+              <span>{t('continue')}</span>
+              <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              disabled={loading}
+              onClick={handleFinalSubmit}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs h-10 px-6 rounded-sm shadow-md transition-all flex items-center gap-1.5"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>{t('launching')}</span>
+                </>
               ) : (
-                <Button
-                  type="button"
-                  disabled={loading}
-                  onClick={handleFinalSubmit}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs h-10 px-6 rounded-sm shadow-md"
-                >
-                  <Sparkles className="w-4 h-4 mr-1.5" />
-                  {loading ? t('launching') : t('launch')}
-                </Button>
+                <>
+                  <Sparkles className="w-4 h-4" />
+                  <span>{t('launch')}</span>
+                </>
               )}
-           </div>
+            </Button>
+          )}
         </div>
       </div>
+
+      {/* Official Emblem & Logo Generator Modal */}
+      <LogoGeneratorModal
+        isOpen={isGeneratorOpen}
+        onClose={() => setIsGeneratorOpen(false)}
+        orgName={orgData.name || 'My Organisation'}
+        orgType={orgData.type}
+        orgSlug={orgData.slug || 'org'}
+        lang={lang}
+        onLogoSelected={(_url, dataUrl) => {
+          setOrgData((prev) => ({ ...prev, logoUrl: dataUrl }))
+        }}
+      />
     </div>
   )
 }
