@@ -14,12 +14,12 @@ describe('Plan Limits & Civic Tier Definitions', () => {
     expect(COMMUNITY_CONTRIBUTION_PRESETS).toContain(500)
   })
 
-  it('should return Sustainer Access plan details with suggested contribution, AI enabled, and unlimited members', () => {
+  it('should return Sustainer Access plan details with suggested contribution, AI enabled, and base members', () => {
     const details = getPlanDetails('Institution')
     expect(details.id).toBe('Institution')
     expect(details.name).toBe('Sustainer Access')
     expect(details.accessType).toBe('sustainer')
-    expect(details.maxMembers).toBe(100000)
+    expect(details.maxMembers).toBe(500)
     expect(details.aiEnabled).toBe(true)
     expect(details.suggestedContributionMonthly).toBe(1000)
     expect(details.suggestedContributionYearly).toBe(10000)

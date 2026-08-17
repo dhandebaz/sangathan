@@ -35,6 +35,37 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.47.8',
+    titleEn: 'Onboarding Launch Resilience, Fail-Safe Org Creation & Server Action Integrity',
+    titleHi: 'ऑनबोर्डिंग लॉन्च विश्वसनीयता, त्रुटि-रहित संगठन निर्माण व सर्वर एक्शन सुरक्षा',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Hardened the complete Organization Onboarding and Launch pipeline with fail-safe server execution, service-role DB rate-limiting, resilient exception handling, and user-friendly error reporting. Eliminated unhandled server action exceptions during the Launch step across all 5 Movement Archetypes and statutory entity forms.',
+    descHi: 'सभी 5 संगठनात्मक श्रेणियों और वैधानिक रूपों में सुरक्षित सर्वर निष्पादन, सर्विस-रोल आधारित दर सीमा, सुरक्षित त्रुटि प्रबंधन और स्पष्ट उपयोगकर्ता संदेशों के साथ संगठन ऑनबोर्डिंग और लॉन्च प्रक्रिया को सुदृढ़ किया गया। लॉन्च चरण के दौरान होने वाली सभी संभावित त्रुटियों का पूर्ण निवारण किया गया।',
+    color: 'emerald',
+    icon: Rocket,
+    features: [
+      {
+        nameEn: 'Resilient Server-Action Exception Handling',
+        nameHi: 'सुरक्षित सर्वर-एक्शन त्रुटि प्रबंधन',
+        textEn: 'Wrapped organization finalization and role provisioning in comprehensive top-level exception handlers with diagnostic logging, ensuring actionable feedback rather than generic error popups.',
+        textHi: 'संगठन सेटअप और भूमिका आवंटन को विस्तृत त्रुटि प्रबंधन और डायग्नोस्टिक लॉगिंग के साथ सुरक्षित किया गया ताकि सामान्य पॉपअप के बजाय सटीक स्थिति संदेश प्राप्त हो सकें।',
+      },
+      {
+        nameEn: 'Fail-Safe DB Rate Limiting',
+        nameHi: 'सुरक्षित डेटाबेस दर-सीमा सत्यापन',
+        textEn: 'Migrated rate limit verification to service-role context with graceful fallback, preventing authorization deadlocks for newly registered administrators.',
+        textHi: 'दर-सीमा जांच को सर्विस-रोल संदर्भ और स्वतः रिकवरी के साथ अपग्रेड किया गया, जिससे नए पंजीकृत प्रशासकों के लिए किसी भी प्रकार का अवरोध न आए।',
+      },
+      {
+        nameEn: 'Robust Post-Setup Navigation & Cache Invalidation',
+        nameHi: 'सुगम पोस्ट-सेटअप नेविगेशन व कैश अद्यतनीकरण',
+        textEn: 'Optimized workspace slug conflict resolution, storage uploads, session cookie assignment, and instant dashboard routing upon collective initialization.',
+        textHi: 'संगठन निर्माण के तुरंत बाद सुरक्षित स्लग सत्यापन, स्टोरेज अपलोड, सत्र कुकी और तत्काल डैशबोर्ड नेविगेशन को सुव्यवस्थित किया गया।',
+      },
+    ],
+  },
+  {
     version: 'v1.47.7',
     titleEn: 'SEO Discovery Architecture, Directory Verification & High-Intent Landing Hubs',
     titleHi: 'एसईओ खोज अवसंरचना, निर्देशिका सत्यापन व उद्देश्य-आधारित लैंडिंग हब',

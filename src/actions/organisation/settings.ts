@@ -78,7 +78,7 @@ export const updateOrganisationSlug = createSafeAction(
       .from('organisations')
       .select('id')
       .eq('slug', newSlug)
-      .single()
+      .maybeSingle()
 
     if (existing && existing.id !== context.organizationId) {
       return { error: 'This slug is already taken by another organisation.' }

@@ -726,8 +726,10 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
       } else {
         toast.error(res.error || t('setupFailed'))
       }
-    } catch {
-      toast.error(t('unexpectedError'))
+    } catch (err: unknown) {
+      console.error('Finalize signup error:', err)
+      const message = err instanceof Error ? err.message : t('unexpectedError')
+      toast.error(message || t('unexpectedError'))
     } finally {
       setLoading(false)
     }
