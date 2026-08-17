@@ -16,7 +16,7 @@ export default async function CheckInPage(props: { params: Promise<{ lang: strin
     .from('events')
     .select('title')
     .eq('id', id)
-    .single()
+    .maybeSingle()
 
   const event = eventData as DashboardEvent | null
 

@@ -74,7 +74,7 @@ export async function POST(request: Request) {
           .from('organisations')
           .select('capabilities, plan_name, whitelabel_enabled')
           .eq('id', orgId)
-          .single()
+          .maybeSingle()
 
         const currentCaps = (org?.capabilities as Record<string, unknown>) || {}
         const isYearly = planPeriod === 'yearly'

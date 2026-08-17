@@ -38,7 +38,7 @@ export async function checkAiAccess(orgId: string): Promise<boolean> {
     .from('organisations')
     .select('plan_name, capabilities')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   if (!data) return false
 
@@ -76,7 +76,7 @@ export async function getAiAssistanceState(orgId: string): Promise<{
       .from('organisations')
       .select('plan_name, capabilities')
       .eq('id', orgId)
-      .single()
+      .maybeSingle()
 
     if (!data) return { isAssistanceEnabled: false, isPlanSupported: false, isConfigured }
 

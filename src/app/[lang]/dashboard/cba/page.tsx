@@ -16,7 +16,7 @@ export default async function CBAPage(props: { params: Promise<{ lang: string }>
     .from('profiles')
     .select('organisation_id')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   let orgId = profile?.organisation_id
   if (!orgId) {

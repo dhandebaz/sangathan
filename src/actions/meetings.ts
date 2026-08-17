@@ -51,7 +51,7 @@ export const createMeeting = createSafeAction(
         created_by: context.user.id,
       } as never)
       .select('id')
-      .single()
+      .maybeSingle()
 
     if (error || !meetingData) {
       const err = error as { message?: string } | null

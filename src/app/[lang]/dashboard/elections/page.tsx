@@ -21,7 +21,7 @@ export default async function ElectionsPage({ params }: { params: Promise<{ lang
     .from('profiles')
     .select('id, role')
     .eq('id', user?.id || '')
-    .single()
+    .maybeSingle()
 
   // Fetch elections
   const { data: elections } = await supabase

@@ -40,7 +40,7 @@ export async function checkMemberLimit(
     .from('organisations')
     .select('plan_name, capabilities')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   const planName = (org?.plan_name || 'Community') as PlanName
   const tier = getPlanDetails(planName)
@@ -120,7 +120,7 @@ export async function getOrgPlanUsage(orgId: string): Promise<OrgPlanUsage> {
       .from('organisations')
       .select('plan_name, plan_period, plan_expires_at, plan_status, whitelabel_enabled, capabilities')
       .eq('id', orgId)
-      .single(),
+      .maybeSingle(),
     supabase
       .from('members')
       .select('id', { count: 'exact', head: true })

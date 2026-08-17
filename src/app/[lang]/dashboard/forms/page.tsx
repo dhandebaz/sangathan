@@ -20,7 +20,7 @@ export default async function FormsPage(props: { params: Promise<{ lang: string 
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   const profile = profileData as { organisation_id: string | null; role: string } | null
 

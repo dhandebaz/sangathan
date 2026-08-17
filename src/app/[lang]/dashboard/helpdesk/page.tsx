@@ -8,7 +8,7 @@ export default async function HelpdeskPage() {
   
   let orgType = 'ngo' // Default
   if (orgId) {
-    const { data } = await supabase.from('organisations').select('org_type').eq('id', orgId).single()
+    const { data } = await supabase.from('organisations').select('org_type').eq('id', orgId).maybeSingle()
     if (data?.org_type) {
       orgType = data.org_type
     }

@@ -17,85 +17,99 @@ const CreateBroadcastSchema = z.object({
 })
 
 export async function createPlatformBroadcast(input: z.infer<typeof CreateBroadcastSchema>) {
-  const result = CreateBroadcastSchema.safeParse(input)
-  if (!result.success) {
-    return { success: false, error: result.error.issues[0]?.message || 'Invalid input' }
-  }
-
-  await requirePlatformAdmin()
-
-  const authClient = await createClient()
-  const { data: { user } } = await authClient.auth.getUser()
-  if (!user) throw new Error('Unauthorized')
-
-  const supabase = createServiceClient()
-
-  // Resolve target organisation ID dynamically
-  let targetOrgId = result.data.target_org_id
-  if (!targetOrgId) {
-    if (process.env.DEFAULT_ORG_ID) {
-      targetOrgId = process.env.DEFAULT_ORG_ID
-    } else {
-      const { data: firstOrg } = await supabase.from('organisations').select('id').limit(1).maybeSingle()
-      targetOrgId = firstOrg?.id
+  try {
+    const result = CreateBroadcastSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid input' }
     }
+
+    await requirePlatformAdmin()
+
+    const authClient = await createClient()
+    const { data: { user } } = await authClient.auth.getUser()
+    if (!user) return { success: false, error: 'Unauthorized' }
+
+    const supabase = createServiceClient()
+
+    // Resolve target organisation ID dynamically
+    let targetOrgId = result.data.target_org_id
+    if (!targetOrgId) {
+      if (process.env.DEFAULT_ORG_ID) {
+        targetOrgId = process.env.DEFAULT_ORG_ID
+      } else {
+        const { data: firstOrg } = await supabase.from('organisations').select('id').limit(1).maybeSingle()
+        targetOrgId = firstOrg?.id
+      }
+    }
+
+    if (!targetOrgId) {
+      return { success: false, error: 'No target organisation available to receive broadcast.' }
+    }
+
+    const { error } = await supabase.from('announcements').insert({
+      organisation_id: targetOrgId,
+      title: result.data.title,
+      content: result.data.content,
+      is_pinned: result.data.priority === 'critical' || result.data.priority === 'high',
+      send_email: result.data.send_email,
+      expires_at: result.data.expires_at || null,
+      created_by: user.id,
+    })
+
+    if (error) return { success: false, error: error.message }
+
+    await logAction({
+      organisation_id: targetOrgId,
+      user_id: user.id,
+      action: 'PLATFORM_BROADCAST_CREATED',
+      resource_table: 'announcements',
+      resource_id: result.data.title,
+      details: { priority: result.data.priority, target_org: targetOrgId },
+    })
+
+    revalidatePath('/admin/broadcasts', 'page')
+    return { success: true }
+  } catch (error: unknown) {
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to create platform broadcast' }
   }
-
-  if (!targetOrgId) {
-    return { success: false, error: 'No target organisation available to receive broadcast.' }
-  }
-
-  const { error } = await supabase.from('announcements').insert({
-    organisation_id: targetOrgId,
-    title: result.data.title,
-    content: result.data.content,
-    is_pinned: result.data.priority === 'critical' || result.data.priority === 'high',
-    send_email: result.data.send_email,
-    expires_at: result.data.expires_at || null,
-    created_by: user.id,
-  })
-
-  if (error) return { success: false, error: error.message }
-
-  await logAction({
-    organisation_id: targetOrgId,
-    user_id: user.id,
-    action: 'PLATFORM_BROADCAST_CREATED',
-    resource_table: 'announcements',
-    resource_id: result.data.title,
-    details: { priority: result.data.priority, target_org: targetOrgId },
-  })
-
-  revalidatePath('/admin/broadcasts', 'page')
-  return { success: true }
 }
 
 export async function getAllBroadcasts() {
-  await requirePlatformAdmin()
-  const supabase = createServiceClient()
-  const { data } = await supabase
-    .from('announcements')
-    .select('*, organisations(name)')
-    .order('created_at', { ascending: false })
-    .limit(100)
-  return data || []
+  try {
+    await requirePlatformAdmin()
+    const supabase = createServiceClient()
+    const { data, error } = await supabase
+      .from('announcements')
+      .select('*, organisations(name)')
+      .order('created_at', { ascending: false })
+      .limit(100)
+    if (error) return []
+    return data || []
+  } catch {
+    return []
+  }
 }
 
 export async function deleteBroadcast(broadcastId: string) {
-  await requirePlatformAdmin()
+  try {
+    await requirePlatformAdmin()
 
-  const authClient = await createClient()
-  const { data: { user } } = await authClient.auth.getUser()
-  if (!user) throw new Error('Unauthorized')
+    const authClient = await createClient()
+    const { data: { user } } = await authClient.auth.getUser()
+    if (!user) return { success: false, error: 'Unauthorized' }
 
-  const supabase = createServiceClient()
-  const { error } = await supabase
-    .from('announcements')
-    .delete()
-    .eq('id', broadcastId)
+    const supabase = createServiceClient()
+    const { error } = await supabase
+      .from('announcements')
+      .delete()
+      .eq('id', broadcastId)
 
-  if (error) return { success: false, error: error.message }
+    if (error) return { success: false, error: error.message }
 
-  revalidatePath('/admin/broadcasts', 'page')
-  return { success: true }
+    revalidatePath('/admin/broadcasts', 'page')
+    return { success: true }
+  } catch (error: unknown) {
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to delete broadcast' }
+  }
 }
+

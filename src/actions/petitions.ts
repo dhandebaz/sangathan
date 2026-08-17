@@ -57,7 +57,7 @@ export async function createPetitionAction(input: z.infer<typeof CreatePetitionS
         created_by: user.id,
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw error
 
@@ -91,7 +91,7 @@ export async function signPetitionAction(input: z.infer<typeof SignPetitionSchem
       .from('petitions')
       .select('id, organisation_id, title, current_signatures')
       .eq('id', validated.petition_id)
-      .single()
+      .maybeSingle()
 
     if (petitionErr || !petition) {
       return { success: false, error: 'Petition not found' }
@@ -110,7 +110,7 @@ export async function signPetitionAction(input: z.infer<typeof SignPetitionSchem
         wants_to_volunteer: validated.wants_to_volunteer,
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (sigErr) throw sigErr
 
@@ -169,7 +169,7 @@ export async function convertSignerToMemberAction(signatureId: string) {
       .from('petition_signatures')
       .select('*, petition:petitions(organisation_id)')
       .eq('id', signatureId)
-      .single()
+      .maybeSingle()
 
     if (sigErr || !sig) return { success: false, error: 'Signature not found' }
 
@@ -186,9 +186,9 @@ export async function convertSignerToMemberAction(signatureId: string) {
         role: 'member',
       })
       .select('id')
-      .single()
+      .maybeSingle()
 
-    if (memErr) throw memErr
+    if (memErr || !newMember) throw new Error(memErr?.message || 'Failed to create member record')
 
     await adminClient
       .from('petition_signatures')
@@ -226,7 +226,7 @@ export async function endorsePetitionAction(input: z.infer<typeof EndorsePetitio
         status: 'approved',
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw error
     return { success: true, data }
@@ -245,7 +245,7 @@ export async function getPetitionDetails(orgSlug: string, petitionIdOrSlug: stri
       .from('organisations')
       .select('id, name, slug, logo_url, org_type')
       .eq('slug', orgSlug)
-      .single()
+      .maybeSingle()
 
     if (orgErr || !org) return null
 
@@ -262,7 +262,7 @@ export async function getPetitionDetails(orgSlug: string, petitionIdOrSlug: stri
       query = query.eq('slug', petitionIdOrSlug)
     }
 
-    const { data: petition, error: petitionErr } = await query.single()
+    const { data: petition, error: petitionErr } = await query.maybeSingle()
     if (petitionErr || !petition) return null
 
     // 3. Get recent signatures
@@ -299,7 +299,7 @@ export async function getOrgPetitions(orgSlug: string) {
       .from('organisations')
       .select('id, name, slug, logo_url, org_type')
       .eq('slug', orgSlug)
-      .single()
+      .maybeSingle()
 
     if (orgErr || !org) return null
 

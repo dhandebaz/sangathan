@@ -99,7 +99,7 @@ export async function createDocumentRecord(input: z.infer<typeof CreateDocumentS
       .select('role, full_name')
       .eq('id', user.id)
       .eq('organisation_id', orgId)
-      .single()
+      .maybeSingle()
 
     if (!profile || !['admin', 'executive', 'editor'].includes(profile.role)) {
       return { success: false, error: 'Permission denied. Admins and editors only.' }
@@ -124,7 +124,7 @@ export async function createDocumentRecord(input: z.infer<typeof CreateDocumentS
         uploader_name: profile.full_name || 'Staff',
       } as never)
       .select()
-      .single()
+      .maybeSingle()
 
     if (error || !doc) {
       return { success: false, error: error?.message || 'Failed to save document record' }
@@ -162,7 +162,7 @@ export async function deleteDocumentRecord(documentId: string, orgId: string) {
       .select('role')
       .eq('id', user.id)
       .eq('organisation_id', orgId)
-      .single()
+      .maybeSingle()
 
     if (!profile || !['admin', 'executive'].includes(profile.role)) {
       return { success: false, error: 'Only admins can delete vault documents.' }

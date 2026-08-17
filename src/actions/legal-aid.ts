@@ -44,7 +44,7 @@ export async function triggerLegalSosAction(input: z.infer<typeof SosSchema>) {
         type: 'grievance'
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw error
 
@@ -81,7 +81,7 @@ export async function submitAntiRaggingAction(input: z.infer<typeof AntiRaggingS
         type: 'grievance'
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw error
 

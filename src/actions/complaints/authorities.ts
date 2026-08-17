@@ -48,7 +48,7 @@ export const createAuthority = createSafeAction(
         is_active: input.is_active,
       })
       .select('id')
-      .single()
+      .maybeSingle()
 
     if (error || !data) {
       return { error: (error as { message?: string })?.message || 'Failed to create authority contact' }

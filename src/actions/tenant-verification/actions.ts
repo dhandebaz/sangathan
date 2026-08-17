@@ -31,7 +31,7 @@ export const createTenantVerification = createSafeAction(
       .from('tenant_verification')
       .select('id')
       .eq('verification_hash', input.verification_hash)
-      .single()
+      .maybeSingle()
 
     if (checkError && checkError.code !== 'PGRST116') { // PGRST116 means no rows returned (expected for new hash)
       return { error: 'Database error during verification check' }
@@ -55,7 +55,7 @@ export const createTenantVerification = createSafeAction(
         validated: false
       })
       .select('id')
-      .single()
+      .maybeSingle()
 
     if (error || !data) {
       return { error: (error as { message?: string })?.message || 'Failed to create tenant verification' }

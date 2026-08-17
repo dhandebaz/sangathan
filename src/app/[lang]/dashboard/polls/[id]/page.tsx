@@ -20,7 +20,7 @@ export default async function PollPage(props: { params: Promise<{ lang: string, 
     .from('polls')
     .select('*')
     .eq('id', id)
-    .single() as { data: Poll | null }
+    .maybeSingle() as { data: Poll | null }
 
   if (!poll) notFound()
 
@@ -38,7 +38,7 @@ export default async function PollPage(props: { params: Promise<{ lang: string, 
        .select('id')
        .eq('poll_id', id)
        .eq('member_id', user.id)
-       .single()
+       .maybeSingle()
      if (vote) hasVoted = true
   } else {
      const secret = process.env.POLL_HMAC_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -53,7 +53,7 @@ export default async function PollPage(props: { params: Promise<{ lang: string, 
        .select('id')
        .eq('poll_id', id)
        .eq('hashed_identifier', hash)
-       .single()
+       .maybeSingle()
      if (vote) hasVoted = true
   }
 
@@ -61,7 +61,7 @@ export default async function PollPage(props: { params: Promise<{ lang: string, 
     .from('profiles')
     .select('role, organisation_id, status')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   const profile = profileData as { role: string; organisation_id: string | null; status: string } | null
 

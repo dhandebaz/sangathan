@@ -142,7 +142,7 @@ export function createSafeAction<TInput, TOutput>(
 
       return {
         success: false,
-        error: 'An unexpected error occurred. Please try again later.',
+        error: error instanceof Error && error.message ? error.message : 'An unexpected error occurred. Please try again later.',
       }
     }
   }

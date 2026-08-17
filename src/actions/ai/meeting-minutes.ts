@@ -34,7 +34,7 @@ export const generateMeetingMinutes = createSafeAction(
       .select('title, date')
       .eq('id', input.meetingId)
       .eq('organisation_id', context.organizationId)
-      .single()
+      .maybeSingle()
 
     if (!meeting) return { error: 'Meeting not found' }
 
@@ -110,7 +110,7 @@ export const createTasksFromMinutes = createSafeAction(
       .select('title')
       .eq('id', input.meetingId)
       .eq('organisation_id', context.organizationId)
-      .single()
+      .maybeSingle()
 
     if (!meeting) return { error: 'Meeting not found' }
 
@@ -139,7 +139,7 @@ Notes: ${input.notes}`,
         status: 'open',
         created_by: context.user.id,
         visibility_level: 'members',
-      } as never).select('id').single()
+      } as never).select('id').maybeSingle()
 
       if (!error && created) tasks.push(created.id)
     }

@@ -20,6 +20,9 @@ const nextConfig: NextConfig = {
     'sharp',
   ],
   experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
     optimizePackageImports: [
       'lucide-react',
       'date-fns',

@@ -97,7 +97,7 @@ export const logDonation = createSafeAction(
         verified_by: context.user.id,
       } as never)
       .select('id')
-      .single()) as { data: DonationRow | null, error: { message: string, code?: string } | null }
+      .maybeSingle()) as { data: DonationRow | null, error: { message: string, code?: string } | null }
 
     if (error || !donation) {
       if (error?.code === '23505') {
@@ -201,7 +201,7 @@ export const createDonationSubscription = createSafeAction(
         status: 'active',
       } as never)
       .select('id')
-      .single()
+      .maybeSingle()
 
     if (error || !subscription) {
       logger.error('donation_subscription_insert', 'Failed to create subscription', { error: error?.message })
@@ -233,7 +233,7 @@ export const generateTaxReceipt = createSafeAction(
       .from('donations')
       .select('amount')
       .eq('id', input.donationId)
-      .single()
+      .maybeSingle()
 
     const donationAmount = (donation as { amount?: number })?.amount || 0
     const pdfUrl = `/api/tax-receipts/${input.receipt_number}.pdf`
@@ -251,7 +251,7 @@ export const generateTaxReceipt = createSafeAction(
         pdf_url: pdfUrl,
       } as never)
       .select('id')
-      .single()
+      .maybeSingle()
 
     if (error || !receipt) {
       if (error?.code === '23505') {
@@ -297,7 +297,7 @@ export async function submitPublicDonation(input: z.infer<typeof PublicDonationS
     .from('organisations')
     .select('id, is_suspended')
     .eq('slug', input.orgSlug)
-    .single()) as {
+    .maybeSingle()) as {
       data: { id: string; is_suspended: boolean } | null
       error: { message: string } | null
     }
@@ -317,7 +317,7 @@ export async function submitPublicDonation(input: z.infer<typeof PublicDonationS
     .select('id')
     .eq('organisation_id', organisation.id)
     .eq('upi_reference', input.upi_reference)
-    .single()
+    .maybeSingle()
 
   if (existing) {
     return { success: false, error: 'This UPI reference has already been submitted.' }

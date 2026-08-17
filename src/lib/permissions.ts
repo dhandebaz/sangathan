@@ -27,7 +27,7 @@ export async function checkUserPermission(
       .select('role')
       .eq('id', userId)
       .eq('organisation_id', orgId)
-      .single()
+      .maybeSingle()
     
     if (profile?.role) {
       return hasPermission(profile.role, permission)
@@ -82,7 +82,7 @@ export async function checkCanAssignRole(
       .select('role')
       .eq('id', actorId)
       .eq('organisation_id', orgId)
-      .single()
+      .maybeSingle()
     if (profile?.role) actorRole = profile.role
   }
   
@@ -121,7 +121,7 @@ export async function getUserPermissions(
       .select('role')
       .eq('id', userId)
       .eq('organisation_id', orgId)
-      .single()
+      .maybeSingle()
     
     if (profile?.role) {
       Object.assign(allPermissions, getSystemRolePermissions(profile.role))
@@ -143,7 +143,7 @@ export async function getAssignableRolesForUser(
     .from('organisations')
     .select('plan_name')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
   
   const planName = org?.plan_name || 'Community'
   
@@ -164,7 +164,7 @@ export async function getAssignableRolesForUser(
       .select('role')
       .eq('id', actorId)
       .eq('organisation_id', orgId)
-      .single()
+      .maybeSingle()
     if (profile?.role) actorRole = profile.role
   }
   
@@ -183,7 +183,7 @@ export async function isPrimaryAdmin(
     .select('is_primary_admin')
     .eq('id', userId)
     .eq('organisation_id', orgId)
-    .single()
+    .maybeSingle()
   
   return profile?.is_primary_admin === true
 }

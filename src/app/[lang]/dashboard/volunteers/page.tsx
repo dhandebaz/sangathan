@@ -18,7 +18,7 @@ export default async function VolunteersPage(props: { params: Promise<{ lang: st
     .from('profiles')
     .select('organisation_id')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   const orgId = profile?.organisation_id
   if (!orgId) {

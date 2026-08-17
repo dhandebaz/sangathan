@@ -46,7 +46,7 @@ export const updateOrganisationProfile = createSafeAction(
       })
       .eq('id', context.organizationId)
       .select('slug')
-      .single()
+      .maybeSingle()
 
     if (error) {
       return { error: error.message }
@@ -115,7 +115,7 @@ export const updateOrganisationImage = createSafeAction(
       .update(updateData)
       .eq('id', context.organizationId)
       .select('slug')
-      .single()
+      .maybeSingle()
 
     if (error) {
       return { error: error.message }

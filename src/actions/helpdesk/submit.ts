@@ -61,7 +61,7 @@ export async function submitSupportTicket(message: string, orgId: string, userId
       status: 'open',
       organisation_id: orgId,
       created_by: userId
-    }).select().single()
+    }).select().maybeSingle()
 
     if (dbError) {
       console.error('Database insert error for ticket:', dbError)

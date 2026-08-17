@@ -19,92 +19,109 @@ const UpdateOrgSchema = z.object({
 })
 
 export async function updateOrganisation(input: z.infer<typeof UpdateOrgSchema>) {
-  const result = UpdateOrgSchema.safeParse(input)
-  if (!result.success) {
-    return { success: false, error: result.error.issues[0]?.message || 'Invalid input' }
+  try {
+    const result = UpdateOrgSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid input' }
+    }
+
+    await requirePlatformAdmin()
+
+    const authClient = await createClient()
+    const { data: { user } } = await authClient.auth.getUser()
+    if (!user) return { success: false, error: 'Unauthorized' }
+
+    const supabase = createServiceClient()
+
+    const updateData: Record<string, unknown> = {}
+    if (result.data.status !== undefined) updateData.status = result.data.status
+    if (result.data.membership_policy !== undefined) updateData.membership_policy = result.data.membership_policy
+    if (result.data.legal_hold !== undefined) updateData.legal_hold = result.data.legal_hold
+    if (result.data.legal_hold_reason !== undefined) updateData.legal_hold_reason = result.data.legal_hold_reason
+    if (result.data.broadcast_restricted !== undefined) updateData.broadcast_restricted = result.data.broadcast_restricted
+    if (result.data.risk_score !== undefined) updateData.risk_score = result.data.risk_score
+
+    const { error } = await supabase
+      .from('organisations')
+      .update(updateData)
+      .eq('id', result.data.organisationId)
+
+    if (error) return { success: false, error: error.message }
+
+    await logAction({
+      organisation_id: result.data.organisationId,
+      user_id: user.id,
+      action: 'ORG_UPDATED_BY_ADMIN',
+      resource_table: 'organisations',
+      resource_id: result.data.organisationId,
+      details: updateData as Json,
+    })
+
+    revalidatePath('/', 'layout')
+    return { success: true }
+  } catch (error: unknown) {
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to update organisation' }
   }
-
-  await requirePlatformAdmin()
-
-  const authClient = await createClient()
-  const { data: { user } } = await authClient.auth.getUser()
-  if (!user) throw new Error('Unauthorized')
-
-  const supabase = createServiceClient()
-
-  const updateData: Record<string, unknown> = {}
-  if (result.data.status !== undefined) updateData.status = result.data.status
-  if (result.data.membership_policy !== undefined) updateData.membership_policy = result.data.membership_policy
-  if (result.data.legal_hold !== undefined) updateData.legal_hold = result.data.legal_hold
-  if (result.data.legal_hold_reason !== undefined) updateData.legal_hold_reason = result.data.legal_hold_reason
-  if (result.data.broadcast_restricted !== undefined) updateData.broadcast_restricted = result.data.broadcast_restricted
-  if (result.data.risk_score !== undefined) updateData.risk_score = result.data.risk_score
-
-  const { error } = await supabase
-    .from('organisations')
-    .update(updateData)
-    .eq('id', result.data.organisationId)
-
-  if (error) return { success: false, error: error.message }
-
-  await logAction({
-    organisation_id: result.data.organisationId,
-    user_id: user.id,
-    action: 'ORG_UPDATED_BY_ADMIN',
-    resource_table: 'organisations',
-    resource_id: result.data.organisationId,
-    details: updateData as Json,
-  })
-
-  revalidatePath('/', 'layout')
-  return { success: true }
 }
 
 export async function deleteOrganisation(organisationId: string) {
-  await requirePlatformAdmin()
+  try {
+    await requirePlatformAdmin()
 
-  const authClient = await createClient()
-  const { data: { user } } = await authClient.auth.getUser()
-  if (!user) throw new Error('Unauthorized')
+    const authClient = await createClient()
+    const { data: { user } } = await authClient.auth.getUser()
+    if (!user) return { success: false, error: 'Unauthorized' }
 
-  const supabase = createServiceClient()
+    const supabase = createServiceClient()
 
-  const { error } = await supabase
-    .from('organisations')
-    .update({ deleted_at: new Date().toISOString(), status: 'suspended' })
-    .eq('id', organisationId)
+    const { error } = await supabase
+      .from('organisations')
+      .update({ deleted_at: new Date().toISOString(), status: 'suspended' })
+      .eq('id', organisationId)
 
-  if (error) return { success: false, error: error.message }
+    if (error) return { success: false, error: error.message }
 
-  await logAction({
-    organisation_id: organisationId,
-    user_id: user.id,
-    action: 'ORG_DELETED_BY_ADMIN',
-    resource_table: 'organisations',
-    resource_id: organisationId,
-  })
+    await logAction({
+      organisation_id: organisationId,
+      user_id: user.id,
+      action: 'ORG_DELETED_BY_ADMIN',
+      resource_table: 'organisations',
+      resource_id: organisationId,
+    })
 
-  revalidatePath('/', 'layout')
-  return { success: true }
+    revalidatePath('/', 'layout')
+    return { success: true }
+  } catch (error: unknown) {
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to delete organisation' }
+  }
 }
 
 export async function getAllOrganisations() {
-  await requirePlatformAdmin()
-  const supabase = createServiceClient()
-  const { data } = await supabase
-    .from('organisations')
-    .select('id, name, slug, status, membership_policy, org_type, created_at, legal_hold, broadcast_restricted, plan_name, risk_score')
-    .order('created_at', { ascending: false })
-  return data || []
+  try {
+    await requirePlatformAdmin()
+    const supabase = createServiceClient()
+    const { data } = await supabase
+      .from('organisations')
+      .select('id, name, slug, status, membership_policy, org_type, created_at, legal_hold, broadcast_restricted, plan_name, risk_score')
+      .order('created_at', { ascending: false })
+    return data || []
+  } catch {
+    return []
+  }
 }
 
 export async function getOrganisationDetails(organisationId: string) {
-  await requirePlatformAdmin()
-  const supabase = createServiceClient()
-  const { data } = await supabase
-    .from('organisations')
-    .select('*')
-    .eq('id', organisationId)
-    .single()
-  return data
+  try {
+    await requirePlatformAdmin()
+    const supabase = createServiceClient()
+    const { data } = await supabase
+      .from('organisations')
+      .select('*')
+      .eq('id', organisationId)
+      .maybeSingle()
+    return data
+  } catch {
+    return null
+  }
 }
+

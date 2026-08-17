@@ -29,7 +29,7 @@ export default async function SubgroupDetailPage(
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   if (profileError || !profile?.organisation_id) {
     redirect(`/${lang}/onboarding`)

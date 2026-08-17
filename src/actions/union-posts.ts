@@ -42,7 +42,7 @@ export async function createUnionPostAction(input: z.infer<typeof CreateUnionPos
         is_system: false
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) {
       const adminClient = createServiceClient()
@@ -56,7 +56,7 @@ export async function createUnionPostAction(input: z.infer<typeof CreateUnionPos
           is_system: false
         })
         .select()
-        .single()
+        .maybeSingle()
 
       if (fallback.error) throw fallback.error
     }

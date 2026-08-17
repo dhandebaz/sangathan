@@ -109,7 +109,7 @@ export const createCBAClause = createSafeAction(
         status: 'in_negotiation',
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) {
       const adminClient = createServiceClient()
@@ -126,7 +126,7 @@ export const createCBAClause = createSafeAction(
           status: 'in_negotiation',
         })
         .select()
-        .single()
+        .maybeSingle()
 
       if (fallback.error) throw new Error(fallback.error.message)
       revalidatePath('/[lang]/dashboard/cba', 'page')

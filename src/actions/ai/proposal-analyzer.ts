@@ -21,7 +21,7 @@ export const analyzeProposal = createSafeAction(
       .select('*')
       .eq('id', input.proposalId)
       .eq('organisation_id', context.organizationId)
-      .single()
+      .maybeSingle()
 
     if (!proposal) return { error: 'Proposal not found' }
 
@@ -88,7 +88,7 @@ export const generateProposalBrief = createSafeAction(
       .select('*')
       .eq('id', input.proposalId)
       .eq('organisation_id', context.organizationId)
-      .single()
+      .maybeSingle()
 
     if (!proposal) return { error: 'Proposal not found' }
 

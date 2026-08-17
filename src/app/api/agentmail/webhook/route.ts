@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
         .from('tickets')
         .select('id, organisation_id, title')
         .eq('id', ticketId)
-        .single()
+        .maybeSingle()
 
       if (ticket) {
         logger.info('agentmail_webhook', `Associated inbound reply to ticket ${ticketId}`, { from, subject })
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
           status: 'open',
         })
         .select('id')
-        .single()
+        .maybeSingle()
 
       if (!ticketError && newTicket) {
         logger.info('agentmail_webhook', `Created support ticket ${newTicket.id} from inbound email`, { from, subject })

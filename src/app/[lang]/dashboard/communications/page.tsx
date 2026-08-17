@@ -30,7 +30,7 @@ export default async function CommunicationsPage(props: { params: Promise<{ lang
     .from('organisations')
     .select('name')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   if (org?.name) orgName = org.name
 

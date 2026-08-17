@@ -57,7 +57,7 @@ export const registerDomesticStaff = createSafeAction(
         status: 'active',
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) {
       const adminClient = createServiceClient()
@@ -76,7 +76,7 @@ export const registerDomesticStaff = createSafeAction(
           status: 'active',
         })
         .select()
-        .single()
+        .maybeSingle()
 
       if (fallback.error) throw new Error(fallback.error.message)
       revalidatePath('/', 'layout')

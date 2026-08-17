@@ -57,7 +57,7 @@ function applySecurityHeaders(response: NextResponse, isApiRoute = false): NextR
   return response
 }
 
-const MAX_BODY_SIZE = 1024 * 100 // 100KB
+const MAX_BODY_SIZE = 10 * 1024 * 1024 // 10MB
 
 function checkBodySize(request: NextRequest): NextResponse | null {
   if (['POST', 'PUT', 'PATCH'].includes(request.method)) {
@@ -115,6 +115,14 @@ export async function updateSession(request: NextRequest) {
           id: userId,
           email: typeof claims?.email === 'string' ? claims.email : undefined,
         }
+      } else {
+        const { data: userData } = await supabase.auth.getUser()
+        if (userData?.user) {
+          user = {
+            id: userData.user.id,
+            email: userData.user.email,
+          }
+        }
       }
     }
   } catch {
@@ -124,16 +132,16 @@ export async function updateSession(request: NextRequest) {
   // Protect System Admin Routes
   if (request.nextUrl.pathname.startsWith('/admin')) {
     if (!user || !user.email) {
-       const url = request.nextUrl.clone()
-        url.pathname = '/login'
-        return applySecurityHeaders(NextResponse.redirect(url))
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      return applySecurityHeaders(NextResponse.redirect(url))
     }
     
     // Strict Whitelist Check
     const superAdmins = process.env.SUPER_ADMIN_EMAILS?.split(',')
     if (!superAdmins || superAdmins.length === 0 || !superAdmins.includes(user.email)) {
-       // Return 404 to hide admin existence or 403
-       return applySecurityHeaders(NextResponse.json({ error: 'Not Found' }, { status: 404 }))
+      // Return 404 to hide admin existence or 403
+      return applySecurityHeaders(NextResponse.json({ error: 'Not Found' }, { status: 404 }))
     }
   }
 
@@ -154,29 +162,29 @@ export async function updateSession(request: NextRequest) {
   if (user && isAuthRoute) {
     const cookieName = 'user-metadata'
     const cached = request.cookies.get(cookieName)?.value
-      let profile = cached ? await verifySignedCookie(cached) : null
+    let profile = cached ? await verifySignedCookie(cached) : null
 
-      if (!profile) {
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-        const supabasePublicKey = getSupabasePublicKey()!
-        const supabase = createServerClient(
-          supabaseUrl,
-          supabasePublicKey,
-          {
-            cookies: {
-              getAll() { return request.cookies.getAll() },
-              setAll() {},
-            },
+    if (!profile) {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+      const supabasePublicKey = getSupabasePublicKey()!
+      const supabase = createServerClient(
+        supabaseUrl,
+        supabasePublicKey,
+        {
+          cookies: {
+            getAll() { return request.cookies.getAll() },
+            setAll() {},
           },
-        )
+        },
+      )
 
-        const { data: fetchedProfile } = await supabase
-          .from('profiles')
-          .select('role, phone_verified, organisations(capabilities)')
-          .eq('id', user.id)
-          .maybeSingle()
-        
-        profile = fetchedProfile
+      const { data: fetchedProfile } = await supabase
+        .from('profiles')
+        .select('role, phone_verified, organisations(capabilities)')
+        .eq('id', user.id)
+        .maybeSingle()
+      
+      profile = fetchedProfile
     }
 
     if (!profile) {
@@ -187,12 +195,12 @@ export async function updateSession(request: NextRequest) {
       const response = applySecurityHeaders(NextResponse.redirect(url))
       
       if (profile && !cached) {
-          const signedValue = await createSignedCookie(profile)
-          response.cookies.set(cookieName, signedValue, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: 60 * 10
-          })
+        const signedValue = await createSignedCookie(profile)
+        response.cookies.set(cookieName, signedValue, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          maxAge: 60 * 10
+        })
       }
       return response
     }
@@ -219,46 +227,52 @@ export async function updateSession(request: NextRequest) {
 
   applySecurityHeaders(supabaseResponse, isApiRoute)
 
-   // --- CAPABILITIES (ORG TYPE) ENFORCEMENT ---
-   if (user && isDashboardRoute) {
-     const cookieName = 'user-metadata'
-     const cached = request.cookies.get(cookieName)?.value
-     const profile = cached ? await verifySignedCookie(cached) as unknown as { organisations?: { capabilities?: Record<string, boolean> } } : null
+  // --- CAPABILITIES (ORG TYPE) ENFORCEMENT ---
+  if (user && isDashboardRoute) {
+    const cookieName = 'user-metadata'
+    const cached = request.cookies.get(cookieName)?.value
+    const profile = cached ? await verifySignedCookie(cached) as unknown as { organisations?: { capabilities?: Record<string, boolean> } } : null
 
-     if (profile && profile.organisations && profile.organisations.capabilities) {
-       const caps = profile.organisations.capabilities
-       const p = pathname
+    if (profile && profile.organisations && profile.organisations.capabilities) {
+      const caps = profile.organisations.capabilities
+      const p = pathname
 
-       // Restrict access based on capabilities
-        if (p.includes('/dashboard/donations') && !caps.donations) {
-          return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
-       }
-        if (p.includes('/dashboard/networks') && !caps.federation_mode) {
-          return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
-        }
-        if (p.includes('/dashboard/campaigns') && !caps.campaigns) {
-          return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
-        }
-        if (p.includes('/dashboard/grievances') && !caps.grievances) {
-          return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
-        }
-        if (p.includes('/dashboard/complaints') && !caps.complaints) {
-          return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
-        }
-        if (p.includes('/dashboard/maintenance') && !caps.maintenance) {
-          return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
-        }
-        if (p.includes('/dashboard/volunteers') && !caps.volunteers) {
-          return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
-        }
-        if (p.includes('/dashboard/student-ids') && !caps.student_ids) {
-          return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
-        }
-     }
-   }
+      // Restrict access based on capabilities
+      if (p.includes('/dashboard/donations') && !caps.donations) {
+        return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+      }
+      if (p.includes('/dashboard/networks') && !caps.federation_mode) {
+        return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+      }
+      if (p.includes('/dashboard/campaigns') && !caps.campaigns) {
+        return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+      }
+      if (p.includes('/dashboard/grievances') && !caps.grievances) {
+        return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+      }
+      if (p.includes('/dashboard/complaints') && !caps.complaints) {
+        return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+      }
+      if (p.includes('/dashboard/maintenance') && !caps.maintenance) {
+        return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+      }
+      if (p.includes('/dashboard/volunteers') && !caps.volunteers) {
+        return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+      }
+      if (p.includes('/dashboard/student-ids') && !caps.student_ids) {
+        return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+      }
+    }
+  }
 
   // i18n Redirection Logic
+  // Never redirect POST, PUT, PATCH or Server Actions (which breaks Next.js Action flight protocols)
+  const isMutationOrAction = request.method !== 'GET' && request.method !== 'HEAD'
+  const isServerAction = request.headers.has('next-action')
+
   const shouldHandleLocale = 
+    !isMutationOrAction &&
+    !isServerAction &&
     !pathname.startsWith('/api') &&
     !pathname.startsWith('/_next') &&
     !pathname.startsWith('/f/') &&
@@ -270,10 +284,10 @@ export async function updateSession(request: NextRequest) {
     !hasLocale
 
   if (shouldHandleLocale) {
-      const locale = i18n.defaultLocale
-      return applySecurityHeaders(NextResponse.redirect(
-        new URL(`/${locale}${pathname.startsWith('/') ? '' : '/'}${pathname}`, request.url)
-      ))
+    const locale = i18n.defaultLocale
+    return applySecurityHeaders(NextResponse.redirect(
+      new URL(`/${locale}${pathname.startsWith('/') ? '' : '/'}${pathname}`, request.url)
+    ))
   }
 
   return supabaseResponse

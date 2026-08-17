@@ -58,7 +58,7 @@ export async function getStatutoryRegistration(orgId: string) {
     .from('organisations')
     .select(LEGAL_COLUMNS.join(', '))
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   if (error) {
     console.error('getStatutoryRegistration Error:', error)
@@ -85,7 +85,7 @@ export async function updateStatutoryRegistration(
     .from('organisations')
     .select('org_type')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   if (orgError || !orgData) {
     return { success: false as const, error: 'Organisation not found' }

@@ -72,7 +72,7 @@ export const addMember = createSafeAction(
         .eq('organisation_id', context.organizationId)
         .eq('name', input.role)
         .eq('is_system', true)
-        .single()
+        .maybeSingle()
       roleId = roleData?.id
     }
 
@@ -93,7 +93,7 @@ export const addMember = createSafeAction(
         role_id: roleId,
       })
       .select('id')
-      .single()
+      .maybeSingle()
 
     const member = data
 
@@ -145,7 +145,7 @@ export const inviteMember = createSafeAction(
         .eq('organisation_id', context.organizationId)
         .eq('name', input.role)
         .eq('is_system', true)
-        .single()
+        .maybeSingle()
       roleId = roleData?.id
     }
 
@@ -164,7 +164,7 @@ export const inviteMember = createSafeAction(
         expires_at: expiresAt.toISOString(),
       })
       .select('id')
-      .single()
+      .maybeSingle()
 
     if (error || !invite) {
       return { error: (error as { message?: string })?.message || 'Failed to create invite' }
@@ -217,6 +217,10 @@ export const changeMemberStatus = createSafeAction(
 )
 
 export async function getAssignableRolesForActor(organisationId: string, actorId: string) {
-  const roles = await getAssignableRolesForUser(organisationId, actorId)
-  return { success: true, data: roles }
+  try {
+    const roles = await getAssignableRolesForUser(organisationId, actorId)
+    return { success: true, data: roles }
+  } catch (error) {
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to get assignable roles', data: [] }
+  }
 }

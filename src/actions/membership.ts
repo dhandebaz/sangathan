@@ -47,7 +47,7 @@ export async function updateTransparency(input: z.infer<typeof UpdateTransparenc
       .from('profiles')
       .select('role, organisation_id')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
 
     const profile = profileData
 
@@ -91,7 +91,7 @@ export async function updateMembershipPolicy(input: z.infer<typeof UpdatePolicyS
       .from('profiles')
       .select('role, organisation_id')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
 
     if (!profile || profile.organisation_id !== data.orgId || profile.role !== 'admin') {
       return { success: false, error: 'Permission denied' }
@@ -137,7 +137,7 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
       .from('organisations')
       .select('name, membership_policy, slug')
       .eq('id', data.orgId)
-      .single()
+      .maybeSingle()
 
     if (orgError || !org) return { success: false, error: 'Organisation not found' }
 
@@ -150,7 +150,7 @@ export async function requestJoinOrganisation(input: z.infer<typeof RequestJoinS
       .from('profiles')
       .select('status')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
 
     if (existing) {
         // If user has a profile, they are already associated with *an* org.
@@ -219,7 +219,7 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
       .from('profiles')
       .select('role, organisation_id')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
 
     if (adminError || !adminProfile || adminProfile.role !== 'admin' || !adminProfile.organisation_id) {
       return { success: false, error: 'Permission denied' }
@@ -238,7 +238,7 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
       .from('profiles')
       .select('email, full_name, organisation_id')
       .eq('id', data.memberId)
-      .single()
+      .maybeSingle()
 
     if (memberError || !member || member.organisation_id !== adminProfile.organisation_id) {
         return { success: false, error: 'Member not found in your organisation' }
@@ -248,7 +248,7 @@ export async function approveMember(input: z.infer<typeof ManageMemberSchema>) {
         .from('organisations')
         .select('name')
         .eq('id', adminProfile.organisation_id as string)
-        .single()
+        .maybeSingle()
 
     // Update
     const { error: updateError } = await supabaseAdmin
@@ -288,7 +288,7 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
       .from('profiles')
       .select('role, organisation_id')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
 
     if (adminError || !adminProfile || adminProfile.role !== 'admin') {
       return { success: false, error: 'Permission denied' }
@@ -301,7 +301,7 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
       .from('profiles')
       .select('email, full_name, organisation_id')
       .eq('id', data.memberId)
-      .single()
+      .maybeSingle()
 
     if (memberError || !member || member.organisation_id !== adminProfile.organisation_id) {
         return { success: false, error: 'Member not found' }
@@ -311,7 +311,7 @@ export async function rejectMember(input: z.infer<typeof ManageMemberSchema>) {
         .from('organisations')
         .select('name')
         .eq('id', adminProfile.organisation_id as string)
-        .single()
+        .maybeSingle()
 
     // Update
     const { error: updateError } = await supabaseAdmin

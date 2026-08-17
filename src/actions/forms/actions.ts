@@ -58,7 +58,7 @@ export const createForm = createSafeAction(
         created_by: context.user.id,
       })
       .select('id')
-      .single()
+      .maybeSingle()
 
     const form = data
 
@@ -210,7 +210,7 @@ export async function submitFormResponse(input: z.infer<typeof SubmitFormSchema>
     .from('forms')
     .select('id, organisation_id, fields, is_active, visibility, deleted_at')
     .eq('id', safeInput.formId)
-    .single()
+    .maybeSingle()
 
   const form = data
 

@@ -35,6 +35,37 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.47.9',
+    titleEn: 'Codebase-Wide Server Action Hardening & Query Resilience Architecture',
+    titleHi: 'संपूर्ण ऐप में सर्वर एक्शन सुदृढ़ीकरण व डेटाबेस क्वेरी सुरक्षा',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Completed an exhaustive, zero-exception audit and hardening pass across all 90+ Server Action files in the application. Eliminated all sources of PostgREST single-row query failures, normalized structured error responses, prevented middleware flight redirects, and safeguarded background processes across all modules.',
+    descHi: 'एप्लिकेशन के सभी 90+ सर्वर एक्शन फाइलों में व्यापक ऑडिट और सुरक्षा सुधार संपन्न। डेटाबेस क्वेरी में होने वाली सभी संभावित विफलताओं का निवारण, त्रुटि प्रतिक्रियाओं का मानकीकरण और पृष्ठभूमि प्रक्रियाओं की पूर्ण विश्वसनीयता सुनिश्चित की गई।',
+    color: 'indigo',
+    icon: ShieldCheck,
+    features: [
+      {
+        nameEn: 'App-Wide Query Resilience (.maybeSingle Migration)',
+        nameHi: 'ऐप-व्यापी डेटाबेस क्वेरी लचीलापन (.maybeSingle माइग्रेशन)',
+        textEn: 'Audited and migrated all single-row lookups and duplicate-check queries across all 90+ action modules to .maybeSingle(), preventing PostgREST code PGRST116 unhandled rejections during poll voting, role assignment, ticket updates, and membership validations.',
+        textHi: 'सभी 90+ एक्शन मॉड्यूल्स में एकल-पंक्ति लुकअप और डुप्लिकेट-चेक क्वेरी को .maybeSingle() में अपग्रेड किया गया, जिससे पोल वोटिंग, भूमिका आवंटन, टिकट और सदस्यता सत्यापन के दौरान होने वाली सभी डेटाबेस बाधाओं का स्थायी समाधान हुआ।',
+      },
+      {
+        nameEn: 'Transparent Action Error Propagation',
+        nameHi: 'पारदर्शी सर्वर एक्शन त्रुटि संप्रेषण',
+        textEn: 'Enhanced the safe action wrapper (createSafeAction) to preserve and return precise diagnostic messages rather than masking operational exceptions with generic fallback alerts.',
+        textHi: 'सुरक्षित एक्शन हैंडलर (createSafeAction) को उन्नत किया गया ताकि सिस्टम त्रुटियों को छिपाने के बजाय उपयोगकर्ताओं और प्रशासकों को सटीक स्थिति संदेश मिल सकें।',
+      },
+      {
+        nameEn: 'System, Archetype & Civic Module Exception Boundaries',
+        nameHi: 'सिस्टम, आर्केटाइप व नागरिक मॉड्यूल अपवाद सीमाएं',
+        textEn: 'Hardened platform admin actions, appeal management, data requests, receiving trackers, and statutory dispute handlers with top-level try-catch boundaries and verified zero-breakage test suites.',
+        textHi: 'प्लेटफ़ॉर्म एडमिन क्रियाएं, अपील प्रबंधन, डेटा अनुरोध, रिसीविंग ट्रैकर और वैधानिक विवाद हैंडलर को पूर्ण त्रुटि-रोधी सीमाओं के साथ सुदृढ़ किया गया।',
+      },
+    ],
+  },
+  {
     version: 'v1.47.8',
     titleEn: 'Onboarding Launch Resilience, Fail-Safe Org Creation & Server Action Integrity',
     titleHi: 'ऑनबोर्डिंग लॉन्च विश्वसनीयता, त्रुटि-रहित संगठन निर्माण व सर्वर एक्शन सुरक्षा',
@@ -62,6 +93,18 @@ const changelogData: ChangelogEntry[] = [
         nameHi: 'सुगम पोस्ट-सेटअप नेविगेशन व कैश अद्यतनीकरण',
         textEn: 'Optimized workspace slug conflict resolution, storage uploads, session cookie assignment, and instant dashboard routing upon collective initialization.',
         textHi: 'संगठन निर्माण के तुरंत बाद सुरक्षित स्लग सत्यापन, स्टोरेज अपलोड, सत्र कुकी और तत्काल डैशबोर्ड नेविगेशन को सुव्यवस्थित किया गया।',
+      },
+      {
+        nameEn: 'Client-Side Real-Time Draft Auto-Save Engine',
+        nameHi: 'क्लाइंट-साइड रीयल-टाइम ड्राफ्ट ऑटो-सेव इंजन',
+        textEn: 'Integrated persistent local draft caching across all 6 onboarding wizard steps. Automatically preserves organization identity, selected blueprints, statutory classifications, and role configurations with instant state recovery on network drop or page reload.',
+        textHi: 'सभी 6 ऑनबोर्डिंग चरणों में स्वतः ड्राफ्ट सुरक्षा इंजन जोड़ा गया। नेटवर्क टूटने या पेज रीलोड होने पर भी संगठन का नाम, ब्लूप्रिंट, वैधानिक विवरण और भूमिकाएं सुरक्षित रहती हैं और स्वतः लोड हो जाती हैं।',
+      },
+      {
+        nameEn: 'Middleware Server-Action Redirect Immunity & 10MB Body Support',
+        nameHi: 'मिडिलवेयर सर्वर-एक्शन रिडायरेक्ट प्रतिरक्षा व 10MB पेलोड समर्थन',
+        textEn: 'Prevented locale 307 redirects on mutation requests and Server Action dispatches without language prefixes. Increased middleware body size thresholds to 10MB, enabling seamless base64 logo generation and multi-step form submissions.',
+        textHi: 'बिना भाषा उपसर्ग वाले सर्वर एक्शन और म्यूटेशन अनुरोधों पर मिडिलवेयर 307 रिडायरेक्ट को रोका गया। मिडिलवेयर पेलोड सीमा को 10MB तक बढ़ाया गया जिससे लोगो जनरेशन और ऑनबोर्डिंग सबमिशन बिना किसी बाधा के निष्पादित हो सकें।',
       },
     ],
   },

@@ -24,7 +24,7 @@ export default async function GrantDetailPage(props: {
     .select('*')
     .eq('id', grantId)
     .eq('organisation_id', orgId || '')
-    .single()
+    .maybeSingle()
 
   let accountingData: any = {
     milestones: [],

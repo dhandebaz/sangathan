@@ -29,7 +29,7 @@ async function generateNotification(
     .from('profiles')
     .select('full_name, role, engagement_score')
     .eq('id', input.member_id)
-    .single()
+    .maybeSingle()
 
   if (!member) return { error: 'Member not found' }
 

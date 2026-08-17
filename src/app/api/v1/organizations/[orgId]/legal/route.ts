@@ -15,7 +15,7 @@ export async function GET(
     .from('organisations')
     .select('legal_entity_type, governing_law, registrar_authority, registration_state, tax_id, tan, gstin, cin, darpan_id, certificate_12a, certificate_80g, fcra_registration, csr_registration, trade_union_registration, cooperative_registration, society_registration, trust_registration, epfo_code, esic_code, udyam_registration')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 })
@@ -41,7 +41,7 @@ export async function PUT(
       .from('organisations')
       .select('org_type')
       .eq('id', orgId)
-      .single()
+      .maybeSingle()
 
     if (orgError || !org) {
       return NextResponse.json({ error: 'Organization not found' }, { status: 404 })

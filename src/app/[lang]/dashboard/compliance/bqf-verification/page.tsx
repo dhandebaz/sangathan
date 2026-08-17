@@ -15,7 +15,7 @@ export default async function BqfVerificationPage(props: { params: Promise<{ lan
     .from('profiles')
     .select('organisation_id')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   if (!profile?.organisation_id) redirect(`/${lang}/onboarding`)
 
@@ -23,7 +23,7 @@ export default async function BqfVerificationPage(props: { params: Promise<{ lan
     .from('organisations')
     .select('name, compliance_documents')
     .eq('id', profile.organisation_id)
-    .single()
+    .maybeSingle()
 
   const complianceDocs = (org?.compliance_documents as Record<string, unknown>) || {}
   const bqfVerification = (complianceDocs.bqf_verification as {

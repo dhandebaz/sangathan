@@ -273,7 +273,7 @@ export function RoleManager({ initialRoles, organisationId }: RoleManagerProps) 
                 <div className="mb-4">
                   <p className="text-sm font-medium mb-1">Permissions:</p>
                   <div className="flex flex-wrap gap-1">
-                    {Object.entries(role.permissions).filter(([, val]) => val).map(([key]) => (
+                    {Object.entries(role.permissions || {}).filter(([, val]) => val).map(([key]) => (
                       <span key={key} className="text-xs bg-brand-50 text-brand-700 px-2 py-0.5 rounded">
                         {key.replace(/_/g, ' ')}
                       </span>

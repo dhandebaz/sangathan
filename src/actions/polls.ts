@@ -67,7 +67,7 @@ export const createPoll = createSafeAction(
         is_public: data.is_public,
       } as never)
       .select()
-      .single()
+      .maybeSingle()
 
     if (error || !poll) throw new Error(error?.message || 'Failed to create poll')
 
@@ -99,7 +99,7 @@ export const castVote = createSafeAction(
       .from('polls')
       .select('*')
       .eq('id', data.poll_id)
-      .single()
+      .maybeSingle()
 
     if (pollError || !poll) throw new Error('Poll not found')
 
@@ -142,7 +142,7 @@ export const castVote = createSafeAction(
          .select('id')
          .eq('poll_id', data.poll_id)
          .eq('hashed_identifier', ip_hash)
-         .single()
+         .maybeSingle()
        
        if (existing) throw new Error('Already voted')
        
@@ -155,7 +155,7 @@ export const castVote = createSafeAction(
          .select('id')
          .eq('poll_id', data.poll_id)
          .eq('member_id', context.user.id)
-         .single()
+         .maybeSingle()
          
        if (existing) throw new Error('Already voted')
     }
@@ -179,7 +179,7 @@ export const closePoll = createSafeAction(
       .from('polls')
       .select('*')
       .eq('id', data.poll_id)
-      .single()
+      .maybeSingle()
 
     if (pollError || !poll) throw new Error('Poll not found')
 

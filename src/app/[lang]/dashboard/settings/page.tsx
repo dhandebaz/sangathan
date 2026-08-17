@@ -42,7 +42,7 @@ export default async function SettingsPage(props: PageProps) {
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   const profile = profileData as { organisation_id: string | null; role: string } | null
 
@@ -56,7 +56,7 @@ export default async function SettingsPage(props: PageProps) {
     .from('organisations')
     .select('id, name, slug, org_type, membership_policy, public_transparency_enabled, description, logo_url, cover_url, contact_email, contact_phone, website, social_links, address, registration_status, registration_number, incorporation_date, tax_id, darpan_id, compliance_documents')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   const organisation = orgData as {
     id: string

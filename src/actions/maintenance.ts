@@ -53,7 +53,7 @@ export const createUnit = createSafeAction(
         tenant_profile_id: input.tenant_profile_id,
       } as never)
       .select('id')
-      .single()
+      .maybeSingle()
 
     if (error || !unit) {
       if (error?.code === '23505') {
@@ -97,7 +97,7 @@ export const createInvoice = createSafeAction(
         status: 'pending',
       } as never)
       .select('id')
-      .single()
+      .maybeSingle()
 
     if (error || !invoice) {
       logger.error('invoice_create', 'Failed to create invoice', { error: error?.message })

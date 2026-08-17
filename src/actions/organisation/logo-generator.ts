@@ -29,7 +29,7 @@ export async function saveGeneratedLogoAction({
       .select('role, organisation_id')
       .eq('id', user.id)
       .eq('organisation_id', orgId)
-      .single()
+      .maybeSingle()
 
     if (!profile || !['admin', 'executive', 'owner'].includes(profile.role)) {
       return { success: false, error: 'Permission denied. Only organization executives can update the official emblem.' }

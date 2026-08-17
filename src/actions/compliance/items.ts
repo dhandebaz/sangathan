@@ -94,7 +94,7 @@ export async function getComplianceItems(orgId: string): Promise<ComplianceItemR
     .from('organisations')
     .select('org_type')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   await evaluateComplianceRecommendations(orgId, orgData?.org_type || 'ngo')
 
@@ -176,7 +176,7 @@ export async function uploadComplianceDocument(itemId: string, formData: FormDat
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   if (!profile?.organisation_id || !['admin', 'executive'].includes(profile.role)) {
     return { success: false, error: 'Unauthorized' }

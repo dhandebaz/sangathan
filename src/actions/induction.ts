@@ -49,7 +49,7 @@ export async function inductMemberAction(input: z.infer<typeof InductMemberSchem
         created_at: new Date().toISOString()
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw error
 

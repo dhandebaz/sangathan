@@ -17,7 +17,7 @@ export default async function CampaignsPage(props: { params: Promise<{ lang: str
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   let orgId = profile?.organisation_id
   const role = profile?.role || 'member'
@@ -42,7 +42,7 @@ export default async function CampaignsPage(props: { params: Promise<{ lang: str
 
   try {
     const [orgRes, campRes, petRes] = await Promise.all([
-      adminClient.from('organisations').select('slug').eq('id', orgId).single(),
+      adminClient.from('organisations').select('slug').eq('id', orgId).maybeSingle(),
       adminClient.from('campaigns').select('*').eq('organisation_id', orgId).order('created_at', { ascending: false }),
       adminClient.from('petitions').select('*').eq('organisation_id', orgId).order('created_at', { ascending: false }),
     ])

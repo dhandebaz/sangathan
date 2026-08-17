@@ -21,36 +21,41 @@ const SubmitAppealSchema = z.object({
 // Assuming they can login to a "Suspended" view.
 
 export async function submitAppeal(input: z.infer<typeof SubmitAppealSchema>) {
-  const result = SubmitAppealSchema.safeParse(input)
-  if (!result.success) {
-    return { success: false, error: result.error.issues[0]?.message || 'Invalid appeal' }
-  }
-
-  const supabase = await createClient()
-  
-  // Verify Org Exists
-  const { data: org } = await supabase.from('organisations').select('id').eq('id', result.data.organisationId).single()
-  
-  if (!org) {
-      return { success: false, error: 'Organisation not found' }
-  }
-
-  // Insert Appeal
-  const { error } = await supabase.from('appeals').insert({
-    organisation_id: result.data.organisationId,
-    type: result.data.type,
-    reason: result.data.reason,
-    status: 'pending',
-    metadata: {
-        contact_email: result.data.contactEmail,
-        evidence_link: result.data.evidenceLink
+  try {
+    const result = SubmitAppealSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid appeal' }
     }
-  } as never)
 
-  if (error) {
-      console.error('Appeal Error:', error)
-      return { success: false, error: 'Failed to submit appeal' }
+    const supabase = await createClient()
+    
+    // Verify Org Exists
+    const { data: org } = await supabase.from('organisations').select('id').eq('id', result.data.organisationId).maybeSingle()
+    
+    if (!org) {
+        return { success: false, error: 'Organisation not found' }
+    }
+
+    // Insert Appeal
+    const { error } = await supabase.from('appeals').insert({
+      organisation_id: result.data.organisationId,
+      type: result.data.type,
+      reason: result.data.reason,
+      status: 'pending',
+      metadata: {
+          contact_email: result.data.contactEmail,
+          evidence_link: result.data.evidenceLink
+      }
+    } as never)
+
+    if (error) {
+        console.error('Appeal Error:', error)
+        return { success: false, error: error.message || 'Failed to submit appeal' }
+    }
+
+    return { success: true }
+  } catch (error: unknown) {
+    console.error('Submit Appeal Exception:', error)
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to submit appeal' }
   }
-
-  return { success: true }
 }

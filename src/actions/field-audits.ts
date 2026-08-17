@@ -57,7 +57,7 @@ export const logFieldSpotAuditAction = createSafeAction(
       .from('profiles')
       .select('full_name')
       .eq('id', context.user.id)
-      .single()
+      .maybeSingle()
 
     const auditorName = profile?.full_name || 'Field Researcher / Citizen Auditor'
 
@@ -82,7 +82,7 @@ export const logFieldSpotAuditAction = createSafeAction(
         status: 'logged',
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) {
       console.error('Failed to log field audit:', error)
@@ -126,7 +126,7 @@ export async function generateStatutoryNoticeAction(auditId: string, orgName: st
       .from('field_spot_audits')
       .select('*')
       .eq('id', auditId)
-      .single()
+      .maybeSingle()
 
     if (auditErr || !audit) {
       return { success: false, error: 'Field audit record not found' }
@@ -208,7 +208,7 @@ export async function generatePublicHealthBulletinAction(auditId: string, orgNam
       .from('field_spot_audits')
       .select('*')
       .eq('id', auditId)
-      .single()
+      .maybeSingle()
 
     if (auditErr || !audit) {
       return { success: false, error: 'Field audit record not found' }

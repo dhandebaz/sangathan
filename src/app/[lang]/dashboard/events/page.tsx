@@ -19,7 +19,7 @@ export default async function EventsPage(props: { params: Promise<{ lang: string
     .from('profiles')
     .select('organisation_id')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   const profile = profileData as { organisation_id: string | null } | null
   const orgId = profile?.organisation_id

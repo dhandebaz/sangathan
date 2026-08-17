@@ -84,7 +84,7 @@ export const generateMonthlyBatchInvoices = createSafeAction(
         created_by: userId,
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (batchError) {
       const adminClient = createServiceClient()

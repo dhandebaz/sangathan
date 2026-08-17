@@ -118,7 +118,7 @@ export function CertificatesManager({ initialCertificates, isHindi }: Certificat
                 <div className="flex items-center gap-1 text-emerald-700 font-bold">
                   <ShieldCheck className="w-4 h-4" />
                   <span className="font-mono text-[10px] text-slate-400 truncate max-w-[180px]">
-                    SHA: {cert.verification_hash.substring(0, 16)}...
+                    SHA: {(cert.verification_hash || '').substring(0, 16)}...
                   </span>
                 </div>
 

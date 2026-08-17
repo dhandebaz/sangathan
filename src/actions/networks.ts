@@ -38,7 +38,7 @@ export async function createNetwork(input: z.infer<typeof NetworkSchema>) {
       .from('profiles')
       .select('role, organisation_id, organisations(capabilities)')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
 
     if (profileError || !profile || profile.role !== 'admin') {
       return { success: false, error: 'Permission denied' }
@@ -59,7 +59,7 @@ export async function createNetwork(input: z.infer<typeof NetworkSchema>) {
         created_by: user.id,
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error || !network) throw new Error(error?.message || 'Failed to create network')
 
@@ -104,7 +104,7 @@ export async function joinNetwork(networkId: string) {
       .from('profiles')
       .select('role, organisation_id')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
 
     if (profileError || !profile || profile.role !== 'admin' || !profile.organisation_id) {
       return { success: false, error: 'Permission denied' }
@@ -116,7 +116,7 @@ export async function joinNetwork(networkId: string) {
       .from('networks')
       .select('id, visibility, slug')
       .eq('id', networkId)
-      .single()
+      .maybeSingle()
 
     if (networkError || !network) {
       return { success: false, error: 'Network not found' }
@@ -160,19 +160,24 @@ export async function joinNetwork(networkId: string) {
 }
 
 export async function getNetworkDetails(slug: string) {
-  const supabase = createServiceClient()
+  try {
+    const supabase = createServiceClient()
 
-  const { data: network } = await supabase
-    .from('networks')
-    .select(`
-            *,
-            members:network_memberships(
-                status,
-                organisation:organisations(id, name, slug)
-            )
-        `)
-    .eq('slug', slug)
-    .single()
+    const { data: network, error } = await supabase
+      .from('networks')
+      .select(`
+              *,
+              members:network_memberships(
+                  status,
+                  organisation:organisations(id, name, slug)
+              )
+          `)
+      .eq('slug', slug)
+      .maybeSingle()
 
-  return network
+    if (error) return null
+    return network
+  } catch {
+    return null
+  }
 }

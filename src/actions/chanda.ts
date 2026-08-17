@@ -30,7 +30,7 @@ export const createChandaRound = createSafeAction(
         frequency: 'one_time'
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (planError || !plan) throw new Error(planError?.message || 'Failed to create round')
 

@@ -14,7 +14,7 @@ export async function GET(
       .from('organisations')
       .select('name, org_type, registration_status, description, logo_url')
       .eq('slug', slug)
-      .single()
+      .maybeSingle()
 
     const orgName = org?.name || 'Organisation Profile'
     const orgType = org?.org_type

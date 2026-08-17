@@ -16,7 +16,7 @@ export default async function MunicipalLettersPage({ params }: { params: Promise
     .from('organisations')
     .select('name')
     .eq('id', organisationId)
-    .single()
+    .maybeSingle()
 
   return (
     <div className="space-y-6">

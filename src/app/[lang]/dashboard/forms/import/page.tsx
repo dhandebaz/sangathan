@@ -22,7 +22,7 @@ export default async function GoogleFormImportPage(props: {
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   if (!profile || !profile.organisation_id || !['admin', 'editor', 'executive'].includes(profile.role)) {
     return <AccessDenied lang={lang} />

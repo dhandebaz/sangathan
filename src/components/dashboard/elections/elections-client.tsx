@@ -205,8 +205,8 @@ export default function ElectionsClient({
       <div className="space-y-8">
         {elections.map((election) => {
           const hasVoted = votedElectionIds.includes(election.id)
-          const isComplete = election.status === 'completed' || new Date() > new Date(election.end_time)
-          const isActive = election.status === 'active' || (new Date() >= new Date(election.start_time) && new Date() <= new Date(election.end_time))
+          const isComplete = election.status === 'completed' || (election.end_time ? new Date() > new Date(election.end_time) : false)
+          const isActive = election.status === 'active' || (election.start_time && election.end_time ? new Date() >= new Date(election.start_time) && new Date() <= new Date(election.end_time) : false)
 
           return (
             <Card key={election.id} className="p-6">

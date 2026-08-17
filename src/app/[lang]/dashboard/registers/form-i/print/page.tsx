@@ -29,7 +29,7 @@ export default async function PrintFormIRegister({
     .from('organisations')
     .select('name, org_type, registration_number, address')
     .eq('id', selectedOrgId)
-    .single()
+    .maybeSingle()
 
   const { data: members } = await adminClient
     .from('members')

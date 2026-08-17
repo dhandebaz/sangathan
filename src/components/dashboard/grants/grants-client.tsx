@@ -51,7 +51,7 @@ export function GrantsClient({ orgId }: GrantsClientProps) {
     }
     
     fetchGrants()
-  }, [])
+  }, [orgId])
 
   function getStatusIcon(status: string) {
     switch (status) {
@@ -72,6 +72,7 @@ export function GrantsClient({ orgId }: GrantsClientProps) {
     })
     if (res?.success) {
       toast.success('Grant created successfully')
+      if (res.data) setGrants(prev => [res.data as Grant, ...prev])
       setIsUploadOpen(false)
       setForm({ title: '', amount: '', status: 'draft', deadline: '' })
     } else {

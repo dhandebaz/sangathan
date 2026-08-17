@@ -25,7 +25,7 @@ export async function requestDataExport() {
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
-    .single()) as { data: ProfileRow | null, error: { message: string } | null }
+    .maybeSingle()) as { data: ProfileRow | null, error: { message: string } | null }
     
   if (profileError || !profile || profile.role !== 'admin' || !profile.organisation_id) {
     return { error: 'Only admins can export organisation data' }
@@ -49,7 +49,7 @@ export async function requestDataExport() {
       status: 'pending',
     } as never)
     .select()
-    .single()) as { data: DataRequestRow | null, error: { message: string } | null }
+    .maybeSingle()) as { data: DataRequestRow | null, error: { message: string } | null }
     
   if (error || !request) return { error: 'Failed to create request' }
   
@@ -105,7 +105,7 @@ export async function deleteOrganisation(orgId: string, confirmation: string) {
     .from('profiles')
     .select('role, organisation_id')
     .eq('id', user.id)
-    .single()) as { data: ProfileRow | null, error: { message: string } | null }
+    .maybeSingle()) as { data: ProfileRow | null, error: { message: string } | null }
     
   if (profileError || !profile || profile.role !== 'admin' || profile.organisation_id !== orgId) {
     return { error: 'Unauthorized' }
@@ -119,7 +119,7 @@ export async function deleteOrganisation(orgId: string, confirmation: string) {
     .from('organisations')
     .select('legal_hold')
     .eq('id', orgId)
-    .single()) as { data: OrganisationRow | null, error: { message: string } | null }
+    .maybeSingle()) as { data: OrganisationRow | null, error: { message: string } | null }
     
   if (orgError || !org || org.legal_hold) {
     await logger.security('compliance', `Blocked deletion attempt on Legal Hold org ${orgId}`)

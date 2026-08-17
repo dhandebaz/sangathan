@@ -25,7 +25,7 @@ export default async function ReceivingTrackerPage(props: { params: Promise<{ la
     .from('profiles')
     .select('organisation_id')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   let orgId = profile?.organisation_id
   if (!orgId) {
@@ -44,7 +44,7 @@ export default async function ReceivingTrackerPage(props: { params: Promise<{ la
     .from('organisations')
     .select('name')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   const trackersRes = await getReceivingTrackersAction(orgId)
 

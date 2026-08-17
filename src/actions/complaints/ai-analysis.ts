@@ -50,7 +50,7 @@ export const analyzeComplaintImage = createSafeAction(
       .select('*')
       .eq('id', input.ticketId)
       .eq('organisation_id', context.organizationId)
-      .single()
+      .maybeSingle()
 
     if (ticketError || !ticket) {
       return { error: 'Complaint not found' }

@@ -147,7 +147,7 @@ export const importGoogleFormWithSubmissions = createSafeAction(
         created_by: context.user.id,
       })
       .select('id')
-      .single()
+      .maybeSingle()
 
     if (formError || !createdForm) {
       return { success: false, error: `Failed to create form: ${formError?.message || 'Unknown error'}` }

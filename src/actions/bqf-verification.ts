@@ -83,7 +83,7 @@ Return ONLY valid JSON matching schema.`
     .from('organisations')
     .select('compliance_documents, capabilities')
     .eq('id', input.orgId)
-    .single()
+    .maybeSingle()
 
   const existingDocs = (org?.compliance_documents as Record<string, unknown>) || {}
   const existingCaps = (org?.capabilities as Record<string, unknown>) || {}

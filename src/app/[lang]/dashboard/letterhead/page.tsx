@@ -16,7 +16,7 @@ export default async function LetterheadPage({ params }: { params: Promise<{ lan
     .from('organisations')
     .select('name')
     .eq('id', organisationId)
-    .single()
+    .maybeSingle()
 
   return (
     <div className="space-y-6">

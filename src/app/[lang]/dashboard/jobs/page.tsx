@@ -19,7 +19,7 @@ export default async function JobsPage({ params }: { params: Promise<{ lang: str
     .from('profiles')
     .select('id, role')
     .eq('id', user?.id || '')
-    .single()
+    .maybeSingle()
 
   const isAdmin = profile?.role === 'admin' || profile?.role === 'editor' || profile?.role === 'executive'
 

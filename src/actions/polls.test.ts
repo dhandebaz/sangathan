@@ -8,13 +8,21 @@ const ORG_ID = '550e8400-e29b-41d4-a716-446655440001'
 const POLL_ID = '550e8400-e29b-41d4-a716-446655440002'
 const OPT_ID = '550e8400-e29b-41d4-a716-446655440003'
 
+const { mockServerSingle, mockServiceSingle } = vi.hoisted(() => {
+  return {
+    mockServerSingle: vi.fn().mockResolvedValue({ data: { id: '550e8400-e29b-41d4-a716-446655440002' }, error: null }),
+    mockServiceSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+  }
+})
+
 vi.mock('@/lib/supabase/server', () => ({
   createClient: vi.fn().mockResolvedValue({
     from: vi.fn().mockReturnThis(),
     select: vi.fn().mockReturnThis(),
     insert: vi.fn().mockReturnThis(),
     update: vi.fn().mockReturnThis(),
-    single: vi.fn().mockResolvedValue({ data: { id: '550e8400-e29b-41d4-a716-446655440002' }, error: null }),
+    single: mockServerSingle,
+    maybeSingle: mockServerSingle,
     eq: vi.fn().mockReturnThis(),
   }),
 }))
@@ -26,7 +34,8 @@ vi.mock('@/lib/supabase/service', () => ({
     insert: vi.fn().mockReturnThis(),
     update: vi.fn().mockReturnThis(),
     eq: vi.fn().mockReturnThis(),
-    single: vi.fn().mockResolvedValue({ data: null, error: null }),
+    single: mockServiceSingle,
+    maybeSingle: mockServiceSingle,
     then: vi.fn().mockImplementation((fn: (data: unknown) => unknown) => Promise.resolve({ data: [], error: null }).then(fn)),
   }),
 }))
@@ -69,6 +78,7 @@ describe('polls actions', () => {
     vi.clearAllMocks()
     mockUserRole = 'admin'
     process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-key'
+    mockServerSingle.mockResolvedValue({ data: { id: '550e8400-e29b-41d4-a716-446655440002' }, error: null })
   })
 
   describe('createPoll', () => {
@@ -98,8 +108,6 @@ describe('polls actions', () => {
 
   describe('castVote', () => {
     it('should cast an anonymous vote successfully', async () => {
-      const { createServiceClient } = await import('@/lib/supabase/service')
-      const mockSupabaseAdmin = createServiceClient() as unknown as { single: Mock }
       const mockPoll = {
         id: POLL_ID,
         organisation_id: ORG_ID,
@@ -108,7 +116,7 @@ describe('polls actions', () => {
         voting_method: 'anonymous'
       }
 
-      mockSupabaseAdmin.single
+      mockServiceSingle
         .mockResolvedValueOnce({ data: mockPoll, error: null }) // poll check
         .mockResolvedValueOnce({ data: null, error: null }) // double vote check
 
@@ -122,7 +130,7 @@ describe('polls actions', () => {
   describe('closePoll', () => {
     it('should close a poll and calculate results', async () => {
       const { createServiceClient } = await import('@/lib/supabase/service')
-      const mockSupabaseAdmin = createServiceClient() as unknown as { single: Mock, then: Mock, eq: Mock }
+      const mockSupabaseAdmin = createServiceClient() as unknown as { single: Mock, maybeSingle: Mock, then: Mock, eq: Mock }
       const mockPoll = {
         id: POLL_ID,
         organisation_id: ORG_ID,
@@ -130,7 +138,7 @@ describe('polls actions', () => {
         type: 'informal'
       }
 
-      mockSupabaseAdmin.single.mockResolvedValue({ data: mockPoll, error: null })
+      mockServiceSingle.mockResolvedValue({ data: mockPoll, error: null })
       mockSupabaseAdmin.then.mockImplementation((fn: (data: unknown) => unknown) =>
         Promise.resolve({ data: [{ id: 'opt-1' }, { id: 'opt-2' }], error: null }).then(fn)
       )

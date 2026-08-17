@@ -25,7 +25,7 @@ export default async function PressReleasesPage(props: { params: Promise<{ lang:
     .from('profiles')
     .select('organisation_id')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   let orgId = profile?.organisation_id
   if (!orgId) {
@@ -44,7 +44,7 @@ export default async function PressReleasesPage(props: { params: Promise<{ lang:
     .from('organisations')
     .select('name')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   const releasesRes = await getPressReleasesAction(orgId)
 

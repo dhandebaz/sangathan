@@ -24,7 +24,7 @@ export const analyzeFormSubmissions = createSafeAction(
       .select('title')
       .eq('id', input.formId)
       .eq('organisation_id', context.organizationId)
-      .single()
+      .maybeSingle()
 
     if (!form) return { error: 'Form not found' }
 
@@ -78,7 +78,7 @@ export const flagUrgentSubmissions = createSafeAction(
       .select('title, fields')
       .eq('id', input.formId)
       .eq('organisation_id', context.organizationId)
-      .single()
+      .maybeSingle()
 
     if (!form) return { error: 'Form not found' }
 

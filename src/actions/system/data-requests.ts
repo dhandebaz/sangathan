@@ -14,58 +14,67 @@ const ProcessDataRequestSchema = z.object({
 })
 
 export async function processDataRequest(input: z.infer<typeof ProcessDataRequestSchema>) {
-  const result = ProcessDataRequestSchema.safeParse(input)
-  if (!result.success) {
-    return { success: false, error: result.error.issues[0]?.message || 'Invalid input' }
-  }
+  try {
+    const result = ProcessDataRequestSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid input' }
+    }
 
-  await requirePlatformAdmin()
+    await requirePlatformAdmin()
 
-  const authClient = await createClient()
-  const { data: { user } } = await authClient.auth.getUser()
-  if (!user) throw new Error('Unauthorized')
+    const authClient = await createClient()
+    const { data: { user } } = await authClient.auth.getUser()
+    if (!user) return { success: false, error: 'Unauthorized' }
 
-  const supabase = createServiceClient()
+    const supabase = createServiceClient()
 
-  const { data: request } = await supabase
-    .from('data_requests')
-    .select('*')
-    .eq('id', result.data.requestId)
-    .single()
+    const { data: request } = await supabase
+      .from('data_requests')
+      .select('*')
+      .eq('id', result.data.requestId)
+      .maybeSingle()
 
-  if (!request) return { success: false, error: 'Data request not found' }
+    if (!request) return { success: false, error: 'Data request not found' }
 
-  const { error } = await supabase
-    .from('data_requests')
-    .update({
-      status: result.data.status,
-      processed_at: new Date().toISOString(),
-      processed_by: user.id,
-      details: { ...(request.details || {}), resolution_note: result.data.note },
+    const { error } = await supabase
+      .from('data_requests')
+      .update({
+        status: result.data.status,
+        processed_at: new Date().toISOString(),
+        processed_by: user.id,
+        details: { ...(request.details || {}), resolution_note: result.data.note },
+      })
+      .eq('id', result.data.requestId)
+
+    if (error) return { success: false, error: error.message }
+
+    await logAction({
+      organisation_id: request.organisation_id,
+      user_id: user.id,
+      action: result.data.status === 'completed' ? 'DATA_REQUEST_COMPLETED' : 'DATA_REQUEST_REJECTED',
+      resource_table: 'data_requests',
+      resource_id: result.data.requestId,
     })
-    .eq('id', result.data.requestId)
 
-  if (error) return { success: false, error: error.message }
-
-  await logAction({
-    organisation_id: request.organisation_id,
-    user_id: user.id,
-    action: result.data.status === 'completed' ? 'DATA_REQUEST_COMPLETED' : 'DATA_REQUEST_REJECTED',
-    resource_table: 'data_requests',
-    resource_id: result.data.requestId,
-  })
-
-  revalidatePath('/admin/data-requests', 'page')
-  return { success: true }
+    revalidatePath('/admin/data-requests', 'page')
+    return { success: true }
+  } catch (error: unknown) {
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to process data request' }
+  }
 }
 
 export async function getAllDataRequests() {
-  await requirePlatformAdmin()
-  const supabase = createServiceClient()
-  const { data } = await supabase
-    .from('data_requests')
-    .select('*, organisations(name), profiles:user_id(email)')
-    .order('created_at', { ascending: false })
-    .limit(100)
-  return data || []
+  try {
+    await requirePlatformAdmin()
+    const supabase = createServiceClient()
+    const { data } = await supabase
+      .from('data_requests')
+      .select('*, organisations(name), profiles:user_id(email)')
+      .order('created_at', { ascending: false })
+      .limit(100)
+    return data || []
+  } catch {
+    return []
+  }
 }
+

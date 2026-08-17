@@ -29,7 +29,7 @@ export default async function PublicTransparencyPage({ params }: PageProps) {
     .from('organisations')
     .select('id, name, created_at, slug, public_transparency_enabled, status, org_type')
     .eq('slug', slug)
-    .single()
+    .maybeSingle()
 
   if (error || !org) {
     notFound()

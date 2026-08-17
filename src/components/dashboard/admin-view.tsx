@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { StatPill } from '@/components/dashboard/stat-pill'
@@ -389,9 +389,14 @@ export function AdminDashboard({
 
   const visibleActions = priorityActions.filter((_, i) => !dismissedActions.includes(i))
 
-  const publicOrgUrl = typeof window !== 'undefined'
-    ? `${window.location.origin}/${lang}/org/${slug || 'demo'}`
-    : `https://sangathan.space/${lang}/org/${slug || 'demo'}`
+  const defaultOrigin = 'https://sangathan.space'
+  const [origin, setOrigin] = useState(defaultOrigin)
+
+  useEffect(() => {
+    setOrigin(window.location.origin)
+  }, [])
+
+  const publicOrgUrl = `${origin}/${lang}/org/${slug || 'demo'}`
 
   const whatsappMessage = isHindi
     ? `नमस्कार! हमारे संगठन "${orgName || 'संगठन'}" से जुड़ें, बैठकें आयोजित करें, प्रस्तावों पर मतदान करें और परिपत्र प्राप्त करें:\n${publicOrgUrl}`

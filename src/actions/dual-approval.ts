@@ -38,7 +38,7 @@ export async function requestDualApprovalAction(input: z.infer<typeof RequestDua
         status: 'pending',
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw error
 
@@ -77,7 +77,7 @@ export async function approveDualApprovalAction(approvalId: string) {
       .from('pending_dual_approvals')
       .select('*')
       .eq('id', approvalId)
-      .single()
+      .maybeSingle()
 
     if (appErr || !approval) return { success: false, error: 'Approval request not found' }
 

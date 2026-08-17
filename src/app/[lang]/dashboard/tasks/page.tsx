@@ -13,7 +13,7 @@ export default async function TasksPage(props: { params: Promise<{ lang: string 
 
   if (!user) return <div>Please login</div>
 
-  const { data: profileData } = await supabase.from('profiles').select('organisation_id, role').eq('id', user.id).single()
+  const { data: profileData } = await supabase.from('profiles').select('organisation_id, role').eq('id', user.id).maybeSingle()
   const profile = profileData as { organisation_id: string | null; role: string } | null
   
   if (!profile || !profile.organisation_id) return <div>No Organisation</div>

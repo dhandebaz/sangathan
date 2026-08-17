@@ -35,7 +35,7 @@ export async function createMemorandum(input: z.infer<typeof CreateMemorandumSch
         status: 'discussion'
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) {
       // Fallback via Service Client
@@ -50,7 +50,7 @@ export async function createMemorandum(input: z.infer<typeof CreateMemorandumSch
           status: 'discussion'
         })
         .select()
-        .single()
+        .maybeSingle()
         
       if (fallback.error) throw fallback.error
     }

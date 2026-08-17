@@ -29,7 +29,7 @@ export default async function DigitalIDPage({ params }: { params: Promise<{ lang
       organisations (name, type, slug)
     `)
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   if (!profile) return <div className="p-8 text-center">Profile not found.</div>
 

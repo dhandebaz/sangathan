@@ -45,7 +45,7 @@ export const createInvite = createSafeAction(
         used: false,
       })
       .select('id, token, email, role, expires_at')
-      .single()
+      .maybeSingle()
 
     if (error) {
       if ((error as { code?: string })?.code === '23505') {
@@ -208,144 +208,154 @@ export const getOrgInvites = createSafeAction(
 )
 
 export async function validateInvite(token: string) {
-  const supabase = createServiceClient()
+  try {
+    const supabase = createServiceClient()
 
-  const { data, error } = await supabase
-    .from('org_invites')
-    .select('id, email, role, organisation_id, expires_at, used')
-    .eq('token', token)
-    .single()
+    const { data, error } = await supabase
+      .from('org_invites')
+      .select('id, email, role, organisation_id, expires_at, used')
+      .eq('token', token)
+      .maybeSingle()
 
-  if (error || !data) {
-    return { valid: false, error: 'Invite not found' }
-  }
+    if (error || !data) {
+      return { valid: false, error: 'Invite not found' }
+    }
 
-  if (data.used) {
-    return { valid: false, error: 'This invite has already been used' }
-  }
+    if (data.used) {
+      return { valid: false, error: 'This invite has already been used' }
+    }
 
-  if (new Date(data.expires_at) < new Date()) {
-    return { valid: false, error: 'This invite has expired' }
-  }
+    if (new Date(data.expires_at) < new Date()) {
+      return { valid: false, error: 'This invite has expired' }
+    }
 
-  const { data: org } = await supabase
-    .from('organisations')
-    .select('name, slug, org_type')
-    .eq('id', data.organisation_id)
-    .single()
+    const { data: org } = await supabase
+      .from('organisations')
+      .select('name, slug, org_type')
+      .eq('id', data.organisation_id)
+      .maybeSingle()
 
-  return {
-    valid: true,
-    invite: {
-      id: data.id,
-      email: data.email,
-      role: data.role,
-      organisation_id: data.organisation_id,
-      organisationName: org?.name || '',
-      organisationSlug: org?.slug || '',
-      organisationType: org?.org_type || '',
-    },
+    return {
+      valid: true,
+      invite: {
+        id: data.id,
+        email: data.email,
+        role: data.role,
+        organisation_id: data.organisation_id,
+        organisationName: org?.name || '',
+        organisationSlug: org?.slug || '',
+        organisationType: org?.org_type || '',
+      },
+    }
+  } catch (err: unknown) {
+    console.error('Validate invite exception:', err)
+    return { valid: false, error: err instanceof Error ? err.message : 'Failed to validate invite' }
   }
 }
 
 export async function acceptInvite(token: string) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user || !user.email) {
-    return { success: false, error: 'Please login or sign up to accept this invite' }
-  }
+    if (!user || !user.email) {
+      return { success: false, error: 'Please login or sign up to accept this invite' }
+    }
 
-  const validation = await validateInvite(token)
-  if (!validation.valid || !validation.invite) {
-    return { success: false, error: validation.error }
-  }
+    const validation = await validateInvite(token)
+    if (!validation.valid || !validation.invite) {
+      return { success: false, error: validation.error }
+    }
 
-  const invite = validation.invite
+    const invite = validation.invite
 
-  if (user.email !== invite.email) {
-    return { success: false, error: `This invite was sent to ${invite.email}` }
-  }
+    if (user.email !== invite.email) {
+      return { success: false, error: `This invite was sent to ${invite.email}` }
+    }
 
-  const supabaseAdmin = createServiceClient()
+    const supabaseAdmin = createServiceClient()
 
-  const { data: existingProfile } = await supabaseAdmin
-    .from('profiles')
-    .select('id, organisation_id')
-    .eq('id', user.id)
-    .single()
-
-  if (existingProfile?.organisation_id && existingProfile.organisation_id !== invite.organisation_id) {
-    return { success: false, error: 'You are already an active member of another organisation' }
-  }
-
-  if (existingProfile) {
-    const { error: profileUpdateError } = await supabaseAdmin
+    const { data: existingProfile } = await supabaseAdmin
       .from('profiles')
-      .update({
-        organisation_id: invite.organisation_id,
-        role: invite.role,
-        status: 'active',
-        approved_at: new Date().toISOString(),
-        onboarding_completed: true,
-      })
+      .select('id, organisation_id')
       .eq('id', user.id)
+      .maybeSingle()
 
-    if (profileUpdateError) {
-      return { success: false, error: profileUpdateError.message || 'Failed to update member profile' }
+    if (existingProfile?.organisation_id && existingProfile.organisation_id !== invite.organisation_id) {
+      return { success: false, error: 'You are already an active member of another organisation' }
     }
-  } else {
-    const { error: profileError } = await supabaseAdmin
-      .from('profiles')
-      .insert({
-        id: user.id,
-        organisation_id: invite.organisation_id,
-        email: user.email,
-        full_name: user.user_metadata?.full_name || user.email.split('@')[0] || 'Member',
-        role: invite.role,
-        status: 'active',
-        approved_at: new Date().toISOString(),
-        onboarding_completed: true,
-      })
 
-    if (profileError) {
-      return { success: false, error: profileError.message || 'Failed to join organisation' }
+    if (existingProfile) {
+      const { error: profileUpdateError } = await supabaseAdmin
+        .from('profiles')
+        .update({
+          organisation_id: invite.organisation_id,
+          role: invite.role,
+          status: 'active',
+          approved_at: new Date().toISOString(),
+          onboarding_completed: true,
+        })
+        .eq('id', user.id)
+
+      if (profileUpdateError) {
+        return { success: false, error: profileUpdateError.message || 'Failed to update member profile' }
+      }
+    } else {
+      const { error: profileError } = await supabaseAdmin
+        .from('profiles')
+        .insert({
+          id: user.id,
+          organisation_id: invite.organisation_id,
+          email: user.email,
+          full_name: user.user_metadata?.full_name || user.email.split('@')[0] || 'Member',
+          role: invite.role,
+          status: 'active',
+          approved_at: new Date().toISOString(),
+          onboarding_completed: true,
+        })
+
+      if (profileError) {
+        return { success: false, error: profileError.message || 'Failed to join organisation' }
+      }
     }
-  }
 
-  // Also add to members table if available
-  try {
+    // Also add to members table if available
+    try {
+      await supabaseAdmin
+        .from('members')
+        .insert({
+          organisation_id: invite.organisation_id,
+          user_id: user.id,
+          email: user.email,
+          name: user.user_metadata?.full_name || user.email.split('@')[0] || 'Member',
+          role: invite.role,
+          status: 'active',
+        })
+    } catch {
+      // optional table entry
+    }
+
     await supabaseAdmin
-      .from('members')
-      .insert({
-        organisation_id: invite.organisation_id,
-        user_id: user.id,
-        email: user.email,
-        name: user.user_metadata?.full_name || user.email.split('@')[0] || 'Member',
-        role: invite.role,
-        status: 'active',
+      .from('org_invites')
+      .update({ used: true })
+      .eq('id', invite.id)
+
+    try {
+      const cookieStore = await cookies()
+      cookieStore.set('sangathan_org_id', invite.organisation_id, {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 30,
+        sameSite: 'lax',
       })
-  } catch {
-    // optional table entry
+    } catch (cookieErr) {
+      console.warn('Could not set org cookie:', cookieErr)
+    }
+
+    await invalidateUserMembershipsCache(user.id)
+
+    return { success: true, organisationId: invite.organisation_id }
+  } catch (err: unknown) {
+    console.error('Accept invite exception:', err)
+    return { success: false, error: err instanceof Error ? err.message : 'Failed to accept invitation' }
   }
-
-  await supabaseAdmin
-    .from('org_invites')
-    .update({ used: true })
-    .eq('id', invite.id)
-
-  try {
-    const cookieStore = await cookies()
-    cookieStore.set('sangathan_org_id', invite.organisation_id, {
-      path: '/',
-      maxAge: 60 * 60 * 24 * 30,
-      sameSite: 'lax',
-    })
-  } catch (cookieErr) {
-    console.warn('Could not set org cookie:', cookieErr)
-  }
-
-  await invalidateUserMembershipsCache(user.id)
-
-  return { success: true, organisationId: invite.organisation_id }
 }

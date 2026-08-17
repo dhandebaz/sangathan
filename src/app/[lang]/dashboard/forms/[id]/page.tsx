@@ -24,7 +24,7 @@ export default async function FormDetailsPage({ params }: PageProps) {
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   const profile = profileData as { organisation_id: string | null; role: string } | null
 
@@ -40,12 +40,12 @@ export default async function FormDetailsPage({ params }: PageProps) {
       .select('*')
       .eq('id', id)
       .eq('organisation_id', orgId)
-      .single(),
+      .maybeSingle(),
     supabase
       .from('organisations')
       .select('name')
       .eq('id', orgId)
-      .single(),
+      .maybeSingle(),
     supabase
       .from('form_submissions')
       .select('*')

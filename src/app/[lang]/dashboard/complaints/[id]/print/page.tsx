@@ -20,7 +20,7 @@ export default async function ComplaintPrintPage({ params }: Props) {
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   const orgId = profile?.organisation_id
   const role = profile?.role || 'member'
@@ -36,7 +36,7 @@ export default async function ComplaintPrintPage({ params }: Props) {
     .select('*, authority_contacts(*)')
     .eq('id', id)
     .eq('organisation_id', orgId)
-    .single()
+    .maybeSingle()
 
   if (error) {
     try {
@@ -46,7 +46,7 @@ export default async function ComplaintPrintPage({ params }: Props) {
         .select('*, authority_contacts(*)')
         .eq('id', id)
         .eq('organisation_id', orgId)
-        .single()
+        .maybeSingle()
 
       if (!fallbackRes.error) {
         ticket = fallbackRes.data
@@ -73,7 +73,7 @@ export default async function ComplaintPrintPage({ params }: Props) {
     .from('organisations')
     .select('name, logo_url, address, contact_phone, contact_email')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   return <ComplaintPrintView ticket={ticket} org={org} lang={lang} />
 }

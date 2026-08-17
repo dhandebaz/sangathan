@@ -40,7 +40,7 @@ export const createCampaign = createSafeAction(
         status: 'draft',
       })
       .select('id')
-      .single()
+      .maybeSingle()
 
     if (error || !data) {
       logger.error('campaign_create', 'Failed to create campaign', { error: error?.message })

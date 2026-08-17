@@ -50,7 +50,7 @@ export const createTicket = createSafeAction(
         tags: triageResult.tags, // Save AI/fallback tags
       })
       .select('id')
-      .single()
+      .maybeSingle()
 
     if (error || !data) {
       logger.error('ticket_create', 'Failed to create ticket', { error: error?.message })
@@ -90,7 +90,7 @@ export const updateTicketStatus = createSafeAction(
       .from('tickets')
       .select('type')
       .eq('id', input.ticketId)
-      .single()
+      .maybeSingle()
 
     const { error } = await supabase
       .from('tickets')
@@ -136,7 +136,7 @@ export const deleteTicket = createSafeAction(
       .from('tickets')
       .select('type')
       .eq('id', input.ticketId)
-      .single()
+      .maybeSingle()
 
     const { error } = await supabase
       .from('tickets')

@@ -17,7 +17,7 @@ export default async function MaintenancePage(props: { params: Promise<{ lang: s
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   let orgId = profile?.organisation_id
   const role = profile?.role || 'member'

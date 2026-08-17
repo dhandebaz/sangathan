@@ -53,7 +53,7 @@ export const createGrantMilestone = createSafeAction(
         status: 'pending',
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) {
       // Graceful fallback via service client
@@ -70,7 +70,7 @@ export const createGrantMilestone = createSafeAction(
           status: 'pending',
         })
         .select()
-        .single()
+        .maybeSingle()
 
       if (fallback.error) throw new Error(fallback.error.message)
       revalidatePath('/', 'layout')
@@ -103,7 +103,7 @@ export const logGrantExpense = createSafeAction(
         notes: data.notes || null,
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) {
       const adminClient = createServiceClient()
@@ -121,7 +121,7 @@ export const logGrantExpense = createSafeAction(
           notes: data.notes || null,
         })
         .select()
-        .single()
+        .maybeSingle()
 
       if (fallback.error) throw new Error(fallback.error.message)
       revalidatePath('/', 'layout')

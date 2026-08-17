@@ -48,7 +48,7 @@ export const createAnnouncement = createSafeAction(
         created_by: context.user.id,
       } as never)
       .select()
-      .single()
+      .maybeSingle()
 
     if (error || !announcement) {
       return { error: error?.message || 'Failed to create announcement' }

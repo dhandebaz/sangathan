@@ -1,12 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Html5QrcodeScanner } from 'html5-qrcode'
 import { verifyAndCheckIn } from '@/actions/events'
 
 export function QRScanner({ userId }: { eventId: string, userId: string }) {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
+  const isProcessingRef = useRef(false)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const scanner = new Html5QrcodeScanner(
@@ -18,11 +20,9 @@ export function QRScanner({ userId }: { eventId: string, userId: string }) {
     scanner.render(onScanSuccess, onScanFailure)
 
     async function onScanSuccess(decodedText: string) {
-      if (status === 'success' || status === 'error') return // Debounce
+      if (isProcessingRef.current) return // Debounce using ref (not stale state)
       
-      // Pause scanning logic handled by state? 
-      // Html5QrcodeScanner keeps running. We should handle state carefully.
-      
+      isProcessingRef.current = true
       setStatus('idle')
       setMessage('Verifying...')
       
@@ -32,35 +32,34 @@ export function QRScanner({ userId }: { eventId: string, userId: string }) {
         if (res.success) {
           setStatus('success')
           setMessage('Check-in Successful!')
-          setTimeout(() => {
-             setStatus('idle')
-             setMessage('')
-          }, 3000)
         } else {
           setStatus('error')
           setMessage(res.error || 'Check-in Failed')
-          setTimeout(() => {
-             setStatus('idle')
-             setMessage('')
-          }, 3000)
         }
       } catch {
         setStatus('error')
         setMessage('System Error')
       }
+
+      // Reset after 3 seconds
+      timerRef.current = setTimeout(() => {
+        setStatus('idle')
+        setMessage('')
+        isProcessingRef.current = false
+      }, 3000)
     }
 
     function onScanFailure() {
       // handle scan failure, usually better to ignore and keep scanning.
-      // console.warn(`Code scan error = ${error}`);
     }
 
     return () => {
+      if (timerRef.current) clearTimeout(timerRef.current)
       scanner.clear().catch(error => {
         console.error('Failed to clear html5QrcodeScanner. ', error)
       })
     }
-  }, [userId, status])
+  }, [userId])
 
   return (
     <div className="max-w-md mx-auto space-y-4">

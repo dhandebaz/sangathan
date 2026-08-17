@@ -14,64 +14,76 @@ const UpdateSettingSchema = z.object({
 })
 
 export async function getSystemSetting(key: string) {
-  const supabase = createServiceClient()
-  const { data } = await supabase
-    .from('system_settings')
-    .select('*')
-    .eq('key', key)
-    .single()
-  return data
+  try {
+    const supabase = createServiceClient()
+    const { data } = await supabase
+      .from('system_settings')
+      .select('*')
+      .eq('key', key)
+      .maybeSingle()
+    return data
+  } catch {
+    return null
+  }
 }
 
 export async function getAllSystemSettings() {
-  await requirePlatformAdmin()
-  const supabase = createServiceClient()
-  const { data } = await supabase
-    .from('system_settings')
-    .select('*')
-    .order('key', { ascending: true })
-  return data || []
+  try {
+    await requirePlatformAdmin()
+    const supabase = createServiceClient()
+    const { data } = await supabase
+      .from('system_settings')
+      .select('*')
+      .order('key', { ascending: true })
+    return data || []
+  } catch {
+    return []
+  }
 }
 
 export async function updateSystemSetting(input: z.infer<typeof UpdateSettingSchema>) {
-  const result = UpdateSettingSchema.safeParse(input)
-  if (!result.success) {
-    return { success: false, error: result.error.issues[0]?.message || 'Invalid input' }
+  try {
+    const result = UpdateSettingSchema.safeParse(input)
+    if (!result.success) {
+      return { success: false, error: result.error.issues[0]?.message || 'Invalid input' }
+    }
+
+    await requirePlatformAdmin()
+
+    const authClient = await createClient()
+    const { data: { user } } = await authClient.auth.getUser()
+    if (!user) return { success: false, error: 'Unauthorized' }
+
+    const supabase = createServiceClient()
+    const { error } = await supabase
+      .from('system_settings')
+      .upsert({
+        key: result.data.key,
+        value: result.data.value,
+        description: result.data.description || null,
+        updated_by: user.id,
+      })
+
+    if (error) return { success: false, error: error.message }
+
+    const { data: firstOrg } = await supabase.from('organisations').select('id').limit(1).maybeSingle()
+    const orgId = process.env.DEFAULT_ORG_ID || firstOrg?.id
+
+    if (orgId) {
+      await logAction({
+        organisation_id: orgId,
+        user_id: user.id,
+        action: 'SYSTEM_SETTING_UPDATED',
+        resource_table: 'system_settings',
+        resource_id: result.data.key,
+      })
+    }
+
+    revalidatePath('/admin/settings', 'page')
+    return { success: true }
+  } catch (error: unknown) {
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to update system setting' }
   }
-
-  await requirePlatformAdmin()
-
-  const authClient = await createClient()
-  const { data: { user } } = await authClient.auth.getUser()
-  if (!user) throw new Error('Unauthorized')
-
-  const supabase = createServiceClient()
-  const { error } = await supabase
-    .from('system_settings')
-    .upsert({
-      key: result.data.key,
-      value: result.data.value,
-      description: result.data.description || null,
-      updated_by: user.id,
-    })
-
-  if (error) return { success: false, error: error.message }
-
-  const { data: firstOrg } = await supabase.from('organisations').select('id').limit(1).maybeSingle()
-  const orgId = process.env.DEFAULT_ORG_ID || firstOrg?.id
-
-  if (orgId) {
-    await logAction({
-      organisation_id: orgId,
-      user_id: user.id,
-      action: 'SYSTEM_SETTING_UPDATED',
-      resource_table: 'system_settings',
-      resource_id: result.data.key,
-    })
-  }
-
-  revalidatePath('/admin/settings', 'page')
-  return { success: true }
 }
 
 export async function createSystemSetting(input: { key: string; value: Record<string, unknown>; description?: string }) {
@@ -79,33 +91,38 @@ export async function createSystemSetting(input: { key: string; value: Record<st
 }
 
 export async function deleteSystemSetting(key: string) {
-  await requirePlatformAdmin()
+  try {
+    await requirePlatformAdmin()
 
-  const authClient = await createClient()
-  const { data: { user } } = await authClient.auth.getUser()
-  if (!user) throw new Error('Unauthorized')
+    const authClient = await createClient()
+    const { data: { user } } = await authClient.auth.getUser()
+    if (!user) return { success: false, error: 'Unauthorized' }
 
-  const supabase = createServiceClient()
-  const { error } = await supabase
-    .from('system_settings')
-    .delete()
-    .eq('key', key)
+    const supabase = createServiceClient()
+    const { error } = await supabase
+      .from('system_settings')
+      .delete()
+      .eq('key', key)
 
-  if (error) return { success: false, error: error.message }
+    if (error) return { success: false, error: error.message }
 
-  const { data: firstOrg } = await supabase.from('organisations').select('id').limit(1).maybeSingle()
-  const orgId = process.env.DEFAULT_ORG_ID || firstOrg?.id
+    const { data: firstOrg } = await supabase.from('organisations').select('id').limit(1).maybeSingle()
+    const orgId = process.env.DEFAULT_ORG_ID || firstOrg?.id
 
-  if (orgId) {
-    await logAction({
-      organisation_id: orgId,
-      user_id: user.id,
-      action: 'SYSTEM_SETTING_DELETED',
-      resource_table: 'system_settings',
-      resource_id: key,
-    })
+    if (orgId) {
+      await logAction({
+        organisation_id: orgId,
+        user_id: user.id,
+        action: 'SYSTEM_SETTING_DELETED',
+        resource_table: 'system_settings',
+        resource_id: key,
+      })
+    }
+
+    revalidatePath('/admin/settings', 'page')
+    return { success: true }
+  } catch (error: unknown) {
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to delete system setting' }
   }
-
-  revalidatePath('/admin/settings', 'page')
-  return { success: true }
 }
+

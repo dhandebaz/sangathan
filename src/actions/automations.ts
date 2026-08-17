@@ -46,7 +46,7 @@ export async function createAutomationAction(input: z.infer<typeof CreateAutomat
         created_by: user.id,
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw error
 
@@ -113,7 +113,7 @@ export async function installPrebuiltRecipeAction(recipeIndex: number) {
         is_active: true,
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw error
     revalidatePath('/[lang]/dashboard/automations', 'page')

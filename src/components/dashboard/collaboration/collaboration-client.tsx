@@ -292,7 +292,7 @@ export default function CollaborationClient({
               <div key={p.id} className="p-3 bg-emerald-50/50 border border-emerald-200 rounded-xl flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">
-                    {p.name.slice(0, 2).toUpperCase()}
+                    {(p.name || '?').slice(0, 2).toUpperCase()}
                   </div>
                   <div>
                     <p className="font-extrabold text-slate-900 text-sm">{p.name}</p>

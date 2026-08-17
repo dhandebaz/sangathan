@@ -91,7 +91,7 @@ export function ComplaintPrintView({ ticket, org, lang }: ComplaintPrintViewProp
               </div>
               <div className="text-right">
                 <p className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Ref. No.</p>
-                <p className="text-sm font-mono font-bold text-slate-800">SG/COMP/{ticket.id.slice(0, 8).toUpperCase()}</p>
+                <p className="text-sm font-mono font-bold text-slate-800">SG/COMP/{(ticket.id || '').slice(0, 8).toUpperCase()}</p>
                 <p className="text-[10px] text-slate-400 mt-2">{ticket.created_at ? new Date(ticket.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}</p>
               </div>
             </div>

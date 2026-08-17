@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -25,6 +26,7 @@ export default function DuesClient({
   })[], 
   lang: string 
 }) {
+  const router = useRouter()
   const [isPlanDialogOpen, setIsPlanDialogOpen] = useState(false)
   const [isGenerateDialogOpen, setIsGenerateDialogOpen] = useState(false)
   
@@ -66,6 +68,7 @@ export default function DuesClient({
     const res = await markDueAsPaid({ due_id: dueId })
     if (res?.success) {
       toast.success('Payment Recorded', { description: 'Due marked as paid.' })
+      router.refresh()
     } else {
       toast.error('Failed', { description: res?.error || 'Could not record payment' })
     }

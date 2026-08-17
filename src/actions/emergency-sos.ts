@@ -47,7 +47,7 @@ export async function triggerEmergencySosAction(input: z.infer<typeof EmergencyS
         status: 'alerted',
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (alertErr) throw alertErr
 
@@ -84,7 +84,7 @@ export async function dispatchAdvocateAction(alertId: string, advocateName: stri
         status: 'en_route',
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw error
 

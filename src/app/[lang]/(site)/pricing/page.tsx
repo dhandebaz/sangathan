@@ -59,7 +59,7 @@ export default async function PricingPage({
       .from('profiles')
       .select('organisation_id')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
     if (profile?.organisation_id) {
       orgId = profile.organisation_id
     }

@@ -28,7 +28,7 @@ export async function submitAppeal(orgId: string, input: z.infer<typeof AppealSc
       .from('profiles')
       .select('role, organisation_id')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
 
     if (profileError || !profile || profile.organisation_id !== orgId || !['admin', 'executive'].includes(profile.role)) {
       return { success: false, error: 'Permission denied' }
@@ -40,7 +40,7 @@ export async function submitAppeal(orgId: string, input: z.infer<typeof AppealSc
       .select('id')
       .eq('organisation_id', orgId)
       .in('status', ['pending', 'under_review'])
-      .single()
+      .maybeSingle()
 
     if (existing) return { success: false, error: 'An appeal is already pending.' }
 

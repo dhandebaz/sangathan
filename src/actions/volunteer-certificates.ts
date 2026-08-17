@@ -43,7 +43,7 @@ export const issueVolunteerCertificate = createSafeAction(
         verification_hash: verificationHash,
       })
       .select('*, volunteer:profiles!volunteer_profile_id(full_name, email)')
-      .single()
+      .maybeSingle()
 
     if (error) {
       const adminClient = createServiceClient()
@@ -60,7 +60,7 @@ export const issueVolunteerCertificate = createSafeAction(
           verification_hash: verificationHash,
         })
         .select('*, volunteer:profiles!volunteer_profile_id(full_name, email)')
-        .single()
+        .maybeSingle()
 
       if (fallback.error) throw new Error(fallback.error.message)
       const resCert = fallback.data

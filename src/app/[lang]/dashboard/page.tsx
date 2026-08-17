@@ -21,7 +21,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     .from('profiles')
     .select('status, role, organisation_id, phone_verified, onboarding_completed, display_name, designation')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   if (profileError || !profileData) {
     return (
@@ -135,7 +135,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     .from('organisations')
     .select('name, status, org_type, slug, capabilities')
     .eq('id', profile.organisation_id)
-    .single()
+    .maybeSingle()
 
   const org = orgData as { name: string; status: string; org_type?: string; slug?: string; capabilities?: Record<string, unknown> } | null
   const focusBlueprint = (org?.capabilities?.focus_blueprint as string) || undefined

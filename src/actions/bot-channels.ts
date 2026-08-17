@@ -467,7 +467,7 @@ export async function sendAdminDirectReplyAction(params: {
       .select('*')
       .eq('id', params.conversationId)
       .eq('organisation_id', orgId)
-      .single()
+      .maybeSingle()
 
     if (convErr || !conv) {
       return { success: false, error: 'Conversation not found' }

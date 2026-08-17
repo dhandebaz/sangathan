@@ -58,7 +58,7 @@ export async function processIncomingBotMessage(input: ProcessBotInput): Promise
             last_command: parsed.command,
           })
           .select('id')
-          .single()
+          .maybeSingle()
         conversationId = newConv?.id || null
       }
     }
@@ -74,7 +74,7 @@ export async function processIncomingBotMessage(input: ProcessBotInput): Promise
         .from('organisations')
         .select('name')
         .eq('id', orgId)
-        .single()
+        .maybeSingle()
       if (org?.name) orgName = org.name
     }
   } catch {

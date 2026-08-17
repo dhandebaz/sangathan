@@ -15,7 +15,7 @@ export default async function EventDetailsPage(props: { params: Promise<{ lang: 
     .from('events')
     .select('*')
     .eq('id', id)
-    .single()
+    .maybeSingle()
 
   const event = eventData as DashboardEvent | null
 
@@ -29,7 +29,7 @@ export default async function EventDetailsPage(props: { params: Promise<{ lang: 
       .from('profiles')
       .select('role')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
     if (profile && ['admin', 'editor'].includes(profile.role)) {
       canEdit = true
     }

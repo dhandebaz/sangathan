@@ -49,7 +49,7 @@ export default async function StatutoryRegistersPage({
     .from('organisations')
     .select('id, name, org_type, registration_number, registration_status')
     .eq('id', selectedOrgId)
-    .single()
+    .maybeSingle()
 
   const { count: memberCount } = await adminClient
     .from('members')

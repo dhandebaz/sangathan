@@ -61,7 +61,7 @@ export async function checkBroadcastLimit(orgId: string) {
     .from('organisations')
     .select('capabilities')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   const capabilities = (org?.capabilities as OrgCapabilities | null) || {}
   const limit =
@@ -147,7 +147,7 @@ export async function restrictOrg(event: { entity_id: string }) {
     .from('organisations')
     .select('capabilities')
     .eq('id', event.entity_id)
-    .single()
+    .maybeSingle()
 
   const current = (org?.capabilities as OrgCapabilities | null) || {}
   const newCapabilities = { ...current, ...restricted }

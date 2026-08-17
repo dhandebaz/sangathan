@@ -19,7 +19,7 @@ export default async function FacilitiesPage({ params }: { params: Promise<{ lan
     .from('profiles')
     .select('id, role')
     .eq('id', user?.id || '')
-    .single()
+    .maybeSingle()
 
   // Fetch facilities
   const { data: facilities } = await supabase

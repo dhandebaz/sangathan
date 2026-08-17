@@ -25,7 +25,7 @@ export const createBillingPlan = createSafeAction(
         ...data,
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw new Error(error.message)
     
@@ -52,7 +52,7 @@ export const generateDuesForMembers = createSafeAction(
       .select('amount')
       .eq('id', data.plan_id)
       .eq('organisation_id', organisationId)
-      .single()
+      .maybeSingle()
       
     if (planError || !plan) throw new Error('Billing plan not found')
 

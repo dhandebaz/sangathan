@@ -56,7 +56,7 @@ export async function createTransparencyEntryAction(input: z.infer<typeof Create
         is_publicly_visible: true,
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw error
 
@@ -82,7 +82,7 @@ export async function getTransparencyLedgerAction(orgId: string) {
         .from('organisations')
         .select('name, slug, created_at, org_type')
         .eq('id', orgId)
-        .single(),
+        .maybeSingle(),
     ])
 
     const entries = entriesRes.data || []

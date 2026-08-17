@@ -32,7 +32,7 @@ export default async function AuditLogPage(props: { params: Promise<{ lang: stri
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   let selectedOrgId = profile?.organisation_id
   if (!selectedOrgId) {

@@ -21,7 +21,7 @@ export default async function MeetingDetailsPage({ params }: PageProps) {
     .from('meetings')
     .select('*, organisation_id')
     .eq('id', id)
-    .single() as { data: Meeting | null, error: { message: string } | null }
+    .maybeSingle() as { data: Meeting | null, error: { message: string } | null }
 
   if (error || !meeting) notFound()
 

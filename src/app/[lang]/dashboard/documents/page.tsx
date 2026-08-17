@@ -55,13 +55,13 @@ export default async function DocumentsPage({ params, searchParams }: PageProps)
     .select('role')
     .eq('id', user.id)
     .eq('organisation_id', selectedOrgId)
-    .single()
+    .maybeSingle()
 
   const { data: org } = await supabase
     .from('organisations')
     .select('org_type')
     .eq('id', selectedOrgId)
-    .single()
+    .maybeSingle()
 
   const isAdmin = ['admin', 'executive'].includes(profile?.role || '')
   const documents = await getDocuments(selectedOrgId, category, search)

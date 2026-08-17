@@ -16,7 +16,7 @@ export async function createCollaborationRequest(targetOrgId: string) {
       .from('profiles')
       .select('role, organisation_id')
       .eq('id', user.id)
-      .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
+      .maybeSingle() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
 
     const profile = profileData
 
@@ -37,7 +37,7 @@ export async function createCollaborationRequest(targetOrgId: string) {
       .from('organisation_links')
       .select('id, status')
       .or(`and(requester_org_id.eq.${profile.organisation_id},responder_org_id.eq.${targetOrgId}),and(requester_org_id.eq.${targetOrgId},responder_org_id.eq.${profile.organisation_id})`)
-      .single()) as { data: OrganisationLinkStatus | null }
+      .maybeSingle()) as { data: OrganisationLinkStatus | null }
 
     if (existing) {
       if (existing.status === 'pending') return { success: false, error: 'Request already pending' }
@@ -77,7 +77,7 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
       .from('profiles')
       .select('role, organisation_id')
       .eq('id', user.id)
-      .single() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
+      .maybeSingle() as { data: { role: string; organisation_id: string } | null, error: { message: string } | null }
 
     const profile = profileData
 
@@ -97,7 +97,7 @@ export async function respondToCollaborationRequest(linkId: string, status: 'act
       .from('organisation_links')
       .select('*')
       .eq('id', linkId)
-      .single()) as { data: OrganisationLinkRow | null, error: { message: string } | null }
+      .maybeSingle()) as { data: OrganisationLinkRow | null, error: { message: string } | null }
 
     if (linkError || !link) return { success: false, error: 'Request not found' }
 

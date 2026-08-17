@@ -25,7 +25,7 @@ export default async function FieldAuditsPage(props: { params: Promise<{ lang: s
     .from('profiles')
     .select('organisation_id')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   let orgId = profile?.organisation_id
   if (!orgId) {
@@ -44,7 +44,7 @@ export default async function FieldAuditsPage(props: { params: Promise<{ lang: s
     .from('organisations')
     .select('name')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   const auditsRes = await getFieldSpotAuditsAction(orgId)
 

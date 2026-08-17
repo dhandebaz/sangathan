@@ -33,7 +33,7 @@ export async function exportOrganisationData(): Promise<OrganisationData | null>
     donationsRes,
     auditRes,
   ] = await Promise.all([
-    supabase.from('organisations').select('*').eq('id', orgId).single(),
+    supabase.from('organisations').select('*').eq('id', orgId).maybeSingle(),
     supabase.from('members').select('*').eq('organisation_id', orgId),
     supabase.from('forms').select('*').eq('organisation_id', orgId),
     supabase.from('form_submissions').select('*').eq('organisation_id', orgId),

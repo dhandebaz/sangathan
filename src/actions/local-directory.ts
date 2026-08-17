@@ -42,7 +42,7 @@ export const addServiceContact = createSafeAction(
         joining_date: new Date().toISOString()
       })
       .select('id')
-      .single()
+      .maybeSingle()
 
     if (error || !data) {
       if ((error as { code?: string })?.code === '23505') {

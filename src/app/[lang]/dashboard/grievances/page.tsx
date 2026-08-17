@@ -17,7 +17,7 @@ export default async function GrievancesPage(props: { params: Promise<{ lang: st
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   let orgId = profile?.organisation_id
   const role = profile?.role || 'member'

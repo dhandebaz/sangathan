@@ -30,7 +30,7 @@ export default async function AutomationsPage(props: { params: Promise<{ lang: s
     .from('organisations')
     .select('name')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   if (org?.name) orgName = org.name
 

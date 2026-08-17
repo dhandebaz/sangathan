@@ -29,7 +29,7 @@ export default async function BotSimulatorPage(props: { params: Promise<{ lang: 
     .from('organisations')
     .select('name')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   if (org?.name) orgName = org.name
 

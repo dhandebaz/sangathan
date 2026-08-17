@@ -24,7 +24,7 @@ export async function toggleAiAssistanceAction(enabled: boolean) {
       .from('profiles')
       .select('organisation_id, role')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
 
     if (!profile?.organisation_id) {
       return { success: false, error: 'Organisation not found' }
@@ -42,7 +42,7 @@ export async function toggleAiAssistanceAction(enabled: boolean) {
       .from('organisations')
       .select('capabilities')
       .eq('id', orgId)
-      .single()
+      .maybeSingle()
 
     const currentCaps = (org?.capabilities as Record<string, unknown>) || {}
     const updatedCaps = {

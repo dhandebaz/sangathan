@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -40,6 +41,7 @@ export default function ChandaClient({
   dues: ChandaDue[]
   lang: string
 }) {
+  const router = useRouter()
   const [openNewRound, setOpenNewRound] = useState(false)
   const [loadingId, setLoadingId] = useState<string | null>(null)
   const [creating, setCreating] = useState(false)
@@ -107,6 +109,7 @@ export default function ChandaClient({
       const res = await markChandaCashPaid({ due_id: dueId })
       if (res?.success) {
         toast.success('Marked as Paid (Cash)')
+        router.refresh()
       } else {
         toast.error('Failed', { description: res?.error || 'Could not mark paid' })
       }

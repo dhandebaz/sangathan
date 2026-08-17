@@ -21,7 +21,7 @@ export default async function PublicFormPage({ params }: PageProps) {
     .from('forms')
     .select('id, title, description, fields, is_active, organisation_id, visibility, deleted_at')
     .eq('id', formId)
-    .single() as { 
+    .maybeSingle() as { 
       data: { 
         id: string; 
         title: string; 
@@ -44,7 +44,7 @@ export default async function PublicFormPage({ params }: PageProps) {
     .from('organisations')
     .select('name, whitelabel_enabled')
     .eq('id', form.organisation_id)
-    .single() as { data: { name: string; whitelabel_enabled?: boolean } | null, error: { message: string } | null }
+    .maybeSingle() as { data: { name: string; whitelabel_enabled?: boolean } | null, error: { message: string } | null }
 
   const whitelabelEnabled = org?.whitelabel_enabled ?? false
 

@@ -30,7 +30,7 @@ export async function createProposal(input: z.infer<typeof ProposalSchema>) {
       .from('profiles')
       .select('organisation_id')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
 
     orgId = profile?.organisation_id || ''
     if (!orgId) {
@@ -53,7 +53,7 @@ export async function createProposal(input: z.infer<typeof ProposalSchema>) {
         status: result.data.status,
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw error
 
@@ -99,7 +99,7 @@ export async function addProposalComment(input: z.infer<typeof CommentSchema>) {
       .from('profiles')
       .select('full_name')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
 
     const { data, error } = await supabase
       .from('proposal_comments')
@@ -109,7 +109,7 @@ export async function addProposalComment(input: z.infer<typeof CommentSchema>) {
         content: result.data.content,
       })
       .select('*')
-      .single()
+      .maybeSingle()
 
     if (error) throw error
 

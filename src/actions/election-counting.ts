@@ -39,7 +39,7 @@ export const logBoothVoteTallyAction = createSafeAction(
           recorded_by: userId,
         }, { onConflict: 'election_id, position_id, candidate_id, booth_name, round_number' })
         .select()
-        .single()
+        .maybeSingle()
 
       if (!error && data) {
         revalidatePath('/[lang]/dashboard/election-counting', 'page')
@@ -60,7 +60,7 @@ export const logBoothVoteTallyAction = createSafeAction(
         priority: 'high'
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw new Error(error.message)
 

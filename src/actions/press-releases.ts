@@ -111,7 +111,7 @@ export const savePressReleaseAction = createSafeAction(
         published_at: input.isPublished ? new Date().toISOString() : null,
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) {
       console.error('Failed to save press release:', error)

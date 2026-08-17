@@ -53,7 +53,7 @@ export async function syncFieldBatchAction(records: FieldRecord[]) {
             supporter_locality: locality || null,
             wants_to_volunteer: !!wantsToVolunteer,
           })
-          const { data: pet } = await adminClient.from('petitions').select('current_signatures').eq('id', petitionId).single()
+          const { data: pet } = await adminClient.from('petitions').select('current_signatures').eq('id', petitionId).maybeSingle()
           if (pet) {
             await adminClient.from('petitions').update({ current_signatures: (pet.current_signatures || 0) + 1 }).eq('id', petitionId)
           }

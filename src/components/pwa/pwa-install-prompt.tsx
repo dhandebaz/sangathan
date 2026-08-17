@@ -91,14 +91,15 @@ export function PwaProvider({ children, lang = 'en' }: { children: React.ReactNo
     window.addEventListener('appinstalled', handleAppInstalled)
 
     // On iOS Safari, show prompt after a short delay if not dismissed
+    let iosTimer: ReturnType<typeof setTimeout> | undefined
     if (isIosDevice && !isDismissed) {
-      const timer = setTimeout(() => {
+      iosTimer = setTimeout(() => {
         setShowPromptBanner(true)
       }, 4000)
-      return () => clearTimeout(timer)
     }
 
     return () => {
+      if (iosTimer) clearTimeout(iosTimer)
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
       window.removeEventListener('appinstalled', handleAppInstalled)
     }

@@ -22,6 +22,10 @@ export async function getUserMemberships(userId: string): Promise<MembershipCont
     from: (table: string) => {
       select: (columns: string) => {
         eq: (column: string, value: string) => {
+          maybeSingle: () => Promise<{
+            data: Record<string, unknown> | null
+            error: { message?: string } | null
+          }>
           single: () => Promise<{
             data: Record<string, unknown> | null
             error: { message?: string } | null
@@ -33,7 +37,7 @@ export async function getUserMemberships(userId: string): Promise<MembershipCont
     .from('profiles')
     .select('id, organisation_id, role, status, deleted_at')
     .eq('id', userId)
-    .single()
+    .maybeSingle()
   const profile = profileRecord.data
   const profileError = profileRecord.error
 
@@ -215,7 +219,7 @@ export async function requirePlatformAdmin(): Promise<void> {
     .from('profiles')
     .select('is_platform_admin')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   if (profileError) {
     throw new Error(profileError.message)

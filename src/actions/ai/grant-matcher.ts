@@ -24,7 +24,7 @@ export async function matchGrantOpportunitiesAction(): Promise<MatchResult[]> {
         .from('organisations')
         .select('name, org_type')
         .eq('id', orgId)
-        .single()
+        .maybeSingle()
       if (data) {
         orgType = data.org_type || 'ngo'
         orgName = data.name || orgName
@@ -88,7 +88,7 @@ export async function generateGrantProposalDraftAction(opportunityId: string): P
   let orgName = 'Democratic Action Collective'
   try {
     const adminClient = createServiceClient()
-    const { data } = await adminClient.from('organisations').select('name').eq('id', orgId).single()
+    const { data } = await adminClient.from('organisations').select('name').eq('id', orgId).maybeSingle()
     if (data?.name) orgName = data.name
   } catch {
     // fallback

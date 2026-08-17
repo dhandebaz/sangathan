@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 
 async function getOrgType(supabase: Awaited<ReturnType<typeof createClient>>, orgId: string): Promise<string> {
   if (!orgId) return 'default'
-  const { data } = await supabase.from('organisations').select('org_type').eq('id', orgId).single()
+  const { data } = await supabase.from('organisations').select('org_type').eq('id', orgId).maybeSingle()
   return data?.org_type || 'default'
 }
 
@@ -35,7 +35,7 @@ export default async function MeetingsPage(props: { params: Promise<{ lang: stri
     .from('profiles')
     .select('organisation_id')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   let selectedOrgId = profile?.organisation_id
   if (!selectedOrgId) {

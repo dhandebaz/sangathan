@@ -48,7 +48,7 @@ export async function logH2HCanvassingAction(input: z.infer<typeof CanvassSchema
         status: 'completed'
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw error
 
@@ -84,7 +84,7 @@ export async function scheduleC2CClassAction(input: z.infer<typeof ClassCampaign
         event_type: 'campaign'
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw error
 

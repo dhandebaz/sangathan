@@ -540,6 +540,10 @@ const UI = {
     adminDesignation: 'Admin Designation',
     membershipPlan: 'Membership Dues',
     growthEngines: 'Active Engines',
+    draftSaved: 'Progress Auto-Saved',
+    draftRestored: 'Previous draft restored automatically.',
+    resetDraft: 'Clear & Start Over',
+    resetConfirm: 'Are you sure you want to clear your draft and start over?',
   },
   hi: {
     step1Title: 'संगठन पहचान और सार्वजनिक वेब पता',
@@ -595,7 +599,31 @@ const UI = {
     adminDesignation: 'प्रशासक पदनाम',
     membershipPlan: 'सदस्यता शुल्क',
     growthEngines: 'सक्रिय इंजन',
+    draftSaved: 'प्रगति स्वतः सुरक्षित (Auto-Saved)',
+    draftRestored: 'पिछला ड्राफ्ट स्वतः लोड हो गया।',
+    resetDraft: 'ड्राफ्ट मिटाएं व नए सिरे से भरें',
+    resetConfirm: 'क्या आप सुनिश्चित हैं कि आप ड्राफ्ट मिटाकर नए सिरे से शुरू करना चाहते हैं?',
   },
+}
+
+const ONBOARDING_DRAFT_KEY = 'sangathan_onboarding_draft_v1'
+
+const DEFAULT_ORG_DATA = {
+  name: '',
+  slug: '',
+  type: 'civic_collective' as OrgType,
+  focusBlueprint: 'colony_civic',
+  legalEntityType: 'unregistered' as LegalEntityType,
+  registrationStatus: 'unregistered',
+  registrationNumber: '',
+  description: '',
+  logoUrl: '',
+  primaryRole: 'Lead Organizer',
+  duesType: 'free' as 'free' | 'paid',
+  monthlyDues: '0',
+  enablePublicPetitions: true,
+  enableTransparencyLedger: true,
+  enableEmergencySos: true,
 }
 
 export function OnboardingWizard({ lang }: OnboardingWizardProps) {
@@ -603,32 +631,87 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
   const t = (key: keyof typeof UI['en']) => UI[isHi ? 'hi' : 'en'][key]
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
+  const [isHydrated, setIsHydrated] = useState(false)
+  const [lastSaved, setLastSaved] = useState<number | null>(null)
   const router = useRouter()
 
   // Form State across steps
-  const [orgData, setOrgData] = useState({
-    name: '',
-    slug: '',
-    type: 'civic_collective' as OrgType,
-    focusBlueprint: 'colony_civic',
-    legalEntityType: 'unregistered' as LegalEntityType,
-    registrationStatus: 'unregistered',
-    registrationNumber: '',
-    description: '',
-    logoUrl: '',
-    primaryRole: 'Lead Organizer',
-    duesType: 'free' as 'free' | 'paid',
-    monthlyDues: '0',
-    enablePublicPetitions: true,
-    enableTransparencyLedger: true,
-    enableEmergencySos: true,
-  })
+  const [orgData, setOrgData] = useState(DEFAULT_ORG_DATA)
+
+  // Restore draft on mount
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        const saved = localStorage.getItem(ONBOARDING_DRAFT_KEY)
+        if (saved) {
+          const parsed = JSON.parse(saved)
+          if (parsed && typeof parsed === 'object') {
+            if (parsed.orgData) {
+              setOrgData((prev) => ({ ...prev, ...parsed.orgData }))
+            }
+            if (typeof parsed.step === 'number' && parsed.step >= 1 && parsed.step <= 6) {
+              setStep(parsed.step)
+            }
+            if (parsed.timestamp) {
+              setLastSaved(parsed.timestamp)
+            }
+            if (parsed.orgData?.name) {
+              toast.info(isHi ? 'पिछला ड्राफ्ट स्वतः लोड हो गया।' : 'Previous draft restored automatically.')
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.warn('Failed to restore onboarding draft:', err)
+    } finally {
+      setIsHydrated(true)
+    }
+  }, [isHi])
+
+  // Auto-save draft on form state changes
+  useEffect(() => {
+    if (!isHydrated) return
+    try {
+      if (typeof window !== 'undefined') {
+        const now = Date.now()
+        localStorage.setItem(
+          ONBOARDING_DRAFT_KEY,
+          JSON.stringify({
+            orgData,
+            step,
+            timestamp: now,
+          })
+        )
+        setLastSaved(now)
+      }
+    } catch (err) {
+      console.warn('Failed to auto-save onboarding draft:', err)
+    }
+  }, [orgData, step, isHydrated])
+
+  const handleResetDraft = () => {
+    if (window.confirm(t('resetConfirm'))) {
+      try {
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem(ONBOARDING_DRAFT_KEY)
+        }
+      } catch {}
+      setOrgData(DEFAULT_ORG_DATA)
+      setStep(1)
+      setLastSaved(null)
+      toast.success(isHi ? 'फॉर्म रीसेट कर दिया गया।' : 'Form reset successfully.')
+    }
+  }
 
   const [slugChecking, setSlugChecking] = useState(false)
   const [slugAvailable, setSlugAvailable] = useState<boolean | null>(null)
   const [isGeneratorOpen, setIsGeneratorOpen] = useState(false)
   const logoInputRef = useRef<HTMLInputElement>(null)
-  const appUrl = typeof window !== 'undefined' ? window.location.origin : 'https://sangathan.space'
+  const [appUrl, setAppUrl] = useState('https://sangathan.space')
+
+  useEffect(() => {
+    setAppUrl(window.location.origin)
+  }, [])
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -721,6 +804,11 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
       })
 
       if (res.success) {
+        try {
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem(ONBOARDING_DRAFT_KEY)
+          }
+        } catch {}
         toast.success(t('orgCreated'))
         router.push(`/${lang}/dashboard`)
       } else {
@@ -819,6 +907,28 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
               style={{ width: `${(step / 6) * 100}%` }}
             />
           </div>
+        </div>
+
+        {/* Auto-Save & Reset Bar */}
+        <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-slate-100 text-[11px]">
+          <div className="flex items-center gap-1.5 text-slate-500">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="font-medium text-emerald-700">{t('draftSaved')}</span>
+            {lastSaved && (
+              <span className="text-slate-400 hidden sm:inline">
+                ({new Date(lastSaved).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})
+              </span>
+            )}
+          </div>
+          {(orgData.name || orgData.description || orgData.slug) && (
+            <button
+              type="button"
+              onClick={handleResetDraft}
+              className="text-slate-400 hover:text-rose-600 transition-colors font-medium cursor-pointer"
+            >
+              {t('resetDraft')}
+            </button>
+          )}
         </div>
       </div>
 

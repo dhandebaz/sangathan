@@ -272,7 +272,7 @@ export async function unlockCapabilities(orgId: string) {
   const completedEvents = events.count || 0
   
   // 2. Fetch Current Capabilities
-  const { data: org } = await supabase.from('organisations').select('capabilities, org_type').eq('id', orgId).single()
+  const { data: org } = await supabase.from('organisations').select('capabilities, org_type').eq('id', orgId).maybeSingle()
   const defaults = getOrgTypeDefaults(org?.org_type)
   const current = (org?.capabilities as Record<string, boolean> || defaults)
   
@@ -328,7 +328,7 @@ export async function checkCapability(orgId: string, capability: OrgCapability, 
     .from('organisations')
     .select('capabilities, org_type')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
     
   const defaults = getOrgTypeDefaults(data?.org_type)
   
@@ -366,7 +366,7 @@ export async function getOrgCapabilities(orgId: string): Promise<Record<string, 
     .from('organisations')
     .select('capabilities, org_type')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
     
   const defaults = getOrgTypeDefaults(data?.org_type)
   if (!data || !data.capabilities) return defaults

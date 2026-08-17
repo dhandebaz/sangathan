@@ -18,7 +18,7 @@ export default async function EditEventPage(props: { params: Promise<{ lang: str
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   const profile = profileData as { organisation_id: string | null; role: string } | null
 
@@ -32,7 +32,7 @@ export default async function EditEventPage(props: { params: Promise<{ lang: str
     .select('*')
     .eq('id', id)
     .eq('organisation_id', profile.organisation_id)
-    .single()
+    .maybeSingle()
 
   const event = eventData as DashboardEvent | null
 

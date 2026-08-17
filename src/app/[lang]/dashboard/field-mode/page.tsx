@@ -29,7 +29,7 @@ export default async function FieldModePage(props: { params: Promise<{ lang: str
     .from('organisations')
     .select('name')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   if (org?.name) orgName = org.name
 

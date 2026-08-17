@@ -19,7 +19,7 @@ export default async function PrintMeetingPage({ params }: PageProps) {
     .from('meetings')
     .select('*')
     .eq('id', id)
-    .single()
+    .maybeSingle()
   
   const meeting = data as Meeting | null
     
@@ -37,7 +37,7 @@ export default async function PrintMeetingPage({ params }: PageProps) {
     .from('organisations')
     .select('name, whitelabel_enabled')
     .eq('id', ctx.organizationId)
-    .single()
+    .maybeSingle()
   
   const org = orgData as (Organisation & { whitelabel_enabled?: boolean }) | null
   const whitelabelEnabled = org?.whitelabel_enabled ?? false

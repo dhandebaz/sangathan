@@ -55,7 +55,7 @@ export const createTask = createSafeAction(
         status: 'open',
       } as never)
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) return { error: error.message }
 
@@ -120,7 +120,7 @@ export const updateTaskStatus = createSafeAction(
       .from('tasks')
       .select('id, task_assignments(member_id), organisation_id')
       .eq('id', input.taskId)
-      .single() as { data: { id: string; task_assignments: { member_id: string }[] | null; organisation_id: string } | null }
+      .maybeSingle() as { data: { id: string; task_assignments: { member_id: string }[] | null; organisation_id: string } | null }
 
     if (!task) return { error: 'Task not found' }
     if (task.organisation_id !== context.organizationId) return { error: 'Permission denied' }
@@ -166,7 +166,7 @@ export const logHours = createSafeAction(
       .from('profiles')
       .select('engagement_score')
       .eq('id', context.user.id)
-      .single() as { data: { engagement_score: number | null } | null }
+      .maybeSingle() as { data: { engagement_score: number | null } | null }
 
     if (profile) {
       await supabaseAdmin

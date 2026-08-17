@@ -25,7 +25,7 @@ export const createElection = createSafeAction(
         ...data,
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw new Error(error.message)
     
@@ -102,7 +102,7 @@ export const submitVote = createSafeAction(
       .from('elections')
       .select('status, end_time')
       .eq('id', data.election_id)
-      .single()
+      .maybeSingle()
 
     if (!election || election.status !== 'active') {
       throw new Error('Voting is not currently active for this election.')
@@ -114,7 +114,7 @@ export const submitVote = createSafeAction(
       .select('id')
       .eq('election_id', data.election_id)
       .eq('profile_id', profileId)
-      .single()
+      .maybeSingle()
 
     if (existingVote) {
       throw new Error('You have already voted in this election.')
@@ -126,7 +126,7 @@ export const submitVote = createSafeAction(
         .from('candidates')
         .select('votes_count')
         .eq('id', vote.candidate_id)
-        .single()
+        .maybeSingle()
         
       if (candidate) {
         await supabase

@@ -26,7 +26,7 @@ export async function generateMetadata(props: {
     .from('organisations')
     .select('name, description, logo_url, org_type, registration_status, address')
     .eq('slug', slug)
-    .single()
+    .maybeSingle()
 
   if (!org) {
     return {
@@ -128,7 +128,7 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
        trade_union_registration`
     )
     .eq('slug', slug)
-    .single()
+    .maybeSingle()
 
   const org = orgData as PublicOrgData | null
   if (!org) notFound()

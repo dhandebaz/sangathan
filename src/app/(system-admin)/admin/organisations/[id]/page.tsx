@@ -20,7 +20,7 @@ export default async function OrganisationDetailsPage({ params }: PageProps) {
     .from('organisations')
     .select('id, name, slug, status, membership_policy, created_at')
     .eq('id', id)
-    .single() as { data: SystemAdminOrganisation | null, error: { message: string } | null }
+    .maybeSingle() as { data: SystemAdminOrganisation | null, error: { message: string } | null }
 
   if (error || !org) return <div className="p-8">Organisation not found</div>
 

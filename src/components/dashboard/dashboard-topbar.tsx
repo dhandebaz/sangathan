@@ -65,13 +65,13 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
           .from('profiles')
           .select('organisation_id')
           .eq('id', user.id)
-          .single()
+          .maybeSingle()
         if (profile?.organisation_id) {
           const { data: org } = await supabase
             .from('organisations')
             .select('name')
             .eq('id', profile.organisation_id)
-            .single()
+            .maybeSingle()
           if (org?.name) {
             setClientOrgName(org.name)
           }

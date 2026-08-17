@@ -20,7 +20,7 @@ export default async function StudentIdsPrintPage(props: PrintPageProps) {
     .from('organisations')
     .select('name, whitelabel_enabled')
     .eq('id', ctx.organizationId)
-    .single()
+    .maybeSingle()
 
   const orgName = orgData?.name || 'Student Union'
   const whitelabelEnabled = (orgData as { whitelabel_enabled?: boolean } | null)?.whitelabel_enabled ?? false

@@ -19,7 +19,7 @@ export async function generateMetadata(props: {
     .from('events')
     .select('title, description, start_time, location, organisation:organisations(name, logo_url)')
     .eq('id', eventId)
-    .single()
+    .maybeSingle()
 
   if (!event) {
     return {
@@ -81,7 +81,7 @@ export default async function EventPage(props: {
     .from('events')
     .select('*, organisation_id')
     .eq('id', eventId)
-    .single()
+    .maybeSingle()
 
   const event = eventData as Event | null
 
@@ -92,7 +92,7 @@ export default async function EventPage(props: {
     .from('organisations')
     .select('id, name, slug, logo_url')
     .eq('id', event.organisation_id)
-    .single()
+    .maybeSingle()
 
   const org = orgData as (Organisation & { logo_url?: string | null }) | null
   if (!org || org.slug !== slug) notFound()
@@ -110,7 +110,7 @@ export default async function EventPage(props: {
       .select('*, user:user_id(full_name)')
       .eq('event_id', eventId)
       .eq('user_id', user.id)
-      .single()
+      .maybeSingle()
     rsvp = data as RSVP | null
   }
 

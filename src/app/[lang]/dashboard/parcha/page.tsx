@@ -24,7 +24,7 @@ export default async function ParchaPage(props: { params: Promise<{ lang: string
     .from('profiles')
     .select('organisation_id')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   let orgId = profile?.organisation_id
   if (!orgId) {
@@ -43,7 +43,7 @@ export default async function ParchaPage(props: { params: Promise<{ lang: string
     .from('organisations')
     .select('name, slug')
     .eq('id', orgId)
-    .single()
+    .maybeSingle()
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">

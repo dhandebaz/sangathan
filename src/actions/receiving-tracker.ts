@@ -40,7 +40,7 @@ export const logPhysicalReceivingAction = createSafeAction(
         escalation_status: 'pending_response',
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) {
       console.error('Failed to log physical receiving:', error)
@@ -121,7 +121,7 @@ export async function generateRtiEscalationAction(
       .from('civic_receiving_trackers')
       .select('*')
       .eq('id', trackerId)
-      .single()
+      .maybeSingle()
 
     if (trackerErr || !tracker) {
       return { success: false, error: 'Receiving tracker not found' }

@@ -43,7 +43,7 @@ export const preApproveVisitor = createSafeAction(
         metadata: input.unit_number ? { unit_number: input.unit_number } : {}
       } as never)
       .select('id')
-      .single()
+      .maybeSingle()
 
     if (error || !visitor) {
       logger.error('visitor_preapprove', 'Failed to pre-approve visitor', { error: error?.message })

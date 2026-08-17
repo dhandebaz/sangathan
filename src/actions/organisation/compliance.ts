@@ -28,7 +28,7 @@ export async function updateComplianceData(orgId: string, payload: ComplianceUpd
       .select('role, organisation_id')
       .eq('id', user.id)
       .eq('organisation_id', orgId)
-      .single()
+      .maybeSingle()
 
     if (!profile || !['admin', 'executive'].includes(profile.role)) {
       return { success: false, error: 'Unauthorized to update compliance details' }
@@ -58,7 +58,7 @@ export async function updateComplianceData(orgId: string, payload: ComplianceUpd
       .update(updateData)
       .eq('id', orgId)
       .select('slug')
-      .single()
+      .maybeSingle()
 
     if (error) {
       console.error('Compliance update error:', error)

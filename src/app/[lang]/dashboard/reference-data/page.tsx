@@ -46,7 +46,7 @@ export default async function MasterReferenceDataPage({
     .from('organisations')
     .select('org_type')
     .eq('id', selectedOrgId)
-    .single()
+    .maybeSingle()
 
   return (
     <div className="py-2">

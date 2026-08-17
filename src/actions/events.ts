@@ -58,7 +58,7 @@ export const createEvent = createSafeAction(
         created_by: context.user.id,
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error || !event) {
       return { error: error?.message || 'Failed to create event' }
@@ -84,7 +84,7 @@ export const createEvent = createSafeAction(
       .from('organisations')
       .select('slug')
       .eq('id', context.organizationId)
-      .single()
+      .maybeSingle()
 
     if (orgData?.slug) {
       await revalidatePublicEventPages(orgData.slug, event.id)
@@ -157,7 +157,7 @@ export const updateEvent = createSafeAction(
       .from('organisations')
       .select('slug')
       .eq('id', context.organizationId)
-      .single()
+      .maybeSingle()
 
     if (orgData?.slug) {
       await revalidatePublicEventPages(orgData.slug, input.id)
@@ -185,7 +185,7 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
       .from('events')
       .select('*')
       .eq('id', data.event_id)
-      .single()
+      .maybeSingle()
 
     if (eventError || !event) return { success: false, error: 'Event not found' }
     if (!event.rsvp_enabled) return { success: false, error: 'RSVP is not enabled for this event' }
@@ -212,7 +212,7 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
         .from('profiles')
         .select('role, status, organisation_id')
         .eq('id', userId)
-        .single()
+        .maybeSingle()
 
       if (!profile || profile.status !== 'active') {
         return { success: false, error: 'You must be an active member to join' }
@@ -226,7 +226,7 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
           .select('id')
           .eq('event_id', event.id)
           .eq('organisation_id', profile.organisation_id)
-          .single()
+          .maybeSingle()
 
         if (joint) isAllowedOrg = true
       }
@@ -255,7 +255,7 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
         .select('id')
         .eq('event_id', data.event_id)
         .eq('user_id', userId)
-        .single()
+        .maybeSingle()
 
       if (existing) return { success: false, error: 'Already registered' }
     } else if (data.guest_email) {
@@ -264,7 +264,7 @@ export async function rsvpToEvent(input: z.infer<typeof RSVPSchema>) {
         .select('id')
         .eq('event_id', data.event_id)
         .eq('guest_email', data.guest_email)
-        .single()
+        .maybeSingle()
 
       if (existing) return { success: false, error: 'Email already registered' }
     }
@@ -317,7 +317,7 @@ export const verifyAndCheckIn = createSafeAction(
       .from('events')
       .select('organisation_id')
       .eq('id', eventId)
-      .single()
+      .maybeSingle()
 
     if (!event || event.organisation_id !== context.organizationId) {
       return { error: 'You are not allowed to check in attendees for this event' }
@@ -328,7 +328,7 @@ export const verifyAndCheckIn = createSafeAction(
     else if (rsvpId) query = query.eq('id', rsvpId)
     else return { error: 'Invalid Token Data' }
 
-    const { data: rsvp, error } = await query.single()
+    const { data: rsvp, error } = await query.maybeSingle()
 
     if (error || !rsvp) return { error: 'RSVP not found' }
     if (rsvp.status === 'attended') return { error: 'Already checked in' }

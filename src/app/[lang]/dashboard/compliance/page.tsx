@@ -12,7 +12,7 @@ export default async function CompliancePage({ params }: { params: Promise<{ lan
 
   let orgType = 'ngo'
   if (orgId) {
-    const { data } = await supabase.from('organisations').select('org_type').eq('id', orgId).single()
+    const { data } = await supabase.from('organisations').select('org_type').eq('id', orgId).maybeSingle()
     if (data?.org_type) orgType = data.org_type
   }
 

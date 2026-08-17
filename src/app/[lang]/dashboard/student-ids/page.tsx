@@ -25,7 +25,7 @@ export default async function StudentIdsPage(props: PageProps) {
     .from('organisations')
     .select('name')
     .eq('id', ctx.organizationId)
-    .single()
+    .maybeSingle()
 
   const typedStudents = students || []
   const orgName = orgData?.name || 'Student Union'

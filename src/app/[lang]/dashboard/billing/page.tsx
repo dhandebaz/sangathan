@@ -43,7 +43,7 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
     .from('profiles')
     .select('organisation_id, role')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   if (!profile || !profile.organisation_id) {
     redirect(`/${lang}/onboarding`)

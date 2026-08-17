@@ -34,7 +34,7 @@ export default async function MemberImportPage({
     .from('organisations')
     .select('org_type')
     .eq('id', selectedOrgId)
-    .single()
+    .maybeSingle()
 
   const usage = await getOrgPlanUsage(selectedOrgId)
   const remaining = Math.max(0, usage.maxMembers - usage.memberCount)

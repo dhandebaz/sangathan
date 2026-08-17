@@ -40,7 +40,7 @@ export async function generateRtiAction(input: z.infer<typeof RtiSchema>) {
         status: 'discussion'
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) {
       const adminClient = createServiceClient()
@@ -54,7 +54,7 @@ export async function generateRtiAction(input: z.infer<typeof RtiSchema>) {
           status: 'discussion'
         })
         .select()
-        .single()
+        .maybeSingle()
 
       if (fallback.error) throw fallback.error
     }
@@ -89,7 +89,7 @@ export async function logAtrAction(input: z.infer<typeof AtrSchema>) {
         status: 'discussion'
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) {
       const adminClient = createServiceClient()
@@ -103,7 +103,7 @@ export async function logAtrAction(input: z.infer<typeof AtrSchema>) {
           status: 'discussion'
         })
         .select()
-        .single()
+        .maybeSingle()
 
       if (fallback.error) throw fallback.error
     }

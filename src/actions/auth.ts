@@ -120,7 +120,7 @@ export async function login(input: z.infer<typeof LoginSchema>) {
       .from('profiles')
       .select('*')
       .eq('id', data.user.id)
-      .single()
+      .maybeSingle()
 
     const profile = profileData as Profile | null
 
@@ -129,7 +129,7 @@ export async function login(input: z.infer<typeof LoginSchema>) {
         .from('organisations')
         .select('*')
         .eq('id', profile.organisation_id)
-        .single()
+        .maybeSingle()
 
       const org = orgData as Organisation | null
 

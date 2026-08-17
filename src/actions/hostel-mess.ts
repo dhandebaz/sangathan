@@ -44,7 +44,7 @@ export const submitMessRatingAction = createSafeAction(
         created_by: userId,
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (!auditError && audit) {
       revalidatePath('/[lang]/dashboard/hostel-mess', 'page')
@@ -65,7 +65,7 @@ export const submitMessRatingAction = createSafeAction(
         type: 'grievance'
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw new Error(error.message)
 
@@ -95,7 +95,7 @@ export const reportHostelIssueAction = createSafeAction(
         created_by: userId,
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (!auditError && audit) {
       revalidatePath('/[lang]/dashboard/hostel-mess', 'page')
@@ -116,7 +116,7 @@ export const reportHostelIssueAction = createSafeAction(
         type: 'grievance'
       })
       .select()
-      .single()
+      .maybeSingle()
 
     if (error) throw new Error(error.message)
 

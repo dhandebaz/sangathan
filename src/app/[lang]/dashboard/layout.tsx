@@ -50,7 +50,7 @@ export default async function DashboardLayout(props: {
         .from('profiles')
         .select('organisation_id')
         .eq('id', user.id)
-        .single()
+        .maybeSingle()
 
       if (profile?.organisation_id) {
         selectedOrgId = profile.organisation_id
@@ -73,7 +73,7 @@ export default async function DashboardLayout(props: {
           .from('organisations')
           .select('name, logo_url, org_type, plan_name, whitelabel_enabled')
           .eq('id', selectedOrgId)
-          .single()
+          .maybeSingle()
 
         if (orgData) {
           const org = orgData as unknown as Organisation
@@ -90,7 +90,7 @@ export default async function DashboardLayout(props: {
               .from('organisations')
               .select('name, logo_url, org_type, plan_name, whitelabel_enabled')
               .eq('id', selectedOrgId)
-              .single()
+              .maybeSingle()
 
             if (adminOrg) {
               const org = adminOrg as unknown as Organisation
