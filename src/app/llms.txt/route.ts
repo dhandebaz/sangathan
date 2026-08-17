@@ -57,7 +57,8 @@ export async function GET() {
 - **1-Page A4 Printable Parcha Studio**: High-contrast black-and-white flyers formatted for ₹1 photostat machines and chai-stall signature tables.
 - **15-Day Stamped Receiving & RTI Countdown Tracker**: Logs municipal receiving stamps and auto-drafts Section 6(1) RTI applications when authorities delay.
 - **Field Spot Audits & Geotagged Sensor Logger**: Geotagged PM2.5 air quality, water TDS, sewer overflow, and pothole evidence logs.
-- **80G & 12A Tax Exemption Engine**: Instant compliant PDF receipts with donor PAN, 10BE filing export, and WhatsApp delivery.
+- **80G & 12A Tax Exemption Engine**: Instant compliant PDF receipts with donor PAN, 10BE filing export, and instant digital receipt distribution.
+- **Telegram Bot & grammY Webhook Engine**: 100% free, zero-bureaucracy bi-directional bot for field grievances, check-ins, dues queries, strike ballots, and emergency SOS alerts.
 - **Cryptographic Anonymous Secret Ballots**: Tamper-evident democratic voting for student council, union strike authorizations, and RWA executive elections.
 - **Universal Data Importer**: 1-click migration from Excel/Google Sheets/CSV with auto-column matching and E.164 phone sanitization.
 - **BQF Section 8 Verification Pathway**: Milestone-based institutional verification from Bahujan Queer Foundation for active grassroots collectives meeting community audit criteria.

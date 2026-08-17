@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { getSelectedOrganisationId } from '@/lib/auth/context'
+import { createSafeAction } from '@/lib/auth/actions'
 import { z } from 'zod'
 
 const EmergencySosSchema = z.object({
@@ -18,11 +19,11 @@ const EmergencySosSchema = z.object({
   severity: z.enum(['moderate', 'urgent', 'critical', 'life_safety']).default('critical'),
 })
 
-export async function triggerEmergencySosAction(input: z.infer<typeof EmergencySosSchema>) {
-  try {
-    const validated = EmergencySosSchema.parse(input)
-    const orgId = await getSelectedOrganisationId()
-    if (!orgId) return { success: false, error: 'Organisation not found' }
+export const triggerEmergencySosAction = createSafeAction(
+  EmergencySosSchema,
+  async (validated, context) => {
+    const orgId = context.organizationId
+    if (!orgId) throw new Error('Organisation not found')
 
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
@@ -62,15 +63,16 @@ export async function triggerEmergencySosAction(input: z.infer<typeof EmergencyS
     })
 
     revalidatePath('/[lang]/dashboard/emergency-sos', 'page')
-    return { success: true, data: alert }
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Failed to broadcast emergency SOS'
-    return { success: false, error: message }
+    return alert
   }
-}
+)
 
 export async function dispatchAdvocateAction(alertId: string, advocateName: string, advocatePhone: string, barCouncilNo?: string) {
   try {
+    const { requireRole } = await import('@/lib/auth/context')
+    const ctx = await requireRole(['admin', 'executive'])
+    if (!ctx) throw new Error('Unauthorized')
+
     const adminClient = createServiceClient()
 
     // 1. Record dispatch
@@ -104,6 +106,10 @@ export async function dispatchAdvocateAction(alertId: string, advocateName: stri
 
 export async function updateSosStatusAction(alertId: string, status: string) {
   try {
+    const { requireRole } = await import('@/lib/auth/context')
+    const ctx = await requireRole(['admin', 'executive'])
+    if (!ctx) throw new Error('Unauthorized')
+
     const adminClient = createServiceClient()
     const updatePayload: Record<string, any> = { status }
     if (status === 'resolved') {
@@ -126,6 +132,10 @@ export async function updateSosStatusAction(alertId: string, status: string) {
 
 export async function getEmergencySosAlerts(orgId: string) {
   try {
+    const { requireRole } = await import('@/lib/auth/context')
+    const ctx = await requireRole(['admin', 'executive'])
+    if (!ctx || ctx.organizationId !== orgId) throw new Error('Unauthorized')
+
     const adminClient = createServiceClient()
     const { data, error } = await adminClient
       .from('emergency_sos_alerts')

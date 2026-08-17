@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase/service'
+import { createClient } from '@/lib/supabase/server'
 import { VALID_LEGAL_TYPES, validateStatutoryId } from '@/lib/legal-entity-types'
 
 export async function GET(
@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: Promise<{ orgId: string }> }
 ) {
   const { orgId } = await params
-  const supabase = createServiceClient()
+  const supabase = await createClient()
 
   // In a real application, verify user is an admin/executive of the org here.
   
@@ -29,7 +29,7 @@ export async function PUT(
   { params }: { params: Promise<{ orgId: string }> }
 ) {
   const { orgId } = await params
-  const supabase = createServiceClient()
+  const supabase = await createClient()
   
   // In a real application, verify user is an admin/executive of the org here.
 

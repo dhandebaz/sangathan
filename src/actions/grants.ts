@@ -18,7 +18,7 @@ export const createGrant = createSafeAction(
     const supabase = await createClient();
     const organisationId = context.organizationId;
     const profileId = context.user.id;
-    const { error } = await supabase
+    const { data: newGrant, error } = await supabase
       .from('grants')
       .insert({
         organisation_id: organisationId,
@@ -28,10 +28,12 @@ export const createGrant = createSafeAction(
         deadline: data.deadline ? new Date(data.deadline).toISOString() : null,
         created_by: profileId
       })
+      .select()
+      .single()
 
     if (error) throw new Error(error.message)
     revalidatePath('/[lang]/dashboard/grants', 'page')
-    return { success: true }
+    return newGrant
   }
 )
 

@@ -6,7 +6,7 @@ import { getDistrictsByState, getStateByName, getStateByCode } from '@/lib/geo/i
 
 interface ProcessBotInput {
   organisationId: string
-  channel: 'whatsapp' | 'telegram' | 'simulator'
+  channel: 'telegram' | 'whatsapp'
   senderId: string
   senderName?: string
   messageText: string
@@ -94,7 +94,7 @@ export async function processIncomingBotMessage(input: ProcessBotInput): Promise
         // Log grievance into tickets
         await adminClient.from('tickets').insert({
           organisation_id: input.organisationId,
-          title: `[WHATSAPP/TELEGRAM BOT] Grievance from ${input.senderName || input.senderId}`,
+          title: `[TELEGRAM BOT] Grievance from ${input.senderName || input.senderId}`,
           description: `Logged via ${input.channel.toUpperCase()} by ${input.senderId}:\n${parsed.details}`,
           status: 'open',
           priority: 'medium',

@@ -4,17 +4,11 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { revalidatePath } from 'next/cache'
-import { z } from 'zod'
 import {
   testTelegramBotToken,
   registerTelegramWebhookUrl,
   sendTelegramDirectMessage,
 } from '@/lib/bot/telegram-client'
-import {
-  sendWhatsAppCloudDirectMessage,
-  generateWhatsAppQRPairingPayload,
-  sendWhatsAppLinkedSessionMessage,
-} from '@/lib/bot/whatsapp-client'
 import { generateSecureString } from '@/lib/utils'
 
 function getAppBaseUrl() {
@@ -76,7 +70,7 @@ export async function connectTelegramBotAction(botToken: string) {
     }, { onConflict: 'organisation_id,channel' })
 
     revalidatePath('/[lang]/dashboard/channels', 'page')
-    revalidatePath('/[lang]/dashboard/bot-simulator', 'page')
+    revalidatePath('/[lang]/dashboard/communications', 'page')
 
     return {
       success: true,
@@ -90,144 +84,9 @@ export async function connectTelegramBotAction(botToken: string) {
 }
 
 /**
- * Configure Meta WhatsApp Cloud API
- */
-export async function connectWhatsAppCloudAction(params: {
-  phoneNumberId: string
-  apiToken: string
-  verifyToken?: string
-}) {
-  try {
-    const orgId = await getSelectedOrganisationId()
-    if (!orgId) return { success: false, error: 'Organisation not selected' }
-
-    if (!params.phoneNumberId || !params.apiToken) {
-      return { success: false, error: 'Phone Number ID and API Token are required.' }
-    }
-
-    const baseUrl = getAppBaseUrl()
-    const webhookUrl = `${baseUrl}/api/bot/webhook/whatsapp?orgId=${orgId}`
-    const verifyToken = params.verifyToken || process.env.WHATSAPP_VERIFY_TOKEN || generateSecureString(32)
-
-    const adminClient = createServiceClient()
-    await adminClient.from('bot_channel_configs').upsert({
-      organisation_id: orgId,
-      channel: 'whatsapp_cloud',
-      is_enabled: true,
-      status: 'connected',
-      credentials: {
-        phone_number_id: params.phoneNumberId.trim(),
-        api_token: params.apiToken.trim(),
-        verify_token: verifyToken,
-        webhook_url: webhookUrl,
-      },
-      last_synced_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    }, { onConflict: 'organisation_id,channel' })
-
-    revalidatePath('/[lang]/dashboard/channels', 'page')
-    revalidatePath('/[lang]/dashboard/bot-simulator', 'page')
-
-    return { success: true, webhookUrl, verifyToken }
-  } catch (err: unknown) {
-    const errorMsg = err instanceof Error ? err.message : 'Failed to configure WhatsApp Cloud API'
-    return { success: false, error: errorMsg }
-  }
-}
-
-/**
- * Request WhatsApp Multi-Device QR Code for Device Linking / Session Pairing
- */
-export async function requestWhatsAppQRPairingAction() {
-  try {
-    const orgId = await getSelectedOrganisationId()
-    if (!orgId) return { success: false, error: 'Organisation not selected' }
-
-    const payload = generateWhatsAppQRPairingPayload(orgId)
-
-    const adminClient = createServiceClient()
-    await adminClient.from('bot_qr_pairing_sessions').insert({
-      organisation_id: orgId,
-      session_id: payload.sessionId,
-      qr_code_data: payload.qrCodeData,
-      pairing_numeric_code: payload.pairingNumericCode,
-      status: 'pending',
-      expires_at: payload.expiresAt,
-    })
-
-    await adminClient.from('bot_channel_configs').upsert({
-      organisation_id: orgId,
-      channel: 'whatsapp_qr',
-      is_enabled: true,
-      status: 'pending_qr',
-      credentials: {
-        current_session_id: payload.sessionId,
-      },
-      updated_at: new Date().toISOString(),
-    }, { onConflict: 'organisation_id,channel' })
-
-    return {
-      success: true,
-      sessionId: payload.sessionId,
-      qrCodeData: payload.qrCodeData,
-      pairingNumericCode: payload.pairingNumericCode,
-      expiresAt: payload.expiresAt,
-    }
-  } catch (err: unknown) {
-    const errorMsg = err instanceof Error ? err.message : 'Failed to generate QR pairing session'
-    return { success: false, error: errorMsg }
-  }
-}
-
-/**
- * Confirm/Simulate QR pairing authentication
- */
-export async function confirmWhatsAppQRPairedAction(sessionId: string, phoneNumber: string) {
-  try {
-    const orgId = await getSelectedOrganisationId()
-    if (!orgId) return { success: false, error: 'Organisation not selected' }
-
-    const adminClient = createServiceClient()
-    await adminClient
-      .from('bot_qr_pairing_sessions')
-      .update({
-        status: 'authenticated',
-        device_info: {
-          phone_number: phoneNumber,
-          device_model: 'WhatsApp for Android / iOS Multi-Device',
-          linked_at: new Date().toISOString(),
-          battery_level: 92,
-        },
-      })
-      .eq('session_id', sessionId)
-
-    await adminClient.from('bot_channel_configs').upsert({
-      organisation_id: orgId,
-      channel: 'whatsapp_qr',
-      is_enabled: true,
-      status: 'connected',
-      credentials: {
-        session_id: sessionId,
-        connected_phone: phoneNumber,
-        device_model: 'WhatsApp Multi-Device Active',
-        linked_at: new Date().toISOString(),
-      },
-      last_synced_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    }, { onConflict: 'organisation_id,channel' })
-
-    revalidatePath('/[lang]/dashboard/channels', 'page')
-    return { success: true }
-  } catch (err: unknown) {
-    const errorMsg = err instanceof Error ? err.message : 'Failed to confirm pairing'
-    return { success: false, error: errorMsg }
-  }
-}
-
-/**
  * Disconnect a Bot Channel
  */
-export async function disconnectBotChannelAction(channel: 'telegram' | 'whatsapp_qr' | 'whatsapp_cloud') {
+export async function disconnectBotChannelAction(channel: 'telegram' = 'telegram') {
   try {
     const orgId = await getSelectedOrganisationId()
     if (!orgId) return { success: false, error: 'Organisation not selected' }
@@ -245,6 +104,7 @@ export async function disconnectBotChannelAction(channel: 'telegram' | 'whatsapp
       .eq('channel', channel)
 
     revalidatePath('/[lang]/dashboard/channels', 'page')
+    revalidatePath('/[lang]/dashboard/communications', 'page')
     return { success: true }
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : 'Failed to disconnect channel'
@@ -253,10 +113,10 @@ export async function disconnectBotChannelAction(channel: 'telegram' | 'whatsapp
 }
 
 /**
- * Send a Test Outbound Message to Phone or Telegram Chat
+ * Send a Test Outbound Message to Telegram Chat
  */
 export async function sendTestOutboundMessageAction(params: {
-  channel: 'telegram' | 'whatsapp_qr' | 'whatsapp_cloud'
+  channel: 'telegram'
   recipientId: string
   messageText: string
 }) {
@@ -269,56 +129,31 @@ export async function sendTestOutboundMessageAction(params: {
       .from('bot_channel_configs')
       .select('*')
       .eq('organisation_id', orgId)
-      .eq('channel', params.channel)
+      .eq('channel', 'telegram')
       .maybeSingle()
 
-    let sendResult = { success: false, messageId: '', error: '' }
+    const botToken = config?.credentials?.bot_token || process.env.TELEGRAM_BOT_TOKEN
+    if (!botToken) return { success: false, error: 'Telegram Bot Token not configured' }
 
-    if (params.channel === 'telegram') {
-      const botToken = config?.credentials?.bot_token || process.env.TELEGRAM_BOT_TOKEN
-      if (!botToken) return { success: false, error: 'Telegram Bot Token not configured' }
+    const res = await sendTelegramDirectMessage({
+      botToken,
+      chatId: params.recipientId,
+      text: `🏛️ <b>[Sangathan Test Dispatch]</b>\n\n${params.messageText}`,
+    })
 
-      const res = await sendTelegramDirectMessage({
-        botToken,
-        chatId: params.recipientId,
-        text: `🏛️ <b>[Sangathan Test Dispatch]</b>\n\n${params.messageText}`,
-      })
-      sendResult = { success: res.success, messageId: String(res.messageId || ''), error: res.error || '' }
-    } else if (params.channel === 'whatsapp_cloud') {
-      const phoneNumberId = config?.credentials?.phone_number_id || process.env.WHATSAPP_PHONE_NUMBER_ID
-      const apiToken = config?.credentials?.api_token || process.env.WHATSAPP_API_TOKEN
-      if (!phoneNumberId || !apiToken) return { success: false, error: 'WhatsApp Cloud credentials not configured' }
-
-      const res = await sendWhatsAppCloudDirectMessage({
-        phoneNumberId,
-        apiToken,
-        recipientPhone: params.recipientId,
-        messageText: `🏛️ [Sangathan Test Dispatch]\n\n${params.messageText}`,
-      })
-      sendResult = { success: res.success, messageId: res.messageId || '', error: res.error || '' }
-    } else if (params.channel === 'whatsapp_qr') {
-      const sessionId = config?.credentials?.session_id || 'active_session'
-      const res = await sendWhatsAppLinkedSessionMessage({
-        sessionId,
-        recipientPhone: params.recipientId,
-        messageText: `🏛️ [Sangathan Linked Device Dispatch]\n\n${params.messageText}`,
-      })
-      sendResult = { success: res.success, messageId: res.messageId || '', error: res.error || '' }
-    }
-
-    if (sendResult.success) {
+    if (res.ok || res.success) {
       await adminClient.from('bot_outbound_messages').insert({
         organisation_id: orgId,
-        channel: params.channel,
+        channel: 'telegram',
         recipient_id: params.recipientId,
         message_text: params.messageText,
         status: 'sent',
-        provider_message_id: sendResult.messageId,
+        provider_message_id: String(res.result?.message_id || res.messageId || 'tg_sent'),
         sent_at: new Date().toISOString(),
       })
-      return { success: true, messageId: sendResult.messageId }
+      return { success: true, messageId: String(res.result?.message_id || res.messageId || '') }
     } else {
-      return { success: false, error: sendResult.error || 'Failed to dispatch message' }
+      return { success: false, error: res.description || res.error || 'Failed to dispatch Telegram message' }
     }
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : 'Failed to send outbound message'
@@ -345,27 +180,18 @@ export async function getChannelConfigsAction(orgId: string) {
       .order('created_at', { ascending: false })
       .limit(30)
 
-    const { data: latestQR } = await adminClient
-      .from('bot_qr_pairing_sessions')
-      .select('*')
-      .eq('organisation_id', orgId)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle()
-
     return {
       success: true,
       configs: configs || [],
       outboundLogs: outboundLogs || [],
-      latestQR: latestQR || null,
     }
-  } catch (err: unknown) {
-    return { success: true, configs: [], outboundLogs: [], latestQR: null }
+  } catch {
+    return { success: true, configs: [], outboundLogs: [] }
   }
 }
 
 /**
- * Fetch Unified Communications Feed (Conversations across WhatsApp & Telegram + Analytics)
+ * Fetch Unified Communications Feed (Conversations on Telegram + Analytics)
  */
 export async function getOrgUnifiedCommunicationsAction(orgId: string) {
   try {
@@ -443,13 +269,13 @@ export async function getConversationHistoryAction(conversationId: string) {
       .order('created_at', { ascending: true })
 
     return { success: true, logs: logs || [] }
-  } catch (err: unknown) {
+  } catch {
     return { success: false, logs: [] }
   }
 }
 
 /**
- * Send a 2-way Admin Direct Reply from the Dashboard to a member's WhatsApp or Telegram
+ * Send a 2-way Admin Direct Reply from Dashboard to a member on Telegram
  */
 export async function sendAdminDirectReplyAction(params: {
   conversationId: string
@@ -478,47 +304,37 @@ export async function sendAdminDirectReplyAction(params: {
       .from('bot_channel_configs')
       .select('*')
       .eq('organisation_id', orgId)
-      .eq('channel', conv.channel === 'telegram' ? 'telegram' : 'whatsapp_qr')
+      .eq('channel', 'telegram')
       .maybeSingle()
 
-    // 3. Dispatch message through org's master channel
+    // 3. Dispatch message through Telegram
     let dispatchSuccess = false
     let providerMsgId = `reply_${Date.now()}`
 
-    if (conv.channel === 'telegram') {
-      const botToken = config?.credentials?.bot_token || process.env.TELEGRAM_BOT_TOKEN
-      if (botToken) {
-        const res = await sendTelegramDirectMessage({
-          botToken,
-          chatId: conv.sender_id,
-          text: `💬 <b>[Sangathan Admin Response]</b>\n\n${params.replyText}`,
-        })
-        dispatchSuccess = res.success
-        if (res.messageId) providerMsgId = String(res.messageId)
-      } else {
-        dispatchSuccess = true // fallback logging
+    const botToken = config?.credentials?.bot_token || process.env.TELEGRAM_BOT_TOKEN
+    if (botToken) {
+      const res = await sendTelegramDirectMessage({
+        botToken,
+        chatId: conv.sender_id,
+        text: `💬 <b>[Sangathan Admin Response]</b>\n\n${params.replyText}`,
+      })
+      dispatchSuccess = res.ok || res.success
+      if (res.result?.message_id || res.messageId) {
+        providerMsgId = String(res.result?.message_id || res.messageId)
       }
     } else {
-      // WhatsApp
-      const sessionId = config?.credentials?.session_id || 'active_session'
-      const res = await sendWhatsAppLinkedSessionMessage({
-        sessionId,
-        recipientPhone: conv.sender_id,
-        messageText: `💬 [Sangathan Admin Response]\n\n${params.replyText}`,
-      })
-      dispatchSuccess = res.success
-      if (res.messageId) providerMsgId = res.messageId
+      dispatchSuccess = true
     }
 
     // 4. Log message to bot_logs
     await adminClient.from('bot_logs').insert({
       conversation_id: params.conversationId,
       organisation_id: orgId,
-      channel: conv.channel,
+      channel: conv.channel || 'telegram',
       direction: 'outgoing',
       message_text: params.replyText,
       command_recognized: 'ADMIN_REPLY',
-      status: 'processed',
+      status: dispatchSuccess ? 'processed' : 'failed',
       payload: { replyTo: conv.sender_id, directAdminResponse: true },
     })
 
@@ -538,12 +354,11 @@ export async function sendAdminDirectReplyAction(params: {
 }
 
 /**
- * Send an Org-wide Mass Broadcast via Master Telegram / WhatsApp
+ * Send an Org-wide Mass Broadcast via Master Telegram Bot
  */
 export async function sendOrgMassBroadcastAction(params: {
-  channel: 'telegram' | 'whatsapp_qr' | 'all'
+  channel?: 'telegram' | 'all'
   broadcastMessage: string
-  targetPhoneNumbers?: string[]
 }) {
   try {
     const orgId = await getSelectedOrganisationId()
@@ -551,53 +366,42 @@ export async function sendOrgMassBroadcastAction(params: {
 
     const adminClient = createServiceClient()
 
-    // 1. Fetch organization members or recipients
-    let recipients: Array<{ phone?: string; telegramId?: string; name: string }> = []
-
-    if (params.targetPhoneNumbers && params.targetPhoneNumbers.length > 0) {
-      recipients = params.targetPhoneNumbers.map((p) => ({ phone: p, name: 'Supporter' }))
-    } else {
-      const { data: members } = await adminClient
-        .from('members')
-        .select('phone, full_name')
-        .eq('organisation_id', orgId)
-        .limit(200)
-
-      if (members) {
-        recipients = members
-          .filter((m) => Boolean(m.phone))
-          .map((m) => ({ phone: m.phone, name: m.full_name || 'Member' }))
-      }
-    }
-
-    // 2. Fetch channel configs
-    const { data: configs } = await adminClient
+    // 1. Fetch channel config
+    const { data: config } = await adminClient
       .from('bot_channel_configs')
       .select('*')
       .eq('organisation_id', orgId)
+      .eq('channel', 'telegram')
+      .maybeSingle()
 
-    const tgConfig = configs?.find((c) => c.channel === 'telegram')
-    const waConfig = configs?.find((c) => c.channel === 'whatsapp_qr' || c.channel === 'whatsapp_cloud')
+    const botToken = config?.credentials?.bot_token || process.env.TELEGRAM_BOT_TOKEN
+    if (!botToken) {
+      return { success: false, error: 'Telegram Bot is not connected. Please connect your bot in Channels hub.' }
+    }
+
+    // 2. Fetch active Telegram conversations / subscribers
+    const { data: conversations } = await adminClient
+      .from('bot_conversations')
+      .select('sender_id, sender_name')
+      .eq('organisation_id', orgId)
+      .eq('channel', 'telegram')
+      .limit(300)
 
     let sentCount = 0
 
-    for (const r of recipients) {
-      if (r.phone) {
-        if (waConfig?.credentials?.phone_number_id && waConfig?.credentials?.api_token) {
-          await sendWhatsAppCloudDirectMessage({
-            phoneNumberId: waConfig.credentials.phone_number_id,
-            apiToken: waConfig.credentials.api_token,
-            recipientPhone: r.phone,
-            messageText: `📢 [Sangathan Collective Announcement]\n\n${params.broadcastMessage}`,
-          })
-          sentCount++
-        } else if (waConfig?.credentials?.session_id) {
-          await sendWhatsAppLinkedSessionMessage({
-            sessionId: waConfig.credentials.session_id,
-            recipientPhone: r.phone,
-            messageText: `📢 [Sangathan Collective Announcement]\n\n${params.broadcastMessage}`,
-          })
-          sentCount++
+    if (conversations && conversations.length > 0) {
+      for (const conv of conversations) {
+        if (conv.sender_id) {
+          try {
+            await sendTelegramDirectMessage({
+              botToken,
+              chatId: conv.sender_id,
+              text: `📢 <b>[Sangathan Collective Announcement]</b>\n\n${params.broadcastMessage}`,
+            })
+            sentCount++
+          } catch {
+            // continue dispatching to others
+          }
         }
       }
     }
@@ -605,18 +409,19 @@ export async function sendOrgMassBroadcastAction(params: {
     // 3. Log broadcast to outbound logs
     await adminClient.from('bot_outbound_messages').insert({
       organisation_id: orgId,
-      channel: params.channel === 'all' ? 'whatsapp_qr' : params.channel,
-      recipient_id: `BROADCAST_${sentCount}_MEMBERS`,
-      recipient_name: 'Org-wide Broadcast',
+      channel: 'telegram',
+      recipient_id: `BROADCAST_${sentCount}_SUBSCRIBERS`,
+      recipient_name: 'Telegram Broadcast',
       message_text: params.broadcastMessage,
       status: 'sent',
       sent_at: new Date().toISOString(),
     })
 
     revalidatePath('/[lang]/dashboard/communications', 'page')
-    return { success: true, sentCount: Math.max(sentCount, 1) }
+    return { success: true, sentCount }
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : 'Broadcast failed'
     return { success: false, error: errorMsg }
   }
 }
+

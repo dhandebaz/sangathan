@@ -35,6 +35,124 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.51.0',
+    titleEn: '100% Free & Ban-Safe Telegram Bot Infrastructure & Real-Time Desk',
+    titleHi: '100% निःशुल्क और सुरक्षित टेलीग्राम बॉट इन्फ्रास्ट्रक्चर व लाइव डेस्क',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Streamlined organization messaging to a dedicated, high-performance Telegram Bot engine powered by grammY webhooks. Completely eliminated complex third-party API dependencies and phone ban risks, delivering instant bi-directional civic command processing (/grievance, /checkin, /dues, /vote, /sos) and unified live dispatch streaming to all grassroots collectives.',
+    descHi: 'संगठनात्मक संवाद को grammY वेबहुक द्वारा संचालित एक समर्पित, तीव्र टेलीग्राम बॉट इंजन में सुव्यवस्थित किया गया। जटिल थर्ड-पार्टी एपीआई निर्भरता और प्रतिबंध जोखिमों को समाप्त करते हुए, जमीनी स्तर के सभी समूहों के लिए तत्काल द्विदिशीय नागरिक कमांड्स (/grievance, /checkin, /dues, /vote, /sos) और लाइव डिस्पैच स्ट्रीमिंग उपलब्ध कराई गई।',
+    color: 'indigo',
+    icon: Rocket,
+    features: [
+      {
+        nameEn: 'Zero-Configuration grammY Telegram Bot Engine',
+        nameHi: 'शून्य-कॉन्फ़िगरेशन grammY टेलीग्राम बॉट इंजन',
+        textEn: 'Connect any bot token from @BotFather in 20 seconds with automatic webhook binding and immediate bi-directional command processing.',
+        textHi: '@BotFather से प्राप्त बॉट टोकन को 20 सेकंड में कनेक्ट करें, जिसमें स्वचालित वेबहुक बाइंडिंग और तत्काल नागरिक कमांड प्रोसेसिंग की सुविधा है।',
+      },
+      {
+        nameEn: '1-Click Sharable Cadre Join Link',
+        nameHi: '1-क्लिक साझा करने योग्य कैडर जॉइन लिंक',
+        textEn: 'Generate instant deep links (t.me/Bot?start=org_id) for volunteers and cadres to start interacting with the collective’s bot directly from their mobile devices.',
+        textHi: 'कार्यकर्ताओं और स्वयंसेवकों के लिए त्वरित डीप लिंक तैयार करें, जिससे वे सीधे अपने मोबाइल से संगठन के बॉट से जुड़ सकें।',
+      },
+      {
+        nameEn: 'Unified Communications Live Stream & Direct Admin Desk',
+        nameHi: 'एकीकृत संवाद लाइव स्ट्रीम व प्रत्यक्ष एडमिन डेस्क',
+        textEn: 'Real-time bi-directional conversation inbox, direct admin replies, mass broadcast transmissions, and complete delivery audit trails.',
+        textHi: 'वास्तविक समय में द्विदिशीय संवाद इनबॉक्स, प्रत्यक्ष एडमिन प्रत्युत्तर, सामूहिक प्रसारण और संपूर्ण डिलीवरी ऑडिट ट्रेल।',
+      },
+    ],
+  },
+  {
+    version: 'v1.50.1',
+    titleEn: 'Comprehensive Security & Runtime Stability Updates',
+    titleHi: 'व्यापक सुरक्षा व रनटाइम स्थिरता अपडेट',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Completed a massive audit resulting in 40+ surgical fixes across the application. Addressed critical API route RLS bypasses, hardened unprotected server actions (Roles, Emergency SOS) with strict RBAC, fixed hydration mismatches on admin dashboards, resolved QR scanner memory leaks, added null-safety guards across components, and fixed TypeScript compilation errors in the Grants module.',
+    descHi: 'एप्लिकेशन में 40+ सर्जिकल सुधारों के साथ व्यापक ऑडिट पूर्ण हुआ। एपीआई राउट्स में RLS बायपास को ठीक किया गया, असुरक्षित सर्वर एक्शन्स (Roles, Emergency SOS) को सख्त RBAC के साथ सुरक्षित किया गया, एडमिन डैशबोर्ड पर हाइड्रेशन मिसमैच को हल किया गया, क्यूआर स्कैनर मेमोरी लीक को ठीक किया गया, विभिन्न घटकों में नल-सेफ्टी गार्ड जोड़े गए और ग्रांट्स मॉड्यूल में टाइपस्क्रिप्ट त्रुटियों का समाधान किया गया।',
+    color: 'emerald',
+    icon: ShieldCheck,
+    features: [
+      {
+        nameEn: 'Zero-Trust Server Action & API Hardening',
+        nameHi: 'ज़ीरो-ट्रस्ट सर्वर एक्शन व एपीआई सुदृढ़ीकरण',
+        textEn: 'Migrated compliance and legal API routes to use authenticated clients for robust Row Level Security. Hardened Roles and Emergency SOS server actions with centralized requireRole checks, preventing unauthorized privilege escalation.',
+        textHi: 'सशक्त रो लेवल सिक्योरिटी के लिए अनुपालन व कानूनी एपीआई राउट्स को प्रमाणित क्लाइंट्स पर माइग्रेट किया गया। रोल्स और इमरजेंसी SOS सर्वर एक्शन्स को requireRole चेक्स के साथ सुरक्षित किया गया, जिससे अनधिकृत अधिकार वृद्धि को रोका जा सके।'
+      },
+      {
+        nameEn: 'UI Hydration & Memory Leak Elimination',
+        nameHi: 'यूआई हाइड्रेशन व मेमोरी लीक निवारण',
+        textEn: 'Fixed severe React hydration mismatches caused by early window access in Onboarding and Admin views. Resolved infinite re-render loops and event listener memory leaks in the QR Scanner and PWA Install Prompt modules.',
+        textHi: 'ऑनबोर्डिंग और एडमिन व्यूज में विंडो एक्सेस के कारण होने वाले गंभीर रिएक्ट हाइड्रेशन मिसमैच को ठीक किया गया। क्यूआर स्कैनर और पीडब्ल्यूए इंस्टॉल प्रॉम्प्ट मॉड्यूल्स में अनंत री-रेंडर लूप्स और मेमोरी लीक का समाधान किया गया।'
+      },
+      {
+        nameEn: 'State Synchronization & Null-Safety Architecture',
+        nameHi: 'स्टेट सिंक्रोनाइजेशन व नल-सेफ्टी आर्किटेक्चर',
+        textEn: 'Enforced rigorous optional chaining and null fallbacks across Role Manager, Elections, Certificates, and Collaboration clients to prevent runtime crashes on missing data. Added Next.js router.refresh() bindings to Chanda and Dues modules to eliminate stale UI state after mutations.',
+        textHi: 'रोल मैनेजर, चुनाव, प्रमाण पत्र और सहयोग क्लाइंट्स में कड़े नल फॉलबैक्स लागू किए गए ताकि डेटा न होने पर रनटाइम क्रैश से बचा जा सके। म्यूटेशन के बाद पुराने यूआई स्टेट को हटाने के लिए चंदा और ड्यूज मॉड्यूल्स में नेक्स्ट.जेएस router.refresh() बाइंडिंग जोड़ी गई।'
+      }
+    ]
+  },
+  {
+    version: 'v1.50.0',
+    titleEn: 'Messaging Channels Direct Authorization & Pairing Resilience',
+    titleHi: 'मैसेजिंग चैनल्स प्रत्यक्ष सत्यापन एवं डिवाइस पेयरिंग सुधार',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Enhanced the Master WhatsApp & Telegram Channels hub with bulletproof direct device authorization, streamlined phone number verification, and improved guidance for multi-device linking and Telegram bot integration.',
+    descHi: 'मास्टर व्हाट्सएप व टेलीग्राम चैनल्स हब में निर्बाध डायरेक्ट डिवाइस सत्यापन, फोन नंबर प्रमाणीकरण और टेलीग्राम बॉट एकीकरण में महत्वपूर्ण सुधार किए गए।',
+    color: 'indigo',
+    icon: Phone,
+    features: [
+      {
+        nameEn: 'Direct Master Phone Device Authorization',
+        nameHi: 'प्रत्यक्ष मास्टर फोन डिवाइस प्रमाणीकरण',
+        textEn: 'Allows organizations to directly confirm and authorize their designated master phone number for automated dispatches and broadcast alerts with zero friction.',
+        textHi: 'संगठनों को स्वचालित संदेशों और प्रसारण अलर्ट के लिए अपने निर्धारित मास्टर फोन नंबर को निर्बाध रूप से सत्यापित और कनेक्ट करने की सुविधा।',
+      },
+      {
+        nameEn: 'Zero-Config Telegram Bot Engine',
+        nameHi: 'शून्य-कॉन्फ़िगरेशन टेलीग्राम बॉट इंजन',
+        textEn: 'Seamless 1-click webhook registration and live dispatch stream for Telegram bots configured via @BotFather.',
+        textHi: '@BotFather के माध्यम से जुड़े टेलीग्राम बॉट्स के लिए त्वरित वेबहुक सक्रियण और लाइव डिस्पैच मॉनिटरिंग।',
+      },
+    ],
+  },
+  {
+    version: 'v1.49.0',
+    titleEn: 'Smart AI Organization Emblem & Insignia Studio',
+    titleHi: 'स्मार्ट संगठन लोगो व मोहर डिज़ाइनर स्टूडियो',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Transformed the official emblem generator into an intelligent design engine that analyzes organization names and movement archetypes, offering 1-click tailored presets, 7 heraldic frame styles, 24 categorized movement symbols, custom monogram lettering, and 8 sovereign color palettes.',
+    descHi: 'आधिकारिक संगठन लोगो व मोहर जनरेटर को एक शक्तिशाली स्मार्ट डिज़ाइन इंजन में अपग्रेड किया गया, जो संगठन के नाम व विचारधारा का स्वतः विश्लेषण कर 1-क्लिक प्रीसेट्स, 7 हेराल्डिक आकृतियां, 24 आंदोलन प्रतीक और कस्टम मोनोग्राम विकल्प प्रदान करता है।',
+    color: 'emerald',
+    icon: Sparkles,
+    features: [
+      {
+        nameEn: 'Dynamic Organization Name & Domain Analysis',
+        nameHi: 'संगठन नाम व क्षेत्र का स्वतः बुद्धिमत्तापूर्ण विश्लेषण',
+        textEn: 'Analyzes movement keywords (e.g. Nyay, Fauj, Kisan, Mazdoor, Chhatra, Seva, RWA) to generate 4 tailored complete design presets, custom monogram initials, and bilingual slogan suggestions.',
+        textHi: 'संगठन के नाम में मौजूद कीवर्ड्स के आधार पर 4 पूर्ण डिज़ाइन प्रीसेट्स, कस्टम मोनोग्राम अक्षर और द्विभाषी नारों के सुझाव स्वतः तैयार किए जाते हैं।',
+      },
+      {
+        nameEn: 'Expanded 7 Heraldic Structure Styles & 24 Symbols',
+        nameHi: '7 हेराल्डिक शैलियाँ और 24 वर्गीकृत आंदोलन प्रतीक',
+        textEn: 'Added Vintage Laurel, Hexagon Insignia, and Minimalist Monogram alongside classic Circular Seals and Movement Shields, backed by 24 curated vector motifs across Justice, Resistance, Land, Youth, and Labor.',
+        textHi: 'संवैधानिक गोल मोहर और रक्षा ढाल के साथ विंटेज पुष्पचक्र, षट्कोण और आधुनिक मोनोग्राम शैलियां जोड़ी गईं, साथ ही न्याय, क्रांति, माटी व श्रम के 24 वेक्टर प्रतीक उपलब्ध कराए गए।',
+      },
+      {
+        nameEn: 'Multi-Mode Live Vector Preview & High-DPI Export',
+        nameHi: 'मल्टी-मोड लाइव प्रीव्यू और 2048px हाई-डीपीआई एक्सपोर्ट',
+        textEn: 'Inspect insignias across Letterhead, Clean White, and Dark Badge surfaces with real-time vector rendering and 1-click 2048px PNG / SVG export for statutory letterheads and banners.',
+        textHi: 'लेटरहेड, श्वेत और डार्क पृष्ठभूमियों पर लोगो का वास्तविक समय में पूर्वावलोकन करें और आधिकारिक दस्तावेजों के लिए 2048px उच्च रिज़ॉल्यूशन में डाउनलोड करें।',
+      },
+    ],
+  },
+  {
     version: 'v1.48.1',
     titleEn: 'Search Engine Indexing, Canonical Alignment & Sitemap Normalization',
     titleHi: 'खोज इंजन अनुक्रमण, कैनोनिकल संरेखण व साइटमैप मानकीकरण',

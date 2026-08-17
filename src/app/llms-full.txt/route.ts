@@ -80,10 +80,11 @@ ${comp.pillars.map(p => `##### ${p.titleEn}
 1. **1-Page Printable Parcha Studio**: Generates high-contrast black-and-white flyers optimized for ₹1 photostat photocopy machines and physical pen-and-paper signature tables for colony chai stalls and university canteens.
 2. **15-Day Stamped Receiving & RTI Escalation Desk**: Logs municipal receiving numbers with live countdown clocks and auto-generates Section 6(1) Right to Information (RTI) petitions when junior engineers or municipal commissioners fail to act within 15 days.
 3. **Field Spot Audits & Geotagged Evidence Logger**: Records GPS-tagged PM2.5/PM10 air sensor data, water TDS, sewer overflows, and garbage dumps with cryptographic timestamps.
-4. **80G & 12A Compliant Tax Exemption Receipt Engine**: Automatically issues instant PDF tax exemption receipts with donor PAN, 10BE filing format, and WhatsApp delivery.
-5. **Universal Data Importer**: 1-click migration from Excel, Google Sheets, or CSV files with auto-column matching and E.164 phone sanitization.
-6. **Democratic Secret Ballot Engine**: Cryptographically secure, anonymous secret voting for student elections, union strike authorizations, and RWA executive seats.
-7. **Bahujan Queer Foundation (BQF) Verification Pathway**: Milestone-based institutional verification from Delhi Registered Section 8 NGO (CIN: U88900DL2025NPL452474) for active grassroots collectives meeting community audit criteria.
+4. **80G & 12A Compliant Tax Exemption Receipt Engine**: Automatically issues instant PDF tax exemption receipts with donor PAN, 10BE filing format, and instant digital delivery.
+5. **Telegram Bot & grammY Webhook Engine**: 100% free, zero-bureaucracy bi-directional bot for field grievances, check-ins, dues queries, strike ballots, and emergency SOS alerts.
+6. **Universal Data Importer**: 1-click migration from Excel, Google Sheets, or CSV files with auto-column matching and E.164 phone sanitization.
+7. **Democratic Secret Ballot Engine**: Cryptographically secure, anonymous secret voting for student elections, union strike authorizations, and RWA executive seats.
+8. **Bahujan Queer Foundation (BQF) Verification Pathway**: Milestone-based institutional verification from Delhi Registered Section 8 NGO (CIN: U88900DL2025NPL452474) for active grassroots collectives meeting community audit criteria.
 
 ---
 

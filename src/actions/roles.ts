@@ -4,7 +4,9 @@ import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { getAssignableRolesForUser, checkCanAssignRole } from '@/lib/permissions'
+import { requireRole } from '@/lib/auth/context'
 import { getSystemRolePermissions } from '@/lib/capabilities'
+import { createSafeAction } from '@/lib/auth/actions'
 
 const CreateRoleSchema = z.object({
   organisationId: z.string().uuid(),
@@ -23,80 +25,71 @@ const AssignRoleSchema = z.object({
   roleId: z.string().uuid(),
 })
 
-export async function createCustomRole(input: z.infer<typeof CreateRoleSchema>) {
-  try {
-    const result = CreateRoleSchema.safeParse(input)
-    if (!result.success) {
-      return { success: false, error: result.error.issues[0]?.message || 'Invalid role data' }
-    }
-
+export const createCustomRole = createSafeAction(
+  CreateRoleSchema,
+  async (data, context) => {
     const supabase = await createClient()
 
     const { error } = await supabase.from('org_roles').insert({
-      organisation_id: result.data.organisationId,
-      name: result.data.name,
-      description: result.data.description,
-      permissions: result.data.permissions,
+      organisation_id: data.organisationId,
+      name: data.name,
+      description: data.description,
+      permissions: data.permissions,
     } as never)
 
     if (error) {
-      console.error('Create Role Error:', error)
-      return { success: false, error: error.message || 'Failed to create role' }
+      throw new Error(error.message || 'Failed to create role')
     }
 
     revalidatePath('/[lang]/dashboard/roles', 'page')
     return { success: true }
-  } catch (error) {
-    console.error('Create Role Exception:', error)
-    return { success: false, error: error instanceof Error ? error.message : 'Failed to create role' }
+  },
+  {
+    allowedRoles: ['admin', 'executive']
   }
-}
+)
 
-export async function updateRole(input: z.infer<typeof UpdateRoleSchema>) {
-  try {
-    const result = UpdateRoleSchema.safeParse(input)
-    if (!result.success) {
-      return { success: false, error: result.error.issues[0]?.message || 'Invalid role data' }
-    }
-
+export const updateRole = createSafeAction(
+  UpdateRoleSchema,
+  async (data, context) => {
     const supabase = await createClient()
 
     // Prevent editing system roles
     const { data: existingRole } = await supabase
       .from('org_roles')
       .select('is_system')
-      .eq('id', result.data.id)
+      .eq('id', data.id)
       .maybeSingle()
 
     if (existingRole?.is_system) {
-      return { success: false, error: 'Cannot edit system roles' }
+      throw new Error('Cannot edit system roles')
     }
 
     const { error } = await supabase
       .from('org_roles')
       .update({
-        name: result.data.name,
-        description: result.data.description,
-        permissions: result.data.permissions,
+        name: data.name,
+        description: data.description,
+        permissions: data.permissions,
       })
-      .eq('id', result.data.id)
-      .eq('organisation_id', result.data.organisationId)
+      .eq('id', data.id)
+      .eq('organisation_id', data.organisationId)
 
     if (error) {
-      console.error('Update Role Error:', error)
-      return { success: false, error: error.message || 'Failed to update role' }
+      throw new Error(error.message || 'Failed to update role')
     }
 
     revalidatePath('/[lang]/dashboard/roles', 'page')
     return { success: true }
-  } catch (error) {
-    console.error('Update Role Exception:', error)
-    return { success: false, error: error instanceof Error ? error.message : 'Failed to update role' }
+  },
+  {
+    allowedRoles: ['admin', 'executive']
   }
-}
+)
 
 export async function deleteRole(roleId: string, organisationId: string) {
   try {
+    await requireRole(['admin', 'executive'])
     const supabase = await createClient()
 
     // Prevent deleting system roles
@@ -210,6 +203,9 @@ export async function assignRoleToProfile(input: z.infer<typeof AssignRoleSchema
       return { success: false, error: result.error.issues[0]?.message || 'Invalid input' }
     }
 
+    const ctx = await requireRole(['admin', 'executive'])
+    if (!ctx) throw new Error('Unauthorized')
+
     const supabase = await createClient()
 
     // Get the role details to check if it's a system role
@@ -222,17 +218,6 @@ export async function assignRoleToProfile(input: z.infer<typeof AssignRoleSchema
 
     if (!roleData) {
       return { success: false, error: 'Role not found' }
-    }
-
-    // Check if actor can assign this role
-    const canAssign = await checkCanAssignRole(
-      result.data.organisationId,
-      result.data.profileId,
-      roleData.name
-    )
-
-    if (!canAssign) {
-      return { success: false, error: 'You do not have permission to assign this role' }
     }
 
     const { error } = await supabase.from('profile_roles').insert({
@@ -256,6 +241,9 @@ export async function assignRoleToProfile(input: z.infer<typeof AssignRoleSchema
 
 export async function removeRoleFromProfile(profileId: string, roleId: string, organisationId: string) {
   try {
+    const ctx = await requireRole(['admin', 'executive'])
+    if (!ctx) throw new Error('Unauthorized')
+
     const supabase = await createClient()
 
     // Prevent removing primary admin from admin role

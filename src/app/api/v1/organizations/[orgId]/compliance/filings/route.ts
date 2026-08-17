@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase/service'
+import { createClient } from '@/lib/supabase/server'
 
 export async function GET(
   req: NextRequest,
@@ -9,7 +9,7 @@ export async function GET(
   const searchParams = req.nextUrl.searchParams
   const status = searchParams.get('status')
   
-  const supabase = createServiceClient()
+  const supabase = await createClient()
 
   // In a real application, verify user is a member of the org here.
 
@@ -36,7 +36,7 @@ export async function POST(
   { params }: { params: Promise<{ orgId: string }> }
 ) {
   const { orgId } = await params
-  const supabase = createServiceClient()
+  const supabase = await createClient()
 
   // In a real application, verify user is an admin/executive of the org here.
 

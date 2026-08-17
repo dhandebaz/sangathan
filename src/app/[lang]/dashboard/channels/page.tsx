@@ -10,8 +10,8 @@ export const dynamic = 'force-dynamic'
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
   return {
-    title: lang === 'hi' ? 'मैसेजिंग एवं बॉट चैनल्स | संगठन' : 'Messaging & Bot Channels | Sangathan',
-    description: 'Connect live Telegram Bots with grammY and pair WhatsApp Multi-Device sessions via QR Code.',
+    title: lang === 'hi' ? 'टेलीग्राम बॉट एवं मैसेजिंग चैनल्स | संगठन' : 'Telegram Bot & Messaging Channels | Sangathan',
+    description: 'Connect live Telegram Bots with grammY webhooks for automated grassroots civic engagement.',
   }
 }
 
@@ -37,7 +37,6 @@ export default async function ChannelsPage(props: { params: Promise<{ lang: stri
       orgId={orgId}
       initialConfigs={result.configs || []}
       initialOutboundLogs={result.outboundLogs || []}
-      initialLatestQR={result.latestQR}
       appUrl={appUrl}
     />
   )

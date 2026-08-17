@@ -75,9 +75,8 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
       items: [
         { href: `/${lang}/dashboard/forms`, icon: Sparkles, label: 'Forms & Survey Studio', show: true },
         { href: `/${lang}/dashboard/communications`, icon: MessageSquare, label: 'Unified Communications', show: true },
-        { href: `/${lang}/dashboard/channels`, icon: Radio, label: 'Master Channels & QR', show: true },
+        { href: `/${lang}/dashboard/channels`, icon: Radio, label: 'Telegram Bot & Channels', show: true },
         { href: `/${lang}/dashboard/field-mode`, icon: Database, label: 'Offline Field Mode', show: true },
-        { href: `/${lang}/dashboard/bot-simulator`, icon: Smartphone, label: 'Bot Simulator', show: true },
         { href: `/${lang}/dashboard/emergency-sos`, icon: AlertTriangle, label: 'Emergency SOS', show: true },
         { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Petitions & Campaigns', show: true },
         { href: `/${lang}/members/badge`, icon: Award, label: 'Verified Member Badges', show: true },
