@@ -358,34 +358,81 @@ export async function finalizeSignup(input: {
       targetSlug = `${baseSlug}-${generateSecureString(5)}`
     }
 
+    const userEmail = user.email || (metadata.email as string) || `${user.id}@sangathan.space`
     const regStatus = input.registrationStatus || (orgType === 'civic_collective' ? 'unregistered' : 'registered')
 
-    const {
-      data: rpcData,
-      error: rpcError,
-    } = await supabaseAdmin.rpc('create_organisation_and_admin', {
+    let orgId: string | null = null
+
+    // Tier 1: 8-parameter RPC
+    const rpcRes1 = await supabaseAdmin.rpc('create_organisation_and_admin', {
       p_org_name: orgName,
       p_org_slug: targetSlug,
       p_user_id: user.id,
       p_full_name: fullName,
-      p_email: user.email,
+      p_email: userEmail,
       p_phone: null,
       p_org_type: orgType,
       p_registration_status: regStatus,
     } as never)
 
-    if (rpcError || !rpcData) {
-      console.error('Signup RPC Error:', rpcError)
-      await logger.error('auth', 'Signup RPC Error during finalizeSignup', {
-        error: rpcError,
-        userId: user.id,
-        orgName,
-        orgType,
-      })
-      return { success: false, error: rpcError?.message || 'Failed to create organisation. Please try again.' }
+    if (rpcRes1.data && (rpcRes1.data as CreateOrganisationAndAdminResult).organisation_id) {
+      orgId = (rpcRes1.data as CreateOrganisationAndAdminResult).organisation_id
+    } else if (rpcRes1.error && rpcRes1.error.message?.includes('function') && rpcRes1.error.message?.includes('does not exist')) {
+      // Tier 2: 7-parameter RPC
+      const rpcRes2 = await supabaseAdmin.rpc('create_organisation_and_admin', {
+        p_org_name: orgName,
+        p_org_slug: targetSlug,
+        p_user_id: user.id,
+        p_full_name: fullName,
+        p_email: userEmail,
+        p_phone: null,
+        p_org_type: orgType,
+      } as never)
+      if (rpcRes2.data && (rpcRes2.data as CreateOrganisationAndAdminResult).organisation_id) {
+        orgId = (rpcRes2.data as CreateOrganisationAndAdminResult).organisation_id
+      }
     }
 
-    const resultObj = rpcData as CreateOrganisationAndAdminResult
+    // Tier 3: Direct database fallback
+    if (!orgId) {
+      const initialCaps = getOrgTypeDefaults(orgType)
+      const { data: newOrg, error: newOrgErr } = await supabaseAdmin
+        .from('organisations')
+        .insert({
+          name: orgName,
+          slug: targetSlug,
+          org_type: orgType,
+          registration_status: regStatus,
+          capabilities: initialCaps,
+        } as never)
+        .select('id')
+        .maybeSingle()
+
+      if (newOrgErr || !newOrg) {
+        console.error('Direct org creation error:', newOrgErr)
+        await logger.error('auth', 'Signup Fallback Insert Error during finalizeSignup', {
+          error: newOrgErr || rpcRes1.error,
+          userId: user.id,
+          orgName,
+          orgType,
+        })
+        return { success: false, error: newOrgErr?.message || rpcRes1.error?.message || 'Failed to create organisation. Please try again.' }
+      }
+      orgId = (newOrg as { id: string }).id
+
+      await supabaseAdmin
+        .from('profiles')
+        .upsert({
+          id: user.id,
+          organisation_id: orgId,
+          role: 'admin',
+          full_name: fullName,
+          email: userEmail,
+          status: 'active',
+          approved_at: new Date().toISOString(),
+          onboarding_completed: true,
+        } as never)
+    }
 
     const { error: profileUpdateError } = await supabaseAdmin
       .from('profiles')
@@ -429,7 +476,7 @@ export async function finalizeSignup(input: {
           const base64Prefix = input.logoUrl.split(';base64,').pop()
           if (base64Prefix) {
             const buffer = Buffer.from(base64Prefix, 'base64')
-            const filePath = `${resultObj.organisation_id}/logo_${Date.now()}.png`
+            const filePath = `${orgId}/logo_${Date.now()}.png`
             const { error: logoUploadErr } = await supabaseAdmin.storage
               .from('organisation_assets')
               .upload(filePath, buffer, { contentType: 'image/png', upsert: true })
@@ -452,7 +499,7 @@ export async function finalizeSignup(input: {
     const { error: orgUpdateError } = await supabaseAdmin
       .from('organisations')
       .update(orgUpdates as never)
-      .eq('id', resultObj.organisation_id)
+      .eq('id', orgId)
 
     if (orgUpdateError) {
       console.error('Org update error:', orgUpdateError)
@@ -460,7 +507,7 @@ export async function finalizeSignup(input: {
 
     try {
       await supabaseAdmin.rpc('seed_compliance_items', {
-        p_org_id: resultObj.organisation_id,
+        p_org_id: orgId,
         p_org_type: orgType,
       } as never)
     } catch (complianceErr) {
@@ -469,7 +516,7 @@ export async function finalizeSignup(input: {
 
     try {
       const cookieStore = await cookies()
-      cookieStore.set('sangathan_org_id', resultObj.organisation_id, {
+      cookieStore.set('sangathan_org_id', orgId, {
         path: '/',
         maxAge: 60 * 60 * 24 * 30,
         sameSite: 'lax',
@@ -484,7 +531,7 @@ export async function finalizeSignup(input: {
       console.warn('Cache invalidation warning:', cacheErr)
     }
 
-    return { success: true, orgId: resultObj.organisation_id, slug: targetSlug }
+    return { success: true, orgId, slug: targetSlug }
   } catch (err: unknown) {
     console.error('finalizeSignup Unhandled Exception:', err)
     await logger.error('auth', 'finalizeSignup Unhandled Exception', {

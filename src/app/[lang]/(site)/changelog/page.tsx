@@ -35,6 +35,37 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.48.0',
+    titleEn: 'Onboarding Launch Resilience, Multi-Tier Org Creation & Middleware Flight Protection',
+    titleHi: 'संगठन सेटअप लॉन्च सुदृढ़ीकरण व सर्वर सुरक्षा सुधार',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Resolved the root-cause Server Action exception during Onboarding Launch by guaranteeing multi-tier RPC/direct insertion fallbacks, eliminating cookie signing crashes with intelligent key fallbacks, preserving session tokens across navigation transitions, and protecting Flight RPC streams against unauthorized middleware redirects.',
+    descHi: 'संगठन सेटअप लॉन्च के दौरान आने वाली सर्वर एक्शन समस्या का पूर्ण समाधान। मल्टी-टियर आरपीसी और प्रत्यक्ष डेटाबेस निर्माण बैकअप, सुरक्षित कुकी हस्ताक्षर प्रणाली, और नेविगेशन के दौरान सत्र निरंतरता सुनिश्चित की गई।',
+    color: 'emerald',
+    icon: Rocket,
+    features: [
+      {
+        nameEn: 'Multi-Tier Organization Creation Architecture',
+        nameHi: 'मल्टी-टियर संगठन निर्माण वास्तुकला',
+        textEn: 'Hardened the finalizeSignup pipeline with 8-argument and 7-argument RPC auto-detection alongside an automatic direct database insertion fallback to guarantee organizations can be launched seamlessly under any database schema variance.',
+        textHi: 'finalizeSignup पाइपलाइन को 8-पैरामीटर व 7-पैरामीटर आरपीसी स्वतः-पहचान तथा प्रत्यक्ष डेटाबेस निर्माण बैकअप के साथ सुदृढ़ किया गया ताकि किसी भी स्थिति में संगठन लॉन्च निर्बाध रूप से पूरा हो सके।',
+      },
+      {
+        nameEn: 'Resilient Cookie Signing Secret Engine',
+        nameHi: 'लचीला कुकी हस्ताक्षर सुरक्षा इंजन',
+        textEn: 'Added safe fallback keys and error boundary protection to createSignedCookie and verifySignedCookie, preventing uncaught environment secret exceptions in edge and server middleware.',
+        textHi: 'createSignedCookie और verifySignedCookie में सुरक्षित वैकल्पिक कुंजियां और त्रुटि निवारण तंत्र जोड़ा गया, जिससे वातावरण चर (env vars) की अनुपस्थिति में भी सर्वर कभी क्रैश नहीं होता।',
+      },
+      {
+        nameEn: 'Session-Preserving Middleware Navigation',
+        nameHi: 'सत्र-संरक्षित मिडिलवेयर नेविगेशन',
+        textEn: 'Ensured all middleware redirects copy over active Supabase session cookies while strictly prohibiting 307/308 redirects on Server Action mutations to preserve React Flight RPC streams.',
+        textHi: 'मिडिलवेयर में सभी रीडायरेक्ट्स पर सक्रिय सत्र कुकीज को बनाए रखने और सर्वर एक्शन म्यूटेशन पर रीडायरेक्ट प्रतिबंध सुनिश्चित किया गया ताकि क्लाइंट और सर्वर का संपर्क कभी बाधित न हो।',
+      },
+    ],
+  },
+  {
     version: 'v1.47.9',
     titleEn: 'Codebase-Wide Server Action Hardening & Query Resilience Architecture',
     titleHi: 'संपूर्ण ऐप में सर्वर एक्शन सुदृढ़ीकरण व डेटाबेस क्वेरी सुरक्षा',

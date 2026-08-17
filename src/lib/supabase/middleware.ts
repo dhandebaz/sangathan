@@ -74,9 +74,24 @@ export async function updateSession(request: NextRequest) {
   const bodySizeCheck = checkBodySize(request)
   if (bodySizeCheck) return applySecurityHeaders(bodySizeCheck)
 
+  // Identify non-GET mutations and Server Action requests early
+  const isMutationOrAction = request.method !== 'GET' && request.method !== 'HEAD'
+  const isServerAction =
+    request.headers.has('next-action') ||
+    request.headers.get('accept')?.includes('text/x-component') === true
+
   let supabaseResponse = NextResponse.next({
     request,
   })
+
+  // Helper to construct redirects while preserving any cookies set by Supabase Auth
+  const createRedirect = (targetUrl: URL | string) => {
+    const redirectResponse = NextResponse.redirect(targetUrl)
+    supabaseResponse.cookies.getAll().forEach((c) => {
+      redirectResponse.cookies.set(c.name, c.value, c)
+    })
+    return applySecurityHeaders(redirectResponse)
+  }
 
   let user: { id: string; email?: string } | null = null
 
@@ -132,15 +147,17 @@ export async function updateSession(request: NextRequest) {
   // Protect System Admin Routes
   if (request.nextUrl.pathname.startsWith('/admin')) {
     if (!user || !user.email) {
+      if (isMutationOrAction || isServerAction) {
+        return applySecurityHeaders(NextResponse.json({ error: 'Unauthorized' }, { status: 401 }))
+      }
       const url = request.nextUrl.clone()
       url.pathname = '/login'
-      return applySecurityHeaders(NextResponse.redirect(url))
+      return createRedirect(url)
     }
     
     // Strict Whitelist Check
     const superAdmins = process.env.SUPER_ADMIN_EMAILS?.split(',')
     if (!superAdmins || superAdmins.length === 0 || !superAdmins.includes(user.email)) {
-      // Return 404 to hide admin existence or 403
       return applySecurityHeaders(NextResponse.json({ error: 'Not Found' }, { status: 404 }))
     }
   }
@@ -159,48 +176,54 @@ export async function updateSession(request: NextRequest) {
     i18n.locales.some(loc => pathname === `/${loc}${route}`)
   )
 
-  if (user && isAuthRoute) {
+  if (user && isAuthRoute && !isMutationOrAction && !isServerAction) {
     const cookieName = 'user-metadata'
     const cached = request.cookies.get(cookieName)?.value
     let profile = cached ? await verifySignedCookie(cached) : null
 
     if (!profile) {
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-      const supabasePublicKey = getSupabasePublicKey()!
-      const supabase = createServerClient(
-        supabaseUrl,
-        supabasePublicKey,
-        {
-          cookies: {
-            getAll() { return request.cookies.getAll() },
-            setAll() {},
+      try {
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+        const supabasePublicKey = getSupabasePublicKey()!
+        const supabase = createServerClient(
+          supabaseUrl,
+          supabasePublicKey,
+          {
+            cookies: {
+              getAll() { return request.cookies.getAll() },
+              setAll() {},
+            },
           },
-        },
-      )
+        )
 
-      const { data: fetchedProfile } = await supabase
-        .from('profiles')
-        .select('role, phone_verified, organisations(capabilities)')
-        .eq('id', user.id)
-        .maybeSingle()
-      
-      profile = fetchedProfile
+        const { data: fetchedProfile } = await supabase
+          .from('profiles')
+          .select('role, phone_verified, organisations(capabilities)')
+          .eq('id', user.id)
+          .maybeSingle()
+        
+        profile = fetchedProfile
+      } catch {
+        // Fallback gracefully
+      }
     }
 
-    if (!profile) {
-      // Allow access to auth screens so the user can login or escape
-    } else {
+    if (profile) {
       const url = request.nextUrl.clone()
       url.pathname = '/en/dashboard'
-      const response = applySecurityHeaders(NextResponse.redirect(url))
+      const response = createRedirect(url)
       
-      if (profile && !cached) {
-        const signedValue = await createSignedCookie(profile)
-        response.cookies.set(cookieName, signedValue, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          maxAge: 60 * 10
-        })
+      if (!cached) {
+        try {
+          const signedValue = await createSignedCookie(profile)
+          response.cookies.set(cookieName, signedValue, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 60 * 10
+          })
+        } catch {
+          // Ignore cookie signing errors
+        }
       }
       return response
     }
@@ -214,11 +237,13 @@ export async function updateSession(request: NextRequest) {
     protectedPrefixes.some(prefix => pathname.startsWith(`/${loc}${prefix}`))
   ) || protectedPrefixes.some(prefix => pathname.startsWith(prefix))
 
-  // Redirect unauthenticated users away from protected routes only
+  // Redirect unauthenticated users away from protected routes only on GET page requests
   if (!user && isProtectedPath) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return applySecurityHeaders(NextResponse.redirect(url))
+    if (!isMutationOrAction && !isServerAction) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      return createRedirect(url)
+    }
   }
 
   // --- Route Type Check ---
@@ -228,7 +253,7 @@ export async function updateSession(request: NextRequest) {
   applySecurityHeaders(supabaseResponse, isApiRoute)
 
   // --- CAPABILITIES (ORG TYPE) ENFORCEMENT ---
-  if (user && isDashboardRoute) {
+  if (user && isDashboardRoute && !isMutationOrAction && !isServerAction) {
     const cookieName = 'user-metadata'
     const cached = request.cookies.get(cookieName)?.value
     const profile = cached ? await verifySignedCookie(cached) as unknown as { organisations?: { capabilities?: Record<string, boolean> } } : null
@@ -239,37 +264,34 @@ export async function updateSession(request: NextRequest) {
 
       // Restrict access based on capabilities
       if (p.includes('/dashboard/donations') && !caps.donations) {
-        return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+        return createRedirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
       }
       if (p.includes('/dashboard/networks') && !caps.federation_mode) {
-        return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+        return createRedirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
       }
       if (p.includes('/dashboard/campaigns') && !caps.campaigns) {
-        return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+        return createRedirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
       }
       if (p.includes('/dashboard/grievances') && !caps.grievances) {
-        return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+        return createRedirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
       }
       if (p.includes('/dashboard/complaints') && !caps.complaints) {
-        return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+        return createRedirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
       }
       if (p.includes('/dashboard/maintenance') && !caps.maintenance) {
-        return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+        return createRedirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
       }
       if (p.includes('/dashboard/volunteers') && !caps.volunteers) {
-        return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+        return createRedirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
       }
       if (p.includes('/dashboard/student-ids') && !caps.student_ids) {
-        return applySecurityHeaders(NextResponse.redirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url)))
+        return createRedirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
       }
     }
   }
 
   // i18n Redirection Logic
   // Never redirect POST, PUT, PATCH or Server Actions (which breaks Next.js Action flight protocols)
-  const isMutationOrAction = request.method !== 'GET' && request.method !== 'HEAD'
-  const isServerAction = request.headers.has('next-action')
-
   const shouldHandleLocale = 
     !isMutationOrAction &&
     !isServerAction &&
@@ -279,15 +301,15 @@ export async function updateSession(request: NextRequest) {
     !pathname.startsWith('/auth') &&
     !pathname.startsWith('/admin') &&
     !pathname.startsWith('/bootstrap-org') &&
-    !pathname.startsWith('/maintenance') && // Exclude maintenance
+    !pathname.startsWith('/maintenance') &&
     !pathname.includes('.') &&
     !hasLocale
 
   if (shouldHandleLocale) {
     const locale = i18n.defaultLocale
-    return applySecurityHeaders(NextResponse.redirect(
+    return createRedirect(
       new URL(`/${locale}${pathname.startsWith('/') ? '' : '/'}${pathname}`, request.url)
-    ))
+    )
   }
 
   return supabaseResponse

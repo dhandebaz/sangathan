@@ -810,7 +810,7 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
           }
         } catch {}
         toast.success(t('orgCreated'))
-        router.push(`/${lang}/dashboard`)
+        window.location.href = `/${lang}/dashboard`
       } else {
         toast.error(res.error || t('setupFailed'))
       }
