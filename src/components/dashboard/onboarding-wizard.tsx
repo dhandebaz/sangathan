@@ -720,16 +720,41 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
       toast.error(isHi ? 'कृपया एक वैध छवि फ़ाइल चुनें।' : 'Please select a valid image file.')
       return
     }
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error(isHi ? 'छवि 5MB से कम होनी चाहिए।' : 'Image must be under 5MB.')
+    if (file.size > 15 * 1024 * 1024) {
+      toast.error(isHi ? 'छवि 15MB से कम होनी चाहिए।' : 'Image must be under 15MB.')
       return
     }
     const reader = new FileReader()
     reader.onload = () => {
-      if (reader.result) {
-        setOrgData((prev) => ({ ...prev, logoUrl: reader.result as string }))
-        toast.success(isHi ? 'लोगो अपलोड हो गया!' : 'Logo uploaded successfully!')
+      if (typeof reader.result !== 'string') return
+      const img = new window.Image()
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        const MAX_DIM = 512
+        let width = img.width
+        let height = img.height
+        if (width > height) {
+          if (width > MAX_DIM) {
+            height = Math.round((height * MAX_DIM) / width)
+            width = MAX_DIM
+          }
+        } else {
+          if (height > MAX_DIM) {
+            width = Math.round((width * MAX_DIM) / height)
+            height = MAX_DIM
+          }
+        }
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height)
+          const compressedDataUrl = canvas.toDataURL('image/png')
+          setOrgData((prev) => ({ ...prev, logoUrl: compressedDataUrl }))
+          toast.success(isHi ? 'लोगो अपलोड हो गया!' : 'Logo uploaded successfully!')
+        }
       }
+      img.src = reader.result
     }
     reader.readAsDataURL(file)
   }
