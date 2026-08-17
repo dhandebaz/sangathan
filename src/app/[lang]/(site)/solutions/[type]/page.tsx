@@ -59,9 +59,9 @@ export async function generateMetadata({ params }: SolutionPageProps): Promise<M
       type: 'website',
       images: [
         {
-          url: '/images/activist-leader.png',
-          width: 800,
-          height: 600,
+          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? solution.titleHi : solution.titleEn)}&desc=${encodeURIComponent(description)}&type=${type}&tag=Movement+Solution&lang=${lang}`,
+          width: 1200,
+          height: 630,
           alt: isHindi ? solution.titleHi : solution.titleEn,
         },
       ],
@@ -70,7 +70,8 @@ export async function generateMetadata({ params }: SolutionPageProps): Promise<M
       card: 'summary_large_image',
       title,
       description,
-      images: ['/images/activist-leader.png'],
+      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? solution.titleHi : solution.titleEn)}&desc=${encodeURIComponent(description)}&type=${type}&tag=Movement+Solution&lang=${lang}`],
+      creator: '@areynetaji',
     },
   }
 }

@@ -33,6 +33,29 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
+  openGraph: {
+    type: 'website',
+    url: 'https://sangathan.space',
+    siteName: 'Sangathan',
+    title: 'Sangathan — Civic Digital Infrastructure for Collectives & NGOs',
+    description: 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
+    images: [
+      {
+        url: 'https://sangathan.space/api/og',
+        width: 1200,
+        height: 630,
+        alt: 'Sangathan - Civic Digital Infrastructure',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@areynetaji',
+    creator: '@areynetaji',
+    title: 'Sangathan — Civic Digital Infrastructure for Collectives & NGOs',
+    description: 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
+    images: ['https://sangathan.space/api/og'],
+  },
   icons: {
     icon: [
       {

@@ -73,6 +73,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = `${form.title} | ${orgName}`
   const description = form.description || `Fill out the official ${form.title} survey on Sangathan.`
   const canonicalUrl = `https://sangathan.space/f/${form.slug || form.id}`
+  const ogImageUrl = `https://sangathan.space/api/og/form/${form.slug || form.id}`
 
   return {
     title,
@@ -86,11 +87,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       url: canonicalUrl,
       siteName: orgName,
       type: 'website',
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${form.title} - Official Form`,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [ogImageUrl],
+      creator: '@areynetaji',
     },
   }
 }

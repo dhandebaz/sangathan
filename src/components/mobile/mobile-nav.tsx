@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import {
   LayoutDashboard, Calendar, Users,
-  HandCoins, Vote, Wrench, Scale, Grid, Activity
+  HandCoins, Vote, Wrench, Scale, Grid, Activity, MessageSquare
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useEffect, useRef, useState } from 'react'
@@ -76,26 +76,26 @@ export function MobileNav({ lang, orgType = 'ngo' }: MobileNavProps) {
     {
       href: `/${lang}/dashboard`,
       icon: LayoutDashboard,
-      labelEn: 'Home',
-      labelHi: 'होम',
+      labelEn: 'Dashboard',
+      labelHi: 'डैशबोर्ड',
     },
     {
-      href: `/${lang}/dashboard/members`,
-      icon: Users,
-      labelEn: orgType === 'rwa' ? 'Residents' : 'Members',
-      labelHi: orgType === 'rwa' ? 'निवासी' : 'सदस्य',
+      href: `/${lang}/dashboard/inbox`,
+      icon: MessageSquare,
+      labelEn: 'Inbox',
+      labelHi: 'इनबॉक्स',
     },
     {
-      href: `/${lang}/dashboard/events`,
+      href: `/${lang}/dashboard/calendar`,
       icon: Calendar,
-      labelEn: 'Events',
-      labelHi: 'सभाएं',
+      labelEn: 'Calendar',
+      labelHi: 'कैलेंडर',
     },
     {
-      href: tab4.href,
-      icon: tab4.icon,
-      labelEn: tab4.labelEn,
-      labelHi: tab4.labelHi,
+      href: `/${lang}/dashboard/people`,
+      icon: Users,
+      labelEn: orgType === 'rwa' ? 'Residents' : 'People',
+      labelHi: orgType === 'rwa' ? 'निवासी' : 'सदस्य',
     },
   ]
 

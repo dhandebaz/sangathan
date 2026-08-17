@@ -17,6 +17,33 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
         hi: 'https://sangathan.space/hi/security',
       },
     },
+    openGraph: {
+      title: isHindi ? 'सुरक्षा और बुनियादी ढांचा | संगठन' : 'Security & Infrastructure | Sangathan',
+      description: isHindi
+        ? 'हम प्रतिकूल डिजिटल वातावरण में आपके डेटा की सुरक्षा कैसे करते हैं।'
+        : 'How we protect your data in a hostile digital environment.',
+      url: `https://sangathan.space/${lang}/security`,
+      siteName: 'Sangathan',
+      type: 'website',
+      images: [
+        {
+          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'सुरक्षा, एन्क्रिप्शन व RLS वास्तुकला' : 'Security & Defensive Infrastructure')}&desc=${encodeURIComponent(isHindi ? 'प्रतिकूल डिजिटल वातावरण में आपके डेटा की संप्रभु सुरक्षा।' : 'Multi-tenant database isolation, zero-profiling guarantees, and cryptographic verification.')}&type=policy&tag=Defensive+Security&lang=${lang}`,
+          width: 1200,
+          height: 630,
+          alt: 'Sangathan Security',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@areynetaji',
+      creator: '@areynetaji',
+      title: isHindi ? 'सुरक्षा और बुनियादी ढांचा | संगठन' : 'Security & Infrastructure | Sangathan',
+      description: isHindi
+        ? 'हम प्रतिकूल डिजिटल वातावरण में आपके डेटा की सुरक्षा कैसे करते हैं।'
+        : 'How we protect your data in a hostile digital environment.',
+      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'सुरक्षा, एन्क्रिप्शन व RLS वास्तुकला' : 'Security & Defensive Infrastructure')}&desc=${encodeURIComponent(isHindi ? 'प्रतिकूल डिजिटल वातावरण में आपके डेटा की संप्रभु सुरक्षा।' : 'Multi-tenant database isolation, zero-profiling guarantees, and cryptographic verification.')}&type=policy&tag=Defensive+Security&lang=${lang}`],
+    },
   }
 }
 

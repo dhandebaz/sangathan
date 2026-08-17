@@ -680,6 +680,26 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
         competitorValueHi: 'खुले व्हाट्सएप पोल जिनमें गोपनीयता शून्य होती है',
         category: 'democracy',
         sangathanAdvantage: true
+      },
+      {
+        featureNameEn: 'Communications & Video Sync',
+        featureNameHi: 'संवाद व वीडियो कॉल एकीकरण',
+        sangathanValueEn: 'Unified Inbox with 1-click Google Meet video rooms & Telegram bots',
+        sangathanValueHi: '1-क्लिक Google Meet वीडियो कॉलिंग व टेलीग्राम बॉट युक्त एकीकृत इनबॉक्स',
+        competitorValueEn: 'Unrecorded personal calls and disorganized group mentions',
+        competitorValueHi: 'बिना रिकॉर्ड की निजी कॉल्स और अनियंत्रित ग्रुप मैसेज',
+        category: 'ground_tools',
+        sangathanAdvantage: true
+      },
+      {
+        featureNameEn: 'Operational Schedule & Field Pairing',
+        featureNameHi: 'केंद्रीकृत कैलेंडर व फील्ड रोस्टर',
+        sangathanValueEn: 'Centralized Calendar with live Google & Apple iCal sync + Surveyor Pairing',
+        sangathanValueHi: 'Google व Apple iCal सिंक और फील्ड सर्वेक्षक जोड़ियों वाला केंद्रीकृत कैलेंडर',
+        competitorValueEn: 'Missed meeting reminders buried in chat scrollback',
+        competitorValueHi: 'चैट में खो जाने वाले मीटिंग रिमाइंडर्स',
+        category: 'ground_tools',
+        sangathanAdvantage: true
       }
     ],
     pillars: [

@@ -19,6 +19,33 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
         hi: 'https://sangathan.space/hi/docs',
       },
     },
+    openGraph: {
+      title: isHindi ? 'दस्तावेज़ एवं हैंडबुक | संगठन' : 'Documentation & Handbook | Sangathan',
+      description: isHindi
+        ? 'संगठन को स्थापित करने, चलाने और सुरक्षित रूप से बढ़ाने के लिए पूर्ण मार्गदर्शिका।'
+        : 'Complete handbook for setting up, running, and safely scaling organisations on Sangathan.',
+      url: `https://sangathan.space/${lang}/docs`,
+      siteName: 'Sangathan',
+      type: 'website',
+      images: [
+        {
+          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'संगठन दस्तावेज़ एवं संचालक हैंडबुक' : 'Documentation & Operator Handbook')}&desc=${encodeURIComponent(isHindi ? 'नागरिक समूहों, एनजीओ और यूनियनों के संचालन के लिए पूर्ण तकनीकी मार्गदर्शिका।' : 'Complete guide to setting up, running, and safely scaling civic organisations on Sangathan.')}&type=doc&tag=Handbook&lang=${lang}`,
+          width: 1200,
+          height: 630,
+          alt: 'Sangathan Documentation',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@areynetaji',
+      creator: '@areynetaji',
+      title: isHindi ? 'दस्तावेज़ | संगठन' : 'Documentation | Sangathan',
+      description: isHindi
+        ? 'संगठन को स्थापित करने, चलाने और सुरक्षित रूप से बढ़ाने के लिए पूर्ण मार्गदर्शिका।'
+        : 'Complete handbook for setting up, running, and safely scaling organisations on Sangathan.',
+      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'संगठन दस्तावेज़ एवं संचालक हैंडबुक' : 'Documentation & Operator Handbook')}&desc=${encodeURIComponent(isHindi ? 'नागरिक समूहों, एनजीओ और यूनियनों के संचालन के लिए पूर्ण तकनीकी मार्गदर्शिका।' : 'Complete guide to setting up, running, and safely scaling civic organisations on Sangathan.')}&type=doc&tag=Handbook&lang=${lang}`],
+    },
   }
 }
 

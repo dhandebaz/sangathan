@@ -11,21 +11,13 @@ import {
   Printer,
   Copy,
   Search,
-  CheckCircle2,
-  AlertTriangle,
-  Flame,
-  ArrowUpRight,
-  Download,
-  Calendar,
   Eye,
-  SlidersHorizontal,
-  ThumbsUp,
-  ThumbsDown,
-  Sparkles,
+  Flame,
   ExternalLink,
   MessageCircle,
   Globe,
-  Link2
+  Edit3,
+  Sparkles
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -148,6 +140,19 @@ export function SurveyAnalyticsDashboard({
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center gap-2">
             <FormStatusToggle formId={form.id} isActive={form.is_active} />
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              asChild
+              className="text-xs font-bold border-slate-200 text-slate-700 hover:bg-slate-50"
+            >
+              <Link href={`/${lang}/dashboard/forms/${form.id}/edit`}>
+                <Edit3 className="w-3.5 h-3.5 mr-1.5 text-slate-600" />
+                {isHindi ? 'फॉर्म संपादित करें' : 'Edit Form'}
+              </Link>
+            </Button>
 
             <Button
               type="button"

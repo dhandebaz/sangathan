@@ -27,19 +27,32 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       },
     },
     openGraph: {
-      title: isHindi ? 'संगठन - नागरिक डिजिटल बुनियादी ढांचा' : 'Sangathan - Movement Infrastructure',
-      description: isHindi ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं और यूनियनों के लिए शक्तिशाली मंच।' : 'Purpose-built operating system for Indian civic collectives, NGOs, and unions.',
+      title: isHindi ? 'संगठन — नागरिक आंदोलनों व समूहों का डिजिटल ऑपरेटिंग सिस्टम' : 'Sangathan — Digital Operating System for Civic Movements & Collectives',
+      description: isHindi
+        ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं, एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए जमीनी डिजिटल हथियार।'
+        : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
       url: `https://sangathan.space/${lang}`,
       siteName: 'Sangathan',
+      locale: isHindi ? 'hi_IN' : 'en_US',
       images: [
         {
-          url: '/images/activist-leader.png',
-          width: 800,
-          height: 600,
-          alt: 'Sangathan Movement Leader',
+          url: `https://sangathan.space/api/og?lang=${lang}&type=collective&tag=Civic+Operating+System`,
+          width: 1200,
+          height: 630,
+          alt: isHindi ? 'संगठन - नागरिक आंदोलनों का डिजिटल बुनियादी ढांचा' : 'Sangathan - Civic Movement Operating System',
         },
       ],
       type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@areynetaji',
+      creator: '@areynetaji',
+      title: isHindi ? 'संगठन — नागरिक आंदोलनों व समूहों का डिजिटल ऑपरेटिंग सिस्टम' : 'Sangathan — Digital Operating System for Civic Movements & Collectives',
+      description: isHindi
+        ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं, एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए जमीनी डिजिटल हथियार।'
+        : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
+      images: [`https://sangathan.space/api/og?lang=${lang}&type=collective&tag=Civic+Operating+System`],
     },
   }
 }
@@ -479,14 +492,14 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
-                { icon: Users, title: 'Granular Role RBAC', desc: 'Can Comment, Can Edit, Can Manage, and Second Admin roles.' },
+                { icon: MessageSquare, title: 'Unified Inbox & Google Meet', desc: 'Direct 2-way member chats, Telegram bots, and 1-click Google Meet video rooms.' },
+                { icon: CheckSquare, title: 'Centralized Calendar & iCal', desc: 'Synchronized assemblies, meeting schedules, and Apple/Google Calendar live sync.' },
+                { icon: Users, title: 'Verified Badges & People Hub', desc: 'Member rolls, printable digital ID credentials, and committee management.' },
                 { icon: Vote, title: 'Secret Anonymous Ballots', desc: 'Cryptographic voting with instant tamper-evident tallies.' },
                 { icon: Banknote, title: 'Transparent Ledgers', desc: 'Auto-reconciled UPI donations and public expenditure books.' },
                 { icon: ShieldCheck, title: 'Immutable Audit Logs', desc: 'WORM log storage ensuring absolute administrative accountability.' },
                 { icon: Smartphone, title: 'Offline-First PWA', desc: 'Zero-connectivity door-to-door data capture with auto-sync.' },
-                { icon: MessageSquare, title: 'WhatsApp Media Dispatch', desc: '1-click formatted statements for journalists and colony groups.' },
                 { icon: Lock, title: 'Tenant Data Isolation', desc: 'PostgreSQL Row Level Security (RLS) across all tables.' },
-                { icon: Globe, title: 'Public Movement Portal', desc: 'Discoverable campaign hubs and verified member badges.' },
               ].map((item, idx) => (
                 <div key={idx} className="bg-white border border-slate-200 p-5 rounded-lg shadow-2xs hover:border-slate-300 transition-colors">
                   <item.icon className="text-slate-700 mb-3" size={22} strokeWidth={1.75} />
@@ -503,7 +516,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900 mb-4">
-                {isHindi ? 'भारतीय प्रशासनिक व सामाजिक संरचनाओं के अनुरूप' : 'Engineered for Indian Wards, Bastis & Campuses'}
+                  {isHindi ? 'भारतीय प्रशासनिक व सामाजिक संरचनाओं के अनुरूप' : 'Engineered for Indian Wards, Bastis & Campuses'}
               </h2>
               <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-6 font-normal">
                 {isHindi 
@@ -568,37 +581,158 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
               <div className="border border-slate-200 p-4 bg-white rounded-lg">
                 <h4 className="text-slate-900 font-bold text-xs mb-1 flex items-center gap-1.5">
+                  <MessageSquare className="w-3.5 h-3.5 text-rose-600" />
+                  <span>Unified Inbox & Google Meet</span>
+                </h4>
+                <p className="text-slate-500 text-xs leading-relaxed">2-way member chats, Telegram bots, and instant Google Meet video rooms</p>
+              </div>
+              <div className="border border-slate-200 p-4 bg-white rounded-lg">
+                <h4 className="text-slate-900 font-bold text-xs mb-1 flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-rose-600" />
+                  <span>Centralized Calendar & iCal</span>
+                </h4>
+                <p className="text-slate-500 text-xs leading-relaxed">Live Apple iCal background sync and 1-click Google Calendar API integration</p>
+              </div>
+              <div className="border border-slate-200 p-4 bg-white rounded-lg">
+                <h4 className="text-slate-900 font-bold text-xs mb-1 flex items-center gap-1.5">
                   <Activity className="w-3.5 h-3.5 text-rose-600" />
                   <span>Spot Sensor Audits</span>
                 </h4>
-                <p className="text-slate-500 text-xs leading-relaxed">Geotagged PM2.5, PM10, and TDS field testing desk</p>
+                <p className="text-slate-500 text-xs leading-relaxed">Geotagged PM2.5, PM10, and TDS field testing desk with legal notices</p>
               </div>
               <div className="border border-slate-200 p-4 bg-white rounded-lg">
                 <h4 className="text-slate-900 font-bold text-xs mb-1 flex items-center gap-1.5">
                   <Printer className="w-3.5 h-3.5 text-rose-600" />
                   <span>1-Page A4 Parchas</span>
                 </h4>
-                <p className="text-slate-500 text-xs leading-relaxed">Printable monochrome flyers and physical signature sheets</p>
-              </div>
-              <div className="border border-slate-200 p-4 bg-white rounded-lg">
-                <h4 className="text-slate-900 font-bold text-xs mb-1 flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-rose-600" />
-                  <span>15-Day RTI Tracker</span>
-                </h4>
-                <p className="text-slate-500 text-xs leading-relaxed">Track stamped ward receiving with Section 6(1) RTI escalation</p>
-              </div>
-              <div className="border border-slate-200 p-4 bg-white rounded-lg">
-                <h4 className="text-slate-900 font-bold text-xs mb-1 flex items-center gap-1.5">
-                  <Newspaper className="w-3.5 h-3.5 text-rose-600" />
-                  <span>Press Dispatch Studio</span>
-                </h4>
-                <p className="text-slate-500 text-xs leading-relaxed">Bilingual media releases with 1-click WhatsApp press copy</p>
+                <p className="text-slate-500 text-xs leading-relaxed">Printable monochrome flyers and physical signature sheets for colonies</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* 7. FINAL CALL TO ACTION - Light, Crisp, Geometric Technical Design */}
+        {/* 7. TRANSPARENT DATA PRACTICES & VERIFIED GOOGLE INTEGRATIONS */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+            <div>
+              <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900 mb-2">
+                {isHindi ? 'डेटा संप्रभुता, सुरक्षा और पारदर्शी एकीकरण' : 'Transparent Data Architecture & Verified Google Sync'}
+              </h2>
+              <p className="text-slate-600 text-xs sm:text-sm max-w-2xl leading-relaxed">
+                {isHindi
+                  ? 'संगठन आपके आंदोलन के डेटा की संप्रभुता और गोपनीयता का सम्मान करता है। हम केवल वही डेटा मांगते हैं जो सदस्य आमंत्रण और प्रशासनिक समन्वय के लिए आवश्यक हो।'
+                  : 'Sangathan is built on sovereign data isolation and strict privacy commitments. Optional Google integrations exist solely to empower grassroots organizers to onboard members, migrate past survey data, and coordinate community assemblies.'}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2 text-xs">
+              <Link 
+                href={`/${lang}/privacy`} 
+                className="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-3 py-1.5 rounded transition-colors inline-flex items-center gap-1"
+              >
+                <ShieldCheck size={14} className="text-indigo-600" />
+                <span>{isHindi ? 'गोपनीयता नीति' : 'Privacy Policy'}</span>
+              </Link>
+              <Link 
+                href={`/${lang}/data-practices`} 
+                className="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-3 py-1.5 rounded transition-colors"
+              >
+                {isHindi ? 'डेटा प्रथाएं' : 'Data Practices'}
+              </Link>
+              <Link 
+                href={`/${lang}/terms`} 
+                className="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-3 py-1.5 rounded transition-colors"
+              >
+                {isHindi ? 'सेवा शर्तें' : 'Terms of Service'}
+              </Link>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            {/* Card 1: Google Contacts */}
+            <div className="bg-white border border-slate-200 rounded-lg p-5 hover:border-slate-300 transition-colors shadow-2xs flex flex-col justify-between">
+              <div className="space-y-2.5">
+                <div className="w-9 h-9 rounded bg-rose-50 text-rose-700 flex items-center justify-center font-bold">
+                  <Users className="w-4 h-4" />
+                </div>
+                <h3 className="text-sm font-bold text-slate-900">
+                  {isHindi ? 'गूगल संपर्क व कैडर आमंत्रण' : 'Google Contacts & Member Intake'}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  {isHindi
+                    ? '1-क्लिक में अपने Google Contacts से नाम, ईमेल और फोन नंबर चुनकर सीधे सदस्य डायरेक्टरी में जोड़ें या आमंत्रण भेजें।'
+                    : '1-click selectively import names, emails, and phone numbers from your address book to invite organizers and populate your collective roster with zero manual typing.'}
+                </p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-100 text-[11px] font-mono text-rose-700 font-bold">
+                contacts.readonly
+              </div>
+            </div>
+
+            {/* Card 2: Google Sheets & Forms */}
+            <div className="bg-white border border-slate-200 rounded-lg p-5 hover:border-slate-300 transition-colors shadow-2xs flex flex-col justify-between">
+              <div className="space-y-2.5">
+                <div className="w-9 h-9 rounded bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+                  <FileText className="w-4 h-4" />
+                </div>
+                <h3 className="text-sm font-bold text-slate-900">
+                  {isHindi ? 'गूगल शीट्स व फॉर्म्स माइग्रेटर' : 'Sheets & Forms Ingestion'}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  {isHindi
+                    ? 'अपनी मौजूदा सदस्य शीट्स या पुराने गूगल फॉर्म सर्वे रिस्पॉन्स को सीधे संगठन फॉर्म स्टूडियो में आयात करें।'
+                    : 'Connect Google Sheets or Forms to migrate legacy survey responses, questions, and volunteer intake data with automated column detection and deduplication.'}
+                </p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-100 text-[11px] font-mono text-emerald-700 font-bold">
+                spreadsheets & forms.readonly
+              </div>
+            </div>
+
+            {/* Card 3: Google Calendar */}
+            <div className="bg-white border border-slate-200 rounded-lg p-5 hover:border-slate-300 transition-colors shadow-2xs flex flex-col justify-between">
+              <div className="space-y-2.5">
+                <div className="w-9 h-9 rounded bg-amber-50 text-amber-700 flex items-center justify-center font-bold">
+                  <Clock className="w-4 h-4" />
+                </div>
+                <h3 className="text-sm font-bold text-slate-900">
+                  {isHindi ? 'कैलेंडर व सभा समन्वय' : 'Calendar & Assembly Sync'}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  {isHindi
+                    ? 'संगठन की आम सभाओं, वार्ड बैठकों और फील्ड सर्वेयर ड्यूटी को अपने व्यक्तिगत या संगठन कैलेंडर के साथ सिंक करें।'
+                    : 'Synchronize community assemblies, ward grievance hearings, and field survey pairings directly with Google Calendar and Apple iCal live feeds.'}
+                </p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-100 text-[11px] font-mono text-amber-700 font-bold">
+                calendar.events
+              </div>
+            </div>
+
+            {/* Card 4: Limited Use & Sovereign Isolation */}
+            <div className="bg-white border border-slate-200 rounded-lg p-5 hover:border-slate-300 transition-colors shadow-2xs flex flex-col justify-between">
+              <div className="space-y-2.5">
+                <div className="w-9 h-9 rounded bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <h3 className="text-sm font-bold text-slate-900">
+                  {isHindi ? 'गूगल लिमिटेड यूज़ व RLS सुरक्षा' : 'Limited Use & PostgreSQL RLS'}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  {isHindi
+                    ? 'डेटा कभी बेचा या विज्ञापनों के लिए उपयोग नहीं किया जाता। रो-लेवल सिक्योरिटी (RLS) द्वारा पूर्ण अलगाव और 1-क्लिक अनुमति निरस्तीकरण।'
+                    : 'Strict adherence to Google API Services User Data Policy. No data sales, no advertising/profiling, encrypted PostgreSQL RLS isolation, and 1-click user revocation.'}
+                </p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-100 text-[11px] font-mono text-indigo-700 font-bold">
+                Limited Use Compliant
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* 8. FINAL CALL TO ACTION - Light, Crisp, Geometric Technical Design */}
         <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
           <div className="border border-slate-300 p-8 sm:p-14 bg-slate-50 rounded-xl space-y-6 shadow-xs">
             <div className="w-12 h-12 bg-white border border-slate-200 text-slate-800 rounded-lg mx-auto flex items-center justify-center shadow-2xs">

@@ -19,6 +19,33 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
         'hi': 'https://sangathan.space/hi/about',
       },
     },
+    openGraph: {
+      title: isHindi ? 'हमारे बारे में | संगठन' : 'About Us | Sangathan',
+      description: isHindi 
+        ? 'बहुजन क्वीर फाउंडेशन (सेक्शन 8 गैर-लाभकारी) द्वारा निर्मित नागरिक डिजिटल बुनियादी ढांचा।'
+        : 'Civic digital infrastructure initiative built by Bahujan Queer Foundation (Section 8 Non-Profit).',
+      url: `https://sangathan.space/${lang}/about`,
+      siteName: 'Sangathan',
+      type: 'website',
+      images: [
+        {
+          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'संगठन के बारे में' : 'About Sangathan')}&desc=${encodeURIComponent(isHindi ? 'बहुजन क्वीर फाउंडेशन (सेक्शन 8 गैर-लाभकारी) द्वारा निर्मित नागरिक डिजिटल बुनियादी ढांचा।' : 'Civic digital infrastructure initiative built by Bahujan Queer Foundation (Section 8 Non-Profit).')}&type=ngo&tag=Section+8+Non-Profit&lang=${lang}`,
+          width: 1200,
+          height: 630,
+          alt: isHindi ? 'संगठन के बारे में' : 'About Sangathan',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@areynetaji',
+      creator: '@areynetaji',
+      title: isHindi ? 'हमारे बारे में | संगठन' : 'About Us | Sangathan',
+      description: isHindi 
+        ? 'बहुजन क्वीर फाउंडेशन (सेक्शन 8 गैर-लाभकारी) द्वारा निर्मित नागरिक डिजिटल बुनियादी ढांचा।'
+        : 'Civic digital infrastructure initiative built by Bahujan Queer Foundation (Section 8 Non-Profit).',
+      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'संगठन के बारे में' : 'About Sangathan')}&desc=${encodeURIComponent(isHindi ? 'बहुजन क्वीर फाउंडेशन (सेक्शन 8 गैर-लाभकारी) द्वारा निर्मित नागरिक डिजिटल बुनियादी ढांचा।' : 'Civic digital infrastructure initiative built by Bahujan Queer Foundation (Section 8 Non-Profit).')}&type=ngo&tag=Section+8+Non-Profit&lang=${lang}`],
+    },
   }
 }
 

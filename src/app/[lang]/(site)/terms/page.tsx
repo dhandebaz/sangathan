@@ -17,6 +17,29 @@ export async function generateMetadata({
         hi: 'https://sangathan.space/hi/terms',
       },
     },
+    openGraph: {
+      title: isHindi ? 'सेवा की शर्तें | संगठन' : 'Terms of Service | Sangathan',
+      description: isHindi ? 'संगठन नागरिक डिजिटल बुनियादी ढांचे के उपयोग की शर्तें।' : 'Terms of service for using Sangathan civic digital infrastructure.',
+      url: `https://sangathan.space/${lang}/terms`,
+      siteName: 'Sangathan',
+      type: 'website',
+      images: [
+        {
+          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'सेवा की शर्तें' : 'Terms of Service & Platform Charter')}&desc=${encodeURIComponent(isHindi ? 'संगठन नागरिक डिजिटल बुनियादी ढांचे के उपयोग की शर्तें।' : 'Terms of service for utilizing Sangathan civic digital public infrastructure.')}&type=policy&tag=Terms+of+Service&lang=${lang}`,
+          width: 1200,
+          height: 630,
+          alt: isHindi ? 'संगठन सेवा की शर्तें' : 'Sangathan Terms of Service',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@areynetaji',
+      creator: '@areynetaji',
+      title: isHindi ? 'सेवा की शर्तें | संगठन' : 'Terms of Service | Sangathan',
+      description: isHindi ? 'संगठन नागरिक डिजिटल बुनियादी ढांचे के उपयोग की शर्तें।' : 'Terms of service for using Sangathan civic digital infrastructure.',
+      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'सेवा की शर्तें' : 'Terms of Service & Platform Charter')}&desc=${encodeURIComponent(isHindi ? 'संगठन नागरिक डिजिटल बुनियादी ढांचे के उपयोग की शर्तें।' : 'Terms of service for utilizing Sangathan civic digital public infrastructure.')}&type=policy&tag=Terms+of+Service&lang=${lang}`],
+    },
   }
 }
 

@@ -57,9 +57,9 @@ export async function generateMetadata({ params }: ComparisonPageProps): Promise
       type: 'website',
       images: [
         {
-          url: '/images/activist-leader.png',
-          width: 800,
-          height: 600,
+          url: `https://sangathan.space/api/og?title=${encodeURIComponent(`Sangathan vs ${comp.competitorName}`)}&desc=${encodeURIComponent(description)}&type=compare&tag=Platform+Comparison&lang=${lang}`,
+          width: 1200,
+          height: 630,
           alt: `Sangathan vs ${comp.competitorName}`,
         },
       ],
@@ -68,7 +68,8 @@ export async function generateMetadata({ params }: ComparisonPageProps): Promise
       card: 'summary_large_image',
       title,
       description,
-      images: ['/images/activist-leader.png'],
+      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(`Sangathan vs ${comp.competitorName}`)}&desc=${encodeURIComponent(description)}&type=compare&tag=Platform+Comparison&lang=${lang}`],
+      creator: '@areynetaji',
     },
   }
 }

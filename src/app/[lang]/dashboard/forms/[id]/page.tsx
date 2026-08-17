@@ -1,11 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { notFound, redirect } from 'next/navigation'
-import { ArrowLeft, Trash2 } from 'lucide-react'
+import { ArrowLeft, Trash2, Edit3 } from 'lucide-react'
 import Link from 'next/link'
 import { AccessDenied } from '@/components/dashboard/access-denied'
 import { SurveyAnalyticsDashboard } from '@/components/forms/survey-analytics-dashboard'
 import { deleteForm } from '@/actions/forms/actions'
 import { FormField } from '@/types/forms'
+import { Button } from '@/components/ui/button'
 
 interface PageProps {
   params: Promise<{ lang: string; id: string }>
@@ -28,7 +30,7 @@ export default async function FormDetailsPage({ params }: PageProps) {
 
   const profile = profileData as { organisation_id: string | null; role: string } | null
 
-  if (!profile || !profile.organisation_id || !['admin', 'editor', 'executive'].includes(profile.role)) {
+  if (!profile || !profile.organisation_id) {
     return <AccessDenied lang={lang} />
   }
 
@@ -53,7 +55,7 @@ export default async function FormDetailsPage({ params }: PageProps) {
       .order('created_at', { ascending: false }),
   ])
 
-  const form = formRes.data as {
+  let form = formRes.data as {
     id: string
     title: string
     description?: string
@@ -64,17 +66,34 @@ export default async function FormDetailsPage({ params }: PageProps) {
     fields?: FormField[]
   } | null
 
-
-  if (formRes.error || !form) notFound()
-
-  const submissions = (subRes.data || []) as Array<{
+  let submissions = (subRes.data || []) as Array<{
     id: string
     created_at: string
     data: Record<string, any>
     user_id?: string | null
   }>
 
-  const orgName = orgRes.data?.name || 'Sangathan'
+  let orgName = orgRes.data?.name || 'Sangathan'
+
+  if (formRes.error || !form) {
+    try {
+      const adminClient = createServiceClient()
+      const [fallbackForm, fallbackOrg, fallbackSubs] = await Promise.all([
+        adminClient.from('forms').select('*').eq('id', id).eq('organisation_id', orgId).maybeSingle(),
+        adminClient.from('organisations').select('name').eq('id', orgId).maybeSingle(),
+        adminClient.from('form_submissions').select('*').eq('form_id', id).order('created_at', { ascending: false }),
+      ])
+      if (fallbackForm.data) {
+        form = fallbackForm.data as typeof form
+        if (fallbackOrg.data?.name) orgName = fallbackOrg.data.name
+        if (fallbackSubs.data) submissions = fallbackSubs.data as typeof submissions
+      }
+    } catch {
+      form = null
+    }
+  }
+
+  if (!form) notFound()
 
   return (
     <div className="space-y-6">
@@ -87,21 +106,36 @@ export default async function FormDetailsPage({ params }: PageProps) {
           <span>Back to All Forms & Surveys</span>
         </Link>
 
-        <form
-          action={async () => {
-            'use server'
-            await deleteForm({ formId: id })
-          }}
-        >
-          <button
-            type="submit"
-            className="text-xs font-bold text-red-600 hover:text-red-800 hover:bg-red-50 p-2 rounded-lg transition-colors flex items-center gap-1"
-            title="Delete Form"
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            asChild
+            className="text-xs font-bold border-slate-200 text-slate-700 hover:bg-slate-50"
           >
-            <Trash2 size={14} />
-            <span>Delete Survey</span>
-          </button>
-        </form>
+            <Link href={`/${lang}/dashboard/forms/${id}/edit`}>
+              <Edit3 size={13} className="mr-1.5 text-slate-600" />
+              <span>Edit Form & Questions</span>
+            </Link>
+          </Button>
+
+          <form
+            action={async () => {
+              'use server'
+              await deleteForm({ formId: id })
+              redirect(`/${lang}/dashboard/forms`)
+            }}
+          >
+            <button
+              type="submit"
+              className="text-xs font-bold text-red-600 hover:text-red-800 hover:bg-red-50 px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1 border border-red-200"
+              title="Delete Form"
+            >
+              <Trash2 size={13} />
+              <span>Delete Survey</span>
+            </button>
+          </form>
+        </div>
       </div>
 
       <SurveyAnalyticsDashboard
@@ -113,3 +147,4 @@ export default async function FormDetailsPage({ params }: PageProps) {
     </div>
   )
 }
+

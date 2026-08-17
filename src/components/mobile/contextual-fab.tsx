@@ -30,16 +30,18 @@ export function ContextualFAB({ lang, role, capabilities }: ContextualFABProps) 
 
   let action: Action | null = null
 
-  if (pathname.endsWith('/dashboard/members') && isAdmin && capabilities.basic_governance !== false) {
-    action = { href: `/${lang}/dashboard/members`, icon: UserPlus, label: 'Add Member' }
-  } else if (pathname.endsWith('/dashboard/events') && isAdmin && capabilities.basic_governance !== false) {
-    action = { href: `/${lang}/dashboard/events/new`, icon: Calendar, label: 'Create Event' }
+  if ((pathname.endsWith('/dashboard/members') || pathname.endsWith('/dashboard/people')) && isAdmin && capabilities.basic_governance !== false) {
+    action = { href: `/${lang}/dashboard/people`, icon: UserPlus, label: 'Add Member' }
+  } else if ((pathname.endsWith('/dashboard/events') || pathname.endsWith('/dashboard/calendar')) && isAdmin && capabilities.basic_governance !== false) {
+    action = { href: `/${lang}/dashboard/calendar`, icon: Calendar, label: 'Schedule Event' }
+  } else if ((pathname.endsWith('/dashboard/inbox') || pathname.endsWith('/dashboard/communications')) && isAdmin) {
+    action = { href: `/${lang}/dashboard/inbox`, icon: Megaphone, label: 'Broadcast Message' }
   } else if (pathname.endsWith('/dashboard/tasks') && isAdmin && capabilities.volunteer_engine !== false) {
     action = { href: `/${lang}/dashboard/tasks/new`, icon: CheckCircle, label: 'New Task' }
   } else if (pathname.endsWith('/dashboard/polls') && isAdmin && capabilities.voting_engine !== false) {
     action = { href: `/${lang}/dashboard/polls/new`, icon: Vote, label: 'New Poll' }
   } else if (pathname.endsWith('/dashboard/announcements') && isAdmin) {
-    action = { href: `/${lang}/dashboard/announcements/new`, icon: Megaphone, label: 'Post Update' }
+    action = { href: `/${lang}/dashboard/inbox`, icon: Megaphone, label: 'Post Update' }
   } else if (pathname.endsWith('/dashboard/forms') && isAdmin) {
     action = { href: `/${lang}/dashboard/forms/new`, icon: Plus, label: 'Create Form' }
   } else if (pathname.endsWith('/dashboard/campaigns') && isAdmin) {

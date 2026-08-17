@@ -20,6 +20,33 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
         'hi': 'https://sangathan.space/hi/features',
       },
     },
+    openGraph: {
+      title: isHindi ? 'नागरिक सुविधाएं व जमीनी टूल्स | संगठन' : 'Features & Movement Tools | Sangathan',
+      description: isHindi
+        ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं, एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए विशेष डिजिटल बुनियादी ढांचा।'
+        : 'Purpose-built features for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
+      url: `https://sangathan.space/${lang}/features`,
+      siteName: 'Sangathan',
+      type: 'website',
+      images: [
+        {
+          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'नागरिक सुविधाएं व जमीनी टूल्स' : 'Features & Movement Tools')}&desc=${encodeURIComponent(isHindi ? 'नागरिक समूहों, एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए विशेष डिजिटल बुनियादी ढांचा।' : 'Purpose-built features for civic collectives, NGOs, student unions, workers unions, and RWAs.')}&type=feature&tag=Movement+Tools&lang=${lang}`,
+          width: 1200,
+          height: 630,
+          alt: isHindi ? 'संगठन सुविधाएं' : 'Sangathan Features',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@areynetaji',
+      creator: '@areynetaji',
+      title: isHindi ? 'नागरिक सुविधाएं व जमीनी टूल्स | संगठन' : 'Features & Movement Tools | Sangathan',
+      description: isHindi
+        ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं, एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए विशेष डिजिटल बुनियादी ढांचा।'
+        : 'Purpose-built features for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
+      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'नागरिक सुविधाएं व जमीनी टूल्स' : 'Features & Movement Tools')}&desc=${encodeURIComponent(isHindi ? 'नागरिक समूहों, एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए विशेष डिजिटल बुनियादी ढांचा।' : 'Purpose-built features for civic collectives, NGOs, student unions, workers unions, and RWAs.')}&type=feature&tag=Movement+Tools&lang=${lang}`],
+    },
   }
 }
 
@@ -37,7 +64,13 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'जमीनी अभियान, अनौपचारिक समूह, स्वतंत्र छात्र इकाइयां और आपसी-सहायता नेटवर्क। किसी पंजीकरण संख्या की आवश्यकता नहीं।'
         : 'Grassroots campaigns, informal collectives, activist coalitions, and mutual-aid networks. No registration number required.',
       features: [
+        { icon: 'LayoutDashboard', title: 'Smart Organization-Specific Parent Feature Hubs', desc: 'Streamlined navigation architecture grouping specialized operations inside 5 core power hubs: Dashboard, Inbox, Calendar, People, and Forms & Surveys.' },
+        { icon: 'MessageSquare', title: 'Unified Inbox & Dispatch (Google Meet + Telegram Bot)', desc: 'Centralized 2-way member chats, Telegram bot webhooks, 1-click Google Meet video rooms, mass announcements, and emergency crisis SOS alerts.' },
+        { icon: 'Calendar', title: 'Centralized Calendar & Operations Sync (Google & Apple iCal)', desc: 'Centralized schedule for assemblies, meetings, and field survey pairings with RFC 5545 iCalendar (.ics) / webcal:// live feeds and Google Calendar sync.' },
+        { icon: 'Users', title: 'Unified People, Credentials & Volunteer Hub', desc: 'Single high-speed workspace combining member directories, verified digital ID card studio, working committees, volunteer desks, and service certificates.' },
         { icon: 'ShieldCheck', title: 'Bahujan Queer Foundation (BQF) Verification Pathway', desc: 'Milestone-based institutional verification from Bahujan Queer Foundation (Delhi Reg. Section 8 NGO • CIN: U88900DL2025NPL452474) for active grassroots collectives meeting verified ground audit and community criteria.' },
+        { icon: 'FileSpreadsheet', title: 'Live Google Contacts & Spreadsheet Cadre Intake', desc: '1-click selectively import organizing contacts from Google People API or connect Google Sheets to populate member directories with automated deduplication.' },
+        { icon: 'FileText', title: 'Legacy Google Forms & Survey Response Migrator', desc: 'Migrate past Google Forms and survey responses into the collective survey studio with automated field generation and historical response retention.' },
         { icon: 'Activity', title: 'Field Spot Audits & Sensor Logger', desc: 'Ground evidence and citizen science testing desk for air quality (PM2.5/PM10), water TDS, waste fires, and industrial emissions with GPS geotagging.' },
         { icon: 'Scale', title: 'Statutory Environmental Violation Notice Generator', desc: 'Instant AI drafting of formal legal representations citing the Air Act 1981, Water Act 1974, CAQM GRAP directives, and NGT compliance orders for DPCC, CPCB, and SDMs.' },
         { icon: 'Printer', title: '1-Page Printable Parcha & Physical Signature Sheets', desc: 'Generate high-contrast black-and-white flyers (पर्चे) formatted for ₹1 photostat/photocopy machines and physical pen-and-paper signature tables for colony chai stalls and parks.' },
@@ -46,7 +79,6 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'FileText', title: 'AI Legal Government Representation Generator', desc: 'Instant AI drafting of legally sound government petitions referencing statutory provisions (DMC Act, Motor Vehicles Act, RTI) tailored for SDMs, Police Commissioners, and Municipal Bodies.' },
         { icon: 'Sparkles', title: 'Grassroots Survey & Goal Studio (SEO Links & WhatsApp CTA)', desc: 'Build 1-click townhall polls, issue prioritization surveys, and volunteer pledges with memorable SEO custom slugs (/f/[slug]), 1-click WhatsApp forward templates, live Sentiment Matrix, and Participant PDF Dossiers.' },
         { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Publish open letters, campaigns, and drives with live signature counters and instant volunteer conversion hooks.' },
-
         { icon: 'Vote', title: 'Direct Democracy & Secret Voting Engine', desc: 'Secure, cryptographic anonymous secret ballots and leadership elections with instant tamper-evident tallies.' },
         { icon: 'Network', title: 'Joint Front & Coalition Engine (संयुक्त मोर्चा)', desc: 'Form alliances with other movements, co-sign joint representations, and publish shared public statements.' },
         { icon: 'ShieldAlert', title: 'Emergency SOS & Legal Rapid Response', desc: '1-tap emergency crisis trigger broadcasting GPS coordinates and detention notes to defense advocates with live response tracking.' },
@@ -73,6 +105,9 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'अपने स्वयंसेवकों को प्रबंधित करें, पारदर्शी रूप से धन जुटाएं, और अपने दान दाताओं के साथ विश्वास बनाएं।'
         : 'Manage your volunteer base, raise funds transparently, and build unshakeable trust with your donors.',
       features: [
+        { icon: 'LayoutDashboard', title: 'Smart Organization-Specific Parent Feature Hubs', desc: 'Streamlined navigation architecture grouping specialized operations inside 5 core power hubs: Dashboard, Inbox, Calendar, People, and Forms & Surveys.' },
+        { icon: 'MessageSquare', title: 'Unified Inbox & Dispatch (Google Meet + Telegram Bot)', desc: 'Centralized 2-way donor/supporter chats, Telegram bot webhooks, 1-click Google Meet video rooms, and urgent disaster response SOS alerts.' },
+        { icon: 'Calendar', title: 'Centralized Calendar & Operations Sync (Google & Apple iCal)', desc: 'Centralized schedule for board meetings, field work, and volunteer drives with RFC 5545 iCalendar (.ics) / webcal:// live feeds and Google Calendar sync.' },
         { icon: 'Award', title: 'Cryptographic Volunteer Service Certificates', desc: 'Issue official volunteer recognition certificates with service hours recognized, digital verification seals, and tamper-proof SHA-256 hashes.' },
         { icon: 'DollarSign', title: 'Grant Tranche Accounting & Milestone Spend', desc: 'Track milestone tranche disbursements, line-item expenditures against sanctioned budgets, and real-time remaining balance accounting.' },
         { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Publish open letters, campaigns, and drives with live signature counters and instant volunteer conversion hooks.' },
@@ -126,6 +161,9 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'छात्रों की आवाज़ को संगठित करें। सुरक्षित चुनाव कराएं और कैंपस की समस्याओं को ट्रैक करें।'
         : 'Organise the student voice. Conduct secure elections, track campus grievances, and manage events.',
       features: [
+        { icon: 'LayoutDashboard', title: 'Smart Organization-Specific Parent Feature Hubs', desc: 'Streamlined navigation architecture grouping specialized operations inside 5 core power hubs: Dashboard, Inbox, Calendar, People, and Forms & Surveys.' },
+        { icon: 'MessageSquare', title: 'Unified Inbox & Dispatch (Google Meet + Telegram Bot)', desc: 'Centralized 2-way student chats, Telegram bot channels, 1-click Google Meet video rooms, and protest detention SOS alerts.' },
+        { icon: 'Calendar', title: 'Centralized Calendar & Operations Sync (Google & Apple iCal)', desc: 'Centralized schedule for general body meetings, campus elections, and batch canvassing with live Apple iCal and Google Calendar sync.' },
         { icon: 'Vote', title: 'Booth-by-Booth Live Election Counting Desk', desc: 'Round-by-round and booth-by-booth vote count logger with live candidate leads and automated election return certificates.' },
         { icon: 'Home', title: 'Hostel & Mess Quality Inspection Portal', desc: 'Daily meal ratings (1-5★), room vacancy tracking, photo evidence logs, and direct escalation to Warden / Dean offices.' },
         { icon: 'Sparkles', title: 'Campus Mess & Grievance Survey Studio (SEO Links & WhatsApp CTA)', desc: '1-click mess food quality rating scales, academic grievance forms, and student sentiment analytics with custom short links (/f/[slug]), WhatsApp student group forwarders, and executive committee PDF reports.' },
@@ -175,6 +213,9 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'मज़दूरों के अधिकारों की रक्षा करें। सामूहिक सौदेबाजी (CBA) और हड़तालों का समन्वय करें।'
         : 'Protect worker rights with power. Coordinate collective bargaining, track dues, and organise actions.',
       features: [
+        { icon: 'LayoutDashboard', title: 'Smart Organization-Specific Parent Feature Hubs', desc: 'Streamlined navigation architecture grouping specialized operations inside 5 core power hubs: Dashboard, Inbox, Calendar, People, and Forms & Surveys.' },
+        { icon: 'MessageSquare', title: 'Unified Inbox & Dispatch (Google Meet + Telegram Bot)', desc: 'Centralized 2-way worker chats, Telegram shift broadcasting, 1-click Google Meet video rooms, and workplace detention SOS alerts.' },
+        { icon: 'Calendar', title: 'Centralized Calendar & Operations Sync (Google & Apple iCal)', desc: 'Centralized schedule for shift rosters, strike picket dates, and conciliation hearings with Apple iCal and Google Calendar sync.' },
         { icon: 'Scale', title: 'Trade Disputes & ALC Conciliation Tracker', desc: 'Manage workplace disputes and statutory conciliation stages under the Industrial Disputes Act (Works Committee → ALC → Labour Court → Industrial Tribunal).' },
         { icon: 'FileText', title: 'CBA Clause-by-Clause Redlining Studio', desc: 'Bipartite collective bargaining agreement builder with clause-by-clause union demands, management counter-offers, and agreed settlements.' },
         { icon: 'Sparkles', title: 'Shop-Floor Hazard & CBA Priority Studio (SEO Links & WhatsApp CTA)', desc: 'Confidential workplace safety complaint forms and collective bargaining priority surveys with memorable short links (/f/[slug]), WhatsApp worker group forwarding, and instant grievance escalation alerts.' },
@@ -218,6 +259,9 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         ? 'अपने पड़ोस को बेहतर बनाएं। रखरखाव, आगंतुक और सामुदायिक मतदान प्रबंधित करें।'
         : 'Modernise your neighbourhood. Manage maintenance, visitors, and democratic community polling.',
       features: [
+        { icon: 'LayoutDashboard', title: 'Smart Organization-Specific Parent Feature Hubs', desc: 'Streamlined navigation architecture grouping specialized operations inside 5 core power hubs: Dashboard, Inbox, Calendar, People, and Forms & Surveys.' },
+        { icon: 'MessageSquare', title: 'Unified Inbox & Dispatch (Google Meet + Telegram Bot)', desc: 'Centralized 2-way resident chats, Telegram notice broadcasts, 1-click Google Meet video rooms for AGM syncs, and emergency maintenance SOS.' },
+        { icon: 'Calendar', title: 'Centralized Calendar & Operations Sync (Google & Apple iCal)', desc: 'Centralized schedule for AGM meetings, clubhouse bookings, and lift maintenance with live Apple iCal and Google Calendar sync.' },
         { icon: 'Award', title: 'Sharable Verified Member Badges & Resident Passes', desc: 'Generate verified managing committee credentials, resident owner passes, and digital ID cards with photo avatars and QR validation.' },
         { icon: 'UserCheck', title: 'Domestic Staff Directory & Digital Gate Passes', desc: 'Manage maids, drivers, cooks, and guards with police verification tags, flat associations, and instant pass code verification.' },
         { icon: 'Wrench', title: 'Society Asset AMC & Statutory NOC Tracker', desc: 'Countdown alerts for passenger lift servicing, DG generator AMCs, fire safety NOC validity, and water tank sanitation audits.' },

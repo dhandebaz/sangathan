@@ -67,7 +67,6 @@ export async function GET(
               alignItems: 'center',
               justifyContent: 'space-between',
               width: '100%',
-              zIndex: 10,
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -111,7 +110,7 @@ export async function GET(
           </div>
 
           {/* Center Main Org Info */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', zIndex: 10 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div
                 style={{
@@ -181,7 +180,6 @@ export async function GET(
               paddingTop: '24px',
               borderTop: '2px solid #f1f5f9',
               width: '100%',
-              zIndex: 10,
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

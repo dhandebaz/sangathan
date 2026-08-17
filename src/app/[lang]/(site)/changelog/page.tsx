@@ -1,4 +1,4 @@
-import { Sparkles, ShieldCheck, Zap, Server, Code, Users, Calendar, Activity, Rocket, Globe, LucideIcon, Building2, Network, Phone, Award, MessageCircle } from 'lucide-react'
+import { Sparkles, ShieldCheck, Zap, Server, Code, Users, Calendar, Activity, Rocket, Globe, LucideIcon, Building2, Network, Phone, Award, MessageCircle, LayoutDashboard } from 'lucide-react'
 import { Metadata } from 'next'
 import { PageHeader } from '@/components/public/page-header'
 
@@ -6,10 +6,44 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'परिवर्तन लॉग | संगठन' : 'Changelog | Sangathan',
+    title: isHindi ? 'परिवर्तन लॉग (Changelog) | संगठन' : 'Changelog | Sangathan',
     description: isHindi
       ? 'हमारे अपडेट और सुधारों का एक पारदर्शी रिकॉर्ड।'
       : 'A transparent record of our updates and improvements.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/changelog`,
+      languages: {
+        en: 'https://sangathan.space/en/changelog',
+        hi: 'https://sangathan.space/hi/changelog',
+      },
+    },
+    openGraph: {
+      title: isHindi ? 'परिवर्तन लॉग | संगठन' : 'Changelog | Sangathan',
+      description: isHindi
+        ? 'हमारे अपडेट और सुधारों का एक पारदर्शी रिकॉर्ड।'
+        : 'A transparent record of our updates and improvements.',
+      url: `https://sangathan.space/${lang}/changelog`,
+      siteName: 'Sangathan',
+      type: 'website',
+      images: [
+        {
+          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'परिवर्तन लॉग एवं रिलीज' : 'Changelog & System Releases')}&desc=${encodeURIComponent(isHindi ? 'हमारे अपडेट, फीचर्स और सुरक्षा सुधारों का पारदर्शी रिकॉर्ड।' : 'A transparent record of software releases, ground features, and security updates.')}&type=feature&tag=Releases&lang=${lang}`,
+          width: 1200,
+          height: 630,
+          alt: 'Sangathan Changelog',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@areynetaji',
+      creator: '@areynetaji',
+      title: isHindi ? 'परिवर्तन लॉग | संगठन' : 'Changelog | Sangathan',
+      description: isHindi
+        ? 'हमारे अपडेट और सुधारों का एक पारदर्शी रिकॉर्ड।'
+        : 'A transparent record of our updates and improvements.',
+      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'परिवर्तन लॉग एवं रिलीज' : 'Changelog & System Releases')}&desc=${encodeURIComponent(isHindi ? 'हमारे अपडेट, फीचर्स और सुरक्षा सुधारों का पारदर्शी रिकॉर्ड।' : 'A transparent record of software releases, ground features, and security updates.')}&type=feature&tag=Releases&lang=${lang}`],
+    },
   }
 }
 
@@ -34,6 +68,154 @@ type ChangelogEntry = {
 }
 
 const changelogData: ChangelogEntry[] = [
+  {
+    version: 'v1.57.0',
+    titleEn: 'Dedicated Forms & Surveys Parent Hub, Google Forms API Migrator & Offline Field Mode PWA',
+    titleHi: 'समर्पित फॉर्म एवं सर्वेक्षण पैरेंट हब, Google Forms API माइग्रेटर एवं ऑफलाइन फील्ड मोड PWA',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Elevated Forms & Survey Studio into a top-level 5th Core Parent Hub uniting custom survey authoring, multi-source Google Forms API imports, live consensus analytics, zero-connectivity offline field PWA collection, and high-contrast 1-page A4 printable paper survey sheets.',
+    descHi: 'फॉर्म और सर्वेक्षण स्टूडियो को 5वें मुख्य पैरेंट हब के रूप में अपग्रेड किया गया, जिसमें कस्टम सर्वे निर्माण, बहु-स्रोत Google Forms API आयात, लाइव जनमत एनालिटिक्स, बिना इंटरनेट का ऑफलाइन फील्ड PWA और 1-पेज A4 प्रिंटेबल पर्चा व हस्ताक्षर शीट्स शामिल हैं।',
+    color: 'orange',
+    icon: Sparkles,
+    features: [
+      {
+        nameEn: 'Top-Level Core Workspace Hub (/dashboard/forms)',
+        nameHi: 'शीर्ष-स्तरीय मुख्य कार्यक्षेत्र हब (/dashboard/forms)',
+        textEn: 'Unified 5th primary workspace alongside Dashboard, Inbox, Calendar, and People with real-time status toggles, response counters, and WhatsApp viral share modals.',
+        textHi: 'डैशबोर्ड, इनबॉक्स, कैलेंडर और पीपल के साथ 5वां एकीकृत कार्यक्षेत्र, जिसमें रीयल-टाइम स्थिति टॉगल और व्हाट्सएप वायरल शेयर मॉडल शामिल हैं।',
+      },
+      {
+        nameEn: 'Multi-Source Google Forms API Migrator',
+        nameHi: 'बहु-स्रोत Google Forms API माइग्रेटर',
+        textEn: 'Direct 1-click import of questions, validation rules, and historical submissions from Google Forms API, Google Sheets URL, CSV upload, or paste.',
+        textHi: 'Google Forms API, Google Sheets URL, CSV फाइल या पेस्ट के माध्यम से प्रश्नों और पिछले उत्तरों का सीधा 1-क्लिक आयात।',
+      },
+      {
+        nameEn: 'Offline-First Field Organizer PWA & IndexedDB Queue',
+        nameHi: 'ऑफलाइन-फर्स्ट फील्ड ऑर्गनाइज़र PWA एवं IndexedDB कतार',
+        textEn: 'Zero-connectivity door-to-door data capture for rural areas and basements with local encryption and automatic background syncing.',
+        textHi: 'ग्रामीण और बेसमेंट क्षेत्रों के लिए बिना इंटरनेट का डोर-टू-डोर डेटा संग्रह, जो दोबारा ऑनलाइन होते ही स्वतः सिंक हो जाता है।',
+      },
+      {
+        nameEn: 'Printable 1-Page A4 Survey Sheets & Tea-Stall Parchas',
+        nameHi: 'प्रिंटेबल 1-पेज A4 सर्वे शीट एवं चाय की दुकान के पर्चे',
+        textEn: 'High-contrast monochrome layout optimized for photostat machines and pen-and-paper mass signature campaigns.',
+        textHi: 'सस्ती फोटोकॉपी मशीनों और पेन-कागज जन-हस्ताक्षर अभियानों के लिए उच्च-कंट्रास्ट ब्लैक-एंड-व्हाइट प्रिंटेबल लेआउट।',
+      },
+    ],
+  },
+  {
+    version: 'v1.56.0',
+    titleEn: 'High-Impact Dynamic Edge OpenGraph & Social Preview Engine (1200x630 Retina)',
+    titleHi: 'उच्च-प्रभाव डायनामिक एज OpenGraph एवं सोशल प्रीव्यू इंजन (1200x630 रेटिना)',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Engineered a platform-wide dynamic Edge OpenGraph image generation engine delivering crisp, 1200x630 branded link previews across WhatsApp, Twitter/X, Telegram, LinkedIn, and Facebook. Integrated bespoke visual cards for public surveys (/f/[slug]), movement archetypes, organization profiles, petitions, documentation, and policy pages with high-contrast typography, Devnagari emblem insignia, and ground verification tags.',
+    descHi: 'प्लेटफॉर्म-व्यापी डायनामिक एज OpenGraph इमेज जेनरेशन इंजन का निर्माण, जो WhatsApp, Twitter/X, Telegram, LinkedIn और Facebook पर 1200x630 के स्पष्ट ब्रांडेड लिंक प्रीव्यू प्रदर्शित करता है। सार्वजनिक सर्वेक्षणों (/f/[slug]), संगठन प्रोफाइल्स, याचिकाओं, दस्तावेज़ों और नीतियों के लिए देवनागरी प्रतीक और ग्राउंड सत्यापन बैज के साथ विशेष विज़ुअल कार्ड्स एकीकृत किए गए।',
+    color: 'indigo',
+    icon: Globe,
+    features: [
+      {
+        nameEn: 'Global Dynamic Edge OpenGraph Generator (/api/og)',
+        nameHi: 'ग्लोबल डायनामिक एज OpenGraph जनरेटर (/api/og)',
+        textEn: 'Edge-rendered 1200x630 social preview engine dynamically composing high-contrast typography, archetype color themes, and ground proof badges on the fly.',
+        textHi: 'एज-रेंडर्ड 1200x630 सोशल प्रीव्यू इंजन जो उच्च-कंट्रास्ट टाइपोग्राफी, संगठन रंग थीम और ग्राउंड प्रूफ बैज को लाइव कंपोज़ करता है।',
+      },
+      {
+        nameEn: 'Public Civic Survey & Feedback Cards (/api/og/form/[formId])',
+        nameHi: 'सार्वजनिक नागरिक सर्वेक्षण व फीडबैक कार्ड्स (/api/og/form/[formId])',
+        textEn: 'Dedicated link preview generator for shared surveys and townhalls with live question counts, organization name, and 1-click WhatsApp participation callout.',
+        textHi: 'शेयर किए गए सर्वेक्षणों और टाउनहॉल के लिए समर्पित लिंक प्रीव्यू जनरेटर, जिसमें प्रश्न संख्या, संगठन का नाम और 1-क्लिक भागीदारी कॉलआउट शामिल है।',
+      },
+      {
+        nameEn: 'Native App Router Metadata Integration',
+        nameHi: 'नेक्स्ट.जेएस ऐप राउटर मेटाडेटा एकीकरण',
+        textEn: 'Automated root-level opengraph-image.tsx and twitter-image.tsx handlers ensuring 100% link preview coverage across all social crawlers.',
+        textHi: 'रूट-लेवल opengraph-image.tsx और twitter-image.tsx हैंडलर्स जो सभी सोशल क्रॉलर्स पर 100% लिंक प्रीव्यू कवरेज सुनिश्चित करते हैं।',
+      },
+      {
+        nameEn: 'Movement Archetype Branding & High-Signal Tags',
+        nameHi: 'आंदोलन ब्रांडिंग एवं उच्च-सिग्नल बैज',
+        textEn: 'Tailored visual badges for Civic Collectives, NGOs, Student Unions, Workers Unions, and RWAs with instant cryptographic and legal standing highlights.',
+        textHi: 'नागरिक समूहों, एनजीओ, छात्र संघों, श्रमिक संघों और आरडब्ल्यूए के लिए वैधानिक और तकनीकी सुरक्षा विशेषताओं को प्रदर्शित करने वाले विशेष बैज।',
+      },
+    ],
+  },
+  {
+    version: 'v1.55.0',
+    titleEn: 'Google OAuth Verification Compliance, Transparent Data Disclosures & Sovereign Google Workspace Sync',
+    titleHi: 'Google OAuth सत्यापन अनुपालन, पारदर्शी डेटा प्रकटीकरण एवं संप्रभु गूगल वर्कस्पेस एकीकरण',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Aligned Sangathan with full Google OAuth Verification standards for Google Contacts, Sheets, Forms, and Calendar integrations. Introduced an accessible, transparent Data Architecture & Google Integrations section on the public homepage, updated the Privacy Policy with formal Google API Services Limited Use disclosures, and established zero-advertising, encrypted Row-Level Security (RLS) data guarantees across all movement archetypes.',
+    descHi: 'Google Contacts, Sheets, Forms और Calendar एकीकरण के लिए संपूर्ण Google OAuth सत्यापन मानकों के अनुरूप सुधार। सार्वजनिक होमपेज पर पारदर्शी डेटा आर्किटेक्चर व Google एकीकरण सेक्शन जोड़ा गया, गोपनीयता नीति में Google API Services Limited Use प्रकटीकरण अद्यतन किया गया, और सभी संगठन प्रारूपों में पूर्ण डेटा सुरक्षा और एन्क्रिप्टेड रो-लेवल सिक्योरिटी (RLS) सुनिश्चित की गई।',
+    color: 'emerald',
+    icon: ShieldCheck,
+    features: [
+      {
+        nameEn: 'Google API Services Limited Use & Policy Disclosures',
+        nameHi: 'Google API Services Limited Use एवं नीतिगत प्रकटीकरण',
+        textEn: 'Formalized strict adherence to Google API Services User Data Policy across all scopes (contacts.readonly, spreadsheets.readonly, forms.body.readonly, forms.responses.readonly, calendar.events) with explicit guarantees against data sales and commercial profiling.',
+        textHi: 'सभी अनुमतियों (contacts, spreadsheets, forms, calendar) पर Google API Services User Data Policy का कड़ाई से अनुपालन, जिसमें डेटा बिक्री और विज्ञापनों पर पूर्ण प्रतिबंध की स्पष्ट गारंटी शामिल है।',
+      },
+      {
+        nameEn: 'Public Homepage Data Transparency & Direct Policy Navigation',
+        nameHi: 'सार्वजनिक होमपेज डेटा पारदर्शिता व प्रत्यक्ष नीति नेविगेशन',
+        textEn: 'Added a dedicated, light geometric technical section on the homepage detailing exact data collection purposes, Google feature workflows, and accessible direct links to Privacy Policy, Terms of Service, and Data Practices.',
+        textHi: 'होमपेज पर डेटा संग्रह उद्देश्यों, Google सुविधाओं की कार्यप्रणाली और गोपनीयता नीति, सेवा शर्तों व डेटा प्रथाओं के सीधे लिंक्स को प्रदर्शित करने वाला पारदर्शी तकनीकी सेक्शन।',
+      },
+      {
+        nameEn: 'Live Google Contacts & Spreadsheet Intake Guard',
+        nameHi: 'लाइव Google Contacts व स्प्रेडशीट डेटा सुरक्षा गार्ड',
+        textEn: 'Empowered organizers to selectively import contacts and past survey responses on-demand with 1-click user revocation and automated phone/email deduplication.',
+        textHi: 'कार्यकर्ताओं को 1-क्लिक अनुमति निरस्तीकरण और स्वचालित डुप्लिकेट फ़िल्टरिंग के साथ संपर्कों और पुराने सर्वेक्षण उत्तरों को सुरक्षित रूप से आयात करने की सुविधा।',
+      },
+      {
+        nameEn: 'Sovereign Multi-Tenant Isolation & Zero-Leakage Architecture',
+        nameHi: 'संप्रभु मल्टी-टेनेंट अलगाव व शून्य-लीकेज वास्तुकला',
+        textEn: 'Enforced PostgreSQL Row-Level Security (RLS) and TLS 1.3/AES-256 encryption at rest and in transit across all imported records and collective databases.',
+        textHi: 'सभी आयातित रिकॉर्ड्स और सामूहिक डेटाबेस में PostgreSQL रो-लेवल सिक्योरिटी (RLS) और TLS 1.3/AES-256 एन्क्रिप्शन का कड़ा अनुपालन।',
+      },
+    ],
+  },
+  {
+    version: 'v1.54.0',
+    titleEn: 'Smart Organization Menu Hubs, Unified Inbox with Google Meet & Centralized Synchronized Calendar',
+    titleHi: 'स्मार्ट संगठन मेनू हब्स, Google Meet युक्त एकीकृत इनबॉक्स एवं केंद्रीकृत स्वतः-सिंक कैलेंडर',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Architected an intelligent, streamlined organization-specific menu hierarchy. Replaced fragmented navigation items with four unified power hubs: Core Dashboard, All-in-One Inbox (Direct 2-Way Member Chats, Telegram Bot & Channels, 1-Click Google Meet Video Calls, Announcements, Emergency SOS), Centralized Calendar with Google Calendar API and Apple iCal/CalDAV Live Feeds, and Unified People Hub integrating Member Directories, ID Card & Badges Studio, Committees, Volunteers, and Recognition Certificates.',
+    descHi: 'संगठन-विशिष्ट स्मार्ट मेनू पदानुक्रम का निर्माण। बिखरे हुए मेनू विकल्पों को चार शक्तिशाली एकीकृत हब्स में पुनर्गठित किया गया: कोर डैशबोर्ड, ऑल-इन-वन इनबॉक्स (2-तरफा सदस्य चैट, टेलीग्राम बॉट, 1-क्लिक Google Meet वीडियो कॉलिंग, घोषणाएं, आपातकालीन SOS), Google Calendar API एवं Apple iCal/CalDAV लाइव फीड्स से युक्त केंद्रीकृत कैलेंडर, और सदस्य निर्देशिका, डिजिटल आईडी कार्ड, समितियां, स्वयंसेवक व प्रमाण पत्र स्टूडियो को समाहित करने वाला एकीकृत पीपल हब।',
+    color: 'orange',
+    icon: LayoutDashboard,
+    features: [
+      {
+        nameEn: 'Smart Organization-Specific Parent Feature Hubs',
+        nameHi: 'संगठन-विशिष्ट स्मार्ट पैरेंट फीचर हब्स',
+        textEn: 'Consolidated complex menus into unified parent feature workspaces tailored specifically for NGOs, Student Unions, Workers Unions, RWAs, and Civic Collectives with zero feature loss.',
+        textHi: 'बिना किसी सुविधा को छोड़े एनजीओ, छात्र संघों, श्रमिक संघों, RWA और नागरिक आंदोलनों के लिए अनुकूलित आधुनिक पैरेंट फीचर वर्कस्पेस।',
+      },
+      {
+        nameEn: 'All-in-One Inbox with Google Meet & Telegram Bot Conduits',
+        nameHi: 'Google Meet व Telegram बॉट युक्त ऑल-इन-वन इनबॉक्स',
+        textEn: 'Unified 2-way member conversations, Telegram bot dispatch, instant Google Meet video room generator, mass broadcast transmissions, and emergency crisis SOS alerts inside a single high-speed desk.',
+        textHi: '2-तरफा सदस्य संवाद, टेलीग्राम बॉट, त्वरित Google Meet वीडियो कक्ष निर्माण, मास ब्रॉडकास्ट और आपातकालीन संकट SOS को एक ही डेस्क में एकीकृत किया गया।',
+      },
+      {
+        nameEn: 'Centralized Calendar with Google Calendar & Apple iCal Sync',
+        nameHi: 'Google Calendar व Apple iCal सिंक युक्त केंद्रीकृत कैलेंडर',
+        textEn: 'Unified calendar scheduling assemblies, internal meetings, and field survey member pairings with RFC 5545 compliant live iCalendar (.ics) / webcal:// background subscriptions and 1-click Google Calendar sync.',
+        textHi: 'सभाओं, बैठकों और फील्ड सर्वेयर जोड़ियों के लिए केंद्रीकृत कैलेंडर, जिसमें RFC 5545 iCalendar (.ics) / webcal:// लाइव सदस्यता और 1-क्लिक Google Calendar सिंक उपलब्ध है।',
+      },
+      {
+        nameEn: 'Unified People, Badges, Teams & Volunteer Hub',
+        nameHi: 'एकीकृत सदस्य, डिजिटल बैज, टीम व स्वयंसेवक हब',
+        textEn: 'A seamless management workspace combining member rosters, verified digital ID card studio, working committees, volunteer desks, and cryptographic service certificates in one place.',
+        textHi: 'सदस्य निर्देशिका, सत्यापित डिजिटल आईडी कार्ड, कार्यसमितियां, स्वयंसेवक प्रबंधन और आधिकारिक सेवा प्रमाण पत्रों का एक सहज व त्वरित हब।',
+      },
+    ],
+  },
   {
     version: 'v1.53.0',
     titleEn: 'SEO-Friendly Form & Survey Slugs with Direct WhatsApp Forwarding & CTA Engine',
@@ -62,6 +244,12 @@ const changelogData: ChangelogEntry[] = [
         nameHi: 'गतिशील ओपनग्राफ व सोशल कार्ड मेटाडेटा इंजन',
         textEn: 'Automatically generates rich link preview cards (OpenGraph & Twitter cards) when public forms are forwarded on WhatsApp, Telegram, Twitter, and social media with organization branding.',
         textHi: 'व्हाट्सएप, टेलीग्राम और सोशल मीडिया पर सार्वजनिक फॉर्म लिंक साझा करने पर संगठन के नाम और शीर्षक के साथ स्वचालित रूप से आकर्षक लिंक प्रीव्यू कार्ड प्रदर्शित होते हैं।',
+      },
+      {
+        nameEn: 'Complete Form Editor Studio & Interactive Card Suite',
+        nameHi: 'पूर्ण फॉर्म संपादन स्टूडियो व इंटरैक्टिव कार्ड प्रबंधन',
+        textEn: 'Seamlessly edit existing form questions, custom SEO slugs, and visibility settings with live preview. Form studio cards now feature 1-click analytics, direct editor, and streamlined deletion.',
+        textHi: 'लाइव पूर्वावलोकन के साथ मौजूदा फॉर्म प्रश्नों, कस्टम एसईओ लिंक और दृश्यता सेटिंग्स को आसानी से संपादित करें। फॉर्म कार्ड में अब 1-क्लिक एनालिटिक्स, प्रत्यक्ष संपादक और सुव्यवस्थित हटाने की सुविधा उपलब्ध है।',
       },
     ],
   },
@@ -95,10 +283,10 @@ const changelogData: ChangelogEntry[] = [
         textHi: 'व्यक्तिगत फोटो अपलोड, 12+ वेक्टर प्रतीक, स्कैन-योग्य क्यूआर कोड, 1-क्लिक क्लिपबोर्ड कॉपी, वेब शेयर और वेबसाइट एम्बेड कोड की सुविधा।',
       },
       {
-        nameEn: 'Supabase Member Credentials Ledger & Public Verification Portal (/verify/[slug]/[id])',
-        nameHi: 'सुपाबेस सदस्य पहचान लेजर व सार्वजनिक सत्यापन पोर्टल (/verify/[slug]/[id])',
-        textEn: 'Tamper-evident SHA-256 cryptographic verification ledger backed by Supabase with Row Level Security (RLS), instant QR verification, and institutional standing proof.',
-        textHi: 'सुपाबेस और रो लेवल सिक्योरिटी (RLS) द्वारा संचालित छेड़छाड़-मुक्त SHA-256 क्रिप्टोग्राफिक सत्यापन लेजर, त्वरित क्यूआर सत्यापन और आधिकारिक सदस्यता प्रमाण।',
+        nameEn: 'Cryptographic Member Credentials Ledger & Public Verification Portal (/verify/[slug]/[id])',
+        nameHi: 'क्रिप्टोग्राफिक सदस्य पहचान लेजर व सार्वजनिक सत्यापन पोर्टल (/verify/[slug]/[id])',
+        textEn: 'Tamper-evident SHA-256 cryptographic verification ledger with Row Level Security (RLS), instant QR verification, and institutional standing proof.',
+        textHi: 'रो लेवल सिक्योरिटी (RLS) द्वारा संचालित छेड़छाड़-मुक्त SHA-256 क्रिप्टोग्राफिक सत्यापन लेजर, त्वरित क्यूआर सत्यापन और आधिकारिक सदस्यता प्रमाण।',
       },
     ],
   },

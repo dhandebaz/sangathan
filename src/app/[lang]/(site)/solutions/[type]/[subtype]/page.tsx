@@ -64,9 +64,9 @@ export async function generateMetadata({ params }: SubtypePageProps): Promise<Me
       type: 'website',
       images: [
         {
-          url: '/images/activist-leader.png',
-          width: 800,
-          height: 600,
+          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? st.titleHi : st.titleEn)}&desc=${encodeURIComponent(description)}&type=${type}&tag=Movement+Playbook&lang=${lang}`,
+          width: 1200,
+          height: 630,
           alt: isHindi ? st.titleHi : st.titleEn,
         },
       ],
@@ -75,7 +75,8 @@ export async function generateMetadata({ params }: SubtypePageProps): Promise<Me
       card: 'summary_large_image',
       title,
       description,
-      images: ['/images/activist-leader.png'],
+      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? st.titleHi : st.titleEn)}&desc=${encodeURIComponent(description)}&type=${type}&tag=Movement+Playbook&lang=${lang}`],
+      creator: '@areynetaji',
     },
   }
 }

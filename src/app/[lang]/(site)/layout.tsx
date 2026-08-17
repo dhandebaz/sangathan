@@ -38,16 +38,30 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     openGraph: {
       type: 'website',
       locale: isHindi ? 'hi_IN' : 'en_US',
-      url: 'https://sangathan.space',
+      url: `https://sangathan.space/${lang}`,
       siteName: 'Sangathan',
-      title: isHindi ? 'संगठन - नागरिक समूहों के लिए बुनियादी ढांचा' : 'Sangathan - Infrastructure for Civic Collectives',
+      title: isHindi ? 'संगठन — नागरिक आंदोलनों व समूहों का डिजिटल ऑपरेटिंग सिस्टम' : 'Sangathan — Civic Digital Infrastructure for Movements & Collectives',
       description: isHindi
-        ? 'एनजीओ, छात्र संघों और सामुदायिक समूहों के लिए सदस्यों, निधियों और शासन का प्रबंधन करने के लिए डिजिटल बुनियादी ढांचा।'
-        : 'Digital infrastructure for NGOs, student unions, and community groups to manage members, funds, and governance.',
+        ? 'नागरिक समूहों, एनजीओ, छात्र संघों, श्रमिक संघों और आरडब्ल्यूए के लिए 1-टैप स्पॉट जांच, ₹1 पर्चे, 15-दिवसीय आरटीआई गार्ड व गुप्त मतदान।'
+        : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
+      images: [
+        {
+          url: `https://sangathan.space/api/og?lang=${lang}&type=collective`,
+          width: 1200,
+          height: 630,
+          alt: isHindi ? 'संगठन - नागरिक डिजिटल बुनियादी ढांचा' : 'Sangathan - Civic Digital Infrastructure',
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       site: '@areynetaji',
+      creator: '@areynetaji',
+      title: isHindi ? 'संगठन — नागरिक आंदोलनों व समूहों का डिजिटल ऑपरेटिंग सिस्टम' : 'Sangathan — Civic Digital Infrastructure for Movements & Collectives',
+      description: isHindi
+        ? 'नागरिक समूहों, एनजीओ, छात्र संघों, श्रमिक संघों और आरडब्ल्यूए के लिए 1-टैप स्पॉट जांच, ₹1 पर्चे, 15-दिवसीय आरटीआई गार्ड व गुप्त मतदान।'
+        : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
+      images: [`https://sangathan.space/api/og?lang=${lang}&type=collective`],
     },
     verification: {
       google: 'google-site-verification=placeholder',

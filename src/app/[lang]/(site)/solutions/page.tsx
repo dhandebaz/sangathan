@@ -20,6 +20,33 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
         hi: 'https://sangathan.space/hi/solutions',
       },
     },
+    openGraph: {
+      title: isHindi ? 'नागरिक समाधान व संगठन प्रकार | संगठन' : 'Civic Solutions & Movement Archetypes | Sangathan',
+      description: isHindi
+        ? 'नागरिक समूहों, पंजीकृत एनजीओ, छात्र संघों, श्रमिक यूनियनों और आरडब्ल्यूए के लिए उद्देश्य-निर्मित डिजिटल समाधान।'
+        : 'Purpose-built civic solutions for grassroots collectives, registered NGOs, student unions, workers unions, and RWAs.',
+      url: `https://sangathan.space/${lang}/solutions`,
+      siteName: 'Sangathan',
+      type: 'website',
+      images: [
+        {
+          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'नागरिक समाधान एवं संगठन ब्लूप्रिंट्स' : 'Civic Solutions & Movement Archetypes')}&desc=${encodeURIComponent(isHindi ? 'नागरिक समूहों, एनजीओ, छात्र संघों, श्रमिक यूनियनों और आरडब्ल्यूए के लिए डिजिटल समाधान।' : 'Purpose-built civic solutions for grassroots collectives, NGOs, student unions, workers unions, and RWAs.')}&type=collective&tag=Movement+Solutions&lang=${lang}`,
+          width: 1200,
+          height: 630,
+          alt: 'Sangathan Solutions',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@areynetaji',
+      creator: '@areynetaji',
+      title: isHindi ? 'नागरिक समाधान व संगठन प्रकार | संगठन' : 'Civic Solutions & Movement Archetypes | Sangathan',
+      description: isHindi
+        ? 'नागरिक समूहों, पंजीकृत एनजीओ, छात्र संघों, श्रमिक यूनियनों और आरडब्ल्यूए के लिए उद्देश्य-निर्मित डिजिटल समाधान।'
+        : 'Purpose-built civic solutions for grassroots collectives, registered NGOs, student unions, workers unions, and RWAs.',
+      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'नागरिक समाधान एवं संगठन ब्लूप्रिंट्स' : 'Civic Solutions & Movement Archetypes')}&desc=${encodeURIComponent(isHindi ? 'नागरिक समूहों, एनजीओ, छात्र संघों, श्रमिक यूनियनों और आरडब्ल्यूए के लिए डिजिटल समाधान।' : 'Purpose-built civic solutions for grassroots collectives, NGOs, student unions, workers unions, and RWAs.')}&type=collective&tag=Movement+Solutions&lang=${lang}`],
+    },
   }
 }
 

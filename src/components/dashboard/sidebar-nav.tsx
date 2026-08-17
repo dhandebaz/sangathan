@@ -8,10 +8,10 @@ import {
   Calendar, CheckSquare, BarChart, Vote, Globe, Scale,
   AlertCircle, Wrench, Gift, Flag, Badge,
   HeartHandshake, Network, Landmark, ScrollText,
-  GalleryVerticalEnd, Gavel, UserCog, DollarSign, FileText, UserCheck, HardHat,
+  UserCog, DollarSign, FileText, UserCheck, HardHat,
   CalendarCheck, Printer, Zap, ShieldCheck, Smartphone, Database, AlertTriangle, Sparkles, Award, Radio, MessageSquare, CreditCard,
-  FolderLock, BookOpen, Layers, Phone, BookOpenText, MapPinHouse, FileSignature,
-  Activity, Clock, Newspaper
+  FolderLock, BookOpen, Layers, Phone, BookOpenText, FileSignature,
+  Activity, Clock, Newspaper, HandCoins
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -27,6 +27,7 @@ type NavItem = {
   icon: React.ElementType
   label: string
   show: boolean
+  badge?: string
 }
 
 type NavGroup = {
@@ -40,7 +41,7 @@ function useActiveGroup(pathname: string | null, groups: NavGroup[]) {
     const active: Record<string, boolean> = {}
     for (const g of groups) {
       active[g.id] = g.items.some(
-        item => pathname === item.href || pathname?.startsWith(item.href + '/')
+        item => pathname === item.href || (item.href !== `/${item.href.split('/')[1]}/dashboard` && pathname?.startsWith(item.href))
       )
     }
     return active
@@ -52,312 +53,233 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
 
   const groups: NavGroup[] = useMemo(() => {
     const c = capabilities
-    const adminGroup: NavGroup = {
-      id: 'admin',
-      title: 'Admin & Guardrails',
+
+    // 1. Universal Core Operations Hub (Same for all Org Types)
+    const coreOperationsGroup: NavGroup = {
+      id: 'core_hubs',
+      title: 'Core Workspace',
+      items: [
+        { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Dashboard', show: true },
+        { href: `/${lang}/dashboard/inbox`, icon: MessageSquare, label: 'Inbox & Dispatch', show: true },
+        { href: `/${lang}/dashboard/calendar`, icon: Calendar, label: 'Calendar & Sync', show: true },
+        { href: `/${lang}/dashboard/people`, icon: Users, label: orgType === 'rwa' ? 'Residents & People' : 'People & Members', show: true },
+        { href: `/${lang}/dashboard/forms`, icon: Sparkles, label: 'Forms & Surveys', show: true },
+      ].filter(i => i.show)
+    }
+
+    // 2. Admin & Guardrails Vault (Clean & Consolidated)
+    const adminVaultGroup: NavGroup = {
+      id: 'admin_vault',
+      title: 'Admin & Vault',
       items: [
         { href: `/${lang}/dashboard/documents`, icon: FolderLock, label: 'Document Vault', show: true },
         { href: `/${lang}/dashboard/registers`, icon: BookOpen, label: 'Statutory Registers', show: true },
-        { href: `/${lang}/dashboard/reference-data`, icon: Layers, label: 'Master Reference Data', show: true },
-        { href: `/${lang}/dashboard/billing`, icon: CreditCard, label: 'Billing & Plans', show: isAdmin },
+        { href: `/${lang}/dashboard/transparency`, icon: Landmark, label: 'Transparency Ledger', show: true },
         { href: `/${lang}/dashboard/automations`, icon: Zap, label: 'Automations', show: isAdmin },
         { href: `/${lang}/dashboard/audit`, icon: ShieldCheck, label: 'Audit & Guardrails', show: isAdmin },
-        { href: `/${lang}/dashboard/transparency`, icon: Landmark, label: 'Transparency Ledger', show: true },
         { href: `/${lang}/dashboard/analytics`, icon: BarChart, label: 'Analytics', show: !!c.advanced_analytics && isAdmin },
+        { href: `/${lang}/dashboard/billing`, icon: CreditCard, label: 'Billing & Plans', show: isAdmin },
         { href: `/${lang}/dashboard/roles`, icon: UserCog, label: 'Custom Roles', show: isAdmin },
         { href: `/${lang}/dashboard/settings`, icon: Settings, label: 'Settings', show: isAdmin },
       ].filter(i => i.show)
     }
 
-    const fieldToolsGroup: NavGroup = {
-      id: 'field_ops',
-      title: 'Field & Grassroots',
-      items: [
-        { href: `/${lang}/dashboard/forms`, icon: Sparkles, label: 'Forms & Survey Studio', show: true },
-        { href: `/${lang}/dashboard/communications`, icon: MessageSquare, label: 'Unified Communications', show: true },
-        { href: `/${lang}/dashboard/channels`, icon: Radio, label: 'Telegram Bot & Channels', show: true },
-        { href: `/${lang}/dashboard/field-mode`, icon: Database, label: 'Offline Field Mode', show: true },
-        { href: `/${lang}/dashboard/emergency-sos`, icon: AlertTriangle, label: 'Emergency SOS', show: true },
-        { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Petitions & Campaigns', show: true },
-        { href: `/${lang}/members/badge`, icon: Award, label: 'Verified Member Badges', show: true },
-      ].filter(i => i.show)
-    }
-
+    // --- STUDENT UNION ---
     if (orgType === 'student_union') {
       return [
+        coreOperationsGroup,
         {
-          id: 'overview',
-          title: 'Overview',
+          id: 'student_governance',
+          title: 'Union Ops & Governance',
           items: [
-            { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Dashboard', show: true },
-            { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
-            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events', show: !!c.events },
-          ].filter(i => i.show)
-        },
-        {
-          id: 'student_body',
-          title: 'Student Body',
-          items: [
-            { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
-            { href: `/${lang}/dashboard/induction`, icon: UserCheck, label: 'Induction Drive', show: true },
             { href: `/${lang}/dashboard/posts`, icon: Badge, label: 'Union Posts (पद)', show: true },
-            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Committees', show: !!c.subgroups },
-            { href: `/${lang}/dashboard/id-card`, icon: Award, label: 'Student IDs & Badges', show: true },
-            { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers', show: !!c.volunteers },
-          ].filter(i => i.show)
-        },
-        {
-          id: 'governance',
-          title: 'Governance & Ops',
-          items: [
-            { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Proposals', show: true },
+            { href: `/${lang}/dashboard/induction`, icon: UserCheck, label: 'Induction Drive', show: true },
+            { href: `/${lang}/dashboard/campus-campaigning`, icon: Megaphone, label: 'Campus Campaigning', show: true },
             { href: `/${lang}/dashboard/memorandums`, icon: FileText, label: 'Gyapan & Memorandums', show: true },
             { href: `/${lang}/dashboard/letterhead`, icon: Printer, label: 'Official Letterhead', show: true },
             { href: `/${lang}/dashboard/rti-atr`, icon: FileText, label: 'RTI & ATR Assistant', show: true },
-            { href: `/${lang}/dashboard/collaboration`, icon: Network, label: 'Joint Front & Collab', show: true },
-            { href: `/${lang}/dashboard/elections`, icon: Vote, label: 'Elections', show: !!c.elections },
-            { href: `/${lang}/dashboard/election-counting`, icon: Vote, label: 'Election Counting Desk', show: !!c.elections },
-            { href: `/${lang}/dashboard/lyngdoh-compliance`, icon: Scale, label: 'Lyngdoh Audit', show: !!c.elections },
-            { href: `/${lang}/dashboard/campus-campaigning`, icon: Megaphone, label: 'Campus Campaigning', show: true },
-            { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Meetings', show: !!c.meetings },
-            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: !!c.tasks },
-            { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financials', show: true },
+            { href: `/${lang}/dashboard/elections`, icon: Vote, label: 'Union Elections', show: !!c.elections },
+            { href: `/${lang}/dashboard/lyngdoh-compliance`, icon: Scale, label: 'Lyngdoh Audit Desk', show: !!c.elections },
+            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Action Tasks', show: !!c.tasks },
+            { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Union Treasury', show: true },
           ].filter(i => i.show)
         },
-        fieldToolsGroup,
         {
-          id: 'support',
-          title: 'Student Services',
+          id: 'field_surveys',
+          title: 'Field & Student Action',
+          items: [
+            { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Petitions & Drives', show: true },
+            { href: `/${lang}/dashboard/field-mode`, icon: Database, label: 'Offline Field PWA', show: true },
+            { href: `/${lang}/dashboard/collaboration`, icon: Network, label: 'Joint Front & Alliances', show: true },
+          ].filter(i => i.show)
+        },
+        {
+          id: 'student_services',
+          title: 'Student Welfare & Legal',
           items: [
             { href: `/${lang}/dashboard/hostel-mess`, icon: Wrench, label: 'Hostel & Mess Audit', show: true },
             { href: `/${lang}/dashboard/legal-aid`, icon: Scale, label: 'Legal Aid & Anti-Ragging', show: true },
-            { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Helpdesk', show: true },
-            { href: `/${lang}/dashboard/grievances`, icon: Scale, label: 'Grievances', show: !!c.grievances },
-            { href: `/${lang}/dashboard/appeals`, icon: ScrollText, label: 'Appeals', show: isAdmin },
+            { href: `/${lang}/dashboard/grievances`, icon: Scale, label: 'Grievance Redressal', show: !!c.grievances },
+            { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Student Helpdesk', show: true },
           ].filter(i => i.show)
         },
-        adminGroup
+        adminVaultGroup
       ]
     }
 
+    // --- WORKERS UNION ---
     if (orgType === 'workers_union') {
       return [
+        coreOperationsGroup,
         {
-          id: 'overview',
-          title: 'Overview',
-          items: [
-            { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Dashboard', show: true },
-            { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
-            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events', show: !!c.events },
-          ].filter(i => i.show)
-        },
-        {
-          id: 'workforce',
-          title: 'Workforce',
-          items: [
-            { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
-            { href: `/${lang}/dashboard/id-card`, icon: Award, label: 'Member IDs & Badges', show: true },
-            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Local Branches', show: !!c.subgroups },
-            { href: `/${lang}/dashboard/networks`, icon: Globe, label: 'Federation', show: !!c.federation_mode },
-          ].filter(i => i.show)
-        },
-        {
-          id: 'union_actions',
-          title: 'Union Actions',
+          id: 'union_action_desk',
+          title: 'Union Action & Collective Rights',
           items: [
             { href: `/${lang}/dashboard/disputes`, icon: Scale, label: 'Trade Disputes & ALC', show: true },
-            { href: `/${lang}/dashboard/cba`, icon: FileText, label: 'CBA Documents', show: !!c.cba_documents },
-            { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Campaigns & Petitions', show: true },
-            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Strike Votes & Polls', show: !!c.voting_engine },
-            { href: `/${lang}/dashboard/jobs`, icon: HardHat, label: 'Worker Dispatch', show: !!c.jobs },
-            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: !!c.tasks },
-            { href: `/${lang}/dashboard/dues`, icon: Landmark, label: 'Union Dues', show: !!c.dues },
-            { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Meetings', show: !!c.meetings },
+            { href: `/${lang}/dashboard/cba`, icon: FileText, label: 'CBA Documents & Accord', show: !!c.cba_documents },
+            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Strike Authorization Votes', show: !!c.voting_engine },
+            { href: `/${lang}/dashboard/jobs`, icon: HardHat, label: 'Worker Dispatch & Shifts', show: !!c.jobs },
+            { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Labor Petitions & Drives', show: true },
+            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Shopfloor Tasks', show: !!c.tasks },
+            { href: `/${lang}/dashboard/dues`, icon: Landmark, label: 'Union Dues Ledger', show: !!c.dues },
           ].filter(i => i.show)
         },
-        fieldToolsGroup,
         {
-          id: 'legal',
-          title: 'Legal & Support',
+          id: 'field_surveys',
+          title: 'Field & Intake Tools',
           items: [
-            { href: `/${lang}/dashboard/grievances`, icon: Scale, label: 'Grievances', show: !!c.grievances },
-            { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Helpdesk', show: true },
-            { href: `/${lang}/dashboard/compliance`, icon: ScrollText, label: 'Compliance Tracker', show: !!c.compliance },
+            { href: `/${lang}/dashboard/field-mode`, icon: Database, label: 'Offline Field PWA', show: true },
+            { href: `/${lang}/dashboard/letterhead`, icon: Printer, label: 'Official Letterhead', show: true },
           ].filter(i => i.show)
         },
-        adminGroup
+        {
+          id: 'legal_support',
+          title: 'Legal Defense & Compliance',
+          items: [
+            { href: `/${lang}/dashboard/grievances`, icon: Scale, label: 'Worker Grievances', show: !!c.grievances },
+            { href: `/${lang}/dashboard/compliance`, icon: ScrollText, label: 'Labor Law Compliance', show: !!c.compliance },
+            { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Support Helpdesk', show: true },
+          ].filter(i => i.show)
+        },
+        adminVaultGroup
       ]
     }
 
+    // --- RWA (RESIDENT WELFARE ASSOCIATION) ---
     if (orgType === 'rwa') {
       return [
+        coreOperationsGroup,
         {
-          id: 'overview',
-          title: 'Overview',
-          items: [
-            { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Dashboard', show: true },
-            { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Notice Board', show: true },
-            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Community Events', show: !!c.events },
-          ].filter(i => i.show)
-        },
-        {
-          id: 'residents',
-          title: 'Community',
-          items: [
-            { href: `/${lang}/dashboard/members`, icon: Users, label: 'Residents', show: true },
-            { href: `/${lang}/dashboard/domestic-staff`, icon: UserCheck, label: 'Domestic Staff & Passes', show: true },
-            { href: `/${lang}/dashboard/id-card`, icon: Award, label: 'Resident IDs', show: true },
-            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Committees', show: !!c.subgroups },
-            { href: `/${lang}/dashboard/visitors`, icon: UserCheck, label: 'Visitor Logs', show: !!c.visitors },
-          ].filter(i => i.show)
-        },
-        {
-          id: 'estate_ops',
-          title: 'Estate Ops',
+          id: 'estate_operations',
+          title: 'Estate Operations & Billing',
           items: [
             { href: `/${lang}/dashboard/maintenance`, icon: Wrench, label: 'Maintenance Billing', show: !!c.maintenance },
             { href: `/${lang}/dashboard/assets`, icon: Wrench, label: 'Asset AMC & NOCs', show: true },
-            { href: `/${lang}/dashboard/facilities`, icon: Calendar, label: 'Facility Booking', show: true },
-            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: !!c.tasks },
-            { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financials & Bills', show: true },
-            { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Meetings', show: !!c.meetings },
+            { href: `/${lang}/dashboard/facilities`, icon: CalendarCheck, label: 'Facility Booking', show: true },
+            { href: `/${lang}/dashboard/domestic-staff`, icon: UserCheck, label: 'Staff Passes & Guards', show: true },
+            { href: `/${lang}/dashboard/visitors`, icon: UserCheck, label: 'Visitor Logs', show: !!c.visitors },
+            { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Society Financials', show: true },
           ].filter(i => i.show)
         },
         {
           id: 'colony_utilities',
-          title: 'Colony Utilities',
+          title: 'Colony Utilities & Civic Desk',
           items: [
             { href: `/${lang}/dashboard/chanda`, icon: BookOpenText, label: 'Chanda Ledger (चंदा)', show: true },
-            { href: `/${lang}/dashboard/tenant-verification`, icon: FileSignature, label: 'Tenant Verification', show: true },
+            { href: `/${lang}/dashboard/tenant-verification`, icon: FileSignature, label: 'Tenant Police Verification', show: true },
             { href: `/${lang}/dashboard/municipal-letters`, icon: Printer, label: 'Municipal Letters', show: true },
             { href: `/${lang}/dashboard/local-directory`, icon: Phone, label: 'Local Directory', show: true },
           ].filter(i => i.show)
         },
-        fieldToolsGroup,
         {
-          id: 'governance_support',
-          title: 'Governance & Support',
+          id: 'rwa_governance',
+          title: 'Governance & Complaints',
           items: [
-            { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Proposals', show: true },
-            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Polls & Elections', show: !!c.elections },
-            { href: `/${lang}/dashboard/complaints`, icon: AlertCircle, label: 'Complaints', show: !!c.complaints },
+            { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'AGM Proposals', show: true },
+            { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Resident Polls & Voting', show: !!c.elections },
+            { href: `/${lang}/dashboard/complaints`, icon: AlertCircle, label: 'Resident Complaints Desk', show: !!c.complaints },
+            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Maintenance Tasks', show: !!c.tasks },
           ].filter(i => i.show)
         },
-        adminGroup
+        adminVaultGroup
       ]
     }
 
+    // --- CIVIC COLLECTIVE & GRASSROOTS MOVEMENTS ---
     if (orgType === 'civic_collective') {
       return [
+        coreOperationsGroup,
         {
-          id: 'overview',
-          title: 'Overview',
-          items: [
-            { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Overview', show: true },
-            { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
-            { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Actions & Events', show: !!c.events },
-          ].filter(i => i.show)
-        },
-        {
-          id: 'movement_base',
-          title: 'Movement & Cadre',
-          items: [
-            { href: `/${lang}/dashboard/members`, icon: Users, label: 'Cadre & Members', show: true },
-            { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Working Groups', show: !!c.subgroups },
-            { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers & Allies', show: !!c.volunteers },
-            { href: `/${lang}/members/badge`, icon: Award, label: 'Verified Member Badges', show: true },
-            { href: `/${lang}/dashboard/collaboration`, icon: Network, label: 'Joint Front (संयुक्त मोर्चा)', show: true },
-          ].filter(i => i.show)
-        },
-        {
-          id: 'field_evidence',
-          title: 'Field & Evidence Desk',
+          id: 'field_evidence_desk',
+          title: 'Field Evidence & Citizen Science',
           items: [
             { href: `/${lang}/dashboard/field-audits`, icon: Activity, label: 'Field Audits & Sensor Desk', show: true },
-            { href: `/${lang}/dashboard/parcha`, icon: Printer, label: 'Printable Parcha & Signatures', show: true },
+            { href: `/${lang}/dashboard/parcha`, icon: Printer, label: '1-Page Printable Parcha (पर्चे)', show: true },
             { href: `/${lang}/dashboard/receiving-tracker`, icon: Clock, label: 'Stamped Receiving & RTI', show: true },
-            { href: `/${lang}/dashboard/forms`, icon: Sparkles, label: 'Forms & Surveys', show: true },
             { href: `/${lang}/dashboard/field-mode`, icon: Database, label: 'Offline Field Mode PWA', show: true },
           ].filter(i => i.show)
         },
         {
-          id: 'direct_action',
-          title: 'Direct Action & Campaigns',
+          id: 'direct_action_hub',
+          title: 'Direct Action & Mobilization',
           items: [
-            { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Petitions & Campaigns', show: true },
+            { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Public Petitions & Drives', show: true },
             { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Direct Democracy & Voting', show: !!c.voting_engine },
             { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Proposals & Demands', show: true },
-            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Field Tasks', show: !!c.tasks },
-            { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Coordination Meetings', show: !!c.meetings },
+            { href: `/${lang}/dashboard/collaboration`, icon: Network, label: 'Joint Front (संयुक्त मोर्चा)', show: true },
             { href: `/${lang}/dashboard/chanda`, icon: BookOpenText, label: 'Chanda & Mutual Aid', show: true },
+            { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Field Action Tasks', show: !!c.tasks },
           ].filter(i => i.show)
         },
         {
-          id: 'legal_defense',
-          title: 'Legal Defense & Media',
+          id: 'legal_defense_media',
+          title: 'Legal Defense & Public Desk',
           items: [
             { href: `/${lang}/dashboard/compliance/bqf-verification`, icon: ShieldCheck, label: 'BQF AI Recognition', show: true },
             { href: `/${lang}/dashboard/press-releases`, icon: Newspaper, label: 'Press Release Studio', show: true },
             { href: `/${lang}/dashboard/municipal-letters`, icon: Printer, label: 'Govt & Civic Letters', show: true },
-            { href: `/${lang}/dashboard/emergency-sos`, icon: AlertTriangle, label: 'Emergency Legal SOS', show: true },
             { href: `/${lang}/dashboard/complaints`, icon: AlertCircle, label: 'Public Grievance Desk', show: true },
             { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Allies Helpdesk', show: true },
           ].filter(i => i.show)
         },
-        fieldToolsGroup,
-        adminGroup
+        adminVaultGroup
       ]
     }
 
-    // Default / NGO
+    // --- DEFAULT / NGO / FOUNDATION ---
     return [
+      coreOperationsGroup,
       {
-        id: 'overview',
-        title: 'Overview',
+        id: 'governance_programs',
+        title: 'Governance & Programs',
         items: [
-          { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Overview', show: true },
-          { href: `/${lang}/dashboard/announcements`, icon: Megaphone, label: 'Announcements', show: true },
-          { href: `/${lang}/dashboard/events`, icon: Calendar, label: 'Events', show: !!c.events },
+          { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Proposals & Resolutions', show: true },
+          { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Board Voting & Decisions', show: !!c.voting_engine },
+          { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Program Tasks', show: !!c.tasks },
+          { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Petitions & Outreach', show: true },
+          { href: `/${lang}/dashboard/field-mode`, icon: Database, label: 'Offline Field Mode', show: true },
         ].filter(i => i.show)
       },
       {
-        id: 'people',
-        title: 'People & Members',
+        id: 'finance_grants',
+        title: 'Treasury & Grants Desk',
         items: [
-          { href: `/${lang}/dashboard/members`, icon: Users, label: 'Members', show: true },
-          { href: `/${lang}/dashboard/id-card`, icon: Award, label: 'Member Badges', show: true },
-          { href: `/${lang}/dashboard/subgroups`, icon: Network, label: 'Teams & Committees', show: !!c.subgroups },
-          { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Volunteers', show: !!c.volunteers },
-          { href: `/${lang}/dashboard/volunteers/certificates`, icon: Award, label: 'Volunteer Certificates', show: true },
-          { href: `/${lang}/dashboard/networks`, icon: Globe, label: 'Networks', show: !!c.federation_mode },
-        ].filter(i => i.show)
-      },
-      {
-        id: 'governance',
-        title: 'Governance & Ops',
-        items: [
-          { href: `/${lang}/dashboard/governance/proposals`, icon: ScrollText, label: 'Proposals', show: true },
-          { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Voting & Decisions', show: !!c.voting_engine },
-          { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Tasks', show: !!c.tasks },
-          { href: `/${lang}/dashboard/meetings`, icon: CalendarCheck, label: 'Meetings', show: !!c.meetings },
-          { href: `/${lang}/dashboard/campaigns`, icon: Flag, label: 'Petitions & Campaigns', show: true },
           { href: `/${lang}/dashboard/financials`, icon: Landmark, label: 'Financial Ledger', show: true },
-          { href: `/${lang}/dashboard/donations`, icon: Gift, label: 'Donations', show: !!c.donations },
+          { href: `/${lang}/dashboard/donations`, icon: HandCoins, label: 'Donations & 80G Receipts', show: !!c.donations },
           { href: `/${lang}/dashboard/grants`, icon: DollarSign, label: 'Grants & Matcher', show: true },
         ].filter(i => i.show)
       },
-      fieldToolsGroup,
       {
-        id: 'support_compliance',
-        title: 'Support & Compliance',
+        id: 'compliance_support',
+        title: 'Compliance & Legal Support',
         items: [
-          { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Helpdesk', show: true },
           { href: `/${lang}/dashboard/compliance`, icon: ScrollText, label: 'Compliance Tracker', show: !!c.compliance },
           { href: `/${lang}/dashboard/compliance/bqf-verification`, icon: ShieldCheck, label: 'BQF AI Verification', show: true },
-          { href: `/${lang}/dashboard/municipal-letters`, icon: Printer, label: 'Govt & Civic Letters', show: true },
+          { href: `/${lang}/dashboard/municipal-letters`, icon: Printer, label: 'Official Representations', show: true },
+          { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Beneficiary Helpdesk', show: true },
         ].filter(i => i.show)
       },
-      adminGroup
+      adminVaultGroup
     ]
   }, [lang, capabilities, isAdmin, orgType])
 
@@ -373,7 +295,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
   const autoCollapsed = useMemo(() => {
     const init: Record<string, boolean> = {}
     for (const g of visibleGroups) {
-      init[g.id] = !(g.id === 'overview' || hasActiveGroup[g.id])
+      init[g.id] = !(g.id === 'core_hubs' || hasActiveGroup[g.id])
     }
     return init
   }, [visibleGroups, hasActiveGroup])
@@ -408,28 +330,31 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
   }, [])
 
   const isActive = useCallback((href: string) => {
+    if (href === `/${lang}/dashboard`) {
+      return pathname === href
+    }
     return pathname === href || pathname?.startsWith(href + '/')
-  }, [pathname])
+  }, [pathname, lang])
 
   return (
-    <nav className="flex-1 overflow-y-auto py-6 px-3 native-scroll-y" aria-label="Dashboard navigation">
+    <nav className="flex-1 overflow-y-auto py-5 px-3 native-scroll-y" aria-label="Dashboard navigation">
       {visibleGroups.map((group) => {
         const isCollapsed = collapsed[group.id]
         return (
           <div 
             key={group.id} 
-            className="mb-5"
+            className="mb-4"
             onMouseEnter={() => handleMouseEnter(group.id)}
             onMouseLeave={() => handleMouseLeave(group.id)}
           >
             <button
               onClick={() => toggleGroup(group.id)}
-              className="flex items-center justify-between w-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-400 hover:text-slate-900 transition-colors group"
+              className="flex items-center justify-between w-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-slate-200 transition-colors group"
             >
               <span>{group.title}</span>
               <ChevronDown
                 className={cn(
-                  'h-3.5 w-3.5 transition-transform duration-200 text-slate-400 group-hover:text-slate-900',
+                  'h-3.5 w-3.5 transition-transform duration-200 text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-200',
                   isCollapsed && '-rotate-90'
                 )}
               />
@@ -445,14 +370,21 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        'flex items-center gap-3 px-3 py-2 text-xs font-semibold rounded-xl transition-all',
+                        'flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-xl transition-all',
                         active
-                          ? 'bg-indigo-50 text-indigo-900 font-bold border border-indigo-100/80 shadow-2xs'
-                          : 'text-slate-600 hover:bg-slate-100/60 hover:text-slate-900'
+                          ? 'bg-orange-50 text-orange-950 font-bold border border-orange-200/80 shadow-2xs dark:bg-orange-950/40 dark:text-orange-200 dark:border-orange-900'
+                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white'
                       )}
                     >
-                      <Icon className={cn('h-4 w-4 shrink-0', active ? 'text-indigo-600' : 'text-slate-400')} />
-                      <span className="truncate">{item.label}</span>
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <Icon className={cn('h-4 w-4 shrink-0', active ? 'text-orange-600 dark:text-orange-400' : 'text-slate-400 dark:text-slate-500')} />
+                        <span className="truncate">{item.label}</span>
+                      </div>
+                      {item.badge && (
+                        <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-orange-100 text-orange-800 dark:bg-orange-950 dark:text-orange-300">
+                          {item.badge}
+                        </span>
+                      )}
                     </Link>
                   )
                 })}

@@ -174,9 +174,9 @@ export function MemberDashboard({
               size="sm"
               className="h-9 px-4 rounded-xl border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-all active:scale-95 shadow-2xs"
             >
-              <Link href={`/${lang}/dashboard/events`}>
+              <Link href={`/${lang}/dashboard/calendar`}>
                 <Calendar className="w-3.5 h-3.5 mr-1 text-indigo-600" />
-                {isHindi ? 'सभाएं' : 'Events'}
+                {isHindi ? 'कैलेंडर व सभाएं' : 'Calendar & Events'}
               </Link>
             </Button>
           </div>

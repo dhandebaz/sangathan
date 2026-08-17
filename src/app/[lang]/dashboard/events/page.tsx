@@ -49,12 +49,20 @@ export default async function EventsPage(props: { params: Promise<{ lang: string
           <h1 className="text-3xl font-bold tracking-tight text-foreground">Events</h1>
           <p className="text-muted-foreground mt-1">Manage your organisation&apos;s events and participation.</p>
         </div>
-        <Button asChild>
-          <Link href={`/${lang}/dashboard/events/new`}>
-            <Plus className="mr-2 h-4 w-4" />
-            Create Event
-          </Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" asChild className="border-indigo-200 bg-indigo-50/60 text-indigo-800 hover:bg-indigo-100 dark:border-indigo-900 dark:bg-indigo-950/40 dark:text-indigo-300 font-semibold">
+            <Link href={`/${lang}/dashboard/calendar`}>
+              <Calendar className="mr-2 h-4 w-4 text-indigo-600" />
+              Centralized Calendar Hub
+            </Link>
+          </Button>
+          <Button asChild className="bg-orange-600 hover:bg-orange-700 text-white font-semibold">
+            <Link href={`/${lang}/dashboard/events/new`}>
+              <Plus className="mr-2 h-4 w-4" />
+              Create Event
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-stagger">

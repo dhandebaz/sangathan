@@ -38,6 +38,33 @@ export async function generateMetadata({
         hi: 'https://sangathan.space/hi/pricing',
       },
     },
+    openGraph: {
+      title: isHindi ? 'योगदान और पहुंच (Pay & Price) | संगठन' : 'Pay & Price: Contribution & Civic Access | Sangathan',
+      description: isHindi
+        ? 'नागरिक डिजिटल बुनियादी ढांचा। स्वैच्छिक सामुदायिक पहुंच और संरक्षक समर्थन।'
+        : 'Civic digital infrastructure by Bahujan Queer Foundation. Voluntary Community Access and Solidarity Sustainer contributions.',
+      url: `https://sangathan.space/${lang}/pricing`,
+      siteName: 'Sangathan',
+      type: 'website',
+      images: [
+        {
+          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'स्वैच्छिक योगदान एवं नागरिक पहुंच' : 'Pay & Price: Contribution & Civic Access')}&desc=${encodeURIComponent(isHindi ? 'नागरिक डिजिटल बुनियादी ढांचा। स्वैच्छिक सामुदायिक पहुंच और संरक्षक समर्थन।' : 'Non-profit digital infrastructure with voluntary community access and solidarity sustainer tiers.')}&type=ngo&tag=Civic+Access&lang=${lang}`,
+          width: 1200,
+          height: 630,
+          alt: isHindi ? 'संगठन मूल्य व योगदान' : 'Sangathan Pricing',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@areynetaji',
+      creator: '@areynetaji',
+      title: isHindi ? 'योगदान और पहुंच (Pay & Price) | संगठन' : 'Pay & Price: Contribution & Civic Access | Sangathan',
+      description: isHindi
+        ? 'नागरिक डिजिटल बुनियादी ढांचा। स्वैच्छिक सामुदायिक पहुंच और संरक्षक समर्थन।'
+        : 'Civic digital infrastructure by Bahujan Queer Foundation. Voluntary Community Access and Solidarity Sustainer contributions.',
+      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'स्वैच्छिक योगदान एवं नागरिक पहुंच' : 'Pay & Price: Contribution & Civic Access')}&desc=${encodeURIComponent(isHindi ? 'नागरिक डिजिटल बुनियादी ढांचा। स्वैच्छिक सामुदायिक पहुंच और संरक्षक समर्थन।' : 'Non-profit digital infrastructure with voluntary community access and solidarity sustainer tiers.')}&type=ngo&tag=Civic+Access&lang=${lang}`],
+    },
   }
 }
 

@@ -137,6 +137,22 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
     ],
     coreTools: [
       {
+        nameEn: 'Unified Inbox & Video Dispatch Desk',
+        nameHi: 'एकीकृत इनबॉक्स व वीडियो संवाद डेस्क',
+        descEn: 'Consolidated 2-way member chats, automated Telegram channel broadcasting, 1-click Google Meet video rooms, and emergency crisis SOS alerts.',
+        descHi: '2-तरफा सदस्य चैट, टेलीग्राम चैनल प्रसारण, 1-क्लिक Google Meet वीडियो कॉलिंग और आपातकालीन संकट SOS अलर्ट।',
+        icon: 'MessageSquare',
+        badge: 'Zero-Leakage Comms'
+      },
+      {
+        nameEn: 'Centralized Synchronized Calendar & Field Rosters',
+        nameHi: 'केंद्रीकृत स्वतः-सिंक कैलेंडर व फील्ड रोस्टर',
+        descEn: 'Shared movement schedule for general assemblies and door-to-door surveyor pairings with live Google Calendar & Apple iCal (webcal://) background sync.',
+        descHi: 'आम सभाओं और घर-घर सर्वेक्षक जोड़ियों के लिए साझा आंदोलन कैलेंडर, Google Calendar व Apple iCal लाइव सिंक सहित।',
+        icon: 'Calendar',
+        badge: 'Live Auto-Sync'
+      },
+      {
         nameEn: 'Field Spot Sensor & Evidence Desk',
         nameHi: 'फील्ड स्पॉट सेंसर व साक्ष्य डेस्क',
         descEn: 'Ground data collection for air quality, sewer overflow, and uncollected waste with instant statutory notice generation for DPCC/CPCB.',

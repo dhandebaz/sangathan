@@ -2,7 +2,8 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 import { 
   Users, CheckCircle2, ArrowRight, ShieldCheck, 
-  MessageSquare, Vote, Activity, HelpCircle, ChevronRight 
+  MessageSquare, Vote, Activity, HelpCircle, ChevronRight,
+  Calendar, Award, Radio
 } from 'lucide-react'
 import { SoftwareApplicationJsonLd, BreadcrumbJsonLd, FAQJsonLd } from '@/components/seo/json-ld'
 
@@ -165,7 +166,7 @@ export default async function CommunityManagementPage({ params }: PageProps) {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 flex flex-col justify-between">
               <div>
                 <div className="w-10 h-10 bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center mb-4 font-bold">
@@ -178,6 +179,38 @@ export default async function CommunityManagementPage({ params }: PageProps) {
                   {isHindi
                     ? 'भूमिका-आधारित पहुंच नियंत्रण (RBAC) के साथ सदस्यों को संगठित करें। आम समर्थकों से लेकर कोर समन्वयकों तक प्रत्येक सदस्य का सुरक्षित सत्यापन।'
                     : 'Organize members with granular role-based permissions. Separate public supporters from verified cadres without exposing personal phone numbers.'}
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 flex flex-col justify-between">
+              <div>
+                <div className="w-10 h-10 bg-rose-100 text-rose-700 rounded-lg flex items-center justify-center mb-4 font-bold">
+                  <MessageSquare size={20} />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">
+                  {isHindi ? 'ऑल-इन-वन इनबॉक्स व Google Meet' : 'All-in-One Inbox & Google Meet'}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {isHindi
+                    ? '2-तरफा सदस्य चैट, टेलीग्राम बॉट डिस्पैच, 1-क्लिक Google Meet वीडियो कॉलिंग और आपातकालीन संकट SOS।'
+                    : '2-way direct member chats, automated Telegram bots, instant Google Meet rooms, and rapid emergency SOS alert desk.'}
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 flex flex-col justify-between">
+              <div>
+                <div className="w-10 h-10 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center mb-4 font-bold">
+                  <Calendar size={20} />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">
+                  {isHindi ? 'केंद्रीकृत कैलेंडर व Apple/Google सिंक' : 'Centralized Calendar & Live Sync'}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {isHindi
+                    ? 'सभाओं, बैठकों और फील्ड जोड़ियों के लिए कैलेंडर, Apple iCal (webcal://) व Google Calendar API स्वतः-सिंक सहित।'
+                    : 'Unified schedule for meetings and field survey pairings with live Apple iCal and Google Calendar background sync.'}
                 </p>
               </div>
             </div>
@@ -210,6 +243,22 @@ export default async function CommunityManagementPage({ params }: PageProps) {
                   {isHindi
                     ? 'सीधे अपने समुदाय के बैंक खाते या क्यूआर से चंदा एकत्र करें। स्वचालित वाउचर रसीदें और सार्वजनिक वित्तीय पारदर्शिता।'
                     : 'Collect member contributions directly to your collective bank account with zero payment gateway deduction and live, audited cash ledgers.'}
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 flex flex-col justify-between">
+              <div>
+                <div className="w-10 h-10 bg-purple-100 text-purple-700 rounded-lg flex items-center justify-center mb-4 font-bold">
+                  <Award size={20} />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">
+                  {isHindi ? 'सत्यापित बैज व पहचान पत्र' : 'Verified ID Badges Studio'}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {isHindi
+                    ? 'सत्यापित डिजिटल सदस्य बैज, क्यूआर कोड प्रमाणीकरण और प्रिंट-रेडी पास जनरेट करें।'
+                    : 'Issue cryptographic, QR-verifiable digital member credentials and printable physical passes.'}
                 </p>
               </div>
             </div>

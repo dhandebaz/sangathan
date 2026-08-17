@@ -40,6 +40,7 @@ export function Footer({ lang }: { lang: string }) {
       links: [
         { label: isHindi ? 'गोपनीयता नीति' : 'Privacy Policy', href: `/${lang}/privacy` },
         { label: isHindi ? 'सेवा की शर्तें' : 'Terms of Service', href: `/${lang}/terms` },
+        { label: isHindi ? 'डेटा प्रथाएं' : 'Data Practices', href: `/${lang}/data-practices` },
         { label: isHindi ? 'डेटा अधिकार' : 'Data Rights', href: `/${lang}/data-rights` },
         { label: isHindi ? 'कुकीज़' : 'Cookies', href: `/${lang}/cookies` },
         { label: isHindi ? 'स्वीकार्य उपयोग' : 'Acceptable Use', href: `/${lang}/acceptable-use-policy` },

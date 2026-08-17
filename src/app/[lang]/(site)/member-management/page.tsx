@@ -2,7 +2,8 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 import { 
   UserCheck, CheckCircle2, ArrowRight, ShieldCheck, 
-  FileSpreadsheet, Lock, BadgePercent, HelpCircle, ChevronRight 
+  FileSpreadsheet, Lock, BadgePercent, HelpCircle, ChevronRight,
+  Award, HeartHandshake, Users
 } from 'lucide-react'
 import { SoftwareApplicationJsonLd, BreadcrumbJsonLd, FAQJsonLd } from '@/components/seo/json-ld'
 
@@ -129,7 +130,7 @@ export default async function MemberManagementPage({ params }: PageProps) {
         </section>
 
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-slate-200">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
               <div className="w-10 h-10 bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center mb-4 font-bold">
                 <FileSpreadsheet size={20} />
@@ -141,6 +142,20 @@ export default async function MemberManagementPage({ params }: PageProps) {
                 {isHindi
                   ? 'ट्रेड यूनियन और सोसायटी रजिस्ट्रार के लिए तैयार सदस्यता रजिस्टर स्वतः उत्पन्न करें।'
                   : 'Auto-generates official register PDFs with membership numbers, join dates, and fee logs.'}
+              </p>
+            </div>
+
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
+              <div className="w-10 h-10 bg-rose-100 text-rose-700 rounded-lg flex items-center justify-center mb-4 font-bold">
+                <Award size={20} />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">
+                {isHindi ? 'सत्यापित डिजिटल आईडी व बैज' : 'Verified ID Badges Studio'}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600">
+                {isHindi
+                  ? 'गतिशील क्यूआर सत्यापन, हेराल्ड्री और 2048px हाई-रेज़ोल्यूशन निर्यात के साथ डिजिटल कार्ड बनाएं।'
+                  : 'Generate official member passes with dynamic cryptographic QR verification and print layouts.'}
               </p>
             </div>
 
@@ -169,6 +184,34 @@ export default async function MemberManagementPage({ params }: PageProps) {
                 {isHindi
                   ? 'काडर फोन नंबर सुरक्षित रखें। किसी बाहरी डेटा ब्रोकर या विज्ञापनदाता को डेटा साझा नहीं।'
                   : 'Protects cadre identities with strict granular role permissions and zero data selling.'}
+              </p>
+            </div>
+
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
+              <div className="w-10 h-10 bg-sky-100 text-sky-700 rounded-lg flex items-center justify-center mb-4 font-bold">
+                <HeartHandshake size={20} />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">
+                {isHindi ? 'स्वयंसेवक व सेवा प्रमाण पत्र' : 'Volunteers & Certificates'}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600">
+                {isHindi
+                  ? 'स्वयंसेवक घंटे ट्रैक करें और 1-क्लिक में आधिकारिक सत्यापित सेवा प्रमाण पत्र जारी करें।'
+                  : 'Track volunteer hours and issue cryptographic, tamper-evident recognition certificates.'}
+              </p>
+            </div>
+
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
+              <div className="w-10 h-10 bg-teal-100 text-teal-700 rounded-lg flex items-center justify-center mb-4 font-bold">
+                <Users size={20} />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">
+                {isHindi ? 'Google Contacts व CSV आयात' : 'Google & CSV Roster Importer'}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600">
+                {isHindi
+                  ? '1-क्लिक में अपने गूगल संपर्क या एक्सेल स्प्रेडशीट से संपूर्ण काडर रोस्टर आयात करें।'
+                  : 'Instantly import your existing contact sheets or Google Contacts into the unified registry.'}
               </p>
             </div>
           </div>

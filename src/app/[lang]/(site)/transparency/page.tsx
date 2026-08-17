@@ -18,6 +18,33 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
         hi: 'https://sangathan.space/hi/transparency',
       },
     },
+    openGraph: {
+      title: isHindi ? 'पारदर्शिता और शासन | संगठन' : 'Transparency & Governance | Sangathan',
+      description: isHindi
+        ? 'कट्टरपंथी खुलेपन और डेटा सुरक्षा के माध्यम से विश्वास।'
+        : 'Trust through radical openness and strict data sovereignty.',
+      url: `https://sangathan.space/${lang}/transparency`,
+      siteName: 'Sangathan',
+      type: 'website',
+      images: [
+        {
+          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'सार्वजनिक पारदर्शिता एवं खुला शासन' : 'Transparency, Governance & Open Ledgers')}&desc=${encodeURIComponent(isHindi ? 'कट्टरपंथी खुलेपन और संप्रभु डेटा सुरक्षा के माध्यम से जन विश्वास।' : 'Auditable grant ledgers, open code principles, and institutional accountability.')}&type=ngo&tag=Radical+Transparency&lang=${lang}`,
+          width: 1200,
+          height: 630,
+          alt: 'Sangathan Transparency',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@areynetaji',
+      creator: '@areynetaji',
+      title: isHindi ? 'पारदर्शिता और शासन | संगठन' : 'Transparency & Governance | Sangathan',
+      description: isHindi
+        ? 'कट्टरपंथी खुलेपन और डेटा सुरक्षा के माध्यम से विश्वास।'
+        : 'Trust through radical openness and strict data sovereignty.',
+      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'सार्वजनिक पारदर्शिता एवं खुला शासन' : 'Transparency, Governance & Open Ledgers')}&desc=${encodeURIComponent(isHindi ? 'कट्टरपंथी खुलेपन और संप्रभु डेटा सुरक्षा के माध्यम से जन विश्वास।' : 'Auditable grant ledgers, open code principles, and institutional accountability.')}&type=ngo&tag=Radical+Transparency&lang=${lang}`],
+    },
   }
 }
 

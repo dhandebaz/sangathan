@@ -262,10 +262,22 @@ export async function getOrgUnifiedCommunicationsAction(orgId: string) {
 export async function getConversationHistoryAction(conversationId: string) {
   try {
     const adminClient = createServiceClient()
+    let queryId = conversationId
+    if (conversationId.startsWith('direct-')) {
+      const memberId = conversationId.replace('direct-', '')
+      const { data: conv } = await adminClient
+        .from('bot_conversations')
+        .select('id')
+        .eq('sender_id', memberId)
+        .maybeSingle()
+      if (conv) queryId = conv.id
+      else return { success: true, logs: [] }
+    }
+
     const { data: logs } = await adminClient
       .from('bot_logs')
       .select('*')
-      .eq('conversation_id', conversationId)
+      .eq('conversation_id', queryId)
       .order('created_at', { ascending: true })
 
     return { success: true, logs: logs || [] }
@@ -286,17 +298,62 @@ export async function sendAdminDirectReplyAction(params: {
     if (!orgId) return { success: false, error: 'Organisation not selected' }
 
     const adminClient = createServiceClient()
+    let conversationId = params.conversationId
+    let conv: any = null
 
-    // 1. Fetch conversation details
-    const { data: conv, error: convErr } = await adminClient
-      .from('bot_conversations')
-      .select('*')
-      .eq('id', params.conversationId)
-      .eq('organisation_id', orgId)
-      .maybeSingle()
+    // 1. Handle direct member conversations dynamically
+    if (conversationId.startsWith('direct-')) {
+      const targetMemberId = conversationId.replace('direct-', '')
+      const { data: member } = await adminClient
+        .from('members')
+        .select('id, full_name, phone, role')
+        .eq('id', targetMemberId)
+        .eq('organisation_id', orgId)
+        .maybeSingle()
 
-    if (convErr || !conv) {
-      return { success: false, error: 'Conversation not found' }
+      // Check if conversation already exists
+      const { data: existingConv } = await adminClient
+        .from('bot_conversations')
+        .select('*')
+        .eq('organisation_id', orgId)
+        .eq('sender_id', targetMemberId)
+        .maybeSingle()
+
+      if (existingConv) {
+        conv = existingConv
+        conversationId = existingConv.id
+      } else {
+        const { data: newConv } = await adminClient
+          .from('bot_conversations')
+          .insert({
+            organisation_id: orgId,
+            channel: 'direct',
+            sender_id: targetMemberId,
+            sender_name: member?.full_name || 'Member',
+            last_command: 'DIRECT_CHAT',
+            last_state: 'admin_replied',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          } as never)
+          .select('*')
+          .maybeSingle()
+
+        conv = newConv
+        if (newConv) conversationId = newConv.id
+      }
+    } else {
+      const { data: fetchedConv } = await adminClient
+        .from('bot_conversations')
+        .select('*')
+        .eq('id', conversationId)
+        .eq('organisation_id', orgId)
+        .maybeSingle()
+
+      conv = fetchedConv
+    }
+
+    if (!conv) {
+      return { success: false, error: 'Conversation could not be initialized or found' }
     }
 
     // 2. Fetch org channel config
@@ -307,12 +364,12 @@ export async function sendAdminDirectReplyAction(params: {
       .eq('channel', 'telegram')
       .maybeSingle()
 
-    // 3. Dispatch message through Telegram
+    // 3. Dispatch message through Telegram if telegram conversation
     let dispatchSuccess = false
     let providerMsgId = `reply_${Date.now()}`
 
     const botToken = config?.credentials?.bot_token || process.env.TELEGRAM_BOT_TOKEN
-    if (botToken) {
+    if (botToken && conv.channel === 'telegram') {
       const res = await sendTelegramDirectMessage({
         botToken,
         chatId: conv.sender_id,
@@ -328,9 +385,9 @@ export async function sendAdminDirectReplyAction(params: {
 
     // 4. Log message to bot_logs
     await adminClient.from('bot_logs').insert({
-      conversation_id: params.conversationId,
+      conversation_id: conv.id,
       organisation_id: orgId,
-      channel: conv.channel || 'telegram',
+      channel: conv.channel || 'direct',
       direction: 'outgoing',
       message_text: params.replyText,
       command_recognized: 'ADMIN_REPLY',
@@ -342,7 +399,7 @@ export async function sendAdminDirectReplyAction(params: {
     await adminClient
       .from('bot_conversations')
       .update({ updated_at: new Date().toISOString(), last_state: 'admin_replied' })
-      .eq('id', params.conversationId)
+      .eq('id', conv.id)
 
     revalidatePath('/[lang]/dashboard/communications', 'page')
 

@@ -1,8 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { redirect } from 'next/navigation'
-import { CommunicationsClient } from '@/components/dashboard/communications-client'
+import { UnifiedInboxHub } from '@/components/dashboard/inbox/unified-inbox-hub'
 import { getOrgUnifiedCommunicationsAction } from '@/actions/bot-channels'
+import { getEmergencySosAlerts } from '@/actions/emergency-sos'
 import { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
@@ -34,16 +35,28 @@ export default async function CommunicationsPage(props: { params: Promise<{ lang
 
   if (org?.name) orgName = org.name
 
-  const result = await getOrgUnifiedCommunicationsAction(orgId)
+  const [result, sosAlerts, membersRes] = await Promise.all([
+    getOrgUnifiedCommunicationsAction(orgId),
+    getEmergencySosAlerts(orgId),
+    supabase
+      .from('members')
+      .select('id, full_name, phone, role')
+      .eq('organisation_id', orgId)
+      .eq('status', 'active')
+      .limit(100)
+  ])
 
   return (
-    <CommunicationsClient
+    <UnifiedInboxHub
       lang={lang}
       orgId={orgId}
       orgName={orgName}
       configs={result.configs || []}
       initialConversations={(result.conversations || []) as any}
       stats={result.stats || { totalConversations: 0, totalInboundMessages: 0, totalBotGrievances: 0, totalSosAlerts: 0 }}
+      initialSosAlerts={sosAlerts || []}
+      members={membersRes.data || []}
     />
   )
 }
+

@@ -2,7 +2,8 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 import { 
   Megaphone, CheckCircle2, ArrowRight, Printer, 
-  Clock, ShieldAlert, Activity, HelpCircle, ChevronRight 
+  Clock, ShieldAlert, Activity, HelpCircle, ChevronRight,
+  Calendar, Vote, Scale
 } from 'lucide-react'
 import { SoftwareApplicationJsonLd, BreadcrumbJsonLd, FAQJsonLd } from '@/components/seo/json-ld'
 
@@ -130,7 +131,7 @@ export default async function GrassrootsOrganizingPage({ params }: PageProps) {
         </section>
 
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-slate-200">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
               <div className="w-10 h-10 bg-amber-100 text-amber-700 rounded-lg flex items-center justify-center mb-4 font-bold">
                 <Printer size={20} />
@@ -170,6 +171,48 @@ export default async function GrassrootsOrganizingPage({ params }: PageProps) {
                 {isHindi
                   ? 'हिरासत या पुलिस दबाव की स्थिति में 1-टैप आपातकालीन अलर्ट जो जीपीएस लोकेशन और थाना विवरण वकीलों के पैनल को भेजता है।'
                   : 'Instant 1-tap crisis alert broadcasting GPS coordinates and police station details to designated panel advocates.'}
+              </p>
+            </div>
+
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
+              <div className="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-lg flex items-center justify-center mb-4 font-bold">
+                <Activity size={20} />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">
+                {isHindi ? 'फील्ड स्पॉट सेंसर ऑडिट' : 'Spot Sensor Audits & Notices'}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600">
+                {isHindi
+                  ? 'PM2.5, पानी टीडीएस और कचरा दहन के आंकड़े दर्ज करें और DPCC/CPCB को विधिक नोटिस भेजें।'
+                  : 'Log geotagged air and water sensor readings and draft formal statutory environmental violation notices.'}
+              </p>
+            </div>
+
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
+              <div className="w-10 h-10 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center mb-4 font-bold">
+                <Calendar size={20} />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">
+                {isHindi ? 'सर्वेक्षक जोड़ी व कैलेंडर सिंक' : 'Surveyor Roster & Calendar'}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600">
+                {isHindi
+                  ? 'वार्ड-वार जमीनी सर्वेक्षणों के लिए कार्यकर्ताओं की जोड़ियां बनाएं और Apple/Google कैलेंडर से सिंक रखें।'
+                  : 'Pair field organizers for target areas and sync deployments automatically with Apple & Google Calendar.'}
+              </p>
+            </div>
+
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
+              <div className="w-10 h-10 bg-purple-100 text-purple-700 rounded-lg flex items-center justify-center mb-4 font-bold">
+                <Vote size={20} />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">
+                {isHindi ? 'प्रत्यक्ष लोकतंत्र व गुप्त मतदान' : 'Direct Democracy & Voting'}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600">
+                {isHindi
+                  ? 'आंदोलन की कार्ययोजना और नेतृत्व पर काडर का गोपनीय और छेड़छाड़-रहित डिजिटल जनमत।'
+                  : 'Run encrypted, verifiable consensus ballots and leadership votes with instant mathematical tallies.'}
               </p>
             </div>
           </div>

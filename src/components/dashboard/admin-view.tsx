@@ -202,14 +202,14 @@ function getOrgStats(
       icon: Users,
       value: stats.members,
       label: isHindi ? 'कुल सदस्य (Members)' : 'Total Members',
-      href: `/${lang}/dashboard/members`,
+      href: `/${lang}/dashboard/people`,
       color: 'brand',
     },
     {
       icon: Calendar,
       value: stats.events,
-      label: isHindi ? 'सभाएं (Events)' : 'Scheduled Events',
-      href: `/${lang}/dashboard/events`,
+      label: isHindi ? 'सभाएं व कैलेंडर (Calendar)' : 'Calendar & Events',
+      href: `/${lang}/dashboard/calendar`,
       color: 'indigo',
     },
     {
@@ -445,7 +445,7 @@ export function AdminDashboard({
               size="sm"
               className="h-9 px-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition-all active:scale-95 shadow-xs"
             >
-              <Link href={`/${lang}/dashboard/members`}>
+              <Link href={`/${lang}/dashboard/people`}>
                 <Plus className="w-3.5 h-3.5 mr-1" />
                 {isHindi ? '+ सदस्य जोड़ें' : '+ Member'}
               </Link>
@@ -456,9 +456,9 @@ export function AdminDashboard({
               size="sm"
               className="h-9 px-3.5 rounded-xl border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-all active:scale-95 shadow-2xs"
             >
-              <Link href={`/${lang}/dashboard/announcements`}>
+              <Link href={`/${lang}/dashboard/inbox`}>
                 <Megaphone className="w-3.5 h-3.5 mr-1 text-indigo-600" />
-                {isHindi ? 'सूचना भेजें' : 'Notice'}
+                {isHindi ? 'इनबॉक्स व घोषणा' : 'Inbox & Notice'}
               </Link>
             </Button>
             <Button

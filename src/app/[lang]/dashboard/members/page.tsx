@@ -3,7 +3,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { AddMemberDialog } from '@/components/members/add-member-dialog'
 import { MemberTable } from '@/components/members/member-table'
-import { Printer, FileSpreadsheet } from 'lucide-react'
+import { Printer, FileSpreadsheet, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { MemberFilters } from '@/components/members/member-filters'
@@ -163,11 +163,11 @@ export default async function MembersPage({ searchParams, params }: PageProps & 
                     {lang === 'hi' ? 'Google Contacts से आयात' : 'Google Contacts Import'}
                 </Link>
             </Button>
-            <Button variant="outline" asChild>
-                <a href={`/${lang}/dashboard/members/print`} target="_blank">
-                    <Printer className="mr-2 h-4 w-4" />
-                    {lang === 'hi' ? 'सूची प्रिंट करें' : 'Print List'}
-                </a>
+            <Button variant="outline" asChild className="border-indigo-200 bg-indigo-50/60 text-indigo-800 hover:bg-indigo-100 dark:border-indigo-900 dark:bg-indigo-950/40 dark:text-indigo-300 font-semibold">
+                <Link href={`/${lang}/dashboard/people`}>
+                    <Users className="mr-2 h-4 w-4 text-indigo-600" />
+                    {lang === 'hi' ? 'एकीकृत पीपल हब' : 'Unified People Hub'}
+                </Link>
             </Button>
             <AddMemberDialog />
         </div>
