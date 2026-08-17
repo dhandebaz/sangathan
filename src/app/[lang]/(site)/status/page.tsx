@@ -9,6 +9,13 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     description: isHindi
       ? 'वास्तविक समय प्रदर्शन निगरानी और घटना इतिहास।'
       : 'Real-time performance monitoring and incident history.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/status`,
+      languages: {
+        en: 'https://sangathan.space/en/status',
+        hi: 'https://sangathan.space/hi/status',
+      },
+    },
   }
 }
 

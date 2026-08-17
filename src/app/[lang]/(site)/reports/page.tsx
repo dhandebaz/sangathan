@@ -1,3 +1,25 @@
+import { Metadata } from 'next'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const isHindi = lang === 'hi'
+  return {
+    title: isHindi ? 'सार्वजनिक रिपोर्ट और पारदर्शिता ऑडिट | संगठन' : 'Public Reports & Transparency Audits | Sangathan',
+    description: isHindi ? 'सार्वजनिक पारदर्शिता ऑडिट, अनुपालन सारांश और परिचालन बेंचमार्क।' : 'Public transparency audits, compliance summaries, and operational benchmarks.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/reports`,
+      languages: {
+        en: 'https://sangathan.space/en/reports',
+        hi: 'https://sangathan.space/hi/reports',
+      },
+    },
+  }
+}
+
 export default function ReportsPage() {
   return (
     <div className="max-w-4xl mx-auto py-12 px-6">

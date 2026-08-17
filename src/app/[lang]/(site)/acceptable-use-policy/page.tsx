@@ -1,3 +1,25 @@
+import { Metadata } from 'next'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const isHindi = lang === 'hi'
+  return {
+    title: isHindi ? 'स्वीकार्य उपयोग नीति | संगठन' : 'Acceptable Use Policy | Sangathan',
+    description: isHindi ? 'संगठन नागरिक कार्यक्षेत्रों के लिए दिशानिर्देश और स्वीकार्य उपयोग नीतियां।' : 'Guidelines and acceptable use policies for Sangathan civic workspaces.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/acceptable-use-policy`,
+      languages: {
+        en: 'https://sangathan.space/en/acceptable-use-policy',
+        hi: 'https://sangathan.space/hi/acceptable-use-policy',
+      },
+    },
+  }
+}
+
 export default function AUPPage() {
   return (
     <div className="max-w-4xl mx-auto py-12 px-6">

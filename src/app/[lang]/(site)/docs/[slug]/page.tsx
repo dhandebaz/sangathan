@@ -26,6 +26,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: lang === 'hi' ? `${title} | संगठन डॉक्स` : `${title} | Sangathan Docs`,
     description: lang === 'hi' ? `${title} के लिए चरण-दर-चरण मार्गदर्शन।` : `Step-by-step Sangathan guidance for ${title.toLowerCase()}.`,
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/docs/${slug}`,
+      languages: {
+        en: `https://sangathan.space/en/docs/${slug}`,
+        hi: `https://sangathan.space/hi/docs/${slug}`,
+      },
+    },
   }
 }
 

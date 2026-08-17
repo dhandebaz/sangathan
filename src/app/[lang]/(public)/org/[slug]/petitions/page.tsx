@@ -14,13 +14,20 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params
+  const { slug, lang } = await params
   const data = await getOrgPetitions(slug)
   if (!data) return { title: 'Campaigns Not Found | Sangathan' }
 
   return {
     title: `Active Petitions & Campaigns | ${data.org.name} | Sangathan`,
     description: `Browse and sign official public petitions launched by ${data.org.name}.`,
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/org/${slug}/petitions`,
+      languages: {
+        en: `https://sangathan.space/en/org/${slug}/petitions`,
+        hi: `https://sangathan.space/hi/org/${slug}/petitions`,
+      },
+    },
   }
 }
 

@@ -11,6 +11,13 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     description: isHindi
       ? 'एक तटस्थ, सुरक्षित और विश्वसनीय मंच बनाए रखने के लिए हमारी रूपरेखा।'
       : 'Our framework for maintaining a neutral, safe, and reliable platform.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/governance`,
+      languages: {
+        en: 'https://sangathan.space/en/governance',
+        hi: 'https://sangathan.space/hi/governance',
+      },
+    },
   }
 }
 

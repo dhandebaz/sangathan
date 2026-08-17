@@ -11,6 +11,13 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     description: isHindi
       ? 'कट्टरपंथी खुलेपन और डेटा सुरक्षा के माध्यम से विश्वास।'
       : 'Trust through radical openness and strict data sovereignty.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/transparency`,
+      languages: {
+        en: 'https://sangathan.space/en/transparency',
+        hi: 'https://sangathan.space/hi/transparency',
+      },
+    },
   }
 }
 

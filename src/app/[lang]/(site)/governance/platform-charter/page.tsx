@@ -1,3 +1,25 @@
+import { Metadata } from 'next'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const isHindi = lang === 'hi'
+  return {
+    title: isHindi ? 'प्लेटफ़ॉर्म चार्टर | संगठन' : 'Platform Charter | Sangathan',
+    description: isHindi ? 'सामुदायिक संप्रभुता और खुले शासन को बनाए रखने वाला लोकतांत्रिक मंच चार्टर।' : 'The democratic platform charter upholding community sovereignty and open governance.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/governance/platform-charter`,
+      languages: {
+        en: 'https://sangathan.space/en/governance/platform-charter',
+        hi: 'https://sangathan.space/hi/governance/platform-charter',
+      },
+    },
+  }
+}
+
 import React from 'react'
 
 export default function PlatformCharterPage() {

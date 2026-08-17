@@ -1,3 +1,25 @@
+import { Metadata } from 'next'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const isHindi = lang === 'hi'
+  return {
+    title: isHindi ? 'सामुदायिक दिशानिर्देश | संगठन' : 'Community Guidelines | Sangathan',
+    description: isHindi ? 'सुरक्षित, लोकतांत्रिक और जवाबदेह नागरिक आंदोलनों को बढ़ावा देने वाले सामुदायिक दिशानिर्देश।' : 'Community guidelines fostering safe, democratic, and accountable civic movements.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/community-guidelines`,
+      languages: {
+        en: 'https://sangathan.space/en/community-guidelines',
+        hi: 'https://sangathan.space/hi/community-guidelines',
+      },
+    },
+  }
+}
+
 import { Heart, AlertTriangle, MessageSquare } from 'lucide-react'
 
 export default function CommunityGuidelinesPage() {

@@ -14,13 +14,20 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug, id } = await params
+  const { slug, id, lang } = await params
   const data = await getPetitionDetails(slug, id)
   if (!data) return { title: 'Petition Not Found | Sangathan' }
 
   return {
     title: `${data.petition.title} | ${data.org.name} | Sangathan`,
     description: data.petition.description.slice(0, 160),
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/org/${slug}/petitions/${id}`,
+      languages: {
+        en: `https://sangathan.space/en/org/${slug}/petitions/${id}`,
+        hi: `https://sangathan.space/hi/org/${slug}/petitions/${id}`,
+      },
+    },
     openGraph: {
       title: data.petition.title,
       description: data.petition.description.slice(0, 160),

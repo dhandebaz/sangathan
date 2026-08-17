@@ -13,8 +13,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/about',
     '/transparency',
     '/changelog',
-    '/roadmap',
-    '/status',
     '/press',
     '/vision',
     '/faq',
@@ -49,34 +47,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // 1. Static Pages for EN and HI
   for (const route of staticRoutes) {
-    const isRoot = route === ''
+    const isHome = route === ''
+    const enUrl = isHome ? `${baseUrl}/en` : `${baseUrl}/en${route}`
+    const hiUrl = isHome ? `${baseUrl}/hi` : `${baseUrl}/hi${route}`
+    const priority = isHome ? 1.0 : route === '/pricing' || route === '/features' || route === '/solutions' || route === '/compare' ? 0.9 : 0.7
+    const changeFreq = isHome ? 'daily' : route === '/pricing' || route === '/changelog' ? 'weekly' : 'monthly'
+
     sitemapEntries.push({
-      url: isRoot ? baseUrl : `${baseUrl}/en${route}`,
+      url: enUrl,
       lastModified: new Date(),
-      changeFrequency: isRoot ? 'daily' : route === '/pricing' || route === '/changelog' ? 'weekly' : 'monthly',
-      priority: isRoot ? 1.0 : route === '/pricing' || route === '/features' || route === '/solutions' || route === '/compare' ? 0.9 : 0.7,
+      changeFrequency: changeFreq,
+      priority: priority,
       alternates: {
         languages: {
-          en: isRoot ? `${baseUrl}/en` : `${baseUrl}/en${route}`,
-          hi: isRoot ? `${baseUrl}/hi` : `${baseUrl}/hi${route}`,
+          en: enUrl,
+          hi: hiUrl,
         },
       },
     })
 
-    if (!isRoot) {
-      sitemapEntries.push({
-        url: `${baseUrl}/hi${route}`,
-        lastModified: new Date(),
-        changeFrequency: route === '/pricing' || route === '/changelog' ? 'weekly' : 'monthly',
-        priority: route === '/pricing' || route === '/features' || route === '/solutions' || route === '/compare' ? 0.9 : 0.7,
-        alternates: {
-          languages: {
-            en: `${baseUrl}/en${route}`,
-            hi: `${baseUrl}/hi${route}`,
-          },
+    sitemapEntries.push({
+      url: hiUrl,
+      lastModified: new Date(),
+      changeFrequency: changeFreq,
+      priority: priority,
+      alternates: {
+        languages: {
+          en: enUrl,
+          hi: hiUrl,
         },
-      })
-    }
+      },
+    })
   }
 
   // 2. Programmatic Solutions (5 Org Types + 20 Focus Blueprints)

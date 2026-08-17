@@ -3,54 +3,28 @@ import { MetadataRoute } from 'next'
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://sangathan.space'
 
+  const privateDisallows = [
+    '/dashboard/',
+    '/admin/',
+    '/api/',
+    '/auth/',
+    '/bootstrap-org/',
+    '/maintenance/',
+    '/select-organisation/',
+    '/f/',
+    '/invite/',
+    '/members/',
+  ]
+
   return {
     rules: [
       {
         userAgent: '*',
         allow: '/',
-        disallow: [
-          '/dashboard/',
-          '/admin/',
-          '/api/',
-          '/auth/',
-          '/bootstrap-org/',
-          '/maintenance/',
-          '/select-organisation/',
-        ],
+        disallow: privateDisallows,
       },
       {
-        userAgent: [
-          'Googlebot',
-          'Bingbot',
-          'Applebot',
-          'DuckDuckBot',
-          'YandexBot',
-        ],
-        allow: [
-          '/',
-          '/en/solutions/',
-          '/hi/solutions/',
-          '/en/compare/',
-          '/hi/compare/',
-          '/en/features',
-          '/hi/features',
-          '/en/pricing',
-          '/hi/pricing',
-          '/en/about',
-          '/hi/about',
-          '/en/transparency',
-          '/hi/transparency',
-          '/en/docs',
-          '/hi/docs',
-          '/en/org/',
-          '/hi/org/',
-          '/en/network/',
-          '/hi/network/',
-        ],
-        disallow: ['/dashboard/', '/admin/', '/api/', '/auth/'],
-      },
-      {
-        // Explicitly allow AI search & answer engines (Perplexity, ChatGPT Search, Claude, Gemini) to index all civic solutions, comparisons & documentation
+        // Explicitly allow AI search & answer engines with access to llms.txt
         userAgent: [
           'GPTBot',
           'ChatGPT-User',
@@ -63,30 +37,8 @@ export default function robots(): MetadataRoute.Robots {
           'Diffbot',
           'FacebookBot',
         ],
-        allow: [
-          '/',
-          '/en/solutions/',
-          '/hi/solutions/',
-          '/en/compare/',
-          '/hi/compare/',
-          '/en/org/',
-          '/hi/org/',
-          '/en/network/',
-          '/hi/network/',
-          '/en/features',
-          '/hi/features',
-          '/en/pricing',
-          '/hi/pricing',
-          '/en/about',
-          '/hi/about',
-          '/en/transparency',
-          '/hi/transparency',
-          '/en/docs',
-          '/hi/docs',
-          '/llms.txt',
-          '/llms-full.txt',
-        ],
-        disallow: ['/dashboard/', '/admin/', '/api/', '/auth/'],
+        allow: ['/', '/llms.txt', '/llms-full.txt'],
+        disallow: privateDisallows,
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

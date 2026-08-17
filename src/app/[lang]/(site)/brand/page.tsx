@@ -9,6 +9,13 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     description: isHindi
       ? 'संगठन ब्रांड का सही तरीके से उपयोग कैसे करें।'
       : 'How to use the Sangathan brand correctly.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/brand`,
+      languages: {
+        en: 'https://sangathan.space/en/brand',
+        hi: 'https://sangathan.space/hi/brand',
+      },
+    },
   }
 }
 

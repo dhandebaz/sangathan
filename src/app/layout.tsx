@@ -18,6 +18,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://sangathan.space'),
   title: {
     template: "%s | Sangathan",
     default: "Sangathan — Civic Digital Infrastructure for Collectives & NGOs",

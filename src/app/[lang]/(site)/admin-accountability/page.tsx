@@ -1,3 +1,25 @@
+import { Metadata } from 'next'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const isHindi = lang === 'hi'
+  return {
+    title: isHindi ? 'प्रशासक जवाबदेही और दोहरी स्वीकृति | संगठन' : 'Admin Accountability & Dual Approval | Sangathan',
+    description: isHindi ? 'क्रिप्टोग्राफ़िक लॉग, दोहरी स्वीकृति वर्कफ़्लो और अपरिवर्तनीय प्रशासक पारदर्शिता।' : 'Cryptographic logs, dual-approval workflows, and immutable admin transparency.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/admin-accountability`,
+      languages: {
+        en: 'https://sangathan.space/en/admin-accountability',
+        hi: 'https://sangathan.space/hi/admin-accountability',
+      },
+    },
+  }
+}
+
 import { Phone, FileText, UserCheck } from 'lucide-react'
 
 export default function AdminAccountabilityPage() {

@@ -35,6 +35,37 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.48.1',
+    titleEn: 'Search Engine Indexing, Canonical Alignment & Sitemap Normalization',
+    titleHi: 'खोज इंजन अनुक्रमण, कैनोनिकल संरेखण व साइटमैप मानकीकरण',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Harmonized canonical URLs and alternate hreflang tags across all 150+ public and programmatic routes, resolved Google Search Console duplicate page and redirect flags, updated robots.txt crawler access patterns, and established metadataBase for accurate search discovery.',
+    descHi: 'सभी 150+ सार्वजनिक और प्रोग्रामेटिक पृष्ठों पर कैनोनिकल यूआरएल और भाषा टैग्स का पूर्ण संरेखण, गूगल सर्च कंसोल में रीडायरेक्ट और डुप्लीकेट पेज चेतावनियों का समाधान, और खोज अनुक्रमण में व्यापक सुधार।',
+    color: 'indigo',
+    icon: Globe,
+    features: [
+      {
+        nameEn: 'Sitemap & Redirect Normalization',
+        nameHi: 'साइटमैप और रीडायरेक्ट मानकीकरण',
+        textEn: 'Pruned redirected routes from sitemap.xml and mapped all home and static routes directly to their respective 200 OK localized endpoints (/en and /hi).',
+        textHi: 'साइटमैप से रीडायरेक्ट होने वाले सभी पुराने मार्गों को हटाकर केवल सीधे सक्रिय बहुभाषी यूआरएल को अनुक्रमित किया गया।',
+      },
+      {
+        nameEn: 'Site-Wide Canonical & Hreflang Tags',
+        nameHi: 'साइट-व्यापी कैनोनिकल और बहुभाषी टैग',
+        textEn: 'Configured explicit canonical metadata and cross-language alternates across every public policy, governance, document, and public petition page.',
+        textHi: 'सभी नीतिगत, शासन, दस्तावेज़ और सार्वजनिक अभियानों के पृष्ठों पर स्पष्ट कैनोनिकल और भाषा विकल्प टैग्स जोड़े गए।',
+      },
+      {
+        nameEn: 'Robots.txt Crawl Policy Optimization',
+        nameHi: 'रोबोट्स पॉलिसी क्रॉल अनुकूलन',
+        textEn: 'Standardized crawler rules to permit full discovery of public civic public goods while shielding private workspace and authenticated member zones.',
+        textHi: 'सार्वजनिक नागरिक संसाधनों की सुगम खोज की अनुमति देते हुए निजी और प्रमाणित उपयोगकर्ता क्षेत्रों की सुरक्षा सुनिश्चित की गई।',
+      },
+    ],
+  },
+  {
     version: 'v1.48.0',
     titleEn: 'Onboarding Launch Resilience, Multi-Tier Org Creation & Middleware Flight Protection',
     titleHi: 'संगठन सेटअप लॉन्च सुदृढ़ीकरण व सर्वर सुरक्षा सुधार',

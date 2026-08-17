@@ -18,6 +18,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: lang === 'hi' ? 'पारदर्शिता एवं सार्वजनिक वित्तीय बहीखाता | संगठन' : `Public Transparency & Trust Ledger | Sangathan`,
     description: 'Verified real-time fund utilization and SHA-256 cryptographically audited expense ledger.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/org/${slug}/transparency`,
+      languages: {
+        en: `https://sangathan.space/en/org/${slug}/transparency`,
+        hi: `https://sangathan.space/hi/org/${slug}/transparency`,
+      },
+    },
   }
 }
 

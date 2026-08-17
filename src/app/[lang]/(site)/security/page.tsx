@@ -10,6 +10,13 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     description: isHindi
       ? 'हम प्रतिकूल डिजिटल वातावरण में आपके डेटा की सुरक्षा कैसे करते हैं।'
       : 'How we protect your data in a hostile digital environment.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/security`,
+      languages: {
+        en: 'https://sangathan.space/en/security',
+        hi: 'https://sangathan.space/hi/security',
+      },
+    },
   }
 }
 

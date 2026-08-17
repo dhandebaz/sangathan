@@ -1,3 +1,25 @@
+import { Metadata } from 'next'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const isHindi = lang === 'hi'
+  return {
+    title: isHindi ? 'कुकी नीति | संगठन' : 'Cookie Policy | Sangathan',
+    description: isHindi ? 'संगठन द्वारा उपयोग की जाने वाली आवश्यक और कार्यात्मक कुकीज के बारे में जानकारी।' : 'Information about how Sangathan uses essential and functional cookies.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/cookies`,
+      languages: {
+        en: 'https://sangathan.space/en/cookies',
+        hi: 'https://sangathan.space/hi/cookies',
+      },
+    },
+  }
+}
+
 export default function CookiesPage() {
   return (
     <div className="max-w-4xl mx-auto py-12 px-6">

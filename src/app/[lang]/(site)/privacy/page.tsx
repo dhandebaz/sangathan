@@ -1,3 +1,25 @@
+import { Metadata } from 'next'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const isHindi = lang === 'hi'
+  return {
+    title: isHindi ? 'गोपनीयता नीति | संगठन' : 'Privacy Policy | Sangathan',
+    description: isHindi ? 'संगठन नागरिक बुनियादी ढांचे के लिए गोपनीयता नीति और डेटा सुरक्षा प्रतिबद्धताएं।' : 'Privacy policy and data protection commitments for Sangathan civic infrastructure.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/privacy`,
+      languages: {
+        en: 'https://sangathan.space/en/privacy',
+        hi: 'https://sangathan.space/hi/privacy',
+      },
+    },
+  }
+}
+
 export default function PrivacyPage() {
   return (
     <div className="max-w-4xl mx-auto py-12 px-6">

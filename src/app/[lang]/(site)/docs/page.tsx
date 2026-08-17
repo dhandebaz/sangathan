@@ -12,6 +12,13 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     description: isHindi
       ? 'संगठन को स्थापित करने, चलाने और सुरक्षित रूप से बढ़ाने के लिए पूर्ण मार्गदर्शिका।'
       : 'Complete handbook for setting up, running, and safely scaling organisations on Sangathan.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/docs`,
+      languages: {
+        en: 'https://sangathan.space/en/docs',
+        hi: 'https://sangathan.space/hi/docs',
+      },
+    },
   }
 }
 

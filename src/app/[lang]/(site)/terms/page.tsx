@@ -1,3 +1,25 @@
+import { Metadata } from 'next'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const isHindi = lang === 'hi'
+  return {
+    title: isHindi ? 'सेवा की शर्तें | संगठन' : 'Terms of Service | Sangathan',
+    description: isHindi ? 'संगठन नागरिक डिजिटल बुनियादी ढांचे के उपयोग की शर्तें।' : 'Terms of service for using Sangathan civic digital infrastructure.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/terms`,
+      languages: {
+        en: 'https://sangathan.space/en/terms',
+        hi: 'https://sangathan.space/hi/terms',
+      },
+    },
+  }
+}
+
 export default function TermsPage() {
   return (
     <div className="max-w-4xl mx-auto py-12 px-6">

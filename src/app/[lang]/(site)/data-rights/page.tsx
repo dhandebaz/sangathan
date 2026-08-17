@@ -1,3 +1,25 @@
+import { Metadata } from 'next'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const isHindi = lang === 'hi'
+  return {
+    title: isHindi ? 'आपके डेटा अधिकार | संगठन' : 'Your Data Rights | Sangathan',
+    description: isHindi ? 'भारतीय डिजिटल कानूनों के तहत अपने डेटा निर्यात, पोर्टेबिलिटी और विलोपन अधिकारों का प्रयोग करें।' : 'Exercise your data export, portability, and deletion rights under Indian digital laws.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/data-rights`,
+      languages: {
+        en: 'https://sangathan.space/en/data-rights',
+        hi: 'https://sangathan.space/hi/data-rights',
+      },
+    },
+  }
+}
+
 export default function DataRightsPage() {
   return (
     <div className="max-w-4xl mx-auto py-12 px-6">

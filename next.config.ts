@@ -51,16 +51,6 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: '/:lang/status',
-        destination: '/:lang/transparency',
-        permanent: true,
-      },
-      {
-        source: '/:lang/governance',
-        destination: '/:lang/transparency',
-        permanent: true,
-      },
-      {
         source: '/:lang/roadmap',
         destination: '/:lang/features',
         permanent: true,

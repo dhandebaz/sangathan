@@ -1,3 +1,25 @@
+import { Metadata } from 'next'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const isHindi = lang === 'hi'
+  return {
+    title: isHindi ? 'डेटा प्रथाएं और सुरक्षा वास्तुकला | संगठन' : 'Data Practices & Security Architecture | Sangathan',
+    description: isHindi ? 'एन्क्रिप्शन, शून्य-ज्ञान सिद्धांतों और संप्रभु डेटा प्रबंधन का अवलोकन।' : 'Overview of encryption, zero-knowledge principles, and sovereign data handling.',
+    alternates: {
+      canonical: `https://sangathan.space/${lang}/data-practices`,
+      languages: {
+        en: 'https://sangathan.space/en/data-practices',
+        hi: 'https://sangathan.space/hi/data-practices',
+      },
+    },
+  }
+}
+
 import { Database, HardDrive, RefreshCw, Download } from 'lucide-react'
 
 export default function DataPracticesPage() {
