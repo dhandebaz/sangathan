@@ -66,6 +66,8 @@ const nextConfig: NextConfig = {
       { source: '/campaign-management', destination: '/en/campaign-management' },
       { source: '/member-management', destination: '/en/member-management' },
       { source: '/collective-decision-making', destination: '/en/collective-decision-making' },
+      { source: '/verify/:slug/:id', destination: '/en/verify/:slug/:id' },
+      { source: '/members/badge', destination: '/en/members/badge' },
       { source: '/sangathan-vs-whatsapp', destination: '/en/sangathan-vs-whatsapp' },
       { source: '/sangathan-vs-nationbuilder', destination: '/en/sangathan-vs-nationbuilder' },
       { source: '/sangathan-vs-action-network', destination: '/en/sangathan-vs-action-network' },

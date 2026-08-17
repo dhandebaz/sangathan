@@ -1,4 +1,4 @@
-import { Sparkles, ShieldCheck, Zap, Server, Code, Users, Calendar, Activity, Rocket, Globe, LucideIcon, Building2, Network, Phone } from 'lucide-react'
+import { Sparkles, ShieldCheck, Zap, Server, Code, Users, Calendar, Activity, Rocket, Globe, LucideIcon, Building2, Network, Phone, Award, MessageCircle } from 'lucide-react'
 import { Metadata } from 'next'
 import { PageHeader } from '@/components/public/page-header'
 
@@ -34,6 +34,74 @@ type ChangelogEntry = {
 }
 
 const changelogData: ChangelogEntry[] = [
+  {
+    version: 'v1.53.0',
+    titleEn: 'SEO-Friendly Form & Survey Slugs with Direct WhatsApp Forwarding & CTA Engine',
+    titleHi: 'एसईओ-अनुकूल फॉर्म व सर्वेक्षण कस्टम लिंक्स एवं प्रत्यक्ष व्हाट्सएप सीटीए शेयरिंग इंजन',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Empowered grassroots organizers and civic leaders to set memorable, SEO-friendly custom URLs (/f/[slug]) for all surveys, townhall feedback forms, and grievance intake desks. Integrated a direct WhatsApp Viral Forwarding Suite with 4 pre-configured call-to-action templates, live WhatsApp chat bubble previews, 1-click clipboard dispatches, and rich OpenGraph metadata tags.',
+    descHi: 'जमीनी कार्यकर्ताओं और नागरिक नेताओं के लिए सभी सर्वेक्षणों, टाउनहॉल फीडबैक फॉर्मों और जनसुनवाई डेस्क के लिए यादगार, एसईओ-अनुकूल कस्टम यूआरएल (/f/[slug]) सेट करने की सुविधा। 4 पूर्व-कॉन्फ़िगर सीटीए संदेश टेम्पलेट्स, लाइव व्हाट्सएप चैट बबल प्रीव्यू, 1-क्लिक क्लिपबोर्ड डिस्पैच और समृद्ध ओपनग्राफ मेटाडेटा टैग के साथ सीधे व्हाट्सएप शेयरिंग इंजन का एकीकरण।',
+    color: 'emerald',
+    icon: MessageCircle,
+    features: [
+      {
+        nameEn: 'Memorable SEO-Friendly URL Slugs (/f/custom-slug)',
+        nameHi: 'यादगार एसईओ-अनुकूल कस्टम यूआरएल लिंक्स (/f/custom-slug)',
+        textEn: 'Define custom, human-friendly links during form creation or edit them in 1-click directly from the Survey Intelligence dashboard with real-time uniqueness validation and dual backward-compatible UUID resolution.',
+        textHi: 'फॉर्म निर्माण के दौरान या सर्वेक्षण इंटेलिजेंस डैशबोर्ड से सीधे 1-क्लिक में आसान लिंक सेट करें। वास्तविक समय में उपलब्धता जांच और पुराने यूयूआईडी लिंक्स के साथ पूर्ण अनुकूलता सुनिश्चित की गई है।',
+      },
+      {
+        nameEn: 'Direct WhatsApp Forwarding & 4 High-Converting CTA Templates',
+        nameHi: 'प्रत्यक्ष व्हाट्सएप फॉरवर्डिंग व 4 उच्च-प्रभावशाली सीटीए टेम्पलेट्स',
+        textEn: '1-click share directly to WhatsApp with pre-composed, purpose-driven text templates for Civic Surveys, Urgent Grievance Calls, Cadre Mobilization, and Custom Copy with live WhatsApp chat bubble previews.',
+        textHi: 'नागरिक सर्वेक्षण, त्वरित जनसुनवाई, कार्यकर्ता आह्वान और कस्टम संदेश के लिए तैयार टेम्पलेट्स के साथ सीधे व्हाट्सएप पर 1-क्लिक शेयरिंग और लाइव चैट बबल पूर्वावलोकन।',
+      },
+      {
+        nameEn: 'Dynamic OpenGraph & Social Card Metadata Engine',
+        nameHi: 'गतिशील ओपनग्राफ व सोशल कार्ड मेटाडेटा इंजन',
+        textEn: 'Automatically generates rich link preview cards (OpenGraph & Twitter cards) when public forms are forwarded on WhatsApp, Telegram, Twitter, and social media with organization branding.',
+        textHi: 'व्हाट्सएप, टेलीग्राम और सोशल मीडिया पर सार्वजनिक फॉर्म लिंक साझा करने पर संगठन के नाम और शीर्षक के साथ स्वचालित रूप से आकर्षक लिंक प्रीव्यू कार्ड प्रदर्शित होते हैं।',
+      },
+    ],
+  },
+  {
+    version: 'v1.52.0',
+    titleEn: 'Multi-Org Verified Member Badge & Credential Studio across All Movement Archetypes',
+    titleHi: 'सभी आंदोलन प्रारूपों के लिए बहु-संगठन सत्यापित सदस्य बैज व पहचान पत्र स्टूडियो',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Transformed the Verified Member Badge Studio into a comprehensive, multi-organization credential engine. Empowers Civic Collectives, Registered NGOs, Student Unions, Workers Unions, and RWAs to generate high-resolution, cryptographically verified social graphics, official digital ID cards, story formats, and printable credentials with 5 distinct layout templates, photo avatar uploads, vector heraldry, and dynamic QR verification codes.',
+    descHi: 'सत्यापित सदस्य बैज स्टूडियो को एक व्यापक, बहु-संगठनात्मक पहचान पत्र इंजन में अपग्रेड किया गया। नागरिक समूहों, पंजीकृत एनजीओ, छात्र संघों, श्रमिक संघों और आरडब्ल्यूए को 5 विशिष्ट लेआउट टेम्पलेट्स, फोटो अपलोड, वेक्टर प्रतीक चिन्ह और गतिशील क्यूआर कोड के साथ उच्च-रिज़ॉल्यूशन सत्यापित सोशल ग्राफिक्स और प्रिंट-योग्य आईडी कार्ड बनाने की सुविधा प्रदान करता है।',
+    color: 'indigo',
+    icon: Award,
+    features: [
+      {
+        nameEn: '5 Purpose-Built Movement Archetypes & Dynamic Tiers',
+        nameHi: '5 विशेष संगठनात्मक प्रारूप व गतिशील पद श्रेणियां',
+        textEn: 'Tailored badge titles, statutory ribbon headers, and designations for Civic Collectives (BQF Sec 8), Registered NGOs (80G), Student Unions (Lyngdoh Compliant), Workers Unions (Trade Unions Act 1926), and RWAs.',
+        textHi: 'नागरिक समूहों, एनजीओ, छात्र संघों, श्रमिक संघों और आरडब्ल्यूए के लिए विशेष बैज पद, वैधानिक रिबन और पदनाम।',
+      },
+      {
+        nameEn: '5 Distinct Visual Layout Engines & CR80 ID Cards',
+        nameHi: '5 विशिष्ट विज़ुअल लेआउट इंजन व CR80 आईडी कार्ड प्रारूप',
+        textEn: 'Switch seamlessly between Executive Sovereign Seal, Modern Movement Social Graphic, Official Digital ID & Pocket Pass, Technical Minimalist Pass, and Constitution Tricolor (तिरंगा) in 1:1, 9:16, 16:9, and CR80 physical card formats.',
+        textHi: 'एग्जीक्यूटिव सील, सोशल मूवमेंट ग्राफिक, डिजिटल आईडी, तकनीकी मिनिमलिस्ट और संविधान तिरंगा लेआउट में 1:1, 9:16, 16:9 और CR80 कार्ड फॉर्मेट में आसानी से बदलें।',
+      },
+      {
+        nameEn: 'Photo Avatar Upload, Vector Heraldry & 2x Retina Export Suite',
+        nameHi: 'फोटो अवतार अपलोड, वेक्टर प्रतीक व 2x रेटिना एक्सपोर्ट सूट',
+        textEn: 'Client-side photo cropping and rendering, 12+ heraldic vector emblems, dynamic scannable QR verification code, 1-click clipboard copy, Web Share API, and web embed snippet generator.',
+        textHi: 'व्यक्तिगत फोटो अपलोड, 12+ वेक्टर प्रतीक, स्कैन-योग्य क्यूआर कोड, 1-क्लिक क्लिपबोर्ड कॉपी, वेब शेयर और वेबसाइट एम्बेड कोड की सुविधा।',
+      },
+      {
+        nameEn: 'Supabase Member Credentials Ledger & Public Verification Portal (/verify/[slug]/[id])',
+        nameHi: 'सुपाबेस सदस्य पहचान लेजर व सार्वजनिक सत्यापन पोर्टल (/verify/[slug]/[id])',
+        textEn: 'Tamper-evident SHA-256 cryptographic verification ledger backed by Supabase with Row Level Security (RLS), instant QR verification, and institutional standing proof.',
+        textHi: 'सुपाबेस और रो लेवल सिक्योरिटी (RLS) द्वारा संचालित छेड़छाड़-मुक्त SHA-256 क्रिप्टोग्राफिक सत्यापन लेजर, त्वरित क्यूआर सत्यापन और आधिकारिक सदस्यता प्रमाण।',
+      },
+    ],
+  },
   {
     version: 'v1.51.0',
     titleEn: '100% Free & Ban-Safe Telegram Bot Infrastructure & Real-Time Desk',

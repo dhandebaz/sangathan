@@ -33,7 +33,7 @@ export default async function FormsPage(props: { params: Promise<{ lang: string 
 
   const { data, error } = await supabase
     .from('forms')
-    .select('id, title, description, is_active, created_at, form_submissions(count)')
+    .select('id, title, description, slug, is_active, created_at, form_submissions(count)')
     .eq('organisation_id', orgId)
     .order('created_at', { ascending: false })
   
@@ -42,7 +42,7 @@ export default async function FormsPage(props: { params: Promise<{ lang: string 
       const adminClient = createServiceClient()
       const fallbackRes = await adminClient
         .from('forms')
-        .select('id, title, description, is_active, created_at, form_submissions(count)')
+        .select('id, title, description, slug, is_active, created_at, form_submissions(count)')
         .eq('organisation_id', orgId)
         .order('created_at', { ascending: false })
 
@@ -87,11 +87,17 @@ export default async function FormsPage(props: { params: Promise<{ lang: string 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {forms.map((form) => {
           const subCount = form.form_submissions?.[0]?.count ?? form.form_submissions?.count ?? 0
+          const shareSlug = form.slug || form.id
 
           return (
             <div key={form.id} className="content-card rounded-2xl flex flex-col h-full relative group p-5 bg-card border border-border shadow-2xs hover:border-orange-300 transition-all">
                <div className="flex justify-between items-start mb-2 gap-2">
-                  <h3 className="font-extrabold text-base line-clamp-1 text-slate-900">{form.title}</h3>
+                  <div>
+                    <h3 className="font-extrabold text-base line-clamp-1 text-slate-900">{form.title}</h3>
+                    <span className="text-[11px] font-mono text-orange-700 font-semibold block mt-0.5">
+                      /f/{form.slug ? form.slug : form.id.slice(0, 8)}
+                    </span>
+                  </div>
                   <FormStatusToggle formId={form.id} isActive={form.is_active} />
                </div>
                
@@ -113,7 +119,7 @@ export default async function FormsPage(props: { params: Promise<{ lang: string 
                          <span>Analytics</span>
                       </Link>
                       <Link
-                        href={`/f/${form.id}`}
+                        href={`/f/${shareSlug}`}
                         target="_blank"
                         className="p-1.5 rounded-lg text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-colors"
                         title="Open Public Link"

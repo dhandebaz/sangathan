@@ -57,11 +57,13 @@ export default async function FormDetailsPage({ params }: PageProps) {
     id: string
     title: string
     description?: string
+    slug?: string | null
     is_active: boolean
     created_at: string
     visibility?: 'public' | 'members' | 'private' | null
     fields?: FormField[]
   } | null
+
 
   if (formRes.error || !form) notFound()
 

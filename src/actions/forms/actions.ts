@@ -11,9 +11,17 @@ import { verifySignedCookie } from '@/lib/auth/cookie'
 
 import { FormFieldSchema } from '@/types/forms'
 
+const slugRegex = /^[a-z0-9-]+$/
+
 const CreateFormSchema = z.object({
   title: z.string().min(3, "Title is required"),
   description: z.string().optional(),
+  slug: z.string()
+    .min(3, "Slug must be at least 3 characters")
+    .max(60, "Slug must be at most 60 characters")
+    .regex(slugRegex, "Only lowercase letters, numbers, and hyphens allowed")
+    .optional()
+    .nullable(),
   fields: z.array(FormFieldSchema).min(1, "At least one field is required"),
   visibility: z.enum(['public', 'members', 'private']).default('public'),
 })
@@ -21,6 +29,14 @@ const CreateFormSchema = z.object({
 const UpdateFormSchema = CreateFormSchema.partial().extend({
   formId: z.string().uuid(),
   visibility: z.enum(['public', 'members', 'private']).optional(),
+})
+
+const UpdateFormSlugSchema = z.object({
+  formId: z.string().uuid(),
+  slug: z.string()
+    .min(3, "Slug must be at least 3 characters")
+    .max(60, "Slug must be at most 60 characters")
+    .regex(slugRegex, "Only lowercase letters, numbers, and hyphens allowed"),
 })
 
 const ToggleFormStatusSchema = z.object({
@@ -41,10 +57,57 @@ const SubmitFormSchema = z.object({
 
 // --- Dashboard Actions ---
 
+export async function checkFormSlugAvailability(slug: string, formId?: string): Promise<{ available: boolean; error?: string }> {
+  const normalizedSlug = slug.toLowerCase().trim()
+  if (!normalizedSlug || normalizedSlug.length < 3) {
+    return { available: false, error: 'Slug must be at least 3 characters' }
+  }
+  if (!slugRegex.test(normalizedSlug)) {
+    return { available: false, error: 'Only lowercase letters, numbers, and hyphens allowed' }
+  }
+
+  // Reserved paths that shouldn't be used as slugs
+  const reservedWords = ['new', 'import', 'api', 'dashboard', 'settings', 'admin', 'edit', 'delete', 'export']
+  if (reservedWords.includes(normalizedSlug)) {
+    return { available: false, error: `"${normalizedSlug}" is a reserved system keyword` }
+  }
+
+  const supabase = createServiceClient()
+  let query = supabase
+    .from('forms')
+    .select('id')
+    .eq('slug', normalizedSlug)
+    .is('deleted_at', null)
+
+  if (formId) {
+    query = query.neq('id', formId)
+  }
+
+  const { data, error } = await query.maybeSingle()
+  if (error) {
+    return { available: false, error: 'Error checking availability' }
+  }
+
+  if (data) {
+    return { available: false, error: `The link "/f/${normalizedSlug}" is already in use` }
+  }
+
+  return { available: true }
+}
+
 export const createForm = createSafeAction(
   CreateFormSchema,
   async (input, context) => {
     const supabase = await createClient()
+
+    let normalizedSlug: string | null = null
+    if (input.slug && input.slug.trim().length > 0) {
+      normalizedSlug = input.slug.toLowerCase().trim()
+      const availability = await checkFormSlugAvailability(normalizedSlug)
+      if (!availability.available) {
+        throw new Error(availability.error || 'Custom link is already in use')
+      }
+    }
 
     const { data, error } = await supabase
       .from('forms')
@@ -52,12 +115,13 @@ export const createForm = createSafeAction(
         organisation_id: context.organizationId,
         title: input.title,
         description: input.description,
+        slug: normalizedSlug,
         visibility: input.visibility,
         fields: input.fields,
         is_active: true,
         created_by: context.user.id,
       })
-      .select('id')
+      .select('id, slug')
       .maybeSingle()
 
     const form = data
@@ -70,11 +134,48 @@ export const createForm = createSafeAction(
       action: 'FORM_CREATED',
       resource_table: 'forms',
       resource_id: form.id,
-      details: { title: input.title }
+      details: { title: input.title, slug: form.slug }
     })
 
     revalidatePath('/', 'layout')
-    return { formId: form.id }
+    return { formId: form.id, slug: form.slug }
+  },
+  { allowedRoles: ['admin', 'editor', 'executive'] }
+)
+
+export const updateFormSlug = createSafeAction(
+  UpdateFormSlugSchema,
+  async (input, context) => {
+    const supabase = await createClient()
+    const normalizedSlug = input.slug.toLowerCase().trim()
+
+    const availability = await checkFormSlugAvailability(normalizedSlug, input.formId)
+    if (!availability.available) {
+      throw new Error(availability.error || 'Custom link is already in use')
+    }
+
+    const { error } = await supabase
+      .from('forms')
+      .update({
+        slug: normalizedSlug,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', input.formId)
+      .eq('organisation_id', context.organizationId)
+
+    if (error) throw new Error(error.message)
+
+    await logAction({
+      organisation_id: context.organizationId,
+      user_id: context.user.id,
+      action: 'FORM_SLUG_UPDATED',
+      resource_table: 'forms',
+      resource_id: input.formId,
+      details: { slug: normalizedSlug }
+    })
+
+    revalidatePath('/', 'layout')
+    return { success: true, slug: normalizedSlug }
   },
   { allowedRoles: ['admin', 'editor', 'executive'] }
 )
@@ -84,15 +185,33 @@ export const updateForm = createSafeAction(
   async (input, context) => {
     const supabase = await createClient()
 
+    let normalizedSlug: string | undefined = undefined
+    if (input.slug !== undefined) {
+      if (input.slug && input.slug.trim().length > 0) {
+        normalizedSlug = input.slug.toLowerCase().trim()
+        const availability = await checkFormSlugAvailability(normalizedSlug, input.formId)
+        if (!availability.available) {
+          throw new Error(availability.error || 'Custom link is already in use')
+        }
+      } else {
+        normalizedSlug = undefined
+      }
+    }
+
+    const updatePayload: Record<string, any> = {
+      title: input.title,
+      description: input.description,
+      visibility: input.visibility,
+      fields: input.fields,
+      updated_at: new Date().toISOString(),
+    }
+    if (normalizedSlug !== undefined) {
+      updatePayload.slug = normalizedSlug
+    }
+
     const { error } = await supabase
       .from('forms')
-      .update({
-        title: input.title,
-        description: input.description,
-        visibility: input.visibility,
-        fields: input.fields,
-        updated_at: new Date().toISOString(),
-      })
+      .update(updatePayload)
       .eq('id', input.formId)
       .eq('organisation_id', context.organizationId)
 
@@ -107,7 +226,6 @@ export const updateForm = createSafeAction(
       details: { changes: input }
     })
 
-    revalidatePath('/', 'layout')
     revalidatePath('/', 'layout')
     return { success: true }
   },

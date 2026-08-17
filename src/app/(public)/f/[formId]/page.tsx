@@ -5,6 +5,7 @@ import { PublicForm } from '@/components/forms/public-form'
 import { z } from 'zod'
 import { FormFieldSchema } from '@/types/forms'
 import { createSignedCookie } from '@/lib/auth/cookie'
+import { Metadata } from 'next'
 
 interface PageProps {
   params: Promise<{ formId: string }>
@@ -12,32 +13,97 @@ interface PageProps {
 
 export const dynamic = 'force-dynamic'
 
-export default async function PublicFormPage({ params }: PageProps) {
-  const { formId } = await params
-  const supabase = createServiceClient()
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
-  // Fetch form details
-  const { data: form, error } = await supabase
+async function getFormBySlugOrId(identifier: string) {
+  const supabase = createServiceClient()
+  const isUuid = UUID_REGEX.test(identifier)
+
+  let query = supabase
     .from('forms')
-    .select('id, title, description, fields, is_active, organisation_id, visibility, deleted_at')
-    .eq('id', formId)
-    .maybeSingle() as { 
-      data: { 
-        id: string; 
-        title: string; 
-        description: string | null; 
-        fields: z.infer<typeof FormFieldSchema>[]; 
-        is_active: boolean; 
-        organisation_id: string; 
-        visibility: 'public' | 'members' | 'private'; 
-        deleted_at: string | null 
-      } | null, 
-      error: { message: string } | null 
-    }
+    .select('id, title, description, slug, fields, is_active, organisation_id, visibility, deleted_at')
+
+  if (isUuid) {
+    query = query.or(`id.eq.${identifier},slug.eq.${identifier.toLowerCase()}`)
+  } else {
+    query = query.eq('slug', identifier.toLowerCase())
+  }
+
+  const { data: form, error } = await query.maybeSingle() as { 
+    data: { 
+      id: string; 
+      title: string; 
+      description: string | null; 
+      slug: string | null;
+      fields: z.infer<typeof FormFieldSchema>[]; 
+      is_active: boolean; 
+      organisation_id: string; 
+      visibility: 'public' | 'members' | 'private'; 
+      deleted_at: string | null 
+    } | null, 
+    error: { message: string } | null 
+  }
 
   if (error || !form || !form.is_active || form.deleted_at !== null) {
+    return null
+  }
+
+  return form
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { formId } = await params
+  const form = await getFormBySlugOrId(formId)
+
+  if (!form) {
+    return {
+      title: 'Form Not Found | Sangathan',
+      description: 'The requested form is not available.',
+    }
+  }
+
+  const supabase = createServiceClient()
+  const { data: org } = await supabase
+    .from('organisations')
+    .select('name')
+    .eq('id', form.organisation_id)
+    .maybeSingle()
+
+  const orgName = org?.name || 'Sangathan'
+  const title = `${form.title} | ${orgName}`
+  const description = form.description || `Fill out the official ${form.title} survey on Sangathan.`
+  const canonicalUrl = `https://sangathan.space/f/${form.slug || form.id}`
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: orgName,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    },
+  }
+}
+
+export default async function PublicFormPage({ params }: PageProps) {
+  const { formId } = await params
+  const form = await getFormBySlugOrId(formId)
+
+  if (!form) {
     notFound()
   }
+
+  const supabase = createServiceClient()
 
   // Fetch Organisation Name for branding
   const { data: org } = await supabase
@@ -47,6 +113,7 @@ export default async function PublicFormPage({ params }: PageProps) {
     .maybeSingle() as { data: { name: string; whitelabel_enabled?: boolean } | null, error: { message: string } | null }
 
   const whitelabelEnabled = org?.whitelabel_enabled ?? false
+  const shareIdentifier = form.slug || form.id
 
   // Visibility Validation Gates
   const userClient = await createClient()
@@ -54,7 +121,7 @@ export default async function PublicFormPage({ params }: PageProps) {
 
   if (form.visibility === 'members') {
     if (!user) {
-      redirect(`/en/login?redirect=/f/${formId}`)
+      redirect(`/en/login?redirect=/f/${shareIdentifier}`)
     }
     const { data: profile } = await supabase
       .from('profiles')
@@ -84,7 +151,7 @@ export default async function PublicFormPage({ params }: PageProps) {
               </div>
               <h2 className="text-xl font-bold text-gray-900 mb-2">Access Denied</h2>
               <p className="text-gray-500 mb-6">Only active members of this organization can fill this form.</p>
-              <a href={`/en/login?redirect=/f/${formId}`} className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-700">
+              <a href={`/en/login?redirect=/f/${shareIdentifier}`} className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-700">
                 Sign In with a different account
               </a>
             </div>
@@ -102,7 +169,7 @@ export default async function PublicFormPage({ params }: PageProps) {
 
   if (form.visibility === 'private') {
     if (!user) {
-      redirect(`/en/login?redirect=/f/${formId}`)
+      redirect(`/en/login?redirect=/f/${shareIdentifier}`)
     }
     const { data: profile } = await supabase
       .from('profiles')
@@ -137,7 +204,7 @@ export default async function PublicFormPage({ params }: PageProps) {
               </div>
               <h2 className="text-xl font-bold text-gray-900 mb-2">Access Denied</h2>
               <p className="text-gray-500 mb-6">Access denied. Only staff can submit responses to this form.</p>
-              <a href={`/en/login?redirect=/f/${formId}`} className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-700">
+              <a href={`/en/login?redirect=/f/${shareIdentifier}`} className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-700">
                 Sign In with a different account
               </a>
             </div>
@@ -153,7 +220,7 @@ export default async function PublicFormPage({ params }: PageProps) {
     }
   }
 
-  const csrfToken = await createSignedCookie({ formId })
+  const csrfToken = await createSignedCookie({ formId: form.id })
 
   return (
     <div className="min-h-screen bg-orange-50/30 py-12 px-4 sm:px-6">
@@ -172,10 +239,13 @@ export default async function PublicFormPage({ params }: PageProps) {
            <PublicForm form={form} csrfToken={csrfToken} />
         </div>
         
-        <div className="mt-8 text-center text-xs text-gray-400">
-           Powered by Sangathan Platform
-        </div>
+        {!whitelabelEnabled && (
+          <div className="mt-8 text-center text-xs text-gray-400">
+             Powered by Sangathan Platform
+          </div>
+        )}
       </div>
     </div>
   )
 }
+

@@ -22,13 +22,17 @@ import {
   ThumbsUp,
   ThumbsDown,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  MessageCircle,
+  Globe,
+  Link2
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FormStatusToggle } from '@/components/forms/form-status-toggle'
 import { CsvExportButton } from '@/components/forms/csv-export-button'
 import { ParticipantDossierModal } from '@/components/forms/participant-dossier-modal'
+import { WhatsappShareModal } from '@/components/forms/whatsapp-share-modal'
 import { toast } from 'sonner'
 import Link from 'next/link'
 
@@ -43,6 +47,7 @@ interface Form {
   id: string
   title: string
   description?: string
+  slug?: string | null
   is_active: boolean
   created_at: string
   visibility?: 'public' | 'members' | 'private' | null
@@ -69,6 +74,8 @@ export function SurveyAnalyticsDashboard({
   const [selectedSentimentFilter, setSelectedSentimentFilter] = useState<'all' | 'positive' | 'neutral' | 'negative' | 'urgent'>('all')
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null)
   const [isDossierOpen, setIsDossierOpen] = useState(false)
+  const [isWhatsappModalOpen, setIsWhatsappModalOpen] = useState(false)
+  const [formSlug, setFormSlug] = useState<string | null>(form.slug || null)
 
   // Compute rich survey analytics
   const analytics = useMemo(() => {
@@ -94,11 +101,13 @@ export function SurveyAnalyticsDashboard({
     })
   }, [submissions, searchQuery, selectedSentimentFilter])
 
+  const shareIdentifier = formSlug || form.id
+
   function handleCopyPublicLink() {
     const origin = typeof window !== 'undefined' ? window.location.origin : ''
-    const link = `${origin}/f/${form.id}`
+    const link = `${origin}/f/${shareIdentifier}`
     navigator.clipboard.writeText(link)
-    toast.success('Public form link copied to clipboard!')
+    toast.success(isHindi ? 'पब्लिक फॉर्म लिंक कॉपी हुआ!' : 'Public form link copied to clipboard!')
   }
 
   function handleOpenDossier(sub: Submission) {
@@ -120,7 +129,15 @@ export function SurveyAnalyticsDashboard({
               <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-sm bg-orange-100 text-orange-800">
                 {isHindi ? 'सर्वेक्षण विश्लेषण व रिपोर्ट' : 'Survey Intelligence & Live Analytics'}
               </span>
-              <span className="text-xs text-slate-400 font-mono">/f/{form.id.slice(0, 8)}</span>
+              <button
+                type="button"
+                onClick={() => setIsWhatsappModalOpen(true)}
+                className="inline-flex items-center gap-1 text-xs text-orange-700 hover:text-orange-900 font-mono bg-orange-50/80 hover:bg-orange-100 px-2 py-0.5 rounded transition-colors"
+                title="Click to view/edit custom link & share on WhatsApp"
+              >
+                <Globe size={11} />
+                <span>/f/{formSlug ? formSlug : form.id.slice(0, 8)}</span>
+              </button>
             </div>
             <h1 className="text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">{form.title}</h1>
             {form.description && (
@@ -134,6 +151,16 @@ export function SurveyAnalyticsDashboard({
 
             <Button
               type="button"
+              onClick={() => setIsWhatsappModalOpen(true)}
+              className="bg-[#25D366] hover:bg-[#1EBE5D] text-white font-extrabold text-xs shadow-xs"
+              title="Share via WhatsApp with custom CTA"
+            >
+              <MessageCircle className="w-3.5 h-3.5 mr-1.5 fill-white" />
+              {isHindi ? 'व्हाट्सएप शेयर' : 'WhatsApp Share'}
+            </Button>
+
+            <Button
+              type="button"
               variant="outline"
               size="sm"
               onClick={handleCopyPublicLink}
@@ -141,7 +168,7 @@ export function SurveyAnalyticsDashboard({
               title="Copy Public Link"
             >
               <Copy className="w-3.5 h-3.5 mr-1 text-slate-500" />
-              {isHindi ? 'लिंक कॉपी करें' : 'Copy Link'}
+              {isHindi ? 'लिंक कॉपी' : 'Copy Link'}
             </Button>
 
             <Button
@@ -151,7 +178,7 @@ export function SurveyAnalyticsDashboard({
               asChild
               className="text-xs font-bold border-slate-200 text-slate-700"
             >
-              <a href={`/f/${form.id}`} target="_blank" rel="noopener noreferrer">
+              <a href={`/f/${shareIdentifier}`} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="w-3.5 h-3.5 mr-1 text-slate-500" />
                 {isHindi ? 'सार्वजनिक फॉर्म' : 'Open Public Form'}
               </a>
@@ -677,6 +704,20 @@ export function SurveyAnalyticsDashboard({
         fields={fields}
         lang={lang}
       />
+
+      {/* WhatsApp Share & SEO Slug Modal */}
+      <WhatsappShareModal
+        isOpen={isWhatsappModalOpen}
+        onClose={() => setIsWhatsappModalOpen(false)}
+        formId={form.id}
+        formTitle={form.title}
+        formDescription={form.description}
+        currentSlug={formSlug}
+        orgName={orgName}
+        lang={lang}
+        onSlugUpdated={(newSlug) => setFormSlug(newSlug)}
+      />
     </div>
   )
 }
+

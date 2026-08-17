@@ -179,6 +179,8 @@ export function NewFormClient({ lang, orgType = 'ngo' }: NewFormClientProps) {
   const [activeMode, setActiveMode] = useState<'build' | 'preview'>('build')
   const [loading, setLoading] = useState(false)
   const [title, setTitle] = useState('')
+  const [slug, setSlug] = useState('')
+  const [isCustomSlugModified, setIsCustomSlugModified] = useState(false)
   const [description, setDescription] = useState('')
   const [visibility, setVisibility] = useState<'public' | 'members' | 'private'>('public')
 
@@ -191,6 +193,23 @@ export function NewFormClient({ lang, orgType = 'ngo' }: NewFormClientProps) {
 
   // Template modal state
   const [showTemplateModal, setShowTemplateModal] = useState(false)
+
+  function slugify(text: string) {
+    return text
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .slice(0, 50)
+  }
+
+  function handleTitleChange(val: string) {
+    setTitle(val)
+    if (!isCustomSlugModified) {
+      setSlug(slugify(val))
+    }
+  }
 
   function handleAddField(paletteItem: typeof FIELD_PALETTE[number]) {
     const newField: FormField = {
@@ -276,6 +295,8 @@ export function NewFormClient({ lang, orgType = 'ngo' }: NewFormClientProps) {
 
   function loadTemplate(template: typeof FORM_TEMPLATES[number]) {
     setTitle(template.title)
+    setSlug(slugify(template.title))
+    setIsCustomSlugModified(false)
     setDescription(template.description)
     setFields(template.fields.map(f => ({ ...f, id: crypto.randomUUID() })))
     setShowTemplateModal(false)
@@ -293,9 +314,12 @@ export function NewFormClient({ lang, orgType = 'ngo' }: NewFormClientProps) {
     setLoading(true)
 
     try {
+      const normalizedSlug = slug.trim() ? slugify(slug) : undefined
+
       const result = await createForm({
         title: title.trim(),
         description: description.trim() || undefined,
+        slug: normalizedSlug,
         visibility,
         fields: fields.map(f => ({
           id: f.id,
@@ -545,10 +569,38 @@ export function NewFormClient({ lang, orgType = 'ngo' }: NewFormClientProps) {
                 </Label>
                 <Input
                   value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  onChange={(e) => handleTitleChange(e.target.value)}
                   placeholder="e.g. Annual Hostel Mess Quality Survey 2026"
                   className="font-bold text-base border-slate-200 focus:border-orange-600"
                 />
+              </div>
+
+              <div>
+                <Label className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 flex items-center justify-between">
+                  <span>{isHindi ? 'कस्टम फ्रेंडली लिंक (SEO URL Slug)' : 'Custom SEO Link (URL Slug)'}</span>
+                  <span className="text-[11px] font-normal text-slate-400 font-mono">
+                    sangathan.space/f/{slug || 'custom-slug'}
+                  </span>
+                </Label>
+                <div className="flex items-center">
+                  <span className="bg-slate-100 border border-r-0 border-slate-200 text-slate-500 px-3 py-2 rounded-l-md text-xs font-mono select-none">
+                    /f/
+                  </span>
+                  <Input
+                    value={slug}
+                    onChange={(e) => {
+                      setIsCustomSlugModified(true)
+                      setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))
+                    }}
+                    placeholder="e.g. annual-hostel-mess-survey-2026"
+                    className="rounded-l-none font-mono text-xs border-slate-200 focus:border-orange-600"
+                  />
+                </div>
+                <p className="text-[11px] text-slate-400 mt-1">
+                  {isHindi
+                    ? 'यह लिंक याद रखने में आसान है और इसे व्हाट्सएप पर सीधे शेयर किया जा सकता है।'
+                    : 'Memorable short link to easily share and forward directly across WhatsApp groups.'}
+                </p>
               </div>
 
               <div>

@@ -64,3 +64,24 @@ export interface SentimentAnalysisResult {
   goalAlignmentScore: number // 0 to 100%
   averageRating: number | null // out of 5
 }
+
+export const FormSlugSchema = z.string()
+  .min(3, 'Slug must be at least 3 characters')
+  .max(60, 'Slug must be at most 60 characters')
+  .regex(/^[a-z0-9-]+$/, 'Slug can only contain lowercase letters, numbers, and hyphens')
+
+export interface FormRecord {
+  id: string
+  organisation_id: string
+  title: string
+  description?: string | null
+  slug?: string | null
+  fields: FormField[]
+  is_active: boolean
+  visibility: 'public' | 'members' | 'private'
+  created_by?: string | null
+  created_at: string
+  updated_at?: string
+  deleted_at?: string | null
+}
+
