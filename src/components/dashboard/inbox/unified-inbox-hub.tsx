@@ -367,10 +367,6 @@ export function UnifiedInboxHub({
       {/* 1. Header Bar with Status Conduits & Instant Action Buttons */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-border pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-600 mb-1">
-            <MessageSquare className="w-4 h-4" />
-            <span>{isHindi ? 'एकीकृत इनबॉक्स एवं डिस्पैच डेस्क' : 'Unified Communications & Dispatch Hub'}</span>
-          </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
             {isHindi ? 'इनबॉक्स एवं संवाद' : 'Inbox & Live Dispatch'}
           </h1>
@@ -388,7 +384,7 @@ export function UnifiedInboxHub({
             variant="outline"
             size="sm"
             onClick={handleConnectGoogleMeet}
-            className="text-xs font-semibold border-emerald-200 bg-emerald-50/50 text-emerald-800 hover:bg-emerald-100/60 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300"
+            className="text-xs font-semibold border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs"
           >
             <Video className="w-3.5 h-3.5 mr-1.5 text-emerald-600" />
             {isHindi ? 'Google Meet अनुमति' : 'Connect Google Meet'}
@@ -399,7 +395,7 @@ export function UnifiedInboxHub({
             variant="outline"
             size="sm"
             onClick={() => setTgTokenModalOpen(true)}
-            className="text-xs font-semibold border-sky-200 bg-sky-50/50 text-sky-800 hover:bg-sky-100/60 dark:border-sky-900 dark:bg-sky-950/40 dark:text-sky-300"
+            className="text-xs font-semibold border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs"
           >
             <Radio className="w-3.5 h-3.5 mr-1.5 text-sky-600" />
             {isTgActive ? (
@@ -417,7 +413,7 @@ export function UnifiedInboxHub({
             variant="outline"
             size="sm"
             onClick={() => setMeetModalOpen(true)}
-            className="text-xs font-semibold border-indigo-200 bg-indigo-50/50 text-indigo-800 hover:bg-indigo-100/60 dark:border-indigo-900 dark:bg-indigo-950/40 dark:text-indigo-300"
+            className="text-xs font-semibold border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs"
           >
             <Video className="w-3.5 h-3.5 mr-1.5 text-indigo-600" />
             {isHindi ? 'त्वरित वीडियो कॉल' : 'Start Video Call'}
@@ -437,16 +433,16 @@ export function UnifiedInboxHub({
 
       {/* 2. Unified KPIs Ribbon */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3 bg-card border border-border rounded-xl shadow-2xs">
-          <div className="text-[11px] font-bold text-muted-foreground uppercase">Active Member Chats</div>
-          <div className="text-xl font-black text-foreground mt-0.5">{stats.totalConversations}</div>
+        <div className="p-3.5 bg-white border border-slate-200 rounded-xl shadow-2xs">
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Active Member Chats</div>
+          <div className="text-xl font-black text-slate-900 mt-0.5">{stats.totalConversations}</div>
         </div>
-        <div className="p-3 bg-card border border-border rounded-xl shadow-2xs">
-          <div className="text-[11px] font-bold text-muted-foreground uppercase">Inbound Messages</div>
-          <div className="text-xl font-black text-foreground mt-0.5">{stats.totalInboundMessages}</div>
+        <div className="p-3.5 bg-white border border-slate-200 rounded-xl shadow-2xs">
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Inbound Messages</div>
+          <div className="text-xl font-black text-slate-900 mt-0.5">{stats.totalInboundMessages}</div>
         </div>
-        <div className="p-3 bg-card border border-border rounded-xl shadow-2xs">
-          <div className="text-[11px] font-bold text-muted-foreground uppercase">Telegram Bot Status</div>
+        <div className="p-3.5 bg-white border border-slate-200 rounded-xl shadow-2xs">
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Telegram Bot Status</div>
           <div className="text-sm font-bold text-sky-600 mt-1 flex items-center gap-1.5">
             {isTgActive ? (
               <>
@@ -461,8 +457,8 @@ export function UnifiedInboxHub({
             )}
           </div>
         </div>
-        <div className="p-3 bg-card border border-border rounded-xl shadow-2xs">
-          <div className="text-[11px] font-bold text-muted-foreground uppercase">Emergency SOS Desk</div>
+        <div className="p-3.5 bg-white border border-slate-200 rounded-xl shadow-2xs">
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Emergency SOS Desk</div>
           <div className="text-sm font-bold text-rose-600 mt-1 flex items-center gap-1.5">
             <ShieldAlert className="w-4 h-4 text-rose-500" />
             {stats.totalSosAlerts} Active
@@ -471,31 +467,33 @@ export function UnifiedInboxHub({
       </div>
 
       {/* 3. Navigation Tabs */}
-      <div className="flex items-center gap-1.5 overflow-x-auto border-b border-border pb-2 scrollbar-none">
-        {[
-          { id: 'chats', label: isHindi ? '2-तरफा सदस्य संवाद' : 'Direct & Member Chats', icon: MessageSquare },
-          { id: 'telegram', label: isHindi ? 'टेलीग्राम बॉट एवं चैनल' : 'Telegram Bot & Channels', icon: Radio },
-          { id: 'emergency', label: isHindi ? 'आपातकालीन एसओएस (SOS)' : 'Emergency SOS', icon: ShieldAlert },
-          { id: 'broadcasts', label: isHindi ? 'ब्रॉडकास्ट एवं घोषणाएं' : 'Announcements & Broadcasts', icon: Megaphone },
-          { id: 'integrations', label: isHindi ? 'कनेक्टर्स व ऐप्स' : 'Apps & Conduits', icon: Layers },
-        ].map((tab) => {
-          const Icon = tab.icon
-          const isActive = activeTab === tab.id
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
-                isActive
-                  ? 'bg-orange-600 text-white shadow-2xs'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              <span>{tab.label}</span>
-            </button>
-          )
-        })}
+      <div className="overflow-x-auto pb-1 scrollbar-none">
+        <div className="inline-flex items-center gap-1 p-1 bg-slate-100/90 border border-slate-200/80 rounded-xl shadow-2xs">
+          {[
+            { id: 'chats', label: isHindi ? '2-तरफा सदस्य संवाद' : 'Direct & Member Chats', icon: MessageSquare },
+            { id: 'telegram', label: isHindi ? 'टेलीग्राम बॉट एवं चैनल' : 'Telegram Bot & Channels', icon: Radio },
+            { id: 'emergency', label: isHindi ? 'आपातकालीन एसओएस (SOS)' : 'Emergency SOS', icon: ShieldAlert },
+            { id: 'broadcasts', label: isHindi ? 'ब्रॉडकास्ट एवं घोषणाएं' : 'Announcements & Broadcasts', icon: Megaphone },
+            { id: 'integrations', label: isHindi ? 'कनेक्टर्स व ऐप्स' : 'Apps & Conduits', icon: Layers },
+          ].map((tab) => {
+            const Icon = tab.icon
+            const isActive = activeTab === tab.id
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
+                  isActive
+                    ? 'bg-white text-slate-900 shadow-2xs border border-slate-200/90 font-extrabold'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                }`}
+              >
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-orange-600' : 'text-slate-400'}`} />
+                <span>{tab.label}</span>
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       {/* 4. Tab 1: Direct Member Chats & Unified Inbound Workspace */}

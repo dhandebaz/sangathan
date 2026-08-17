@@ -69,7 +69,7 @@ export function ActionCard({
             <Button
               asChild
               size="sm"
-              className="h-8 px-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-all active:scale-95 shadow-xs"
+              className="h-8 px-3.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs transition-all active:scale-95 shadow-xs"
             >
               <Link href={actionHref}>
                 {actionLabel}

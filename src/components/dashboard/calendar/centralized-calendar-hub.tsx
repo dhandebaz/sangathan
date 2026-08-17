@@ -270,10 +270,6 @@ export function CentralizedCalendarHub({
       {/* Header Bar */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-border pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-600 mb-1">
-            <CalendarIcon className="w-4 h-4" />
-            <span>{isHindi ? 'केंद्रीकृत संगठन कैलेंडर एवं फील्ड रोस्टर' : 'Centralized Schedule & Field Operations Calendar'}</span>
-          </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
             {isHindi ? 'कैलेंडर एवं समन्वय' : 'Calendar & Operations Sync'}
           </h1>
@@ -291,9 +287,9 @@ export function CentralizedCalendarHub({
             variant="outline"
             size="sm"
             onClick={handleOpenSubscribe}
-            className="text-xs font-semibold border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900"
+            className="text-xs font-semibold border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs"
           >
-            <Smartphone className="w-3.5 h-3.5 mr-1.5 text-slate-700 dark:text-slate-300" />
+            <Smartphone className="w-3.5 h-3.5 mr-1.5 text-slate-500" />
             {isHindi ? 'iPhone / iCal सिंक' : 'Subscribe to iCal'}
           </Button>
 
@@ -303,10 +299,10 @@ export function CentralizedCalendarHub({
             size="sm"
             onClick={handleGoogleCalendarSync}
             disabled={isSyncingGoogle}
-            className="text-xs font-semibold border-blue-200 bg-blue-50/50 text-blue-800 hover:bg-blue-100/60 dark:border-blue-900 dark:bg-blue-950/40 dark:text-blue-300"
+            className="text-xs font-semibold border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs"
           >
             {isSyncingGoogle ? (
-              <RefreshCw className="w-3.5 h-3.5 mr-1.5 animate-spin" />
+              <RefreshCw className="w-3.5 h-3.5 mr-1.5 animate-spin text-blue-600" />
             ) : (
               <CalendarCheck className="w-3.5 h-3.5 mr-1.5 text-blue-600" />
             )}
@@ -318,7 +314,7 @@ export function CentralizedCalendarHub({
             variant="outline"
             size="sm"
             onClick={() => setMeetModalOpen(true)}
-            className="text-xs font-semibold border-emerald-200 bg-emerald-50/50 text-emerald-800 hover:bg-emerald-100/60 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300"
+            className="text-xs font-semibold border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs"
           >
             <Video className="w-3.5 h-3.5 mr-1.5 text-emerald-600" />
             {isHindi ? 'Google Meet कक्ष' : 'Instant Google Meet'}
@@ -347,9 +343,9 @@ export function CentralizedCalendarHub({
       </div>
 
       {/* Control Strip: Filter Tabs + View Mode + Month Nav */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-card border border-border p-3 rounded-xl shadow-2xs">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white border border-slate-200 p-3 rounded-xl shadow-2xs">
         {/* Category Filters */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
+        <div className="inline-flex items-center gap-1 p-1 bg-slate-100/90 border border-slate-200/80 rounded-xl shadow-2xs overflow-x-auto scrollbar-none">
           {[
             { id: 'all', label: isHindi ? 'सभी' : 'All Items' },
             { id: 'event', label: isHindi ? 'कार्यक्रम' : 'Events' },
@@ -362,8 +358,8 @@ export function CentralizedCalendarHub({
               onClick={() => setActiveFilter(f.id as any)}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
                 activeFilter === f.id
-                  ? 'bg-orange-600 text-white shadow-2xs'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                  ? 'bg-white text-slate-900 shadow-2xs border border-slate-200/90 font-extrabold'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`}
             >
               {f.label}
@@ -469,14 +465,14 @@ export function CentralizedCalendarHub({
               return (
                 <div
                   key={`day-${dayNumber}`}
-                  className={`min-h-[90px] sm:min-h-[110px] p-1.5 transition-colors flex flex-col justify-between ${
-                    isToday ? 'bg-orange-50/40 dark:bg-orange-950/20' : 'hover:bg-muted/30'
+                  className={`min-h-[90px] sm:min-h-[110px] p-2 transition-colors flex flex-col justify-between ${
+                    isToday ? 'bg-indigo-50/40 ring-1 ring-inset ring-indigo-400/50' : 'hover:bg-slate-50/80'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <span
                       className={`text-xs font-extrabold inline-flex items-center justify-center rounded-full w-5 h-5 ${
-                        isToday ? 'bg-orange-600 text-white' : 'text-foreground'
+                        isToday ? 'bg-indigo-600 text-white shadow-2xs' : 'text-slate-800'
                       }`}
                     >
                       {dayNumber}

@@ -372,7 +372,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
                       className={cn(
                         'flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-xl transition-all',
                         active
-                          ? 'bg-orange-50 text-orange-950 font-bold border border-orange-200/80 shadow-2xs dark:bg-orange-950/40 dark:text-orange-200 dark:border-orange-900'
+                          ? 'bg-slate-100 text-slate-900 font-bold border border-slate-200/90 shadow-2xs dark:bg-slate-800 dark:text-white dark:border-slate-700'
                           : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white'
                       )}
                     >

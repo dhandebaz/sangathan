@@ -130,10 +130,6 @@ export function UnifiedFormsHub({
       {/* 1. Header Bar */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-border pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-600 mb-1">
-            <Sparkles className="w-4 h-4" />
-            <span>{isHindi ? 'नागरिक फॉर्म, सर्वेक्षण एवं फील्ड डेटा हब' : 'Civic Forms, Survey Studio & Field Intake'}</span>
-          </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
             {isHindi ? 'फॉर्म एवं सर्वेक्षण हब' : 'Forms & Survey Studio'}
           </h1>
@@ -151,7 +147,7 @@ export function UnifiedFormsHub({
             variant="outline"
             size="sm"
             onClick={() => setActiveTab('google_import')}
-            className="text-xs font-semibold border-indigo-200 bg-indigo-50/50 text-indigo-800 hover:bg-indigo-100/60 dark:border-indigo-900 dark:bg-indigo-950/40 dark:text-indigo-300"
+            className="text-xs font-semibold border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs"
           >
             <Database className="w-3.5 h-3.5 mr-1.5 text-indigo-600" />
             {isHindi ? 'Google Form आयात' : 'Import Google Form'}
@@ -162,7 +158,7 @@ export function UnifiedFormsHub({
             variant="outline"
             size="sm"
             asChild
-            className="text-xs font-semibold border-emerald-200 bg-emerald-50/50 text-emerald-800 hover:bg-emerald-100/60 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300"
+            className="text-xs font-semibold border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs"
           >
             <Link href={`/${lang}/dashboard/field-mode`}>
               <Smartphone className="w-3.5 h-3.5 mr-1.5 text-emerald-600" />
@@ -188,41 +184,41 @@ export function UnifiedFormsHub({
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div
           onClick={() => { setActiveTab('studio'); setStatusFilter('all'); }}
-          className={`p-3 bg-card border rounded-xl shadow-2xs cursor-pointer transition-all ${
-            activeTab === 'studio' && statusFilter === 'all' ? 'border-orange-600 bg-orange-50/20 dark:bg-orange-950/20' : 'border-border hover:border-slate-400'
+          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+            activeTab === 'studio' && statusFilter === 'all' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
-          <div className="text-[11px] font-bold text-muted-foreground uppercase">Total Forms</div>
-          <div className="text-xl font-black text-foreground mt-0.5">{forms.length}</div>
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Forms</div>
+          <div className="text-xl font-black text-slate-900 mt-0.5">{forms.length}</div>
         </div>
 
         <div
           onClick={() => { setActiveTab('studio'); setStatusFilter('active'); }}
-          className={`p-3 bg-card border rounded-xl shadow-2xs cursor-pointer transition-all ${
-            activeTab === 'studio' && statusFilter === 'active' ? 'border-orange-600 bg-orange-50/20 dark:bg-orange-950/20' : 'border-border hover:border-slate-400'
+          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+            activeTab === 'studio' && statusFilter === 'active' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
-          <div className="text-[11px] font-bold text-muted-foreground uppercase">Live & Active</div>
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Live & Active</div>
           <div className="text-xl font-black text-emerald-600 mt-0.5">{activeCount}</div>
         </div>
 
         <div
           onClick={() => setActiveTab('submissions')}
-          className={`p-3 bg-card border rounded-xl shadow-2xs cursor-pointer transition-all ${
-            activeTab === 'submissions' ? 'border-orange-600 bg-orange-50/20 dark:bg-orange-950/20' : 'border-border hover:border-slate-400'
+          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+            activeTab === 'submissions' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
-          <div className="text-[11px] font-bold text-muted-foreground uppercase">Total Responses</div>
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Responses</div>
           <div className="text-xl font-black text-indigo-600 mt-0.5">{initialTotalSubmissions}</div>
         </div>
 
         <div
           onClick={() => setActiveTab('offline_field')}
-          className={`p-3 bg-card border rounded-xl shadow-2xs cursor-pointer transition-all ${
-            activeTab === 'offline_field' ? 'border-orange-600 bg-orange-50/20 dark:bg-orange-950/20' : 'border-border hover:border-slate-400'
+          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+            activeTab === 'offline_field' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
-          <div className="text-[11px] font-bold text-muted-foreground uppercase">Field PWA Ready</div>
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Field PWA Ready</div>
           <div className="text-sm font-bold text-emerald-600 mt-1 flex items-center gap-1">
             <CheckCircle2 className="w-4 h-4" />
             100% Offline
@@ -231,31 +227,33 @@ export function UnifiedFormsHub({
       </div>
 
       {/* 3. Navigation Tabs */}
-      <div className="flex items-center gap-1.5 overflow-x-auto border-b border-border pb-2 scrollbar-none">
-        {[
-          { id: 'studio', label: isHindi ? 'फॉर्म एवं सर्वेक्षण सूची' : 'Forms & Survey Studio', icon: FileText },
-          { id: 'submissions', label: isHindi ? 'उत्तर एवं लाइव एनालिटिक्स' : 'Submissions & Analytics', icon: BarChart3 },
-          { id: 'google_import', label: isHindi ? 'Google Forms API माइग्रेटर' : 'Google Forms Importer', icon: Database },
-          { id: 'offline_field', label: isHindi ? 'ऑफलाइन फील्ड मोड PWA' : 'Offline Field Mode', icon: Smartphone },
-          { id: 'paper_print', label: isHindi ? 'प्रिंटेबल A4 पर्चा / सर्वे शीट' : 'Printable Paper Sheets', icon: Printer },
-        ].map((tab) => {
-          const Icon = tab.icon
-          const isActive = activeTab === tab.id
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
-                isActive
-                  ? 'bg-orange-600 text-white shadow-2xs'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              <span>{tab.label}</span>
-            </button>
-          )
-        })}
+      <div className="overflow-x-auto pb-1 scrollbar-none">
+        <div className="inline-flex items-center gap-1 p-1 bg-slate-100/90 border border-slate-200/80 rounded-xl shadow-2xs">
+          {[
+            { id: 'studio', label: isHindi ? 'फॉर्म एवं सर्वेक्षण सूची' : 'Forms & Survey Studio', icon: FileText },
+            { id: 'submissions', label: isHindi ? 'उत्तर एवं लाइव एनालिटिक्स' : 'Submissions & Analytics', icon: BarChart3 },
+            { id: 'google_import', label: isHindi ? 'Google Forms API माइग्रेटर' : 'Google Forms Importer', icon: Database },
+            { id: 'offline_field', label: isHindi ? 'ऑफलाइन फील्ड मोड PWA' : 'Offline Field Mode', icon: Smartphone },
+            { id: 'paper_print', label: isHindi ? 'प्रिंटेबल A4 पर्चा / सर्वे शीट' : 'Printable Paper Sheets', icon: Printer },
+          ].map((tab) => {
+            const Icon = tab.icon
+            const isActive = activeTab === tab.id
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
+                  isActive
+                    ? 'bg-white text-slate-900 shadow-2xs border border-slate-200/90 font-extrabold'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                }`}
+              >
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-orange-600' : 'text-slate-400'}`} />
+                <span>{tab.label}</span>
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       {/* 4. Tab 1: Forms & Survey Studio */}

@@ -91,10 +91,6 @@ export function UnifiedPeopleHub({
       {/* 1. Header Bar */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-border pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-600 mb-1">
-            <Users className="w-4 h-4" />
-            <span>{isHindi ? 'एकीकृत सदस्य, स्वयंसेवक एवं दल हब' : 'Unified People, Cadre & Credentials Hub'}</span>
-          </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
             {isHindi ? 'सदस्य एवं कार्यसमिति' : 'People & Members Hub'}
           </h1>
@@ -112,10 +108,10 @@ export function UnifiedPeopleHub({
             variant="outline"
             size="sm"
             asChild
-            className="text-xs font-semibold border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900"
+            className="text-xs font-semibold border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs"
           >
             <Link href={`/${lang}/dashboard/members/import`}>
-              <FileSpreadsheet className="w-3.5 h-3.5 mr-1.5 text-slate-700 dark:text-slate-300" />
+              <FileSpreadsheet className="w-3.5 h-3.5 mr-1.5 text-slate-500" />
               {isHindi ? 'आयात (Excel / Google)' : 'Import Roster'}
             </Link>
           </Button>
@@ -125,7 +121,7 @@ export function UnifiedPeopleHub({
             variant="outline"
             size="sm"
             asChild
-            className="text-xs font-semibold border-indigo-200 bg-indigo-50/50 text-indigo-800 hover:bg-indigo-100/60 dark:border-indigo-900 dark:bg-indigo-950/40 dark:text-indigo-300"
+            className="text-xs font-semibold border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs"
           >
             <Link href={`/${lang}/members/badge`}>
               <Award className="w-3.5 h-3.5 mr-1.5 text-indigo-600" />
@@ -147,82 +143,84 @@ export function UnifiedPeopleHub({
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         <div
           onClick={() => setActiveTab('members')}
-          className={`p-3 bg-card border rounded-xl shadow-2xs cursor-pointer transition-all ${
-            activeTab === 'members' ? 'border-orange-600 bg-orange-50/20 dark:bg-orange-950/20' : 'border-border hover:border-slate-400'
+          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+            activeTab === 'members' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
-          <div className="text-[11px] font-bold text-muted-foreground uppercase">Members Roster</div>
-          <div className="text-xl font-black text-foreground mt-0.5">{totalMembersCount}</div>
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Members Roster</div>
+          <div className="text-xl font-black text-slate-900 mt-0.5">{totalMembersCount}</div>
         </div>
 
         <div
           onClick={() => setActiveTab('badges')}
-          className={`p-3 bg-card border rounded-xl shadow-2xs cursor-pointer transition-all ${
-            activeTab === 'badges' ? 'border-orange-600 bg-orange-50/20 dark:bg-orange-950/20' : 'border-border hover:border-slate-400'
+          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+            activeTab === 'badges' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
-          <div className="text-[11px] font-bold text-muted-foreground uppercase">ID Cards & Badges</div>
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">ID Cards & Badges</div>
           <div className="text-xl font-black text-indigo-600 mt-0.5">{totalMembersCount} Verified</div>
         </div>
 
         <div
           onClick={() => setActiveTab('teams')}
-          className={`p-3 bg-card border rounded-xl shadow-2xs cursor-pointer transition-all ${
-            activeTab === 'teams' ? 'border-orange-600 bg-orange-50/20 dark:bg-orange-950/20' : 'border-border hover:border-slate-400'
+          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+            activeTab === 'teams' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
-          <div className="text-[11px] font-bold text-muted-foreground uppercase">Committees</div>
-          <div className="text-xl font-black text-foreground mt-0.5">{subgroups.length}</div>
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Committees</div>
+          <div className="text-xl font-black text-slate-900 mt-0.5">{subgroups.length}</div>
         </div>
 
         <div
           onClick={() => setActiveTab('volunteers')}
-          className={`p-3 bg-card border rounded-xl shadow-2xs cursor-pointer transition-all ${
-            activeTab === 'volunteers' ? 'border-orange-600 bg-orange-50/20 dark:bg-orange-950/20' : 'border-border hover:border-slate-400'
+          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+            activeTab === 'volunteers' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
-          <div className="text-[11px] font-bold text-muted-foreground uppercase">Volunteers</div>
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Volunteers</div>
           <div className="text-xl font-black text-emerald-600 mt-0.5">{volunteers.length}</div>
         </div>
 
         <div
           onClick={() => setActiveTab('certificates')}
-          className={`p-3 bg-card border rounded-xl shadow-2xs cursor-pointer transition-all ${
-            activeTab === 'certificates' ? 'border-orange-600 bg-orange-50/20 dark:bg-orange-950/20' : 'border-border hover:border-slate-400'
+          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+            activeTab === 'certificates' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
-          <div className="text-[11px] font-bold text-muted-foreground uppercase">Certificates Issued</div>
-          <div className="text-xl font-black text-foreground mt-0.5">{certificates.length}</div>
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Certificates Issued</div>
+          <div className="text-xl font-black text-slate-900 mt-0.5">{certificates.length}</div>
         </div>
       </div>
 
       {/* 3. Navigation Tabs */}
-      <div className="flex items-center gap-1.5 overflow-x-auto border-b border-border pb-2 scrollbar-none">
-        {[
-          { id: 'members', label: isHindi ? 'सदस्य निर्देशिका' : 'Member Directory', icon: Users },
-          { id: 'badges', label: isHindi ? 'डिजिटल आईडी व सत्यापित बैज' : 'ID Cards & Badges Studio', icon: Award },
-          { id: 'teams', label: isHindi ? 'टीमें व कार्यसमितियां' : 'Teams & Committees', icon: Network },
-          { id: 'volunteers', label: isHindi ? 'स्वयंसेवक डेस्क' : 'Volunteers Desk', icon: HeartHandshake },
-          { id: 'certificates', label: isHindi ? 'प्रमाण पत्र स्टूडियो' : 'Volunteer Certificates', icon: ShieldCheck },
-          { id: 'networks', label: isHindi ? 'महासंघ व संयुक्त मोर्चा' : 'Federation & Networks', icon: Globe },
-        ].map((tab) => {
-          const Icon = tab.icon
-          const isActive = activeTab === tab.id
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
-                isActive
-                  ? 'bg-orange-600 text-white shadow-2xs'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              <span>{tab.label}</span>
-            </button>
-          )
-        })}
+      <div className="overflow-x-auto pb-1 scrollbar-none">
+        <div className="inline-flex items-center gap-1 p-1 bg-slate-100/90 border border-slate-200/80 rounded-xl shadow-2xs">
+          {[
+            { id: 'members', label: isHindi ? 'सदस्य निर्देशिका' : 'Member Directory', icon: Users },
+            { id: 'badges', label: isHindi ? 'डिजिटल आईडी व सत्यापित बैज' : 'ID Cards & Badges Studio', icon: Award },
+            { id: 'teams', label: isHindi ? 'टीमें व कार्यसमितियां' : 'Teams & Committees', icon: Network },
+            { id: 'volunteers', label: isHindi ? 'स्वयंसेवक डेस्क' : 'Volunteers Desk', icon: HeartHandshake },
+            { id: 'certificates', label: isHindi ? 'प्रमाण पत्र स्टूडियो' : 'Volunteer Certificates', icon: ShieldCheck },
+            { id: 'networks', label: isHindi ? 'महासंघ व संयुक्त मोर्चा' : 'Federation & Networks', icon: Globe },
+          ].map((tab) => {
+            const Icon = tab.icon
+            const isActive = activeTab === tab.id
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
+                  isActive
+                    ? 'bg-white text-slate-900 shadow-2xs border border-slate-200/90 font-extrabold'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                }`}
+              >
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-orange-600' : 'text-slate-400'}`} />
+                <span>{tab.label}</span>
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       {/* 4. Tab 1: Member Directory */}

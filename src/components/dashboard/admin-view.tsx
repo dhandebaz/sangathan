@@ -443,7 +443,7 @@ export function AdminDashboard({
             <Button
               asChild
               size="sm"
-              className="h-9 px-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition-all active:scale-95 shadow-xs"
+              className="h-9 px-3.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs transition-all active:scale-95 shadow-xs"
             >
               <Link href={`/${lang}/dashboard/people`}>
                 <Plus className="w-3.5 h-3.5 mr-1" />
@@ -454,7 +454,7 @@ export function AdminDashboard({
               asChild
               variant="outline"
               size="sm"
-              className="h-9 px-3.5 rounded-xl border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-all active:scale-95 shadow-2xs"
+              className="h-9 px-3.5 rounded-xl border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all active:scale-95 shadow-2xs"
             >
               <Link href={`/${lang}/dashboard/inbox`}>
                 <Megaphone className="w-3.5 h-3.5 mr-1 text-indigo-600" />
@@ -465,7 +465,7 @@ export function AdminDashboard({
               asChild
               variant="outline"
               size="sm"
-              className="h-9 px-3.5 rounded-xl border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-all active:scale-95 shadow-2xs"
+              className="h-9 px-3.5 rounded-xl border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all active:scale-95 shadow-2xs"
             >
               <Link href={`/${lang}/dashboard/donations`}>
                 <HandCoins className="w-3.5 h-3.5 mr-1 text-emerald-600" />

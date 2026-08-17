@@ -69,6 +69,43 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.58.0',
+    titleEn: 'Modern Lightweight UI System, Crisp Light Aesthetics & Segmented Navigation Refactor',
+    titleHi: 'आधुनिक लाइटवेट UI प्रणाली, स्पष्ट लाइट थीम एवं सेगमेंटेड नेविगेशन रिफैक्टर',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Comprehensive design system overhaul eliminating dark containers and noisy backgrounds in favor of crisp, lightweight, geometric light surfaces. Introduced sleek segmented control tabs across all 5 core parent hubs, unified high-contrast action button hierarchies, modernized KPI ribbons, and light-mode verified badge previews.',
+    descHi: 'डार्क कंटेनर्स और भारी बैकग्राउंड्स को हटाकर स्पष्ट, हल्के और ज्यामितीय लाइट सरफेसेस के साथ संपूर्ण डिज़ाइन नवीनीकरण। सभी 5 मुख्य पैरेंट हब्स में आधुनिक सेगमेंटेड कंट्रोल टैब्स, एकीकृत हाई-कंट्रास्ट एक्शन बटन और लाइट-मोड सत्यापित बैज स्टूडियो लागू किए गए।',
+    color: 'indigo',
+    icon: Sparkles,
+    features: [
+      {
+        nameEn: '100% Clean Light Surfaces & Zero Dark Previews',
+        nameHi: '100% स्वच्छ लाइट सरफेसेस एवं डार्क कंटेनर्स का निष्कासन',
+        textEn: 'Eliminated dark preview canvases and dark buttons across Member Badges Studio, Main Dashboard, and Parent Hubs for a lightweight, modern appearance.',
+        textHi: 'सदस्य बैज स्टूडियो, मुख्य डैशबोर्ड और पैरेंट हब्स में डार्क प्रीव्यू बॉक्स और डार्क बटनों को हटाकर आधुनिक व हल्का इंटरफेस प्रदान किया गया।',
+      },
+      {
+        nameEn: 'Sleek Segmented Tab Controls',
+        nameHi: 'आधुनिक सेगमेंटेड टैब कंट्रोल्स',
+        textEn: 'Replaced heavy rectangular buttons with refined Linear/Apple-grade segmented tab strips with smooth micro-interactions across People, Inbox, Calendar, and Forms.',
+        textHi: 'पीपल, इनबॉक्स, कैलेंडर और फॉर्म्स में भारी बटनों के स्थान पर स्मूथ माइक्रो-इंटरैक्शन वाले आधुनिक सेगमेंटेड टैब बार पेश किए गए।',
+      },
+      {
+        nameEn: 'Unified Button & Action Bar Hierarchy',
+        nameHi: 'एकीकृत बटन एवं एक्शन बार पदानुक्रम',
+        textEn: 'Standardized secondary action buttons into crisp white cards with refined borders and clear high-contrast primary brand actions.',
+        textHi: 'सभी सेकेंडरी एक्शन बटनों को स्पष्ट सफेद बॉर्डर और मुख्य बटनों को उच्च-कंट्रास्ट ब्रांड कलर के साथ मानकीकृत किया गया।',
+      },
+      {
+        nameEn: 'Refined Sidebar & Calendar Highlights',
+        nameHi: 'परिष्कृत साइडबार एवं कैलेंडर हाइलाइट्स',
+        textEn: 'Upgraded active sidebar navigation states to crisp slate surfaces and replaced dusty calendar highlights with modern indigo ring accents.',
+        textHi: 'साइडबार के सक्रिय नेविगेशन आइटम को स्पष्ट स्लेट सतहों में अपग्रेड किया गया और कैलेंडर में आधुनिक इंडिगो रिंग एक्सेंट जोड़े गए।',
+      },
+    ],
+  },
+  {
     version: 'v1.57.0',
     titleEn: 'Dedicated Forms & Surveys Parent Hub, Google Forms API Migrator & Offline Field Mode PWA',
     titleHi: 'समर्पित फॉर्म एवं सर्वेक्षण पैरेंट हब, Google Forms API माइग्रेटर एवं ऑफलाइन फील्ड मोड PWA',

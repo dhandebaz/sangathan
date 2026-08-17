@@ -188,9 +188,9 @@ export function MemberBadgeStudio({
     ctx.fillStyle = bgGrad
     ctx.fillRect(0, 0, w, h)
 
-    // Subtle technical grid
-    const isDark = activeTheme.id !== 'tricolor_saffron' && activeTheme.id !== 'technical_slate' && activeTheme.id !== 'ink_monochrome'
-    ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)'
+    // Subtle technical grid (light crisp aesthetic)
+    const isDark = false
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.04)'
     ctx.lineWidth = 1
     const gridSize = 40
     for (let x = 0; x < w; x += gridSize) {
@@ -962,7 +962,7 @@ export function MemberBadgeStudio({
             variant="outline"
             onClick={handleSaveCredential}
             disabled={isSaving}
-            className="text-xs font-semibold border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+            className="text-xs font-semibold border-slate-200 bg-white text-emerald-700 hover:bg-emerald-50/60 shadow-2xs"
           >
             <ShieldCheck className="w-4 h-4 mr-1.5 text-emerald-600" />
             {isSaving ? 'Saving...' : 'Save & Sync to Ledger'}
@@ -971,25 +971,25 @@ export function MemberBadgeStudio({
           <Button
             variant="outline"
             onClick={handleCopyImage}
-            className="text-xs font-semibold border-slate-300"
+            className="text-xs font-semibold border-slate-200 bg-white text-slate-700 hover:bg-slate-50 shadow-2xs"
           >
-            <Copy className="w-4 h-4 mr-1.5" />
+            <Copy className="w-4 h-4 mr-1.5 text-slate-500" />
             Copy Image
           </Button>
 
           <Button
             variant="outline"
             onClick={handleShare}
-            className="text-xs font-semibold border-slate-300"
+            className="text-xs font-semibold border-slate-200 bg-white text-slate-700 hover:bg-slate-50 shadow-2xs"
           >
-            <Share2 className="w-4 h-4 mr-1.5" />
+            <Share2 className="w-4 h-4 mr-1.5 text-slate-500" />
             Share Graphic
           </Button>
 
           <Button
             onClick={handleDownload}
             disabled={isGenerating}
-            className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs"
+            className="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs shadow-xs"
           >
             <Download className="w-4 h-4 mr-1.5" />
             Download High-Res PNG
@@ -1367,7 +1367,7 @@ export function MemberBadgeStudio({
         </div>
 
         {/* Right Side: Live High-DPI Canvas Preview */}
-        <div className="lg:col-span-7 flex flex-col items-center bg-slate-100 border border-slate-200 p-6 rounded-sm">
+        <div className="lg:col-span-7 flex flex-col items-center bg-slate-50/80 border border-slate-200 p-6 rounded-2xl shadow-2xs">
           <div className="w-full flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">
             <div className="flex items-center gap-2">
               <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
@@ -1379,10 +1379,10 @@ export function MemberBadgeStudio({
           </div>
 
           {/* Canvas Rendering Box */}
-          <div className="max-w-full overflow-hidden shadow-md border border-slate-300 rounded-sm bg-white p-1">
+          <div className="max-w-full overflow-hidden shadow-xs border border-slate-200 rounded-xl bg-white p-1.5">
             <canvas
               ref={canvasRef}
-              className="max-h-[500px] w-auto max-w-full object-contain block mx-auto"
+              className="max-h-[500px] w-auto max-w-full object-contain block mx-auto rounded-lg"
             />
           </div>
 
