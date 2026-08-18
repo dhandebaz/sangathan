@@ -69,6 +69,43 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.59.0',
+    titleEn: 'Consolidated Governance & Administration Parent Hubs, High-Contrast Typography & 5-Org Parity',
+    titleHi: 'एकीकृत शासन व प्रशासन पैरेंट हब्स, उच्च-कंट्रास्ट डार्क टाइपोग्राफी एवं 5-संगठन पूर्ण समानता',
+    dateEn: 'August 2026',
+    dateHi: 'अगस्त 2026',
+    descEn: 'Eliminated scattered dropdown menus by consolidating Governance & Programs + Treasury & Grants into a 7-tab Governance & Treasury Hub (/dashboard/governance) and Compliance & Legal + Admin & Vault into a 5-tab Administration & Vault Hub (/dashboard/administration). Overhauled sidebar typography with crisp, high-contrast dark text (text-slate-800) on light surfaces with complete feature parity across all 5 organization archetypes.',
+    descHi: 'बिखरे हुए ड्रॉपडाउन मेन्यू को समाप्त करके शासन व कार्यक्रम + कोष व अनुदान को 7-टैब गवर्नेंस एवं ट्रेजरी हब (/dashboard/governance) और अनुपालन व विधिक + एडमिन व तिजोरी को 5-टैब एडमिनिस्ट्रेशन एवं वॉल्ट हब (/dashboard/administration) में एकीकृत किया गया। साइडबार में स्पष्ट डार्क टाइपोग्राफी और सभी 5 संगठन प्रकारों में पूर्ण सुविधा समरूपता सुनिश्चित की गई।',
+    color: 'emerald',
+    icon: Sparkles,
+    features: [
+      {
+        nameEn: 'Unified Governance & Treasury Parent Hub (/dashboard/governance)',
+        nameHi: 'एकीकृत शासन व वित्तीय कोष हब (/dashboard/governance)',
+        textEn: 'Consolidated proposals, secret ballots, double-entry financial ledger, chanda receipts, 80G tax certificates, CSR grant matching, campaigns, and program tasks.',
+        textHi: 'प्रस्ताव, गुप्त मतदान, वित्तीय बहीखाता, चंदा रसीदें, 80G टैक्स सर्टिफिकेट, CSR अनुदान खोज, जन-अभियान और कार्यक्रम कार्यों का एकीकरण।',
+      },
+      {
+        nameEn: 'Unified Administration & Vault Parent Hub (/dashboard/administration)',
+        nameHi: 'एकीकृत प्रशासन, अनुपालन एवं तिजोरी हब (/dashboard/administration)',
+        textEn: 'Unified institutional document vault, statutory registers, labor dispute redressal, official letterhead studio, and cryptographic audit log guardrails.',
+        textHi: 'दस्तावेज़ तिजोरी, वैधानिक रजिस्टर, श्रम विवाद निवारण, आधिकारिक लेटरहेड जनरेटर और सुरक्षा ऑडिट लॉग का एकीकरण।',
+      },
+      {
+        nameEn: 'High-Contrast Dark Typography on Light Surfaces',
+        nameHi: 'उच्च-कंट्रास्ट डार्क टाइपोग्राफी एवं स्पष्ट दृश्यता',
+        textEn: 'Fixed washed-out low contrast text across sidebar navigation, section headers, and tool drawers with bold, crisp slate typography (text-slate-800/text-slate-900).',
+        textHi: 'साइडबार और टूल्स में हल्के रंग के टेक्स्ट को बदलकर गहरा, स्पष्ट और पठनीय डार्क टेक्स्ट लागू किया गया।',
+      },
+      {
+        nameEn: '100% 5-Org Archetype Architectural Parity',
+        nameHi: 'सभी 5 संगठन प्रकारों में 100% संरचनात्मक समानता',
+        textEn: 'Tailored specialized operational desks across Civic Collectives, NGOs, Student Unions, Workers Unions, and RWAs with zero broken links.',
+        textHi: 'नागरिक समूहों, एनजीओ, छात्र संघों, श्रमिक संघों और आरडब्ल्यूए में बिना किसी टूटे लिंक के विशेष डेस्क और पूर्ण सुविधा समरूपता।',
+      },
+    ],
+  },
+  {
     version: 'v1.58.0',
     titleEn: 'Modern Lightweight UI System, Crisp Light Aesthetics & Segmented Navigation Refactor',
     titleHi: 'आधुनिक लाइटवेट UI प्रणाली, स्पष्ट लाइट थीम एवं सेगमेंटेड नेविगेशन रिफैक्टर',

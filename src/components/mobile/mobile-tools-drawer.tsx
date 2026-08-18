@@ -47,6 +47,26 @@ export function MobileToolsDrawer({
     const list: ToolItem[] = [
       // Core Parent Hubs
       {
+        href: `/${lang}/dashboard/governance`,
+        icon: Landmark,
+        titleEn: 'Governance & Treasury Hub',
+        titleHi: 'शासन प्रणाली एवं वित्तीय कोष',
+        descEn: 'Proposals, voting, ledger, chanda & grants',
+        descHi: 'प्रस्ताव, मतदान, बहीखाता, चंदा व अनुदान',
+        category: 'core',
+        color: 'bg-indigo-50 text-indigo-800 border-indigo-200',
+      },
+      {
+        href: `/${lang}/dashboard/administration`,
+        icon: FolderLock,
+        titleEn: 'Administration & Vault Hub',
+        titleHi: 'प्रशासन, अनुपालन एवं तिजोरी',
+        descEn: 'Document vault, registers, legal aid & audit',
+        descHi: 'दस्तावेज़ तिजोरी, रजिस्टर, विधिक सहायता व ऑडिट',
+        category: 'core',
+        color: 'bg-amber-50 text-amber-800 border-amber-200',
+      },
+      {
         href: `/${lang}/dashboard/inbox`,
         icon: MessageSquare,
         titleEn: 'Unified Inbox & Dispatch',
