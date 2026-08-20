@@ -96,7 +96,7 @@ export const logFieldSpotAuditAction = createSafeAction(
       details: { location: input.locationName, type: input.auditType, severity: input.severity },
     })
 
-    revalidatePath('/[lang]/dashboard/field-audits', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   },
   {

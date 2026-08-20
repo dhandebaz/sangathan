@@ -15,7 +15,7 @@ export default async function StudentIdsPage(props: PageProps) {
 
   // Fetch student membership details
   const { data: students } = await supabase
-    .from('members')
+    .from('profiles')
     .select('*')
     .eq('organisation_id', ctx.organizationId)
     .eq('status', 'active')

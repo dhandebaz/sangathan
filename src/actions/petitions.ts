@@ -61,7 +61,7 @@ export async function createPetitionAction(input: z.infer<typeof CreatePetitionS
 
     if (error) throw error
 
-    revalidatePath('/[lang]/dashboard/campaigns', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to create petition'
@@ -124,7 +124,7 @@ export async function signPetitionAction(input: z.infer<typeof SignPetitionSchem
     let convertedMemberId: string | null = null
     if (validated.wants_to_volunteer) {
       const { data: memberData } = await adminClient
-        .from('members')
+        .from('profiles')
         .insert({
           organisation_id: petition.organisation_id,
           full_name: validated.supporter_name.trim(),
@@ -177,7 +177,7 @@ export async function convertSignerToMemberAction(signatureId: string) {
     if (!orgId) return { success: false, error: 'Organisation not found' }
 
     const { data: newMember, error: memErr } = await adminClient
-      .from('members')
+      .from('profiles')
       .insert({
         organisation_id: orgId,
         full_name: sig.supporter_name,

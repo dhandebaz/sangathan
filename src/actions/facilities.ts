@@ -26,7 +26,7 @@ export const createFacility = createSafeAction(
       })
 
     if (error) throw new Error(error.message)
-    revalidatePath('/[lang]/dashboard/facilities', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   }
 )
@@ -70,7 +70,7 @@ export const bookFacility = createSafeAction(
       })
 
     if (error) throw new Error(error.message)
-    revalidatePath('/[lang]/dashboard/facilities', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   }
 )
@@ -93,7 +93,7 @@ export const updateBookingStatus = createSafeAction(
       .eq('organisation_id', organisationId)
 
     if (error) throw new Error(error.message)
-    revalidatePath('/[lang]/dashboard/facilities', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   }
 )

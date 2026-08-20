@@ -50,7 +50,7 @@ export const bulkImportMembers = createSafeAction(
 
     // 2. Fetch existing phones and emails in this organisation to prevent duplicates
     const { data: existingMembers } = await adminClient
-      .from('members')
+      .from('profiles')
       .select('phone, email')
       .eq('organisation_id', orgId)
 
@@ -123,7 +123,7 @@ export const bulkImportMembers = createSafeAction(
 
     for (let i = 0; i < toInsert.length; i += chunkSize) {
       const chunk = toInsert.slice(i, i + chunkSize)
-      const { error: insertError } = await adminClient.from('members').insert(chunk)
+      const { error: insertError } = await adminClient.from('profiles').insert(chunk)
 
       if (insertError) {
         return {

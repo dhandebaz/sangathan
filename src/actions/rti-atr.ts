@@ -59,7 +59,7 @@ export async function generateRtiAction(input: z.infer<typeof RtiSchema>) {
       if (fallback.error) throw fallback.error
     }
 
-    revalidatePath('/[lang]/dashboard/rti-atr', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to generate RTI'
@@ -108,7 +108,7 @@ export async function logAtrAction(input: z.infer<typeof AtrSchema>) {
       if (fallback.error) throw fallback.error
     }
 
-    revalidatePath('/[lang]/dashboard/rti-atr', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to log ATR commitment'

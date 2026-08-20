@@ -83,7 +83,7 @@ export default async function MembersPage({ searchParams, params }: PageProps & 
   const usage = await getOrgPlanUsage(selectedOrgId)
 
   let dbQuery = supabase
-    .from('members')
+    .from('profiles')
     .select('*', { count: 'exact' })
     .eq('organisation_id', selectedOrgId)
     .order('created_at', { ascending: false })
@@ -106,7 +106,7 @@ export default async function MembersPage({ searchParams, params }: PageProps & 
     try {
       const adminClient = createServiceClient()
       let fallbackQuery = adminClient
-        .from('members')
+        .from('profiles')
         .select('*', { count: 'exact' })
         .eq('organisation_id', selectedOrgId)
         .order('created_at', { ascending: false })

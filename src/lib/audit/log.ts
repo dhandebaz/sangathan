@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import type { Json } from '@/types/database'
 
 interface LogActionParams {
@@ -12,7 +12,16 @@ interface LogActionParams {
 
 export async function logAction(params: LogActionParams) {
   try {
-    const supabase = await createClient()
+    // Use service client to bypass RLS - audit_logs has no INSERT policy for RLS client
+    // Fallback to regular client if service key missing (e.g. local dev without env)
+    let supabase: ReturnType<typeof createServiceClient>
+    try {
+      supabase = createServiceClient()
+    } catch {
+      // Fallback: try to use server client if service not configured
+      const { createClient } = await import('@/lib/supabase/server')
+      supabase = createClient() as unknown as ReturnType<typeof createServiceClient>
+    }
     
     // We fire this asynchronously but we need a valid client.
     // Since this runs in Server Actions, we can await it.

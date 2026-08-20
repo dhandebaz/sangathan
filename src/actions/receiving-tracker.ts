@@ -54,7 +54,7 @@ export const logPhysicalReceivingAction = createSafeAction(
       details: { ref: input.letterRefNumber, authority: input.authorityName },
     })
 
-    revalidatePath('/[lang]/dashboard/receiving-tracker', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   },
   {

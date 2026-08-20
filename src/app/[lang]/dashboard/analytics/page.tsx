@@ -28,8 +28,8 @@ export default async function AnalyticsPage(props: { params: Promise<{ lang: str
   const orgId = profile.organisation_id
 
   const results = await Promise.allSettled([
-    supabase.from('members').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId),
-    supabase.from('members').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'active'),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'active'),
     supabase.from('events').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId),
     supabase.from('event_rsvps').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'attended'),
     supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'open'),

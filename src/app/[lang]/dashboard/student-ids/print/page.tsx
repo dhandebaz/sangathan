@@ -27,7 +27,7 @@ export default async function StudentIdsPrintPage(props: PrintPageProps) {
 
   // Fetch active students / member details
   let query = supabase
-    .from('members')
+    .from('profiles')
     .select('*')
     .eq('organisation_id', ctx.organizationId)
     .eq('status', 'active')

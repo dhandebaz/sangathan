@@ -42,7 +42,7 @@ export const logBoothVoteTallyAction = createSafeAction(
         .maybeSingle()
 
       if (!error && data) {
-        revalidatePath('/[lang]/dashboard/election-counting', 'page')
+        revalidatePath('/', 'layout')
         return { success: true, data }
       }
     }
@@ -64,7 +64,7 @@ export const logBoothVoteTallyAction = createSafeAction(
 
     if (error) throw new Error(error.message)
 
-    revalidatePath('/[lang]/dashboard/election-counting', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   },
   { allowedRoles: ['admin', 'executive', 'can_manage', 'second_admin', 'editor'] }

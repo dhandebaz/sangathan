@@ -72,8 +72,8 @@ export async function toggleAiAssistanceAction(enabled: boolean) {
       actor_id: user.id,
     })
 
-    revalidatePath('/[lang]/dashboard', 'layout')
-    revalidatePath('/[lang]/dashboard/settings', 'page')
+    revalidatePath('/', 'layout')
+    revalidatePath('/', 'layout')
 
     return {
       success: true,

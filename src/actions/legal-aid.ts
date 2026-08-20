@@ -48,7 +48,7 @@ export async function triggerLegalSosAction(input: z.infer<typeof SosSchema>) {
 
     if (error) throw error
 
-    revalidatePath('/[lang]/dashboard/legal-aid', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to trigger SOS'
@@ -85,7 +85,7 @@ export async function submitAntiRaggingAction(input: z.infer<typeof AntiRaggingS
 
     if (error) throw error
 
-    revalidatePath('/[lang]/dashboard/legal-aid', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to file anti-ragging complaint'

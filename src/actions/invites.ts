@@ -322,7 +322,7 @@ export async function acceptInvite(token: string) {
     // Also add to members table if available
     try {
       await supabaseAdmin
-        .from('members')
+        .from('profiles')
         .insert({
           organisation_id: invite.organisation_id,
           user_id: user.id,

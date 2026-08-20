@@ -125,7 +125,7 @@ export const savePressReleaseAction = createSafeAction(
       details: { title: input.titleEn, published: input.isPublished },
     })
 
-    revalidatePath('/[lang]/dashboard/press-releases', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   },
   {

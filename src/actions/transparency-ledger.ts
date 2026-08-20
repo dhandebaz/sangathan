@@ -60,7 +60,7 @@ export async function createTransparencyEntryAction(input: z.infer<typeof Create
 
     if (error) throw error
 
-    revalidatePath('/[lang]/dashboard/transparency', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to record transparency entry'

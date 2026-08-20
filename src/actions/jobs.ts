@@ -41,7 +41,7 @@ export const createJobPosting = createSafeAction(
       })
 
     if (error) throw new Error(error.message)
-    revalidatePath('/[lang]/dashboard/jobs', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   }
 )
@@ -70,7 +70,7 @@ export const applyForJob = createSafeAction(
       throw new Error(error.message)
     }
     
-    revalidatePath('/[lang]/dashboard/jobs', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   }
 )
@@ -93,7 +93,7 @@ export const updateApplicationStatus = createSafeAction(
       .eq('id', data.application_id)
 
     if (error) throw new Error(error.message)
-    revalidatePath('/[lang]/dashboard/jobs', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   }
 )

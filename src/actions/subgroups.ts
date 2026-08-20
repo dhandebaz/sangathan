@@ -38,7 +38,7 @@ export async function createSubgroup(input: z.infer<typeof CreateSubgroupSchema>
       return { success: false, error: error.message || 'Failed to create subgroup' }
     }
 
-    revalidatePath('/[lang]/dashboard/subgroups', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     console.error('Create Subgroup Exception:', error)
@@ -71,8 +71,8 @@ export async function updateSubgroup(input: z.infer<typeof UpdateSubgroupSchema>
       return { success: false, error: error.message || 'Failed to update subgroup' }
     }
 
-    revalidatePath('/[lang]/dashboard/subgroups', 'page')
-    revalidatePath('/[lang]/dashboard/subgroups/[subgroupId]', 'page')
+    revalidatePath('/', 'layout')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     console.error('Update Subgroup Exception:', error)
@@ -95,7 +95,7 @@ export async function deleteSubgroup(subgroupId: string, organisationId: string)
       return { success: false, error: error.message || 'Failed to delete subgroup' }
     }
 
-    revalidatePath('/[lang]/dashboard/subgroups', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     console.error('Delete Subgroup Exception:', error)
@@ -174,7 +174,7 @@ export async function addSubgroupMember(subgroupId: string, profileId: string, r
       return { success: false, error: error.message || 'Failed to add member to subgroup' }
     }
 
-    revalidatePath('/[lang]/dashboard/subgroups/[subgroupId]', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     console.error('Add Subgroup Member Exception:', error)
@@ -196,7 +196,7 @@ export async function updateSubgroupMemberRole(subgroupId: string, profileId: st
       return { success: false, error: error.message || 'Failed to update member role' }
     }
 
-    revalidatePath('/[lang]/dashboard/subgroups/[subgroupId]', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     console.error('Update Member Role Exception:', error)
@@ -218,7 +218,7 @@ export async function removeSubgroupMember(subgroupId: string, profileId: string
       return { success: false, error: error.message || 'Failed to remove member from subgroup' }
     }
 
-    revalidatePath('/[lang]/dashboard/subgroups/[subgroupId]', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     console.error('Remove Member Exception:', error)

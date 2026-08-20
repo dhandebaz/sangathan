@@ -27,7 +27,7 @@ export const addServiceContact = createSafeAction(
     const supabase = await createClient()
 
     const { data, error } = await supabase
-      .from('members')
+      .from('profiles')
       .insert({
         organisation_id: context.organizationId,
         full_name: input.full_name,
@@ -72,7 +72,7 @@ export const updateServiceContact = createSafeAction(
     const supabase = await createClient()
 
     const { error } = await supabase
-      .from('members')
+      .from('profiles')
       .update({
         full_name: input.full_name,
         phone: input.phone,
@@ -110,7 +110,7 @@ export const removeServiceContact = createSafeAction(
     const supabase = await createClient()
 
     const { error } = await supabase
-      .from('members')
+      .from('profiles')
       .delete()
       .eq('id', input.id)
       .eq('organisation_id', context.organizationId)

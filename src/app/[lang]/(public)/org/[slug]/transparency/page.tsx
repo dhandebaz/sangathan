@@ -51,7 +51,7 @@ export default async function PublicTransparencyPage({ params }: PageProps) {
       .eq('is_publicly_visible', true)
       .order('expense_date', { ascending: false }),
     adminClient
-      .from('members')
+      .from('profiles')
       .select('id', { count: 'exact', head: true })
       .eq('organisation_id', org.id)
       .eq('status', 'active'),

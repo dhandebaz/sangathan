@@ -29,7 +29,7 @@ export const createElection = createSafeAction(
 
     if (error) throw new Error(error.message)
     
-    revalidatePath('/[lang]/dashboard/elections', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, election }
   }
 )
@@ -51,7 +51,7 @@ export const createElectionPosition = createSafeAction(
       .insert(data)
 
     if (error) throw new Error(error.message)
-    revalidatePath('/[lang]/dashboard/elections', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   }
 )
@@ -78,7 +78,7 @@ export const nominateCandidate = createSafeAction(
       })
 
     if (error) throw new Error(error.message)
-    revalidatePath('/[lang]/dashboard/elections', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   }
 )
@@ -146,7 +146,7 @@ export const submitVote = createSafeAction(
 
     if (voteRecordError) throw new Error('Failed to record voter receipt')
 
-    revalidatePath('/[lang]/dashboard/elections', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   }
 )

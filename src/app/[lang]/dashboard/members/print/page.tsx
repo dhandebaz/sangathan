@@ -10,7 +10,7 @@ export default async function PrintMembersPage() {
   const ctx = await getUserContext()
   
   const { data, error } = await supabase
-    .from('members')
+    .from('profiles')
     .select('*')
     .eq('status', 'active')
     .order('full_name', { ascending: true })

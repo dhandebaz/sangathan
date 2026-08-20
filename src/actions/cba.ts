@@ -34,7 +34,7 @@ export const uploadCBADocument = createSafeAction(
 
     if (error) throw new Error(error.message)
     
-    revalidatePath('/[lang]/dashboard/cba', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   }
 )
@@ -58,7 +58,7 @@ export const updateCBAStatus = createSafeAction(
 
     if (error) throw new Error(error.message)
     
-    revalidatePath('/[lang]/dashboard/cba', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   }
 )
@@ -129,11 +129,11 @@ export const createCBAClause = createSafeAction(
         .maybeSingle()
 
       if (fallback.error) throw new Error(fallback.error.message)
-      revalidatePath('/[lang]/dashboard/cba', 'page')
+      revalidatePath('/', 'layout')
       return { success: true, clause: fallback.data }
     }
 
-    revalidatePath('/[lang]/dashboard/cba', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, clause }
   },
   { allowedRoles: ['admin', 'executive', 'can_manage', 'second_admin', 'editor'] }
@@ -170,7 +170,7 @@ export const updateCBAClause = createSafeAction(
       if (fallback.error) throw new Error(fallback.error.message)
     }
 
-    revalidatePath('/[lang]/dashboard/cba', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   { allowedRoles: ['admin', 'executive', 'can_manage', 'second_admin', 'editor'] }

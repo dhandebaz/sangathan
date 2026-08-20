@@ -172,11 +172,11 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
       appealsRes
     ] = await Promise.all([
       supabase
-        .from('members')
+        .from('profiles')
         .select('*', { count: 'exact', head: true })
         .eq('organisation_id', profile.organisation_id),
       supabase
-        .from('members')
+        .from('profiles')
         .select('*', { count: 'exact', head: true })
         .eq('organisation_id', profile.organisation_id)
         .eq('status', 'active'),

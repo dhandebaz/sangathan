@@ -42,7 +42,7 @@ USING (
   EXISTS (
     SELECT 1 FROM public.profiles
     WHERE profiles.id = auth.uid()
-      AND profiles.organisation_id::text = (string_to_array(storage.objects.name, '/'))[1]
+      AND profiles.organisation_id::text = split_part(storage.objects.name, '/', 1)
       AND profiles.role IN ('admin', 'executive')
   )
 )
@@ -51,7 +51,7 @@ WITH CHECK (
   EXISTS (
     SELECT 1 FROM public.profiles
     WHERE profiles.id = auth.uid()
-      AND profiles.organisation_id::text = (string_to_array(storage.objects.name, '/'))[1]
+      AND profiles.organisation_id::text = split_part(storage.objects.name, '/', 1)
       AND profiles.role IN ('admin', 'executive')
   )
 );

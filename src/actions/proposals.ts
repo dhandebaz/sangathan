@@ -57,7 +57,7 @@ export async function createProposal(input: z.infer<typeof ProposalSchema>) {
 
     if (error) throw error
 
-    revalidatePath('/[lang]/dashboard/governance/proposals', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error'
@@ -78,7 +78,7 @@ export async function updateProposalStatus(proposalId: string, status: 'draft' |
 
     if (error) throw error
 
-    revalidatePath('/[lang]/dashboard/governance/proposals', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error'
@@ -113,7 +113,7 @@ export async function addProposalComment(input: z.infer<typeof CommentSchema>) {
 
     if (error) throw error
 
-    revalidatePath('/[lang]/dashboard/governance/proposals', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data: { ...data, author_name: profile?.full_name || 'Member' } }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error'

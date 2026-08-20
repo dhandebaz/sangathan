@@ -18,7 +18,7 @@ export default async function AnalyticsPage() {
   ] = await Promise.all([
     supabase.from('organisations').select('id, name, org_type, created_at').order('created_at', { ascending: false }).limit(500),
     supabase.from('organisations').select('org_type'),
-    supabase.from('members').select('organisation_id, organisations(name)'),
+    supabase.from('profiles').select('organisation_id, organisations(name)'),
     supabase.from('audit_logs').select('*, organisations(name), profiles(full_name)').order('created_at', { ascending: false }).limit(20),
     supabase.from('organisations').select('created_at'),
   ])

@@ -63,7 +63,7 @@ export const createAuthority = createSafeAction(
       details: { department: input.department, authority_name: input.authority_name }
     })
 
-    revalidatePath('/[lang]/dashboard/settings/local-directory')
+    revalidatePath('/', 'layout')
     return { success: true, authorityId: data.id }
   },
   { allowedRoles: ['admin', 'editor', 'can_manage', 'second_admin'] }
@@ -98,7 +98,7 @@ export const updateAuthority = createSafeAction(
       details: rest
     })
 
-    revalidatePath('/[lang]/dashboard/settings/local-directory')
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   { allowedRoles: ['admin', 'editor', 'can_manage', 'second_admin'] }
@@ -128,7 +128,7 @@ export const deleteAuthority = createSafeAction(
       details: {}
     })
 
-    revalidatePath('/[lang]/dashboard/settings/local-directory')
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   { allowedRoles: ['admin', 'can_manage', 'second_admin'] }

@@ -87,7 +87,7 @@ export const analyzeComplaintImage = createSafeAction(
       details: { analysis }
     })
 
-    revalidatePath('/[lang]/dashboard/complaints')
+    revalidatePath('/', 'layout')
     return { success: true, analysis }
   },
   { allowedRoles: ['admin', 'editor', 'can_edit', 'can_manage', 'second_admin'] }
@@ -120,7 +120,7 @@ export const updateComplaintAuthority = createSafeAction(
       details: { authority_id: input.authorityId }
     })
 
-    revalidatePath('/[lang]/dashboard/complaints')
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   { allowedRoles: ['admin', 'editor', 'can_manage', 'second_admin'] }
@@ -153,7 +153,7 @@ export const markComplaintPrinted = createSafeAction(
       details: {}
     })
 
-    revalidatePath('/[lang]/dashboard/complaints')
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   { allowedRoles: ['admin', 'editor', 'can_edit', 'can_manage', 'second_admin'] }
@@ -187,7 +187,7 @@ export const markComplaintDelivered = createSafeAction(
       details: { delivery_method: input.deliveryMethod }
     })
 
-    revalidatePath('/[lang]/dashboard/complaints')
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   { allowedRoles: ['admin', 'editor', 'can_manage', 'second_admin'] }

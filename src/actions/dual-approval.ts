@@ -53,7 +53,7 @@ export async function requestDualApprovalAction(input: z.infer<typeof RequestDua
       payloadSnapshot: validated.action_payload,
     })
 
-    revalidatePath('/[lang]/dashboard/audit', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to request dual approval'
@@ -106,7 +106,7 @@ export async function approveDualApprovalAction(approvalId: string) {
       payloadSnapshot: { originalRequest: approval.action_payload },
     })
 
-    revalidatePath('/[lang]/dashboard/audit', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to approve action'
@@ -134,7 +134,7 @@ export async function rejectDualApprovalAction(approvalId: string, reason?: stri
       })
       .eq('id', approvalId)
 
-    revalidatePath('/[lang]/dashboard/audit', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to reject action'

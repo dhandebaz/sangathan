@@ -27,7 +27,7 @@ export default async function NewMeetingPage(props: { params: Promise<{ lang: st
   }
 
   const { data: members } = await supabase
-    .from('members')
+    .from('profiles')
     .select('id, full_name')
     .eq('status', 'active')
     .order('full_name')

@@ -18,7 +18,7 @@ export default async function LocalDirectoryPage({ params }: { params: Promise<{
 
   // Fetch service contacts: members whose designation starts with [SERVICE]
   const { data: contacts } = await supabase
-    .from('members')
+    .from('profiles')
     .select('*')
     .eq('organisation_id', organisationId)
     .like('designation', '[SERVICE]%')
@@ -27,7 +27,7 @@ export default async function LocalDirectoryPage({ params }: { params: Promise<{
 
   // Fetch tenant verification contacts marked as emergency contacts
   const { data: emergencyContacts } = await supabase
-    .from('members')
+    .from('profiles')
     .select('*')
     .eq('organisation_id', organisationId)
     .like('notes', '%EMERGENCY_CONTACT%')
@@ -36,7 +36,7 @@ export default async function LocalDirectoryPage({ params }: { params: Promise<{
 
   // Fetch landlord contacts for tenant verification follow-up
   const { data: landlordContacts } = await supabase
-    .from('members')
+    .from('profiles')
     .select('*')
     .eq('organisation_id', organisationId)
     .like('designation', '%LANDLORD%')

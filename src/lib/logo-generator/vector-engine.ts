@@ -361,45 +361,127 @@ export function generateLogoSvg(options: LogoOptions): string {
 
 /**
  * Renders SVG to a high-resolution Canvas Blob / Data URL (up to 2048x2048)
+ * Robust cross-browser implementation with Safari/iOS compatibility.
  */
 export async function rasterizeSvgToPng(
   svgString: string,
   size = 2048
 ): Promise<{ blob: Blob; dataUrl: string }> {
   return new Promise((resolve, reject) => {
+    // Ensure SVG has explicit dimensions for rasterization
+    let normalizedSvg = svgString.trim()
+    if (!normalizedSvg.includes('width=') || !normalizedSvg.includes('height=')) {
+      normalizedSvg = normalizedSvg.replace('<svg', `<svg width="${size}" height="${size}"`)
+    }
+
     const canvas = document.createElement('canvas')
-    canvas.width = size
-    canvas.height = size
+    // Cap size to prevent OOM on low-memory mobile devices
+    const safeSize = Math.min(Math.max(size, 256), 2048)
+    canvas.width = safeSize
+    canvas.height = safeSize
     const ctx = canvas.getContext('2d')
     if (!ctx) {
       reject(new Error('Canvas context not available'))
       return
     }
 
+    // High-quality rendering
+    ctx.imageSmoothingEnabled = true
+    ctx.imageSmoothingQuality = 'high'
+
+    // Fill white background to avoid transparent PNG looking blank on some viewers
+    ctx.fillStyle = '#ffffff'
+    ctx.fillRect(0, 0, safeSize, safeSize)
+
     const img = new Image()
-    const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' })
+    // Important for Safari blob handling
+    img.crossOrigin = 'anonymous'
+    img.decoding = 'async' as never
+
+    const svgBlob = new Blob([normalizedSvg], { type: 'image/svg+xml;charset=utf-8' })
     const url = URL.createObjectURL(svgBlob)
 
-    img.onload = () => {
-      ctx.clearRect(0, 0, size, size)
-      ctx.drawImage(img, 0, 0, size, size)
-      URL.revokeObjectURL(url)
+    let settled = false
+    const cleanup = () => {
+      try { URL.revokeObjectURL(url) } catch {}
+    }
 
-      canvas.toBlob((blob) => {
-        if (!blob) {
-          reject(new Error('Failed to generate PNG blob'))
-          return
+    const handleSuccess = () => {
+      if (settled) return
+      settled = true
+      try {
+        ctx.clearRect(0, 0, safeSize, safeSize)
+        // White background again before draw
+        ctx.fillStyle = '#ffffff'
+        ctx.fillRect(0, 0, safeSize, safeSize)
+        ctx.drawImage(img, 0, 0, safeSize, safeSize)
+      } catch (drawErr) {
+        cleanup()
+        reject(drawErr)
+        return
+      }
+      cleanup()
+
+      // Prefer toBlob (async, lower memory), fallback to toDataURL
+      if (canvas.toBlob) {
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            try {
+              const dataUrl = canvas.toDataURL('image/png')
+              // Convert dataUrl to blob manually as fallback
+              const binary = atob(dataUrl.split(',')[1])
+              const bytes = new Uint8Array(binary.length)
+              for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i)
+              const fallbackBlob = new Blob([bytes], { type: 'image/png' })
+              resolve({ blob: fallbackBlob, dataUrl })
+            } catch {
+              reject(new Error('Failed to generate PNG blob'))
+            }
+            return
+          }
+          const dataUrl = canvas.toDataURL('image/png')
+          resolve({ blob, dataUrl })
+        }, 'image/png', 1.0)
+      } else {
+        try {
+          const dataUrl = canvas.toDataURL('image/png')
+          const binary = atob(dataUrl.split(',')[1])
+          const bytes = new Uint8Array(binary.length)
+          for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i)
+          const blob = new Blob([bytes], { type: 'image/png' })
+          resolve({ blob, dataUrl })
+        } catch (e) {
+          reject(e)
         }
-        const dataUrl = canvas.toDataURL('image/png')
-        resolve({ blob, dataUrl })
-      }, 'image/png')
+      }
     }
 
-    img.onerror = (err) => {
-      URL.revokeObjectURL(url)
-      reject(err)
+    const handleError = (err: unknown) => {
+      if (settled) return
+      settled = true
+      cleanup()
+      reject(err instanceof Error ? err : new Error('Failed to load SVG for rasterization'))
     }
 
-    img.src = url
+    img.onload = handleSuccess
+    img.onerror = handleError as unknown as (this: GlobalEventHandlers, ev: Event | string) => unknown
+    if (typeof (img as HTMLImageElement & { decode?: () => Promise<void> }).decode === 'function') {
+      img.src = url
+      ;(img as HTMLImageElement & { decode: () => Promise<void> }).decode().then(handleSuccess).catch(() => {
+        // decode failed but onload may still fire; wait a bit then error
+        setTimeout(() => {
+          if (!settled) handleError(new Error('Image decode failed'))
+        }, 1000)
+      })
+    } else {
+      img.src = url
+    }
+
+    // Safety timeout - if neither onload nor onerror fires within 8s, reject
+    setTimeout(() => {
+      if (!settled) {
+        handleError(new Error('Image load timed out'))
+      }
+    }, 8000)
   })
 }

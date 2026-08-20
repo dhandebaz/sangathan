@@ -293,15 +293,15 @@ DROP POLICY IF EXISTS "Public Access" ON storage.objects;
 CREATE POLICY "Public Access" ON storage.objects FOR SELECT USING ( bucket_id = 'organisation_assets' );
 DROP POLICY IF EXISTS "Org admins can upload assets" ON storage.objects;
 CREATE POLICY "Org admins can upload assets" ON storage.objects FOR INSERT TO authenticated WITH CHECK (
-  bucket_id = 'organisation_assets' AND EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.role IN ('admin', 'executive', 'editor') AND p.status = 'active' AND p.organisation_id::text = (string_to_array(name, '/'))[1])
+  bucket_id = 'organisation_assets' AND EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.role IN ('admin', 'executive', 'editor') AND p.status = 'active' AND p.organisation_id::text = split_part(name, '/', 1))
 );
 DROP POLICY IF EXISTS "Org admins can update assets" ON storage.objects;
 CREATE POLICY "Org admins can update assets" ON storage.objects FOR UPDATE TO authenticated USING (
-  bucket_id = 'organisation_assets' AND EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.role IN ('admin', 'executive', 'editor') AND p.status = 'active' AND p.organisation_id::text = (string_to_array(name, '/'))[1])
+  bucket_id = 'organisation_assets' AND EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.role IN ('admin', 'executive', 'editor') AND p.status = 'active' AND p.organisation_id::text = split_part(name, '/', 1))
 );
 DROP POLICY IF EXISTS "Org admins can delete assets" ON storage.objects;
 CREATE POLICY "Org admins can delete assets" ON storage.objects FOR DELETE TO authenticated USING (
-  bucket_id = 'organisation_assets' AND EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.role IN ('admin', 'executive', 'editor') AND p.status = 'active' AND p.organisation_id::text = (string_to_array(name, '/'))[1])
+  bucket_id = 'organisation_assets' AND EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.role IN ('admin', 'executive', 'editor') AND p.status = 'active' AND p.organisation_id::text = split_part(name, '/', 1))
 );
 
 -- 11. ENABLE RLS
@@ -495,6 +495,10 @@ DROP POLICY IF EXISTS "admins view audit logs" ON public.audit_logs;
 DROP POLICY IF EXISTS "admins view audit logs" ON public.audit_logs;
 CREATE POLICY "admins view audit logs" ON public.audit_logs FOR SELECT USING (
   EXISTS (SELECT 1 FROM profiles p WHERE p.id = auth.uid() AND p.organisation_id = audit_logs.organisation_id AND p.role IN ('admin', 'executive') AND p.status = 'active') OR is_platform_admin()
+);
+DROP POLICY IF EXISTS "authenticated can insert audit logs" ON public.audit_logs;
+CREATE POLICY "authenticated can insert audit logs" ON public.audit_logs FOR INSERT TO authenticated WITH CHECK (
+  auth.uid() IS NOT NULL
 );
 
 -- Networks & Memberships

@@ -262,9 +262,9 @@ export async function unlockCapabilities(orgId: string) {
     return
   }
   
-  // 1. Fetch Stats
+  // 1. Fetch Stats - filter soft-deleted profiles
   const [members, events] = await Promise.all([
-    supabase.from('members').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'active'),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'active').is('deleted_at', null),
     supabase.from('events').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).lt('end_time', new Date().toISOString())
   ])
   

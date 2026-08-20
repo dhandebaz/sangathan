@@ -106,7 +106,7 @@ export default async function DashboardLayout(props: {
         }
 
         const { data: membershipData } = await supabase
-          .from('members')
+          .from('profiles')
           .select('role')
           .eq('user_id', user.id)
           .eq('organisation_id', selectedOrgId)

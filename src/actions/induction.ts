@@ -53,8 +53,8 @@ export async function inductMemberAction(input: z.infer<typeof InductMemberSchem
 
     if (error) throw error
 
-    revalidatePath('/[lang]/dashboard/induction', 'page')
-    revalidatePath('/[lang]/dashboard/members', 'page')
+    revalidatePath('/', 'layout')
+    revalidatePath('/', 'layout')
 
     return { success: true, member: newProfile }
   } catch (err: unknown) {
@@ -96,8 +96,8 @@ export async function batchInductMembersAction(membersList: { fullName: string; 
 
     if (error) throw error
 
-    revalidatePath('/[lang]/dashboard/induction', 'page')
-    revalidatePath('/[lang]/dashboard/members', 'page')
+    revalidatePath('/', 'layout')
+    revalidatePath('/', 'layout')
 
     return { success: true, count: rows.length }
   } catch (err: unknown) {

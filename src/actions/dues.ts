@@ -29,7 +29,7 @@ export const createBillingPlan = createSafeAction(
 
     if (error) throw new Error(error.message)
     
-    revalidatePath('/[lang]/dashboard/dues', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, plan }
   }
 )
@@ -83,7 +83,7 @@ export const generateDuesForMembers = createSafeAction(
       
     if (insertError) throw new Error(insertError.message)
     
-    revalidatePath('/[lang]/dashboard/dues', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, count: duesToInsert.length }
   }
 )
@@ -107,7 +107,7 @@ export const markDueAsPaid = createSafeAction(
 
     if (error) throw new Error(error.message)
     
-    revalidatePath('/[lang]/dashboard/dues', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   }
 )

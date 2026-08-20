@@ -109,14 +109,40 @@ export async function getComplianceItems(orgId: string): Promise<ComplianceItemR
     return []
   }
 
-  // Enrich with registration_links from rules
-  const enrichedData = data.map((item: ComplianceItemRow) => {
+  // Enrich with registration_links and convert private storage path to signed URL
+  const adminClient = (() => {
+    try { return createServiceClient() } catch { return null }
+  })()
+  const enrichedData = await Promise.all((data as ComplianceItemRow[]).map(async (item) => {
     const matchingRule = COMPLIANCE_RULES.find(r => r.title === item.title)
     if (matchingRule?.registration_link) {
       item.registration_link = matchingRule.registration_link
     }
+    // If document_url is a storage path (orgId/file), generate signed URL for private bucket
+    if (item.document_url && !item.document_url.startsWith('http')) {
+      try {
+        const supabaseForSigned = adminClient || supabase
+        const { data: signed } = await supabaseForSigned.storage.from('compliance_docs').createSignedUrl(item.document_url, 60 * 60 * 24 * 7) // 7 days
+        if (signed?.signedUrl) {
+          // Keep original path in separate field but expose signed URL for UI
+          item.document_url = signed.signedUrl
+        }
+      } catch {
+        // Keep original path if signed URL fails
+      }
+    } else if (item.document_url && item.document_url.includes('/storage/v1/object/public/compliance_docs/')) {
+      // Legacy publicUrl stored for private bucket - convert to signed URL
+      try {
+        const path = item.document_url.split('/compliance_docs/')[1]?.split('?')[0]
+        if (path) {
+          const supabaseForSigned = adminClient || supabase
+          const { data: signed } = await supabaseForSigned.storage.from('compliance_docs').createSignedUrl(path, 60 * 60 * 24 * 7)
+          if (signed?.signedUrl) item.document_url = signed.signedUrl
+        }
+      } catch {}
+    }
     return item
-  })
+  }))
 
   return enrichedData || []
 }
@@ -147,7 +173,7 @@ export async function updateComplianceItemStatus(
 
   if (error) return { success: false, error: error.message }
 
-  revalidatePath('/[lang]/dashboard/compliance')
+  revalidatePath('/', 'layout')
   return { success: true }
 }
 
@@ -163,7 +189,7 @@ export async function deleteComplianceItem(itemId: string) {
 
   if (error) return { success: false, error: error.message }
 
-  revalidatePath('/[lang]/dashboard/compliance')
+  revalidatePath('/', 'layout')
   return { success: true }
 }
 
@@ -197,14 +223,11 @@ export async function uploadComplianceDocument(itemId: string, formData: FormDat
 
   if (uploadError) return { success: false, error: uploadError.message }
 
-  const { data: { publicUrl } } = supabase.storage
-    .from('compliance_docs')
-    .getPublicUrl(filePath)
-
+  // For private bucket, store the storage path, not publicUrl. Signed URL will be generated on read.
   const { error: updateError } = await supabase
     .from('compliance_items')
     .update({
-      document_url: publicUrl,
+      document_url: filePath,
       document_name: file.name,
       document_size: file.size,
       status: 'submitted',
@@ -212,9 +235,13 @@ export async function uploadComplianceDocument(itemId: string, formData: FormDat
     })
     .eq('id', itemId)
 
-  if (updateError) return { success: false, error: updateError.message }
+  if (updateError) {
+    // Compensating delete to avoid orphan
+    await supabase.storage.from('compliance_docs').remove([filePath]).catch(() => {})
+    return { success: false, error: updateError.message }
+  }
 
-  revalidatePath('/[lang]/dashboard/compliance')
+  revalidatePath('/', 'layout')
   return { success: true }
 }
 
@@ -235,6 +262,6 @@ export async function removeComplianceDocument(itemId: string) {
 
   if (error) return { success: false, error: error.message }
 
-  revalidatePath('/[lang]/dashboard/compliance')
+  revalidatePath('/', 'layout')
   return { success: true }
 }

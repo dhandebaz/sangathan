@@ -32,7 +32,7 @@ export const createGrant = createSafeAction(
       .single()
 
     if (error) throw new Error(error.message)
-    revalidatePath('/[lang]/dashboard/grants', 'page')
+    revalidatePath('/', 'layout')
     return newGrant
   }
 )
@@ -55,7 +55,7 @@ export const updateGrantStatus = createSafeAction(
       .eq('organisation_id', organisationId)
 
     if (error) throw new Error(error.message)
-    revalidatePath('/[lang]/dashboard/grants', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   }
 )

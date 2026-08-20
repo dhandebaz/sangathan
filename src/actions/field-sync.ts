@@ -20,7 +20,7 @@ export async function syncFieldBatchAction(records: FieldRecord[]) {
       if (rec.type === 'member_intake') {
         const { fullName, email, phone, role } = rec.data
         if (fullName) {
-          await adminClient.from('members').insert({
+          await adminClient.from('profiles').insert({
             organisation_id: orgId,
             full_name: fullName,
             email: email || null,

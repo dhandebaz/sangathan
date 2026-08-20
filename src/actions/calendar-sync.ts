@@ -48,7 +48,7 @@ export async function getCentralizedCalendarData(orgId: string) {
         .eq('organisation_id', orgId)
         .order('due_date', { ascending: true }),
       supabase
-        .from('members')
+        .from('profiles')
         .select('id, full_name, role, designation, phone')
         .eq('organisation_id', orgId)
         .eq('status', 'active')

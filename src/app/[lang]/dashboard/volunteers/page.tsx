@@ -27,7 +27,7 @@ export default async function VolunteersPage(props: { params: Promise<{ lang: st
 
   // Fetch active volunteers with lightweight columns & limit for fast response
   const { data: volunteers } = await supabase
-    .from('members')
+    .from('profiles')
     .select('id, full_name, email, phone, created_at')
     .eq('organisation_id', orgId)
     .eq('status', 'active')

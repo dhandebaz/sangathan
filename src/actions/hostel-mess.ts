@@ -47,7 +47,7 @@ export const submitMessRatingAction = createSafeAction(
       .maybeSingle()
 
     if (!auditError && audit) {
-      revalidatePath('/[lang]/dashboard/hostel-mess', 'page')
+      revalidatePath('/', 'layout')
       return { success: true, data: audit }
     }
 
@@ -69,7 +69,7 @@ export const submitMessRatingAction = createSafeAction(
 
     if (error) throw new Error(error.message)
 
-    revalidatePath('/[lang]/dashboard/hostel-mess', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   }
 )
@@ -98,7 +98,7 @@ export const reportHostelIssueAction = createSafeAction(
       .maybeSingle()
 
     if (!auditError && audit) {
-      revalidatePath('/[lang]/dashboard/hostel-mess', 'page')
+      revalidatePath('/', 'layout')
       return { success: true, data: audit }
     }
 
@@ -120,7 +120,7 @@ export const reportHostelIssueAction = createSafeAction(
 
     if (error) throw new Error(error.message)
 
-    revalidatePath('/[lang]/dashboard/hostel-mess', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   }
 )

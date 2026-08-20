@@ -138,7 +138,7 @@ export async function updateStatutoryRegistration(
     return { success: false as const, error: 'Failed to update statutory registration' }
   }
 
-  revalidatePath('/[lang]/dashboard', 'layout')
+  revalidatePath('/', 'layout')
   return { success: true as const }
 }
 
@@ -202,7 +202,7 @@ export async function createComplianceFiling(orgId: string, data: z.infer<typeof
     return { success: false as const, error: 'Failed to create compliance filing' }
   }
 
-  revalidatePath('/[lang]/dashboard', 'layout')
+  revalidatePath('/', 'layout')
   return { success: true as const }
 }
 
@@ -234,6 +234,6 @@ export async function updateComplianceFiling(filingId: string, data: z.infer<typ
     return { success: false as const, error: 'Failed to update compliance filing' }
   }
 
-  revalidatePath('/[lang]/dashboard', 'layout')
+  revalidatePath('/', 'layout')
   return { success: true as const }
 }

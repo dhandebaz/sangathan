@@ -50,7 +50,7 @@ export async function createAutomationAction(input: z.infer<typeof CreateAutomat
 
     if (error) throw error
 
-    revalidatePath('/[lang]/dashboard/automations', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to create automation rule'
@@ -67,7 +67,7 @@ export async function toggleAutomationAction(automationId: string, isActive: boo
       .eq('id', automationId)
 
     if (error) throw error
-    revalidatePath('/[lang]/dashboard/automations', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to toggle automation'
@@ -84,7 +84,7 @@ export async function deleteAutomationAction(automationId: string) {
       .eq('id', automationId)
 
     if (error) throw error
-    revalidatePath('/[lang]/dashboard/automations', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to delete automation'
@@ -116,7 +116,7 @@ export async function installPrebuiltRecipeAction(recipeIndex: number) {
       .maybeSingle()
 
     if (error) throw error
-    revalidatePath('/[lang]/dashboard/automations', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to install recipe'

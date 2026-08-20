@@ -144,9 +144,9 @@ export function PwaProvider({ children, lang = 'en' }: { children: React.ReactNo
     >
       {children}
 
-      {/* Floating Bottom Installation Banner (Mobile & Tablet) */}
+      {/* Floating Bottom Installation Banner (Mobile & Tablet) - lower z-index than modals (modals are z-[70]) */}
       {showPromptBanner && !isInstalled && (
-        <div className="fixed bottom-4 left-4 right-4 z-50 sm:left-auto sm:right-6 sm:max-w-sm animate-in fade-in slide-in-from-bottom-5 duration-300">
+        <div className="fixed bottom-4 left-4 right-4 z-40 sm:left-auto sm:right-6 sm:max-w-sm animate-in fade-in slide-in-from-bottom-5 duration-300">
           <div className="bg-white border border-slate-300 shadow-xl rounded-xl p-3.5 flex items-center gap-3">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-slate-900 p-1.5 shadow-xs">
               <Image

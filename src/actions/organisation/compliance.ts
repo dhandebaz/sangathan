@@ -65,7 +65,7 @@ export async function updateComplianceData(orgId: string, payload: ComplianceUpd
       return { success: false, error: 'Failed to update database' }
     }
 
-    revalidatePath('/[lang]/dashboard/settings', 'page')
+    revalidatePath('/', 'layout')
     if (orgData?.slug) {
       await revalidatePublicOrgPages(orgData.slug)
     }

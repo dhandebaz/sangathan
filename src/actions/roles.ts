@@ -41,7 +41,7 @@ export const createCustomRole = createSafeAction(
       throw new Error(error.message || 'Failed to create role')
     }
 
-    revalidatePath('/[lang]/dashboard/roles', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   {
@@ -79,7 +79,7 @@ export const updateRole = createSafeAction(
       throw new Error(error.message || 'Failed to update role')
     }
 
-    revalidatePath('/[lang]/dashboard/roles', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   },
   {
@@ -114,7 +114,7 @@ export async function deleteRole(roleId: string, organisationId: string) {
       return { success: false, error: error.message || 'Failed to delete role' }
     }
 
-    revalidatePath('/[lang]/dashboard/roles', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     console.error('Delete Role Exception:', error)
@@ -231,7 +231,7 @@ export async function assignRoleToProfile(input: z.infer<typeof AssignRoleSchema
       return { success: false, error: error.message || 'Failed to assign role to user' }
     }
 
-    revalidatePath('/[lang]/dashboard/roles', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     console.error('Assign Role Exception:', error)
@@ -277,7 +277,7 @@ export async function removeRoleFromProfile(profileId: string, roleId: string, o
       return { success: false, error: error.message || 'Failed to remove role from user' }
     }
 
-    revalidatePath('/[lang]/dashboard/roles', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     console.error('Remove Role Exception:', error)

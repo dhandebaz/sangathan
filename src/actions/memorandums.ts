@@ -55,7 +55,7 @@ export async function createMemorandum(input: z.infer<typeof CreateMemorandumSch
       if (fallback.error) throw fallback.error
     }
 
-    revalidatePath('/[lang]/dashboard/memorandums', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to save Memorandum'
@@ -117,7 +117,7 @@ export async function signMemorandum(proposalId: string) {
         })
     }
 
-    revalidatePath('/[lang]/dashboard/memorandums', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to sign memorandum'

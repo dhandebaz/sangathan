@@ -61,7 +61,7 @@ export async function createUnionPostAction(input: z.infer<typeof CreateUnionPos
       if (fallback.error) throw fallback.error
     }
 
-    revalidatePath('/[lang]/dashboard/posts', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to create post'
@@ -101,7 +101,7 @@ export async function assignMemberPostAction(input: z.infer<typeof AssignPostSch
         .eq('id', result.data.memberId)
     }
 
-    revalidatePath('/[lang]/dashboard/posts', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to assign post'

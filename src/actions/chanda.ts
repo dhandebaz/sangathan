@@ -65,7 +65,7 @@ export const createChandaRound = createSafeAction(
       
     if (insertError) throw new Error(insertError.message)
     
-    revalidatePath('/[lang]/dashboard/chanda', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, count: duesToInsert.length, plan }
   }
 )
@@ -97,7 +97,7 @@ export const markChandaCashPaid = createSafeAction(
 
     if (error) throw new Error(error.message)
     
-    revalidatePath('/[lang]/dashboard/chanda', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   }
 )

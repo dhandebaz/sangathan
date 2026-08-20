@@ -88,8 +88,9 @@ export const saveMemberCredentialAction = createSafeAction(
       return { error: error.message || 'Failed to save member credential' }
     }
 
-    revalidatePath('/[lang]/members/badge', 'page')
-    revalidatePath('/[lang]/dashboard/id-card', 'page')
+    revalidatePath('/', 'layout')
+    revalidatePath('/en/members/badge', 'page')
+    revalidatePath('/hi/members/badge', 'page')
 
     return { credential }
   }

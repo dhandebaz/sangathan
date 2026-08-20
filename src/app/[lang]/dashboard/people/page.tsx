@@ -49,7 +49,7 @@ export default async function PeoplePage(props: { params: Promise<{ lang: string
       .eq('id', selectedOrgId)
       .maybeSingle(),
     supabase
-      .from('members')
+      .from('profiles')
       .select('*')
       .eq('organisation_id', selectedOrgId)
       .order('created_at', { ascending: false }),

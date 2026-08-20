@@ -69,8 +69,8 @@ export async function connectTelegramBotAction(botToken: string) {
       updated_at: new Date().toISOString(),
     }, { onConflict: 'organisation_id,channel' })
 
-    revalidatePath('/[lang]/dashboard/channels', 'page')
-    revalidatePath('/[lang]/dashboard/communications', 'page')
+    revalidatePath('/', 'layout')
+    revalidatePath('/', 'layout')
 
     return {
       success: true,
@@ -103,8 +103,8 @@ export async function disconnectBotChannelAction(channel: 'telegram' = 'telegram
       .eq('organisation_id', orgId)
       .eq('channel', channel)
 
-    revalidatePath('/[lang]/dashboard/channels', 'page')
-    revalidatePath('/[lang]/dashboard/communications', 'page')
+    revalidatePath('/', 'layout')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : 'Failed to disconnect channel'
@@ -305,7 +305,7 @@ export async function sendAdminDirectReplyAction(params: {
     if (conversationId.startsWith('direct-')) {
       const targetMemberId = conversationId.replace('direct-', '')
       const { data: member } = await adminClient
-        .from('members')
+        .from('profiles')
         .select('id, full_name, phone, role')
         .eq('id', targetMemberId)
         .eq('organisation_id', orgId)
@@ -401,7 +401,7 @@ export async function sendAdminDirectReplyAction(params: {
       .update({ updated_at: new Date().toISOString(), last_state: 'admin_replied' })
       .eq('id', conv.id)
 
-    revalidatePath('/[lang]/dashboard/communications', 'page')
+    revalidatePath('/', 'layout')
 
     return { success: true, messageId: providerMsgId }
   } catch (err: unknown) {
@@ -474,7 +474,7 @@ export async function sendOrgMassBroadcastAction(params: {
       sent_at: new Date().toISOString(),
     })
 
-    revalidatePath('/[lang]/dashboard/communications', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, sentCount }
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : 'Broadcast failed'

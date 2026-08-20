@@ -54,7 +54,7 @@ export async function checkMemberLimit(
   // 2. Fetch Active Members Count from both members table and pending active invites
   const [membersRes, invitesRes] = await Promise.all([
     supabase
-      .from('members')
+      .from('profiles')
       .select('id', { count: 'exact', head: true })
       .eq('organisation_id', orgId)
       .eq('status', 'active'),
@@ -122,7 +122,7 @@ export async function getOrgPlanUsage(orgId: string): Promise<OrgPlanUsage> {
       .eq('id', orgId)
       .maybeSingle(),
     supabase
-      .from('members')
+      .from('profiles')
       .select('id', { count: 'exact', head: true })
       .eq('organisation_id', orgId)
       .eq('status', 'active'),

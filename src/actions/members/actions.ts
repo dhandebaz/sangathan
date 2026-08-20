@@ -78,7 +78,7 @@ export const addMember = createSafeAction(
 
     // We are adding to the 'members' table
     const { data, error } = await supabase
-      .from('members')
+      .from('profiles')
       .insert({
         organisation_id: context.organizationId,
         full_name: input.full_name,
@@ -191,7 +191,7 @@ export const changeMemberStatus = createSafeAction(
     const supabase = await createClient()
 
     const { error } = await supabase
-      .from('members')
+      .from('profiles')
       .update({ status: input.status })
       .eq('id', input.memberId)
       .eq('organisation_id', context.organizationId)

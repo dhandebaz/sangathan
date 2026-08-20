@@ -17,7 +17,7 @@ export default async function SystemAdminDashboard() {
          supabase.from('organisations').select('*', { count: 'exact', head: true }),
          supabase.from('organisations').select('*', { count: 'exact', head: true }).eq('status', 'suspended'),
          supabase.from('profiles').select('*', { count: 'exact', head: true }),
-         supabase.from('members').select('*', { count: 'exact', head: true }),
+         supabase.from('profiles').select('*', { count: 'exact', head: true }),
          supabase.from('appeals').select('*', { count: 'exact', head: true }).in('status', ['pending', 'under_review']),
          supabase.from('organisations')
              .select('id, name, slug, status, membership_policy, created_at, members(count)')

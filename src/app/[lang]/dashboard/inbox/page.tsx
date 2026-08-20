@@ -40,7 +40,7 @@ export default async function InboxPage(props: { params: Promise<{ lang: string 
     getOrgUnifiedCommunicationsAction(orgId),
     getEmergencySosAlerts(orgId),
     supabase
-      .from('members')
+      .from('profiles')
       .select('id, full_name, phone, role')
       .eq('organisation_id', orgId)
       .eq('status', 'active')

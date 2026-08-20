@@ -52,7 +52,7 @@ export async function logH2HCanvassingAction(input: z.infer<typeof CanvassSchema
 
     if (error) throw error
 
-    revalidatePath('/[lang]/dashboard/campus-campaigning', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to log H2H drive'
@@ -88,7 +88,7 @@ export async function scheduleC2CClassAction(input: z.infer<typeof ClassCampaign
 
     if (error) throw error
 
-    revalidatePath('/[lang]/dashboard/campus-campaigning', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to schedule C2C campaign'

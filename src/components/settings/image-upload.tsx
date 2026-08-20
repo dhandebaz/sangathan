@@ -56,6 +56,7 @@ export function ImageUpload({
 
     setIsUploading(true)
 
+    let uploadedPath: string | null = null
     try {
       const supabase = createClient()
       
@@ -63,6 +64,7 @@ export function ImageUpload({
       const fileExt = file.name.split('.').pop()
       const fileName = `${type}_${Date.now()}.${fileExt}`
       const filePath = `${orgId}/${fileName}`
+      uploadedPath = filePath
 
       // Upload to Supabase Storage
       const { error: uploadError } = await supabase.storage
@@ -76,19 +78,30 @@ export function ImageUpload({
         .from('organisation_assets')
         .getPublicUrl(filePath)
 
-      // Update database
+      // Update database (now allows editor via brandingAction)
       const res = await updateOrganisationImage({ type, url: publicUrl })
 
       if (!res.success) {
+        // Compensating delete to avoid orphaned storage object
+        await supabase.storage.from('organisation_assets').remove([filePath]).catch(() => {})
+        uploadedPath = null
         throw new Error(res.error)
       }
 
+      uploadedPath = null
       setDisplayUrl(publicUrl)
 
       toast.success(isHindi ? 'छवि अपडेट हो गई' : 'Image Updated', {
         description: isHindi ? `आपके संगठन का ${type} सफलतापूर्वक अपडेट हो गया है।` : `Your organisation ${type} has been successfully updated.`,
       })
     } catch (err: unknown) {
+      // Cleanup orphaned upload if DB update failed but file was already stored
+      if (uploadedPath) {
+        try {
+          const cleanupClient = createClient()
+          await cleanupClient.storage.from('organisation_assets').remove([uploadedPath]).catch(() => {})
+        } catch {}
+      }
       const message = err instanceof Error ? err.message : 'Something went wrong during upload.'
       toast.error(isHindi ? 'अपलोड विफल' : 'Upload failed', {
         description: message,

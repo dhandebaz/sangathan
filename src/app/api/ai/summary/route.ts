@@ -26,7 +26,7 @@ export async function GET(request: Request) {
     }
 
     const { data: membership } = await supabase
-      .from('members')
+      .from('profiles')
       .select('id')
       .eq('user_id', user.id)
       .eq('organisation_id', orgId)
@@ -44,7 +44,7 @@ export async function GET(request: Request) {
     const [{ count: newTickets }, { count: resolvedTickets }, { count: newMembers }, { count: upcomingEvents }, { count: activePolls }] = await Promise.all([
       supabase.from('tickets').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).gte('created_at', weekAgoStr),
       supabase.from('tickets').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'resolved').gte('updated_at', weekAgoStr),
-      supabase.from('members').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).gte('created_at', weekAgoStr),
+      supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).gte('created_at', weekAgoStr),
       supabase.from('events').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).gte('start_time', weekAgoStr),
       supabase.from('polls').select('*', { count: 'exact', head: true }).eq('organisation_id', orgId).eq('status', 'active'),
     ])

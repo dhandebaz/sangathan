@@ -67,6 +67,21 @@ export function LogoGeneratorModal({
   const [isSaving, setIsSaving] = useState(false)
   const [isDownloading, setIsDownloading] = useState(false)
 
+  // Prevent background scroll and hide PWA banner when modal is open
+  useEffect(() => {
+    if (!isOpen) return
+    const originalOverflow = document.body.style.overflow
+    const originalPaddingRight = document.body.style.paddingRight
+    // Compensate for scrollbar to prevent layout shift
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+    document.body.style.overflow = 'hidden'
+    if (scrollbarWidth > 0) document.body.style.paddingRight = `${scrollbarWidth}px`
+    return () => {
+      document.body.style.overflow = originalOverflow
+      document.body.style.paddingRight = originalPaddingRight
+    }
+  }, [isOpen])
+
   // Sync props on change
   useEffect(() => {
     setName(orgName || 'My Organisation')
@@ -153,27 +168,67 @@ export function LogoGeneratorModal({
     toast.info(isHindi ? 'नया स्मार्ट डिज़ाइन तैयार किया गया!' : 'Generated fresh smart design!')
   }
 
-  // Download High-Resolution 2048x2048 PNG
+  // Download High-Resolution 2048x2048 PNG - iOS/Safari compatible
   const handleDownload = async () => {
     setIsDownloading(true)
     try {
-      const { blob } = await rasterizeSvgToPng(svgContent, 2048)
+      const { blob, dataUrl } = await rasterizeSvgToPng(svgContent, 2048)
+      const fileName = `${orgSlug || 'sangathan'}-official-emblem.png`
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+
+      // iOS Safari does not support <a download>, use share or open in new tab
+      if (isIOS || isSafari) {
+        // Try Web Share API for files if available
+        const file = new File([blob], fileName, { type: 'image/png' })
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({ files: [file], title: fileName })
+            toast.success(isHindi ? 'शेयर शीट खुल गई - फाइल सेव करें।' : 'Share sheet opened - save your emblem!')
+            return
+          } catch (shareErr) {
+            // User cancelled share or share failed - fall through to open
+            if ((shareErr as Error)?.name === 'AbortError') return
+          }
+        }
+        // Fallback: open data URL in new tab (user can long-press to save)
+        const win = window.open()
+        if (win) {
+          win.document.write(`<html><head><title>${fileName}</title><meta name="viewport" content="width=device-width, initial-scale=1"/></head><body style="margin:0;background:#f8fafc;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:16px;"><p style="font-family:system-ui;font-size:14px;color:#334155;margin-bottom:12px;text-align:center;">Long-press the image and tap "Add to Photos" or "Save to Files"</p><img src="${dataUrl}" style="max-width:100%;height:auto;border:1px solid #e2e8f0;box-shadow:0 4px 12px rgba(0,0,0,0.1);"/><p style="font-family:system-ui;font-size:12px;color:#64748b;margin-top:12px;">${fileName}</p></body></html>`)
+          win.document.close()
+          toast.success(isHindi ? 'नई टैब में लोगो खोला गया - लॉन्ग प्रेस करके सेव करें।' : 'Opened in new tab - long-press image to save!')
+          return
+        }
+        // Last resort: download via dataUrl navigation
+        window.location.href = dataUrl
+        toast.success(isHindi ? 'छवि खोली गई - सेव करें।' : 'Image opened - please save it.')
+        return
+      }
+
+      // Standard desktop/Android flow
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `${orgSlug || 'sangathan'}-official-emblem.png`
+      a.download = fileName
+      a.rel = 'noopener'
       document.body.appendChild(a)
       a.click()
-      document.body.removeChild(a)
-      URL.revokeObjectURL(url)
+      // Delay removal to ensure click registers on Firefox
+      setTimeout(() => {
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url)
+      }, 250)
 
       toast.success(
         isHindi
           ? 'उच्च रिज़ॉल्यूशन (2048px) लोगो डाउनलोड हो गया!'
           : 'High-resolution 2048px emblem downloaded successfully!'
       )
-    } catch {
-      toast.error(isHindi ? 'डाउनलोड करने में विफल।' : 'Failed to download logo.')
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : ''
+      toast.error(isHindi ? `डाउनलोड करने में विफल: ${msg}` : `Failed to download logo: ${msg}`, {
+        description: isHindi ? 'नया टैब ट्राई करें या दूसरा ब्राउज़र उपयोग करें।' : 'Try opening in a new tab or use a different browser.',
+      })
     } finally {
       setIsDownloading(false)
     }
@@ -224,6 +279,14 @@ export function LogoGeneratorModal({
     }
   }
 
+  // Close on Escape (must be before early return to keep hook order)
+  useEffect(() => {
+    if (!isOpen) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [isOpen, onClose])
+
   if (!isOpen) return null
 
   const styleItems = [
@@ -247,28 +310,32 @@ export function LogoGeneratorModal({
   ]
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/75 backdrop-blur-xs animate-in fade-in duration-200">
+    <div
+      className="fixed inset-0 z-[70] flex items-center justify-center p-2 sm:p-4 bg-slate-900/75 backdrop-blur-xs animate-in fade-in duration-200"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
+    >
       <div
-        className="w-full max-w-5xl bg-white border border-slate-200 rounded-sm shadow-2xl overflow-hidden flex flex-col max-h-[94vh] animate-in zoom-in-95 duration-200"
+        className="w-full max-w-5xl bg-white border border-slate-200 rounded-sm shadow-2xl overflow-hidden flex flex-col max-h-[calc(100dvh-0.5rem)] sm:max-h-[92vh] animate-in zoom-in-95 duration-200"
         role="dialog"
         aria-modal="true"
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Top Header */}
-        <div className="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-          <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-sm bg-slate-900 text-white flex items-center justify-center shadow-xs">
+        <div className="px-3 sm:px-5 py-3 sm:py-3.5 border-b border-slate-200 flex items-center justify-between gap-2 bg-slate-50 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+            <div className="h-8 w-8 sm:h-8 sm:w-8 rounded-sm bg-slate-900 text-white flex items-center justify-center shadow-xs shrink-0">
               <Sparkles className="w-4 h-4 text-amber-400" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-sm sm:text-base font-bold text-slate-900">
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <h2 className="text-[13px] sm:text-base font-bold text-slate-900 leading-tight">
                   {isHindi ? 'स्मार्ट संगठन लोगो व मोहर डिज़ाइनर' : 'Smart Organization Emblem & Insignia Studio'}
                 </h2>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-xs bg-indigo-50 text-indigo-700 border border-indigo-200">
+                <span className="text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-xs bg-indigo-50 text-indigo-700 border border-indigo-200 whitespace-nowrap">
                   {smartAnalysis.detectedTheme}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[10px] sm:text-[11px] text-slate-500 leading-snug line-clamp-2 sm:line-clamp-none">
                 {isHindi
                   ? 'आपके संगठन नाम और स्वरूप के अनुरूप स्वतः अनुकूलित वेक्टर मोहर'
                   : 'Tailored vector insignia analyzed dynamically from your organization name & identity'}
@@ -278,20 +345,21 @@ export function LogoGeneratorModal({
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-700 p-1.5 rounded-sm hover:bg-slate-200/50 transition"
+            aria-label="Close"
+            className="text-slate-400 hover:text-slate-700 p-1.5 rounded-sm hover:bg-slate-200/50 transition shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Body */}
-        <div className="flex-1 overflow-y-auto p-5 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="flex-1 overflow-y-auto overscroll-contain min-w-0 p-3 sm:p-5 grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
           {/* Left Column: Live High-DPI Vector Preview */}
-          <div className="lg:col-span-5 flex flex-col items-center justify-between space-y-4">
-            <div className="w-full space-y-2.5">
-              <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
-                <span className="font-bold text-slate-700">{isHindi ? 'लाइव वेक्टर प्रीव्यू' : 'Live Vector Preview'}</span>
-                <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-sm border border-slate-200">
+          <div className="lg:col-span-5 flex flex-col items-center justify-start space-y-4 min-w-0">
+            <div className="w-full space-y-2.5 min-w-0">
+              <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-2 text-xs font-semibold text-slate-500">
+                <span className="font-bold text-slate-700 shrink-0">{isHindi ? 'लाइव वेक्टर प्रीव्यू' : 'Live Vector Preview'}</span>
+                <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-sm border border-slate-200 self-start xs:self-auto">
                   <button
                     type="button"
                     onClick={() => setPreviewBg('letterhead')}
@@ -324,7 +392,7 @@ export function LogoGeneratorModal({
 
               {/* Preview Canvas Box */}
               <div
-                className={`w-full aspect-square border border-slate-200 rounded-sm p-6 sm:p-8 flex items-center justify-center shadow-xs transition-colors ${
+                className={`w-full aspect-square border border-slate-200 rounded-sm p-4 sm:p-6 md:p-8 flex items-center justify-center shadow-xs transition-colors overflow-hidden ${
                   previewBg === 'letterhead'
                     ? 'bg-[#fbf9f5] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:12px_12px]'
                     : previewBg === 'dark'
@@ -333,7 +401,7 @@ export function LogoGeneratorModal({
                 }`}
               >
                 <div
-                  className="w-full h-full max-w-[270px] max-h-[270px] flex items-center justify-center transition-all duration-300 transform hover:scale-105"
+                  className="w-full h-full max-w-[280px] max-h-[280px] sm:max-w-[270px] sm:max-h-[270px] flex items-center justify-center"
                   dangerouslySetInnerHTML={{ __html: svgContent }}
                 />
               </div>
@@ -358,28 +426,29 @@ export function LogoGeneratorModal({
           </div>
 
           {/* Right Column: Customization Controls */}
-          <div className="lg:col-span-7 flex flex-col space-y-4">
-            {/* Navigation Tabs */}
-            <div className="flex items-center gap-1 border-b border-slate-200 pb-2 overflow-x-auto scrollbar-none">
+          <div className="lg:col-span-7 flex flex-col space-y-4 min-w-0">
+            {/* Navigation Tabs - horizontally scrollable, no overlapping */}
+            <div className="flex items-center gap-1 sm:gap-1.5 border-b border-slate-200 pb-2.5 overflow-x-auto overscroll-x-contain snap-x snap-mandatory scrollbar-thin -mx-1 px-1 sm:mx-0 sm:px-0">
               {[
-                { id: 'presets', label: isHindi ? 'स्मार्ट प्रीसेट्स' : '1. Smart Presets', icon: <Sparkles className="w-3.5 h-3.5" /> },
-                { id: 'structure', label: isHindi ? 'ढांचा व आकार' : '2. Structure & Shape', icon: <Layout className="w-3.5 h-3.5" /> },
-                { id: 'symbol', label: isHindi ? 'केंद्रीय प्रतीक' : '3. Central Motif', icon: <Award className="w-3.5 h-3.5" /> },
-                { id: 'palette', label: isHindi ? 'रंग थीम' : '4. Color Theme', icon: <Palette className="w-3.5 h-3.5" /> },
-                { id: 'typography', label: isHindi ? 'पाठ व विवरण' : '5. Text & Details', icon: <Type className="w-3.5 h-3.5" /> },
-              ].map((tab) => (
+                { id: 'presets', label: isHindi ? 'स्मार्ट प्रीसेट्स' : 'Smart Presets', shortLabel: 'Presets', icon: <Sparkles className="w-3.5 h-3.5 shrink-0" /> },
+                { id: 'structure', label: isHindi ? 'ढांचा व आकार' : 'Structure', shortLabel: 'Structure', icon: <Layout className="w-3.5 h-3.5 shrink-0" /> },
+                { id: 'symbol', label: isHindi ? 'केंद्रीय प्रतीक' : 'Motif', shortLabel: 'Motif', icon: <Award className="w-3.5 h-3.5 shrink-0" /> },
+                { id: 'palette', label: isHindi ? 'रंग थीम' : 'Colors', shortLabel: 'Colors', icon: <Palette className="w-3.5 h-3.5 shrink-0" /> },
+                { id: 'typography', label: isHindi ? 'पाठ व विवरण' : 'Text', shortLabel: 'Text', icon: <Type className="w-3.5 h-3.5 shrink-0" /> },
+              ].map((tab, idx) => (
                 <button
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-bold whitespace-nowrap transition ${
+                  className={`shrink-0 snap-start flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-sm text-[11px] sm:text-xs font-bold whitespace-nowrap transition border ${
                     activeTab === tab.id
-                      ? 'bg-slate-900 text-white shadow-xs'
-                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                      ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
+                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 border-transparent hover:border-slate-200 bg-white sm:bg-transparent'
                   }`}
+                  title={tab.label}
                 >
-                  {tab.icon}
-                  <span>{tab.label}</span>
+                  <span className="hidden sm:inline-flex items-center gap-1.5">{tab.icon}<span>{idx+1}. {tab.label}</span></span>
+                  <span className="sm:hidden flex items-center gap-1">{tab.icon}<span>{tab.shortLabel}</span></span>
                 </button>
               ))}
             </div>
@@ -470,30 +539,32 @@ export function LogoGeneratorModal({
             {activeTab === 'symbol' && (
               <div className="space-y-3.5 animate-in fade-in duration-150">
                 {/* Switch: Symbol vs Monogram */}
-                <div className="flex items-center justify-between bg-slate-100 p-1 rounded-sm border border-slate-200">
+                <div className="flex items-center justify-between bg-slate-100 p-1 rounded-sm border border-slate-200 gap-1">
                   <button
                     type="button"
                     onClick={() => setCenterType('symbol')}
-                    className={`flex-1 py-1.5 text-xs font-bold rounded-xs transition flex items-center justify-center gap-1.5 ${
+                    className={`flex-1 min-w-0 py-2 sm:py-1.5 text-[11px] sm:text-xs font-bold rounded-xs transition flex items-center justify-center gap-1.5 px-1 ${
                       centerType === 'symbol'
                         ? 'bg-white text-slate-900 shadow-xs'
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    <Award className="w-3.5 h-3.5" />
-                    <span>{isHindi ? 'केंद्रीय हेराल्डिक प्रतीक (Icon Motif)' : 'Heraldic Symbol Icon'}</span>
+                    <Award className="w-3.5 h-3.5 shrink-0" />
+                    <span className="truncate hidden sm:inline">{isHindi ? 'केंद्रीय हेराल्डिक प्रतीक (Icon Motif)' : 'Heraldic Symbol Icon'}</span>
+                    <span className="truncate sm:hidden">{isHindi ? 'प्रतीक Icon' : 'Symbol'}</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setCenterType('monogram')}
-                    className={`flex-1 py-1.5 text-xs font-bold rounded-xs transition flex items-center justify-center gap-1.5 ${
+                    className={`flex-1 min-w-0 py-2 sm:py-1.5 text-[11px] sm:text-xs font-bold rounded-xs transition flex items-center justify-center gap-1.5 px-1 ${
                       centerType === 'monogram'
                         ? 'bg-white text-slate-900 shadow-xs'
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    <Type className="w-3.5 h-3.5" />
-                    <span>{isHindi ? 'मोनोग्राम अक्षर (Initials Monogram)' : 'Initials Monogram (e.g. NF)'}</span>
+                    <Type className="w-3.5 h-3.5 shrink-0" />
+                    <span className="truncate hidden sm:inline">{isHindi ? 'मोनोग्राम अक्षर (Initials Monogram)' : 'Initials Monogram (e.g. NF)'}</span>
+                    <span className="truncate sm:hidden">{isHindi ? 'मोनोग्राम' : 'Monogram'}</span>
                   </button>
                 </div>
 
@@ -515,17 +586,17 @@ export function LogoGeneratorModal({
                   </div>
                 ) : (
                   <>
-                    {/* Category Filter Pills */}
-                    <div className="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none">
+                    {/* Category Filter Pills - scrollable */}
+                    <div className="flex items-center gap-1.5 overflow-x-auto overscroll-x-contain snap-x pb-1.5 -mx-1 px-1 scrollbar-thin">
                       {categoryPills.map((cp) => (
                         <button
                           key={cp.id}
                           type="button"
                           onClick={() => setSymbolCategoryFilter(cp.id)}
-                          className={`px-2 py-1 text-[11px] rounded-sm font-semibold flex items-center gap-1 whitespace-nowrap transition ${
+                          className={`shrink-0 snap-start px-2.5 py-1.5 text-[11px] rounded-sm font-semibold flex items-center gap-1 whitespace-nowrap transition border ${
                             symbolCategoryFilter === cp.id
-                              ? 'bg-slate-900 text-white'
-                              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                              ? 'bg-slate-900 text-white border-slate-900'
+                              : 'bg-white sm:bg-slate-100 text-slate-600 hover:bg-slate-200 border-slate-200'
                           }`}
                         >
                           {cp.icon}
@@ -611,46 +682,50 @@ export function LogoGeneratorModal({
 
             {/* TAB 5: TEXT & TYPOGRAPHY */}
             {activeTab === 'typography' && (
-              <div className="space-y-3.5 animate-in fade-in duration-150">
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
+              <div className="space-y-3.5 animate-in fade-in duration-150 min-w-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="min-w-0">
                     <Label className="text-[11px] font-bold text-slate-700">Organization Name</Label>
                     <Input
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="h-8 text-xs mt-1 rounded-sm"
+                      className="h-9 text-sm sm:text-xs mt-1 rounded-sm"
+                      placeholder="Okhla Health Forum"
                     />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <Label className="text-[11px] font-bold text-slate-700">State / City / Nation</Label>
                     <Input
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
-                      className="h-8 text-xs mt-1 rounded-sm"
+                      className="h-9 text-sm sm:text-xs mt-1 rounded-sm"
+                      placeholder="India"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="min-w-0">
                     <Label className="text-[11px] font-bold text-slate-700">Established Year</Label>
                     <Input
                       value={year}
                       onChange={(e) => setYear(e.target.value)}
-                      className="h-8 text-xs mt-1 rounded-sm"
+                      className="h-9 text-sm sm:text-xs mt-1 rounded-sm"
+                      placeholder="2026"
+                      inputMode="numeric"
                     />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <Label className="text-[11px] font-bold text-slate-700">Font Family</Label>
-                    <div className="grid grid-cols-3 gap-1 mt-1">
+                    <div className="grid grid-cols-3 gap-1.5 mt-1">
                       {(['sans', 'serif', 'slab'] as FontStyle[]).map((f) => (
                         <button
                           key={f}
                           type="button"
                           onClick={() => setFontStyle(f)}
-                          className={`h-8 text-[11px] font-bold uppercase rounded-sm border ${
+                          className={`h-9 text-[11px] font-bold uppercase rounded-sm border transition ${
                             fontStyle === f
-                              ? 'border-slate-900 bg-slate-900 text-white'
+                              ? 'border-slate-900 bg-slate-900 text-white shadow-xs'
                               : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                           }`}
                         >
@@ -661,15 +736,16 @@ export function LogoGeneratorModal({
                   </div>
                 </div>
 
-                <div>
-                  <div className="flex items-center justify-between">
+                <div className="min-w-0">
+                  <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-1">
                     <Label className="text-[11px] font-bold text-slate-700">Tagline / Motto</Label>
                     <span className="text-[10px] text-slate-400">Click a smart suggestion below</span>
                   </div>
                   <Input
                     value={tagline}
                     onChange={(e) => setTagline(e.target.value)}
-                    className="h-8 text-xs mt-1 rounded-sm"
+                    className="h-9 text-sm sm:text-xs mt-1 rounded-sm"
+                    placeholder="UNITY, LIBERTY & EQUALITY"
                   />
 
                   {/* Smart Suggested Taglines */}
@@ -679,7 +755,7 @@ export function LogoGeneratorModal({
                         key={i}
                         type="button"
                         onClick={() => setTagline(st)}
-                        className={`text-[10px] font-semibold px-2 py-1 rounded-xs border transition ${
+                        className={`text-[10px] sm:text-[11px] font-semibold px-2 py-1.5 rounded-xs border transition text-left leading-tight break-words max-w-full ${
                           tagline === st
                             ? 'bg-indigo-50 border-indigo-300 text-indigo-900 font-bold'
                             : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900'
@@ -695,34 +771,35 @@ export function LogoGeneratorModal({
           </div>
         </div>
 
-        {/* Modal Footer Controls */}
-        <div className="px-5 py-3.5 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-center justify-between gap-3">
+        {/* Modal Footer Controls - sticky, not overlapped by PWA banner */}
+        <div className="px-3 sm:px-5 py-3 sm:py-3.5 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 shrink-0">
           <Button
             type="button"
             variant="outline"
             onClick={handleDownload}
             disabled={isDownloading}
-            className="w-full sm:w-auto text-xs font-bold border-slate-300 rounded-sm h-9 gap-1.5"
+            className="w-full sm:w-auto text-xs font-bold border-slate-300 rounded-sm h-9 gap-1.5 shrink-0 justify-center"
           >
             {isDownloading ? (
               <>
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                <span>{isHindi ? 'डाउनलोड हो रहा है...' : 'Generating 2048px...'}</span>
+                <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
+                <span className="truncate">{isHindi ? 'डाउनलोड हो रहा है...' : 'Generating 2048px...'}</span>
               </>
             ) : (
               <>
-                <Download className="w-3.5 h-3.5" />
-                <span>{isHindi ? 'उच्च रिज़ॉल्यूशन लोगो (2048px PNG)' : 'Download High-Res Logo (2048px PNG)'}</span>
+                <Download className="w-3.5 h-3.5 shrink-0" />
+                <span className="hidden sm:inline truncate">{isHindi ? 'उच्च रिज़ॉल्यूशन लोगो (2048px PNG)' : 'Download High-Res Logo (2048px PNG)'}</span>
+                <span className="sm:hidden truncate">{isHindi ? 'डाउनलोड PNG (2048px)' : 'Download PNG (2048px)'}</span>
               </>
             )}
           </Button>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto">
+          <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
             <Button
               type="button"
               variant="ghost"
               onClick={onClose}
-              className="w-1/3 sm:w-auto text-xs font-semibold rounded-sm h-9"
+              className="flex-1 sm:flex-none sm:w-auto text-xs font-semibold rounded-sm h-9 px-4"
             >
               {isHindi ? 'रद्द करें' : 'Cancel'}
             </Button>
@@ -731,17 +808,18 @@ export function LogoGeneratorModal({
               type="button"
               onClick={handleSaveAndUse}
               disabled={isSaving}
-              className="flex-1 sm:flex-none bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-5 rounded-sm h-9 shadow-xs flex items-center gap-1.5"
+              className="flex-[2] sm:flex-none bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 sm:px-5 rounded-sm h-9 shadow-xs flex items-center justify-center gap-1.5 min-w-0"
             >
               {isSaving ? (
                 <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span>{isHindi ? 'सेव हो रहा है...' : 'Saving...'}</span>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
+                  <span className="truncate">{isHindi ? 'सेव हो रहा है...' : 'Saving...'}</span>
                 </>
               ) : (
                 <>
-                  <Save className="w-3.5 h-3.5" />
-                  <span>{isHindi ? 'संगठन में सेव करें और लोगो लगाएं' : 'Save to Sangathan & Use Logo'}</span>
+                  <Save className="w-3.5 h-3.5 shrink-0" />
+                  <span className="hidden sm:inline truncate">{isHindi ? 'संगठन में सेव करें और लोगो लगाएं' : 'Save to Sangathan & Use Logo'}</span>
+                  <span className="sm:hidden truncate">{isHindi ? 'सेव करें और लगाएं' : 'Save & Use Logo'}</span>
                 </>
               )}
             </Button>

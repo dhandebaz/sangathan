@@ -39,7 +39,7 @@ export default async function CommunicationsPage(props: { params: Promise<{ lang
     getOrgUnifiedCommunicationsAction(orgId),
     getEmergencySosAlerts(orgId),
     supabase
-      .from('members')
+      .from('profiles')
       .select('id, full_name, phone, role')
       .eq('organisation_id', orgId)
       .eq('status', 'active')

@@ -32,7 +32,7 @@ export default async function PrintFormIRegister({
     .maybeSingle()
 
   const { data: members } = await adminClient
-    .from('members')
+    .from('profiles')
     .select('id, full_name, phone, email, designation, area, joining_date, status, role')
     .eq('organisation_id', selectedOrgId)
     .order('joining_date', { ascending: true })

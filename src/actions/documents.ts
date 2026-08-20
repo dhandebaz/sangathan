@@ -139,7 +139,7 @@ export async function createDocumentRecord(input: z.infer<typeof CreateDocumentS
       details: { title: validated.title, category: validated.category, access_level: validated.access_level },
     })
 
-    revalidatePath('/[lang]/dashboard/documents', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, document: doc }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
@@ -188,7 +188,7 @@ export async function deleteDocumentRecord(documentId: string, orgId: string) {
       resource_id: documentId,
     })
 
-    revalidatePath('/[lang]/dashboard/documents', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
@@ -220,7 +220,7 @@ export async function updateDocumentAccessLevel(
 
     if (error) return { success: false, error: error.message }
 
-    revalidatePath('/[lang]/dashboard/documents', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'

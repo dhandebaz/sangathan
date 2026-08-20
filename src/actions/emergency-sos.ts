@@ -62,7 +62,7 @@ export const triggerEmergencySosAction = createSafeAction(
       type: 'grievance',
     })
 
-    revalidatePath('/[lang]/dashboard/emergency-sos', 'page')
+    revalidatePath('/', 'layout')
     return alert
   }
 )
@@ -96,7 +96,7 @@ export async function dispatchAdvocateAction(alertId: string, advocateName: stri
       .update({ status: 'legal_dispatched' })
       .eq('id', alertId)
 
-    revalidatePath('/[lang]/dashboard/emergency-sos', 'page')
+    revalidatePath('/', 'layout')
     return { success: true, data }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to dispatch advocate'
@@ -122,7 +122,7 @@ export async function updateSosStatusAction(alertId: string, status: string) {
       .eq('id', alertId)
 
     if (error) throw error
-    revalidatePath('/[lang]/dashboard/emergency-sos', 'page')
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to update SOS status'

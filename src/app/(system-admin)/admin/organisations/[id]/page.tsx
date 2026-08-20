@@ -25,7 +25,7 @@ export default async function OrganisationDetailsPage({ params }: PageProps) {
   if (error || !org) return <div className="p-8">Organisation not found</div>
 
   const { data: members } = await supabase
-    .from('members')
+    .from('profiles')
     .select('id, role, joined_at, profiles(full_name, email, phone, status)')
     .eq('organisation_id', id)
     .order('joined_at', { ascending: false })

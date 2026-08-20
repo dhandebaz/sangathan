@@ -30,6 +30,12 @@ const adminAction: ActionOptions = {
   actionName: 'organisation_settings',
 }
 
+// Unified branding edit roles - matches storage RLS (admin/executive/editor) + logo-generator
+const brandingAction: ActionOptions = {
+  allowedRoles: ['admin', 'executive', 'editor'],
+  actionName: 'organisation_branding',
+}
+
 export const updateOrganisationProfile = createSafeAction(
   ProfileSchema,
   async (input, context) => {
@@ -121,6 +127,12 @@ export const updateOrganisationImage = createSafeAction(
       return { error: error.message }
     }
 
+    await context.logAction({
+      action: `ORG_${input.type.toUpperCase()}_UPDATED`,
+      resourceTable: 'organisations',
+      resourceId: context.organizationId,
+    })
+
     revalidatePath('/', 'layout')
     if (orgData?.slug) {
       await revalidatePublicOrgPages(orgData.slug)
@@ -128,5 +140,5 @@ export const updateOrganisationImage = createSafeAction(
 
     return { success: true }
   },
-  adminAction,
+  brandingAction,
 )
