@@ -255,6 +255,8 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
           orgType={org?.org_type || 'ngo'}
           orgName={org?.name}
           initialShow={showOnboarding}
+          lang={lang}
+          isAdmin={true}
         />
       </>
     )
@@ -289,6 +291,8 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
         orgType={org?.org_type || 'ngo'}
         orgName={org?.name}
         initialShow={showOnboarding}
+        lang={lang}
+        isAdmin={false}
       />
     </>
   )

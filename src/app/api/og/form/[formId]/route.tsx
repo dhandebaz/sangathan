@@ -43,13 +43,7 @@ export async function GET(
       if (org?.org_type) {
         orgType = org.org_type === 'ngo'
           ? 'Registered NGO'
-          : org.org_type === 'student_union'
-            ? 'Student Union'
-            : org.org_type === 'workers_union'
-              ? 'Workers Union'
-              : org.org_type === 'rwa'
-                ? 'Resident Welfare'
-                : 'Civic Collective'
+          : 'Civic Collective'
       }
     }
 

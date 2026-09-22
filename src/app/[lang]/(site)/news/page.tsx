@@ -25,15 +25,15 @@ const newsItems = [
     categoryColor: 'text-[var(--accent)]',
     title: 'Unified Ticketing Module Released',
     date: 'June 20, 2026',
-    excerpt: 'We have completely overhauled the Helpdesk system, enabling powerful multi-tenant support. Grievances for Unions, Maintenance for RWAs, and Support for NGOs, all from a single scalable engine. This release improves the core functionality across all 4 major organizational structures we support.',
+    excerpt: 'We have completely overhauled the Helpdesk system, enabling powerful multi-tenant support. Complaints and support for collectives and NGOs, all from a single scalable engine. This release improves the core functionality across the organizational structures we support.',
   },
   {
     id: 'cba-grants',
     category: 'Feature Release',
     categoryColor: 'text-[var(--success)]',
-    title: 'CBA & Grants Management',
+    title: 'Proposals & Grants Management',
     date: 'June 18, 2026',
-    excerpt: 'Unions can now securely manage Collective Bargaining Agreements, while NGOs gain dedicated pipelines to track grant proposals and compliance deadlines directly from their dashboards. This brings enterprise-level tracking to grassroots collectives.',
+    excerpt: 'Collectives can now securely manage proposals, while NGOs gain dedicated pipelines to track grant proposals and compliance deadlines directly from their dashboards. This brings enterprise-level tracking to grassroots collectives.',
   },
   {
     id: '500-collectives',
@@ -41,7 +41,7 @@ const newsItems = [
     categoryColor: 'text-[var(--text-primary)]',
     title: '500+ Grassroots Collectives Onboarded',
     date: 'June 10, 2026',
-    excerpt: 'Sangathan has now surpassed 500 active civic organizations on the platform. We are humbled to see student unions, environmental NGOs, and housing societies building robust governance using our free-to-use tools. This milestone proves the dire need for civic tech infrastructure.',
+    excerpt: 'Sangathan has now surpassed 500 active civic organizations on the platform. We are humbled to see community collectives and environmental NGOs building robust governance using our free-to-use tools. This milestone proves the dire need for civic tech infrastructure.',
   },
   {
     id: 'free-plan-launch',

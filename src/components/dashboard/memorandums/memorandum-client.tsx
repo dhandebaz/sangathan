@@ -14,51 +14,51 @@ interface MemorandumClientProps {
 const TEMPLATES = [
   {
     id: 'hostel_mess',
-    title: 'Representation Regarding Hostel Allotment & Mess Quality',
-    recipient: 'Dean of Student Welfare / Chief Warden',
-    department: 'Hostel Administration',
+    title: 'Representation Regarding Community Facility & Service Quality',
+    recipient: 'Concerned Authority / Facility Manager',
+    department: 'Facility Administration',
     content: `Respected Sir/Madam,
 
-We, the undersigned students and student representatives, submit this Memorandum (ज्ञापन) regarding urgent concerns in campus hostels:
-1. Immediate audit and improvement of food quality in Mess #2 and #4.
-2. Timely allotment of hostel rooms for 1st-year postgraduate students.
-3. Extension of library and reading room hours to 24x7.
+We, the undersigned members and representatives, submit this Memorandum (ज्ञापन) regarding urgent concerns in community facilities:
+1. Immediate audit and improvement of service quality.
+2. Timely allotment and maintenance of community resources.
+3. Extension of facility access hours.
 
 We request your prompt action within 7 business days.
 
 Yours sincerely,
-Student Collective Representatives`
+Collective Representatives`
   },
   {
     id: 'exam_extension',
-    title: 'Memorandum for Extension of Examination Dates & Syllabus Relief',
-    recipient: 'Controller of Examinations',
-    department: 'Examination Branch',
-    content: `Respected Controller of Examinations,
+    title: 'Memorandum for Extension of Deadlines & Relief',
+    recipient: 'Concerned Authority',
+    department: 'Administration',
+    content: `Respected Authority,
 
-Due to recent campus academic schedule disruptions, we request:
-1. Extension of semester examination commencement by 10 days.
-2. Publication of internal assessment scores prior to final exams.
+Due to recent schedule disruptions, we request:
+1. Extension of deadline by 10 days.
+2. Publication of assessment scores prior to final decisions.
 
-We trust the administration will consider the welfare of the student community.
+We trust the administration will consider the welfare of the community.
 
 Yours sincerely,
-Student Body Delegation`
+Member Delegation`
   },
   {
     id: 'fee_hike',
-    title: 'Memorandum Demanding Rollback of Proposed Annual Fee Hike',
-    recipient: 'Vice-Chancellor / Finance Officer',
+    title: 'Memorandum Demanding Rollback of Proposed Fee Hike',
+    recipient: 'Chairperson / Finance Officer',
     department: 'Central Administration',
-    content: `To the Honorable Vice-Chancellor,
+    content: `To the Honorable Chairperson,
 
-We express our strong objection to the proposed 15% increase in annual tuition and lab fees:
+We express our strong objection to the proposed 15% increase in annual fees:
 1. Immediate suspension of the fee hike decision.
-2. Formation of a joint student-faculty committee to review fee structures.
-3. Special fee waivers for economically marginalized students.
+2. Formation of a joint member committee to review fee structures.
+3. Special fee waivers for economically marginalized members.
 
 Thanking you,
-Student Union Executive Committee`
+Collective Executive Committee`
   }
 ]
 
@@ -90,8 +90,8 @@ export default function MemorandumClient({ initialMemorandums }: MemorandumClien
     try {
       const res = await createMemorandum({
         title: newTitle,
-        recipient: newRecipient || 'Vice-Chancellor',
-        department: newDepartment || 'University Administration',
+        recipient: newRecipient || 'Concerned Authority',
+        department: newDepartment || 'Administration',
         content: newContent
       })
 
@@ -137,7 +137,7 @@ export default function MemorandumClient({ initialMemorandums }: MemorandumClien
             <h2 className="text-xl font-bold">Gyapan (ज्ञापन) & Memorandum Generator</h2>
           </div>
           <p className="text-slate-300 text-sm mt-1">
-            Draft formal student representations, collect verified student signatures, and present demands to VCs, Deans, and Wardens.
+            Draft formal collective representations, collect verified member signatures, and present demands to authorities and departments.
           </p>
         </div>
         <button
@@ -158,7 +158,7 @@ export default function MemorandumClient({ initialMemorandums }: MemorandumClien
               Draft Formal Memorandum (ज्ञापन)
             </CardTitle>
             <CardDescription>
-              Select a standard campus template or write a custom representation.
+              Select a standard template or write a custom representation.
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleCreate}>
@@ -200,7 +200,7 @@ export default function MemorandumClient({ initialMemorandums }: MemorandumClien
                     required
                     value={newRecipient}
                     onChange={e => setNewRecipient(e.target.value)}
-                    placeholder="e.g., Vice-Chancellor / Dean of Student Welfare"
+                    placeholder="e.g., Chairperson / Concerned Authority"
                     className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>

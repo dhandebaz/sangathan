@@ -47,8 +47,8 @@ export default async function GovernancePage({ params }: { params: Promise<{ lan
             <div className="text-slate-600  space-y-4">
               <p>
                 {isHindi
-                  ? 'संगठन केवल तकनीकी बुनियादी ढांचे के रूप में कार्य करता है। हम हमारे मंच पर किसी भी संगठन का समर्थन, वित्त पोषण या निर्देशन नहीं करते हैं। चाहे आप एक छात्र संघ हों, एक पड़ोस सामूहिक हों, या एक गैर-लाभकारी हों, हमारी भूमिका आपको स्वयं को नियंत्रित करने के लिए आवश्यक उपकरण प्रदान करना है।'
-                  : 'Sangathan acts solely as technical infrastructure. We do not endorse, fund, or direct any organisation on our platform. Whether you are a student union, a neighborhood collective, or a non-profit, our role is to provide the tools you need to govern yourself.'}
+                  ? 'संगठन केवल तकनीकी बुनियादी ढांचे के रूप में कार्य करता है। हम हमारे मंच पर किसी भी संगठन का समर्थन, वित्त पोषण या निर्देशन नहीं करते हैं। चाहे आप एक नागरिक समूह हों या एक गैर-लाभकारी हों, हमारी भूमिका आपको स्वयं को नियंत्रित करने के लिए आवश्यक उपकरण प्रदान करना है।'
+                  : 'Sangathan acts solely as technical infrastructure. We do not endorse, fund, or direct any organisation on our platform. Whether you are a civic collective or a non-profit, our role is to provide the tools you need to govern yourself.'}
               </p>
               <p>
                 {isHindi ? (

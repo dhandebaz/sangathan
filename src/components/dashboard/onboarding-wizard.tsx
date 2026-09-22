@@ -32,18 +32,6 @@ const ORG_DESCRIPTIONS: Record<OrgType, { en: string; hi: string }> = {
     en: 'Registered trusts, societies, Section 8 non-profits with donor CRM, 80G tax receipts & compliance',
     hi: 'पंजीकृत ट्रस्ट, सोसायटियां, सेक्शन 8 संस्थाएं (दानदाता CRM, 80G रसीदें और वैधानिक अनुपालन)',
   },
-  student_union: {
-    en: 'Hostel & Mess audits, RTI/ATR assistant, election tallies & anti-ragging cell',
-    hi: 'हॉस्टल और मेस ऑडिट, RTI/ATR सहायक, चुनाव गणना और एंटी-रैगिंग सेल',
-  },
-  workers_union: {
-    en: 'Collective bargaining (CBA), strike ballots, workplace grievances & dues',
-    hi: 'सामूहिक सौदेबाजी (CBA), हड़ताल मतदान, कार्यस्थल शिकायतें और शुल्क',
-  },
-  rwa: {
-    en: 'Maintenance logs, estate operations, apartment management & community voting',
-    hi: 'रखरखाव लॉग, संपत्ति संचालन, अपार्टमेंट प्रबंधन और सामुदायिक मतदान',
-  },
 }
 
 export interface FocusBlueprint {
@@ -164,168 +152,6 @@ export const FOCUS_BLUEPRINTS: Record<OrgType, FocusBlueprint[]> = {
       ],
     },
   ],
-  student_union: [
-    {
-      id: 'campus_elections',
-      titleEn: '1. Campus Elections & Lyngdoh Compliance',
-      titleHi: '1. छात्र संघ चुनाव व लिंगदोह अनुपालन',
-      descEn: 'Candidate nomination verification, expenditure caps, debate Q&A, and encrypted secret ballots.',
-      descHi: 'उम्मीदवार नामांकन जांच, चुनावी खर्च सीमा, डिबेट प्रश्नोत्तरी और गुप्त मतदान।',
-      recommendedRoles: [
-        { value: 'Union President', labelEn: 'Student Union President (अध्यक्ष)', labelHi: 'अध्यक्ष' },
-        { value: 'Election Commissioner', labelEn: 'Chief Election Commissioner (मुख्य चुनाव आयुक्त)', labelHi: 'मुख्य चुनाव आयुक्त' },
-        { value: 'General Secretary', labelEn: 'General Secretary (महासचिव)', labelHi: 'महासचिव' },
-        { value: 'Returning Officer', labelEn: 'Returning Officer (निर्वाचन अधिकारी)', labelHi: 'निर्वाचन अधिकारी' },
-      ],
-    },
-    {
-      id: 'hostel_mess',
-      titleEn: '2. Hostel, Mess & Campus Welfare',
-      titleHi: '2. हॉस्टल, मेस व कैम्पस कल्याण',
-      descEn: 'Mess food quality spot audits, hostel maintenance tickets, warden resolution tracking.',
-      descHi: 'मेस भोजन गुणवत्ता ऑडिट, हॉस्टल शिकायत टिकट, वार्डन समाधान ट्रैकर।',
-      recommendedRoles: [
-        { value: 'Mess Secretary', labelEn: 'Mess Secretary (मेस सचिव)', labelHi: 'मेस सचिव' },
-        { value: 'Hostel Representative', labelEn: 'Hostel Representative (हॉस्टल प्रतिनिधि)', labelHi: 'हॉस्टल प्रतिनिधि' },
-        { value: 'Welfare Convener', labelEn: 'Student Welfare Convener (कल्याण संयोजक)', labelHi: 'कल्याण संयोजक' },
-        { value: 'Health Inspector', labelEn: 'Campus Health In-Charge (स्वास्थ्य निरीक्षक)', labelHi: 'स्वास्थ्य निरीक्षक' },
-      ],
-    },
-    {
-      id: 'academic_antiragging',
-      titleEn: '3. Academic Rights & Anti-Ragging Cell',
-      titleHi: '3. शैक्षणिक अधिकार व एंटी-रैगिंग सेल',
-      descEn: 'Curriculum & exam petitions, anonymous ragging reporting, legal defense, and counseling.',
-      descHi: 'परीक्षा याचिकाएं, गोपनीय एंटी-रैगिंग रिपोर्टिंग, कानूनी व मानसिक स्वास्थ्य सहायता।',
-      recommendedRoles: [
-        { value: 'Anti-Ragging In-Charge', labelEn: 'Anti-Ragging Cell In-Charge (एंटी-रैगिंग प्रमुख)', labelHi: 'एंटी-रैगिंग प्रमुख' },
-        { value: 'Academic Secretary', labelEn: 'Academic Affairs Secretary (शैक्षणिक सचिव)', labelHi: 'शैक्षणिक सचिव' },
-        { value: 'Counseling Lead', labelEn: 'Peer Counseling Lead (परामर्श प्रमुख)', labelHi: 'परामर्श प्रमुख' },
-        { value: 'Faculty Liaison', labelEn: 'Faculty Liaison Delegate (संकाय प्रतिनिधि)', labelHi: 'संकाय प्रतिनिधि' },
-      ],
-    },
-    {
-      id: 'student_movement',
-      titleEn: '4. Student Activism & Fee Agitations',
-      titleHi: '4. छात्र आंदोलन व फीस वृद्धि विरोध',
-      descEn: 'Campus Parchas, student general bodies (GBM), strike ballots, and national solidarity.',
-      descHi: 'कैम्पस पर्चे, छात्र आम सभा (GBM), हड़ताल मतदान और एकजुटता मोर्चा।',
-      recommendedRoles: [
-        { value: 'Movement Convener', labelEn: 'Campus Movement Convener (आंदोलन संयोजक)', labelHi: 'आंदोलन संयोजक' },
-        { value: 'Agitation Lead', labelEn: 'Direct Action Lead (आंदोलन प्रमुख)', labelHi: 'आंदोलन प्रमुख' },
-        { value: 'Publications Secretary', labelEn: 'Parcha & Press Secretary (प्रचार सचिव)', labelHi: 'प्रचार सचिव' },
-        { value: 'Solidarity Coordinator', labelEn: 'Inter-University Liaison (अंतर-विश्वविद्यालय संयोजक)', labelHi: 'अंतर-विश्वविद्यालय संयोजक' },
-      ],
-    },
-  ],
-  workers_union: [
-    {
-      id: 'trade_union_cba',
-      titleEn: '1. Collective Bargaining & Wage Accords',
-      titleHi: '1. सामूहिक सौदेबाजी व वेतन समझौता (CBA)',
-      descEn: 'Charter of demands, wage negotiations tracker, strike ballot verification, and labour court logs.',
-      descHi: 'मांग पत्र (Charter of Demands), वेतन वार्ता, हड़ताल मतदान और लेबर कोर्ट ट्रैकर।',
-      recommendedRoles: [
-        { value: 'Union President', labelEn: 'Union President (अध्यक्ष)', labelHi: 'अध्यक्ष' },
-        { value: 'General Secretary', labelEn: 'General Secretary (महासचिव)', labelHi: 'महासचिव' },
-        { value: 'Negotiations Convener', labelEn: 'CBA Negotiations Lead (समझौता संयोजक)', labelHi: 'समझौता संयोजक' },
-        { value: 'Legal Advisor', labelEn: 'Labour Law Legal Advisor (कानूनी सलाहकार)', labelHi: 'कानूनी सलाहकार' },
-      ],
-    },
-    {
-      id: 'workplace_safety',
-      titleEn: '2. Factory Safety, OSHA & Compensation',
-      titleHi: '2. कारखाना सुरक्षा, OSHA व मुआवजा सहायता',
-      descEn: 'Workplace accident reporting, ESIC/EPFO claims, hazardous duty spot inspections.',
-      descHi: 'कार्यस्थल दुर्घटना रिपोर्टिंग, ESIC/EPFO दावा सहायता और सुरक्षा निरीक्षण।',
-      recommendedRoles: [
-        { value: 'Safety Secretary', labelEn: 'Workplace Safety Secretary (सुरक्षा सचिव)', labelHi: 'सुरक्षा सचिव' },
-        { value: 'ESIC Claim Officer', labelEn: 'ESIC & Welfare Officer (कल्याण अधिकारी)', labelHi: 'कल्याण अधिकारी' },
-        { value: 'Works Inspector', labelEn: 'Shop-Floor Safety Auditor (सुरक्षा ऑडिटर)', labelHi: 'सुरक्षा ऑडिटर' },
-        { value: 'Grievance Officer', labelEn: 'Workplace Grievance Officer (शिकायत अधिकारी)', labelHi: 'शिकायत अधिकारी' },
-      ],
-    },
-    {
-      id: 'gig_informal',
-      titleEn: '3. Gig, Platform & Informal Workers',
-      titleHi: '3. गिग, डिलीवरी व असंगठित श्रमिक मोर्चा',
-      descEn: 'App delivery rate cards, police harassment SOS, informal mutual-aid fund, and strikes.',
-      descHi: 'रेट-कार्ड विसंगति, पुलिस प्रताड़ना SOS, आपसी सहायता कोष और त्वरित हड़ताल।',
-      recommendedRoles: [
-        { value: 'Gig Collective Lead', labelEn: 'Gig Workers Lead (गिग मोर्चा प्रमुख)', labelHi: 'गिग मोर्चा प्रमुख' },
-        { value: 'Hub Coordinator', labelEn: 'Delivery Hub In-Charge (हब प्रभारी)', labelHi: 'हब प्रभारी' },
-        { value: 'Mutual-Aid Custodian', labelEn: 'Mutual-Aid Fund In-Charge (राहत कोष प्रमुख)', labelHi: 'राहत कोष प्रमुख' },
-        { value: 'Field Mobilizer', labelEn: 'Field Mobilizer (फील्ड प्रेरक)', labelHi: 'फील्ड प्रेरक' },
-      ],
-    },
-    {
-      id: 'plant_stewards',
-      titleEn: '4. Plant Cadre & Shop-Floor Stewards',
-      titleHi: '4. प्लांट काडर व शॉप-फ्लोर प्रतिनिधि',
-      descEn: 'Shift steward assignments, gate meetings, member dues collection, and discipline defense.',
-      descHi: 'शिफ्ट प्रतिनिधि रोस्टर, गेट मीटिंग, सदस्यता चंदा संग्रह और अनुशासन जांच बचाव।',
-      recommendedRoles: [
-        { value: 'Chief Shop Steward', labelEn: 'Chief Shop Steward (मुख्य शॉप प्रतिनिधि)', labelHi: 'मुख्य शॉप प्रतिनिधि' },
-        { value: 'Unit Delegate', labelEn: 'Unit Delegate (प्लांट प्रतिनिधि)', labelHi: 'प्लांट प्रतिनिधि' },
-        { value: 'Dues Collector', labelEn: 'Dues & Membership In-Charge (चंदा प्रभारी)', labelHi: 'चंदा प्रभारी' },
-        { value: 'Meeting Secretary', labelEn: 'Gate Meeting Coordinator (बैठक सचिव)', labelHi: 'बैठक सचिव' },
-      ],
-    },
-  ],
-  rwa: [
-    {
-      id: 'estate_maintenance',
-      titleEn: '1. Gated Society & Estate Operations',
-      titleHi: '1. गेटेड सोसायटी व मेंटेनेंस संचालन',
-      descEn: 'Lift, DG, water pump workorders, technician assignment, and AMC equipment tracking.',
-      descHi: 'लिफ्ट, डीजी, वाटर पंप वर्कऑर्डर, तकनीशियन कार्य और AMC उपकरण ट्रैकिंग।',
-      recommendedRoles: [
-        { value: 'RWA President', labelEn: 'RWA President (अध्यक्ष)', labelHi: 'अध्यक्ष' },
-        { value: 'Maintenance Secretary', labelEn: 'Maintenance Secretary (रखरखाव सचिव)', labelHi: 'रखरखाव सचिव' },
-        { value: 'Estate Manager', labelEn: 'Estate Manager (सोसायटी प्रबंधक)', labelHi: 'सोसायटी प्रबंधक' },
-        { value: 'Facility Supervisor', labelEn: 'Facility Supervisor (सुपरवाइजर)', labelHi: 'सुपरवाइजर' },
-      ],
-    },
-    {
-      id: 'municipal_civic',
-      titleEn: '2. Colony & Ward Municipal Action',
-      titleHi: '2. कॉलोनी व वार्ड नगर निगम कार्रवाई',
-      descEn: 'Potholes, sewers, streetlights, stamped representation letters to MCD, and councillor RTI.',
-      descHi: 'सड़क, सीवर, स्ट्रीट लाइट, नगर निगम को स्टैम्प्ड पत्र और पार्षद आरटीआई।',
-      recommendedRoles: [
-        { value: 'Civic In-Charge', labelEn: 'Colony Civic Affairs Lead (नागरिक कार्य प्रमुख)', labelHi: 'नागरिक कार्य प्रमुख' },
-        { value: 'Ward Liaison', labelEn: 'MCD / Councillor Liaison (निगम प्रतिनिधि)', labelHi: 'निगम प्रतिनिधि' },
-        { value: 'Sanitation Lead', labelEn: 'Sanitation & Waste Lead (सफाई प्रमुख)', labelHi: 'सफाई प्रमुख' },
-        { value: 'General Secretary', labelEn: 'General Secretary (महासचिव)', labelHi: 'महासचिव' },
-      ],
-    },
-    {
-      id: 'security_amenities',
-      titleEn: '3. Security, Parking & Community Facilities',
-      titleHi: '3. सुरक्षा, पार्किंग व क्लबहाउस प्रबंधन',
-      descEn: 'Security guard rosters, parking slot allocation, clubhouse booking, and visitor logs.',
-      descHi: 'गार्ड रोस्टर, पार्किंग स्लॉट आवंटन, क्लबहाउस बुकिंग और आगंतुक लॉग।',
-      recommendedRoles: [
-        { value: 'Security Secretary', labelEn: 'Security Secretary (सुरक्षा सचिव)', labelHi: 'सुरक्षा सचिव' },
-        { value: 'Amenity Manager', labelEn: 'Clubhouse & Sports In-Charge (क्लब प्रबंधक)', labelHi: 'क्लब प्रबंधक' },
-        { value: 'Parking In-Charge', labelEn: 'Parking Officer (पार्किंग प्रभारी)', labelHi: 'पार्किंग प्रभारी' },
-        { value: 'Executive Member', labelEn: 'Executive Committee Member (कार्यकारिणी सदस्य)', labelHi: 'कार्यकारिणी सदस्य' },
-      ],
-    },
-    {
-      id: 'agm_billing',
-      titleEn: '4. Annual AGM Elections & Bill Collection',
-      titleHi: '4. वार्षिक AGM चुनाव व मासिक बिलिंग',
-      descEn: 'Online AGM secret ballots, automated maintenance bill generation, UPI dues, and transparency audit.',
-      descHi: 'ऑनलाइन एजीएम गुप्त मतदान, स्वचालित मेंटेनेंस बिल, UPI भुगतान व वित्तीय पारदर्शिता।',
-      recommendedRoles: [
-        { value: 'RWA Treasurer', labelEn: 'Treasurer / Finance Lead (कोषाध्यक्ष)', labelHi: 'कोषाध्यक्ष' },
-        { value: 'Returning Officer', labelEn: 'AGM Election Returning Officer (चुनाव अधिकारी)', labelHi: 'चुनाव अधिकारी' },
-        { value: 'Audit Convener', labelEn: 'Internal Auditor (आंतरिक ऑडिटर)', labelHi: 'आंतरिक ऑडिटर' },
-        { value: 'Accounts Lead', labelEn: 'Billing & Collection In-Charge (बिलिंग प्रभारी)', labelHi: 'बिलिंग प्रभारी' },
-      ],
-    },
-  ],
 }
 
 interface LegalOptionDetail {
@@ -355,14 +181,14 @@ const LEGAL_ENTITY_OPTIONS: Record<OrgType, LegalOptionDetail[]> = {
     },
     {
       type: 'bqf_recognized',
-      titleEn: 'BQF Umbrella Recognized Collective',
-      titleHi: 'BQF छत्र मान्यता प्राप्त समूह',
-      subEn: 'Section 8 Umbrella Recognition & Verification',
-      subHi: 'धारा 8 छत्र मान्यता व सत्यापन',
-      descEn: 'Affiliated with Bahujan Queer Foundation (Section 8 Non-Profit) for grant eligibility, legal protection, and audited bank routing.',
-      descHi: 'अनुदान पात्रता, कानूनी संरक्षण और ऑडिटेड बैंक रूटिंग के लिए बहुजन क्वीर फाउंडेशन से संबद्ध।',
-      actEn: 'Companies Act, 2013 (Section 8 Institutional Umbrella)',
-      actHi: 'कंपनी अधिनियम, 2013 (धारा 8 संस्थागत छत्र)',
+      titleEn: 'BQF Community-Affiliated Collective',
+      titleHi: 'BQF सामुदायिक संबद्ध समूह',
+      subEn: 'Community Affiliation (No Legal Status)',
+      subHi: 'सामुदायिक संबद्धता (कानूनी दर्जा नहीं)',
+      descEn: 'Community affiliation with Bahujan Queer Foundation (Section 8 Non-Profit) for credibility. Grants no legal protection, grant eligibility, or banking rights.',
+      descHi: 'विश्वसनीयता के लिए बहुजन क्वीर फाउंडेशन से सामुदायिक संबद्धता। कोई कानूनी संरक्षण, अनुदान पात्रता या बैंकिंग अधिकार नहीं मिलता।',
+      actEn: 'Community affiliation only — not a legal entity',
+      actHi: 'सिर्फ सामुदायिक संबद्धता — कानूनी इकाई नहीं',
     },
   ],
   ngo: [
@@ -398,89 +224,6 @@ const LEGAL_ENTITY_OPTIONS: Record<OrgType, LegalOptionDetail[]> = {
       descHi: 'CIN, DIN, AOC-4 और MGT-7 फाइलिंग के साथ कॉर्पोरेट मामलों के मंत्रालय (MCA) द्वारा शासित।',
       actEn: 'Companies Act, 2013 (Section 8 MCA Framework)',
       actHi: 'कंपनी अधिनियम, 2013 (धारा 8 MCA ढांचा)',
-    },
-  ],
-  student_union: [
-    {
-      type: 'university_body',
-      titleEn: 'Constituted University / College Body',
-      titleHi: 'मान्यता प्राप्त विश्वविद्यालय / कॉलेज निकाय',
-      subEn: 'University Statutes & Lyngdoh Committee Framework',
-      subHi: 'विश्वविद्यालय नियम व लिंगदोह समिति दिशानिर्देश',
-      descEn: 'Official student body governed by Dean of Students Welfare (DSW), university act statutes, and election code.',
-      descHi: 'विश्वविद्यालय प्रशासन (DSW), विश्वविद्यालय अधिनियम और चुनाव आचार संहिता द्वारा शासित।',
-      actEn: 'University Central/State Acts & UGC Guidelines',
-      actHi: 'विश्वविद्यालय केंद्रीय/राज्य अधिनियम व UGC दिशानिर्देश',
-    },
-    {
-      type: 'independent_front',
-      titleEn: 'Independent Student Guild / Front',
-      titleHi: 'स्वतंत्र छात्र मंच / फ्रंट',
-      subEn: 'Autonomous Student Movement Association',
-      subHi: 'स्वायत्त छात्र आंदोलन व संघ',
-      descEn: 'Autonomous, democratic student association independent of university administration restrictions.',
-      descHi: 'विश्वविद्यालय प्रशासन के प्रतिबंधों से स्वतंत्र, स्वायत्त एवं लोकतांत्रिक छात्र संगठन।',
-      actEn: 'Article 19(1)(c) / Societies Registration Act',
-      actHi: 'अनुच्छेद 19(1)(c) / सोसाइटी पंजीकरण अधिनियम',
-    },
-  ],
-  workers_union: [
-    {
-      type: 'registered_trade_union',
-      titleEn: 'Registered Trade Union',
-      titleHi: 'पंजीकृत ट्रेड यूनियन',
-      subEn: 'Trade Unions Act, 1926',
-      subHi: 'ट्रेड यूनियन अधिनियम, 1926',
-      descEn: 'Statutory registered union with strike notice rights, collective bargaining mandate, and annual Form H returns.',
-      descHi: 'हड़ताल नोटिस अधिकार, सामूहिक सौदेबाजी जनादेश और वार्षिक फॉर्म H रिटर्न के साथ पंजीकृत यूनियन।',
-      actEn: 'Trade Unions Act, 1926 (State Labour Commissioner)',
-      actHi: 'ट्रेड यूनियन अधिनियम, 1926 (राज्य श्रम आयुक्त)',
-    },
-    {
-      type: 'informal_collective',
-      titleEn: 'Informal / Gig Workers Collective',
-      titleHi: 'असंगठित / गिग वर्कर्स मोर्चा',
-      subEn: 'Platform & Informal Labor Front',
-      subHi: 'प्लेटफॉर्म व असंगठित श्रम मंच',
-      descEn: 'Grassroots collective of gig, platform, or contract workers for mutual protection and spot agitation.',
-      descHi: 'पारस्परिक सुरक्षा और त्वरित मांग अभियान के लिए गिग, प्लेटफॉर्म या अनुबंध श्रमिकों का जमीनी संगठन।',
-      actEn: 'Article 19(1)(c) & Unorganised Workers Social Security Act',
-      actHi: 'अनुच्छेद 19(1)(c) व असंगठित कर्मकार सामाजिक सुरक्षा अधिनियम',
-    },
-  ],
-  rwa: [
-    {
-      type: 'registered_society',
-      titleEn: 'Registered Society (RWA)',
-      titleHi: 'पंजीकृत सोसाइटी (RWA)',
-      subEn: 'Societies Registration Act, 1860',
-      subHi: 'सोसाइटी पंजीकरण अधिनियम, 1860',
-      descEn: 'Standard resident welfare association registered with Registrar of Societies for maintenance and civic representation.',
-      descHi: 'रखरखाव और नागरिक प्रतिनिधित्व के लिए रजिस्ट्रार ऑफ सोसाइटीज के साथ पंजीकृत आरडब्ल्यूए।',
-      actEn: 'Societies Registration Act, 1860',
-      actHi: 'सोसाइटी पंजीकरण अधिनियम, 1860',
-    },
-    {
-      type: 'cooperative_housing',
-      titleEn: 'Cooperative Housing Society (CHS)',
-      titleHi: 'सहकारी आवास सोसाइटी (CHS)',
-      subEn: 'State Cooperative Societies Act',
-      subHi: 'राज्य सहकारी सोसाइटी अधिनियम',
-      descEn: 'Cooperative housing entity with share certificates, panel statutory audits, and mandatory AGM elections.',
-      descHi: 'शेयर सर्टिफिकेट, पैनल वैधानिक ऑडिट और अनिवार्य एजीएम चुनावों के साथ सहकारी आवास निकाय।',
-      actEn: 'State Cooperative Societies Acts (Registrar of Cooperatives)',
-      actHi: 'राज्य सहकारी समिति अधिनियम (सहकारी रजिस्ट्रार)',
-    },
-    {
-      type: 'apartment_association',
-      titleEn: 'Apartment Owners Association (AOA)',
-      titleHi: 'अपार्टमेंट ओनर्स एसोसिएशन (AOA)',
-      subEn: 'State Apartment Ownership Act / RERA Rules',
-      subHi: 'राज्य अपार्टमेंट स्वामित्व अधिनियम / RERA नियम',
-      descEn: 'Formed by deed of declaration under Apartment Ownership Act for common area deeds and builder handovers.',
-      descHi: 'कॉमन एरिया डीड और बिल्डर हैंडओवर के लिए अपार्टमेंट ओनरशिप एक्ट के तहत गठित।',
-      actEn: 'State Apartment Ownership Acts & Real Estate (RERA) Act',
-      actHi: 'राज्य अपार्टमेंट स्वामित्व अधिनियम व रेरा (RERA) अधिनियम',
     },
   ],
 }
@@ -1242,8 +985,8 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
                 <p className="leading-relaxed">
                   💡 <strong>{isHi ? 'संवैधानिक सूचना:' : 'Constitutional Note:'}</strong>{' '}
                   {isHi
-                    ? 'नागरिक समूहों को अनौपचारिक रूप से कार्य करने का पूर्ण संवैधानिक अधिकार है। भविष्य में यदि औपचारिक खाता या 80G रसीद की आवश्यकता हो, तो BQF मान्यता या सोसायटी पंजीकरण में अपग्रेड किया जा सकता है।'
-                    : 'Civic collectives operate lawfully as informal associations under Article 19(1)(c). If your collective later requires grant access or 80G tax benefits, you can link with BQF Section 8 umbrella recognition anytime.'}
+                    ? 'नागरिक समूहों को अनौपचारिक रूप से कार्य करने का पूर्ण संवैधानिक अधिकार है। भविष्य में यदि औपचारिक खाता या टैक्स रसीदों की आवश्यकता हो, तो सोसायटी/ट्रस्ट पंजीकरण और 80G के लिए किसी CA से सलाह लें।'
+                    : 'Civic collectives operate lawfully as informal associations under Article 19(1)(c). If you later need formal accounts or tax receipts, consult a CA about society/trust registration and 80G.'}
                 </p>
               </div>
             )}

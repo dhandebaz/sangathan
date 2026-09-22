@@ -6,17 +6,15 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     
     const title = searchParams.get('title') || 'Sangathan - Civic Digital Infrastructure'
-    const desc = searchParams.get('desc') || 'The zero-tech, mobile-first operating system for civic collectives, NGOs, student unions, workers unions, and RWAs.'
+    const desc = searchParams.get('desc') || 'The zero-tech, mobile-first operating system for civic collectives and NGOs.'
     const type = searchParams.get('type') || 'collective'
     const tag = searchParams.get('tag') || 'Ground Movement Standard'
 
     // Movement Archetype Color Themes
     const archetypeColors: Record<string, { bg: string; text: string; border: string; accent: string }> = {
       collective: { bg: '#fff1f2', text: '#be123c', border: '#fecdd3', accent: '#e11d48' },
+      civic_collective: { bg: '#fff1f2', text: '#be123c', border: '#fecdd3', accent: '#e11d48' },
       ngo: { bg: '#ecfdf5', text: '#047857', border: '#a7f3d0', accent: '#059669' },
-      student_union: { bg: '#eef2ff', text: '#4338ca', border: '#c7d2fe', accent: '#4f46e5' },
-      workers_union: { bg: '#fffbeb', text: '#b45309', border: '#fde68a', accent: '#d97706' },
-      rwa: { bg: '#f0f9ff', text: '#0369a1', border: '#bae6fd', accent: '#0284c7' },
       feature: { bg: '#f8fafc', text: '#334155', border: '#cbd5e1', accent: '#475569' },
       petition: { bg: '#fff1f2', text: '#9f1239', border: '#fecdd3', accent: '#e11d48' },
       survey: { bg: '#f0fdf4', text: '#15803d', border: '#bbf7d0', accent: '#16a34a' },
@@ -28,10 +26,8 @@ export async function GET(request: NextRequest) {
 
     const typeLabels: Record<string, string> = {
       collective: 'Civic Collectives & Movements',
+      civic_collective: 'Civic Collectives & Movements',
       ngo: 'Registered NGOs & Trusts (80G)',
-      student_union: 'Student Unions & Youth Councils',
-      workers_union: 'Workers & Labor Unions (Trade Unions Act)',
-      rwa: 'Resident Welfare Associations (RWAs)',
       feature: 'Civic Infrastructure Tools',
       petition: 'Public Campaign & Open Letter',
       survey: 'Official Civic Survey & Townhall',
@@ -188,10 +184,10 @@ export async function GET(request: NextRequest) {
                 <span style={{ color: '#e11d48' }}>●</span> ₹1 Photostat Parchas
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 700, color: '#334155' }}>
-                <span style={{ color: '#d97706' }}>●</span> 15-Day RTI Guard
+                <span style={{ color: '#d97706' }}>●</span> 30-Day RTI Reminder
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 700, color: '#4f46e5' }}>
-                <span style={{ color: '#4f46e5' }}>●</span> BQF Sec 8 Protection
+                <span style={{ color: '#4f46e5' }}>●</span> BQF Recognition
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 700, color: '#059669' }}>
                 <span style={{ color: '#059669' }}>●</span> 100% Sovereign &amp; PWA

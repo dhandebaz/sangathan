@@ -68,7 +68,7 @@ export function BqfVerificationClient({
       return
     }
     if (!indemnityAccepted) {
-      toast.error('You must accept the legal indemnity agreement.')
+      toast.error('Please accept the responsibility terms and ID storage consent.')
       return
     }
 
@@ -86,7 +86,7 @@ export function BqfVerificationClient({
       })
 
       if (res.success && res.data) {
-        toast.success('Bahujan Queer Foundation Recognition Granted!')
+        toast.success('BQF community affiliation recorded.')
         setVerificationData(res.data)
         setStep(3)
       } else {
@@ -111,15 +111,15 @@ export function BqfVerificationClient({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl font-bold text-slate-900">BQF Recognition & AI Verification</h1>
+                <h1 className="text-xl font-bold text-slate-900">BQF Community Affiliation</h1>
                 {verificationData?.verified && (
                   <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-300 font-semibold text-xs">
-                    ✓ Recognized Collective
+                    Affiliated Group
                   </Badge>
                 )}
               </div>
               <p className="text-slate-500 text-xs mt-1">
-                Official recognition for unregistered civic collectives by <strong className="text-slate-800">BAHUJAN QUEER FOUNDATION</strong> (Section 8 NGO, Delhi • CIN: U88900DL2025NPL452474).
+                Community affiliation for active civic groups by <strong className="text-slate-800">BAHUJAN QUEER FOUNDATION</strong> (Section 8 NGO, Delhi). Self-declared — not government registration, verified identity, or legal immunity.
               </p>
             </div>
           </div>
@@ -133,7 +133,7 @@ export function BqfVerificationClient({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-emerald-800">
                 <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                <CardTitle className="text-base font-bold">Official BQF Recognition Active</CardTitle>
+                <CardTitle className="text-base font-bold">BQF Community Affiliation Active</CardTitle>
               </div>
               <span className="text-xs font-mono text-slate-500">CIN: U88900DL2025NPL452474</span>
             </div>
@@ -158,9 +158,9 @@ export function BqfVerificationClient({
             </div>
 
             <div className="bg-white p-4 rounded border border-slate-200 space-y-2">
-              <div className="flex items-center gap-2 text-slate-800 font-semibold text-xs uppercase tracking-wider">
-                <Lock className="w-4 h-4 text-slate-500" /> Statutory Legal Disclaimer & Indemnity Agreement
-              </div>
+                <div className="flex items-center gap-2 text-slate-800 font-semibold text-xs uppercase tracking-wider">
+                  <Lock className="w-4 h-4 text-slate-500" /> Affiliation Terms Record
+                </div>
               <p className="text-xs text-slate-600 leading-relaxed font-sans">
                 {verificationData.legal_disclaimer}
               </p>
@@ -179,12 +179,12 @@ export function BqfVerificationClient({
           <CardHeader className="border-b bg-slate-50">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base text-slate-900 font-bold">
-                {step === 1 ? 'Step 1: Representative Identity & Documents' : 'Step 2: AI Verification & Legal Indemnity'}
+                {step === 1 ? 'Step 1: Representative Details & ID' : 'Step 2: Terms & Confirmation'}
               </CardTitle>
               <span className="text-xs text-slate-500 font-medium">Step {step} of 2</span>
             </div>
             <CardDescription className="text-xs text-slate-500">
-              Complete facial & document verification to unlock official BQF letterhead representations for your civic group.
+              Record community affiliation for your group. Letters always go in your group&apos;s own name — never as BQF itself.
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-6 space-y-6">
@@ -210,7 +210,7 @@ export function BqfVerificationClient({
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label className="text-xs font-bold uppercase text-slate-600">Select Government Photo ID Type</Label>
+                  <Label className="text-xs font-bold uppercase text-slate-600">Photo ID (Voter ID preferred)</Label>
                   <div className="grid grid-cols-3 gap-3">
                     {[
                       { id: 'aadhaar', label: 'Aadhaar Card' },
@@ -238,7 +238,7 @@ export function BqfVerificationClient({
                   <div className="border-2 border-dashed border-slate-200 rounded p-4 text-center hover:border-purple-300 transition-colors">
                     <Upload className="w-6 h-6 text-slate-400 mx-auto mb-2" />
                     <span className="text-xs font-semibold text-slate-700 block">Upload {idType.toUpperCase()} Document</span>
-                    <span className="text-[11px] text-slate-400 block mt-0.5">Scanned PDF or clear photo</span>
+                    <span className="text-[11px] text-slate-400 block mt-0.5">Only if comfortable — ID copies are sensitive and stay in your org record</span>
                     <Input
                       type="file"
                       accept="image/*,.pdf"
@@ -252,8 +252,8 @@ export function BqfVerificationClient({
 
                   <div className="border-2 border-dashed border-slate-200 rounded p-4 text-center hover:border-purple-300 transition-colors">
                     <Camera className="w-6 h-6 text-slate-400 mx-auto mb-2" />
-                    <span className="text-xs font-semibold text-slate-700 block">Facial Verification Selfie</span>
-                    <span className="text-[11px] text-slate-400 block mt-0.5">Clear front-facing photo</span>
+                    <span className="text-xs font-semibold text-slate-700 block">Representative Photo</span>
+                    <span className="text-[11px] text-slate-400 block mt-0.5">Clear front-facing photo (optional)</span>
                     <Input
                       type="file"
                       accept="image/*"
@@ -268,31 +268,31 @@ export function BqfVerificationClient({
 
                 <div className="flex justify-end pt-4">
                   <Button onClick={() => setStep(2)} className="bg-purple-700 hover:bg-purple-800 text-white font-semibold text-xs px-6">
-                    Proceed to Verification & Legal Terms →
+                    Continue to Terms →
                   </Button>
                 </div>
               </div>
             ) : (
               <div className="space-y-6">
-                {/* Legal Indemnity Document Block */}
+                {/* Responsibility Terms Block */}
                 <div className="bg-slate-50 border border-slate-200 rounded p-4 space-y-3">
                   <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
                     <Building className="w-4 h-4 text-purple-700" />
-                    BAHUJAN QUEER FOUNDATION — Legal Recognition & Indemnity Covenant
+                    Community Affiliation & Responsibility Terms
                   </div>
                   <p className="text-xs text-slate-500 leading-normal">
-                    CIN: <strong className="text-slate-800">U88900DL2025NPL452474</strong> • Registered Section 8 NGO under Government of NCT of Delhi.
+                    Bahujan Queer Foundation is a registered Section 8 non-profit. Affiliation is community recognition only.
                   </p>
                   <div className="bg-white p-3 rounded border text-xs text-slate-700 space-y-2 leading-relaxed max-h-48 overflow-y-auto font-mono">
-                    <p className="font-bold text-slate-900">TERMS OF CIVIC RECOGNITION & LIABILITY DISCLAIMER:</p>
+                    <p className="font-bold text-slate-900">TERMS OF COMMUNITY AFFILIATION:</p>
                     <p>
-                      1. Bahujan Queer Foundation (BQF) grants official recognition to <strong>{orgName}</strong> as an unregistered grassroots civic collective solely for lodging civic complaints, representations, and local authority petitions.
+                      1. Bahujan Queer Foundation (BQF) records community affiliation for <strong>{orgName}</strong> as an unregistered grassroots civic collective, for community credibility only. This grants no legal status, registration, or immunity.
                     </p>
                     <p>
-                      2. <strong>INDEMNIFICATION:</strong> BQF is completely indemnified, shielded, and held harmless from any unlawful activities, unauthorized financial transactions, local disputes, or illegal actions committed by <strong>{orgName}</strong> or its representatives.
+                      2. <strong>RESPONSIBILITY:</strong> <strong>{orgName}</strong> and its representatives remain fully responsible for their own actions, finances, and disputes. BQF is not liable for anything the group does.
                     </p>
                     <p>
-                      3. All representations issued under BQF letterheads must strictly adhere to Indian Law, public decency, and peaceful civic engagement.
+                      3. Never present the group as BQF itself. All letters and representations must go in the group&apos;s own name, follow Indian law, and stay peaceful.
                     </p>
                   </div>
 
@@ -305,7 +305,7 @@ export function BqfVerificationClient({
                       className="w-4 h-4 text-purple-700 border-slate-300 rounded focus:ring-purple-500 mt-0.5"
                     />
                     <label htmlFor="indemnity" className="text-xs text-slate-800 font-medium cursor-pointer leading-tight">
-                      I, <strong>{repName}</strong>, hereby declare under penalty of law that I am an authorized representative of <strong>{orgName}</strong> and explicitly agree to the BQF Legal Recognition & Indemnity terms.
+                      I confirm I am authorized to represent <strong>{orgName}</strong>, I accept the responsibility terms above, and I consent to storing the ID details for this affiliation record.
                     </label>
                   </div>
                 </div>
@@ -319,7 +319,7 @@ export function BqfVerificationClient({
                     disabled={isSubmitting || !indemnityAccepted}
                     className="bg-purple-700 hover:bg-purple-800 text-white font-semibold text-xs px-6 gap-2"
                   >
-                    {isSubmitting ? 'Verifying with AI...' : 'Submit AI Verification & Grant Recognition ✓'}
+                    {isSubmitting ? 'Saving...' : 'Record Affiliation'}
                   </Button>
                 </div>
               </div>

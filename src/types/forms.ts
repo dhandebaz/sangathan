@@ -48,7 +48,7 @@ export interface FormTemplate {
   id: string
   title: string
   description: string
-  category: 'ngo' | 'student_union' | 'workers_union' | 'rwa' | 'civic_collective' | 'general'
+  category: 'ngo' | 'civic_collective' | 'general'
   orgTypeLabel: string
   fields: FormField[]
 }

@@ -20,7 +20,7 @@ export type GeneratedTemplateResult = z.infer<typeof templateSchema>
 
 export async function generateLegalGovernmentTemplate(prompt: string, orgName: string, orgType?: string) {
   try {
-    const aiPrompt = `You are a senior Indian administrative law and civic affairs expert specializing in drafting official government representations, petitions, and complaints for civic collectives, NGOs, RWAs, and unions in India.
+    const aiPrompt = `You are a senior Indian administrative law and civic affairs expert specializing in drafting official government representations, petitions, and complaints for civic collectives and NGOs in India.
 
 The user wants an official representation template based on this request:
 "${prompt}"
@@ -42,7 +42,7 @@ Requirements:
    - Clear list of actionable demands ((a), (b), (c))
    - Respectful closing
 5. Provide signatories (e.g., President / General Secretary or Convener / Secretary).
-6. Provide a clean reference prefix (e.g. BQF/CIVIC, NGO/GOV, RWA/LEG).
+6. Provide a clean reference prefix (e.g. BQF/CIVIC, NGO/GOV, CIVIC/LEG).
 
 Return ONLY valid JSON matching the required schema. Do not include markdown fences.`
 

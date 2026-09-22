@@ -18,19 +18,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const isHindi = lang === 'hi'
 
   const title = isHindi
-    ? 'सदस्यता प्रबंधन सॉफ्टवेयर भारत | यूनियन व संगठन काडर रजिस्टर | संगठन'
-    : 'Member Management Software India | Union & Association Cadres | Sangathan'
+    ? 'सदस्यता प्रबंधन सॉफ्टवेयर भारत | संगठन काडर रजिस्टर | संगठन'
+    : 'Member Management Software India | Association Cadres | Sangathan'
   const description = isHindi
-    ? 'श्रमिक यूनियनों, छात्र संघों और सोसायटियों के लिए कानूनी सदस्य पंजी (Form I/H)। सदस्यता शुल्क संग्रह, पहचान सत्यापन और गोपनीयता सुरक्षा।'
-    : 'Statutory member register management for Indian trade unions, associations, and collectives. Form I & H registers, dues tracking, ID verification, and phone privacy.'
+    ? 'नागरिक संस्थाओं और सोसायटियों के लिए कानूनी सदस्य पंजी। सदस्यता शुल्क संग्रह, पहचान सत्यापन और गोपनीयता सुरक्षा।'
+    : 'Statutory member register management for Indian associations and collectives. Member registers, dues tracking, ID verification, and phone privacy.'
 
   return {
     title,
     description,
     keywords: [
       'member management software India',
-      'trade union membership software',
-      'statutory member register Form I Form H',
+      'statutory member register',
       'association member management app',
       'cadre tracking tool',
       'membership dues collection UPI'
@@ -59,11 +58,11 @@ export default async function MemberManagementPage({ params }: PageProps) {
   const faqs = [
     {
       question: isHindi
-        ? 'क्या ट्रेड यूनियन अधिनियम के तहत फॉर्म I और फॉर्म H सदस्य रजिस्टर बनते हैं?'
-        : 'Does Sangathan generate statutory Trade Union Form I & Form H registers?',
+        ? 'क्या वैधानिक सदस्य रजिस्टर बनते हैं?'
+        : 'Does Sangathan generate statutory member registers?',
       answer: isHindi
-        ? 'हाँ। संगठन भारतीय ट्रेड यूनियन नियमों के अनुसार सदस्यता शुल्क, प्रवेश तिथि और पदनाम के साथ स्वतः प्रिंट-रेडी रजिस्टर तैयार करता है।'
-        : 'Yes. Sangathan automatically generates Trade Union Act compliant Form I (Register of Members) and Form H (Annual Returns) ready for registrar submission.',
+        ? 'हाँ। संगठन नियमानुसार सदस्यता शुल्क, प्रवेश तिथि और पदनाम के साथ स्वतः प्रिंट-रेडी रजिस्टर तैयार करता है।'
+        : 'Yes. Sangathan automatically generates compliant member registers ready for registrar submission.',
     },
     {
       question: isHindi
@@ -107,7 +106,7 @@ export default async function MemberManagementPage({ params }: PageProps) {
             </h1>
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed mb-8">
               {isHindi
-                ? 'ट्रेड यूनियनों, छात्र परिषदों और नागरिक संस्थाओं के लिए कानूनी रूप से मान्य सदस्य पंजी। सदस्यता शुल्क की स्वचालित ट्रैकिंग और संपर्क गोपनीयता।'
+                ? 'नागरिक संस्थाओं के लिए कानूनी रूप से मान्य सदस्य पंजी। सदस्यता शुल्क की स्वचालित ट्रैकिंग और संपर्क गोपनीयता।'
                 : 'Replace error-prone spreadsheets with audit-ready member registries. Track dues, verify voting eligibility, and safeguard member identities under DPDP Act compliance.'}
             </p>
 
@@ -120,10 +119,10 @@ export default async function MemberManagementPage({ params }: PageProps) {
                 <ArrowRight size={16} />
               </Link>
               <Link
-                href={`/${lang}/solutions/workers-union`}
+                href={`/${lang}/solutions/civic-collective`}
                 className="bg-white text-slate-800 px-6 py-3.5 font-bold text-sm border border-slate-300 hover:border-slate-400 hover:bg-slate-50 transition-all flex items-center justify-center gap-2 rounded-md min-h-[48px]"
               >
-                <span>{isHindi ? 'यूनियन समाधान देखें' : 'Union Blueprint'}</span>
+                <span>{isHindi ? 'समाधान देखें' : 'Collective Blueprint'}</span>
               </Link>
             </div>
           </div>
@@ -136,11 +135,11 @@ export default async function MemberManagementPage({ params }: PageProps) {
                 <FileSpreadsheet size={20} />
               </div>
               <h3 className="text-lg font-bold text-slate-900 mb-2">
-                {isHindi ? 'वैधानिक फॉर्म I व H रजिस्टर' : 'Statutory Form I & H Registers'}
+                {isHindi ? 'वैधानिक सदस्य रजिस्टर' : 'Statutory Member Registers'}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600">
                 {isHindi
-                  ? 'ट्रेड यूनियन और सोसायटी रजिस्ट्रार के लिए तैयार सदस्यता रजिस्टर स्वतः उत्पन्न करें।'
+                  ? 'रजिस्ट्रार के लिए तैयार सदस्यता रजिस्टर स्वतः उत्पन्न करें।'
                   : 'Auto-generates official register PDFs with membership numbers, join dates, and fee logs.'}
               </p>
             </div>

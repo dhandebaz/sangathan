@@ -106,8 +106,8 @@ export default async function PricingPage({
         ? 'सामुदायिक पहुंच (Community Access) के लिए भुगतान कैसे काम करता है?'
         : 'How does payment work for Community Access?',
       answer: isHindi
-        ? 'सामुदायिक पहुंच एक स्वैच्छिक योगदान मॉडल पर आधारित है (सुझाए गए विकल्प: ₹5, ₹10, ₹50, ₹100, ₹500 या कोई भी कस्टम राशि)। जमीनी स्तर के नागरिक समूह और छात्र इकाइयां अपनी क्षमता अनुसार योगदान देकर तुरंत पहुंच प्राप्त कर सकते हैं।'
-        : 'Community Access uses a voluntary contribution model (choices: ₹5, ₹10, ₹50, ₹100, ₹500, or custom). Grassroots collectives and student unions can contribute what they wish to access full democratic organizing tools.',
+        ? 'सामुदायिक पहुंच एक स्वैच्छिक योगदान मॉडल पर आधारित है (सुझाए गए विकल्प: ₹5, ₹10, ₹50, ₹100, ₹500 या कोई भी कस्टम राशि)। जमीनी स्तर के नागरिक समूह अपनी क्षमता अनुसार योगदान देकर तुरंत पहुंच प्राप्त कर सकते हैं।'
+        : 'Community Access uses a voluntary contribution model (choices: ₹5, ₹10, ₹50, ₹100, ₹500, or custom). Grassroots collectives can contribute what they wish to access full democratic organizing tools.',
     },
     {
       question: isHindi
@@ -146,16 +146,16 @@ export default async function PricingPage({
         ? 'क्या गैर-पंजीकृत नागरिक समूह या जमीनी आंदोलन संगठन का उपयोग कर सकते हैं?'
         : 'Can unregistered grassroots movements and civic collectives join?',
       answer: isHindi
-        ? 'हाँ, बिल्कुल। संगठन विशेष रूप से अनौपचारिक समूहों, विरोध मंचों, छात्र इकाइयों और नागरिक आंदोलनों का समर्थन करता है। आपको शुरू करने के लिए किसी सरकारी पंजीकरण संख्या की आवश्यकता नहीं है।'
-        : 'Yes, absolutely. Sangathan is built for informal collectives, mutual-aid groups, student cells, and grassroots campaigns without requiring statutory registration numbers.',
+        ? 'हाँ, बिल्कुल। संगठन विशेष रूप से अनौपचारिक समूहों, विरोध मंचों और नागरिक आंदोलनों का समर्थन करता है। आपको शुरू करने के लिए किसी सरकारी पंजीकरण संख्या की आवश्यकता नहीं है।'
+        : 'Yes, absolutely. Sangathan is built for informal collectives, mutual-aid groups, and grassroots campaigns without requiring statutory registration numbers.',
     },
     {
       question: isHindi
         ? 'बहुजन क्वीर फाउंडेशन (BQF) मान्यता कैसे काम करती है?'
         : 'How does Bahujan Queer Foundation (BQF) recognition work for collectives?',
       answer: isHindi
-        ? 'बहुजन क्वीर फाउंडेशन (दिल्ली पंजीकृत सेक्शन 8 NGO • CIN: U88900DL2025NPL452474) अनौपचारिक नागरिक समूहों को AI चेहरा व पहचान पत्र सत्यापन के आधार पर आधिकारिक BQF मान्यता प्रदान करता है। वैधानिक क्षतिपूर्ति शर्तों के तहत, आपका समूह विधायकों, SDM, पुलिस और नगर निगम को आधिकारिक पत्र भेजने के लिए BQF समर्थित मान्यता प्राप्त स्थिति का उपयोग कर सकता है।'
-        : 'Bahujan Queer Foundation (Delhi Reg. Section 8 NGO • CIN: U88900DL2025NPL452474) provides official BQF Recognition for unregistered collectives via AI facial & ID verification. Under statutory legal indemnity terms, your collective can issue official government representations and municipal letters to MLAs, SDMs, Police Commissioners, and Municipal Bodies.',
+        ? 'सक्रिय जमीनी समूह बहुजन क्वीर फाउंडेशन (दिल्ली पंजीकृत सेक्शन 8 NGO) से सामुदायिक संबद्धता मांग सकते हैं, जिससे उनकी विश्वसनीयता बढ़ती है। यह किसी गैर-लाभकारी की मान्यता है — कानूनी छूट, सरकारी पंजीकरण या गिरफ्तारी से सुरक्षा नहीं। आधिकारिक पत्र हमेशा अपने नाम से भेजें।'
+        : 'Active grassroots groups can seek community affiliation with Bahujan Queer Foundation (Delhi Reg. Section 8 NGO) for credibility. This is a non-profit recognition — not legal immunity, government registration, or protection from arrest. Always send official letters in your own name.',
     },
   ]
 

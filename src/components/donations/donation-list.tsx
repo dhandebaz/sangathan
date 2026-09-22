@@ -60,7 +60,7 @@ export function DonationList({ donations }: { donations: Donation[] }) {
     if (res?.error) {
         alert(res.error)
     } else if (res?.success) {
-        alert('Tax receipt generated successfully!')
+        alert('Donation receipt recorded. Note: call it an 80G receipt only if your org holds its own 80G registration.')
     }
     
     router.refresh()
@@ -124,7 +124,7 @@ export function DonationList({ donations }: { donations: Donation[] }) {
                              onClick={() => handleGenerateReceipt(donation)}
                              disabled={loading === `receipt-${donation.id}`}
                              className="text-blue-600 hover:bg-blue-50 p-1.5 rounded disabled:opacity-50"
-                             title="Generate Tax Receipt (80G)"
+                              title="Generate Donation Receipt"
                           >
                              <Receipt size={16} />
                           </button>

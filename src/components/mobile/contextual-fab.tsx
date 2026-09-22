@@ -3,8 +3,8 @@
 import { usePathname } from 'next/navigation'
 import {
   Plus, UserPlus, CheckCircle, Vote, Megaphone, Calendar,
-  HeartHandshake, Scale, AlertCircle, Wrench, Gift, Network,
-  Badge, Users, HelpCircle, Activity, Clock, Newspaper, Printer
+  HeartHandshake, AlertCircle, Gift, Network,
+  Users, HelpCircle, Activity, Clock, Newspaper, Printer
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -48,12 +48,8 @@ export function ContextualFAB({ lang, role, capabilities }: ContextualFABProps) 
     action = { href: `/${lang}/dashboard/campaigns`, icon: Megaphone, label: 'New Campaign' }
   } else if (pathname.endsWith('/dashboard/volunteers') && isAdmin && capabilities.volunteers) {
     action = { href: `/${lang}/dashboard/volunteers`, icon: HeartHandshake, label: 'Add Volunteer' }
-  } else if (pathname.endsWith('/dashboard/grievances') && isAdmin && capabilities.grievances) {
-    action = { href: `/${lang}/dashboard/grievances`, icon: Scale, label: 'File Grievance' }
   } else if (pathname.endsWith('/dashboard/complaints') && isAdmin && capabilities.complaints) {
     action = { href: `/${lang}/dashboard/complaints`, icon: AlertCircle, label: 'New Complaint' }
-  } else if (pathname.endsWith('/dashboard/maintenance') && isAdmin && capabilities.maintenance) {
-    action = { href: `/${lang}/dashboard/maintenance`, icon: Wrench, label: 'New Request' }
   } else if (pathname.endsWith('/dashboard/donations') && isAdmin && capabilities.donations) {
     action = { href: `/${lang}/dashboard/donations`, icon: Gift, label: 'Record Donation' }
   } else if (pathname.endsWith('/dashboard/meetings') && isAdmin) {
@@ -62,8 +58,6 @@ export function ContextualFAB({ lang, role, capabilities }: ContextualFABProps) 
     action = { href: `/${lang}/dashboard/subgroups`, icon: Users, label: 'Create Team' }
   } else if (pathname.endsWith('/dashboard/networks') && isAdmin && capabilities.federation_mode) {
     action = { href: `/${lang}/dashboard/networks/new`, icon: Network, label: 'Add Network' }
-  } else if (pathname.endsWith('/dashboard/student-ids') && isAdmin && capabilities.student_ids) {
-    action = { href: `/${lang}/dashboard/student-ids`, icon: Badge, label: 'Issue ID' }
   } else if (pathname.endsWith('/dashboard/field-audits') && isAdmin) {
     action = { href: `/${lang}/dashboard/field-audits`, icon: Activity, label: 'Log Spot Audit' }
   } else if (pathname.endsWith('/dashboard/parcha') && isAdmin) {

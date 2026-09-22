@@ -9,8 +9,8 @@ export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: 'Stamped Physical Receiving & RTI Tracker | Sangathan',
-    description: 'Track physical stamped receiving copies from municipal ward offices and auto-generate Section 6(1) RTI applications.',
+    title: 'Complaint Diary & RTI Helper | Sangathan',
+    description: 'Save stamped receiving photos with dates, get a 30-day reminder, and prepare a Section 6(1) RTI draft to file yourself.',
   }
 }
 

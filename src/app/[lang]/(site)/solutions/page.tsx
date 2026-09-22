@@ -11,8 +11,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   return {
     title: isHindi ? 'नागरिक समाधान व संगठन प्रकार | संगठन' : 'Civic Solutions & Movement Archetypes | Sangathan',
     description: isHindi
-      ? 'नागरिक समूहों, पंजीकृत एनजीओ, छात्र संघों, श्रमिक यूनियनों और आरडब्ल्यूए के लिए उद्देश्य-निर्मित डिजिटल समाधान।'
-      : 'Purpose-built civic solutions for grassroots collectives, registered NGOs, student unions, workers unions, and RWAs.',
+      ? 'नागरिक समूहों और पंजीकृत एनजीओ के लिए उद्देश्य-निर्मित डिजिटल समाधान।'
+      : 'Purpose-built civic solutions for grassroots collectives and registered NGOs.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/solutions`,
       languages: {
@@ -23,14 +23,14 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     openGraph: {
       title: isHindi ? 'नागरिक समाधान व संगठन प्रकार | संगठन' : 'Civic Solutions & Movement Archetypes | Sangathan',
       description: isHindi
-        ? 'नागरिक समूहों, पंजीकृत एनजीओ, छात्र संघों, श्रमिक यूनियनों और आरडब्ल्यूए के लिए उद्देश्य-निर्मित डिजिटल समाधान।'
-        : 'Purpose-built civic solutions for grassroots collectives, registered NGOs, student unions, workers unions, and RWAs.',
+        ? 'नागरिक समूहों और पंजीकृत एनजीओ के लिए उद्देश्य-निर्मित डिजिटल समाधान।'
+        : 'Purpose-built civic solutions for grassroots collectives and registered NGOs.',
       url: `https://sangathan.space/${lang}/solutions`,
       siteName: 'Sangathan',
       type: 'website',
       images: [
         {
-          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'नागरिक समाधान एवं संगठन ब्लूप्रिंट्स' : 'Civic Solutions & Movement Archetypes')}&desc=${encodeURIComponent(isHindi ? 'नागरिक समूहों, एनजीओ, छात्र संघों, श्रमिक यूनियनों और आरडब्ल्यूए के लिए डिजिटल समाधान।' : 'Purpose-built civic solutions for grassroots collectives, NGOs, student unions, workers unions, and RWAs.')}&type=collective&tag=Movement+Solutions&lang=${lang}`,
+          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'नागरिक समाधान एवं संगठन ब्लूप्रिंट्स' : 'Civic Solutions & Movement Archetypes')}&desc=${encodeURIComponent(isHindi ? 'नागरिक समूहों और एनजीओ के लिए डिजिटल समाधान।' : 'Purpose-built civic solutions for grassroots collectives and NGOs.')}&type=collective&tag=Movement+Solutions&lang=${lang}`,
           width: 1200,
           height: 630,
           alt: 'Sangathan Solutions',
@@ -43,9 +43,9 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       creator: '@areynetaji',
       title: isHindi ? 'नागरिक समाधान व संगठन प्रकार | संगठन' : 'Civic Solutions & Movement Archetypes | Sangathan',
       description: isHindi
-        ? 'नागरिक समूहों, पंजीकृत एनजीओ, छात्र संघों, श्रमिक यूनियनों और आरडब्ल्यूए के लिए उद्देश्य-निर्मित डिजिटल समाधान।'
-        : 'Purpose-built civic solutions for grassroots collectives, registered NGOs, student unions, workers unions, and RWAs.',
-      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'नागरिक समाधान एवं संगठन ब्लूप्रिंट्स' : 'Civic Solutions & Movement Archetypes')}&desc=${encodeURIComponent(isHindi ? 'नागरिक समूहों, एनजीओ, छात्र संघों, श्रमिक यूनियनों और आरडब्ल्यूए के लिए डिजिटल समाधान।' : 'Purpose-built civic solutions for grassroots collectives, NGOs, student unions, workers unions, and RWAs.')}&type=collective&tag=Movement+Solutions&lang=${lang}`],
+        ? 'नागरिक समूहों और पंजीकृत एनजीओ के लिए उद्देश्य-निर्मित डिजिटल समाधान।'
+        : 'Purpose-built civic solutions for grassroots collectives and registered NGOs.',
+      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'नागरिक समाधान एवं संगठन ब्लूप्रिंट्स' : 'Civic Solutions & Movement Archetypes')}&desc=${encodeURIComponent(isHindi ? 'नागरिक समूहों और एनजीओ के लिए डिजिटल समाधान।' : 'Purpose-built civic solutions for grassroots collectives and NGOs.')}&type=collective&tag=Movement+Solutions&lang=${lang}`],
     },
   }
 }
@@ -93,8 +93,8 @@ export default async function SolutionsDirectoryPage({ params }: { params: Promi
 
               <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
                 {isHindi
-                  ? 'चाहे आप अनौपचारिक कॉलोनी समूह हों, पंजीकृत एनजीओ हों, कैम्पस छात्र संघ हों, फैक्ट्री ट्रेड यूनियन हों या आरडब्ल्यूए—संगठन आपकी जमीनी वास्तविकताओं के अनुरूप वैधानिक उपकरण प्रदान करता है।'
-                  : 'Whether you lead an unregistered basti collective, a registered 80G non-profit, a university student council, a factory labor union, or an apartment RWA—Sangathan provides ground-tested tools engineered for Indian statutory realities.'}
+                  ? 'चाहे आप अनौपचारिक कॉलोनी समूह हों या पंजीकृत एनजीओ—संगठन आपकी जमीनी वास्तविकताओं के अनुरूप वैधानिक उपकरण प्रदान करता है।'
+                  : 'Whether you lead an unregistered basti collective or a registered 80G non-profit—Sangathan provides ground-tested tools engineered for Indian statutory realities.'}
               </p>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3.5 pt-2">
@@ -135,7 +135,7 @@ export default async function SolutionsDirectoryPage({ params }: { params: Promi
                   <div className="bg-slate-900/90 text-white backdrop-blur-xs border border-slate-700 rounded p-2.5 text-left shadow-xs flex items-center justify-between">
                     <div className="text-[11px] leading-tight">
                       <span className="font-bold text-indigo-400 block">Sovereign Civic Infrastructure</span>
-                      <span className="text-[10px] text-slate-300">5 Archetypes • 20 Blueprints</span>
+                      <span className="text-[10px] text-slate-300">2 Archetypes • 8 Blueprints</span>
                     </div>
                     <span className="text-[9px] font-mono font-bold bg-emerald-900/80 text-emerald-200 px-2 py-0.5 rounded border border-emerald-700">
                       ₹0 Community Tier

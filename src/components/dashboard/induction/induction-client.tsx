@@ -51,9 +51,9 @@ export default function InductionClient({ initialMembers }: InductionClientProps
           id: res.member.id,
           name: res.member.full_name,
           phone: res.member.phone,
-          course: res.member.area || course || 'General Student',
+          course: res.member.area || course || 'General Member',
           hostel,
-          inductedBy: inductedBy || 'Campus Drive Volunteer'
+          inductedBy: inductedBy || 'Community Volunteer'
         })
         setName('')
         setPhone('')
@@ -78,7 +78,7 @@ export default function InductionClient({ initialMembers }: InductionClientProps
       const list = lines.map(line => {
         const parts = line.split(',')
         return {
-          fullName: parts[0]?.trim() || 'New Student',
+          fullName: parts[0]?.trim() || 'New Member',
           phone: parts[1]?.trim() || '+91 90000 00000',
           course: parts[2]?.trim() || 'General'
         }
@@ -153,7 +153,7 @@ export default function InductionClient({ initialMembers }: InductionClientProps
               <CardContent className="space-y-4 pt-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-1">Student Full Name *</label>
+                    <label className="block text-sm font-semibold text-slate-700 mb-1">Member Full Name *</label>
                     <input
                       type="text"
                       required
@@ -286,9 +286,9 @@ export default function InductionClient({ initialMembers }: InductionClientProps
         <Card className="border-2 shadow-lg bg-gradient-to-b from-slate-900 to-indigo-950 text-white text-center p-8 max-w-xl mx-auto">
           <CardHeader>
             <div className="mx-auto bg-amber-400 text-slate-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-2">
-              CAMPUS MEMBERSHIP BOOTH POSTER
+              MEMBERSHIP BOOTH POSTER
             </div>
-            <CardTitle className="text-3xl font-extrabold text-white">Join the Student Union</CardTitle>
+            <CardTitle className="text-3xl font-extrabold text-white">Join Our Collective</CardTitle>
             <CardDescription className="text-slate-300 text-sm mt-1">
               Scan below to register as an active member in 30 seconds!
             </CardDescription>
@@ -297,7 +297,7 @@ export default function InductionClient({ initialMembers }: InductionClientProps
             <div className="p-4 bg-white rounded-2xl w-48 h-48 mx-auto flex items-center justify-center border-4 border-amber-400 shadow-2xl">
               <QrCode className="w-40 h-40 text-slate-900" />
             </div>
-            <p className="text-xs text-slate-400 font-mono">https://sangathan.org/join/student-union</p>
+            <p className="text-xs text-slate-400 font-mono">https://sangathan.space/join</p>
           </CardContent>
           <CardFooter className="flex justify-center gap-3">
             <button 
@@ -320,7 +320,7 @@ export default function InductionClient({ initialMembers }: InductionClientProps
               Batch Paper Slip Intake (रैली पर्ची प्रविष्टि)
             </CardTitle>
             <CardDescription>
-              Paste line-by-line student entries collected physically on paper slips during campaign rallies (Format: Name, Phone, Course).
+              Paste line-by-line member entries collected physically on paper slips during campaign rallies (Format: Name, Phone, Course).
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 pt-6">
@@ -339,7 +339,7 @@ export default function InductionClient({ initialMembers }: InductionClientProps
               className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-2"
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-              Import Batch Student Records into DB
+              Import Batch Member Records into DB
             </button>
           </CardFooter>
         </Card>
@@ -361,7 +361,7 @@ export default function InductionClient({ initialMembers }: InductionClientProps
               <div>
                 <span className="font-extrabold text-slate-900 text-base">{item.full_name || item.name}</span>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  {item.area || 'General Student'} • Phone: <strong className="text-slate-800">{item.phone}</strong>
+                  {item.area || 'General Member'} • Phone: <strong className="text-slate-800">{item.phone}</strong>
                 </p>
                 <p className="text-[11px] text-emerald-700 mt-0.5 font-medium">
                   Status: {item.status || 'Active'} • {new Date(item.created_at || item.registeredAt).toLocaleDateString()}

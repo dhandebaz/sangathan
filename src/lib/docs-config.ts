@@ -75,9 +75,6 @@ export const docsConfig: DocSection[] = [
     items: [
       { title: { en: 'Civic Collective & Citizen Science Handbook', hi: 'नागरिक समूह व जमीनी संगठन हैंडबुक' }, slug: 'civic-collective-playbook' },
       { title: { en: 'NGO & Civil Society Handbook', hi: 'एनजीओ व नागरिक समाज हैंडबुक' }, slug: 'ngo-playbook' },
-      { title: { en: 'Student Union & Campus Guild', hi: 'छात्र संघ व विश्वविद्यालय परिषद' }, slug: 'student-union-playbook' },
-      { title: { en: 'Trade Union & Labor Collective', hi: 'श्रमिक संघ व ट्रेड यूनियन' }, slug: 'workers-union-playbook' },
-      { title: { en: 'Resident Welfare Association (RWA)', hi: 'आवासीय कल्याण संघ (RWA)' }, slug: 'rwa-playbook' },
     ]
   },
   {

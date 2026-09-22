@@ -1,6 +1,6 @@
 /**
  * Sangathan Domain-Specific Master Reference Datasets & Statutory Taxonomies
- * Pre-populated for NGOs, Student Unions, Workers Unions, and Resident Welfare Associations.
+ * Pre-populated for NGOs and Civic Collectives.
  */
 
 export interface MasterItem {
@@ -100,37 +100,4 @@ export const STATUTORY_LABOUR_AUTHORITIES: MasterItem[] = [
   { id: 'rlc', code: 'AUTH-RLC', nameEn: 'Regional Labour Commissioner (Central / State)', nameHi: 'क्षेत्रीय श्रम आयुक्त (केंद्रीय / राज्य)' },
   { id: 'tribunal', code: 'AUTH-IT', nameEn: 'Industrial Disputes Tribunal', nameHi: 'औद्योगिक विवाद न्यायाधिकरण' },
   { id: 'cgit', code: 'AUTH-CGIT', nameEn: 'Central Govt Industrial Tribunal (CGIT)', nameHi: 'केंद्रीय सरकार औद्योगिक न्यायाधिकरण (CGIT)' },
-]
-
-// ==========================================
-// 4. RESIDENT WELFARE ASSOCIATION (RWA) MASTER DATA
-// ==========================================
-
-export const RWA_UNIT_TYPES: MasterItem[] = [
-  { id: '1bhk', nameEn: '1 BHK Studio / Compact Apartment', nameHi: '1 बीएचके स्टूडियो अपार्टमेंट' },
-  { id: '2bhk', nameEn: '2 BHK Standard Flat', nameHi: '2 बीएचके फ्लैट' },
-  { id: '3bhk', nameEn: '3 BHK Family Flat', nameHi: '3 बीएचके फ्लैट' },
-  { id: '4bhk', nameEn: '4 BHK Luxury Apartment', nameHi: '4 बीएचके लग्जरी फ्लैट' },
-  { id: 'penthouse', nameEn: 'Penthouse / Duplex Unit', nameHi: 'पेंटहाउस / डुप्लेक्स' },
-  { id: 'villa', nameEn: 'Independent Row House / Villa', nameHi: 'स्वतंत्र विला / रो हाउस' },
-  { id: 'shop', nameEn: 'Commercial Society Retail Shop', nameHi: 'सोसाइटी रिटेल दुकान' },
-]
-
-export const RWA_AMENITIES: MasterItem[] = [
-  { id: 'clubhouse', nameEn: 'Community Clubhouse & Lounge', nameHi: 'सामुदायिक क्लब हाउस' },
-  { id: 'gym', nameEn: 'Fitness Center & Gymnasium', nameHi: 'फिटनेस सेंटर व जिम' },
-  { id: 'pool', nameEn: 'Swimming Pool & Kids Splash Deck', nameHi: 'स्विमिंग पूल' },
-  { id: 'banquet', nameEn: 'Party Hall & Event Banquet', nameHi: 'पार्टी हॉल व बैंक्वेट' },
-  { id: 'sports', nameEn: 'Badminton / Tennis Court', nameHi: 'बैडमिंटन / टेनिस कोर्ट' },
-  { id: 'ev_charging', nameEn: 'EV Vehicle Fast-Charging Station', nameHi: 'ईवी फास्ट चार्जिंग स्टेशन' },
-]
-
-export const RWA_MAINTENANCE_HEADS: MasterItem[] = [
-  { id: 'electricity_common', nameEn: 'Common Area Grid Electricity', nameHi: 'सामान्य क्षेत्र बिजली बिल' },
-  { id: 'security', nameEn: '24x7 Security Guard Agency Contract', nameHi: 'सुरक्षा गार्ड एजेंसी अनुबंध' },
-  { id: 'housekeeping', nameEn: 'Housekeeping, Waste Segregation & Sanitation', nameHi: 'सफाई व कचरा पृथक्करण' },
-  { id: 'lift_amc', nameEn: 'Elevator & Lift Maintenance (AMC)', nameHi: 'लिफ्ट रखरखाव (AMC)' },
-  { id: 'diesel_gen', nameEn: 'Diesel Generator (DG) Backup Fuel', nameHi: 'डीजल जनरेटर ईंधन' },
-  { id: 'fire_safety', nameEn: 'Fire Fighting Systems AMC & NOC', nameHi: 'अग्निशमन प्रणाली रखरखाव' },
-  { id: 'sinking_fund', nameEn: 'Long-term Capital Sinking Fund', nameHi: 'दीर्घकालिक सिंकिंग फंड' },
 ]

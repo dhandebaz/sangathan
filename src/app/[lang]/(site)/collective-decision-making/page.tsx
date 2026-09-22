@@ -20,8 +20,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ? 'सामूहिक निर्णय व गुप्त मतदान सॉफ्टवेयर | लोकतांत्रिक वोटिंग | संगठन'
     : 'Collective Decision Making Software | Secret Ballot & AGM Voting | Sangathan'
   const description = isHindi
-    ? 'नागरिक संस्थाओं, छात्र संघों और आरडब्ल्यूए के लिए डिजिटल गुप्त मतदान। क्रिप्टोग्राफिक निष्पक्षता, 1-व्यक्ति-1-वोट और एजीएम आम सभा जनमत।'
-    : 'Cryptographic secret voting and collective decision making software for Indian NGOs, unions, and RWAs. Tamper-evident 1-person-1-vote elections and AGM resolutions.'
+    ? 'नागरिक संस्थाओं और एनजीओ के लिए डिजिटल गुप्त मतदान। क्रिप्टोग्राफिक निष्पक्षता, 1-व्यक्ति-1-वोट और एजीएम आम सभा जनमत।'
+    : 'Cryptographic secret voting and collective decision making software for Indian NGOs and civic collectives. Tamper-evident 1-person-1-vote elections and AGM resolutions.'
 
   return {
     title,
@@ -29,10 +29,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: [
       'collective decision making software',
       'online secret voting NGO India',
-      'AGM election software RWA',
-      'tamper proof digital voting union',
+      'AGM election software',
+      'tamper proof digital voting',
       'consensus polling collective governance',
-      'student union election platform'
+      'community election platform'
     ],
     alternates: {
       canonical: `https://sangathan.space/${lang}/collective-decision-making`,
@@ -66,11 +66,11 @@ export default async function CollectiveDecisionMakingPage({ params }: PageProps
     },
     {
       question: isHindi
-        ? 'क्या छात्र संघ और आरडब्ल्यूए चुनाव नियमों का पालन होता है?'
-        : 'Is it compliant with Lyngdoh Committee & Societies election rules?',
+        ? 'क्या सामुदायिक चुनाव नियमों का पालन होता है?'
+        : 'Is it compliant with society & NGO election rules?',
       answer: isHindi
-        ? 'हाँ। लिंगदोह समिति के दिशा-निर्देशों और सोसायटी नियमों के अनुसार निष्पक्ष आंतरिक चुनाव कराए जा सकते हैं।'
-        : 'Yes. Designed to adhere to Lyngdoh Committee norms for student councils and statutory AGM quorum rules for housing societies and unions.',
+        ? 'हाँ। सोसायटी नियमों के अनुसार निष्पक्ष आंतरिक चुनाव कराए जा सकते हैं।'
+        : 'Yes. Designed to adhere to statutory AGM quorum rules for societies, NGOs, and collectives.',
     },
   ]
 
@@ -119,10 +119,10 @@ export default async function CollectiveDecisionMakingPage({ params }: PageProps
                 <ArrowRight size={16} />
               </Link>
               <Link
-                href={`/${lang}/solutions/student-union`}
+                href={`/${lang}/solutions/civic-collective`}
                 className="bg-white text-slate-800 px-6 py-3.5 font-bold text-sm border border-slate-300 hover:border-slate-400 hover:bg-slate-50 transition-all flex items-center justify-center gap-2 rounded-md min-h-[48px]"
               >
-                <span>{isHindi ? 'छात्र संघ समाधान' : 'Student Union Blueprint'}</span>
+                <span>{isHindi ? 'सामुदायिक समाधान' : 'Collective Blueprint'}</span>
               </Link>
             </div>
           </div>

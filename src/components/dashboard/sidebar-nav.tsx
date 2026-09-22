@@ -4,15 +4,15 @@ import { useState, useMemo, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  ChevronDown, LayoutDashboard, Users, Settings, Megaphone,
-  Calendar, CheckSquare, BarChart, Vote, Globe, Scale,
-  AlertCircle, Wrench, Gift, Flag, Badge,
-  HeartHandshake, Network, Landmark, ScrollText,
-  UserCog, DollarSign, FileText, UserCheck, HardHat,
-  CalendarCheck, Printer, Zap, ShieldCheck, Smartphone, Database,
-  AlertTriangle, Sparkles, Award, Radio, MessageSquare, CreditCard,
-  FolderLock, BookOpen, Layers, Phone, BookOpenText, FileSignature,
-  Activity, Clock, Newspaper, HandCoins
+  ChevronDown, LayoutDashboard, Users,
+  Calendar, Vote,
+  AlertCircle,
+  Landmark,
+  DollarSign,
+  Printer, ShieldCheck,
+  Sparkles, MessageSquare,
+  FolderLock, BookOpen,
+  Activity, Clock, HandCoins
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -58,88 +58,52 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
     // 1. Universal Core Operations Workspace (5 Primary Parent Hubs)
     const coreWorkspaceGroup: NavGroup = {
       id: 'core_hubs',
-      title: 'Core Workspace',
+      title: 'Home',
       items: [
-        { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Dashboard', show: true },
-        { href: `/${lang}/dashboard/inbox`, icon: MessageSquare, label: 'Inbox & Dispatch', show: true },
-        { href: `/${lang}/dashboard/calendar`, icon: Calendar, label: 'Calendar & Sync', show: true },
-        { href: `/${lang}/dashboard/people`, icon: Users, label: orgType === 'rwa' ? 'Residents & People' : 'People & Cadre', show: true },
-        { href: `/${lang}/dashboard/forms`, icon: Sparkles, label: 'Forms & Surveys', show: true },
+        { href: `/${lang}/dashboard`, icon: LayoutDashboard, label: 'Home', show: true },
+        { href: `/${lang}/dashboard/inbox`, icon: MessageSquare, label: 'Messages', show: true },
+        { href: `/${lang}/dashboard/calendar`, icon: Calendar, label: 'Meetings', show: true },
+        { href: `/${lang}/dashboard/people`, icon: Users, label: 'People', show: true },
+        { href: `/${lang}/dashboard/forms`, icon: Sparkles, label: 'Forms', show: true },
       ].filter(i => i.show)
     }
 
     // 2. Consolidated Operations & Governance (2 Powerful Parent Workspaces)
     const operationsGroup: NavGroup = {
       id: 'operations_governance',
-      title: 'Operations & Governance',
+      title: 'Work',
       items: [
-        { href: `/${lang}/dashboard/governance`, icon: Landmark, label: 'Governance & Treasury', show: true },
-        { href: `/${lang}/dashboard/administration`, icon: FolderLock, label: 'Administration & Vault', show: true },
+        { href: `/${lang}/dashboard/governance`, icon: Landmark, label: 'Money and votes', show: true },
+        { href: `/${lang}/dashboard/administration`, icon: FolderLock, label: 'Files and records', show: true },
       ].filter(i => i.show)
     }
 
-    // 3. Organization Specialized Desk (Tailored to Archetype)
+    // 3. Org desk — only civic_collective and ngo
     let specializedDeskGroup: NavGroup
 
-    if (orgType === 'student_union') {
+    if (orgType === 'civic_collective') {
       specializedDeskGroup = {
         id: 'specialized_desk',
-        title: 'Student & Campus Desk',
+        title: 'Field work',
         items: [
-          { href: `/${lang}/dashboard/posts`, icon: Badge, label: 'Union Posts (पद)', show: true },
-          { href: `/${lang}/dashboard/campus-campaigning`, icon: Megaphone, label: 'Campus Campaigning', show: true },
-          { href: `/${lang}/dashboard/induction`, icon: UserCheck, label: 'Induction Drive', show: true },
-          { href: `/${lang}/dashboard/lyngdoh-compliance`, icon: Scale, label: 'Lyngdoh Audit Desk', show: true },
-          { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Student Helpdesk', show: true },
-        ].filter(i => i.show)
-      }
-    } else if (orgType === 'workers_union') {
-      specializedDeskGroup = {
-        id: 'specialized_desk',
-        title: 'Trade Action & CBA Desk',
-        items: [
-          { href: `/${lang}/dashboard/disputes`, icon: Scale, label: 'Trade Disputes & ALC', show: true },
-          { href: `/${lang}/dashboard/cba`, icon: FileText, label: 'CBA Accord & Accords', show: true },
-          { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Strike Authorization Votes', show: true },
-          { href: `/${lang}/dashboard/jobs`, icon: HardHat, label: 'Worker Dispatch & Shifts', show: true },
-          { href: `/${lang}/dashboard/tasks`, icon: CheckSquare, label: 'Shopfloor Tasks', show: true },
-        ].filter(i => i.show)
-      }
-    } else if (orgType === 'rwa') {
-      specializedDeskGroup = {
-        id: 'specialized_desk',
-        title: 'Estate & Resident Desk',
-        items: [
-          { href: `/${lang}/dashboard/maintenance`, icon: Wrench, label: 'Maintenance Billing', show: true },
-          { href: `/${lang}/dashboard/assets`, icon: Wrench, label: 'Asset AMC & NOCs', show: true },
-          { href: `/${lang}/dashboard/facilities`, icon: CalendarCheck, label: 'Facility Booking', show: true },
-          { href: `/${lang}/dashboard/domestic-staff`, icon: UserCheck, label: 'Staff & Guard Passes', show: true },
-          { href: `/${lang}/dashboard/tenant-verification`, icon: FileSignature, label: 'Tenant Verification', show: true },
-        ].filter(i => i.show)
-      }
-    } else if (orgType === 'civic_collective') {
-      specializedDeskGroup = {
-        id: 'specialized_desk',
-        title: 'Field Evidence & Action',
-        items: [
-          { href: `/${lang}/dashboard/field-audits`, icon: Activity, label: 'Field Audits & Sensors', show: true },
-          { href: `/${lang}/dashboard/parcha`, icon: Printer, label: '1-Page Printable Parcha', show: true },
-          { href: `/${lang}/dashboard/receiving-tracker`, icon: Clock, label: 'Stamped Receiving & RTI', show: true },
-          { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Direct Democracy Voting', show: true },
-          { href: `/${lang}/dashboard/compliance/bqf-verification`, icon: ShieldCheck, label: 'BQF AI Recognition', show: true },
+          { href: `/${lang}/dashboard/field-audits`, icon: Activity, label: 'Field checks', show: true },
+          { href: `/${lang}/dashboard/parcha`, icon: Printer, label: 'Parcha', show: true },
+          { href: `/${lang}/dashboard/receiving-tracker`, icon: Clock, label: 'Complaint and RTI', show: true },
+          { href: `/${lang}/dashboard/polls`, icon: Vote, label: 'Votes', show: true },
+          { href: `/${lang}/dashboard/compliance/bqf-verification`, icon: ShieldCheck, label: 'ID check', show: true },
         ].filter(i => i.show)
       }
     } else {
-      // Default: NGO / Foundation
+      // Default: NGO
       specializedDeskGroup = {
         id: 'specialized_desk',
-        title: 'Grants & Impact Desk',
+        title: 'NGO desk',
         items: [
-          { href: `/${lang}/dashboard/donations`, icon: HandCoins, label: 'Donations & 80G Receipts', show: true },
-          { href: `/${lang}/dashboard/grants`, icon: DollarSign, label: 'Grants & CSR Matcher', show: true },
-          { href: `/${lang}/dashboard/registers`, icon: BookOpen, label: 'Statutory Registers', show: true },
-          { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Beneficiary Helpdesk', show: true },
-          { href: `/${lang}/dashboard/municipal-letters`, icon: Printer, label: 'Official Representations', show: true },
+          { href: `/${lang}/dashboard/donations`, icon: HandCoins, label: 'Donations', show: true },
+          { href: `/${lang}/dashboard/grants`, icon: DollarSign, label: 'Grants', show: true },
+          { href: `/${lang}/dashboard/registers`, icon: BookOpen, label: 'Registers', show: true },
+          { href: `/${lang}/dashboard/helpdesk`, icon: AlertCircle, label: 'Helpdesk', show: true },
+          { href: `/${lang}/dashboard/municipal-letters`, icon: Printer, label: 'Letters', show: true },
         ].filter(i => i.show)
       }
     }

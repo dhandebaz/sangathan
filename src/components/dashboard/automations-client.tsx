@@ -302,7 +302,7 @@ export function AutomationsClient({ initialAutomations, orgName }: AutomationsCl
                   <SelectItem value="issue_digital_id">Issue Digital ID Card</SelectItem>
                   <SelectItem value="send_welcome_message">Send WhatsApp/SMS Welcome</SelectItem>
                   <SelectItem value="alert_legal_team">Broadcast Alert to Legal Team</SelectItem>
-                  <SelectItem value="generate_tax_receipt">Generate 80G Tax Receipt</SelectItem>
+                  <SelectItem value="generate_tax_receipt">Generate Donation Receipt</SelectItem>
                   <SelectItem value="assign_task">Assign Task to Convener</SelectItem>
                 </SelectContent>
               </Select>

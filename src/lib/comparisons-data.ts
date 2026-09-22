@@ -72,8 +72,8 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
     ],
     heroHeadlineEn: 'Why Indian Movements Choose Sangathan Over Action Network',
     heroHeadlineHi: 'भारतीय जन आंदोलन एक्शन नेटवर्क की जगह संगठन क्यों चुनते हैं?',
-    heroSubheadlineEn: 'Action Network was built for US progressive email fundraisers charging $105-$1,050/mo (₹9,000 - ₹90,000/mo in USD). Sangathan is built for Indian ground organizers with offline PWA spot audits, ₹1 A4 photostat flyers, 15-day RTI countdowns, and direct UPI chanda for ₹0.',
-    heroSubheadlineHi: 'एक्शन नेटवर्क अमेरिकी ईमेल अभियानों और ₹9,000 से ₹90,000/माह के डॉलर भुगतानों के लिए बना है। संगठन भारतीय जमीनी कार्यकर्ताओं के लिए बना है—ऑफलाइन फील्ड ऑडिट, ₹1 पर्चा, 15-दिवसीय आरटीआई ट्रैकर और यूपीआई चंदा।',
+    heroSubheadlineEn: 'Action Network was built for US progressive email fundraisers charging $105-$1,050/mo (₹9,000 - ₹90,000/mo in USD). Sangathan is built for Indian ground organizers with offline PWA field checks, ₹1 A4 photostat flyers, 30-day RTI reminders, and direct UPI chanda for ₹0.',
+    heroSubheadlineHi: 'एक्शन नेटवर्क अमेरिकी ईमेल अभियानों और ₹9,000 से ₹90,000/माह के डॉलर भुगतानों के लिए बना है। संगठन भारतीय जमीनी कार्यकर्ताओं के लिए बना है—ऑफलाइन फील्ड जांच, ₹1 पर्चा, 30-दिवसीय आरटीआई याद और यूपीआई चंदा।',
     summaryVerdictEn: 'Action Network relies heavily on bulk email marketing and credit card donations in USD ($105+/mo or ₹9,000+/mo). Sangathan provides a true ground operating system tailored for India: physical A4 flyers, WhatsApp-first communication, offline field data sync, ₹0 community tier, and ₹1,000/mo 500-cadre Sustainer plan.',
     summaryVerdictHi: 'एक्शन नेटवर्क केवल ईमेल और विदेशी कार्ड भुगतानों (₹9,000+/माह) पर निर्भर है। संगठन भारत की जमीनी वास्तविकताओं के अनुरूप है: भौतिक पर्चे, व्हाट्सएप समन्वय, ऑफलाइन डेटा सिंक और ₹0 निःशुल्क नागरिक टियर।',
     activistQuoteEn: '“In Indian bastis, email campaigns don’t work. You need ₹1 photostat leaflets on chai stalls, stamped ward receiving copies, and UPI. That’s why we use Sangathan.”',
@@ -122,10 +122,10 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
         sangathanAdvantage: true
       },
       {
-        featureNameEn: 'Statutory Administrative Accountability',
-        featureNameHi: 'वैधानिक प्रशासनिक जवाबदेही',
-        sangathanValueEn: '15-Day Stamped Receiving & RTI Section 6(1) Drafter',
-        sangathanValueHi: '15-दिवसीय मुहर लगी रिसीविंग व धारा 6(1) आरटीआई',
+        featureNameEn: 'Written Complaint Records',
+        featureNameHi: 'लिखित शिकायत रिकॉर्ड',
+        sangathanValueEn: 'Complaint diary with 30-day RTI reminder & Section 6(1) draft',
+        sangathanValueHi: '30-दिवसीय आरटीआई याद वाली शिकायत डायरी',
         competitorValueEn: 'None (Only online petition signing)',
         competitorValueHi: 'कुछ नहीं (केवल ऑनलाइन याचिका)',
         category: 'compliance',
@@ -199,22 +199,22 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
     competitorTaglineHi: 'अत्यधिक महंगा अमेरिकी राजनीतिक सीआरएम व डेटाबेस',
     metaTitleEn: 'Sangathan vs NationBuilder: Why Grassroots Movements Choose Sangathan',
     metaTitleHi: 'संगठन बनाम नेशनबिल्डर | जन आंदोलनों व एनजीओ के लिए तुलना',
-    metaDescEn: 'Compare Sangathan and NationBuilder. See why Indian NGOs, student unions, and civic groups choose Sangathan for ₹0 community tier, 500-cadre Sustainer plan, Indian statutory compliance, and ground PWA.',
-    metaDescHi: 'संगठन और नेशनबिल्डर की संपूर्ण तुलना। जानें क्यों भारतीय एनजीओ, छात्र संघ और नागरिक समूह ₹0 टियर, 500 काडर संरक्षक प्लान और फील्ड PWA के लिए संगठन चुनते हैं।',
+    metaDescEn: 'Compare Sangathan and NationBuilder. See why Indian NGOs and civic groups choose Sangathan for ₹0 community tier, 500-member Sustainer plan, Indian statutory compliance, and ground PWA.',
+    metaDescHi: 'संगठन और नेशनबिल्डर की संपूर्ण तुलना। जानें क्यों भारतीय एनजीओ और नागरिक समूह ₹0 टियर, 500 सदस्य संरक्षक प्लान और फील्ड PWA के लिए संगठन चुनते हैं।',
     keywords: [
       'Sangathan vs NationBuilder', 'NationBuilder alternative India', 'NationBuilder pricing review India',
-      'NGO software India free', 'student union campaign platform'
+      'NGO software India free', 'civic collective campaign platform'
     ],
     heroHeadlineEn: 'NationBuilder Costs Thousands of Dollars (₹3 Lakhs+/Yr). Sangathan Powers Movement Democracy for ₹0.',
     heroHeadlineHi: 'नेशनबिल्डर पर लाखों रुपये खर्च करने के बजाय संगठन से ₹0 में आंदोलन चलाएं।',
-    heroSubheadlineEn: 'NationBuilder is a legacy enterprise CRM charging from ₹3,300 up to ₹1,29,000+ per month ($39 - $1,500+/mo USD). Sangathan provides purpose-built, accessible infrastructure with Indian statutory registers (Form I, Form H, 12A/80G, Cash Book) and mobile spot audits for ₹0.',
+    heroSubheadlineEn: 'NationBuilder is a legacy enterprise CRM charging from ₹3,300 up to ₹1,29,000+ per month ($39 - $1,500+/mo USD). Sangathan provides purpose-built, accessible infrastructure with Indian statutory registers (Form I, 12A/80G, Cash Book) and mobile field checks for ₹0.',
     heroSubheadlineHi: 'नेशनबिल्डर ₹3,300 से ₹1,29,000+ प्रति माह की भारी विदेशी फीस मांगता है। संगठन भारतीय जमीनी आंदोलनों के लिए बना है—वैधानिक फॉर्म I/H रजिस्टर, 12A/80G रसीदें, पारदर्शी बहीखाता और मोबाइल फील्ड टूल्स।',
     summaryVerdictEn: 'NationBuilder locks movements into expensive subscriptions starting at ₹3,300 to ₹1,29,000+ per month ($39 - $1,500/mo USD). Sangathan is 100% free for community organizers (up to 20 leaders), includes 500 active cadres in the ₹1,000/mo Sustainer plan with transparent ₹11/cadre scale, and ships with Indian compliance out of the box.',
     summaryVerdictHi: 'नेशनबिल्डर ₹3,300 से ₹1,29,000+ प्रति माह की महंगी फीस ($39-$1,500/माह) और जटिल सेटअप मांगता है। संगठन जमीनी कार्यकर्ताओं के लिए 100% निःशुल्क है (20 लीडर्स), ₹1,000/माह में 500 काडर देता है (₹11/अतिरिक्त काडर) और भारतीय कानूनी नियमों से लैस है।',
     activistQuoteEn: '“We were quoted ₹3 Lakhs/year for NationBuilder. We moved our 12,000 supporters to Sangathan in 10 minutes at zero cost and our field teams actually use it daily.”',
     activistQuoteHi: '“नेशनबिल्डर ने हमसे सालाना ₹3 लाख मांगे थे। हमने 10 मिनट में अपने 12,000 समर्थक संगठन पर ₹0 में माइग्रेट किए और आज हमारी फील्ड टीम इसे रोज चलाती है।”',
-    quoteAttributionEn: 'All-India Gig Workers Union Organizer',
-    quoteAttributionHi: 'अखिल भारतीय गिग वर्कर यूनियन संयोजक',
+    quoteAttributionEn: 'Civic Collective Organizer',
+    quoteAttributionHi: 'नागरिक समूह संयोजक',
     comparisonMatrix: [
       {
         featureNameEn: 'Starting Monthly Cost & Cadre Quota',
@@ -227,8 +227,8 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
         sangathanAdvantage: true
       },
       {
-        featureNameEn: 'Indian Statutory Registers (Form I, H, 80G)',
-        featureNameHi: 'भारतीय वैधानिक रजिस्टर (फॉर्म I, H, 80G)',
+        featureNameEn: 'Indian Statutory Registers (Form I, Cash Book, 80G)',
+        featureNameHi: 'भारतीय वैधानिक रजिस्टर (फॉर्म I, रोकड़, 80G)',
         sangathanValueEn: 'Built-in auto-generating PDF registers',
         sangathanValueHi: 'स्वचालित प्रिंट-रेडी वैधानिक रजिस्टर',
         competitorValueEn: 'None (US IRS format only)',
@@ -247,10 +247,10 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
         sangathanAdvantage: true
       },
       {
-        featureNameEn: 'Secret Voting & Direct Democracy',
-        featureNameHi: 'गुप्त मतदान व लोकतांत्रिक निर्णय',
-        sangathanValueEn: 'Cryptographic anonymous ballots compliant with Lyngdoh/Trade Union rules',
-        sangathanValueHi: 'लिंगदोह व ट्रेड यूनियन नियमों के तहत गोपनीय मतदान',
+        featureNameEn: 'Secret Voting & Group Decisions',
+        featureNameHi: 'गुप्त मतदान व सामूहिक निर्णय',
+        sangathanValueEn: 'Anonymous ballots for group decisions',
+        sangathanValueHi: 'सामूहिक फैसलों के लिए गोपनीय मतदान',
         competitorValueEn: 'No secret ballot or internal election voting',
         competitorValueHi: 'कोई आंतरिक गुप्त मतदान प्रणाली नहीं',
         category: 'democracy',
@@ -375,13 +375,13 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
     ],
     heroHeadlineEn: 'Mobilize Does Event Shifts. Sangathan Powers the Entire Movement.',
     heroHeadlineHi: 'मोबिलाइज केवल इवेंट बनाता है; संगठन पूरा जन आंदोलन चलाता है।',
-    heroSubheadlineEn: 'Mobilize costs ₹8,500 to ₹45,000+ per month ($100 - $500/mo USD) for event signups alone. Sangathan is a complete digital operating system providing field spot audits, ₹1 printable flyers, municipal stamped receiving countdowns, 80G donations, and cryptographic democratic voting for ₹0 to ₹1,000/mo.',
-    heroSubheadlineHi: 'मोबिलाइज केवल इवेंट साइनअप के लिए ₹8,500 से ₹45,000+ प्रति माह लेता है। संगठन संपूर्ण आंदोलन ऑपरेटिंग सिस्टम है—फील्ड प्रदूषण जांच, ₹1 पर्चा, नगर निगम आरटीआई ट्रैकर, 80G दान और गोपनीय गुप्त मतदान।',
+    heroSubheadlineEn: 'Mobilize costs ₹8,500 to ₹45,000+ per month ($100 - $500/mo USD) for event signups alone. Sangathan is a complete digital operating system providing field checks, ₹1 printable flyers, complaint diary with RTI reminders, 80G donations, and democratic voting for ₹0 to ₹1,000/mo.',
+    heroSubheadlineHi: 'मोबिलाइज केवल इवेंट साइनअप के लिए ₹8,500 से ₹45,000+ प्रति माह लेता है। संगठन संपूर्ण आंदोलन ऑपरेटिंग सिस्टम है—फील्ड जांच, ₹1 पर्चा, आरटीआई याद वाली शिकायत डायरी, 80G दान और गुप्त मतदान।',
     summaryVerdictEn: 'Event signups alone do not win civic battles. Sangathan combines public mobilization with administrative accountability, statutory filing, transparent financial ledgers, and emergency defense infrastructure at ₹0 Community or ₹1,000/mo Sustainer access vs Mobilize\'s ₹8,500+/mo ($100+/mo USD) fee.',
     summaryVerdictHi: 'केवल इवेंट बनाने से नागरिक समस्याएं हल नहीं होतीं। संगठन इवेंट्स के साथ-साथ प्रशासनिक जवाबदेही, कानूनी सुरक्षा, खुला बहीखाता और आपातकालीन एसओएस देता है।',
     activistQuoteEn: '“Mobilize can tell you who came to a rally for ₹20,000/mo. Sangathan turns those attendees into a disciplined collective that forces the administration to fix our ward for ₹0.”',
     activistQuoteHi: '“मोबिलाइज ₹20,000/माह में केवल यह बताता है कि रैली में कौन आया। संगठन उन लोगों को एक अनुशासित शक्ति बनाता है जो प्रशासन से अपना हक छीन कर लाती है।”',
-    quoteAttributionEn: 'Student Union Campus Action Secretary',
+    quoteAttributionEn: 'Campus Action Volunteer',
     quoteAttributionHi: 'छात्र संघ कैम्पस एक्शन सचिव',
     comparisonMatrix: [
       {
@@ -419,8 +419,8 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
       {
         titleEn: 'Beyond Events: Complete Administrative Escalation',
         titleHi: 'इवेंट्स से आगे: पूर्ण प्रशासनिक पैरवी',
-        sangathanDetailEn: 'Sangathan bridges street turnouts with bureaucratic action through stamped physical receiving copies and statutory 15-day RTI tracking.',
-        sangathanDetailHi: 'संगठन रैली की भीड़ को सरकारी दफ्तर में मुहर लगी रिसीविंग और 15-दिवसीय आरटीआई नोटिस में बदलता है।',
+        sangathanDetailEn: 'Sangathan keeps street turnouts connected to follow-up with dated complaint diary entries and 30-day RTI reminders.',
+        sangathanDetailHi: 'संगठन रैली की भीड़ को तारीख वाली शिकायत डायरी और 30-दिवसीय आरटीआई याद से जोड़े रखता है।',
         competitorDetailEn: 'Mobilize ends at the event door—it has no tools for legal defense, administrative follow-up, or local government accountability.',
         competitorDetailHi: 'मोबिलाइज केवल इवेंट तक सीमित है—इसमें कानूनी सुरक्षा या सरकारी पत्राचार का कोई टूल नहीं है।',
         verdictEn: 'Sangathan provides 10x more utility for real-world impact.',
@@ -516,95 +516,6 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
     ]
   },
 
-  'mygate': {
-    slug: 'mygate',
-    competitorName: 'MyGate & ADDA',
-    competitorCategoryEn: 'Commercial Gated Society Apps',
-    competitorCategoryHi: 'व्यावसायिक गेटेड सोसायटी ऐप',
-    competitorTaglineEn: 'Commercial ad-driven apartment security and billing apps',
-    competitorTaglineHi: 'विज्ञापन-आधारित व्यावसायिक अपार्टमेंट ऐप',
-    metaTitleEn: 'Sangathan vs MyGate & ADDA: Ad-Free Democratic RWA Governance',
-    metaTitleHi: 'संगठन बनाम मायगेट (MyGate) व ADDA | विज्ञापन-मुक्त लोकतांत्रिक RWA',
-    metaDescEn: 'Compare Sangathan and MyGate / ADDA. Why Indian housing societies and RWAs choose Sangathan for zero ads, zero resident data monetization, and municipal ward escalations.',
-    metaDescHi: 'संगठन और मायगेट/ADDA की तुलना। जानें क्यों हाउसिंग सोसायटियां और आरडब्ल्यूए शून्य विज्ञापन, डेटा गोपनीयता और नगर निगम पैरवी के लिए संगठन चुनती हैं।',
-    keywords: [
-      'Sangathan vs MyGate', 'MyGate alternative India', 'ADDA society app alternative',
-      'ad-free housing society app', 'RWA management software zero commission'
-    ],
-    heroHeadlineEn: 'Your Housing Society Needs Democratic Governance, Not Advertising.',
-    heroHeadlineHi: 'हाउसिंग सोसायटियों को लोकतांत्रिक प्रशासन चाहिए, विज्ञापन नहीं।',
-    heroSubheadlineEn: 'Commercial society apps charge ₹3,000 to ₹15,000/month plus 1.5-2% gateway surcharges, and monetize resident phone numbers with ads. Sangathan provides a 100% ad-free, sovereign platform with transparent UPI maintenance, AGM elections, and municipal councillor escalations for ₹0 to ₹1,000/mo.',
-    heroSubheadlineHi: 'कमर्शियल ऐप ₹3,000 से ₹15,000/माह प्लस 1.5-2% गेटवे कमीशन वसूलते हैं और विज्ञापनों से परेशान करते हैं। संगठन 100% विज्ञापन-मुक्त है, सीधा शून्य-कमीशन यूपीआई मेंटेनेंस, एजीएम चुनाव और पार्षद स्तर पर नागरिक पैरवी ₹0 से ₹1,000/माह में देता है।',
-    summaryVerdictEn: 'MyGate and ADDA are for-profit commercial platforms that view residents as advertising eyeballs and take transaction cuts. Sangathan is a non-profit civic utility (₹0 Community / ₹1,000 Sustainer for 500 flats) that empowers residents with democratic secret ballots, transparent accounts, and municipal infrastructure advocacy with 0% gateway commission.',
-    summaryVerdictHi: 'मायगेट और ADDA प्राइवेट कंपनियां हैं जो निवासियों को विज्ञापन का जरिया मानती हैं और पेमेंट पर कमीशन काटती हैं। संगठन एक गैर-लाभकारी सार्वजनिक मंच है (₹0 कम्युनिटी / ₹1,000 संरक्षक 500 फ्लैटों के लिए) जो 0% कमीशन पर निष्पक्ष चुनाव और खुला बहीखाता देता है।',
-    activistQuoteEn: '“Our residents were fed up with daily loan and grocery notifications inside their society app. Sangathan gave us clean, ad-free governance and saved us ₹12,000/month in app subscription and payment gateway fees.”',
-    activistQuoteHi: '“निवासी अपने पुराने ऐप में लोन और विज्ञापनों से परेशान थे। संगठन ने हमें पूरी तरह साफ, विज्ञापन-मुक्त प्रशासन दिया और ऐप फीस व गेटवे कमीशन के ₹12,000 प्रति माह बचाए।”',
-    quoteAttributionEn: 'NCR Apartment Owners Association General Secretary',
-    quoteAttributionHi: 'एनसीआर अपार्टमेंट ओनर्स एसोसिएशन महासचिव',
-    comparisonMatrix: [
-      {
-        featureNameEn: 'Monthly Platform Fee & Gateway Cut',
-        featureNameHi: 'मासिक प्लेटफॉर्म फीस व गेटवे कमीशन',
-        sangathanValueEn: '₹0 / mo (Community) • ₹1,000/mo (500 Flats) • 0% UPI Gateway Cut',
-        sangathanValueHi: '₹0 / माह (कम्युनिटी) • ₹1,000/माह (500 फ्लैट) • 0% यूपीआई गेटवे फीस',
-        competitorValueEn: '₹3,000 - ₹15,000 / month per society + 1.5% to 2% transaction surcharge',
-        competitorValueHi: '₹3,000 से ₹15,000 प्रति माह प्रति सोसायटी + 1.5% से 2% अतिरिक्त चार्ज',
-        category: 'pricing',
-        sangathanAdvantage: true
-      },
-      {
-        featureNameEn: 'Advertisements & Resident Data Monetization',
-        featureNameHi: 'विज्ञापन व डेटा का व्यावसायिक उपयोग',
-        sangathanValueEn: '100% Ad-Free, Zero commercial data harvesting guaranteed',
-        sangathanValueHi: '100% विज्ञापन-मुक्त, डेटा बेचने पर पूर्ण पाबंदी',
-        competitorValueEn: 'In-app shopping ads, promoted services & brand sponsorships',
-        competitorValueHi: 'ऐप में शॉपिंग विज्ञापन, लोन ऑफर्स व प्रायोजित सेवाएं',
-        category: 'privacy',
-        sangathanAdvantage: true
-      },
-      {
-        featureNameEn: 'Municipal & Ward Councillor Escalation',
-        featureNameHi: 'नगर निगम व पार्षद स्तर पर पैरवी',
-        sangathanValueEn: 'Built-in stamped letter generator & 15-day RTI countdowns',
-        sangathanValueHi: 'मुहर लगे मांग पत्र व 15-दिवसीय आरटीआई काउंटडाउन',
-        competitorValueEn: 'None (Confined inside the society gate only)',
-        competitorValueHi: 'कुछ नहीं (केवल गेट के अंदर तक सीमित)',
-        category: 'ground_tools',
-        sangathanAdvantage: true
-      },
-      {
-        featureNameEn: 'Democratic AGM Executive Elections',
-        featureNameHi: 'लोकतांत्रिक AGM कार्यसमिति चुनाव',
-        sangathanValueEn: '1-flat-1-vote cryptographic secret ballot with audit trails',
-        sangathanValueHi: '1-फ्लैट-1-वोट की सुरक्षित गुप्त मतदान प्रणाली',
-        competitorValueEn: 'Basic open polls vulnerable to proxy tampering',
-        competitorValueHi: 'साधारण पोल जिसमें धांधली की संभावना रहती है',
-        category: 'democracy',
-        sangathanAdvantage: true
-      }
-    ],
-    pillars: [
-      {
-        titleEn: 'Data Privacy & The Digital Personal Data Protection Act',
-        titleHi: 'डेटा गोपनीयता व डीपीएसपी (DPDP) अनुपालन',
-        sangathanDetailEn: 'Sangathan never shares resident phone numbers, vehicle numbers, or visitor entry timestamps with commercial advertisers.',
-        sangathanDetailHi: 'संगठन निवासियों के फोन नंबर, गाड़ी नंबर या विजिटर रिकॉर्ड कभी किसी कंपनी या विज्ञापनदाता को नहीं देता।',
-        competitorDetailEn: 'Commercial gated society apps actively monetize user behavioral profiles to sell insurance, real estate, and home services.',
-        competitorDetailHi: 'कमर्शियल ऐप निवासियों की प्रोफाइल बनाकर उन्हें बीमा, प्रॉपर्टी और अन्य सेवाएं बेचने के लिए डेटा उपयोग करते हैं।',
-        verdictEn: 'Sangathan treats your home as a private sovereign sanctuary.',
-        verdictHi: 'संगठन आपके घर की निजता का 100% सम्मान करता है।'
-      }
-    ],
-    faqs: [
-      {
-        questionEn: 'How does Sangathan collect maintenance without gateway fees?',
-        questionHi: 'संगठन बिना किसी गेटवे फीस के मेंटेनेंस कैसे वसूलता है?',
-        answerEn: 'Sangathan connects directly to your society bank UPI VPA or QR code. Funds transfer instantly from the resident to the society account without any intermediary middleman taking a percentage.',
-        answerHi: 'संगठन सीधे आपकी सोसायटी के बैंक यूपीआई क्यूआर कोड से जुड़ता है। पैसा बिना किसी बिचौलिए के सीधे बैंक खाते में 0% फीस पर जमा होता है।'
-      }
-    ]
-  },
-
   'whatsapp-sheets': {
     slug: 'whatsapp-sheets',
     competitorName: 'WhatsApp Groups & Google Sheets',
@@ -614,7 +525,7 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
     competitorTaglineHi: 'बिखरे हुए चैट, खोई हुई फाइलें व एक्सेल की अव्यवस्था',
     metaTitleEn: 'Sangathan vs WhatsApp Groups & Google Sheets: Why Spreadsheets Fail Movements',
     metaTitleHi: 'संगठन बनाम व्हाट्सएप ग्रुप व गूगल शीट्स | आंदोलन के लिए सही व्यवस्था',
-    metaDescEn: 'Compare Sangathan with WhatsApp groups and Excel sheets. Why serious civic movements, NGOs, and unions switch to Sangathan for audit-ready records, secret voting, and RTI timers.',
+    metaDescEn: 'Compare Sangathan with WhatsApp groups and Excel sheets. Why serious civic movements and NGOs switch to Sangathan for dated records, secret voting, and RTI reminders.',
     metaDescHi: 'संगठन और व्हाट्सएप/एक्सेल की तुलना। जानें क्यों गंभीर जन आंदोलन और एनजीओ खोई हुई फाइलों से बचकर पारदर्शी बहीखाते और गुप्त मतदान के लिए संगठन अपनाते हैं।',
     keywords: [
       'Sangathan vs WhatsApp groups', 'Google sheets alternative NGO', 'WhatsApp group organizing problems',
@@ -622,12 +533,12 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
     ],
     heroHeadlineEn: 'WhatsApp Groups Cause Clutter. Spreadsheets Break. Sangathan Wins Battles.',
     heroHeadlineHi: 'व्हाट्सएप पर केवल शोर होता है; एक्सेल फाइलें खो जाती हैं; संगठन से जीत मिलती है।',
-    heroSubheadlineEn: 'Organizing on WhatsApp groups leads to message chaos, lost documents, privacy leaks, and zero accountability. Sangathan replaces spreadsheet chaos with structured member rolls, 15-day RTI countdowns, transparent UPI ledgers, and tamper-proof secret ballots for ₹0 to ₹1,000/mo.',
-    heroSubheadlineHi: 'व्हाट्सएप ग्रुपों में जरूरी बातें दब जाती हैं, नंबर लीक होते हैं और कोई जिम्मेदारी तय नहीं होती। संगठन स्प्रेडशीट की अव्यवस्था को हटाकर व्यवस्थित सदस्य पंजी, 15-दिवसीय आरटीआई टाइमर और पारदर्शी बहीखाता देता है।',
-    summaryVerdictEn: 'WhatsApp is an informal chat app, not an organization operating system. Sangathan provides the structured administrative discipline, legal shielding, and financial transparency that turns scattered groups into powerful institutions with a ₹0 Community tier and ₹1,000/mo Sustainer plan.',
-    summaryVerdictHi: 'व्हाट्सएप केवल बातचीत के लिए है, संगठन चलाने के लिए नहीं। संगठन वह प्रशासनिक अनुशासन, कानूनी सुरक्षा और वित्तीय पारदर्शिता देता है जो भीड़ को मजबूत संगठन बनाती है।',
-    activistQuoteEn: '“On WhatsApp, our municipal petition got lost in 500 good-morning messages. On Sangathan, it’s a stamped diary ticket with a 15-day timer that forced the JE to repair our sewer.”',
-    activistQuoteHi: '“व्हाट्सएप पर हमारा मांग पत्र 500 गुड-मॉर्निंग मैसेज में दब गया था। संगठन पर वह मुहर लगा टिकट बना जिसने 15 दिन में सीवर लाइन ठीक करा दी।”',
+    heroSubheadlineEn: 'Organizing on WhatsApp groups leads to message chaos, lost documents, privacy leaks, and zero accountability. Sangathan replaces spreadsheet chaos with structured member rolls, complaint diary with RTI reminders, transparent UPI ledgers, and secret ballots for ₹0 to ₹1,000/mo.',
+    heroSubheadlineHi: 'व्हाट्सएप ग्रुपों में जरूरी बातें दब जाती हैं, नंबर लीक होते हैं और कोई जिम्मेदारी तय नहीं होती। संगठन स्प्रेडशीट की अव्यवस्था को हटाकर व्यवस्थित सदस्य पंजी, आरटीआई याद वाली शिकायत डायरी और पारदर्शी बहीखाता देता है।',
+    summaryVerdictEn: 'WhatsApp is an informal chat app, not an organization operating system. Sangathan provides the structured discipline and financial transparency that turns scattered groups into strong institutions with a ₹0 Community tier and ₹1,000/mo Sustainer plan.',
+    summaryVerdictHi: 'व्हाट्सएप केवल बातचीत के लिए है, संगठन चलाने के लिए नहीं। संगठन वह अनुशासन और वित्तीय पारदर्शिता देता है जो भीड़ को मजबूत संगठन बनाती है।',
+    activistQuoteEn: '“On WhatsApp, our municipal petition got lost in 500 good-morning messages. On Sangathan, it is a dated diary entry with a photo that nobody can deny.”',
+    activistQuoteHi: '“व्हाट्सएप पर हमारा मांग पत्र 500 गुड-मॉर्निंग मैसेज में दब गया था। संगठन पर वह तारीख वाली फोटो सहित प्रविष्टि है जिससे कोई मुकर नहीं सकता।”',
     quoteAttributionEn: 'Colony Resident Welfare Action Team Member',
     quoteAttributionHi: 'कॉलोनी नागरिक सुधार टीम साथी',
     comparisonMatrix: [

@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       'grassroots collective management',
       'neighborhood community software',
       'community organizing platform free',
-      'RWA and collective tools'
+      'collective tools'
     ],
     alternates: {
       canonical: `https://sangathan.space/${lang}/community-management`,

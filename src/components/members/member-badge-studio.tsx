@@ -40,11 +40,11 @@ export interface MemberBadgeStudioProps {
 
 export function MemberBadgeStudio({
   initialMemberName = 'Arjun Verma',
-  initialOrgName = 'National Student Solidarity Collective',
+  initialOrgName = 'National Civic Solidarity Collective',
   initialRole = 'General Secretary',
   initialOrgSlug = 'solidarity',
   initialMemberId = 'SAN-2026-IN-9812',
-  initialOrgType = 'student_union',
+  initialOrgType = 'civic_collective',
   initialAvatarUrl,
   initialLang = 'en',
 }: MemberBadgeStudioProps) {

@@ -36,7 +36,6 @@ export function MobileToolsDrawer({
   isOpen,
   onClose,
   lang,
-  orgType = 'ngo',
   isAdmin = true,
 }: MobileToolsDrawerProps) {
   const [searchQuery, setSearchQuery] = useState('')
@@ -89,10 +88,10 @@ export function MobileToolsDrawer({
       {
         href: `/${lang}/dashboard/people`,
         icon: Users,
-        titleEn: orgType === 'rwa' ? 'Residents & Cadre Hub' : 'People & Members Hub',
-        titleHi: orgType === 'rwa' ? 'निवासी व रोस्टर हब' : 'सदस्य व काडर हब',
-        descEn: 'Rosters, badges, committees & volunteers',
-        descHi: 'सूची, बैज, समितियां व स्वयंसेवक',
+        titleEn: 'People',
+        titleHi: 'लोग',
+        descEn: 'Members, badges and teams',
+        descHi: 'सदस्य, बैज और टीमें',
         category: 'core',
         color: 'bg-brand-50 text-brand-700 border-brand-200',
       },
@@ -193,10 +192,10 @@ export function MobileToolsDrawer({
       {
         href: `/${lang}/dashboard/receiving-tracker`,
         icon: Clock,
-        titleEn: 'Stamped Receiving & 15-Day RTI',
-        titleHi: 'स्टैम्प्ड रिसीविंग व 15-दिन RTI',
-        descEn: 'Track ward stamps & auto-draft Section 6(1) RTIs',
-        descHi: 'वार्ड रिसीविंग डायरी व आरटीआई एस्केलेटर',
+        titleEn: 'Complaint Diary & RTI Helper',
+        titleHi: 'शिकायत डायरी व RTI सहायक',
+        descEn: 'Save diary numbers, get 30-day RTI reminder',
+        descHi: 'डायरी नंबर सहेजें, 30-दिन RTI याद पाएं',
         category: 'field',
         color: 'bg-amber-50 text-amber-700 border-amber-200',
       },
@@ -345,65 +344,19 @@ export function MobileToolsDrawer({
         color: 'bg-slate-50 text-slate-700 border-slate-200',
       },
       {
-        href: `/${lang}/dashboard/helpdesk`,
-        icon: HelpCircle,
-        titleEn: 'Help & Knowledge Base',
-        titleHi: 'सहायता व मार्गदर्शिका',
-        descEn: 'Civic organizing manuals & support',
-        descHi: 'उपयोग मार्गदर्शिका व सहायता',
-        category: 'admin',
-        color: 'bg-brand-50 text-brand-700 border-brand-200',
+        href: `/${lang}/dashboard/municipal-letters`,
+        icon: Printer,
+        titleEn: 'Letters',
+        titleHi: 'पत्र',
+        descEn: 'Formal complaints and requests',
+        descHi: 'आधिकारिक पत्र और मांगें',
+        category: 'compliance',
+        color: 'bg-sky-50 text-sky-700 border-sky-200',
       },
     ]
 
-    // Specific additions for RWA / Student Unions
-    if (orgType === 'rwa') {
-      list.push(
-        {
-          href: `/${lang}/dashboard/chanda`,
-          icon: BookOpenText,
-          titleEn: 'Chanda & Festival Ledger',
-          titleHi: 'चंदा व उत्सव बहीखाता',
-          descEn: 'Track festival contributions & passbooks',
-          descHi: 'त्योहार व आयोजन चंदा रिकॉर्ड',
-          category: 'core',
-          color: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-        },
-        {
-          href: `/${lang}/dashboard/tenant-verification`,
-          icon: FileSignature,
-          titleEn: 'Tenant Verification Desk',
-          titleHi: 'किरायेदार पुलिस सत्यापन',
-          descEn: 'Generate police verification forms',
-          descHi: 'सत्यापन फॉर्म व दस्तावेज',
-          category: 'compliance',
-          color: 'bg-purple-50 text-purple-700 border-purple-200',
-        },
-        {
-          href: `/${lang}/dashboard/municipal-letters`,
-          icon: Printer,
-          titleEn: 'Municipal Letter Generator',
-          titleHi: 'नगर निगम पत्र निर्माता',
-          descEn: 'Formal complaints & requests',
-          descHi: 'सड़क, पानी, बिजली आधिकारिक पत्र',
-          category: 'compliance',
-          color: 'bg-sky-50 text-sky-700 border-sky-200',
-        },
-        {
-          href: `/${lang}/dashboard/local-directory`,
-          icon: Phone,
-          titleEn: 'Local Essential Directory',
-          titleHi: 'स्थानीय आवश्यक फोन निर्देशिका',
-          descEn: 'Police, hospital, electrician contacts',
-          descHi: 'थाना, डॉक्टर, एम्बुलेंस नंबर',
-          category: 'core',
-          color: 'bg-amber-50 text-amber-700 border-amber-200',
-        }
-      )
-    }
-
     return list
-  }, [lang, orgType])
+  }, [lang])
 
   const filteredTools = useMemo(() => {
     if (!searchQuery.trim()) return allTools

@@ -272,19 +272,10 @@ export async function updateSession(request: NextRequest) {
       if (p.includes('/dashboard/campaigns') && !caps.campaigns) {
         return createRedirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
       }
-      if (p.includes('/dashboard/grievances') && !caps.grievances) {
-        return createRedirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
-      }
       if (p.includes('/dashboard/complaints') && !caps.complaints) {
         return createRedirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
       }
-      if (p.includes('/dashboard/maintenance') && !caps.maintenance) {
-        return createRedirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
-      }
       if (p.includes('/dashboard/volunteers') && !caps.volunteers) {
-        return createRedirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
-      }
-      if (p.includes('/dashboard/student-ids') && !caps.student_ids) {
         return createRedirect(new URL(`/${hasLocale ? pathname.split('/')[1] : i18n.defaultLocale}/dashboard`, request.url))
       }
     }

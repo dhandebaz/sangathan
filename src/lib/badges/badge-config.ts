@@ -17,7 +17,7 @@ export interface OrgArchetypeConfig {
   defaultRoles: string[]
 }
 
-// 5 Sangathan Org Archetypes configuration
+// 2 Sangathan Org Archetypes configuration
 export const ORG_ARCHETYPES: Record<OrgType, OrgArchetypeConfig> = {
   civic_collective: {
     nameEn: 'Civic Collective & Grassroots Movement',
@@ -56,63 +56,6 @@ export const ORG_ARCHETYPES: Record<OrgType, OrgArchetypeConfig> = {
       { value: 'Executive Trustee & Board Member', labelEn: 'Executive Trustee & Board Member', labelHi: 'कार्यकारी ट्रस्टी व बोर्ड सदस्य' },
     ],
     defaultRoles: ['Volunteer', 'Project Coordinator', 'Program Director', 'Field Officer', 'Trustee', 'Executive Director'],
-  },
-  student_union: {
-    nameEn: 'Democratic Student Union',
-    nameHi: 'लोकतांत्रिक छात्र संघ',
-    ribbonHeaderEn: '✦ DEMOCRATIC STUDENT UNION FEDERATION • LYNGDOH COMPLIANT ✦',
-    ribbonHeaderHi: '✦ लोकतांत्रिक छात्र संघ महासंघ • लिंगदोह अनुपालित ✦',
-    statutoryTagEn: 'DEMOCRATIC STUDENT BODY • UNIVERSITY STATUTE RECOGNIZED',
-    statutoryTagHi: 'लोकतांत्रिक छात्र निकाय • विश्वविद्यालय अधिनियम मान्यता प्राप्त',
-    defaultTheme: 'royal_indigo',
-    defaultSymbol: 'quill_and_torch',
-    badgeTiers: [
-      { value: 'Elected Student Representative', labelEn: 'Elected Student Representative', labelHi: 'निर्वाचित छात्र प्रतिनिधि' },
-      { value: 'Union President / Vice President', labelEn: 'Union President / Vice President', labelHi: 'संघ अध्यक्ष / उपाध्यक्ष' },
-      { value: 'General Secretary & Central Councillor', labelEn: 'General Secretary & Central Councillor', labelHi: 'महासचिव व केंद्रीय पार्षद' },
-      { value: 'Department / Hostel Councillor', labelEn: 'Department / Hostel Councillor', labelHi: 'विभाग / छात्रावास पार्षद' },
-      { value: 'Campus Mess & Welfare Committee Lead', labelEn: 'Campus Mess & Welfare Lead', labelHi: 'मेस व छात्र कल्याण समिति प्रमुख' },
-      { value: 'Anti-Ragging & Student Rights Delegate', labelEn: 'Student Rights & Anti-Ragging Delegate', labelHi: 'छात्र अधिकार व रैगिंग-रोधी प्रतिनिधि' },
-    ],
-    defaultRoles: ['General Secretary', 'President', 'Vice President', 'Department Councillor', 'Hostel Warden Rep', 'Cadre Member'],
-  },
-  workers_union: {
-    nameEn: 'Workers Union & Trade Collective',
-    nameHi: 'श्रमिक संघ व मजदूर संगठन',
-    ribbonHeaderEn: '✦ SHRAMIK SANGATHAN • TRADE UNIONS ACT 1926 REGISTERED ✦',
-    ribbonHeaderHi: '✦ श्रमिक संगठन • ट्रेड यूनियन अधिनियम 1926 पंजीकृत ✦',
-    statutoryTagEn: 'REGISTERED TRADE UNION • COLLECTIVE BARGAINING BODY (CBA)',
-    statutoryTagHi: 'पंजीकृत ट्रेड यूनियन • सामूहिक सौदेबाजी निकाय (CBA)',
-    defaultTheme: 'inquilab_crimson',
-    defaultSymbol: 'solidarity_fist',
-    badgeTiers: [
-      { value: 'Certified Shop Floor Steward', labelEn: 'Certified Shop Floor Steward', labelHi: 'प्रमाणित शॉप-फ्लोर प्रतिनिधि' },
-      { value: 'Trade Union Delegate (CBA Negotiator)', labelEn: 'Trade Union Delegate (CBA)', labelHi: 'ट्रेड यूनियन प्रतिनिधि (CBA वार्ताकार)' },
-      { value: 'Workplace Safety & Hazard Auditor', labelEn: 'Workplace Safety & Hazard Auditor', labelHi: 'कार्यस्थल सुरक्षा व श्रम परीक्षक' },
-      { value: 'Strike & Welfare Relief Cadre', labelEn: 'Strike & Welfare Relief Cadre', labelHi: 'हड़ताल व मजदूर कल्याण कैडर' },
-      { value: 'General Secretary / State Office Bearer', labelEn: 'General Secretary / State Bearer', labelHi: 'महासचिव / राज्य पदाधिकारी' },
-      { value: 'Gig & Informal Sector Worker Steward', labelEn: 'Gig & Informal Sector Steward', labelHi: 'गिग व असंगठित मजदूर प्रतिनिधि' },
-    ],
-    defaultRoles: ['Shop Floor Steward', 'Union Delegate', 'General Secretary', 'Safety Warden', 'CBA Representative', 'Standing Member'],
-  },
-  rwa: {
-    nameEn: 'Resident Welfare Association (RWA)',
-    nameHi: 'आवासीय कल्याण संघ (RWA)',
-    ribbonHeaderEn: '✦ RESIDENT WELFARE ASSOCIATION • REGISTERED COMMUNITY COUNCIL ✦',
-    ribbonHeaderHi: '✦ आवासीय कल्याण संघ • पंजीकृत समुदाय परिषद ✦',
-    statutoryTagEn: 'REGISTERED RWA • STATE COOPERATIVE & APARTMENT ACTS',
-    statutoryTagHi: 'पंजीकृत आरडब्ल्यूए • राज्य सहकारी व अपार्टमेंट अधिनियम',
-    defaultTheme: 'technical_slate',
-    defaultSymbol: 'community_housing',
-    badgeTiers: [
-      { value: 'Elected Managing Committee Officer', labelEn: 'Elected Managing Committee Officer', labelHi: 'निर्वाचित प्रबंधन समिति अधिकारी' },
-      { value: 'Block / Floor Action Representative', labelEn: 'Block / Floor Action Representative', labelHi: 'ब्लॉक व फ्लोर एक्शन प्रतिनिधि' },
-      { value: 'Estate Maintenance & Asset Warden', labelEn: 'Estate Maintenance & Asset Warden', labelHi: 'सोसाइटी रखरखाव व संपत्ति वार्डन' },
-      { value: 'Green, Solar & Sanitation Steward', labelEn: 'Green & Sanitation Steward', labelHi: 'हरित व स्वच्छता प्रभारी' },
-      { value: 'Security & Gate Protocol Convener', labelEn: 'Security & Gate Protocol Convener', labelHi: 'सुरक्षा व गेट प्रोटोकॉल संयोजक' },
-      { value: 'Senior Citizen & Community Care Rep', labelEn: 'Community Care Representative', labelHi: 'वरिष्ठ नागरिक व समुदाय सेवा साथी' },
-    ],
-    defaultRoles: ['President', 'General Secretary', 'Treasurer', 'Block Representative', 'Managing Committee Member', 'Resident Owner'],
   },
 }
 

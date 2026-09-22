@@ -12,26 +12,26 @@ interface LetterheadClientProps {
 }
 
 export default function LetterheadClient({ defaultOrgName }: LetterheadClientProps) {
-  const [unionName, setUnionName] = useState(defaultOrgName || 'STUDENT UNION EXECUTIVE COUNCIL')
-  const [tagline, setTagline] = useState('Recognized Apex Student Body • Central Campus Representation')
+  const [unionName, setUnionName] = useState(defaultOrgName || 'CIVIC COLLECTIVE EXECUTIVE COUNCIL')
+  const [tagline, setTagline] = useState('Recognized Grassroots Collective • Community Representation')
   const id = useId()
-  const [refNumber, setRefNumber] = useState(`SU/REG/${new Date().getFullYear()}/${Math.floor(1000 + parseInt(id.replace(/[^0-9]/g, '').slice(0, 4) || '0042', 10))}`)
+  const [refNumber, setRefNumber] = useState(`CIVIC/REG/${new Date().getFullYear()}/${Math.floor(1000 + parseInt(id.replace(/[^0-9]/g, '').slice(0, 4) || '0042', 10))}`)
   const [letterDate, setLetterDate] = useState(new Date().toISOString().split('T')[0])
-  const [recipient, setRecipient] = useState('To,\nThe Vice-Chancellor / Dean of Student Welfare,\nCentral Administration Building, Campus')
-  const [subject, setSubject] = useState('MEMORANDUM REGARDING IMMEDIATE RESOLUTION OF HOSTEL MESS & SANITATION ISSUES')
+  const [recipient, setRecipient] = useState('To,\nThe Concerned Authority,\nOffice of Public Grievance')
+  const [subject, setSubject] = useState('MEMORANDUM REGARDING COMMUNITY ISSUE & PUBLIC GRIEVANCE')
   const [body, setBody] = useState(
 `Respected Sir/Madam,
 
-We, the elected representatives of the Student Union, wish to bring your urgent attention to the pressing student grievances regarding hostel mess quality, sanitation infrastructure, and library reading room hours.
+We, the elected representatives of the Collective, wish to bring your urgent attention to pressing community grievances regarding public services and civic infrastructure.
 
-Despite multiple oral representations, concrete action remains pending. We request an official delegation meeting within 48 hours to discuss the Action Taken Report (ATR).
+Despite multiple oral representations, concrete action remains pending. We request an official meeting within 48 hours to discuss the Action Taken Report (ATR).
 
 Thanking you,
 
 Yours sincerely,`
   )
-  const [signatory1, setSignatory1] = useState('President, Student Union')
-  const [signatory2, setSignatory2] = useState('General Secretary, Student Union')
+  const [signatory1, setSignatory1] = useState('President, Collective')
+  const [signatory2, setSignatory2] = useState('General Secretary, Collective')
 
   const handlePrint = () => {
     window.print()
@@ -52,9 +52,9 @@ Yours sincerely,`
             <Printer className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Official Union Letterhead &amp; Printable PDF Exporter</h2>
+            <h2 className="text-lg font-bold text-slate-900">Official Collective Letterhead &amp; Printable PDF Exporter</h2>
             <p className="text-slate-500 text-xs mt-0.5">
-              Format formal Gyapans, Press Releases, and RTI Applications into official print-ready letterheads.
+              Format formal representations, press releases, and RTI applications into official print-ready letterheads.
             </p>
           </div>
         </div>
@@ -88,7 +88,7 @@ Yours sincerely,`
         <CardContent className="space-y-4 pt-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Union Heading Title</label>
+              <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Collective Heading Title</label>
               <input
                 type="text"
                 value={unionName}
@@ -176,7 +176,7 @@ Yours sincerely,`
         <div className="border-b-4 border-double border-slate-900 pb-4 mb-6 text-center">
           <div className="flex justify-center items-center gap-3 mb-2">
             <div className="w-12 h-12 rounded-full border-2 border-slate-900 flex items-center justify-center font-bold text-lg font-sans bg-slate-100">
-              SU
+              CC
             </div>
             <div className="text-center">
               <h1 className="text-xl sm:text-2xl font-black tracking-wider uppercase font-sans text-slate-900">

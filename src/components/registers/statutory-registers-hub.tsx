@@ -2,9 +2,7 @@
 
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Printer, FileSpreadsheet, ShieldCheck, Landmark, HardHat, Home, BookOpen, ExternalLink } from 'lucide-react'
-import { getOrgLabel } from '@/lib/org-types'
+import { Printer, Landmark, Home } from 'lucide-react'
 
 interface StatutoryRegistersHubProps {
   org: {
@@ -34,27 +32,14 @@ export function StatutoryRegistersHub({
       id: 'form-i',
       titleEn: 'Form I: Statutory Member Roll Register',
       titleHi: 'फॉर्म I: वैधानिक सदस्य रजिस्टर',
-      actEn: 'Societies Registration Act 1860 / State Apartment Ownership Acts',
-      actHi: 'सोसाइटी पंजीकरण अधिनियम 1860 / राज्य अपार्टमेंट स्वामित्व अधिनियम',
-      descEn: 'Official serialized roll of members with admission dates, unit/flat designations, and voting status for Registrar inspection.',
-      descHi: 'पंजीयक निरीक्षण के लिए प्रवेश तिथियों, इकाई/फ्लैट पदों और मतदान स्थिति के साथ सदस्यों का आधिकारिक क्रमबद्ध रजिस्टर।',
+      actEn: 'Societies Registration Act 1860',
+      actHi: 'सोसाइटी पंजीकरण अधिनियम 1860',
+      descEn: 'Official serialized roll of members with admission dates and voting status for Registrar inspection.',
+      descHi: 'पंजीयक निरीक्षण के लिए प्रवेश तिथियों और मतदान स्थिति के साथ सदस्यों का आधिकारिक क्रमबद्ध रजिस्टर।',
       icon: Home,
       color: 'sky',
       printHref: `/${lang}/dashboard/registers/form-i/print`,
-      applicableOrgs: ['ngo', 'rwa', 'student_union'],
-    },
-    {
-      id: 'form-h',
-      titleEn: 'Form H: Annual General Return & Subscription Ledger',
-      titleHi: 'फॉर्म H: वार्षिक सामान्य रिटर्न व सदस्यता बहीखाता',
-      actEn: 'Trade Unions Act 1926 (Section 28 / Regulation 18)',
-      actHi: 'ट्रेड यूनियन अधिनियम 1926 (धारा 28 / विनियम 18)',
-      descEn: 'Mandatory audited register of worker subscriptions, general fund balances, and executive office-bearer rolls for Labour Commissioner.',
-      descHi: 'श्रम आयुक्त के लिए श्रमिक अंशदान, सामान्य निधि शेष और पदाधिकारियों की सूची का अनिवार्य ऑडिटेड रजिस्टर।',
-      icon: HardHat,
-      color: 'amber',
-      printHref: `/${lang}/dashboard/registers/form-h/print`,
-      applicableOrgs: ['workers_union'],
+      applicableOrgs: ['ngo', 'civic_collective'],
     },
     {
       id: 'cash-book',
@@ -67,7 +52,7 @@ export function StatutoryRegistersHub({
       icon: Landmark,
       color: 'emerald',
       printHref: `/${lang}/dashboard/registers/cash-book/print`,
-      applicableOrgs: ['ngo'],
+      applicableOrgs: ['ngo', 'civic_collective'],
     },
   ]
 

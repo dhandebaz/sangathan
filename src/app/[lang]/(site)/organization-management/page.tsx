@@ -20,8 +20,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ? 'संगठन प्रबंधन सॉफ्टवेयर | संस्थागत संचालन व प्रशासन | संगठन'
     : 'Organization Management Software | Unified Movement OS | Sangathan'
   const description = isHindi
-    ? 'नागरिक संस्थाओं, यूनियनों और गैर-लाभकारी संगठनों के लिए एकीकृत प्रबंधन प्लेटफॉर्म। सदस्य, निर्णय, कोष और फील्ड अभियानों का केंद्रीकृत नियंत्रण।'
-    : 'Unified organization management platform for civic institutions, trade unions, non-profits, and associations in India. Centralize cadres, assemblies, audits, and treasury.'
+    ? 'नागरिक संस्थाओं और गैर-लाभकारी संगठनों के लिए एकीकृत प्रबंधन प्लेटफॉर्म। सदस्य, निर्णय, कोष और फील्ड अभियानों का केंद्रीकृत नियंत्रण।'
+    : 'Unified organization management platform for civic institutions, non-profits, and associations in India. Centralize cadres, assemblies, audits, and treasury.'
 
   return {
     title,
@@ -61,8 +61,8 @@ export default async function OrganizationManagementPage({ params }: PageProps) 
         ? 'संगठन किस प्रकार के संगठनों के लिए उपयुक्त है?'
         : 'Which types of organizations can use Sangathan?',
       answer: isHindi
-        ? 'संगठन अनौपचारिक नागरिक समूहों, पंजीकृत एनजीओ, छात्र परिषदों, ट्रेड यूनियनों और आवासीय सोसायटियों (RWAs) के लिए विशेष रूप से डिज़ाइन किया गया है।'
-        : 'Sangathan is designed for 5 movement archetypes: Grassroots Civic Collectives, Registered NGOs & Trusts, University Student Unions, Labor & Gig Worker Unions, and Resident Welfare Associations (RWAs).',
+        ? 'संगठन अनौपचारिक नागरिक समूहों और पंजीकृत एनजीओ के लिए विशेष रूप से डिज़ाइन किया गया है।'
+        : 'Sangathan is designed for 2 movement archetypes: Grassroots Civic Collectives and Registered NGOs & Trusts.',
     },
     {
       question: isHindi

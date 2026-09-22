@@ -55,7 +55,7 @@ export function ReceivingTrackerClient({ orgId, orgName, initialTrackers }: Rece
   const [recipientOfficial, setRecipientOfficial] = useState('')
   const [submissionDate, setSubmissionDate] = useState(() => new Date().toISOString().split('T')[0])
   const [receivingNumber, setReceivingNumber] = useState('')
-  const [statutoryDeadlineDays, setStatutoryDeadlineDays] = useState('15')
+  const [statutoryDeadlineDays, setStatutoryDeadlineDays] = useState('30')
   const [notes, setNotes] = useState('')
 
   // RTI Generator State
@@ -82,13 +82,13 @@ export function ReceivingTrackerClient({ orgId, orgName, initialTrackers }: Rece
         recipientOfficial: recipientOfficial || undefined,
         submissionDate,
         receivingNumber: receivingNumber || undefined,
-        statutoryDeadlineDays: parseInt(statutoryDeadlineDays) || 15,
+        statutoryDeadlineDays: parseInt(statutoryDeadlineDays) || 30,
         notes: notes || undefined,
       })
 
       if (res.success && res.data) {
         toast.success('Physical receiving stamped letter logged!')
-        setTrackers([{ ...(res.data as any), elapsedDays: 0, remainingDays: 15, isOverdue: false }, ...trackers])
+        setTrackers([{ ...(res.data as any), elapsedDays: 0, remainingDays: 30, isOverdue: false }, ...trackers])
         setIsLogModalOpen(false)
         resetForm()
       } else {
@@ -151,11 +151,11 @@ export function ReceivingTrackerClient({ orgId, orgName, initialTrackers }: Rece
               <Clock className="w-5 h-5" />
             </span>
             <h1 className="text-2xl font-black tracking-tight text-slate-900">
-              Stamped Receiving & 15-Day RTI Escalation Tracker
+              Complaint Diary & RTI Helper
             </h1>
           </div>
           <p className="text-sm text-slate-500 mt-1">
-            Track physical stamped receiving copies from MCD, PWD, DJB and auto-trigger Section 6(1) RTI applications when authorities delay.
+            Save stamped receiving photos from MCD, PWD, DJB with dates. Get a 30-day reminder and a ready Section 6(1) RTI draft that you print, sign and submit yourself.
           </p>
         </div>
 
@@ -174,9 +174,9 @@ export function ReceivingTrackerClient({ orgId, orgName, initialTrackers }: Rece
           <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-800 mx-auto flex items-center justify-center">
             <Clock className="w-6 h-6" />
           </div>
-          <h3 className="font-bold text-slate-800 text-base">No stamped letters tracked yet</h3>
+          <h3 className="font-bold text-slate-800 text-base">No letters saved yet</h3>
           <p className="text-xs text-slate-500 max-w-md mx-auto">
-            Whenever you submit a representation or complaint to a ward or municipal office, log the stamped receiving number and start the 15-day statutory accountability countdown.
+            When you submit a complaint to a ward or municipal office, save the stamped diary number and photo here so the date is never lost.
           </p>
           <Button
             onClick={() => setIsLogModalOpen(true)}
@@ -190,7 +190,7 @@ export function ReceivingTrackerClient({ orgId, orgName, initialTrackers }: Rece
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {trackers.map((rec) => {
-            const remaining = rec.remainingDays !== undefined ? rec.remainingDays : 15
+            const remaining = rec.remainingDays !== undefined ? rec.remainingDays : 30
             const isOverdue = rec.isOverdue || (remaining <= 0 && rec.escalation_status === 'pending_response')
 
             return (
@@ -237,12 +237,12 @@ export function ReceivingTrackerClient({ orgId, orgName, initialTrackers }: Rece
                     ) : isOverdue ? (
                       <span className="inline-flex items-center gap-1 text-red-800 bg-red-100 px-2 py-0.5 rounded font-bold text-[11px]">
                         <AlertTriangle className="w-3 h-3 text-red-600" />
-                        <span>{Math.abs(remaining)} Days Overdue (Statutory Breach)</span>
+                        <span>{Math.abs(remaining)} days waiting</span>
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded font-bold text-[11px]">
                         <Clock className="w-3 h-3 text-emerald-700" />
-                        <span>{remaining} Days Remaining for Authority Response</span>
+                        <span>{remaining} days left on reminder</span>
                       </span>
                     )}
                   </div>
@@ -260,7 +260,7 @@ export function ReceivingTrackerClient({ orgId, orgName, initialTrackers }: Rece
 
                 <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
                   <span className="text-[11px] text-slate-400">
-                    Citizens&apos; Charter Guard
+                    Complaint diary
                   </span>
 
                   <Button
@@ -276,7 +276,7 @@ export function ReceivingTrackerClient({ orgId, orgName, initialTrackers }: Rece
                     }`}
                   >
                     <Sparkles className="w-3 h-3" />
-                    <span>{rec.escalation_status === 'rti_filed' ? 'View RTI Draft' : 'Escalate to RTI (आरटीआई)'}</span>
+                    <span>{rec.escalation_status === 'rti_filed' ? 'View RTI draft' : 'Make RTI draft'}</span>
                   </Button>
                 </div>
               </div>
@@ -397,7 +397,7 @@ export function ReceivingTrackerClient({ orgId, orgName, initialTrackers }: Rece
                   disabled={isSubmitting}
                   className="bg-amber-800 hover:bg-amber-900 text-white font-bold text-xs"
                 >
-                  {isSubmitting ? 'Saving...' : 'Start 15-Day Tracker'}
+                  {isSubmitting ? 'Saving...' : 'Save to diary'}
                 </Button>
               </div>
             </form>
@@ -415,7 +415,7 @@ export function ReceivingTrackerClient({ orgId, orgName, initialTrackers }: Rece
                   RTI Application Generator (Right to Information Act, 2005)
                 </h2>
                 <p className="text-xs text-slate-500">
-                  Statutory escalation for unaddressed representation Ref: {selectedForRti.letter_ref_number}
+                  Draft for pending letter Ref: {selectedForRti.letter_ref_number} — you file it yourself
                 </p>
               </div>
               <button onClick={() => setSelectedForRti(null)} className="text-slate-400 hover:text-slate-700">
@@ -426,7 +426,7 @@ export function ReceivingTrackerClient({ orgId, orgName, initialTrackers }: Rece
             {!generatedRti ? (
               <form onSubmit={handleGenerateRti} className="space-y-3 text-xs">
                 <div className="p-3 bg-amber-50 border border-amber-200 rounded text-amber-900 leading-relaxed">
-                  <strong>Why file an RTI?</strong> If an authority ignores your letter, filing an RTI forces them under penalty (₹250/day up to ₹25,000 on the PIO) to disclose file notings, inspection dates, and reasons for inaction within 30 days.
+                  <strong>How this works.</strong> The app only prepares a draft. You print it, sign it, attach the ₹10 fee and submit it to the PIO yourself. The PIO must reply within 30 days (Section 7(1)). Fine on officers happens only if the Information Commission orders it after an appeal — nothing is automatic.
                 </div>
 
                 <div>

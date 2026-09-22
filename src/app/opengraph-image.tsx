@@ -133,7 +133,7 @@ export default async function Image() {
               maxWidth: '960px',
             }}
           >
-            1-tap spot sensor audits, ₹1 printable Parchas, 15-day RTI countdowns, secret cryptographic ballots, and BQF Section 8 legal protection.
+            1-tap field checks, ₹1 printable Parchas, 30-day RTI reminders, secret ballots, and BQF community recognition.
           </div>
         </div>
 
@@ -153,10 +153,10 @@ export default async function Image() {
               <span style={{ color: '#e11d48' }}>●</span> ₹1 Photostat Parchas
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 700, color: '#334155' }}>
-              <span style={{ color: '#d97706' }}>●</span> 15-Day RTI Guard
+              <span style={{ color: '#d97706' }}>●</span> 30-Day RTI Reminder
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 700, color: '#4f46e5' }}>
-              <span style={{ color: '#4f46e5' }}>●</span> BQF Sec 8 Protection
+              <span style={{ color: '#4f46e5' }}>●</span> BQF Recognition
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 700, color: '#059669' }}>
               <span style={{ color: '#059669' }}>●</span> 100% Sovereign &amp; PWA

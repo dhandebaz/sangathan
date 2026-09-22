@@ -15,9 +15,7 @@ async function getOrgType(supabase: Awaited<ReturnType<typeof createClient>>, or
 function getOrgLabels(orgType: string) {
   const labels: Record<string, { title: string; description: string }> = {
     ngo: { title: 'Meetings & Syncs', description: 'Track board meetings, team syncs, and stakeholder gatherings.' },
-    student_union: { title: 'Union Assemblies', description: 'Schedule council meetings, club assemblies, and student forums.' },
-    workers_union: { title: 'Union Meetings', description: 'Organize collective bargaining sessions, shop floor meetings, and member assemblies.' },
-    rwa: { title: 'Society Meetings', description: 'Manage AGMs, committee meetings, and resident gatherings.' },
+    civic_collective: { title: 'Assemblies & Meetings', description: 'Schedule community assemblies, committee meetings, and member forums.' },
   }
   return labels[orgType] || { title: 'Meetings', description: 'Schedule and track organisational gatherings.' }
 }

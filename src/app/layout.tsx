@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: "%s | Sangathan",
     default: "Sangathan — Civic Digital Infrastructure for Collectives & NGOs",
   },
-  description: "Civic digital infrastructure built by Bahujan Queer Foundation (Section 8 Non-Profit) to help NGOs, student unions, workers unions, and civic collectives govern, communicate, and operate with transparency, privacy, and accountability.",
+  description: "Civic digital infrastructure built by Bahujan Queer Foundation (Section 8 Non-Profit) to help NGOs and civic collectives govern, communicate, and operate with transparency, privacy, and accountability.",
   applicationName: "Sangathan",
   appleWebApp: {
     capable: true,
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     url: 'https://sangathan.space',
     siteName: 'Sangathan',
     title: 'Sangathan — Civic Digital Infrastructure for Collectives & NGOs',
-    description: 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
+    description: 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, and NGOs.',
     images: [
       {
         url: 'https://sangathan.space/api/og',
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     site: '@areynetaji',
     creator: '@areynetaji',
     title: 'Sangathan — Civic Digital Infrastructure for Collectives & NGOs',
-    description: 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
+    description: 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, and NGOs.',
     images: ['https://sangathan.space/api/og'],
   },
   icons: {

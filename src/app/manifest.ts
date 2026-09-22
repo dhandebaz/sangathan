@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Sangathan — Civic Infrastructure Platform',
     short_name: 'Sangathan',
-    description: 'Civic digital infrastructure built by Bahujan Queer Foundation (Section 8 Non-Profit) to help NGOs, student unions, workers unions, and civic collectives govern and organize with transparency, privacy, and accountability.',
+    description: 'Civic digital infrastructure built by Bahujan Queer Foundation (Section 8 Non-Profit) to help NGOs and civic collectives govern and organize with transparency, privacy, and accountability.',
     start_url: '/',
     display: 'standalone',
     display_override: ['standalone', 'fullscreen', 'minimal-ui'],

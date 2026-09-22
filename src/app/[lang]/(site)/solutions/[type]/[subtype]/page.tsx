@@ -280,7 +280,7 @@ export default async function SolutionSubtypePage({ params }: SubtypePageProps) 
 
             <div className="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-8">
               <h3 className="text-2xl font-black text-slate-900 mb-4">
-                {isHindi ? 'संगठन प्रशासनिक बदलाव कैसे लाता है?' : 'How Sangathan Forces Action'}
+                {isHindi ? 'संगठन लिखित रिकॉर्ड कैसे बनाता है?' : 'How Sangathan Keeps Written Records'}
               </h3>
               <p className="text-slate-700 text-sm sm:text-base leading-relaxed">
                 {isHindi ? st.solutionOverviewHi : st.solutionOverviewEn}

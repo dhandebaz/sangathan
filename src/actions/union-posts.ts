@@ -37,7 +37,7 @@ export async function createUnionPostAction(input: z.infer<typeof CreateUnionPos
       .insert({
         organisation_id: orgId,
         name: `${result.data.title_en} (${result.data.title_hi || result.data.title_en})`,
-        description: result.data.description || 'Custom Student Union Post',
+        description: result.data.description || 'Custom Collective Post',
         permissions: { is_custom_union_post: true },
         is_system: false
       })
@@ -51,7 +51,7 @@ export async function createUnionPostAction(input: z.infer<typeof CreateUnionPos
         .insert({
           organisation_id: orgId,
           name: `${result.data.title_en} (${result.data.title_hi || result.data.title_en})`,
-          description: result.data.description || 'Custom Student Union Post',
+          description: result.data.description || 'Custom Collective Post',
           permissions: { is_custom_union_post: true },
           is_system: false
         })

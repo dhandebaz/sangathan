@@ -248,8 +248,8 @@ export function UnifiedAdministrationHub({
               </h4>
               <p className="text-xs text-slate-600 leading-relaxed font-medium">
                 {isHindi
-                  ? 'सरकारी जांच व श्रम निरीक्षकों के समक्ष प्रस्तुत किए जाने वाले वैधानिक फॉर्म व दैनिक उपस्थिति रजिस्टर।'
-                  : 'Statutory registers compliant with Trade Unions Act, Societies Act, and State Cooperative Acts.'}
+                  ? 'सरकारी जांच व निरीक्षकों के समक्ष प्रस्तुत किए जाने वाले वैधानिक फॉर्म व दैनिक उपस्थिति रजिस्टर।'
+                  : 'Statutory registers compliant with Societies, Trust, and Section 8 Acts.'}
               </p>
               <div className="pt-2">
                 <Button asChild size="sm" className="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs w-full">
@@ -271,12 +271,12 @@ export function UnifiedAdministrationHub({
                 <Badge variant="outline" className="text-[10px] border-slate-200">Annual Audit</Badge>
               </div>
               <h4 className="text-sm font-bold text-slate-900">
-                {isHindi ? 'वार्षिक अनुपालन, 80G/12A व BQF प्रमाणन' : 'Annual Compliance, 80G/12A & BQF Certification'}
+                {isHindi ? 'वार्षिक अनुपालन व प्रमाणन' : 'Annual Compliance & Records'}
               </h4>
               <p className="text-xs text-slate-600 leading-relaxed font-medium">
                 {isHindi
-                  ? 'आईटी रिटर्न, लिंगदोह समिति सीमाएं, 15-दिवसीय RTI टाइमर्स और वैधानिक समय-सीमा ट्रैकिंग।'
-                  : 'Track filing deadlines, regulatory returns, Citizens Charter countdowns, and audit reports.'}
+                  ? 'आईटी रिटर्न, फाइलिंग समय-सीमा और ऑडिट ट्रैकिंग।'
+                  : 'Track filing deadlines, returns, and audit reports.'}
               </p>
               <div className="pt-2">
                 <Button asChild size="sm" variant="outline" className="text-xs font-bold border-slate-200 w-full">
@@ -305,18 +305,18 @@ export function UnifiedAdministrationHub({
                 <Badge variant="outline" className="text-[10px] border-slate-200">Conciliation</Badge>
               </div>
               <h4 className="text-sm font-bold text-slate-900">
-                {isHindi ? 'विवाद निवारण, ALC व विधिक सहायता' : 'Dispute Redressal & Labor Conciliation'}
+                {isHindi ? 'शिकायत निवारण व सहायता' : 'Complaint Redressal & Helpdesk'}
               </h4>
               <p className="text-xs text-slate-600 leading-relaxed font-medium">
                 {isHindi
-                  ? 'सहायक श्रम आयुक्त (ALC) विवाद, एंटी-रैगिंग सेल, और सदस्य शिकायतों का समाधान।'
-                  : 'Track ALC conciliation notices, workplace grievances, anti-ragging complaints, and tenant verifications.'}
+                  ? 'सदस्य शिकायतों और जन समस्याओं का समाधान।'
+                  : 'Track member complaints, civic grievances, and support requests.'}
               </p>
               <div className="pt-2">
                 <Button asChild size="sm" className="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs w-full">
-                  <Link href={orgType === 'workers_union' ? `/${lang}/dashboard/disputes` : `/${lang}/dashboard/grievances`}>
+                  <Link href={`/${lang}/dashboard/complaints`}>
                     <Scale className="w-3.5 h-3.5 mr-1" />
-                    {isHindi ? 'विवाद व शिकायतें देखें' : 'View Grievance Desk'}
+                    {isHindi ? 'शिकायतें देखें' : 'View Complaints Desk'}
                   </Link>
                 </Button>
               </div>

@@ -21,8 +21,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ? 'जमीनी आंदोलन व जन अधिकार सॉफ्टवेयर | ग्रासरूट्स ऑर्गेनाइजिंग | संगठन'
     : 'Grassroots Organizing Software India | Movement Field OS | Sangathan'
   const description = isHindi
-    ? 'जमीनी कार्यकर्ताओं और जन आंदोलनों के लिए ऑफलाइन PWA। ₹1 प्रिंटेबल पर्चे, 15-दिवसीय आरटीआई टाइमर, फील्ड स्पॉट ऑडिट और आपातकालीन विधिक SOS।'
-    : 'Ground operating system for Indian grassroots movements, worker fronts, and colony activists. ₹1 A4 printable flyers, offline spot sensor audits, 15-day RTI countdowns, and legal SOS.'
+    ? 'जमीनी कार्यकर्ताओं और जन आंदोलनों के लिए ऑफलाइन PWA। ₹1 प्रिंटेबल पर्चे, 30-दिवसीय आरटीआई याद, फील्ड जांच और टीम SOS अलर्ट।'
+    : 'Ground operating system for Indian grassroots movements and colony activists. ₹1 A4 printable flyers, offline spot audits, 30-day RTI reminders, and team SOS alerts.'
 
   return {
     title,
@@ -31,9 +31,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       'grassroots organizing software India',
       'movement organizing tool',
       'activist field app offline',
-      'RTI 15-day escalation tracker',
+      'RTI reminder diary',
       'printable A4 parcha generator',
-      'legal SOS rapid response tool',
+      'team SOS alert tool',
       'citizen science ground audit'
     ],
     alternates: {
@@ -68,11 +68,11 @@ export default async function GrassrootsOrganizingPage({ params }: PageProps) {
     },
     {
       question: isHindi
-        ? '15-दिवसीय स्टैम्प्ड रिसीविंग टाइमर कैसे काम करता है?'
-        : 'How does the 15-day stamped municipal receiving tracker work?',
+        ? 'शिकायत डायरी और आरटीआई याद कैसे काम करता है?'
+        : 'How do the complaint diary and RTI reminder work?',
       answer: isHindi
-        ? 'सरकारी कार्यालय से मुहर लगी रिसीविंग कॉपी अपलोड करते ही 15 दिन का उल्टी गिनती टाइमर शुरू होता है। समय सीमा बीतने पर स्वतः धारा 6(1) आरटीआई आवेदन तैयार होता है।'
-        : 'Upload a photo of the stamped diary receipt from the ward office to activate a 15-day statutory countdown. If unresponsive, an automated Section 6(1) RTI application is generated.',
+        ? 'मुहर लगी रिसीविंग तारीख सहित सहेजें। 30 दिन पर — PIO की कानूनी जवाब अवधि — ऐप याद दिलाता है और फाइल की स्थिति मांगने वाला धारा 6(1) मसौदा बनाता है। प्रिंट, हस्ताक्षर, ₹10 और जमा आप करते हैं।'
+        : 'Save the stamped receiving with its date. At 30 days — the legal PIO reply period — the app reminds you and prepares a Section 6(1) draft asking for file status. You print, sign, pay ₹10 and submit it yourself.',
     },
   ]
 
@@ -108,8 +108,8 @@ export default async function GrassrootsOrganizingPage({ params }: PageProps) {
             </h1>
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed mb-8">
               {isHindi
-                ? 'जमीनी कार्यकर्ताओं के लिए ₹1 प्रिंटेबल पर्चे, नगर निगम की स्टैम्प्ड रिसीविंग डायरी, 15-दिवसीय आरटीआई काउंटडाउन और आपातकालीन विधिक सुरक्षा।'
-                : 'Empower ground activists with ₹1 high-contrast photostat flyers, municipal receiving logs, automatic 15-day RTI countdowns, and instant legal defense SOS.'}
+                ? 'जमीनी कार्यकर्ताओं के लिए ₹1 प्रिंटेबल पर्चे, नगर निगम की स्टैम्प्ड रिसीविंग डायरी, 30-दिवसीय आरटीआई याद और टीम SOS अलर्ट।'
+                : 'Empower ground activists with ₹1 high-contrast photostat flyers, municipal receiving logs, 30-day RTI reminders, and team SOS alerts.'}
             </p>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
@@ -151,12 +151,12 @@ export default async function GrassrootsOrganizingPage({ params }: PageProps) {
                 <Clock size={20} />
               </div>
               <h3 className="text-lg font-bold text-slate-900 mb-2">
-                {isHindi ? '15-दिवसीय आरटीआई एस्केलेशन' : '15-Day Stamped RTI Clock'}
+                {isHindi ? '30-दिवसीय आरटीआई याद' : '30-Day RTI Reminder'}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600">
                 {isHindi
-                  ? 'वार्ड कार्यालय से प्राप्त डायरी संख्या दर्ज करें और अधिकारियों की जवाबदेही तय करने के लिए स्वचालित आरटीआई निकालें।'
-                  : 'Log ward diary stamps and auto-trigger statutory Section 6(1) RTI applications when public officials fail to act.'}
+                  ? 'वार्ड कार्यालय से प्राप्त डायरी संख्या तारीख सहित सहेजें और खुद दाखिल करने वाला आरटीआई मसौदा बनाएं।'
+                  : 'Save ward diary numbers with dates and prepare an RTI draft that you file yourself.'}
               </p>
             </div>
 
@@ -165,12 +165,12 @@ export default async function GrassrootsOrganizingPage({ params }: PageProps) {
                 <ShieldAlert size={20} />
               </div>
               <h3 className="text-lg font-bold text-slate-900 mb-2">
-                {isHindi ? 'आपातकालीन लीगल SOS' : 'Emergency Legal SOS'}
+                {isHindi ? 'टीम SOS अलर्ट' : 'Team SOS Alert'}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600">
                 {isHindi
-                  ? 'हिरासत या पुलिस दबाव की स्थिति में 1-टैप आपातकालीन अलर्ट जो जीपीएस लोकेशन और थाना विवरण वकीलों के पैनल को भेजता है।'
-                  : 'Instant 1-tap crisis alert broadcasting GPS coordinates and police station details to designated panel advocates.'}
+                  ? 'मुश्किल स्थिति में 1-टैप अलर्ट जो लोकेशन सहित संदेश आपकी अपनी टीम को भेजता है।'
+                  : '1-tap alert in trouble that messages your own team with location. Not a legal rescue service.'}
               </p>
             </div>
 
@@ -179,12 +179,12 @@ export default async function GrassrootsOrganizingPage({ params }: PageProps) {
                 <Activity size={20} />
               </div>
               <h3 className="text-lg font-bold text-slate-900 mb-2">
-                {isHindi ? 'फील्ड स्पॉट सेंसर ऑडिट' : 'Spot Sensor Audits & Notices'}
+                {isHindi ? 'फील्ड जांच व पत्र मसौदे' : 'Field Checks & Letter Drafts'}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600">
                 {isHindi
-                  ? 'PM2.5, पानी टीडीएस और कचरा दहन के आंकड़े दर्ज करें और DPCC/CPCB को विधिक नोटिस भेजें।'
-                  : 'Log geotagged air and water sensor readings and draft formal statutory environmental violation notices.'}
+                  ? 'PM2.5, पानी TDS आंकड़े दर्ज करें और अधिकारियों के लिए पत्रों के मसौदे बनाएं।'
+                  : 'Log geotagged air and water readings and draft letters to authorities for filing yourself.'}
               </p>
             </div>
 

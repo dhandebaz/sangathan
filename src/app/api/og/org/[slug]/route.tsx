@@ -20,11 +20,7 @@ export async function GET(
     const orgType = org?.org_type
       ? org.org_type === 'ngo'
         ? 'Non-Governmental Organisation'
-        : org.org_type === 'student_union'
-          ? 'Student Union & Council'
-          : org.org_type === 'workers_union'
-            ? 'Workers & Labor Union'
-            : 'Resident Welfare Association'
+        : 'Civic Collective'
       : 'Civic Collective'
 
     const isRegistered = org?.registration_status === 'registered'

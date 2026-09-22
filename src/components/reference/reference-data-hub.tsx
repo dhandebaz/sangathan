@@ -7,32 +7,14 @@ import { Button } from '@/components/ui/button'
 import { getAllStates, searchDistricts } from '@/lib/geo/india'
 import {
   NGO_SDG_SECTORS,
-  NGO_LEGAL_STRUCTURES,
   NGO_TAX_EXEMPTIONS,
-  STUDENT_CENTRAL_PANEL,
-  ACADEMIC_FACULTIES,
-  CAMPUS_GRIEVANCE_CHANNELS,
-  INDUSTRIAL_SECTORS,
-  LABOUR_DISPUTE_CATEGORIES,
-  STATUTORY_LABOUR_AUTHORITIES,
-  RWA_UNIT_TYPES,
-  RWA_AMENITIES,
-  RWA_MAINTENANCE_HEADS,
-  MasterItem,
 } from '@/lib/data/org-master-data'
 import {
   MapPin,
   Building2,
-  GraduationCap,
-  HardHat,
-  Home,
   Search,
-  BookOpen,
-  CheckCircle2,
   Copy,
   Layers,
-  Shield,
-  Sparkles
 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -43,7 +25,7 @@ interface ReferenceDataHubProps {
 
 export function ReferenceDataHub({ lang, orgType }: ReferenceDataHubProps) {
   const isHindi = lang === 'hi'
-  const [activeTab, setActiveTab] = useState<'geo' | 'ngo' | 'student' | 'workers' | 'rwa'>('geo')
+  const [activeTab, setActiveTab] = useState<'geo' | 'ngo'>('geo')
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedStateCode, setSelectedStateCode] = useState<string>('IN-DL')
 
@@ -72,7 +54,7 @@ export function ReferenceDataHub({ lang, orgType }: ReferenceDataHubProps) {
         </h1>
         <p className="text-sm text-slate-500 mt-1">
           {isHindi
-            ? 'भारत के सभी 28 राज्यों, 8 केंद्र शासित प्रदेशों और 780+ जिलों के साथ-साथ एनजीओ, छात्र संघों, श्रमिक संघों और आरडब्ल्यूए के लिए आधिकारिक मास्टर डेटा।'
+            ? 'भारत के सभी 28 राज्यों, 8 केंद्र शासित प्रदेशों और 780+ जिलों के साथ-साथ एनजीओ के लिए आधिकारिक मास्टर डेटा।'
             : 'Pre-populated national geographic registry (28 States, 8 UTs, 780+ Districts) and standardized statutory taxonomies tailored for civic organizing.'}
         </p>
       </div>
@@ -82,9 +64,6 @@ export function ReferenceDataHub({ lang, orgType }: ReferenceDataHubProps) {
         {[
           { id: 'geo', labelEn: 'States & Districts (780+)', labelHi: 'राज्य व जिले (780+)', icon: MapPin },
           { id: 'ngo', labelEn: 'NGO & SDG Taxonomies', labelHi: 'एनजीओ व SDG वर्गीकरण', icon: Building2 },
-          { id: 'student', labelEn: 'Student Union & Faculties', labelHi: 'छात्र संघ व संकाय', icon: GraduationCap },
-          { id: 'workers', labelEn: 'Workers Union & Dispute Bodies', labelHi: 'श्रमिक संघ व न्यायाधिकरण', icon: HardHat },
-          { id: 'rwa', labelEn: 'RWA Units & Amenities', labelHi: 'RWA फ्लैट व रखरखाव मद', icon: Home },
         ].map((tab) => {
           const Icon = tab.icon
           const isActive = activeTab === tab.id
@@ -265,121 +244,6 @@ export function ReferenceDataHub({ lang, orgType }: ReferenceDataHubProps) {
         </div>
       )}
 
-      {/* TAB 3: Student Union Master Data */}
-      {activeTab === 'student' && (
-        <div className="space-y-6">
-          <div>
-            <h3 className="text-base font-bold text-slate-900 mb-3">
-              {isHindi ? 'छात्र संघ केंद्रीय पैनल (Central Panel Designations)' : 'Student Union Central Panel Designations'}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {STUDENT_CENTRAL_PANEL.map((item) => (
-                <div key={item.id} className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-900">{isHindi ? item.nameHi : item.nameEn}</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-bold">{item.code}</span>
-                  </div>
-                  <p className="text-[11px] text-slate-500">{isHindi ? item.descriptionHi : item.descriptionEn}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-base font-bold text-slate-900 mb-3">
-              {isHindi ? 'कैंपस शिकायत व विनियामक सेल' : 'Campus Redressal Authorities & Welfare Cells'}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {CAMPUS_GRIEVANCE_CHANNELS.map((item) => (
-                <div key={item.id} className="p-3.5 rounded-xl border border-slate-200 bg-white flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <span className="text-xs font-bold text-slate-900">{isHindi ? item.nameHi : item.nameEn}</span>
-                    <p className="text-[10px] font-mono text-indigo-700">{item.code}</p>
-                  </div>
-                  <button onClick={() => copyText(item.code || '')} className="text-slate-400 hover:text-slate-700 p-1">
-                    <Copy className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* TAB 4: Workers Union Master Data */}
-      {activeTab === 'workers' && (
-        <div className="space-y-6">
-          <div>
-            <h3 className="text-base font-bold text-slate-900 mb-3">
-              {isHindi ? 'औद्योगिक क्षेत्र व व्यापार वर्गीकरण' : 'Standard Industrial Classifications'}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {INDUSTRIAL_SECTORS.map((item) => (
-                <div key={item.id} className="p-3.5 rounded-xl border border-slate-200 bg-white flex items-center justify-between">
-                  <div>
-                    <span className="text-xs font-bold text-slate-900">{isHindi ? item.nameHi : item.nameEn}</span>
-                    <p className="text-[10px] font-mono text-amber-700">{item.code}</p>
-                  </div>
-                  <button onClick={() => copyText(item.code || '')} className="text-slate-400 hover:text-slate-700 p-1">
-                    <Copy className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-base font-bold text-slate-900 mb-3">
-              {isHindi ? 'श्रम विवाद प्राधिकरण व न्यायाधिकरण' : 'Statutory Labour Conciliation & Dispute Authorities'}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {STATUTORY_LABOUR_AUTHORITIES.map((item) => (
-                <div key={item.id} className="p-3.5 rounded-xl border border-slate-200 bg-white flex items-center justify-between">
-                  <div>
-                    <span className="text-xs font-bold text-slate-900">{isHindi ? item.nameHi : item.nameEn}</span>
-                    <p className="text-[10px] font-mono text-red-700">{item.code}</p>
-                  </div>
-                  <button onClick={() => copyText(item.code || '')} className="text-slate-400 hover:text-slate-700 p-1">
-                    <Copy className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* TAB 5: RWA Master Data */}
-      {activeTab === 'rwa' && (
-        <div className="space-y-6">
-          <div>
-            <h3 className="text-base font-bold text-slate-900 mb-3">
-              {isHindi ? 'सोसाइटी फ्लैट व इकाई प्रकार' : 'Standard Residential Apartment & Unit Configurations'}
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-              {RWA_UNIT_TYPES.map((item) => (
-                <div key={item.id} className="p-3.5 rounded-xl border border-slate-200 bg-white">
-                  <span className="text-xs font-bold text-slate-900">{isHindi ? item.nameHi : item.nameEn}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-base font-bold text-slate-900 mb-3">
-              {isHindi ? 'मानकीकृत मेंटेनेंस व शुल्क मदें' : 'Standard Society Maintenance & Sinking Fund Heads'}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {RWA_MAINTENANCE_HEADS.map((item) => (
-                <div key={item.id} className="p-3.5 rounded-xl border border-slate-200 bg-white flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-900">{isHindi ? item.nameHi : item.nameEn}</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-semibold">Standard Head</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

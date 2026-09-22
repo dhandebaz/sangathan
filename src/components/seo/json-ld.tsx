@@ -8,7 +8,7 @@ export function OrganizationJsonLd() {
     name: 'Sangathan',
     alternateName: 'संगठन',
     url: 'https://sangathan.space',
-    description: 'Digital public infrastructure for NGOs, student unions, worker collectives, and community RWAs to manage members, funds, and democratic governance.',
+    description: 'Digital public infrastructure for NGOs and civic collectives to manage members, funds, and democratic governance.',
     contactPoint: {
       '@type': 'ContactPoint',
       email: 'support@sangathan.space',
@@ -85,7 +85,7 @@ export function SoftwareApplicationJsonLd() {
         price: '1000',
         priceCurrency: 'INR',
         name: 'Institution Plan (Monthly)',
-        description: 'Solidarity patronage for funded NGOs and unions with unlimited members and AI tools.',
+        description: 'Solidarity patronage for funded NGOs and civic collectives with unlimited members and AI tools.',
       },
       {
         '@type': 'Offer',
@@ -174,11 +174,7 @@ export function OrgProfileJsonLd({ org, lang, memberCount, eventCount, partners 
   const schemaType =
     org.org_type === 'ngo'
       ? 'NGO'
-      : org.org_type === 'student_union'
-        ? 'EducationalOrganization'
-        : org.org_type === 'workers_union'
-          ? 'LaborUnion'
-          : 'Organization'
+      : 'Organization'
 
   const sameAsList: string[] = []
   if (org.website) sameAsList.push(org.website)
@@ -378,7 +374,7 @@ export function SolutionJsonLd({
         price: '1000',
         priceCurrency: 'INR',
         name: 'Institution Plan',
-        description: 'Patronage tier for funded NGOs, trade unions, and formal institutions.',
+        description: 'Patronage tier for funded NGOs, civic collectives, and formal institutions.',
       },
     ],
     featureList: features.map((f) => `${f.name}: ${f.description}`),

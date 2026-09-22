@@ -14,7 +14,7 @@ const LogReceivingSchema = z.object({
   submissionDate: z.string().default(() => new Date().toISOString().split('T')[0]),
   receivingPhotoUrl: z.string().optional(),
   receivingNumber: z.string().optional(),
-  statutoryDeadlineDays: z.number().min(1).default(15),
+  statutoryDeadlineDays: z.number().min(1).default(30),
   notes: z.string().optional(),
 })
 
@@ -138,7 +138,7 @@ Representation Details:
 - Subject / Issue: ${tracker.subject}
 - Applicant: ${applicantName}, Address: ${applicantAddress}, Phone: ${applicantPhone}
 
-Since the concerned public authority has failed to resolve or provide a written status update within the statutory period under the Citizens' Charter, draft a formal, high-impact RTI Application under Section 6(1) of the RTI Act, 2005.
+Since the representation above is still pending a written status update, draft a formal RTI Application under Section 6(1) of the RTI Act, 2005 asking only for recorded information (file status, notings, timelines). Remember the PIO must reply within 30 days under Section 7(1). Do not promise penalties or guaranteed action.
 
 Queries to format:
 1. Daily progress report and file notings on representation ${tracker.letter_ref_number}.

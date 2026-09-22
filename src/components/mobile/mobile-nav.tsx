@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import {
   LayoutDashboard, Calendar, Users,
-  HandCoins, Vote, Wrench, Scale, Grid, Activity, MessageSquare
+  Grid, MessageSquare
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useEffect, useRef, useState } from 'react'
@@ -40,29 +40,11 @@ const triggerHaptic = (type: 'light' | 'medium' | 'heavy' | 'success' | 'warning
   }
 }
 
-function getTab4(lang: string, orgType: string): { href: string; icon: typeof LayoutDashboard; labelEn: string; labelHi: string } {
-  switch (orgType) {
-    case 'civic_collective':
-      return { href: `/${lang}/dashboard/field-audits`, icon: Activity, labelEn: 'Field Audits', labelHi: 'फील्ड जांच' }
-    case 'ngo':
-      return { href: `/${lang}/dashboard/donations`, icon: HandCoins, labelEn: 'Donations', labelHi: 'दान/चंदा' }
-    case 'student_union':
-      return { href: `/${lang}/dashboard/elections`, icon: Vote, labelEn: 'Elections', labelHi: 'चुनाव' }
-    case 'workers_union':
-      return { href: `/${lang}/dashboard/grievances`, icon: Scale, labelEn: 'Grievances', labelHi: 'शिकायतें' }
-    case 'rwa':
-      return { href: `/${lang}/dashboard/maintenance`, icon: Wrench, labelEn: 'Maintenance', labelHi: 'मरम्मत' }
-    default:
-      return { href: `/${lang}/dashboard/events`, icon: Calendar, labelEn: 'Events', labelHi: 'कार्यक्रम' }
-  }
-}
-
 export function MobileNav({ lang, orgType = 'ngo' }: MobileNavProps) {
   const pathname = usePathname()
   const prevPathnameRef = useRef(pathname)
   const [isToolsOpen, setIsToolsOpen] = useState(false)
   const isHindi = lang === 'hi'
-  const tab4 = getTab4(lang, orgType)
 
   useEffect(() => {
     if (prevPathnameRef.current !== pathname) {
@@ -76,26 +58,26 @@ export function MobileNav({ lang, orgType = 'ngo' }: MobileNavProps) {
     {
       href: `/${lang}/dashboard`,
       icon: LayoutDashboard,
-      labelEn: 'Dashboard',
-      labelHi: 'डैशबोर्ड',
+      labelEn: 'Home',
+      labelHi: 'होम',
     },
     {
       href: `/${lang}/dashboard/inbox`,
       icon: MessageSquare,
-      labelEn: 'Inbox',
-      labelHi: 'इनबॉक्स',
+      labelEn: 'Messages',
+      labelHi: 'संदेश',
     },
     {
       href: `/${lang}/dashboard/calendar`,
       icon: Calendar,
-      labelEn: 'Calendar',
-      labelHi: 'कैलेंडर',
+      labelEn: 'Meetings',
+      labelHi: 'बैठकें',
     },
     {
       href: `/${lang}/dashboard/people`,
       icon: Users,
-      labelEn: orgType === 'rwa' ? 'Residents' : 'People',
-      labelHi: orgType === 'rwa' ? 'निवासी' : 'सदस्य',
+      labelEn: 'People',
+      labelHi: 'लोग',
     },
   ]
 

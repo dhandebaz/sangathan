@@ -69,6 +69,68 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.61.0',
+    titleEn: 'Focused Direction: Only Civic Collectives & NGOs, Honest Wording Everywhere',
+    titleHi: 'स्पष्ट दिशा: सिर्फ नागरिक समूह व एनजीओ, हर जगह ईमानदार भाषा',
+    dateEn: 'September 2026',
+    dateHi: 'सितंबर 2026',
+    descEn: 'Removed Student Union, Workers Union and RWA modes completely so the app has one clear direction. Fixed misleading promises: the RTI tracker is now an honest 30-day reminder helper, BQF is described as community affiliation instead of legal protection, and donation receipts no longer claim automatic 80G status.',
+    descHi: 'छात्र संघ, श्रमिक संघ और RWA मोड पूरी तरह हटाए गए ताकि ऐप की एक स्पष्ट दिशा हो। भ्रामक वादे ठीक किए गए: आरटीआई ट्रैकर अब ईमानदार 30-दिवसीय याद सहायक है, BQF को कानूनी सुरक्षा की जगह सामुदायिक मान्यता बताया गया है, और दान रसीदें अब स्वतः 80G का दावा नहीं करतीं।',
+    color: 'emerald',
+    icon: ShieldCheck,
+    features: [
+      {
+        nameEn: 'Only 2 organisation types',
+        nameHi: 'सिर्फ 2 संगठन प्रकार',
+        textEn: 'Civic Collectives and NGOs only. Removed 18 dashboard sections, 15 server action modules, and all Student, Workers and RWA blueprints, templates and guides.',
+        textHi: 'सिर्फ नागरिक समूह और एनजीओ। 18 डैशबोर्ड सेक्शन, 15 सर्वर मॉड्यूल और सभी छात्र, श्रमिक व RWA ब्लूप्रिंट हटाए गए।',
+      },
+      {
+        nameEn: 'Honest RTI helper (30 days, not 15)',
+        nameHi: 'ईमानदार आरटीआई सहायक (15 नहीं, 30 दिन)',
+        textEn: 'The RTI Act gives PIOs 30 days to reply. The diary now reminds at 30 days and prepares a draft you print, sign and submit yourself. No auto-filing, no fine claims.',
+        textHi: 'आरटीआई कानून में PIO को 30 दिन मिलते हैं। डायरी अब 30 दिन पर याद दिलाती है और मसौदा बनाती है जिसे आप खुद दाखिल करते हैं। कोई स्वतः कार्रवाई या जुर्माने का दावा नहीं।',
+      },
+      {
+        nameEn: 'Truthful BQF, notices and receipts',
+        nameHi: 'सच्ची BQF, नोटिस व रसीद भाषा',
+        textEn: 'BQF is community affiliation, not legal immunity. Pollution tools prepare letter drafts you file yourself. Donation receipts mention 80G only with your own 80G registration.',
+        textHi: 'BQF सामुदायिक मान्यता है, कानूनी छूट नहीं। प्रदूषण टूल पत्रों के मसौदे बनाते हैं जिन्हें आप खुद दाखिल करते हैं। दान रसीदों में 80G सिर्फ अपने पंजीकरण पर।',
+      },
+    ],
+  },
+  {
+    version: 'v1.60.0',
+    titleEn: 'Simpler Dashboard, Plain Language and 3-Step Start',
+    titleHi: 'सरल डैशबोर्ड, आसान भाषा और 3-चरण शुरुआत',
+    dateEn: 'September 2026',
+    dateHi: 'सितंबर 2026',
+    descEn: 'Made the app much easier for first-time users. Shorter home pages with only the next actions, plain everyday words instead of heavy terms, one clear People section, and a simple 3-step guide for new groups.',
+    descHi: 'पहली बार इस्तेमाल करने वालों के लिए ऐप को आसान बनाया गया। होम पेज पर सिर्फ अगले काम, कठिन शब्दों की जगह रोज़ की भाषा, एक साफ People सेक्शन और नए समूहों के लिए 3-चरण गाइड।',
+    color: 'emerald',
+    icon: Sparkles,
+    features: [
+      {
+        nameEn: 'Calm home pages with fewer boxes',
+        nameHi: 'शांत होम पेज, कम बॉक्स',
+        textEn: 'Removed duplicate cards and limited pending actions to 2. New groups see only 3 first steps: add people, call a meeting, do the first work.',
+        textHi: 'दोहराए गए कार्ड हटाए गए और बाकी काम सिर्फ 2 तक सीमित। नए समूह सिर्फ 3 काम देखते हैं: लोगों को जोड़ें, बैठक बुलाएं, पहला काम करें।',
+      },
+      {
+        nameEn: 'Plain words everywhere',
+        nameHi: 'हर जगह आसान शब्द',
+        textEn: 'Replaced heavy labels like Governance & Treasury with simple Money and votes, Files and records, Meetings, People and Messages. One language at a time instead of mixed brackets.',
+        textHi: 'भारी नामों की जगह आसान शब्द: Money and votes, Files and records, Meetings, People और Messages। ब्रैकेट वाली मिली-जुली भाषा हटाई गई।',
+      },
+      {
+        nameEn: 'Fixed confusing links and guides',
+        nameHi: 'गलत लिंक और गाइड ठीक किए',
+        textEn: 'Fixed broken union agreement link, corrected People links, shortened onboarding from 5 heavy steps to 3 friendly steps with correct language.',
+        textHi: 'टूटा हुआ समझौता लिंक ठीक किया, People लिंक सही किए, और 5 भारी चरणों वाली शुरुआत को 3 आसान चरणों में बदला।',
+      },
+    ],
+  },
+  {
     version: 'v1.59.0',
     titleEn: 'Consolidated Governance & Administration Parent Hubs, High-Contrast Typography & 5-Org Parity',
     titleHi: 'एकीकृत शासन व प्रशासन पैरेंट हब्स, उच्च-कंट्रास्ट डार्क टाइपोग्राफी एवं 5-संगठन पूर्ण समानता',

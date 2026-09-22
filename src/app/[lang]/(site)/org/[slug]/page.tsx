@@ -41,11 +41,7 @@ export async function generateMetadata(props: {
       ? isHindi ? 'नागरिक समूह व जमीनी आंदोलन' : 'Civic Collective & Movement'
       : org.org_type === 'ngo'
         ? isHindi ? 'गैर-सरकारी संगठन (NGO)' : 'Non-Governmental Organisation'
-        : org.org_type === 'student_union'
-          ? isHindi ? 'छात्र संघ' : 'Student Union'
-          : org.org_type === 'workers_union'
-            ? isHindi ? 'कर्मचारी व ट्रेड संघ' : 'Workers Union'
-            : isHindi ? 'रेजिडेंट वेलफेयर एसोसिएशन' : 'Resident Welfare Association'
+        : isHindi ? 'नागरिक समूह' : 'Civic Collective'
 
   const title = `${org.name} | ${typeLabel} | Sangathan`
   const description =
@@ -64,7 +60,6 @@ export async function generateMetadata(props: {
       'Civil Society',
       'Grassroots Democracy',
       'NGO India',
-      'Student Union',
       'Civic Infrastructure',
     ],
     alternates: {
@@ -124,8 +119,7 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
        registration_state, membership_policy, created_at, public_transparency_enabled,
        description, logo_url, cover_url, contact_email, contact_phone, website,
        social_links, address, registration_status, registration_number, incorporation_date,
-       tax_id, darpan_id, tan, gstin, cin, fcra_registration, certificate_12a, certificate_80g,
-       trade_union_registration`
+       tax_id, darpan_id, tan, gstin, cin, fcra_registration, certificate_12a, certificate_80g`
     )
     .eq('slug', slug)
     .maybeSingle()

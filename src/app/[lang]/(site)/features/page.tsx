@@ -11,8 +11,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   return {
     title: isHindi ? 'नागरिक सुविधाएं | संगठन' : 'Features & Movement Tools | Sangathan',
     description: isHindi
-      ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं, एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए विशेष डिजिटल बुनियादी ढांचा।'
-      : 'Purpose-built features for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
+      ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं और एनजीओ के लिए विशेष डिजिटल बुनियादी ढांचा।'
+      : 'Purpose-built features for civic collectives, citizen science networks, and NGOs.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/features`,
       languages: {
@@ -23,14 +23,14 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     openGraph: {
       title: isHindi ? 'नागरिक सुविधाएं व जमीनी टूल्स | संगठन' : 'Features & Movement Tools | Sangathan',
       description: isHindi
-        ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं, एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए विशेष डिजिटल बुनियादी ढांचा।'
-        : 'Purpose-built features for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
+        ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं और एनजीओ के लिए विशेष डिजिटल बुनियादी ढांचा।'
+        : 'Purpose-built features for civic collectives, citizen science networks, and NGOs.',
       url: `https://sangathan.space/${lang}/features`,
       siteName: 'Sangathan',
       type: 'website',
       images: [
         {
-          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'नागरिक सुविधाएं व जमीनी टूल्स' : 'Features & Movement Tools')}&desc=${encodeURIComponent(isHindi ? 'नागरिक समूहों, एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए विशेष डिजिटल बुनियादी ढांचा।' : 'Purpose-built features for civic collectives, NGOs, student unions, workers unions, and RWAs.')}&type=feature&tag=Movement+Tools&lang=${lang}`,
+          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'नागरिक सुविधाएं व जमीनी टूल्स' : 'Features & Movement Tools')}&desc=${encodeURIComponent(isHindi ? 'नागरिक समूहों और एनजीओ के लिए विशेष डिजिटल बुनियादी ढांचा।' : 'Purpose-built features for civic collectives and NGOs.')}&type=feature&tag=Movement+Tools&lang=${lang}`,
           width: 1200,
           height: 630,
           alt: isHindi ? 'संगठन सुविधाएं' : 'Sangathan Features',
@@ -43,9 +43,9 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       creator: '@areynetaji',
       title: isHindi ? 'नागरिक सुविधाएं व जमीनी टूल्स | संगठन' : 'Features & Movement Tools | Sangathan',
       description: isHindi
-        ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं, एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए विशेष डिजिटल बुनियादी ढांचा।'
-        : 'Purpose-built features for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
-      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'नागरिक सुविधाएं व जमीनी टूल्स' : 'Features & Movement Tools')}&desc=${encodeURIComponent(isHindi ? 'नागरिक समूहों, एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए विशेष डिजिटल बुनियादी ढांचा।' : 'Purpose-built features for civic collectives, NGOs, student unions, workers unions, and RWAs.')}&type=feature&tag=Movement+Tools&lang=${lang}`],
+        ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं और एनजीओ के लिए विशेष डिजिटल बुनियादी ढांचा।'
+        : 'Purpose-built features for civic collectives, citizen science networks, and NGOs.',
+      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'नागरिक सुविधाएं व जमीनी टूल्स' : 'Features & Movement Tools')}&desc=${encodeURIComponent(isHindi ? 'नागरिक समूहों और एनजीओ के लिए विशेष डिजिटल बुनियादी ढांचा।' : 'Purpose-built features for civic collectives and NGOs.')}&type=feature&tag=Movement+Tools&lang=${lang}`],
     },
   }
 }
@@ -68,20 +68,20 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'MessageSquare', title: 'Unified Inbox & Dispatch (Google Meet + Telegram Bot)', desc: 'Centralized 2-way member chats, Telegram bot webhooks, 1-click Google Meet video rooms, mass announcements, and emergency crisis SOS alerts.' },
         { icon: 'Calendar', title: 'Centralized Calendar & Operations Sync (Google & Apple iCal)', desc: 'Centralized schedule for assemblies, meetings, and field survey pairings with RFC 5545 iCalendar (.ics) / webcal:// live feeds and Google Calendar sync.' },
         { icon: 'Users', title: 'Unified People, Credentials & Volunteer Hub', desc: 'Single high-speed workspace combining member directories, verified digital ID card studio, working committees, volunteer desks, and service certificates.' },
-        { icon: 'ShieldCheck', title: 'Bahujan Queer Foundation (BQF) Verification Pathway', desc: 'Milestone-based institutional verification from Bahujan Queer Foundation (Delhi Reg. Section 8 NGO • CIN: U88900DL2025NPL452474) for active grassroots collectives meeting verified ground audit and community criteria.' },
+        { icon: 'ShieldCheck', title: 'Bahujan Queer Foundation (BQF) Community Recognition', desc: 'Active grassroots collectives can seek community affiliation with Bahujan Queer Foundation (Delhi Reg. Section 8 NGO) for credibility. This is non-profit recognition, not legal immunity or government registration.' },
         { icon: 'FileSpreadsheet', title: 'Live Google Contacts & Spreadsheet Cadre Intake', desc: '1-click selectively import organizing contacts from Google People API or connect Google Sheets to populate member directories with automated deduplication.' },
         { icon: 'FileText', title: 'Legacy Google Forms & Survey Response Migrator', desc: 'Migrate past Google Forms and survey responses into the collective survey studio with automated field generation and historical response retention.' },
         { icon: 'Activity', title: 'Field Spot Audits & Sensor Logger', desc: 'Ground evidence and citizen science testing desk for air quality (PM2.5/PM10), water TDS, waste fires, and industrial emissions with GPS geotagging.' },
-        { icon: 'Scale', title: 'Statutory Environmental Violation Notice Generator', desc: 'Instant AI drafting of formal legal representations citing the Air Act 1981, Water Act 1974, CAQM GRAP directives, and NGT compliance orders for DPCC, CPCB, and SDMs.' },
+        { icon: 'Scale', title: 'Pollution Representation Drafter', desc: 'Draft representations citing the Air Act 1981, Water Act 1974 and CAQM GRAP directives for DPCC, CPCB and SDMs — you file them yourself.' },
         { icon: 'Printer', title: '1-Page Printable Parcha & Physical Signature Sheets', desc: 'Generate high-contrast black-and-white flyers (पर्चे) formatted for ₹1 photostat/photocopy machines and physical pen-and-paper signature tables for colony chai stalls and parks.' },
-        { icon: 'Clock', title: 'Stamped Receiving & 15-Day RTI Escalation Tracker', desc: 'Track stamped physical receiving copies from municipal ward offices with live countdown timers and 1-click Section 6(1) RTI application generator when authorities delay.' },
+        { icon: 'Clock', title: 'Complaint Diary & 30-Day RTI Reminder', desc: 'Save stamped receiving copies with dates. Get a 30-day reminder (the legal PIO reply period) and a Section 6(1) draft you print, sign and submit yourself.' },
         { icon: 'Newspaper', title: 'Bilingual Press Release & Media Dispatch Studio', desc: 'Draft journalistic English & Hindi media releases with standard embargo headers, spokesperson quote blocks, and 1-click formatted WhatsApp media broadcast copy.' },
-        { icon: 'FileText', title: 'AI Legal Government Representation Generator', desc: 'Instant AI drafting of legally sound government petitions referencing statutory provisions (DMC Act, Motor Vehicles Act, RTI) tailored for SDMs, Police Commissioners, and Municipal Bodies.' },
+        { icon: 'FileText', title: 'Government Letter Draft Helper', desc: 'Draft government letters referencing relevant provisions (DMC Act, RTI) for SDMs and municipal bodies. You review, print and submit them yourself.' },
         { icon: 'Sparkles', title: 'Grassroots Survey & Goal Studio (SEO Links & WhatsApp CTA)', desc: 'Build 1-click townhall polls, issue prioritization surveys, and volunteer pledges with memorable SEO custom slugs (/f/[slug]), 1-click WhatsApp forward templates, live Sentiment Matrix, and Participant PDF Dossiers.' },
         { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Publish open letters, campaigns, and drives with live signature counters and instant volunteer conversion hooks.' },
         { icon: 'Vote', title: 'Direct Democracy & Secret Voting Engine', desc: 'Secure, cryptographic anonymous secret ballots and leadership elections with instant tamper-evident tallies.' },
         { icon: 'Network', title: 'Joint Front & Coalition Engine (संयुक्त मोर्चा)', desc: 'Form alliances with other movements, co-sign joint representations, and publish shared public statements.' },
-        { icon: 'ShieldAlert', title: 'Emergency SOS & Legal Rapid Response', desc: '1-tap emergency crisis trigger broadcasting GPS coordinates and detention notes to defense advocates with live response tracking.' },
+        { icon: 'ShieldAlert', title: 'Emergency SOS Team Broadcast', desc: '1-tap alert to your own team members and saved contacts with location and details you type. Not a legal rescue service.' },
         { icon: 'Database', title: 'Offline-First Field Organizer PWA', desc: 'Door-to-door membership intake and field grievance capture in zero-connectivity areas with automatic background queue sync.' },
         { icon: 'Award', title: 'Sharable Verified Member Badges & Credential Studio', desc: 'Generate high-resolution verified credentials, social movement graphics, and printable ID passes with 5 layout engines, photo avatar uploads, vector heraldry, and dynamic QR verification codes.' },
         { icon: 'Users', title: 'Volunteer & Working Group Desks', desc: 'Coordinate volunteers, assign field actions, and manage decentralized working subgroups and committees.' },
@@ -142,158 +142,11 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
 
         { icon: 'FileText', title: 'Live Google Forms API Migrator', desc: 'Import Google Forms directly via the Forms API — auto-pulls form structure (questions, field types, options) and all historical responses. Also supports CSV paste and response sheet link methods.' },
         { icon: 'FolderLock', title: 'Institutional Document & Asset Vault', desc: 'Encrypted cloud storage for Trust Deeds, 12A/80G tax orders, CSR-1 certificates, and property conveyance deeds with role permissions.' },
-        { icon: 'Printer', title: 'Statutory PDF Registers & Audit Books', desc: '1-click export of official Form I Member Rolls, Form H Returns, and Double-Entry Cash Books formatted for government inspections.' },
+        { icon: 'Printer', title: 'Statutory PDF Registers & Audit Books', desc: '1-click export of Form I Member Rolls and Double-Entry Cash Books formatted for inspections.' },
         { icon: 'MapPin', title: 'National Geo Engine (780+ Districts)', desc: 'Pre-populated registry of all 28 Indian States, 8 UTs, and 780+ administrative districts with ISO codes and SDG sector taxonomies.' },
         { icon: 'Globe', title: 'Public SEO & AI Search Engine Citability', desc: 'Schema.org JSON-LD structured data, dynamic Edge OpenGraph image previews, and high-signal public profiles indexed across Google, Bing, and AI answer engines.' },
         { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests 12A, 80G, FCRA based on actual usage and donations.' },
         { icon: 'ShieldCheck', title: 'Legal Identity & Compliance Engine', desc: 'Manage statutory registrations (PAN, CIN, GSTIN) and compliance filings with upcoming direct Government API integrations.' },
-        { icon: 'Smartphone', title: 'All-In-One Public Portal & Native PWA Installation', desc: 'Transform public org profiles into complete standalone web portals with native tabbed feeds, 1-tap UPI Chanda donation sheets, and instant Android/iOS homescreen app installation.' },
-        { icon: 'Sparkles', title: 'AI & Vector Official Emblem Studio (2048px Export)', desc: 'Generate mathematically aligned circular statutory seals, modern crests, and letterhead-ready ink stamps with 1-click apply and 2048px high-resolution PNG downloads.' },
-        { icon: 'ShieldCheck', title: 'Statutory Compliance & Government Readiness', desc: 'Legal entity sub-classification, validated statutory ID fields, compliance filings tracker, government API endpoints, and statutory knowledge hub.' }
-      ]
-    },
-    {
-      id: 'student_union',
-      title: isHindi ? 'छात्र संघ' : 'Student Unions',
-      icon: 'GraduationCap',
-      color: 'indigo',
-      description: isHindi
-        ? 'छात्रों की आवाज़ को संगठित करें। सुरक्षित चुनाव कराएं और कैंपस की समस्याओं को ट्रैक करें।'
-        : 'Organise the student voice. Conduct secure elections, track campus grievances, and manage events.',
-      features: [
-        { icon: 'LayoutDashboard', title: 'Smart Organization-Specific Parent Feature Hubs', desc: 'Streamlined navigation architecture grouping specialized operations inside 5 core power hubs: Dashboard, Inbox, Calendar, People, and Forms & Surveys.' },
-        { icon: 'MessageSquare', title: 'Unified Inbox & Dispatch (Google Meet + Telegram Bot)', desc: 'Centralized 2-way student chats, Telegram bot channels, 1-click Google Meet video rooms, and protest detention SOS alerts.' },
-        { icon: 'Calendar', title: 'Centralized Calendar & Operations Sync (Google & Apple iCal)', desc: 'Centralized schedule for general body meetings, campus elections, and batch canvassing with live Apple iCal and Google Calendar sync.' },
-        { icon: 'Vote', title: 'Booth-by-Booth Live Election Counting Desk', desc: 'Round-by-round and booth-by-booth vote count logger with live candidate leads and automated election return certificates.' },
-        { icon: 'Home', title: 'Hostel & Mess Quality Inspection Portal', desc: 'Daily meal ratings (1-5★), room vacancy tracking, photo evidence logs, and direct escalation to Warden / Dean offices.' },
-        { icon: 'Sparkles', title: 'Campus Mess & Grievance Survey Studio (SEO Links & WhatsApp CTA)', desc: '1-click mess food quality rating scales, academic grievance forms, and student sentiment analytics with custom short links (/f/[slug]), WhatsApp student group forwarders, and executive committee PDF reports.' },
-        { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Publish public campus representations with live signature counters, 1-click volunteer conversion hooks, and inter-union solidarity endorsements.' },
-
-        { icon: 'FileSpreadsheet', title: 'Batch Student Roster Importer', desc: 'Instantly import campus batches, hostel rosters, and department lists from CSV/Excel with auto-phone validation.' },
-        { icon: 'FolderLock', title: 'Campus Document & MoU Vault', desc: 'Secure repository for university representations, administrative agreements, and legal aid case files.' },
-        { icon: 'Award', title: 'Sharable Verified Member Badges & Credential Studio', desc: 'Generate dynamic social graphics and pocket passes for Instagram, Twitter/X, and WhatsApp Stories with verified union designations and cryptographic QR codes.' },
-        { icon: 'Users', title: 'Team Invite System', desc: 'Invite members via email with shareable links. New members can accept and join instantly with role-based access.' },
-        { icon: 'Users', title: 'Granular Team Roles & Permission-Based Dashboards', desc: 'Can Comment, Can Edit, Can Manage, and Second Admin roles tailored to campus committee structures.' },
-        { icon: 'Building2', title: 'Campus Authority & Department Directory', desc: 'Directory of university offices and local authorities to auto-match campus grievances to the right office.' },
-        { icon: 'Printer', title: 'Formal Grievance Print & Delivery Tracking', desc: 'Official print-ready grievance letters to VC, Dean, and Warden offices with delivery tracking.' },
-        { icon: 'Smartphone', title: 'Telegram Conversational Bot & Console', desc: 'Bilingual Telegram bot and console for campus grievances, event attendance, and emergency SOS detention alerts.' },
-        { icon: 'Database', title: 'Offline-First Field Organizer PWA', desc: 'Hostel-to-hostel and gate desk onboarding in zero-connectivity environments with automatic background synchronization.' },
-        { icon: 'ShieldAlert', title: 'Emergency SOS & Legal Rapid-Response', desc: '1-tap protest detention alert broadcasting GPS coordinates to volunteer advocates with live thana response tracking.' },
-        { icon: 'Sparkles', title: 'Sangathan AI Grant & Welfare Matcher', desc: 'Scan UGC and government student welfare grants with 1-click structured AI proposal draft generation.' },
-        { icon: 'Database', title: 'Central Student DB & HEI Directory', desc: 'Pre-populated Indian government institutions database including JMI, JNU, DU, BHU, IITs & NITs with support for both official unions and independent collectives.' },
-        { icon: 'Printer', title: 'Official Union Letterhead & PDF Exporter', desc: 'Customizable emblem header, reference number generator (SU/2026/08/XXX), recipient block, and print-ready Gyapan & press release layout.' },
-        { icon: 'Network', title: 'Joint Front & Co-Signed Protests (संयुक्त मोर्चा)', desc: 'Multi-org alliance hub for co-signing Gyapan representations, organizing joint rallies, and publishing co-authored press statements.' },
-        { icon: 'FileText', title: 'RTI & Action Taken Report (ATR) Assistant', desc: 'RTI Act 2005 pre-formatted legal query generator and VC/Dean commitment deadline tracker.' },
-        { icon: 'Shield', title: 'Legal Aid & Anti-Ragging Cell', desc: 'Emergency protest detention SOS trigger, volunteer advocate directory, and anonymous UGC-compliant anti-ragging desk.' },
-        { icon: 'Megaphone', title: 'Campus Campaigning & Mobilization Suite', desc: 'Hostel-to-Hostel (H2H) canvassing manager, Class-to-Class (C2C) lecture campaign scheduler, and poster wall allocation.' },
-        { icon: 'UserCheck', title: 'On-Ground Member Induction Drive', desc: 'Kiosk desk mode for canteen/gate booths, scannable QR posters, and paper slip batch intake for rapid campus onboarding.' },
-        { icon: 'Badge', title: 'Union Posts (पद) & Designation Registry', desc: 'Pre-configured designations (President, Vice President, General Secretary, Coordinator, Convener) plus custom post type creation.' },
-        { icon: 'Lock', title: 'Digital ID Cards', desc: 'Cryptographically secure digital IDs with QR access.' },
-        { icon: 'Users', title: 'Role-Based Governance', desc: 'Tiered access for executives, presidents, and students.' },
-        { icon: 'Vote', title: 'Secure Online Voting', desc: 'End-to-end verifiable, anonymous elections.' },
-        { icon: 'Scale', title: 'Lyngdoh Compliance Audit', desc: 'Automated Supreme Court mandate checks for candidate age limits, attendance thresholds, and ₹5,000 expense caps.' },
-        { icon: 'FileText', title: 'Gyapan (ज्ञापन) Memorandum Builder', desc: 'Draft formal representations to VCs, Deans, and Wardens with digital student signature petitions.' },
-        { icon: 'AlertTriangle', title: 'Hostel & Mess Grievances', desc: 'Ticketing system for academic, hostel allotment, mess quality, and campus disputes.' },
-        { icon: 'Ticket', title: 'Event Ticketing & RSVPs', desc: 'Manage campus events, QR check-ins, and waitlists.' },
-        { icon: 'Wallet', title: 'Club Sub-funding', desc: 'Allow societies to request and track micro-budgets.' },
-        { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable campus scaling, live member slot meters, automated receipt archiving, and multi-org capabilities.' },
-        { icon: 'Globe', title: 'Public SEO & OpenGraph Social Previews', desc: 'Schema.org structured data, dynamic 1200x630 social preview cards for WhatsApp/Twitter, and high-signal public profiles.' },
-        { icon: 'FileText', title: 'Proposals & Bills', desc: 'Draft, debate, and pass union resolutions democratically.' },
-        { icon: 'Smartphone', title: 'All-In-One Public Portal & Native PWA Installation', desc: 'Transform public org profiles into complete standalone web portals with native tabbed feeds, 1-tap UPI Chanda donation sheets, and instant Android/iOS homescreen app installation.' },
-        { icon: 'Sparkles', title: 'AI & Vector Official Emblem Studio (2048px Export)', desc: 'Generate mathematically aligned circular statutory seals, modern crests, and letterhead-ready ink stamps with 1-click apply and 2048px high-resolution PNG downloads.' },
-        { icon: 'ShieldCheck', title: 'Statutory Compliance & Government Readiness', desc: 'Legal entity sub-classification, validated statutory ID fields, compliance filings tracker, government API endpoints, and statutory knowledge hub.' }
-      ]
-    },
-    {
-      id: 'workers_union',
-      title: isHindi ? 'श्रमिक संघ' : 'Workers Unions',
-      icon: 'HardHat',
-      color: 'amber',
-      description: isHindi
-        ? 'मज़दूरों के अधिकारों की रक्षा करें। सामूहिक सौदेबाजी (CBA) और हड़तालों का समन्वय करें।'
-        : 'Protect worker rights with power. Coordinate collective bargaining, track dues, and organise actions.',
-      features: [
-        { icon: 'LayoutDashboard', title: 'Smart Organization-Specific Parent Feature Hubs', desc: 'Streamlined navigation architecture grouping specialized operations inside 5 core power hubs: Dashboard, Inbox, Calendar, People, and Forms & Surveys.' },
-        { icon: 'MessageSquare', title: 'Unified Inbox & Dispatch (Google Meet + Telegram Bot)', desc: 'Centralized 2-way worker chats, Telegram shift broadcasting, 1-click Google Meet video rooms, and workplace detention SOS alerts.' },
-        { icon: 'Calendar', title: 'Centralized Calendar & Operations Sync (Google & Apple iCal)', desc: 'Centralized schedule for shift rosters, strike picket dates, and conciliation hearings with Apple iCal and Google Calendar sync.' },
-        { icon: 'Scale', title: 'Trade Disputes & ALC Conciliation Tracker', desc: 'Manage workplace disputes and statutory conciliation stages under the Industrial Disputes Act (Works Committee → ALC → Labour Court → Industrial Tribunal).' },
-        { icon: 'FileText', title: 'CBA Clause-by-Clause Redlining Studio', desc: 'Bipartite collective bargaining agreement builder with clause-by-clause union demands, management counter-offers, and agreed settlements.' },
-        { icon: 'Sparkles', title: 'Shop-Floor Hazard & CBA Priority Studio (SEO Links & WhatsApp CTA)', desc: 'Confidential workplace safety complaint forms and collective bargaining priority surveys with memorable short links (/f/[slug]), WhatsApp worker group forwarding, and instant grievance escalation alerts.' },
-        { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Launch wage defense and collective strike petitions with live signature counts and volunteer conversion.' },
-
-        { icon: 'FileSpreadsheet', title: 'Factory Floor CSV / Excel Importer', desc: 'Import thousands of shift workers and shop floor delegates from spreadsheets with automatic duplicate cleansing.' },
-        { icon: 'FolderLock', title: 'CBA & Bipartite Document Vault', desc: 'Encrypted storage for Collective Bargaining Agreements, strike notices, and wage settlement deeds.' },
-        { icon: 'Printer', title: 'Form H Annual General Return Ledger', desc: 'Official print-ready Trade Unions Act 1926 membership and subscription ledger for Labour Commissioner audits.' },
-        { icon: 'Award', title: 'Sharable Verified Member Badges & Credential Studio', desc: 'Verified shop floor steward and cadre credentials with CBA designations, QR verification, and WhatsApp/Twitter formats.' },
-        { icon: 'Users', title: 'Team Invite System', desc: 'Invite members via email with shareable links. New members can accept and join instantly with role-based access.' },
-        { icon: 'Users', title: 'Granular Team Roles & Permission-Based Dashboards', desc: 'Can Comment, Can Edit, Can Manage, and Second Admin roles for shop stewards and executives.' },
-        { icon: 'Building2', title: 'Labour Authority & Department Directory', desc: 'Directory of labour commissioner offices, tribunals (ALC/RLC/CGIT), and factory inspectorates for grievance routing.' },
-        { icon: 'Printer', title: 'Formal Grievance Print & Delivery Tracking', desc: 'Official print-ready grievance and complaint letters to labour authorities with delivery tracking.' },
-        { icon: 'Smartphone', title: 'Telegram Conversational Bot & Console', desc: 'Bilingual Telegram bot for grievance logging, strike ballot casting, and dues status inquiries via messaging.' },
-        { icon: 'Database', title: 'Offline-First Field Organizer PWA', desc: 'Factory gate and construction site worker intake in low-connectivity areas with automatic queue sync.' },
-        { icon: 'AlertTriangle', title: 'Emergency SOS & Legal Rapid Response', desc: '1-tap emergency alert for unlawful worker detention with GPS broadcast to labor defense advocates.' },
-        { icon: 'ShieldCheck', title: 'Public Trust & Transparency Ledger', desc: 'Audited strike relief fund ledger and worker welfare accounting with SHA-256 verified receipts.' },
-        { icon: 'Users', title: 'Member Database', desc: 'Track employment history, standing, and certifications.' },
-        { icon: 'Wallet', title: 'Automated Dues Collection', desc: 'Manage percentage or flat dues, with delinquency alerts.' },
-        { icon: 'Scale', title: 'Grievance Case Mgmt', desc: 'Track workplace disputes through arbitration stages.' },
-        { icon: 'Briefcase', title: 'CBA Contract Tracking', desc: 'Central repository for redlining and negotiation prep.' },
-        { icon: 'Megaphone', title: 'Strike Coordination', desc: 'Workplace mapping and picket line organization.' },
-        { icon: 'Vote', title: 'Secure Polling', desc: 'Conduct strike ballots and leadership elections.' },
-        { icon: 'HardHat', title: 'Worker Dispatch System', desc: 'Match member skills to employer job requirements.' },
-        { icon: 'Building2', title: 'Employer Management', desc: 'Monitor contract compliance across signatory companies.' },
-        { icon: 'BadgeAlert', title: 'Shop Steward Roles', desc: 'Granular permissions for field representatives.' },
-        { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable union dues budgeting, member slot tracking, and multi-branch federation tools.' },
-        { icon: 'Globe', title: 'Public Union Directory & Schema.org Graph', desc: 'Indexed union representations, public solidarity petitions, and verified collective bargaining records.' },
-        { icon: 'ShieldCheck', title: 'Labor Law Compliance', desc: 'Automated checks against union regulations.' },
-        { icon: 'Smartphone', title: 'All-In-One Public Portal & Native PWA Installation', desc: 'Transform public org profiles into complete standalone web portals with native tabbed feeds, 1-tap UPI Chanda donation sheets, and instant Android/iOS homescreen app installation.' },
-        { icon: 'Sparkles', title: 'AI & Vector Official Emblem Studio (2048px Export)', desc: 'Generate mathematically aligned circular statutory seals, modern crests, and letterhead-ready ink stamps with 1-click apply and 2048px high-resolution PNG downloads.' },
-        { icon: 'ShieldCheck', title: 'Statutory Compliance & Government Readiness', desc: 'Legal entity sub-classification, validated statutory ID fields, compliance filings tracker, government API endpoints, and statutory knowledge hub.' }
-      ]
-    },
-    {
-      id: 'rwa',
-      title: isHindi ? 'आवासीय कल्याण संघ (RWA)' : 'Resident Welfare Association (RWA)',
-      icon: 'Home',
-      color: 'sky',
-      description: isHindi
-        ? 'अपने पड़ोस को बेहतर बनाएं। रखरखाव, आगंतुक और सामुदायिक मतदान प्रबंधित करें।'
-        : 'Modernise your neighbourhood. Manage maintenance, visitors, and democratic community polling.',
-      features: [
-        { icon: 'LayoutDashboard', title: 'Smart Organization-Specific Parent Feature Hubs', desc: 'Streamlined navigation architecture grouping specialized operations inside 5 core power hubs: Dashboard, Inbox, Calendar, People, and Forms & Surveys.' },
-        { icon: 'MessageSquare', title: 'Unified Inbox & Dispatch (Google Meet + Telegram Bot)', desc: 'Centralized 2-way resident chats, Telegram notice broadcasts, 1-click Google Meet video rooms for AGM syncs, and emergency maintenance SOS.' },
-        { icon: 'Calendar', title: 'Centralized Calendar & Operations Sync (Google & Apple iCal)', desc: 'Centralized schedule for AGM meetings, clubhouse bookings, and lift maintenance with live Apple iCal and Google Calendar sync.' },
-        { icon: 'Award', title: 'Sharable Verified Member Badges & Resident Passes', desc: 'Generate verified managing committee credentials, resident owner passes, and digital ID cards with photo avatars and QR validation.' },
-        { icon: 'UserCheck', title: 'Domestic Staff Directory & Digital Gate Passes', desc: 'Manage maids, drivers, cooks, and guards with police verification tags, flat associations, and instant pass code verification.' },
-        { icon: 'Wrench', title: 'Society Asset AMC & Statutory NOC Tracker', desc: 'Countdown alerts for passenger lift servicing, DG generator AMCs, fire safety NOC validity, and water tank sanitation audits.' },
-        { icon: 'Receipt', title: 'Automated Batch Maintenance Invoicing', desc: '1-click generation of monthly maintenance invoices for all occupied units (per sqft or fixed flat rate) with UPI payment links.' },
-        { icon: 'Sparkles', title: 'Colony Resident Census & Safai Survey Studio (SEO Links & WhatsApp CTA)', desc: 'Resident directory census and colony maintenance satisfaction surveys with custom SEO short links (/f/[slug]), WhatsApp society group forward templates, Likert rating scales, and individual flat dossier printouts.' },
-        { icon: 'Receipt', title: 'Maintenance Billing', desc: 'Automated invoices based on flat size and late fees.' },
-
-        { icon: 'FileSpreadsheet', title: 'Spreadsheet Flat & Resident Importer', desc: 'Bulk import flat numbers, owner contacts, and tenant directories from Excel in 60 seconds.' },
-        { icon: 'FolderLock', title: 'Society Deed & Resolution Vault', desc: 'Centralized repository for builder handover deeds, AGM meeting minutes, fire safety NOCs, and lift licenses.' },
-        { icon: 'Printer', title: 'Form I Statutory Member Register', desc: 'Official Societies Registration Act compliant membership book ready for annual registrar filings.' },
-        { icon: 'Wallet', title: 'Online Payment Gateway', desc: 'Collect dues via UPI/Cards with auto-reconciliation.' },
-        { icon: 'Users', title: 'Team Invite System', desc: 'Invite members via email with shareable links. New members can accept and join instantly with role-based access.' },
-        { icon: 'Users', title: 'Granular Team Roles & Permission-Based Dashboards', desc: 'Can Comment, Can Edit, Can Manage, and Second Admin roles for the managing committee and residents.' },
-        { icon: 'Building2', title: 'Local Government Authority Directory', desc: 'Directory of MCD, DJB, BSES, PWD, and police authorities to route maintenance and civic complaints to the right department.' },
-        { icon: 'Sparkles', title: 'AI Complaint Photo Analysis', desc: 'Instant AI analysis of complaint photos (waterlogging, safai, damage) detecting issue and urgency automatically.' },
-        { icon: 'Printer', title: 'Formal Complaint Print & Delivery Tracking', desc: 'Official print-ready complaint letters to municipal and utility authorities with hand or email delivery tracking.' },
-        { icon: 'Users', title: 'Digital Visitor Log', desc: 'Gatekeeper app with photo capture and timestamps.' },
-        { icon: 'Lock', title: 'Pre-approved Entry', desc: 'Residents approve guests or deliveries via the app.' },
-        { icon: 'CheckSquare', title: 'Staff Attendance', desc: 'Biometric/geo-enabled tracking for domestic help.' },
-        { icon: 'Headphones', title: 'Helpdesk Ticketing', desc: 'System for plumbing or electrical complaints.' },
-        { icon: 'Calendar', title: 'Facility Booking', desc: 'Reserve clubhouses, gyms, or sports courts easily.' },
-        { icon: 'Briefcase', title: 'Vendor Management', desc: 'Track society assets and preventive maintenance.' },
-        { icon: 'FileText', title: 'Financial Ledgers', desc: 'Audit-ready P&L statements and transparent expenditure.' },
-        { icon: 'Vote', title: 'Community Polls', desc: 'Vote on society upgrades and committee elections.' },
-        { icon: 'Bell', title: 'Digital Notice Board', desc: 'Official society announcements with read receipts.' },
-        { icon: 'Home', title: 'Resident Directory', desc: 'Verified database of owners, tenants, and emergency contacts.' },
-        { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable society scaling, resident capacity meters, and transparent audit trails.' },
-        { icon: 'Globe', title: 'Public RWA Portal & SEO Discoverability', desc: 'Public community noticeboard, verified estate representation, and search-optimized public registry.' },
-        { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests renewals and NOCs based on maintenance and facility usage.' },
-        { icon: 'Lock', title: 'Social OAuth', desc: 'Frictionless member onboarding via Google and X.' },
-        { icon: 'ShieldCheck', title: 'Enterprise Security', desc: 'Role-based access and strict data isolation.' },
-        { icon: 'Zap', title: 'Sangathan AI Assistive Intelligence', desc: 'Smart summaries, meeting minutes extraction, form sentiment analysis, and proposal analysis with master organization control.' },
         { icon: 'Smartphone', title: 'All-In-One Public Portal & Native PWA Installation', desc: 'Transform public org profiles into complete standalone web portals with native tabbed feeds, 1-tap UPI Chanda donation sheets, and instant Android/iOS homescreen app installation.' },
         { icon: 'Sparkles', title: 'AI & Vector Official Emblem Studio (2048px Export)', desc: 'Generate mathematically aligned circular statutory seals, modern crests, and letterhead-ready ink stamps with 1-click apply and 2048px high-resolution PNG downloads.' },
         { icon: 'ShieldCheck', title: 'Statutory Compliance & Government Readiness', desc: 'Legal entity sub-classification, validated statutory ID fields, compliance filings tracker, government API endpoints, and statutory knowledge hub.' }
@@ -324,8 +177,8 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
 
               <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
                 {isHindi 
-                  ? 'नागरिक समूहों, पंजीकृत एनजीओ, छात्र संघों, श्रमिक संघों और आरडब्ल्यूए के लिए विशेष मॉड्यूल — 1-टैप फील्ड जांच व ₹1 पर्चे से लेकर गुप्त मतदान और वैधानिक 80G लेजर तक।' 
-                  : 'Purpose-built for civic collectives, NGOs, student unions, workers unions, and RWAs. From 1-tap spot audits and ₹1 printable Parchas to secret ballots and 80G tax receipts.'}
+                  ? 'नागरिक समूहों और पंजीकृत एनजीओ के लिए विशेष मॉड्यूल — 1-टैप फील्ड जांच व ₹1 पर्चे से लेकर गुप्त मतदान और वैधानिक 80G लेजर तक।' 
+                  : 'Purpose-built for civic collectives and NGOs. From 1-tap spot audits and ₹1 printable Parchas to secret ballots and 80G tax receipts.'}
               </p>
 
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 pt-2 text-xs font-medium text-slate-600">
@@ -336,10 +189,10 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
                   <Printer className="w-3.5 h-3.5 text-slate-700" /> ₹1 A4 Parchas
                 </span>
                 <span className="inline-flex items-center gap-1 bg-white border border-slate-200 px-2.5 py-1 rounded">
-                  <Clock className="w-3.5 h-3.5 text-amber-600" /> 15-Day RTI Tracker
+                  <Clock className="w-3.5 h-3.5 text-amber-600" /> 30-Day RTI Reminder
                 </span>
                 <span className="inline-flex items-center gap-1 bg-white border border-slate-200 px-2.5 py-1 rounded">
-                  <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" /> BQF Sec 8 Protection
+                  <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" /> BQF Recognition
                 </span>
               </div>
             </div>
@@ -383,7 +236,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
               </h3>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed mb-4">
                 {isHindi
-                  ? 'नागरिक समूहों, एनजीओ, छात्र संघों, ट्रेड यूनियनों और आरडब्ल्यूए के लिए पूर्ण वैधानिक समाधान और टूल्स।'
+                  ? 'नागरिक समूहों और एनजीओ के लिए पूर्ण वैधानिक समाधान और टूल्स।'
                   : 'Explore purpose-built landing pages and step-by-step ground playbooks for each organization archetype.'}
               </p>
             </div>

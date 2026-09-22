@@ -16,32 +16,20 @@ function welcomeMessage(type: string, isHindi: boolean): string {
   if (isHindi) {
     switch (type) {
       case 'civic_collective':
-        return 'फील्ड स्पॉट जांच, पर्चा अभियान, बैठकें और जमीनी कार्रवाई देखें'
-      case 'student_union':
-        return 'कैम्पस सभाएं, ज्ञापन और छात्र संघ गतिविधियाँ देखें'
-      case 'workers_union':
-        return 'यूनियन बैठकें, collective actions और मज़दूर अधिकार देखें'
-      case 'rwa':
-        return 'सोसायटी कार्यक्रम, रखरखाव नोटिस और बिलिंग देखें'
+        return 'फील्ड जांच, पर्चा, बैठकें और जमीनी काम देखें'
       case 'ngo':
-        return 'प्रोजेक्ट कार्यभार, बैठकें और स्वयंसेवक अवसर देखें'
+        return 'प्रोजेक्ट काम, बैठकें और स्वयंसेवक अवसर देखें'
       default:
-        return 'अपने नागरिक कार्यक्षेत्र की ताज़ा गतिविधियां देखें'
+        return 'अपने कार्यक्षेत्र की ताज़ा जानकारी देखें'
     }
   }
   switch (type) {
     case 'civic_collective':
-      return 'Field spot audits, Parcha signature drives, meetings, and ground action'
-    case 'student_union':
-      return 'Campus assemblies, student representations, and union activities'
-    case 'workers_union':
-      return 'Union meetings, collective agreements, and worker solidarity'
-    case 'rwa':
-      return 'Community events, maintenance circulars, and society updates'
+      return 'Field checks, parcha drives, meetings and ground work'
     case 'ngo':
-      return 'Ground projects, volunteer coordination, and meeting agenda'
+      return 'Ground projects, volunteer work and meetings'
     default:
-      return 'Latest updates and actions from your civic workspace'
+      return 'Latest updates from your workspace'
   }
 }
 
@@ -50,48 +38,28 @@ function getMemberActionTiles(type: string, lang: string) {
   switch (type) {
     case 'civic_collective':
       return [
-        { icon: Activity, title: isHindi ? 'फील्ड स्पॉट जांच' : 'Spot Sensor Audit', subtitle: isHindi ? 'प्रदूषण व पानी टेस्ट' : 'Log field data & test', href: `/${lang}/dashboard/field-audits`, color: 'rose' as OrgColor },
-        { icon: Printer, title: isHindi ? '₹1 पर्चा व हस्ताक्षर' : 'Printable Parcha', subtitle: isHindi ? 'A4 आंदोलन पत्र प्रिंट करें' : 'Download flyer & sheet', href: `/${lang}/dashboard/parcha`, color: 'indigo' as OrgColor },
-        { icon: Vote, title: isHindi ? 'सामूहिक मतदान' : 'Direct Voting', subtitle: isHindi ? 'प्रस्तावों पर वोट दें' : 'Vote on resolutions', href: `/${lang}/dashboard/polls`, color: 'brand' as OrgColor },
-        { icon: AlertCircle, title: isHindi ? 'नागरिक शिकायत' : 'Local Issue Desk', subtitle: isHindi ? 'समस्या रिपोर्ट करें' : 'Submit grievance ticket', href: `/${lang}/dashboard/complaints`, color: 'amber' as OrgColor },
-      ]
-    case 'student_union':
-      return [
-        { icon: AlertCircle, title: isHindi ? 'मेस व हॉस्टल शिकायत' : 'Hostel & Mess Grievance', subtitle: isHindi ? 'वार्डन को शिकायत भेजें' : 'Report food & room issues', href: `/${lang}/dashboard/grievances`, color: 'rose' as OrgColor },
-        { icon: Vote, title: isHindi ? 'छात्र गुप्त मतदान' : 'Campus Secret Ballot', subtitle: isHindi ? 'चुनाव व जनमत संग्रह' : 'Vote on campus elections', href: `/${lang}/dashboard/polls`, color: 'indigo' as OrgColor },
-        { icon: Award, title: isHindi ? 'डिजिटल छात्र ID' : 'Verified Student ID', subtitle: isHindi ? 'आधिकारिक पहचान पत्र' : 'View digital badge', href: `/${lang}/dashboard/id-card`, color: 'emerald' as OrgColor },
-        { icon: Sparkles, title: isHindi ? 'कैम्पस सर्वे' : 'Campus Surveys', subtitle: isHindi ? 'अपनी राय साझा करें' : 'Fill active surveys', href: `/${lang}/dashboard/forms`, color: 'sky' as OrgColor },
-      ]
-    case 'workers_union':
-      return [
-        { icon: AlertCircle, title: isHindi ? 'कार्यस्थल शिकायत' : 'Workplace Grievance', subtitle: isHindi ? 'वेतन व सुरक्षा समस्या' : 'Submit dispute ticket', href: `/${lang}/dashboard/grievances`, color: 'rose' as OrgColor },
-        { icon: ScrollText, title: isHindi ? 'CBA अधिकार पत्र' : 'Collective Agreement', subtitle: isHindi ? 'मांग पत्र व कानूनी शर्तें' : 'View union agreements', href: `/${lang}/dashboard/cba-documents`, color: 'indigo' as OrgColor },
-        { icon: HandCoins, title: isHindi ? 'मासिक यूनियन चंदा' : 'Pay Union Levy', subtitle: isHindi ? 'UPI सदस्यता शुल्क' : 'Dues & mutual-aid receipt', href: `/${lang}/dashboard/donations`, color: 'emerald' as OrgColor },
-        { icon: Vote, title: isHindi ? 'हड़ताल व यूनियन वोट' : 'Strike & Union Ballots', subtitle: isHindi ? 'गोपनीय यूनियन वोटिंग' : 'Authorize resolutions', href: `/${lang}/dashboard/polls`, color: 'brand' as OrgColor },
-      ]
-    case 'rwa':
-      return [
-        { icon: Wrench, title: isHindi ? 'मरम्मत अनुरोध (Ticket)' : 'Maintenance Request', subtitle: isHindi ? 'प्लंबिंग, लिफ्ट व लाइट' : 'Log repair ticket', href: `/${lang}/dashboard/maintenance`, color: 'sky' as OrgColor },
-        { icon: Calendar, title: isHindi ? 'सोसायटी सुविधाएं' : 'Clubhouse & Events', subtitle: isHindi ? 'बुकिंग व सामुदायिक सभाएं' : 'Book amenities & events', href: `/${lang}/dashboard/events`, color: 'indigo' as OrgColor },
-        { icon: HandCoins, title: isHindi ? 'मेंटेनेंस बिल भुगतान' : 'Pay Society Dues', subtitle: isHindi ? 'मासिक बिल व रसीदें' : 'UPI maintenance payments', href: `/${lang}/dashboard/donations`, color: 'emerald' as OrgColor },
-        { icon: Vote, title: isHindi ? 'AGM आम रायशुमारी' : 'AGM & Society Polls', subtitle: isHindi ? 'सोसायटी प्रस्तावों पर वोट' : 'Vote on RWA decisions', href: `/${lang}/dashboard/polls`, color: 'brand' as OrgColor },
+        { icon: Activity, title: isHindi ? 'फील्ड जांच' : 'Field check', subtitle: isHindi ? 'प्रदूषण देखें' : 'Log an issue', href: `/${lang}/dashboard/field-audits`, color: 'rose' as OrgColor },
+        { icon: Printer, title: isHindi ? 'पर्चा' : 'Parcha', subtitle: isHindi ? 'पर्चा छापें' : 'Print flyer', href: `/${lang}/dashboard/parcha`, color: 'indigo' as OrgColor },
+        { icon: Vote, title: isHindi ? 'वोट' : 'Vote', subtitle: isHindi ? 'फैसले पर वोट' : 'Vote now', href: `/${lang}/dashboard/polls`, color: 'brand' as OrgColor },
+        { icon: AlertCircle, title: isHindi ? 'शिकायत' : 'Complaint', subtitle: isHindi ? 'समस्या बताएं' : 'Report issue', href: `/${lang}/dashboard/complaints`, color: 'amber' as OrgColor },
       ]
     default: // ngo
       return [
-        { icon: CheckSquare, title: isHindi ? 'स्वयंसेवक घंटे दर्ज करें' : 'Log Volunteer Hours', subtitle: isHindi ? 'फील्ड कार्य लॉग करें' : 'Track ground hours', href: `/${lang}/dashboard/tasks`, color: 'emerald' as OrgColor },
-        { icon: Award, title: isHindi ? 'सत्यापित स्वयंसेवक प्रमाण' : 'Volunteer Certificate', subtitle: isHindi ? 'QR सत्यापित प्रमाणपत्र' : 'Download certificate', href: `/${lang}/dashboard/id-card`, color: 'indigo' as OrgColor },
-        { icon: HandCoins, title: isHindi ? 'सहयोग व दान' : 'Contribute / Donate', subtitle: isHindi ? '80G टैक्स छूट रसीद' : 'Direct donation & 80G', href: `/${lang}/dashboard/donations`, color: 'amber' as OrgColor },
-        { icon: Sparkles, title: isHindi ? 'फील्ड सर्वे व फॉर्म' : 'Field Surveys & Forms', subtitle: isHindi ? 'सर्वेक्षण डेटा भरें' : 'Fill ground questionnaires', href: `/${lang}/dashboard/forms`, color: 'rose' as OrgColor },
+        { icon: CheckSquare, title: isHindi ? 'मेरा काम' : 'My work', subtitle: isHindi ? 'काम देखें' : 'See tasks', href: `/${lang}/dashboard/tasks`, color: 'emerald' as OrgColor },
+        { icon: Award, title: isHindi ? 'प्रमाणपत्र' : 'Certificate', subtitle: isHindi ? 'सर्टिफिकेट लें' : 'Get certificate', href: `/${lang}/dashboard/id-card`, color: 'indigo' as OrgColor },
+        { icon: HandCoins, title: isHindi ? 'दान' : 'Donate', subtitle: isHindi ? 'मदद करें' : 'Contribute', href: `/${lang}/dashboard/donations`, color: 'amber' as OrgColor },
+        { icon: Sparkles, title: isHindi ? 'सर्वे' : 'Survey', subtitle: isHindi ? 'फॉर्म भरें' : 'Fill form', href: `/${lang}/dashboard/forms`, color: 'rose' as OrgColor },
       ]
   }
 }
 
-function getTimeGreeting(): string {
+function getTimeGreeting(lang: string): string {
   const hour = new Date().getHours()
-  if (hour < 12) return 'सुप्रभात (Good Morning)'
-  if (hour < 17) return 'नमस्कार (Namaskar)'
-  if (hour < 21) return 'शुभ संध्या (Good Evening)'
-  return 'शुभ रात्रि (Good Night)'
+  const hi = lang === 'hi'
+  if (hour < 12) return hi ? 'सुप्रभात' : 'Good morning'
+  if (hour < 17) return hi ? 'नमस्कार' : 'Hello'
+  if (hour < 21) return hi ? 'शुभ संध्या' : 'Good evening'
+  return hi ? 'शुभ रात्रि' : 'Good night'
 }
 
 export function MemberDashboard({
@@ -119,7 +87,6 @@ export function MemberDashboard({
 }) {
   const type = orgType || 'ngo'
   const isHindi = lang === 'hi'
-  const nextEvent = events[0]
   const taskCount = tasks.length
   const actionTiles = getMemberActionTiles(type, lang)
 
@@ -131,7 +98,7 @@ export function MemberDashboard({
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900">
-                {getTimeGreeting()}{userName ? `, ${userName}` : ''}!
+                {getTimeGreeting(lang)}{userName ? `, ${userName}` : ''}!
               </h1>
             </div>
             <p className="text-xs sm:text-sm text-slate-600 font-medium">
@@ -187,7 +154,7 @@ export function MemberDashboard({
       <div>
         <h2 className="text-xs sm:text-sm font-bold text-slate-900 mb-3 flex items-center gap-1.5 uppercase tracking-wide">
           <Sparkles className="w-4 h-4 text-indigo-600" />
-          <span>{isHindi ? 'त्वरित नागरिक टूल्स (Ground Actions)' : 'Quick Ground Actions & Tools'}</span>
+          <span>{isHindi ? 'क्या करना है' : 'What to do'}</span>
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {actionTiles.map((tile) => {
@@ -214,63 +181,6 @@ export function MemberDashboard({
             )
           })}
         </div>
-      </div>
-
-      {/* Quick Summary Cards */}
-      <div className="grid grid-cols-2 gap-3">
-        <Link
-          href={`/${lang}/dashboard/tasks`}
-          className="p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 active:scale-[0.98] transition-all shadow-xs block"
-        >
-          <div className="flex items-center gap-2 mb-1.5">
-            <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700">
-              <CheckSquare className="w-4 h-4" />
-            </div>
-            <span className="text-xs font-bold text-slate-700">
-              {isHindi ? 'मेरे कार्य (Tasks)' : 'My Tasks'}
-            </span>
-          </div>
-          <div className="text-2xl font-extrabold text-slate-900">{taskCount}</div>
-          <p className="text-[11px] text-slate-500 mt-0.5">
-            {taskCount > 0
-              ? (isHindi ? 'कार्य पूरा करने के लिए क्लिक करें' : 'Tap to review and complete')
-              : (isHindi ? 'सभी कार्य पूरे हैं 🎉' : 'All tasks completed 🎉')}
-          </p>
-        </Link>
-
-        <Link
-          href={`/${lang}/dashboard/events`}
-          className="p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 active:scale-[0.98] transition-all shadow-xs block"
-        >
-          <div className="flex items-center gap-2 mb-1.5">
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-700">
-              <Calendar className="w-4 h-4" />
-            </div>
-            <span className="text-xs font-bold text-slate-700">
-              {isHindi ? 'अगली सभा (Next Event)' : 'Next Assembly'}
-            </span>
-          </div>
-          {nextEvent ? (
-            <div>
-              <div className="text-sm font-bold text-slate-900 truncate">{nextEvent.title}</div>
-              <p className="text-[11px] text-slate-500 mt-0.5">
-                {new Date(nextEvent.start_time).toLocaleDateString(undefined, {
-                  month: 'short',
-                  day: 'numeric',
-                })}
-              </p>
-            </div>
-          ) : (
-            <div>
-              <div className="text-sm font-medium text-slate-600">
-                {isHindi ? 'कोई नई सभा नहीं' : 'No upcoming event'}
-              </div>
-              <p className="text-[11px] text-slate-400 mt-0.5">
-                {isHindi ? 'शांति है!' : 'All clear!'}
-              </p>
-            </div>
-          )}
-        </Link>
       </div>
 
       {/* My Tasks Section */}

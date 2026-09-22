@@ -31,7 +31,7 @@ export function analyzeOrganizationIdentity(
   const isYouthStudent = /(chhatra|student|vidyarthi|yuva|youth|campus|university|college|shiksha|academy|parishad)/i.test(lowerName)
   const isEnvironment = /(jal|jungle|zameen|paryavaran|green|earth|eco|forest|nature|vriksh|climate)/i.test(lowerName)
   const isSevaWelfare = /(seva|kalyan|welfare|samaj|trust|sahayata|foundation|care|vikas|help|sahodari)/i.test(lowerName)
-  const isHousingCommunity = /(rwa|society|colony|niwas|apartment|enclave|resident|vihar|nagar|housing)/i.test(lowerName)
+  const isHousingCommunity = /(society|colony|niwas|apartment|enclave|resident|vihar|nagar|housing)/i.test(lowerName)
   const isWomenEmpowerment = /(mahila|nari|stree|women|shakti|behan|matri)/i.test(lowerName)
 
   // 3. Recommended Themes & Symbols
@@ -137,7 +137,7 @@ export function analyzeOrganizationIdentity(
     )
   }
 
-  if (isHousingCommunity || orgType === 'rwa') {
+  if (isHousingCommunity) {
     detectedTheme = 'Colony & Community Governance'
     recommendedSymbols.push('community_housing', 'protective_roof', 'scales_of_justice', 'banyan_tree')
     recommendedThemes.push('sovereign_navy', 'forest_gold', 'grassroots_emerald')
@@ -163,16 +163,6 @@ export function analyzeOrganizationIdentity(
       recommendedSymbols.push('dharma_wheel', 'helping_hands', 'open_book_sun', 'banyan_tree')
       recommendedThemes.push('sovereign_navy', 'grassroots_emerald', 'royal_indigo')
       recommendedStyles.push('circular_seal', 'vintage_laurel', 'modern_crest')
-    } else if (orgType === 'student_union') {
-      detectedTheme = 'Student Movement & Campus Rights'
-      recommendedSymbols.push('quill_and_torch', 'academic_star', 'flame_of_freedom', 'solidarity_fist')
-      recommendedThemes.push('royal_indigo', 'crimson_flame', 'sovereign_navy')
-      recommendedStyles.push('modern_crest', 'hexagon_insignia', 'circular_seal')
-    } else if (orgType === 'workers_union') {
-      detectedTheme = 'Labor Federation & Worker Power'
-      recommendedSymbols.push('industrial_gear', 'clasped_hands', 'solidarity_fist', 'flame_of_freedom')
-      recommendedThemes.push('crimson_flame', 'sovereign_navy', 'inquilab_saffron')
-      recommendedStyles.push('movement_shield', 'circular_seal', 'hexagon_insignia')
     } else {
       detectedTheme = 'Democratic Civic Collective'
       recommendedSymbols.push('flame_of_freedom', 'scales_of_justice', 'banyan_tree', 'solidarity_fist')

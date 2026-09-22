@@ -4,7 +4,7 @@ import { Metadata } from 'next'
 import { 
   ArrowRight, ShieldCheck, Activity, Printer, Clock, FileText, 
   Receipt, Wallet, Users, Vote, Scale, AlertTriangle, CheckSquare, 
-  Building2, HardHat, Check, Megaphone, GraduationCap, Home,
+  Building2, Check, Megaphone,
   Smartphone, MessageSquare, Banknote, Globe, Newspaper, Sparkles, Lock
 } from 'lucide-react'
 import { SoftwareApplicationJsonLd, BreadcrumbJsonLd } from '@/components/seo/json-ld'
@@ -14,11 +14,11 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const isHindi = lang === 'hi'
   return {
     title: isHindi 
-      ? 'संगठन - नागरिक समूहों, एनजीओ और यूनियनों के लिए डिजिटल बुनियादी ढांचा'
+      ? 'संगठन - नागरिक समूहों और एनजीओ के लिए डिजिटल बुनियादी ढांचा'
       : 'Sangathan - Digital Operating System for Civic Movements & Collectives',
     description: isHindi
-      ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं, एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए जमीनी डिजिटल हथियार। 1-टैप फील्ड जांच, ₹1 पर्चे, आरटीआई ट्रैकर एवं विधिक सुरक्षा।'
-      : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs. 1-tap spot audits, ₹1 printable Parchas, 15-day RTI countdowns, and official BQF legal protection.',
+      ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं और एनजीओ के लिए जमीनी डिजिटल हथियार। 1-टैप फील्ड जांच, ₹1 पर्चे, आरटीआई ट्रैकर एवं विधिक सुरक्षा।'
+      : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, and NGOs. 1-tap spot audits, ₹1 printable Parchas, 30-day RTI reminders, and BQF community recognition.',
     alternates: {
       canonical: `https://sangathan.space/${lang}`,
       languages: {
@@ -29,8 +29,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     openGraph: {
       title: isHindi ? 'संगठन — नागरिक आंदोलनों व समूहों का डिजिटल ऑपरेटिंग सिस्टम' : 'Sangathan — Digital Operating System for Civic Movements & Collectives',
       description: isHindi
-        ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं, एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए जमीनी डिजिटल हथियार।'
-        : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
+        ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं और एनजीओ के लिए जमीनी डिजिटल हथियार।'
+        : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, and NGOs.',
       url: `https://sangathan.space/${lang}`,
       siteName: 'Sangathan',
       locale: isHindi ? 'hi_IN' : 'en_US',
@@ -50,8 +50,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       creator: '@areynetaji',
       title: isHindi ? 'संगठन — नागरिक आंदोलनों व समूहों का डिजिटल ऑपरेटिंग सिस्टम' : 'Sangathan — Digital Operating System for Civic Movements & Collectives',
       description: isHindi
-        ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं, एनजीओ, छात्र संघों, श्रमिक संघों और RWA के लिए जमीनी डिजिटल हथियार।'
-        : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
+        ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं और एनजीओ के लिए जमीनी डिजिटल हथियार।'
+        : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, and NGOs.',
       images: [`https://sangathan.space/api/og?lang=${lang}&type=collective&tag=Civic+Operating+System`],
     },
   }
@@ -101,8 +101,8 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
               {/* Subheading */}
               <p className="text-base sm:text-lg lg:text-xl text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
                 {isHindi
-                  ? 'नागरिक समूहों, पर्यावरण शोधकर्ताओं, छात्र संघों और आरडब्ल्यूए के लिए पूर्ण डिजिटल हथियार। 1-टैप प्रदूषण जांच, ₹1 फोटोस्टेट पर्चे, 15-दिवसीय आरटीआई ट्रैकर एवं बीक्यूएफ विधिक सुरक्षा।'
-                  : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, student unions, and RWAs. 1-tap spot audits, ₹1 printable Parchas, 15-day RTI countdowns, and official BQF legal protection.'}
+                  ? 'नागरिक समूहों, पर्यावरण शोधकर्ताओं और एनजीओ के लिए पूर्ण डिजिटल हथियार। 1-टैप जांच, ₹1 फोटोस्टेट पर्चे, 30-दिवसीय आरटीआई याद एवं सामुदायिक मान्यता।'
+                  : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, and NGOs. 1-tap spot audits, ₹1 printable Parchas, 30-day RTI reminders, and BQF community recognition.'}
               </p>
               
               {/* Primary Action Buttons */}
@@ -135,7 +135,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4 text-amber-600 shrink-0" />
-                  <span>15-Day RTI Guard</span>
+                  <span>30-Day RTI Reminder</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-indigo-600 shrink-0" />
@@ -168,7 +168,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                 <div className="absolute top-4 left-4 right-4 flex flex-col gap-2 pointer-events-none">
                   <div className="bg-white/95 backdrop-blur-xs border border-slate-300 rounded p-2 text-left shadow-xs flex items-center justify-between">
                     <div className="text-[10px] font-mono leading-tight">
-                      <strong className="text-slate-900 block">15-Day Statutory Countdown</strong>
+                      <strong className="text-slate-900 block">30-Day RTI Reminder</strong>
                       <span className="text-slate-500">MCD Ward 42 • Diary No. 1492</span>
                     </div>
                     <span className="text-[9px] font-mono font-bold bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded border border-amber-300">
@@ -193,7 +193,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
 
               <div className="mt-3 text-center">
                 <p className="text-xs font-bold text-slate-700">
-                  {isHindi ? '“अधिकारियों से मौखिक शिकायत नहीं, लिखित वैधानिक रिकॉर्ड से काम कराएं।”' : '“Don’t beg authorities verbally. Force action with stamped receiving and RTI countdowns.”'}
+                  {isHindi ? '“अधिकारियों से मौखिक शिकायत नहीं, तारीख वाली लिखित रिसीविंग से हिसाब रखें।”' : '“Don’t rely on verbal complaints. Keep dated written records with stamped receiving numbers.”'}
                 </p>
                 <span className="text-[11px] text-slate-400 font-mono">
                   Ground Movement Standard • Citizen Science & Civic Collectives
@@ -209,7 +209,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
               <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900">
-                {isHindi ? 'भारतीय प्रशासनिक तंत्र में काम कैसे होता है?' : 'Why Verbal Complaints Fail & How Sangathan Forces Action'}
+                {isHindi ? 'लिखित रिकॉर्ड से जवाब कैसे मिलता है?' : 'Why Written Records Get Responses'}
               </h2>
             </div>
             <p className="text-slate-500 max-w-md text-xs sm:text-sm leading-relaxed">
@@ -264,14 +264,14 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                   <Clock className="w-5 h-5" />
                 </div>
                 <h3 className="text-base font-bold text-slate-900">
-                  Stamped Receiving & RTI Guard
+                  Complaint Diary & RTI Helper
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Upload photos of stamped ward diary numbers. If the authority ignores the 15-day Citizens&apos; Charter deadline, auto-generate Section 6(1) RTI applications with ₹250/day officer fines.
+                  Save stamped diary numbers with photos and dates. Get a 30-day reminder and a Section 6(1) RTI draft that you print, sign and submit yourself.
                 </p>
               </div>
               <div className="pt-4 mt-4 border-t border-slate-100 text-[11px] font-mono text-amber-800 font-bold">
-                Citizens&apos; Charter Guard
+                Dated Written Record
               </div>
             </div>
 
@@ -282,10 +282,10 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <h3 className="text-base font-bold text-slate-900">
-                  BQF Section 8 Legal Protection
+                  BQF Community Recognition
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  AI facial & ID verification granting recognized status under Bahujan Queer Foundation (Delhi Reg. Section 8 NGO • CIN: U88900DL2025NPL452474) with statutory legal indemnity.
+                  Active collectives can seek affiliation with Bahujan Queer Foundation (Delhi Reg. Section 8 NGO) for community credibility. This is recognition by a non-profit, not legal immunity or government registration.
                 </p>
               </div>
               <div className="pt-4 mt-4 border-t border-slate-100 text-[11px] font-mono text-indigo-700 font-bold">
@@ -296,14 +296,14 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
           </div>
         </section>
 
-        {/* 3. THE 5 MOVEMENT ARCHETYPES */}
+        {/* 3. THE 2 MOVEMENT ARCHETYPES */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
           <div className="mb-12">
             <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900 mb-2">
               {isHindi ? 'हर प्रकार के नागरिक समूह के लिए समर्पित व्यवस्था' : 'Choose Your Battlefield & Launch Your Workspace'}
             </h2>
             <p className="text-slate-600 text-sm">
-              {isHindi ? '5 मुख्य संगठन मॉडल और 20 विशेष कार्यक्षेत्र ब्लूप्रिंट्स।' : '5 movement archetypes and 20 specialized focus blueprints.'}
+              {isHindi ? '2 मुख्य संगठन मॉडल और 8 विशेष कार्यक्षेत्र ब्लूप्रिंट्स।' : '2 movement archetypes and 8 specialized focus blueprints.'}
             </p>
           </div>
 
@@ -330,7 +330,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                   <li className="flex items-center gap-1.5"><Check size={14} className="text-rose-600" /> Spot Sensor Audits (PM2.5/TDS)</li>
                   <li className="flex items-center gap-1.5"><Check size={14} className="text-rose-600" /> Printable A4 Parchas & Signatures</li>
                   <li className="flex items-center gap-1.5"><Check size={14} className="text-rose-600" /> Stamped Receiving & RTI Tracker</li>
-                  <li className="flex items-center gap-1.5"><Check size={14} className="text-rose-600" /> BQF Section 8 Recognition</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-rose-600" /> BQF Community Recognition</li>
                 </ul>
               </div>
               <span className="text-xs font-bold text-rose-700 flex items-center gap-1">
@@ -364,93 +364,6 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
               </div>
               <span className="text-xs font-bold text-emerald-700 flex items-center gap-1">
                 Explore NGO Solutions <ArrowRight size={14} />
-              </span>
-            </Link>
-
-            {/* 3. Student Unions */}
-            <Link 
-              href={`/${lang}/solutions/student-union`} 
-              className="bg-white border border-slate-200 rounded-lg p-6 hover:border-indigo-300 hover:shadow-xs transition-all flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-10 h-10 bg-indigo-50 text-indigo-700 rounded flex items-center justify-center">
-                    <GraduationCap className="w-5 h-5" />
-                  </div>
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-1">
-                  {isHindi ? 'छात्र संघ व युवा संगठन' : 'Student Unions & Youth Fronts'}
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                  Campus elections, hostel committees, and student rights collectives.
-                </p>
-                <ul className="space-y-1.5 text-xs text-slate-700 font-medium mb-4">
-                  <li className="flex items-center gap-1.5"><Check size={14} className="text-indigo-600" /> Lyngdoh Committee Compliance</li>
-                  <li className="flex items-center gap-1.5"><Check size={14} className="text-indigo-600" /> VC & Registrar Gyapan Builder</li>
-                  <li className="flex items-center gap-1.5"><Check size={14} className="text-indigo-600" /> Secret Anonymous Voting</li>
-                  <li className="flex items-center gap-1.5"><Check size={14} className="text-indigo-600" /> Hostel Grievance Ledger</li>
-                </ul>
-              </div>
-              <span className="text-xs font-bold text-indigo-700 flex items-center gap-1">
-                Explore Student Solutions <ArrowRight size={14} />
-              </span>
-            </Link>
-
-            {/* 4. Workers Unions */}
-            <Link 
-              href={`/${lang}/solutions/workers-union`} 
-              className="bg-white border border-slate-200 rounded-lg p-6 hover:border-amber-300 hover:shadow-xs transition-all flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-10 h-10 bg-amber-50 text-amber-700 rounded flex items-center justify-center">
-                    <HardHat className="w-5 h-5" />
-                  </div>
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-1">
-                  {isHindi ? 'श्रमिक व ट्रेड यूनियन' : 'Workers & Trade Unions'}
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                  Gig workers, factory units, transport unions, and informal labour fronts.
-                </p>
-                <ul className="space-y-1.5 text-xs text-slate-700 font-medium mb-4">
-                  <li className="flex items-center gap-1.5"><Check size={14} className="text-amber-600" /> Collective Bargaining (CBA)</li>
-                  <li className="flex items-center gap-1.5"><Check size={14} className="text-amber-600" /> Strike & Dharna Coordinator</li>
-                  <li className="flex items-center gap-1.5"><Check size={14} className="text-amber-600" /> Monthly Chanda & Dues Ledger</li>
-                  <li className="flex items-center gap-1.5"><Check size={14} className="text-amber-600" /> Legal Aid & Detention SOS</li>
-                </ul>
-              </div>
-              <span className="text-xs font-bold text-amber-700 flex items-center gap-1">
-                Explore Workers Solutions <ArrowRight size={14} />
-              </span>
-            </Link>
-
-            {/* 5. RWAs */}
-            <Link 
-              href={`/${lang}/solutions/rwa`} 
-              className="bg-white border border-slate-200 rounded-lg p-6 hover:border-sky-300 hover:shadow-xs transition-all flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-10 h-10 bg-sky-50 text-sky-700 rounded flex items-center justify-center">
-                    <Home className="w-5 h-5" />
-                  </div>
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-1">
-                  {isHindi ? 'रेजिडेंट वेलफेयर एसोसिएशन (RWA)' : 'Resident Welfare (RWA)'}
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                  Apartment management committees, gated societies, and plotted colonies.
-                </p>
-                <ul className="space-y-1.5 text-xs text-slate-700 font-medium mb-4">
-                  <li className="flex items-center gap-1.5"><Check size={14} className="text-sky-600" /> Batch Maintenance UPI Invoicing</li>
-                  <li className="flex items-center gap-1.5"><Check size={14} className="text-sky-600" /> Domestic Staff & Gate Passes</li>
-                  <li className="flex items-center gap-1.5"><Check size={14} className="text-sky-600" /> Society AMC & Lift NOC Tracker</li>
-                  <li className="flex items-center gap-1.5"><Check size={14} className="text-sky-600" /> Form I Statutory Register</li>
-                </ul>
-              </div>
-              <span className="text-xs font-bold text-sky-700 flex items-center gap-1">
-                Explore RWA Solutions <ArrowRight size={14} />
               </span>
             </Link>
 
@@ -552,8 +465,8 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
               </div>
               <div className="border border-slate-200 p-5 bg-white rounded-lg">
                 <Scale className="text-rose-600 mb-2.5" size={22} />
-                <h4 className="text-slate-900 font-bold text-xs mb-1">Statutory Legal Indemnity</h4>
-                <p className="text-slate-500 text-xs">Protective umbrella under BQF Section 8 Non-Profit registration.</p>
+                <h4 className="text-slate-900 font-bold text-xs mb-1">Community Recognition</h4>
+                <p className="text-slate-500 text-xs">Community recognition through BQF Section 8 Non-Profit affiliation (not legal immunity).</p>
               </div>
               <div className="border border-slate-200 p-5 bg-white rounded-lg">
                 <Printer className="text-rose-600 mb-2.5" size={22} />

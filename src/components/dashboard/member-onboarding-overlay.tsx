@@ -9,6 +9,8 @@ interface MemberOnboardingOverlayProps {
   orgType: string
   orgName?: string
   initialShow: boolean
+  lang?: string
+  isAdmin?: boolean
 }
 
 const STORAGE_KEY = 'sangathan_onboarding_done'
@@ -19,7 +21,7 @@ function subscribe(callback: () => void) {
   return () => window.removeEventListener('storage', callback)
 }
 
-export function MemberOnboardingOverlay({ userId, orgType, orgName, initialShow }: MemberOnboardingOverlayProps) {
+export function MemberOnboardingOverlay({ userId, orgType, orgName, initialShow, lang = 'en', isAdmin = false }: MemberOnboardingOverlayProps) {
   const [dismissed, setDismissed] = useState(false)
   const isStoredDone = useSyncExternalStore(
     subscribe,
@@ -45,6 +47,8 @@ export function MemberOnboardingOverlay({ userId, orgType, orgName, initialShow 
     <MemberOnboardingGuide
       orgType={orgType}
       orgName={orgName}
+      lang={lang}
+      isAdmin={isAdmin}
       onComplete={handleClose}
       onSkip={handleClose}
     />

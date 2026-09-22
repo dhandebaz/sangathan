@@ -149,9 +149,9 @@ export function FieldAuditsClient({ orgId, orgName, initialAudits }: FieldAudits
       const res = await generateStatutoryNoticeAction(audit.id, orgName)
       if (res.success && res.data) {
         setGeneratedNotice(res.data)
-        toast.success('Statutory environmental violation notice drafted!')
+        toast.success('Representation letter drafted!')
       } else {
-        toast.error(res.error || 'Failed to generate statutory notice')
+        toast.error(res.error || 'Failed to draft letter')
       }
     } catch (err: any) {
       toast.error(err.message || 'Error generating notice')
@@ -193,7 +193,7 @@ export function FieldAuditsClient({ orgId, orgName, initialAudits }: FieldAudits
             </h1>
           </div>
           <p className="text-sm text-slate-500 mt-1">
-            Citizen science & ground evidence suite for air quality, water tests, waste fires, and statutory DPCC/CPCB/NGT notices.
+            Citizen science ground evidence for air quality, water tests and waste fires — plus letter drafts to authorities that you file yourself.
           </p>
         </div>
 
@@ -377,7 +377,7 @@ export function FieldAuditsClient({ orgId, orgName, initialAudits }: FieldAudits
                       className="text-xs h-7 font-bold gap-1 bg-slate-900 hover:bg-slate-800 text-white shadow-2xs"
                     >
                       <Printer className="w-3.5 h-3.5 text-rose-400" />
-                      <span>DPCC/CPCB Notice</span>
+                      <span>Authority Letter Draft</span>
                     </Button>
                   </div>
                 </div>
@@ -575,17 +575,17 @@ export function FieldAuditsClient({ orgId, orgName, initialAudits }: FieldAudits
         </div>
       )}
 
-      {/* Modal: Statutory Notice Generator View */}
+      {/* Modal: Representation Letter Draft View */}
       {selectedAuditForNotice && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
                 <h2 className="text-base font-bold text-slate-900">
-                  Statutory Environmental Violation Notice
+                  Representation Letter Draft
                 </h2>
                 <p className="text-xs text-slate-500">
-                  Legal representation for DPCC, CPCB, CAQM & NGT compliance
+                  A draft for DPCC, CPCB, CAQM or NGT — review, print and file it yourself
                 </p>
               </div>
               <button
@@ -600,7 +600,7 @@ export function FieldAuditsClient({ orgId, orgName, initialAudits }: FieldAudits
               <div className="p-12 text-center space-y-3">
                 <div className="w-8 h-8 border-3 border-rose-600 border-t-transparent rounded-full animate-spin mx-auto" />
                 <p className="text-xs font-bold text-slate-700">
-                  Synthesizing Air Act, Water Act & CAQM statutory clauses...
+                  Drafting letter with Air Act, Water Act & CAQM references...
                 </p>
               </div>
             ) : generatedNotice ? (
@@ -616,9 +616,9 @@ export function FieldAuditsClient({ orgId, orgName, initialAudits }: FieldAudits
                   <div className="font-bold text-slate-900 mt-2">SUBJECT: {generatedNotice.noticeTitle}</div>
                 </div>
 
-                {/* Acts Cited */}
+                {/* Acts Referenced */}
                 <div className="space-y-1">
-                  <span className="font-bold text-slate-900 uppercase text-[11px]">Statutory Acts & Orders Cited:</span>
+                  <span className="font-bold text-slate-900 uppercase text-[11px]">Laws Referenced (for your review):</span>
                   <div className="flex flex-wrap gap-1">
                     {generatedNotice.statutoryActsCited.map((act, i) => (
                       <span key={i} className="px-2 py-0.5 bg-rose-50 text-rose-800 border border-rose-200 rounded text-[10px] font-bold">

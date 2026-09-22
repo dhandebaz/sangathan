@@ -49,7 +49,6 @@ export interface PublicOrgData {
   fcra_registration?: string | null
   certificate_12a?: string | null
   certificate_80g?: string | null
-  trade_union_registration?: string | null
 }
 
 export interface PublicAnnouncement {
@@ -479,12 +478,6 @@ export function PublicOrgPortal({
                       <div className="p-3 bg-slate-50 border border-slate-200 rounded-xs">
                         <div className="text-[10px] text-slate-500 font-bold uppercase">Section 80G Tax Deduction</div>
                         <div className="font-mono font-bold text-emerald-700 mt-0.5">Verified 50% Tax Deductible</div>
-                      </div>
-                    )}
-                    {org.trade_union_registration && (
-                      <div className="p-3 bg-slate-50 border border-slate-200 rounded-xs">
-                        <div className="text-[10px] text-slate-500 font-bold uppercase">Trade Union Reg. (State Labour Dept)</div>
-                        <div className="font-mono font-bold text-slate-900 mt-0.5">{org.trade_union_registration}</div>
                       </div>
                     )}
                     {org.org_type === 'civic_collective' && (

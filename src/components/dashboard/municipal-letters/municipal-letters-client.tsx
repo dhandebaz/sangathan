@@ -54,7 +54,7 @@ export default function MunicipalLettersClient({
   const [body, setBody] = useState('')
   const [signatory1, setSignatory1] = useState('President / Lead Convener')
   const [signatory2, setSignatory2] = useState('General Secretary')
-  const [isBqfHeaderEnabled, setIsBqfHeaderEnabled] = useState(true)
+  const [isBqfHeaderEnabled, setIsBqfHeaderEnabled] = useState(false)
 
   // AI Generator Modal state
   const [showAiModal, setShowAiModal] = useState(false)
@@ -314,6 +314,18 @@ export default function MunicipalLettersClient({
             </div>
           </div>
 
+          <label className="flex items-start gap-2.5 p-3 rounded-md border border-slate-200 bg-slate-50 text-xs text-slate-700 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={isBqfHeaderEnabled}
+              onChange={(e) => setIsBqfHeaderEnabled(e.target.checked)}
+              className="w-4 h-4 mt-0.5"
+            />
+            <span>
+              Add BQF community-affiliation line. Tick only if your group has recorded BQF affiliation — it adds no legal status and letters still go in your own name.
+            </span>
+          </label>
+
           <div className="space-y-1.5">
             <Label className="text-xs font-bold uppercase text-slate-500">Recipient Address Block</Label>
             <textarea
@@ -361,7 +373,7 @@ export default function MunicipalLettersClient({
           )}
           {isBqfHeaderEnabled && (
             <div className="mt-2 text-[11px] font-mono text-purple-900 bg-purple-50/80 inline-block px-3 py-1 rounded border border-purple-200">
-              Recognized Civic Collective • BAHUJAN QUEER FOUNDATION (Delhi Reg. Section 8 NGO • CIN: U88900DL2025NPL452474)
+              Community-affiliated group (self-declared) • BAHUJAN QUEER FOUNDATION (Section 8 NGO, Delhi)
             </div>
           )}
         </div>

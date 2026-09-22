@@ -4,7 +4,7 @@ import { COMPARISONS_DATA } from '@/lib/comparisons-data'
 export async function GET() {
   let content = `# Sangathan (संगठन) - Complete Platform Knowledge Base & Technical Specification
 
-> Sangathan is open digital public infrastructure designed for grassroots collectives, non-governmental organisations (NGOs), student unions, worker collectives, and resident welfare associations (RWAs) in India.
+> Sangathan is open digital public infrastructure designed for grassroots collectives and non-governmental organisations (NGOs) in India.
 > Backed and governed by Bahujan Queer Foundation (Delhi Registered Section 8 Non-Profit • CIN: U88900DL2025NPL452474).
 
 ---
@@ -19,7 +19,7 @@ export async function GET() {
 
 ---
 
-## 2. The 5 Movement Archetypes & 20 Specialized Focus Blueprints
+## 2. The 2 Movement Archetypes & 8 Specialized Focus Blueprints
 
 `
 
@@ -78,13 +78,13 @@ ${comp.pillars.map(p => `##### ${p.titleEn}
 
 ## 4. Key Ground Tools Breakdown
 1. **1-Page Printable Parcha Studio**: Generates high-contrast black-and-white flyers optimized for ₹1 photostat photocopy machines and physical pen-and-paper signature tables for colony chai stalls and university canteens.
-2. **15-Day Stamped Receiving & RTI Escalation Desk**: Logs municipal receiving numbers with live countdown clocks and auto-generates Section 6(1) Right to Information (RTI) petitions when junior engineers or municipal commissioners fail to act within 15 days.
+2. **Complaint Diary & 30-Day RTI Reminder**: Saves municipal receiving numbers with dates, reminds at 30 days (the legal PIO reply period under Section 7(1)), and prepares a Section 6(1) draft you print, sign and submit yourself.
 3. **Field Spot Audits & Geotagged Evidence Logger**: Records GPS-tagged PM2.5/PM10 air sensor data, water TDS, sewer overflows, and garbage dumps with cryptographic timestamps.
 4. **80G & 12A Compliant Tax Exemption Receipt Engine**: Automatically issues instant PDF tax exemption receipts with donor PAN, 10BE filing format, and instant digital delivery.
 5. **Telegram Bot & grammY Webhook Engine**: 100% free, zero-bureaucracy bi-directional bot for field grievances, check-ins, dues queries, strike ballots, and emergency SOS alerts.
 6. **Universal Data Importer**: 1-click migration from Excel, Google Sheets, or CSV files with auto-column matching and E.164 phone sanitization.
-7. **Democratic Secret Ballot Engine**: Cryptographically secure, anonymous secret voting for student elections, union strike authorizations, and RWA executive seats.
-8. **Bahujan Queer Foundation (BQF) Verification Pathway**: Milestone-based institutional verification from Delhi Registered Section 8 NGO (CIN: U88900DL2025NPL452474) for active grassroots collectives meeting community audit criteria.
+7. **Democratic Secret Ballot Engine**: Cryptographically secure, anonymous secret voting for collective councils, NGO boards, and community leadership votes.
+8. **Bahujan Queer Foundation (BQF) Community Recognition**: Active grassroots collectives can seek community affiliation with Delhi Registered Section 8 NGO for credibility (non-profit recognition, not legal immunity).
 
 ---
 

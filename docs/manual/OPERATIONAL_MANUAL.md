@@ -557,32 +557,22 @@ Field volunteers can log hyper-local environmental and municipal infraction audi
 ### 31.4 Bilingual Media Press Releases (`/[lang]/dashboard/press-releases`)
 Publish standardized bilingual press statements with official location headers, embargo management (`immediate` or `timed`), spokesperson contact blocks, and print-ready PDF exports formatted for national and regional media houses.
 
-### 31.5 Civic Receiving Trackers (`/[lang]/dashboard/receiving-trackers`)
-Track physical representation letters submitted to government departments with photo uploads of stamped receiving seals and an automated **15-Day Statutory Response Countdown**. If officials fail to respond within the deadline, the system automatically drafts a follow-up **Right to Information (RTI)** application citing the stamped receiving number.
+### 31.5 Civic Receiving Trackers (`/[lang]/dashboard/receiving-tracker`)
+Track physical representation letters submitted to government departments with photo uploads of stamped receiving seals and a dated diary. At 30 days — the legal PIO reply period under Section 7(1) of the RTI Act — the app reminds you and prepares a Section 6(1) draft that you print, sign and submit yourself.
 
 ---
 
 ## Section 32: Statutory Framework & Legal Sub-Classification
 
 ### 32.1 Legal Entity Sub-Classification Architecture
-Sangathan preserves 5 distinct Movement Archetypes while providing deep legal sub-classification according to Indian statutory enactments:
+Sangathan supports 2 organisation types with legal sub-classification according to Indian statutory enactments:
 1. **Registered NGO (`ngo`):**
    * *Registered Society:* Under Societies Registration Act, 1860 (State Registrar of Societies).
    * *Public Charitable Trust:* Under Indian Trusts Act, 1882 / Bombay Public Trust Act, 1950 (Charity Commissioner).
    * *Section 8 Company:* Under Companies Act, 2013 (Ministry of Corporate Affairs / Registrar of Companies).
-2. **Workers Union (`workers_union`):**
-   * *Registered Trade Union:* Under Trade Unions Act, 1926 (State Registrar of Trade Unions).
-   * *Informal Worker Collective:* Gig workers, domestic labor, or self-employed collective.
-3. **Resident Welfare Association (`rwa`):**
-   * *Registered Society (RWA):* Under Societies Registration Act, 1860.
-   * *Cooperative Housing Society:* Under State Cooperative Societies Acts.
-   * *Apartment Owners Association:* Under State Apartment Ownership Acts / RERA 2016.
-4. **Student Union (`student_union`):**
-   * *University-Constituted Body:* Operating under university statutes and Dean of Students Welfare (DSW).
-   * *Independent Student Front:* Independent organization registered under Societies Registration Act.
-5. **Civic Collective (`civic_collective`):**
+2. **Civic Collective (`civic_collective`):**
    * *Unregistered Collective:* Informal constitutional association under Article 19(1)(c).
-   * *BQF Recognized:* Endorsed under Bahujan Queer Foundation Section 8 umbrella.
+   * *BQF Affiliated:* Community affiliation with Bahujan Queer Foundation (Section 8 non-profit) for credibility — not legal status.
 
 ### 32.2 16+ Validated Statutory ID Fields
 Organisations can record validated statutory registration numbers with regex verification and instant links to official government portals:

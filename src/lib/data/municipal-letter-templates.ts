@@ -1,8 +1,9 @@
 /**
  * Municipal & Government Representation Templates
- * 
- * Official pre-formatted letters used by RWAs, Civic Collectives, BQF Recognized Groups,
- * Workers Unions, and Student Unions when writing to Indian government authorities.
+ *
+ * Pre-formatted letter drafts used by Civic Collectives and NGOs when writing
+ * to Indian government authorities. Drafts only — groups review, print, sign
+ * and submit them in their own name.
  */
 
 export interface MunicipalLetterTemplate {
@@ -30,20 +31,20 @@ export interface MunicipalLetterTemplate {
 }
 
 export const MUNICIPAL_LETTER_TEMPLATES: MunicipalLetterTemplate[] = [
-  // --- BQF Official Civic Representations ---
+  // --- Community-Affiliated Civic Representation Draft ---
   {
     id: 'bqf_civic_representation',
     category: 'bqf_official',
-    title: 'BQF Official Recognized Collective Civic Representation',
-    titleHi: 'BQF मान्यता प्राप्त नागरिक मंच आधिकारिक प्रतिवेदन',
-    description: 'Official representation under Bahujan Queer Foundation (CIN: U88900DL2025NPL452474) recognized civic collective status.',
+    title: 'Community-Affiliated Collective Representation Draft',
+    titleHi: 'सामुदायिक संबद्ध नागरिक मंच प्रतिवेदन मसौदा',
+    description: 'Letter draft for BQF community-affiliated groups. Goes in your group\u2019s own name — affiliation adds no legal status.',
     recipient: 'To,\nThe District Magistrate (DM) / Deputy Commissioner,\nOffice of District Magistrate, District ________,\nGovt. of NCT of Delhi / State Govt.',
-    subject: 'OFFICIAL REPRESENTATION REGARDING PUBLIC INFRASTRUCTURE & DISCRIMINATION FREE CIVIC AMENITIES IN ________ AREA',
+    subject: 'REPRESENTATION REGARDING PUBLIC INFRASTRUCTURE & CIVIC AMENITIES IN ________ AREA',
     body: `Respected Sir/Madam,
 
-This official representation is submitted on behalf of ________, a grassroots civic collective recognized under the civic empowerment framework of BAHUJAN QUEER FOUNDATION (Section 8 NGO Registered in Delhi, CIN: U88900DL2025NPL452474).
+This representation is submitted by ________, a grassroots civic collective (community-affiliated with Bahujan Queer Foundation, a Section 8 non-profit — affiliation only, no legal status).
 
-We bring to your urgent attention the pressing civic issues affecting marginalized communities and local residents in ________ locality:
+We bring to your attention the pressing civic issues affecting local residents in ________ locality:
 
 1. Lack of sanitation and basic public convenience facilities in Gali/Block ________
 2. Inadequate streetlight illumination creating safety concerns for women, queer residents, and senior citizens
@@ -62,8 +63,8 @@ Thanking you.
 
 Yours sincerely,`,
     signatory1: 'Lead Convener, Collective',
-    signatory2: 'BQF Civic Nodal Representative',
-    refPrefix: 'BQF/CIVIC',
+    signatory2: 'General Secretary, Collective',
+    refPrefix: 'CIVIC/COLLECTIVE',
   },
 
   // --- Elected Representatives ---
@@ -96,9 +97,9 @@ We earnestly request your intervention to:
 We trust in your leadership and request an early resolution.
 
 With regards,`,
-    signatory1: 'President, RWA',
-    signatory2: 'General Secretary, RWA',
-    refPrefix: 'RWA/MLA',
+    signatory1: 'President, Collective',
+    signatory2: 'General Secretary, Collective',
+    refPrefix: 'CIVIC/MLA',
   },
   {
     id: 'parshad_road_repair',
@@ -123,9 +124,9 @@ The poor road conditions are causing vehicle breakdowns and pedestrian injury ri
 We request you to kindly allocate ward development funds for re-surfacing and patch repair.
 
 With warm regards,`,
-    signatory1: 'President, RWA',
-    signatory2: 'General Secretary, RWA',
-    refPrefix: 'RWA/PARSHAD',
+    signatory1: 'President, Collective',
+    signatory2: 'General Secretary, Collective',
+    refPrefix: 'CIVIC/PARSHAD',
   },
 
   // --- Municipal / Civic ---
@@ -149,9 +150,9 @@ We request:
 Kindly treat this as urgent.
 
 Yours faithfully,`,
-    signatory1: 'President, RWA',
-    signatory2: 'General Secretary, RWA',
-    refPrefix: 'RWA/MCD',
+    signatory1: 'President, Collective',
+    signatory2: 'General Secretary, Collective',
+    refPrefix: 'CIVIC/MCD',
   },
 
   // --- Police ---
@@ -170,59 +171,11 @@ We, the residents of ________ Colony, under the jurisdiction of PS ________, wis
 We request regular night patrolling by beat constables and installation of a police patrolling point.
 
 With regards,`,
-    signatory1: 'President, RWA',
-    signatory2: 'General Secretary, RWA',
-    refPrefix: 'RWA/PS',
+    signatory1: 'President, Collective',
+    signatory2: 'General Secretary, Collective',
+    refPrefix: 'CIVIC/PS',
   },
 
-  // --- Labour Rights ---
-  {
-    id: 'labour_wages_safety',
-    category: 'labour_rights',
-    title: 'Labour Commissioner Safety & Minimum Wage Representation',
-    titleHi: 'श्रम आयुक्त को न्यूनतम मजदूरी एवं सुरक्षा प्रतिवेदन',
-    description: 'Petition to Labour Department regarding safety equipment and wage compliance.',
-    recipient: 'To,\nThe Deputy Labour Commissioner,\nOffice of the Labour Commissioner,\nGovernment of NCT of Delhi / State Govt.',
-    subject: 'REPRESENTATION REGARDING SAFETY EQUIPMENT & TIMELY WAGE DISBURSEMENT FOR SANITATION WORKERS',
-    body: `Respected Sir/Madam,
-
-On behalf of ________ Union, we submit this urgent representation regarding non-compliance with statutory safety standards and wage delays under the Minimum Wages Act and Occupational Safety, Health and Working Conditions Code.
-
-Demands:
-1. Provision of mandatory PPE kits, masks, and boots for sanitation workers
-2. Immediate release of pending wages for the months of ________
-3. Health checkup camps and insurance enrollment
-
-Yours faithfully,`,
-    signatory1: 'President, Workers Union',
-    signatory2: 'General Secretary',
-    refPrefix: 'UNION/LABOUR',
-  },
-
-  // --- Student Campus ---
-  {
-    id: 'student_hostel_audit',
-    category: 'student_campus',
-    title: 'University Registrar Campus Hostel & Mess Infrastructure Representation',
-    titleHi: 'कुलसचिव को छात्रावास एवं मेस ढांचागत प्रतिवेदन',
-    description: 'Representation to University administration regarding hostel hygiene and mess facilities.',
-    recipient: 'To,\nThe Registrar / Dean of Students Welfare (DSW),\n________ University / Institute,\nNew Delhi / Regional Campus',
-    subject: 'REPRESENTATION REGARDING HOSTEL INFRASTRUCTURE, MESS HYGIENE & STUDENT SAFETY',
-    body: `Respected Sir/Madam,
-
-We, the elected representatives of ________ Student Union, bring to your attention pressing issues in Hostel No. ________:
-
-1. Substandard food quality and lack of water purifiers in mess
-2. Broken window panes and unmaintained washrooms
-3. Demand for 24/7 library reading room access
-
-We request a joint committee inspection within 3 days.
-
-Sincerely,`,
-    signatory1: 'President, Student Union',
-    signatory2: 'General Secretary',
-    refPrefix: 'STUDENT/DSW',
-  },
 ]
 
 /**
@@ -230,14 +183,12 @@ Sincerely,`,
  */
 export function getTemplatesByCategory() {
   const categories: Record<string, { label: string; labelHi: string; icon: string; templates: MunicipalLetterTemplate[] }> = {
-    bqf_official: { label: 'BQF Recognized Civic Submissions', labelHi: 'BQF मान्यता प्राप्त प्रतिवेदन', icon: 'Shield', templates: [] },
+    bqf_official: { label: 'Community-Affiliated Drafts', labelHi: 'सामुदायिक संबद्ध मसौदे', icon: 'Shield', templates: [] },
     elected_representative: { label: 'Elected Representatives', labelHi: 'निर्वाचित प्रतिनिधि', icon: 'Landmark', templates: [] },
     municipal_civic: { label: 'Municipal & Civic Services', labelHi: 'नगर निगम एवं नागरिक सेवाएं', icon: 'Building2', templates: [] },
     utility: { label: 'Utility Companies', labelHi: 'बिजली एवं जल बोर्ड', icon: 'Zap', templates: [] },
     police: { label: 'Police & Security', labelHi: 'पुलिस एवं सुरक्षा', icon: 'Shield', templates: [] },
     revenue: { label: 'Revenue & Land', labelHi: 'राजस्व एवं भूमि', icon: 'MapPin', templates: [] },
-    labour_rights: { label: 'Labour Rights & Unions', labelHi: 'श्रम अधिकार एवं यूनियन', icon: 'HardHat', templates: [] },
-    student_campus: { label: 'Student Unions & Campus', labelHi: 'छात्र संघ एवं परिसर', icon: 'GraduationCap', templates: [] },
   }
 
   for (const template of MUNICIPAL_LETTER_TEMPLATES) {

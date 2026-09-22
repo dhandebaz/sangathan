@@ -239,15 +239,6 @@ export function getOrgTypeDefaults(orgType?: string | null): Record<OrgCapabilit
   if (orgType === 'ngo') {
     return { ...BASE_CAPABILITIES, volunteers: true, volunteer_certificates: true, donations: true, campaigns: true, coalition_tools: true, transparency_mode: true, memberships: true, volunteer_engine: true, federation_mode: true, grants: true, events: true, elections: true, dues: true, compliance: true, meetings: true, subgroups: true, press_releases: true, field_audits: true, receiving_tracker: true, parcha_generator: true }
   }
-  if (orgType === 'student_union') {
-    return { ...BASE_CAPABILITIES, student_ids: true, events: true, voting_engine: true, grievances: true, federation_mode: true, campaigns: true, memberships: true, elections: true, election_counting: true, hostel_mess: true, subgroups: true, compliance: true, meetings: true, dues: true }
-  }
-  if (orgType === 'workers_union') {
-    return { ...BASE_CAPABILITIES, grievances: true, disputes: true, voting_engine: true, federation_mode: true, campaigns: true, memberships: true, cba_documents: true, jobs: true, dues: true, elections: true, events: true, compliance: true, meetings: true, subgroups: true }
-  }
-  if (orgType === 'rwa') {
-    return { ...BASE_CAPABILITIES, maintenance: true, domestic_staff: true, assets_amc: true, complaints: true, donations: true, voting_engine: true, events: true, memberships: true, visitors: true, elections: true, grievances: true, compliance: true, meetings: true, subgroups: true }
-  }
 
   return { ...BASE_CAPABILITIES, voting_engine: true, federation_mode: true, volunteer_engine: true }
 }

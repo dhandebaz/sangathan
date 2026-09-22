@@ -138,7 +138,7 @@ export function UnifiedGovernanceHub({
             asChild
             className="text-xs font-bold border-slate-200 bg-white hover:bg-slate-50 text-slate-800 shadow-2xs"
           >
-            <Link href={`/${lang}/dashboard/chanda`}>
+            <Link href={`/${lang}/dashboard/donations`}>
               <HandCoins className="w-3.5 h-3.5 mr-1.5 text-amber-600" />
               {isHindi ? 'चंदा रसीद' : 'Issue Receipt'}
             </Link>
@@ -295,8 +295,8 @@ export function UnifiedGovernanceHub({
               </h3>
               <p className="text-xs text-slate-600 max-w-md mx-auto mb-6">
                 {isHindi
-                  ? 'हड़ताल प्राधिकरण, प्रस्तावों, या छात्र संघ व काडर चुनाव के लिए क्रिप्टोग्राफ़िक गुप्त मतदान शुरू करें।'
-                  : 'Launch encrypted secret strike ballots, AGM resolutions, or representative elections.'}
+                  ? 'प्रस्तावों या प्रतिनिधि चुनाव के लिए क्रिप्टोग्राफ़िक गुप्त मतदान शुरू करें।'
+                  : 'Launch encrypted secret ballots, AGM resolutions, or representative elections.'}
               </p>
               <Button asChild size="sm" className="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs">
                 <Link href={`/${lang}/dashboard/polls/new`}>
@@ -404,23 +404,23 @@ export function UnifiedGovernanceHub({
         </div>
       )}
 
-      {/* 7. Tab 4: Chanda, Donations & 80G Receipts */}
+      {/* 7. Tab 4: Chanda & Donation Receipts */}
       {activeTab === 'chanda' && (
         <div className="space-y-4">
           <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h3 className="text-sm font-bold text-slate-900">
-                {isHindi ? 'चंदा, जन-सहयोग व 80G दान रसीद डेस्क' : 'Chanda, Mutual Aid & 80G Tax Receipts Desk'}
+                {isHindi ? 'चंदा व दान रसीद डेस्क' : 'Chanda & Donation Receipts Desk'}
               </h3>
               <p className="text-xs text-slate-600 font-medium mt-1">
                 {isHindi
-                  ? 'जनता व सदस्यों से प्राप्त सहयोग राशि की रसीदें जारी करें, QR कोड साझा करें और 80G टैक्स सर्टिफिकेट बनाएं।'
-                  : 'Issue tamper-evident receipts, share UPI QR codes, and generate 80G compliance tax slips.'}
+                  ? 'सहयोग राशि की रसीदें जारी करें और QR कोड साझा करें। 80G लिखें सिर्फ तभी जब आपकी संस्था के पास खुद 80G पंजीकरण हो।'
+                  : 'Issue donation receipts and share UPI QR codes. Mention 80G only if your org holds its own 80G registration.'}
               </p>
             </div>
             <div className="flex items-center gap-2">
               <Button asChild size="sm" className="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs">
-                <Link href={`/${lang}/dashboard/chanda`}>
+                <Link href={`/${lang}/dashboard/donations`}>
                   <HandCoins className="w-3.5 h-3.5 mr-1" />
                   {isHindi ? 'नया चंदा दर्ज करें' : 'Record Chanda / Donation'}
                 </Link>

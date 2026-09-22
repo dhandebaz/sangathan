@@ -104,37 +104,43 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
     if (segments.length < 2) return 'Dashboard'
     const parts = segments.slice(1)
     const words = parts.map((segment) => {
-      if (segment === 'dashboard') return 'Dashboard'
-      if (segment === 'events') return 'Events'
+      if (segment === 'dashboard') return 'Home'
+      if (segment === 'events') return 'Meetings'
       if (segment === 'new') return 'Create'
-      if (segment === 'members') return 'Members'
+      if (segment === 'members') return 'People'
+      if (segment === 'people') return 'People'
+      if (segment === 'inbox') return 'Messages'
+      if (segment === 'calendar') return 'Meetings'
+      if (segment === 'governance') return 'Money and votes'
+      if (segment === 'administration') return 'Files and records'
+      if (segment === 'channels') return 'Channels'
+      if (segment === 'communications') return 'Messages'
       if (segment === 'meetings') return 'Meetings'
       if (segment === 'forms') return 'Forms'
       if (segment === 'tasks') return 'Tasks'
-      if (segment === 'polls') return 'Decisions'
+      if (segment === 'polls') return 'Votes'
       if (segment === 'donations') return 'Donations'
       if (segment === 'settings') return 'Settings'
-      if (segment === 'announcements') return 'Announcements'
-      if (segment === 'governance') return 'Governance'
+      if (segment === 'announcements') return 'Messages'
       if (segment === 'proposals') return 'Proposals'
-      if (segment === 'financials') return 'Financial Ledger'
-      if (segment === 'membership-requests') return 'Membership Requests'
-      if (segment === 'student-ids') return 'Student IDs'
+      if (segment === 'financials') return 'Money'
+      if (segment === 'membership-requests') return 'Requests'
+      if (segment === 'student-ids') return 'IDs'
       if (segment === 'print') return 'Print'
       if (segment === 'check-in') return 'Check-in'
       if (segment === 'edit') return 'Edit'
-      if (segment === 'analytics') return 'Analytics'
-      if (segment === 'volunteers') return 'Volunteers'
+      if (segment === 'analytics') return 'Numbers'
+      if (segment === 'volunteers') return 'Team'
       if (segment === 'subgroups') return 'Teams'
       if (segment === 'networks') return 'Networks'
       if (segment === 'campaigns') return 'Campaigns'
-      if (segment === 'grievances') return 'Grievances'
-      if (segment === 'complaints') return 'Complaints'
-      if (segment === 'maintenance') return 'Maintenance'
-      if (segment === 'roles') return 'Custom Roles'
+      if (segment === 'grievances') return 'Issues'
+      if (segment === 'complaints') return 'Issues'
+      if (segment === 'maintenance') return 'Repairs'
+      if (segment === 'roles') return 'Roles'
       if (segment === 'support') return 'Support'
       if (segment === 'appeals') return 'Appeals'
-      if (segment === 'audit') return 'Audit Log'
+      if (segment === 'audit') return 'Logs'
       return segment.charAt(0).toUpperCase() + segment.slice(1)
     })
     return words.join(' / ')
@@ -246,7 +252,7 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
                     }}
                   >
                     <Settings className="h-4 w-4 text-slate-400" />
-                    Workspace Settings (सेटिंग्स)
+                    {lang === 'hi' ? 'सेटिंग्स' : 'Settings'}
                   </button>
                   <button
                     type="button"
@@ -258,7 +264,7 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
                     }}
                   >
                     <CreditCard className="h-4 w-4 text-slate-400" />
-                    Billing & Plans (बिलिंग)
+                    {lang === 'hi' ? 'बिलिंग' : 'Billing'}
                   </button>
                 </div>
                 <div className="border-t border-slate-100 p-1.5">
@@ -270,7 +276,7 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
                     disabled={isSigningOut}
                   >
                     <LogOut className="h-4 w-4" />
-                    {isSigningOut ? 'Signing out...' : 'Sign Out (लॉग आउट)'}
+                    {isSigningOut ? (lang === 'hi' ? 'निकल रहे हैं...' : 'Signing out...') : (lang === 'hi' ? 'लॉग आउट' : 'Sign out')}
                   </button>
                 </div>
               </div>

@@ -28,7 +28,7 @@ export async function processBqfVerification(input: BqfVerificationInput) {
   if (!input.indemnityAccepted) {
     return {
       success: false,
-      error: 'You must accept the legal indemnity & liability terms of Bahujan Queer Foundation.',
+      error: 'Please accept the responsibility terms and ID storage consent.',
     }
   }
 
@@ -75,7 +75,7 @@ Return ONLY valid JSON matching schema.`
     face_match_score: verificationResult.faceMatchScore,
     indemnity_timestamp: new Date().toISOString(),
     terms_version: 'BQF-INDEMNITY-V1.0',
-    legal_disclaimer: 'Bahujan Queer Foundation (Section 8 NGO, Delhi) officially recognizes this civic collective for local public representations. BQF is strictly indemnified from any unlawful actions, illegal activities, or unapproved commitments made by this collective.',
+    legal_disclaimer: 'Bahujan Queer Foundation community affiliation recorded for this civic collective based on self-declared details. This is not government registration, verified identity, or legal immunity. All letters must go in the group\u2019s own name.',
   }
 
   // Fetch existing compliance_documents

@@ -21,9 +21,7 @@ async function getOrgType(supabase: Awaited<ReturnType<typeof createClient>>, or
 function getOrgLabels(orgType: string) {
   const labels: Record<string, { title: string; description: string }> = {
     ngo: { title: 'Donations & Fundraising', description: 'Track donor contributions, issue tax receipts, and manage fundraising campaigns.' },
-    rwa: { title: 'Maintenance Collections', description: 'Track maintenance fee collections and society funds.' },
-    student_union: { title: 'Contributions', description: 'Track financial contributions and member subscriptions.' },
-    workers_union: { title: 'Contributions', description: 'Track financial contributions and member subscriptions.' },
+    civic_collective: { title: 'Donations & Chanda', description: 'Track community contributions, chanda collections, and supporter funds.' },
   }
   return labels[orgType] || { title: 'Donations', description: 'Track contributions and manage financial support.' }
 }

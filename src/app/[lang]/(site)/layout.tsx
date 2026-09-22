@@ -15,18 +15,16 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       default: isHindi ? 'संगठन - नागरिक समूहों के लिए बुनियादी ढांचा' : 'Sangathan - Infrastructure for Civic Collectives',
     },
     description: isHindi
-      ? 'एनजीओ, छात्र संघों और सामुदायिक समूहों के लिए सदस्यों, निधियों और शासन का प्रबंधन करने के लिए डिजिटल बुनियादी ढांचा।'
-      : 'Digital infrastructure for NGOs, student unions, and community groups to manage members, funds, and governance.',
+      ? 'एनजीओ और सामुदायिक समूहों के लिए सदस्यों, निधियों और शासन का प्रबंधन करने के लिए डिजिटल बुनियादी ढांचा।'
+      : 'Digital infrastructure for NGOs and community groups to manage members, funds, and governance.',
     keywords: [
-      'NGO management software India', 'student union election software', 'RWA management app', 
-      'housing society app India', 'workers union management', 'member management India', 
+      'NGO management software India',
+      'member management India', 
       'organization management platform', 'civic tech India', 'donation management NGO', 
       '80G tax receipt software', 'FCRA compliance tracker', 'RTI application tool', 
-      'campus election management', 'Lyngdoh committee compliance', 'online voting platform India', 
-      'maintenance billing housing society', 'resident welfare association software', 
-      'trade union management system', 'collective bargaining agreement software', 
+      'online voting platform India', 
       'transparent governance platform', 'digital id card organization', 'event management NGO', 
-      'volunteer management software India', 'sangathan app', 'संगठन', 'एनजीओ सॉफ्टवेयर', 'छात्र संघ'
+      'volunteer management software India', 'sangathan app', 'संगठन', 'एनजीओ सॉफ्टवेयर'
     ],
     alternates: {
       canonical: `/${lang}`,
@@ -42,8 +40,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       siteName: 'Sangathan',
       title: isHindi ? 'संगठन — नागरिक आंदोलनों व समूहों का डिजिटल ऑपरेटिंग सिस्टम' : 'Sangathan — Civic Digital Infrastructure for Movements & Collectives',
       description: isHindi
-        ? 'नागरिक समूहों, एनजीओ, छात्र संघों, श्रमिक संघों और आरडब्ल्यूए के लिए 1-टैप स्पॉट जांच, ₹1 पर्चे, 15-दिवसीय आरटीआई गार्ड व गुप्त मतदान।'
-        : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
+        ? 'नागरिक समूहों और एनजीओ के लिए 1-टैप जांच, ₹1 पर्चे, 30-दिवसीय आरटीआई याद व गुप्त मतदान।'
+        : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, and NGOs.',
       images: [
         {
           url: `https://sangathan.space/api/og?lang=${lang}&type=collective`,
@@ -59,8 +57,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       creator: '@areynetaji',
       title: isHindi ? 'संगठन — नागरिक आंदोलनों व समूहों का डिजिटल ऑपरेटिंग सिस्टम' : 'Sangathan — Civic Digital Infrastructure for Movements & Collectives',
       description: isHindi
-        ? 'नागरिक समूहों, एनजीओ, छात्र संघों, श्रमिक संघों और आरडब्ल्यूए के लिए 1-टैप स्पॉट जांच, ₹1 पर्चे, 15-दिवसीय आरटीआई गार्ड व गुप्त मतदान।'
-        : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, NGOs, student unions, workers unions, and RWAs.',
+        ? 'नागरिक समूहों और एनजीओ के लिए 1-टैप जांच, ₹1 पर्चे, 30-दिवसीय आरटीआई याद व गुप्त मतदान।'
+        : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, and NGOs.',
       images: [`https://sangathan.space/api/og?lang=${lang}&type=collective`],
     },
     verification: {
