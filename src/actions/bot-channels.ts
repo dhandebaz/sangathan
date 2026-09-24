@@ -1,6 +1,5 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { getSelectedOrganisationId } from '@/lib/auth/context'
 import { revalidatePath } from 'next/cache'
@@ -299,7 +298,7 @@ export async function sendAdminDirectReplyAction(params: {
 
     const adminClient = createServiceClient()
     let conversationId = params.conversationId
-    let conv: any = null
+    let conv: { id: string; channel?: string | null; sender_id?: string | null } | null = null
 
     // 1. Handle direct member conversations dynamically
     if (conversationId.startsWith('direct-')) {
@@ -368,8 +367,12 @@ export async function sendAdminDirectReplyAction(params: {
     let dispatchSuccess = false
     let providerMsgId = `reply_${Date.now()}`
 
+    if (!conv) {
+      return { success: false, error: 'Conversation not found' }
+    }
+
     const botToken = config?.credentials?.bot_token || process.env.TELEGRAM_BOT_TOKEN
-    if (botToken && conv.channel === 'telegram') {
+    if (botToken && conv.channel === 'telegram' && conv.sender_id) {
       const res = await sendTelegramDirectMessage({
         botToken,
         chatId: conv.sender_id,

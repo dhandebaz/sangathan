@@ -2,7 +2,7 @@
 
 import { createServiceClient } from '@/lib/supabase/service'
 import { parseBotMessage } from '@/lib/bot/parser'
-import { getDistrictsByState, getStateByName, getStateByCode } from '@/lib/geo/india'
+import { getStateByName, getStateByCode } from '@/lib/geo/india'
 
 interface ProcessBotInput {
   organisationId: string
@@ -15,7 +15,7 @@ interface ProcessBotInput {
 interface BotResponse {
   replyText: string
   actionExecuted?: string
-  data?: any
+  data?: Record<string, unknown>
 }
 
 export async function processIncomingBotMessage(input: ProcessBotInput): Promise<BotResponse> {

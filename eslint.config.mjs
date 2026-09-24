@@ -12,13 +12,15 @@ const eslintConfig = defineConfig([
     },
   },
   // Override default ignores of eslint-config-next.
+  // NOTE: "**/*.js" (not "*.js") — flat-config minimatch does not cross
+  // directories, so legacy helper scripts under supabase/ must be covered.
   globalIgnores([
     ".next/**",
     "out/**",
     "build/**",
     "next-env.d.ts",
     "src/types/database.ts",
-    "*.js",
+    "**/*.js",
     "scripts/**",
   ]),
 ]);

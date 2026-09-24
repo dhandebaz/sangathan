@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* App is light-only by design (no theme toggle anywhere).
+   Tailwind v4 applies `dark:` variants via OS prefers-color-scheme, which was
+   painting dark-mode text on light containers (e.g. invisible sidebar labels).
+   Restrict `dark:` to an explicit .dark class (never added) to lock light mode. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 html {
   cursor: default;
 }

@@ -104,9 +104,19 @@ console.log('\n=== Executing via Supabase MCP Server ===\n');
 
 console.log('Attempting to apply migration via supabase CLI with direct database connection...');
 
+// NOTE: Direct connections (db.<ref>.supabase.co:5432) are IPv6-first and time
+// out with "dial tcp ... i/o timeout" on IPv4-only networks (CI runners,
+// Supabase Preview). Always use the Supavisor pooler (IPv4, port 6543) here.
+// Full override: SUPABASE_DB_URL. Region default: ap-south-1 (override: SUPABASE_DB_REGION).
+const dbPassword = process.env.SUPABASE_DB_PASSWORD || 'postgres';
+const dbRegion = process.env.SUPABASE_DB_REGION || 'ap-south-1';
+const dbUrl =
+  process.env.SUPABASE_DB_URL ||
+  `postgresql://postgres.${PROJECT_REF}:${encodeURIComponent(dbPassword)}@aws-0-${dbRegion}.pooler.supabase.com:6543/postgres`;
+
 const cli = spawn('npx', [
   'supabase', 'db', 'push',
-  '--db-url', `postgresql://postgres:${process.env.SUPABASE_DB_PASSWORD || 'postgres'}@db.${PROJECT_REF}.supabase.co:5432/postgres`
+  '--db-url', dbUrl,
 ], {
   env: { ...process.env },
   stdio: ['pipe', 'inherit', 'inherit']

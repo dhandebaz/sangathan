@@ -160,7 +160,7 @@ export function DigestTriggerCard() {
             </div>
 
             {/* Prompt Content */}
-            <div className="p-5 overflow-y-auto flex-1 font-mono text-xs text-slate-700 whitespace-pre-wrap bg-slate-900 text-slate-100 rounded-b-none selection:bg-sky-500 selection:text-white">
+            <div className="p-5 overflow-y-auto flex-1 font-mono text-xs text-slate-100 whitespace-pre-wrap bg-slate-900 rounded-b-none selection:bg-sky-500 selection:text-white">
               {preview.idePromptBlock}
             </div>
 

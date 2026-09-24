@@ -12,12 +12,10 @@ import {
   Upload,
   FileSpreadsheet,
   CheckCircle2,
-  AlertTriangle,
   ArrowRight,
   ArrowLeft,
   RotateCcw,
   Sparkles,
-  Users,
   ShieldCheck,
   Globe,
   Contact,
@@ -44,7 +42,7 @@ type ColumnMapping = {
 
 type SourceType = 'csv' | 'google_sheets' | 'google_contacts' | 'live_google_contacts'
 
-export function ImportWizard({ lang, orgType = 'ngo', remainingCapacity = 1000, initialSourceType = 'csv' }: ImportWizardProps) {
+export function ImportWizard({ lang, remainingCapacity = 1000, initialSourceType = 'csv' }: ImportWizardProps) {
   const router = useRouter()
   const isHindi = lang === 'hi'
 
@@ -313,7 +311,7 @@ export function ImportWizard({ lang, orgType = 'ngo', remainingCapacity = 1000, 
       
       setGoogleContacts(data.contacts || [])
       // Select all by default
-      setSelectedGoogleContacts(new Set((data.contacts || []).map((_: any, i: number) => i)))
+      setSelectedGoogleContacts(new Set((data.contacts || []).map((_: unknown, i: number) => i)))
       toast.success(isHindi ? `${data.totalCount} Google Contacts मिले!` : `Found ${data.totalCount} Google Contacts!`)
     } catch (err: unknown) {
       setGoogleContactsError(err instanceof Error ? err.message : 'Failed to connect to Google')
@@ -536,7 +534,7 @@ export function ImportWizard({ lang, orgType = 'ngo', remainingCapacity = 1000, 
                   <p className="font-bold mb-1">{isHindi ? 'Google Sheet कैसे कनेक्ट करें:' : 'How to connect your Google Sheet:'}</p>
                   <ol className="list-decimal list-inside space-y-1 text-slate-600">
                     <li>Open your Google Sheet $\rightarrow$ Click <strong>Share</strong> (top right).</li>
-                    <li>Change General access to <strong>"Anyone with the link can view"</strong>.</li>
+                    <li>Change General access to <strong>&quot;Anyone with the link can view&quot;</strong>.</li>
                     <li>Copy the sheet URL and paste it below.</li>
                   </ol>
                 </div>
@@ -589,7 +587,7 @@ export function ImportWizard({ lang, orgType = 'ngo', remainingCapacity = 1000, 
                     >
                       contacts.google.com <ExternalLink className="w-3 h-3" />
                     </a>{' '}
-                    $\rightarrow$ click <strong>Export</strong> $\rightarrow$ select <strong>"Google CSV"</strong>. Then drop that file or paste its contents below.
+                    $\rightarrow$ click <strong>Export</strong> $\rightarrow$ select <strong>&quot;Google CSV&quot;</strong>. Then drop that file or paste its contents below.
                   </p>
                 </div>
 

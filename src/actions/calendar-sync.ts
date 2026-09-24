@@ -103,11 +103,11 @@ export async function getCentralizedCalendarData(orgId: string) {
                                 tk.title?.toLowerCase().includes('audit') ||
                                 tk.title?.toLowerCase().includes('visit')
         
-        const assigned = (tk.task_assignments || []).map((ta: any) => ({
+        const assigned = (tk.task_assignments || []).map((ta: { member?: { id?: string; full_name?: string; role?: string } | null }) => ({
           id: ta.member?.id || '',
           name: ta.member?.full_name || 'Assigned Member',
           role: ta.member?.role || 'Member'
-        })).filter((m: any) => m.id)
+        })).filter((m: { id: string }) => m.id)
 
         calendarItems.push({
           id: `tk-${tk.id}`,
@@ -133,11 +133,11 @@ export async function getCentralizedCalendarData(orgId: string) {
       members: membersRes.data || [],
       orgId
     }
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Error fetching calendar data:', err)
     return {
       success: false,
-      error: err?.message || 'Failed to fetch calendar items',
+      error: err instanceof Error ? err.message : 'Failed to fetch calendar items',
       items: [],
       members: [],
       orgId
@@ -285,7 +285,7 @@ export async function syncOrgToGoogleCalendarAction(orgId: string) {
 }
 
 // 5. Generate Apple iCal / Webcal Subscription Feed URL
-export async function getCalendarSubscriptionDetails(orgId: string, lang: string = 'en') {
+export async function getCalendarSubscriptionDetails(orgId: string, _lang: string = 'en') {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { success: false, error: 'Unauthorized' }

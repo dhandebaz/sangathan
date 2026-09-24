@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { getSelectedOrganisationId } from '@/lib/auth/context'
-import { AutomationRule, PREBUILT_AUTOMATION_RECIPES } from '@/lib/automations/engine'
+import { PREBUILT_AUTOMATION_RECIPES } from '@/lib/automations/engine'
 import { z } from 'zod'
 
 const CreateAutomationSchema = z.object({

@@ -15,19 +15,17 @@ export interface MatchResult {
 export async function matchGrantOpportunitiesAction(): Promise<MatchResult[]> {
   const orgId = await getSelectedOrganisationId()
   let orgType = 'ngo'
-  let orgName = 'Democratic Collective'
 
   if (orgId) {
     try {
       const adminClient = createServiceClient()
       const { data } = await adminClient
         .from('organisations')
-        .select('name, org_type')
+        .select('org_type')
         .eq('id', orgId)
         .maybeSingle()
       if (data) {
         orgType = data.org_type || 'ngo'
-        orgName = data.name || orgName
       }
     } catch {
       // fallback
@@ -131,7 +129,7 @@ export async function generateGrantProposalDraftAction(opportunityId: string): P
         project_title: proposal.projectTitle,
         requested_amount: proposal.requestedAmount,
         match_score_percentage: 92,
-        proposal_draft: proposal as any,
+        proposal_draft: JSON.parse(JSON.stringify(proposal)) as import('@/types/database').Json,
         status: 'ai_generated',
       })
     } catch {

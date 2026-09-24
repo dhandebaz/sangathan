@@ -9,8 +9,8 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -22,19 +22,10 @@ jobs:
       - name: Create issue if vulnerabilities found
         if: ${{ env.report != '{}' && env.report != '' }}
         run: |
+          AUDIT_BODY="$(npm audit --audit-level=low 2>&1 || true)"
           gh issue create \
             --title "Weekly Dependency Audit — Vulnerabilities Found" \
-            --body "$(cat <<'ISSUE'
-        ## Dependency Audit Report
-
-        The weekly dependency scan found vulnerabilities in the project.
-
-        $(npm audit --audit-level=low 2>&1 || true)
-
-        ---
-        _Generated automatically by the Dependency Refresh workflow._
-        ISSUE
-        )" \
+            --body "$(printf '## Dependency Audit Report\n\nThe weekly dependency scan found vulnerabilities in the project.\n\n%s\n\n---\n_Generated automatically by the Dependency Refresh workflow._\n' "$AUDIT_BODY")" \
             --label "dependencies,security"
         env:
           GH_TOKEN: ${{ github.token }}
@@ -44,7 +35,7 @@ jobs:
         run: |
           gh issue create \
             --title "Weekly Dependency Audit — All Clear" \
-            --body "## Dependency Audit Report\n\nNo vulnerabilities found in the project's dependencies.\n\n---\n_Generated automatically by the Dependency Refresh workflow._" \
+            --body "$(printf '## Dependency Audit Report\n\nNo vulnerabilities found in the project dependencies.\n\n---\n_Generated automatically by the Dependency Refresh workflow._\n')" \
             --label "dependencies"
         env:
           GH_TOKEN: ${{ github.token }}

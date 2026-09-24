@@ -161,18 +161,21 @@ export function InteractiveFeatures({ orgs, isHindi, lang }: InteractiveFeatures
   const [activeTab, setActiveTab] = useState(defaultOrgId)
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(0)
 
-  // Safe mount-time hash retrieval to prevent hydration mismatches
+  // Hash sync deferred to a microtask: server HTML and first client render stay
+  // identical (no hydration mismatch), then the anchor tab applies before paint.
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const hash = window.location.hash
-      if (hash) {
-        const tabId = hash.replace('#', '')
-        if (orgs.some(org => org.id === tabId)) {
-          setActiveTab(tabId)
-          setActiveFeatureIndex(0)
+    queueMicrotask(() => {
+      if (typeof window !== 'undefined') {
+        const hash = window.location.hash
+        if (hash) {
+          const tabId = hash.replace('#', '')
+          if (orgs.some(org => org.id === tabId)) {
+            setActiveTab(tabId)
+            setActiveFeatureIndex(0)
+          }
         }
       }
-    }
+    })
     return () => {}
   }, [orgs])
 

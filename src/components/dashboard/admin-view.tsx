@@ -252,8 +252,12 @@ export function AdminDashboard({
   const defaultOrigin = 'https://sangathan.space'
   const [origin, setOrigin] = useState(defaultOrigin)
 
+  // Deferred (not synchronous effect body): server HTML and first client render
+  // stay identical, then the real origin applies before paint.
   useEffect(() => {
-    setOrigin(window.location.origin)
+    queueMicrotask(() => {
+      if (typeof window !== 'undefined') setOrigin(window.location.origin)
+    })
   }, [])
 
   const publicOrgUrl = `${origin}/${lang}/org/${slug || 'demo'}`

@@ -1,4 +1,5 @@
 import { describe, expect, it, beforeEach } from 'vitest'
+import crypto from 'crypto'
 import { splitGst, isDelhiBuyer, invoiceNoFor } from '@/lib/billing/invoices'
 import { verifyRazorpayWebhookSignature } from '@/lib/billing/razorpay-webhook'
 import { encryptTokenSecret, decryptTokenSecret } from '@/lib/integrations/crypto'
@@ -40,7 +41,6 @@ describe('GST invoice math (inclusive prices)', () => {
 
 describe('Razorpay webhook signature', () => {
   it('accepts valid HMAC and rejects tampering', () => {
-    const crypto = require('crypto') as typeof import('crypto')
     const secret = 'test_webhook_secret'
     const body = JSON.stringify({ event: 'subscription.charged' })
     const sig = crypto.createHmac('sha256', secret).update(body).digest('hex')

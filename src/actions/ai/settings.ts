@@ -10,6 +10,10 @@ const ToggleAiSchema = z.object({
 })
 
 export async function toggleAiAssistanceAction(enabled: boolean) {
+  const parsed = ToggleAiSchema.safeParse({ enabled })
+  if (!parsed.success) {
+    return { success: false, error: 'Invalid input' }
+  }
   try {
     const supabase = await createClient()
     const {

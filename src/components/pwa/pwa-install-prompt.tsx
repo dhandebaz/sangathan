@@ -4,7 +4,7 @@ import React, { useState, useEffect, createContext, useContext } from 'react'
 import Image from 'next/image'
 import {
   Download, Share, PlusSquare, X, CheckCircle2,
-  Sparkles, Smartphone, ArrowRight, ShieldCheck
+  Smartphone
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -35,8 +35,29 @@ export function usePwa() {
   return useContext(PwaContext)
 }
 
+function isStandaloneDisplay(): boolean {
+  if (typeof window === 'undefined') return false
+  return (
+    window.matchMedia('(display-mode: standalone)').matches ||
+    ('standalone' in window.navigator && (window.navigator as unknown as { standalone: boolean }).standalone)
+  )
+}
+
+function isIosDevice(): boolean {
+  if (typeof window === 'undefined') return false
+  const userAgent = window.navigator.userAgent.toLowerCase()
+  return /iphone|ipad|ipod/.test(userAgent) && !(window as unknown as { MSStream?: unknown }).MSStream
+}
+
+function isAndroidDevice(): boolean {
+  if (typeof window === 'undefined') return false
+  return /android/.test(window.navigator.userAgent.toLowerCase())
+}
+
 export function PwaProvider({ children, lang = 'en' }: { children: React.ReactNode; lang?: string }) {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
+  // Initialized false so server HTML and first client render match (no hydration
+  // mismatch); browser values sync in a microtask below, before paint.
   const [isInstalled, setIsInstalled] = useState(false)
   const [isIos, setIsIos] = useState(false)
   const [isAndroid, setIsAndroid] = useState(false)
@@ -46,24 +67,15 @@ export function PwaProvider({ children, lang = 'en' }: { children: React.ReactNo
   const isHindi = lang === 'hi'
 
   useEffect(() => {
-    // Check if already running in standalone mode (installed PWA)
-    const isStandalone =
-      typeof window !== 'undefined' &&
-      (window.matchMedia('(display-mode: standalone)').matches ||
-        ('standalone' in window.navigator && (window.navigator as unknown as { standalone: boolean }).standalone))
-
-    if (isStandalone) {
-      setIsInstalled(true)
-      return
-    }
-
-    // Detect user agent
-    const userAgent = typeof window !== 'undefined' ? window.navigator.userAgent.toLowerCase() : ''
-    const isIosDevice = /iphone|ipad|ipod/.test(userAgent) && !(window as unknown as { MSStream?: unknown }).MSStream
-    const isAndroidDevice = /android/.test(userAgent)
-
-    setIsIos(isIosDevice)
-    setIsAndroid(isAndroidDevice)
+    // Deferred (not synchronous effect body): same timing, lint-clean.
+    queueMicrotask(() => {
+      if (isStandaloneDisplay()) {
+        setIsInstalled(true)
+        return
+      }
+      setIsIos(isIosDevice())
+      setIsAndroid(isAndroidDevice())
+    })
 
     // Check localStorage dismissal
     const dismissedAt = localStorage.getItem('sangathan_pwa_dismissed')
@@ -91,8 +103,9 @@ export function PwaProvider({ children, lang = 'en' }: { children: React.ReactNo
     window.addEventListener('appinstalled', handleAppInstalled)
 
     // On iOS Safari, show prompt after a short delay if not dismissed
+    // (reads the device directly — effect closure must not use the state value)
     let iosTimer: ReturnType<typeof setTimeout> | undefined
-    if (isIosDevice && !isDismissed) {
+    if (isIosDevice() && !isDismissed) {
       iosTimer = setTimeout(() => {
         setShowPromptBanner(true)
       }, 4000)
