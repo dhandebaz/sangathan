@@ -62,14 +62,14 @@ export function PlanUsageBanner({ usage, lang }: PlanUsageBannerProps) {
               <span className="text-amber-800 font-medium flex items-center gap-1 mt-1">
                 <AlertCircle className="w-3.5 h-3.5" />
                 {isHindi
-                  ? '20 सदस्यों की मुफ्त सीमा के करीब। असीमित सदस्यों और AI बुद्धिमत्ता के लिए अपग्रेड करें।'
-                  : 'Approaching the 20-member free tier limit. Upgrade for unlimited members & AI intelligence.'}
+                  ? '5 प्रोफाइल की मुफ्त सीमा के करीब। 6वें साथी से मीटर चलता है: (सक्रिय − 5) × ₹11/माह।'
+                  : 'Approaching the 5-profile free limit. Beyond 5, the meter runs: (actives − 5) × ₹11/mo.'}
               </span>
             ) : (
               <span>
                 {isHindi
-                  ? 'मुफ्त समुदाय योजना 20 सदस्यों तक का समर्थन करती है। असीमित वृद्धि के लिए कभी भी अपग्रेड करें।'
-                  : 'Free community tier supports up to 20 members. Upgrade anytime for unlimited growth.'}
+                  ? 'मुफ्त समुदाय योजना 5 प्रोफाइल तक का समर्थन करती है। उसके बाद हर सक्रिय साथी ₹11/माह।'
+                  : 'Free community tier supports up to 5 profiles. Beyond that, ₹11/month per active member.'}
               </span>
             )}
           </p>

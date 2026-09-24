@@ -497,7 +497,7 @@ export function PetitionView({ lang, org, petition, recentSignatures: initialSig
               </Label>
               <Textarea
                 id="statement"
-                placeholder="e.g. Our union stands shoulder to shoulder with this critical student demand..."
+                placeholder="e.g. Our organisation stands shoulder to shoulder with this critical public demand..."
                 value={endorseStatement}
                 onChange={(e) => setEndorseStatement(e.target.value)}
                 rows={3}

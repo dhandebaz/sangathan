@@ -80,13 +80,13 @@ export default async function SolutionsDirectoryPage({ params }: { params: Promi
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.08]">
                 {isHindi ? (
                   <>
-                    हर प्रकार के संगठन के लिए <br className="hidden sm:inline" />
+                    नागरिक समूह या एनजीओ के लिए <br className="hidden sm:inline" />
                     <span className="text-indigo-600">विशेष डिजिटल हथियार।</span>
                   </>
                 ) : (
                   <>
-                    Purpose-Built Digital Weapons for <br className="hidden sm:inline" />
-                    <span className="text-indigo-600">Every Movement Archetype.</span>
+                    Purpose-Built Digital Tools for <br className="hidden sm:inline" />
+                    <span className="text-indigo-600">Civic Collectives & NGOs.</span>
                   </>
                 )}
               </h1>
@@ -148,7 +148,7 @@ export default async function SolutionsDirectoryPage({ params }: { params: Promi
           </div>
         </section>
 
-        {/* 5 CORE SOLUTIONS GRID */}
+        {/* 2 CORE SOLUTIONS GRID */}
         <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mb-4">

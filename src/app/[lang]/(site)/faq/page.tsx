@@ -53,8 +53,8 @@ export default async function FAQPage({ params }: { params: Promise<{ lang: stri
     {
       q: isHindi ? 'क्या गैर-पंजीकृत नागरिक समूह संगठन का उपयोग कर सकते हैं?' : 'Can unregistered grassroots movements use Sangathan?',
       a: isHindi
-        ? 'हाँ, बिल्कुल। संगठन विशेष रूप से अनौपचारिक नागरिक समूहों, पर्यावरण शोधकर्ताओं और छात्र पहलों के लिए बनाया गया है, जिन्हें किसी सरकारी पंजीकरण संख्या की आवश्यकता नहीं है।'
-        : 'Yes, absolutely. Sangathan is purposely built for informal collectives, neighborhood groups, student fronts, and mutual-aid networks without requiring statutory registration.',
+        ? 'हाँ, बिल्कुल। संगठन विशेष रूप से अनौपचारिक नागरिक समूहों, पर्यावरण शोधकर्ताओं और युवा पहलों के लिए बनाया गया है, जिन्हें किसी सरकारी पंजीकरण संख्या की आवश्यकता नहीं है।'
+        : 'Yes, absolutely. Sangathan is purposely built for informal collectives, neighborhood groups, youth initiatives, and mutual-aid networks without requiring statutory registration.',
     },
   ]
 

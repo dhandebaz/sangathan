@@ -9,9 +9,7 @@ import {
 } from '@/lib/geo/india'
 import {
   NGO_SDG_SECTORS,
-  STUDENT_CENTRAL_PANEL,
-  INDUSTRIAL_SECTORS,
-  RWA_MAINTENANCE_HEADS,
+  CIVIC_ACTION_AREAS,
 } from '@/lib/data/org-master-data'
 
 describe('National Indian Geographical Engine', () => {
@@ -61,16 +59,8 @@ describe('Domain-Specific Master Reference Taxonomies', () => {
     expect(NGO_SDG_SECTORS.find((s) => s.code === 'SDG-1')).toBeDefined()
   })
 
-  it('should provide Student Union Central Panel designations', () => {
-    expect(STUDENT_CENTRAL_PANEL.find((p) => p.code === 'SU-PRES')).toBeDefined()
-    expect(STUDENT_CENTRAL_PANEL.find((p) => p.code === 'SU-GS')).toBeDefined()
-  })
-
-  it('should provide Worker Union Industrial Classifications', () => {
-    expect(INDUSTRIAL_SECTORS.find((i) => i.code === 'SEC-MFG')).toBeDefined()
-  })
-
-  it('should provide RWA Standard Maintenance Heads', () => {
-    expect(RWA_MAINTENANCE_HEADS.length).toBeGreaterThan(5)
+  it('should provide Civic Collective ground action areas', () => {
+    expect(CIVIC_ACTION_AREAS.length).toBeGreaterThanOrEqual(5)
+    expect(CIVIC_ACTION_AREAS.find((a) => a.code === 'CIVIC-AIR')).toBeDefined()
   })
 })

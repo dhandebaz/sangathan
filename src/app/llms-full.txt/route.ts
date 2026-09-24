@@ -1,5 +1,6 @@
 import { SOLUTIONS_DATA } from '@/lib/solutions-data'
 import { COMPARISONS_DATA } from '@/lib/comparisons-data'
+import { ALL_GUIDE_ARTICLES, ARTICLE_CATEGORIES } from '@/lib/seo-articles'
 
 export async function GET() {
   let content = `# Sangathan (संगठन) - Complete Platform Knowledge Base & Technical Specification
@@ -12,9 +13,10 @@ export async function GET() {
 ## 1. Executive Summary & Core Identity
 - **Website**: https://sangathan.space
 - **Type**: Civic Public Infrastructure / Digital Organizing Operating System
-- **Pricing Model**: 2-Tier Civic Solidarity Model
-  - **Community Tier**: ₹0 Forever (Free for grassroots collectives, informal groups, and community volunteers up to 20 leaders with unlimited public supporters).
-  - **Institution Tier**: ₹1,000/month or ₹10,000/year (Cross-subsidizing patronage for funded non-profits and formal unions).
+- **Pricing Model**: Monthly-only, no annual, no slabs
+  - **Community Tier**: ₹0 Forever (Free for grassroots collectives up to 5 member profiles, with open participation fair-use for public supporters, voters, petition signers).
+  - **Metered Billing**: (active members − 5) × ₹11/month, counted month-end (active = logged in within 60 days). No base fee. Pause anytime, data stays.
+  - **Whitelabel for Life**: ₹999 one-time per org, removes platform branding forever.
 - **Core Principles**: Zero advertising, absolute data privacy (no commercial data selling), offline-first mobile PWA, bilingual in English and Hindi, Indian statutory compliance out-of-the-box.
 
 ---
@@ -79,11 +81,11 @@ ${comp.pillars.map(p => `##### ${p.titleEn}
 ## 4. Key Ground Tools Breakdown
 1. **1-Page Printable Parcha Studio**: Generates high-contrast black-and-white flyers optimized for ₹1 photostat photocopy machines and physical pen-and-paper signature tables for colony chai stalls and university canteens.
 2. **Complaint Diary & 30-Day RTI Reminder**: Saves municipal receiving numbers with dates, reminds at 30 days (the legal PIO reply period under Section 7(1)), and prepares a Section 6(1) draft you print, sign and submit yourself.
-3. **Field Spot Audits & Geotagged Evidence Logger**: Records GPS-tagged PM2.5/PM10 air sensor data, water TDS, sewer overflows, and garbage dumps with cryptographic timestamps.
-4. **80G & 12A Compliant Tax Exemption Receipt Engine**: Automatically issues instant PDF tax exemption receipts with donor PAN, 10BE filing format, and instant digital delivery.
-5. **Telegram Bot & grammY Webhook Engine**: 100% free, zero-bureaucracy bi-directional bot for field grievances, check-ins, dues queries, strike ballots, and emergency SOS alerts.
+3. **Field Checks & Evidence Logger**: Records GPS-tagged PM2.5/PM10 air data, water TDS, sewer overflows, and garbage dumps with dates and photos.
+4. **Donation Receipt Records**: Records donations with donor details and receipt numbers. Mention 80G only if your org holds its own 80G registration.
+5. **Telegram Bot & Webhook Engine**: Free bi-directional bot for field issues, check-ins, dues queries, polls, and team SOS alerts.
 6. **Universal Data Importer**: 1-click migration from Excel, Google Sheets, or CSV files with auto-column matching and E.164 phone sanitization.
-7. **Democratic Secret Ballot Engine**: Cryptographically secure, anonymous secret voting for collective councils, NGO boards, and community leadership votes.
+7. **Democratic Secret Ballot Engine**: Anonymous secret voting for group decisions — members see only totals, never individual choices.
 8. **Bahujan Queer Foundation (BQF) Community Recognition**: Active grassroots collectives can seek community affiliation with Delhi Registered Section 8 NGO for credibility (non-profit recognition, not legal immunity).
 
 ---
@@ -92,6 +94,14 @@ ${comp.pillars.map(p => `##### ${p.titleEn}
 - **Publisher**: Bahujan Queer Foundation (Section 8 Non-Profit)
 - **Support**: support@sangathan.space | +91 8527976791
 - **Address**: Street 8, Ghaffar Manzil, Jamia Nagar, Okhla, New Delhi 110025, India
+
+---
+
+## 6. Guides & How-To Library (practical NGO/collective guides, English)
+${ALL_GUIDE_ARTICLES.map(
+  (a) =>
+    `### ${a.title}\n- **URL**: https://sangathan.space/guides/${a.slug}\n- **Category**: ${ARTICLE_CATEGORIES[a.category].labelEn}\n- **Summary**: ${a.description}\n- **Key points**: ${a.keyTakeaways.join(' | ')}`
+).join('\n\n')}
 `
 
   return new Response(content, {

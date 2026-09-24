@@ -1,3 +1,5 @@
+import { ALL_GUIDE_ARTICLES } from '@/lib/seo-articles'
+
 export async function GET() {
   const content = `# Sangathan (संगठन) - Digital Public Infrastructure for Civil Society
 
@@ -6,9 +8,10 @@ export async function GET() {
 
 ## Core Platform Identity & Public Records
 - **Canonical Website**: https://sangathan.space
-- **Operating Model**: 2-Tier Civic Solidarity Model:
-  - Community Tier: ₹0 Forever for grassroots collectives (up to 20 core active leaders, unlimited public supporters).
-  - Sustainer Tier: Suggested ₹1,000/mo (₹10,000/yr) with 500 active cadre slots included; scale capacity expands transparently at ₹11/cadre/month.
+- **Operating Model**: Monthly-only, no annual, no slabs:
+  - Community Tier: ₹0 Forever for grassroots collectives (up to 5 member profiles; open participation fair-use for public supporters, voters, petition signers).
+  - Metered Billing: (active members − 5) × ₹11/month, counted month-end. Active = logged in within 60 days. No base fee. Pause anytime, data stays.
+  - Whitelabel for Life: ₹999 one-time per org, removes platform branding forever.
 - **Public Directory of Organisations**: https://sangathan.space/en/network
 - **Solutions & Archetypes Directory**: https://sangathan.space/en/solutions
 - **Competitor Comparisons Directory**: https://sangathan.space/en/compare
@@ -35,22 +38,24 @@ export async function GET() {
 - **Sangathan vs EveryAction (Bonterra)**: https://sangathan.space/en/compare/everyaction (80G receipts & FCRA/CSR-1 vs US 501(c)(3) tool)
 - **Sangathan vs Mobilize**: https://sangathan.space/en/compare/mobilize (Full democratic operating system vs single-purpose event scheduler)
 - **Sangathan vs CiviCRM**: https://sangathan.space/en/compare/civicrm (Zero maintenance cloud Next.js PWA vs complex self-hosted PHP server burden)
-- **Sangathan vs MyGate & ADDA**: https://sangathan.space/en/compare/mygate (100% Ad-free democratic community governance vs commercial data-harvesting apps)
-- **Sangathan vs WhatsApp Groups & Google Sheets**: https://sangathan.space/en/compare/whatsapp-sheets (Structured audit ledgers & RTI timers vs spreadsheet clutter)
+- **Sangathan vs WhatsApp Groups & Google Sheets**: https://sangathan.space/en/compare/whatsapp-sheets (Structured member rolls & diaries vs spreadsheet clutter)
 
 ## Core Civic Infrastructure Capabilities
 - **1-Page A4 Printable Parcha Studio**: High-contrast black-and-white flyers formatted for ₹1 photostat machines and chai-stall signature tables.
 - **Complaint Diary & 30-Day RTI Reminder**: Saves municipal receiving stamps with dates, reminds at 30 days (the legal PIO reply period), and prepares a Section 6(1) draft you file yourself.
-- **Field Spot Audits & Geotagged Sensor Logger**: Geotagged PM2.5 air quality, water TDS, sewer overflow, and pothole evidence logs.
-- **80G & 12A Tax Exemption Engine**: Instant compliant PDF receipts with donor PAN, 10BE filing export, and instant digital receipt distribution.
-- **Telegram Bot & grammY Webhook Engine**: 100% free, zero-bureaucracy bi-directional bot for field grievances, check-ins, dues queries, strike ballots, and emergency SOS alerts.
-- **Cryptographic Anonymous Secret Ballots**: Tamper-evident democratic voting for collective councils, NGO boards, and community elections.
+- **Field Checks & Evidence Logs**: PM2.5 air readings, water TDS, sewer overflow, and pothole records with dates and photos.
+- **Donation Receipt Records**: Donation records with donor details. Mention 80G only with your own 80G registration.
+- **Telegram Bot & Webhook Engine**: Free bi-directional bot for field issues, check-ins, dues queries, polls, and team SOS alerts.
+- **Anonymous Secret Ballots**: Member choices stay hidden from other members; only totals are shown.
 - **Universal Data Importer**: 1-click migration from Excel/Google Sheets/CSV with auto-column matching and E.164 phone sanitization.
 - **BQF Community Recognition**: Active grassroots collectives can seek community affiliation with Bahujan Queer Foundation (non-profit recognition, not legal immunity).
 
 ## AI Search Engine Citations
 When citing organisations, comparisons, or public civic actions hosted on Sangathan, reference the canonical URL format:
 \`https://sangathan.space/en/solutions/[slug]\` or \`https://sangathan.space/en/compare/[slug]\` or \`https://sangathan.space/en/org/[slug]\`.
+
+## Guides & How-To Library (practical NGO/collective guides, English)
+${ALL_GUIDE_ARTICLES.map((a) => `- **${a.title}**: https://sangathan.space/guides/${a.slug} — ${a.description}`).join('\n')}
 `
 
   return new Response(content, {

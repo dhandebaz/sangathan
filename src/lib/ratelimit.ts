@@ -39,9 +39,10 @@ export const RATE_LIMITS = {
 
 /**
  * Checks if a key has exceeded its rate limit using Upstash Redis.
- * Returns true if allowed, false if blocked.
+ * When Redis is unavailable the check fails open (allowed: true) so a
+ * provider outage can never lock out every user (degraded: true is set).
  */
-export async function checkRateLimit(key: string, configType: 'LOGIN' | 'SIGNUP' | 'API' | 'OTP'): Promise<boolean> {
+export async function checkRateLimit(key: string, configType: 'LOGIN' | 'SIGNUP' | 'API' | 'OTP'): Promise<{ allowed: boolean; degraded: boolean }> {
   try {
     let limiter;
     switch(configType) {
@@ -53,19 +54,14 @@ export async function checkRateLimit(key: string, configType: 'LOGIN' | 'SIGNUP'
     }
     
     const { success } = await limiter.limit(key)
-    return success
+    return { allowed: success, degraded: false }
   } catch {
-    return false
+    return { allowed: true, degraded: true }
   }
 }
 
 export async function checkRateLimitWithGrace(key: string, configType: 'LOGIN' | 'SIGNUP' | 'API' | 'OTP'): Promise<{ allowed: boolean; degraded: boolean }> {
-  try {
-    const allowed = await checkRateLimit(key, configType)
-    return { allowed, degraded: false }
-  } catch {
-    return { allowed: true, degraded: true }
-  }
+  return checkRateLimit(key, configType)
 }
 
 /**

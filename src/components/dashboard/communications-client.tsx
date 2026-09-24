@@ -526,7 +526,7 @@ export function CommunicationsClient({
               <Textarea
                 rows={4}
                 required
-                placeholder="e.g. 📢 Urgent Meeting Call: All union delegates gather at Gandhi Bhawan tomorrow at 4 PM for the collective bargaining agenda review."
+                placeholder="e.g. 📢 Urgent Meeting Call: All member delegates gather at the community hall tomorrow at 4 PM for the agenda review."
                 value={broadcastMsg}
                 onChange={(e) => setBroadcastMsg(e.target.value)}
                 className="mt-1 text-xs rounded-sm"

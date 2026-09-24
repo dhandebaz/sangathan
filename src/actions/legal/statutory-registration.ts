@@ -40,7 +40,6 @@ const LEGAL_COLUMNS = [
   'certificate_80g',
   'certificate_80g_valid_till',
   'csr_registration',
-  'trade_union_registration',
   'cooperative_registration',
   'society_registration',
   'trust_registration',

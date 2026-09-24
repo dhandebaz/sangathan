@@ -65,7 +65,7 @@ export default function TermsPage() {
           <h2 className="text-xl font-semibold text-black mb-3">2. Definitions</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong>&quot;Platform&quot;</strong> refers to the Sangathan digital infrastructure, including its website, database, and associated services.</li>
-            <li><strong>&quot;Organisation&quot;</strong> refers to any collective, NGO, student group, union, or community entity created on the Platform.</li>
+            <li><strong>&quot;Organisation&quot;</strong> refers to any civic collective, NGO, or community entity created on the Platform.</li>
             <li><strong>&quot;Admin&quot;</strong> refers to the User who creates an Organisation or is granted administrative privileges within an Organisation.</li>
             <li><strong>&quot;Member&quot;</strong> refers to an individual whose data is recorded within an Organisation&apos;s database on the Platform.</li>
             <li><strong>&quot;User Data&quot;</strong> refers to all information, data, and content uploaded, entered, or managed by an Organisation on the Platform.</li>

@@ -9,7 +9,7 @@ import { requirePlatformAdmin } from '@/lib/auth/context'
 
 const UpdatePlanSchema = z.object({
   organisationId: z.string().uuid(),
-  planName: z.enum(['Community', 'Institution']),
+  planName: z.enum(['Community', 'Metered', 'Institution']),
   planPeriod: z.enum(['monthly', 'yearly', 'lifetime']).optional(),
 })
 
@@ -36,12 +36,12 @@ export async function setOrganisationPlan(input: z.infer<typeof UpdatePlanSchema
       .maybeSingle()
 
     const currentCaps = (org?.capabilities as Record<string, boolean>) || {}
-    const isInstitution = result.data.planName === 'Institution'
+    const isPayingTier = result.data.planName === 'Institution' || result.data.planName === 'Metered'
 
     const updatedCapabilities = {
       ...currentCaps,
-      ai_features: isInstitution,
-      advanced_analytics: isInstitution,
+      ai_features: isPayingTier,
+      advanced_analytics: isPayingTier,
     }
 
     const updates: Record<string, unknown> = {

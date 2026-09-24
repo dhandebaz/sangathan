@@ -26,11 +26,11 @@ export async function generateMetadata({
   const isHindi = lang === 'hi'
   return {
     title: isHindi
-      ? 'योगदान और पहुंच (Pay & Price) | संगठन'
-      : 'Pay & Price: Contribution & Civic Access | Sangathan',
+      ? 'मूल्य निर्धारण: ₹0, ₹11, ₹999 | संगठन'
+      : 'Pricing: ₹0, ₹11, ₹999 | Sangathan',
     description: isHindi
-      ? 'नागरिक डिजिटल बुनियादी ढांचा। स्वैच्छिक सामुदायिक पहुंच और संरक्षक समर्थन।'
-      : 'Civic digital infrastructure by Bahujan Queer Foundation. Voluntary Community Access and Solidarity Sustainer contributions.',
+      ? '5 सदस्यों तक मुफ्त। उसके बाद हर सक्रिय साथी ₹11/माह। व्हाइट-लेबल ₹999 एकमुश्त। कोई वार्षिक बंधन नहीं।'
+      : 'Free up to 5 members. Then ₹11/month per active member beyond 5. Whitelabel ₹999 one-time. No annual lock-in, no slabs.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/pricing`,
       languages: {
@@ -39,19 +39,19 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      title: isHindi ? 'योगदान और पहुंच (Pay & Price) | संगठन' : 'Pay & Price: Contribution & Civic Access | Sangathan',
+      title: isHindi ? 'मूल्य निर्धारण: ₹0, ₹11, ₹999 | संगठन' : 'Pricing: ₹0, ₹11, ₹999 | Sangathan',
       description: isHindi
-        ? 'नागरिक डिजिटल बुनियादी ढांचा। स्वैच्छिक सामुदायिक पहुंच और संरक्षक समर्थन।'
-        : 'Civic digital infrastructure by Bahujan Queer Foundation. Voluntary Community Access and Solidarity Sustainer contributions.',
+        ? '5 सदस्यों तक मुफ्त। उसके बाद हर सक्रिय साथी ₹11/माह। व्हाइट-लेबल ₹999 एकमुश्त।'
+        : 'Free up to 5 members. Then ₹11/month per active member beyond 5. Whitelabel ₹999 one-time.',
       url: `https://sangathan.space/${lang}/pricing`,
       siteName: 'Sangathan',
       type: 'website',
       images: [
         {
-          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'स्वैच्छिक योगदान एवं नागरिक पहुंच' : 'Pay & Price: Contribution & Civic Access')}&desc=${encodeURIComponent(isHindi ? 'नागरिक डिजिटल बुनियादी ढांचा। स्वैच्छिक सामुदायिक पहुंच और संरक्षक समर्थन।' : 'Non-profit digital infrastructure with voluntary community access and solidarity sustainer tiers.')}&type=ngo&tag=Civic+Access&lang=${lang}`,
+          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'मूल्य: ₹0, ₹11, ₹999' : 'Pricing: ₹0, ₹11, ₹999')}&desc=${encodeURIComponent(isHindi ? '5 तक मुफ्त, उसके बाद ₹11/साथी/माह। कोई वार्षिक बंधन नहीं।' : 'Free up to 5 members, then ₹11/member/month. No annual lock-in.')}&type=ngo&tag=Pricing&lang=${lang}`,
           width: 1200,
           height: 630,
-          alt: isHindi ? 'संगठन मूल्य व योगदान' : 'Sangathan Pricing',
+          alt: isHindi ? 'संगठन मूल्य निर्धारण' : 'Sangathan Pricing',
         },
       ],
     },
@@ -59,11 +59,11 @@ export async function generateMetadata({
       card: 'summary_large_image',
       site: '@areynetaji',
       creator: '@areynetaji',
-      title: isHindi ? 'योगदान और पहुंच (Pay & Price) | संगठन' : 'Pay & Price: Contribution & Civic Access | Sangathan',
+      title: isHindi ? 'मूल्य निर्धारण: ₹0, ₹11, ₹999 | संगठन' : 'Pricing: ₹0, ₹11, ₹999 | Sangathan',
       description: isHindi
-        ? 'नागरिक डिजिटल बुनियादी ढांचा। स्वैच्छिक सामुदायिक पहुंच और संरक्षक समर्थन।'
-        : 'Civic digital infrastructure by Bahujan Queer Foundation. Voluntary Community Access and Solidarity Sustainer contributions.',
-      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'स्वैच्छिक योगदान एवं नागरिक पहुंच' : 'Pay & Price: Contribution & Civic Access')}&desc=${encodeURIComponent(isHindi ? 'नागरिक डिजिटल बुनियादी ढांचा। स्वैच्छिक सामुदायिक पहुंच और संरक्षक समर्थन।' : 'Non-profit digital infrastructure with voluntary community access and solidarity sustainer tiers.')}&type=ngo&tag=Civic+Access&lang=${lang}`],
+        ? '5 सदस्यों तक मुफ्त। उसके बाद हर सक्रिय साथी ₹11/माह। व्हाइट-लेबल ₹999 एकमुश्त।'
+        : 'Free up to 5 members. Then ₹11/month per active member beyond 5. Whitelabel ₹999 one-time.',
+      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'मूल्य: ₹0, ₹11, ₹999' : 'Pricing: ₹0, ₹11, ₹999')}&desc=${encodeURIComponent(isHindi ? '5 तक मुफ्त, उसके बाद ₹11/साथी/माह। कोई वार्षिक बंधन नहीं।' : 'Free up to 5 members, then ₹11/member/month. No annual lock-in.')}&type=ngo&tag=Pricing&lang=${lang}`],
     },
   }
 }
@@ -103,27 +103,27 @@ export default async function PricingPage({
     },
     {
       question: isHindi
-        ? 'सामुदायिक पहुंच (Community Access) के लिए भुगतान कैसे काम करता है?'
-        : 'How does payment work for Community Access?',
+        ? 'मुफ्त सामुदायिक पहुंच (Community Access) में क्या मिलता है?'
+        : 'What does free Community Access include?',
       answer: isHindi
-        ? 'सामुदायिक पहुंच एक स्वैच्छिक योगदान मॉडल पर आधारित है (सुझाए गए विकल्प: ₹5, ₹10, ₹50, ₹100, ₹500 या कोई भी कस्टम राशि)। जमीनी स्तर के नागरिक समूह अपनी क्षमता अनुसार योगदान देकर तुरंत पहुंच प्राप्त कर सकते हैं।'
-        : 'Community Access uses a voluntary contribution model (choices: ₹5, ₹10, ₹50, ₹100, ₹500, or custom). Grassroots collectives can contribute what they wish to access full democratic organizing tools.',
+        ? '5 सदस्य प्रोफाइल (एडमिन सहित) तक सब कुछ मुफ्त: मतदान, सर्वेक्षण, फील्ड-डेटा, रजिस्टर, 80G-तैयार रसीदें, पर्चा, याचिकाएं व पारदर्शिता पेज। मतदाता व हस्ताक्षरकर्ता गिनती में नहीं आते। यही मुफ्त ट्रायल है — कोई समय सीमा नहीं।'
+        : 'Up to 5 member profiles (admin included) with everything: voting, surveys, field-data tools, registers, 80G-ready receipts, parcha, petitions and transparency page. Voters and signers are never counted. This free tier is the trial — no time limit.',
     },
     {
       question: isHindi
-        ? 'संरक्षक पहुंच (Sustainer Access) क्या है?'
-        : 'What is Sustainer Access?',
+        ? 'मीटर बिलिंग (₹11/साथी) कैसे काम करती है?'
+        : 'How does metered billing (₹11/member) work?',
       answer: isHindi
-        ? 'संरक्षक पहुंच बड़े एनजीओ और पंजीकृत संघों के लिए सुझाया गया ₹1,000/माह का एकजुटता योगदान है। इसमें 500 सक्रिय काडर स्लॉट और संपूर्ण संगठन AI सुइट शामिल हैं, और साथ ही यह छोटे नागरिक समूहों के लिए मुफ्त सर्वर अवसंरचना को निधि देता है।'
-        : 'Sustainer Access is a suggested ₹1,000/month institutional solidarity contribution. It includes 500 active cadre slots and the full Sangathan AI suite while directly cross-subsidizing infrastructure for smaller grassroots movements.',
+        ? 'कोई बेस फीस नहीं, कोई प्लान खरीदना नहीं। UPI ऑटोपे लगाओ और मीटर चल पड़ेगा: (सक्रिय सदस्य − 5) × ₹11/माह, माह-अंत गणना। सक्रिय = 60 दिन में लॉगिन। जैसे 30 सदस्य = ₹275/माह। कभी भी रोको — डेटा रहेगा। कोई वार्षिक बंधन नहीं।'
+        : 'No base fee, no plan to buy. Add UPI autopay and the meter runs: (active members − 5) × ₹11/month, counted month-end. Active = logged in within 60 days. E.g. 30 members = ₹275/month. Pause anytime — data stays. No annual lock-in.',
     },
     {
       question: isHindi
-        ? 'काडर क्षमता का पैमाना (Scale Capacity @ ₹11/सदस्य) कैसे काम करता है?'
-        : 'How does cadre scale capacity (₹11/member) work?',
+        ? 'व्हाइट-लेबल (₹999) में क्या मिलता है?'
+        : 'What does the ₹999 whitelabel give?',
       answer: isHindi
-        ? '500 सदस्यों तक बेस ₹1,000/माह में शामिल हैं। 500 से अधिक सदस्यों के लिए, वास्तविक डेटाबेस स्टोरेज, बैकअप और SMS/OTP डिलीवरी लागत को कवर करने के लिए ₹11 प्रति सदस्य प्रति माह का पारदर्शी परिचालन शुल्क लगता है।'
-        : '500 active member slots are included in the base ₹1,000/mo Sustainer plan. Beyond 500, capacity expands at ₹11/member/month to cover high-volume database compute, daily encrypted backups, and transactional OTP/email delivery.',
+        ? 'एकमुश्त ₹999 भुगतान पर सार्वजनिक पेजों, कार्यक्रमों, पत्रों व बैज से "Powered by Sangathan" हमेशा के लिए हटेगा और आपका प्रतीक पहले आएगा। मुफ्त व मीटर वाली दोनों श्रेणियां खरीद सकती हैं।'
+        : 'A one-time ₹999 payment removes "Powered by Sangathan" branding and puts your emblem first across public pages, events, letters and badges — forever. Buyable on both Free and Metered.',
     },
     {
       question: isHindi
@@ -183,9 +183,9 @@ export default async function PricingPage({
       titleEn: 'Transactional Email & SMS Delivery',
       titleHi: 'लेन-देन ईमेल व SMS डिलीवरी',
       descEn:
-        'Guaranteed delivery for emergency SOS alerts, meeting invites, voting OTPs, and statutory notice circulars.',
+        'Best-effort delivery for SOS alerts, meeting invites and voting OTPs via email/SMS providers. Delivery depends on telecom networks and cannot be guaranteed.',
       descHi:
-        'आपातकालीन अलर्ट, बैठक आमंत्रण, मतदान OTP और वैधानिक सूचनाओं के लिए विश्वसनीय डिलीवरी।',
+        'ईमेल/SMS से अलर्ट, बैठक आमंत्रण और OTP भेजने की भरसक कोशिश। डिलीवरी टेलीकॉम नेटवर्क पर निर्भर है, गारंटी नहीं।',
     },
     {
       icon: Cpu,
@@ -235,11 +235,11 @@ export default async function PricingPage({
       />
 
       <PageHeader
-        title={isHindi ? 'नागरिक अवसंरचना: योगदान और पहुंच' : 'Civic Infrastructure: Pay & Price'}
+        title={isHindi ? 'मूल्य निर्धारण: ₹0, ₹11, ₹999' : 'Pricing: ₹0, ₹11, ₹999'}
         description={
           isHindi
-            ? 'बहुजन क्वीर फाउंडेशन की एक गैर-लाभकारी पहल। सभी लोकतांत्रिक समूहों के लिए सुलभ, पारदर्शी और टिकाऊ डिजिटल मंच।'
-            : 'A non-profit digital initiative of Bahujan Queer Foundation. Accessible, sovereign, and sustainable infrastructure for grassroots collectives and NGOs.'
+            ? '5 सदस्यों तक मुफ्त। उसके बाद हर सक्रिय साथी ₹11/माह। व्हाइट-लेबल ₹999 एकमुश्त। कोई वार्षिक बंधन, कोई स्लैब नहीं।'
+            : 'Free up to 5 members. Then ₹11/month per active member beyond 5. Whitelabel ₹999 one-time. No annual lock-in, no slabs.'
         }
       />
 

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     : 'Collective Decision Making Software | Secret Ballot & AGM Voting | Sangathan'
   const description = isHindi
     ? 'नागरिक संस्थाओं और एनजीओ के लिए डिजिटल गुप्त मतदान। क्रिप्टोग्राफिक निष्पक्षता, 1-व्यक्ति-1-वोट और एजीएम आम सभा जनमत।'
-    : 'Cryptographic secret voting and collective decision making software for Indian NGOs and civic collectives. Tamper-evident 1-person-1-vote elections and AGM resolutions.'
+    : 'Secret voting and collective decision making software for Indian NGOs and civic collectives. 1-person-1-vote polls and meeting resolutions.'
 
   return {
     title,
@@ -58,11 +58,11 @@ export default async function CollectiveDecisionMakingPage({ params }: PageProps
   const faqs = [
     {
       question: isHindi
-        ? 'क्या मतदान की गोपनीयता की गारंटी है?'
-        : 'Is voter anonymity mathematically guaranteed?',
+        ? 'क्या मेरा वोट दूसरे सदस्यों से छिपा रहता है?'
+        : 'Is my vote hidden from other members?',
       answer: isHindi
-        ? 'हाँ। क्रिप्टोग्राफिक तकनीक से यह सुनिश्चित किया जाता है कि कौन किस विकल्प को वोट दे रहा है, यह कोई भी व्यवस्थापक नहीं देख सकता।'
-        : 'Yes. Sangathan separates voter identity from the ballot choice using cryptographic tokens, ensuring nobody—not even system admins—can trace votes back to individuals.',
+        ? 'हाँ, अन्य सदस्यों और संगठन व्यवस्थापकों को आपका विकल्प नहीं दिखता — सिर्फ कुल गिनती दिखती है। ध्यान रहे: सर्वर तक पहुंच रखने वाला तकनीकी संचालक सैद्धांतिक रूप से रिकॉर्ड जोड़ सकता है, इसलिए अत्यंत संवेदनशील मतदान कागजी मतपत्र से कराएं।'
+        : 'Yes. Other members and org admins see only totals, never your choice. Note: platform operators with server access could technically link records, so use paper ballots for highly sensitive votes.',
     },
     {
       question: isHindi
@@ -89,7 +89,7 @@ export default async function CollectiveDecisionMakingPage({ params }: PageProps
         <section className="pt-28 pb-16 sm:pt-36 sm:pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-slate-200">
           <div className="max-w-3xl">
             <span className="text-xs font-mono font-bold tracking-wider text-emerald-700 uppercase block mb-3">
-              {isHindi ? 'आंतरिक लोकतंत्र व निष्पक्ष चुनाव' : 'Internal Democracy & Cryptographic Secret Ballots'}
+              {isHindi ? 'आंतरिक लोकतंत्र व गुप्त मतदान' : 'Internal Democracy & Secret Ballots'}
             </span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.08] mb-6">
               {isHindi ? (
@@ -100,14 +100,14 @@ export default async function CollectiveDecisionMakingPage({ params }: PageProps
               ) : (
                 <>
                   Democratic Governance, <br />
-                  <span className="text-indigo-600">Mathematically Secret Ballots.</span>
+                  <span className="text-indigo-600">Truly Secret Ballots.</span>
                 </>
               )}
             </h1>
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed mb-8">
               {isHindi
                 ? 'खुले व्हाट्सएप पोल और विवादित हाथ उठाने की प्रथा को समाप्त करें। संगठन 1-व्यक्ति-1-वोट की पूर्ण गोपनीयता के साथ आंतरिक लोकतंत्र को सुदृढ़ बनाता है।'
-                : 'Replace easily rigged chat polls with tamper-evident digital ballots. Conduct executive committee elections, general body resolutions, and consensus polling with verifiable quorum.'}
+                : 'Replace easily rigged chat polls with secret digital ballots. Conduct committee votes, general body resolutions, and consensus polling with recorded quorum.'}
             </p>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
@@ -168,7 +168,7 @@ export default async function CollectiveDecisionMakingPage({ params }: PageProps
               <p className="text-xs sm:text-sm text-slate-600">
                 {isHindi
                   ? 'मतदान समाप्त होते ही पारदर्शी गणना रिपोर्ट और एजीएम मिनट्स पीडीएफ में डाउनलोड करें।'
-                  : 'Generate tamper-evident election result certificates and GBM minutes in 1 click.'}
+                  : 'Download result summaries and meeting minutes as PDF in 1 click.'}
               </p>
             </div>
           </div>

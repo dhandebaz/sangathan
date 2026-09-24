@@ -123,7 +123,7 @@ export function CertificatesManager({ initialCertificates, isHindi }: Certificat
                 </div>
 
                 <span className="text-[11px] font-bold text-slate-500 bg-slate-50 px-2 py-1 rounded-md border border-slate-200">
-                  {isHindi ? 'सत्यापित' : 'Tamper-Evident'}
+                  {isHindi ? 'सत्यापित' : 'Verifiable'}
                 </span>
               </div>
             </div>

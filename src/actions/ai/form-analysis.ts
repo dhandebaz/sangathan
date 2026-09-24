@@ -60,6 +60,7 @@ ${submissions.map(s => `${s.id}: ${JSON.stringify(s.data)}`).join('\n')}
 
 Return structured analysis.`,
       maxTokens: 2_500,
+      budgetKey: context.organizationId,
     }, analysisSchema)
 
     return { success: true, analysis: result.object, totalSubmissions: submissions.length, providerUsed: result.providerUsed, latencyMs: result.latencyMs }
@@ -112,6 +113,7 @@ Submissions: ${submissions.map(s => `${s.id}: ${JSON.stringify(s.data)}`).join('
 
 Flag submissions containing distress signals, urgent requests, or high-priority issues.`,
       maxTokens: 2_000,
+      budgetKey: context.organizationId,
     }, urgentSchema)
 
     return { success: true, urgent: result.object.urgent, providerUsed: result.providerUsed, latencyMs: result.latencyMs }

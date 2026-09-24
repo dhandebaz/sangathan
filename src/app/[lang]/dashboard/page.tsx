@@ -7,6 +7,7 @@ import { MemberOnboardingOverlay } from '@/components/dashboard/member-onboardin
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { DashboardEvent, DashboardTask, DashboardAnnouncement } from '@/types/dashboard'
+import { humanizeAction } from '@/lib/audit/humanize'
 
 export const dynamic = 'force-dynamic'
 
@@ -224,7 +225,7 @@ export default async function DashboardPage(props: { params: Promise<{ lang: str
     const totalDonations = (donationsRes.data || []).reduce((sum: number, d) => sum + (Number(d.amount) || 0), 0)
 
     const recentActivity = (activityRes.data || []).map((log) => ({
-      title: log.action.replace(/_/g, ' '),
+      title: humanizeAction(log.action),
       type: 'audit',
       created_at: new Date(log.created_at).toLocaleDateString()
     }))

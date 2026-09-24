@@ -24,6 +24,14 @@ const BulkImportSchema = z.object({
 
 function cleanPhoneNumber(raw: string): string {
   let cleaned = raw.replace(/[^\d+]/g, '').trim()
+  // Handle +91 or 91 prefix (India country code)
+  if (cleaned.startsWith('+91')) {
+    // Already has country code, just ensure it's 12 digits after +
+    return cleaned
+  }
+  if (cleaned.startsWith('91') && cleaned.length === 12) {
+    cleaned = '+91' + cleaned.substring(2)
+  }
   if (cleaned.startsWith('0') && cleaned.length === 11) {
     cleaned = '+91' + cleaned.substring(1)
   } else if (!cleaned.startsWith('+') && cleaned.length === 10) {

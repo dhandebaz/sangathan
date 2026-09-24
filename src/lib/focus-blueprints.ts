@@ -71,8 +71,8 @@ export const FOCUS_BLUEPRINTS: Record<OrgType, FocusBlueprint[]> = {
       id: 'welfare_relief',
       titleEn: 'Education, Health & Relief Welfare (समाज कल्याण)',
       titleHi: 'शिक्षा, स्वास्थ्य व राहत वितरण कार्यक्रम',
-      descEn: 'Volunteer hours logging, 80G tax-exempt donor receipts, beneficiary survey forms, and field distribution audits.',
-      descHi: 'स्वयंसेवक सेवा घंटे, 80G दान रसीदें, लाभार्थी डेटा सर्वेक्षण और राहत वितरण लेखाजोखा।',
+      descEn: 'Volunteer hours logging, 80G/12A donor receipts, beneficiary survey forms, and field distribution audits.',
+      descHi: 'स्वयंसेवक सेवा घंटे, 80G/12A दान रसीदें, लाभार्थी डेटा सर्वेक्षण और राहत वितरण लेखाजोखा।',
       recommendedRoles: [
         { value: 'Program Director', labelEn: 'Program Director (कार्यक्रम निदेशक)', labelHi: 'कार्यक्रम निदेशक' },
         { value: 'Volunteer Manager', labelEn: 'Volunteer Manager (स्वयंसेवक प्रबंधक)', labelHi: 'स्वयंसेवक प्रबंधक' },

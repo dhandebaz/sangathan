@@ -57,8 +57,8 @@ export default async function VisionPage({ params }: { params: Promise<{ lang: s
             <h3 className="text-lg font-bold text-slate-900">{isHindi ? 'मॉड्यूलर गवर्नेंस' : 'Modular Governance'}</h3>
             <p className="text-slate-600 text-sm leading-relaxed">
               {isHindi
-                ? 'विशेष कार्यक्षेत्रों (जैसे पर्यावरण निगरानी, छात्र चुनाव, आरडब्ल्यूए बिलिंग) के लिए 1-क्लिक प्लगइन आर्किटेक्चर।'
-                : 'Plug-and-play modular architecture tailored for environmental sensor audits, student elections, and labor negotiations.'}
+                ? 'विशेष कार्यक्षेत्रों (जैसे पर्यावरण जांच, दान प्रबंधन, शिकायत डायरी) के लिए मॉड्यूलर संरचना।'
+                : 'Plug-and-play modular architecture tailored for environmental checks, donation records, and complaint diaries.'}
             </p>
           </div>
 

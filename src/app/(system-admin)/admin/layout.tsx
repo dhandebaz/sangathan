@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Activity, BarChart3, Bell, Building2, CreditCard, FileClock, FileText, Gavel, LayoutDashboard, Scale, Search, ScrollText, Server, Settings as SettingsIcon, Shield, ShieldCheck, Siren, Users, Webhook } from 'lucide-react'
+import { Activity, BarChart3, Bell, Building2, CreditCard, FileClock, FileText, Gavel, LayoutDashboard, Newspaper, Scale, Search, ScrollText, Server, Settings as SettingsIcon, Shield, ShieldCheck, Siren, Users, Webhook } from 'lucide-react'
 import { requirePlatformAdmin } from '@/lib/auth/context'
 
 const adminLinks = [
@@ -18,6 +18,7 @@ const adminLinks = [
   { href: '/admin/data-requests', label: 'Data Requests', icon: FileText },
   { href: '/admin/billing', label: 'Billing', icon: CreditCard },
   { href: '/admin/broadcasts', label: 'Broadcasts', icon: Bell },
+  { href: '/admin/seo-posts', label: 'SEO Posts', icon: Newspaper },
   { href: '/admin/jobs', label: 'Jobs', icon: Server },
   { href: '/admin/webhooks', label: 'Webhooks', icon: Webhook },
   { href: '/admin/health', label: 'Health', icon: Activity },

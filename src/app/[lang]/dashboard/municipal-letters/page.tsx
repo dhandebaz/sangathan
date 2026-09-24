@@ -33,7 +33,7 @@ export default async function MunicipalLettersPage({ params }: { params: Promise
 
       <MunicipalLettersClient
         organisationId={organisationId}
-        defaultOrgName={org?.name || 'Resident Welfare Association'}
+        defaultOrgName={org?.name || 'Our Organisation'}
       />
     </div>
   )

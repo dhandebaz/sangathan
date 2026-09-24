@@ -106,8 +106,8 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
                 <h3 className="text-lg font-bold mb-2 text-slate-900">{isHindi ? 'निष्ठा' : 'Integrity (Nishtha)'}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
                   {isHindi
-                    ? 'विश्वास समूहों की मुद्रा है। हमारा सिस्टम अपरिवर्तनीय ऑडिट लॉग और सत्यापित पहचान के माध्यम से इसे लागू करता है।'
-                    : 'Trust is the currency of collectives. Our system enforces it through immutable audit logs and verified identities.'}
+                    ? 'विश्वास समूहों की मुद्रा है। हमारा सिस्टम हर काम का ऑडिट रिकॉर्ड रखता है ताकि पूछताछ हमेशा संभव हो।'
+                    : 'Trust is the currency of collectives. Our system keeps an audit record of every action so questions can always be answered.'}
                 </p>
               </div>
               <div className="p-6 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 transition-colors">

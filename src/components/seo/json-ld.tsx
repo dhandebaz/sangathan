@@ -78,21 +78,21 @@ export function SoftwareApplicationJsonLd() {
         price: '0',
         priceCurrency: 'INR',
         name: 'Community Plan (Free Forever)',
-        description: 'Free civic infrastructure for grassroots collectives up to 20 users.',
+        description: 'Free civic infrastructure for grassroots collectives up to 5 member profiles.',
       },
       {
         '@type': 'Offer',
-        price: '1000',
+        price: '11',
         priceCurrency: 'INR',
-        name: 'Institution Plan (Monthly)',
-        description: 'Solidarity patronage for funded NGOs and civic collectives with unlimited members and AI tools.',
+        name: 'Metered Billing (per active member)',
+        description: 'Beyond 5 free profiles: (active members − 5) × ₹11/month. No base fee, monthly only, pause anytime.',
       },
       {
         '@type': 'Offer',
-        price: '10000',
+        price: '999',
         priceCurrency: 'INR',
-        name: 'Institution Plan (Annual)',
-        description: 'Annual patronage with 2 months free.',
+        name: 'Whitelabel for Life (One-time)',
+        description: 'One-time payment removing platform branding forever.',
       },
     ],
   }
@@ -367,14 +367,14 @@ export function SolutionJsonLd({
         price: '0',
         priceCurrency: 'INR',
         name: 'Community Plan (Free Forever)',
-        description: '₹0 forever civic infrastructure for grassroots collectives and community activists.',
+        description: '₹0 forever civic infrastructure for grassroots collectives up to 5 member profiles.',
       },
       {
         '@type': 'Offer',
-        price: '1000',
+        price: '11',
         priceCurrency: 'INR',
-        name: 'Institution Plan',
-        description: 'Patronage tier for funded NGOs, civic collectives, and formal institutions.',
+        name: 'Metered Billing',
+        description: 'Beyond 5 free profiles: (active members − 5) × ₹11/month. No base fee, monthly only.',
       },
     ],
     featureList: features.map((f) => `${f.name}: ${f.description}`),
@@ -465,5 +465,63 @@ export function ComparisonJsonLd({
         />
       )}
     </>
+  )
+}
+
+export interface ArticleJsonLdProps {
+  headline: string
+  description: string
+  url: string
+  imageUrl: string
+  datePublished: string
+  dateModified: string
+  keywords: string[]
+}
+
+export function ArticleJsonLd({
+  headline,
+  description,
+  url,
+  imageUrl,
+  datePublished,
+  dateModified,
+  keywords,
+}: ArticleJsonLdProps) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline,
+    description,
+    image: imageUrl,
+    datePublished,
+    dateModified,
+    inLanguage: 'en-IN',
+    keywords: keywords.join(', '),
+    author: {
+      '@type': 'Organization',
+      name: 'Sangathan Editorial Team',
+      url: 'https://sangathan.space',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Sangathan',
+      alternateName: 'संगठन',
+      url: 'https://sangathan.space',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://sangathan.space/api/og?type=feature&tag=Sangathan',
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': url,
+    },
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
   )
 }

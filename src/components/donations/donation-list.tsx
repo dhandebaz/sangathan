@@ -48,12 +48,9 @@ export function DonationList({ donations }: { donations: Donation[] }) {
         ? `${donationDate.getFullYear() - 1}-${donationDate.getFullYear()}`
         : `${donationDate.getFullYear()}-${donationDate.getFullYear() + 1}`;
 
-    const receiptNum = `TR-${Date.now().toString(36).toUpperCase()}`
-
     const res = await generateTaxReceipt({
         donationId: donation.id,
         donor_id: donation.donor_id,
-        receipt_number: receiptNum,
         financial_year: financialYear
     })
     

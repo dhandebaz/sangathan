@@ -246,12 +246,12 @@ export default async function CredentialVerificationPage(props: VerifyPageProps)
             <div className="bg-indigo-50/70 border border-indigo-100 p-4 rounded-md text-xs text-indigo-950 space-y-1.5">
               <div className="font-bold flex items-center gap-1.5 text-indigo-900">
                 <Lock className="w-3.5 h-3.5 text-indigo-600" />
-                <span>{isHindi ? 'संगठन लोकतांत्रिक लेजर गारंटी' : 'Sangathan Democratic Ledger Guarantee'}</span>
+                <span>{isHindi ? 'संगठन रिकॉर्ड जांच' : 'Sangathan Record Check'}</span>
               </div>
               <p className="text-[11px] leading-relaxed text-indigo-900/80">
                 {isHindi
-                  ? 'यह पहचान पत्र सीधे संगठन के एन्क्रिप्टेड लेजर से सत्यापित किया गया है। इसमें किया गया कोई भी अनधिकृत बदलाव डिजिटल हस्ताक्षर को अमान्य कर देगा।'
-                  : 'This credential is cryptographic proof of standing issued through Sangathan. Any unauthorized alteration or revocation immediately invalidates the signature verification hash.'}
+                  ? 'यह पहचान पत्र संगठन के रिकॉर्ड में दर्ज जानकारी से मिलान करके दिखाया गया है। रिकॉर्ड बदलने पर यह जांच परिणाम भी बदल जाएगा।'
+                  : 'This credential is shown by matching our records. If the record changes, this check result changes too.'}
               </p>
             </div>
           </div>

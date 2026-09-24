@@ -61,7 +61,7 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-xl font-semibold text-black mb-3">2. Scope & Role</h2>
           <p>
-            <strong>Our Role:</strong> Sangathan acts primarily as a <strong>Data Processor</strong> (Infrastructure Provider). The Organisation (your NGO, union, or collective) acts as the <strong>Data Controller</strong>.
+            <strong>Our Role:</strong> Sangathan acts primarily as a <strong>Data Processor</strong> (Infrastructure Provider). The Organisation (your NGO, trust, society, or collective) acts as the <strong>Data Controller</strong>.
           </p>
           <p>
             <strong>Your Role:</strong> If you are an Organisation Admin, you control the data entered into your workspace. If you are a Member, your data is controlled by the Organisation you belong to.

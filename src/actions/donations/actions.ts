@@ -39,7 +39,7 @@ const CreateSubscriptionSchema = z.object({
 const GenerateTaxReceiptSchema = z.object({
   donationId: z.string().uuid(),
   donor_id: z.string().uuid(),
-  receipt_number: z.string(),
+  receipt_number: z.string().optional(),
   financial_year: z.string(),
   donor_pan: z.string().optional(),
 })
@@ -227,6 +227,7 @@ export const generateTaxReceipt = createSafeAction(
   GenerateTaxReceiptSchema,
   async (input, context) => {
     const supabase = await createClient()
+    const adminClient = createServiceClient()
 
     // Fetch donation amount for the receipt
     const { data: donation } = await supabase
@@ -236,7 +237,22 @@ export const generateTaxReceipt = createSafeAction(
       .maybeSingle()
 
     const donationAmount = (donation as { amount?: number })?.amount || 0
-    const pdfUrl = `/api/tax-receipts/${input.receipt_number}.pdf`
+
+    // Generate a sequential receipt number per financial year (audit-friendly),
+    // unless the caller already provided one.
+    let receiptNumber = input.receipt_number
+    if (!receiptNumber) {
+      const { count } = await adminClient
+        .from('tax_receipts')
+        .select('*', { count: 'exact', head: true })
+        .eq('organisation_id', context.organizationId)
+        .eq('financial_year', input.financial_year)
+
+      const sequence = (count || 0) + 1
+      receiptNumber = `${input.financial_year}-${String(sequence).padStart(4, '0')}`
+    }
+
+    const pdfUrl = `/api/tax-receipts/${context.organizationId}/${receiptNumber}.pdf`
 
     const { data: receipt, error } = await supabase
       .from('tax_receipts')
@@ -244,7 +260,7 @@ export const generateTaxReceipt = createSafeAction(
         organisation_id: context.organizationId,
         donation_id: input.donationId,
         donor_id: input.donor_id,
-        receipt_number: input.receipt_number,
+        receipt_number: receiptNumber,
         financial_year: input.financial_year,
         amount: donationAmount,
         donor_pan: input.donor_pan,
@@ -273,7 +289,7 @@ export const generateTaxReceipt = createSafeAction(
       action: 'TAX_RECEIPT_GENERATED',
       resource_table: 'tax_receipts',
       resource_id: receipt.id,
-      details: { receipt_number: input.receipt_number }
+      details: { receipt_number: receiptNumber }
     })
 
     revalidatePath('/', 'layout')

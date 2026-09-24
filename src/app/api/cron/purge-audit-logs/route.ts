@@ -1,12 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { logger } from '@/lib/logger'
+import { validateCronRequest } from '@/lib/cron-auth'
 
 export async function GET(request: NextRequest) {
-  const authHeader = request.headers.get('x-cron-secret')
-  if (authHeader !== process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const auth = await validateCronRequest(request)
+  if (!auth.ok) return auth.response
 
   try {
     const supabase = createServiceClient()

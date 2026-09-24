@@ -49,9 +49,9 @@ export async function checkAiAccess(orgId: string): Promise<boolean> {
     return false
   }
 
-  // Plan level check: Sustainer / Institution tier has ai_features enabled
+  // Plan level check: Metered (paying) and legacy Institution tiers have AI enabled
   const planName = data.plan_name || 'Community'
-  const isSustainer = planName === 'Institution' || planName === 'Sustainer'
+  const isSustainer = planName === 'Institution' || planName === 'Sustainer' || planName === 'Metered'
   const hasAiCapability = capabilities.ai_features === true || isSustainer
 
   return hasAiCapability
@@ -81,7 +81,7 @@ export async function getAiAssistanceState(orgId: string): Promise<{
     if (!data) return { isAssistanceEnabled: false, isPlanSupported: false, isConfigured }
 
     const capabilities = (data.capabilities as Record<string, unknown>) || {}
-    const isSustainer = data.plan_name === 'Institution' || data.plan_name === 'Sustainer'
+    const isSustainer = data.plan_name === 'Institution' || data.plan_name === 'Sustainer' || data.plan_name === 'Metered'
     const isPlanSupported = capabilities.ai_features === true || isSustainer
     const isAssistanceEnabled = capabilities.ai_assistance_enabled !== false && isPlanSupported
 

@@ -13,7 +13,7 @@ export async function GET(
   
   const { data: org, error } = await supabase
     .from('organisations')
-    .select('legal_entity_type, governing_law, registrar_authority, registration_state, tax_id, tan, gstin, cin, darpan_id, certificate_12a, certificate_80g, fcra_registration, csr_registration, trade_union_registration, cooperative_registration, society_registration, trust_registration, epfo_code, esic_code, udyam_registration')
+    .select('legal_entity_type, governing_law, registrar_authority, registration_state, tax_id, tan, gstin, cin, darpan_id, certificate_12a, certificate_80g, fcra_registration, csr_registration, cooperative_registration, society_registration, trust_registration, epfo_code, esic_code, udyam_registration')
     .eq('id', orgId)
     .maybeSingle()
 

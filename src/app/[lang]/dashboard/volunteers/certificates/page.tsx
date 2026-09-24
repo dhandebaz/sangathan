@@ -6,7 +6,7 @@ import { CertificatesManager } from '@/components/volunteers/certificates-manage
 
 export const metadata: Metadata = {
   title: 'Volunteer Recognition & Verified Certificates | Sangathan',
-  description: 'Issue cryptographic, QR-verifiable service certificates recognized for civil society and non-profit volunteer hours.',
+    description: 'Issue QR-verifiable service certificates for civil society and non-profit volunteer hours.',
 }
 
 export default async function VolunteerCertificatesPage(props: {
@@ -42,7 +42,7 @@ export default async function VolunteerCertificatesPage(props: {
             <p className="mt-1.5 text-sm text-slate-500 max-w-2xl">
               {isHindi
                 ? 'निस्वार्थ सेवा घंटों के आधार पर स्वयंसेवकों को SHA-256 सत्यापित व QR-सत्यापनीय आधिकारिक प्रमाण पत्र जारी करें।'
-                : 'Issue cryptographic, tamper-proof certificates recognizing volunteer service hours with dynamic digital verification hashes.'}
+                : 'Issue QR-verifiable certificates recording volunteer service hours, checkable against org records.'}
             </p>
           </div>
         </div>

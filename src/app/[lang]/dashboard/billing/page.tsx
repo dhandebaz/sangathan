@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import { getOrgPlanUsage, PLAN_TIERS } from '@/lib/plans/limits'
 import { BillingPlanSelector } from '@/components/dashboard/billing-plan-selector'
+import { ArchiveDormantButton } from './archive-dormant-button'
 import { SangathanAiModal } from '@/components/ai/sangathan-ai-modal'
 
 export const dynamic = 'force-dynamic'
@@ -88,7 +89,7 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
           href={`/${lang}/pricing`}
           className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors"
         >
-          <span>{isHindi ? 'सार्वजनिक Pay & Price देखें' : 'View Public Pay & Price'}</span>
+            <span>{isHindi ? 'सार्वजनिक मूल्य देखें' : 'View Public Pricing'}</span>
         </Link>
       </div>
 
@@ -116,28 +117,52 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
             </div>
           </div>
 
-          {/* Member Capacity */}
+          {/* Member Capacity / Meter */}
           <div className="space-y-1 md:border-r md:border-slate-100 pr-4">
-            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-              <span>{isHindi ? 'सक्रिय सदस्य स्लॉट' : 'Active Member Slots'}</span>
-              <span className="text-slate-900 font-bold">{usage.memberUsagePercentage}%</span>
-            </div>
-            <div className="text-2xl font-extrabold text-slate-900">
-              {usage.memberCount}{' '}
-              <span className="text-sm font-medium text-slate-400">/ {usage.maxMembers}</span>
-            </div>
-            <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden mt-2">
-              <div
-                className={`h-full rounded-full transition-all ${
-                  usage.isAtMemberLimit
-                    ? 'bg-rose-600'
-                    : usage.isNearMemberLimit
-                      ? 'bg-amber-500'
-                      : 'bg-indigo-600'
-                }`}
-                style={{ width: `${Math.min(100, usage.memberUsagePercentage)}%` }}
-              />
-            </div>
+            {usage.planName === 'Metered' ? (
+              <>
+                <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+                  <span>{isHindi ? 'मासिक मीटर' : 'Monthly Meter'}</span>
+                  <span className="text-slate-900 font-bold">
+                    ₹{(usage.estimatedMonthlyBill || 0).toLocaleString('en-IN')}
+                  </span>
+                </div>
+                <div className="text-2xl font-extrabold text-slate-900">
+                  {usage.memberCount}{' '}
+                  <span className="text-sm font-medium text-slate-400">
+                    {isHindi ? 'सक्रिय' : 'actives'}
+                  </span>
+                </div>
+                <div className="text-xs text-slate-500">
+                  {isHindi
+                    ? `${usage.billableMembers || 0} बिल योग्य × ₹11 · माह-अंत गणना`
+                    : `${usage.billableMembers || 0} billable × ₹11 · month-end count`}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+                  <span>{isHindi ? 'सक्रिय सदस्य स्लॉट' : 'Active Member Slots'}</span>
+                  <span className="text-slate-900 font-bold">{usage.memberUsagePercentage}%</span>
+                </div>
+                <div className="text-2xl font-extrabold text-slate-900">
+                  {usage.memberCount}{' '}
+                  <span className="text-sm font-medium text-slate-400">/ {usage.maxMembers}</span>
+                </div>
+                <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden mt-2">
+                  <div
+                    className={`h-full rounded-full transition-all ${
+                      usage.isAtMemberLimit
+                        ? 'bg-rose-600'
+                        : usage.isNearMemberLimit
+                          ? 'bg-amber-500'
+                          : 'bg-indigo-600'
+                    }`}
+                    style={{ width: `${Math.min(100, usage.memberUsagePercentage)}%` }}
+                  />
+                </div>
+              </>
+            )}
           </div>
 
           {/* Sangathan AI */}
@@ -152,7 +177,7 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
               {usage.planTier.aiEnabled ? (
                 <span className="text-emerald-700">{isHindi ? 'सक्रिय' : 'Active'}</span>
               ) : (
-                <span className="text-slate-500">{isHindi ? 'संरक्षक स्तर' : 'Sustainer'}</span>
+                <span className="text-slate-500">{isHindi ? 'मीटर पर' : 'Metered'}</span>
               )}
             </div>
             <div className="text-xs text-slate-500">
@@ -161,8 +186,8 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
                   ? 'संप्रभु व निजी सहायता उपलब्ध'
                   : 'Sovereign AI Suite Unlocked'
                 : isHindi
-                  ? 'संरक्षक पहुंच में उपलब्ध'
-                  : 'Included in Sustainer Access'}
+                  ? 'मीटर बिलिंग में उपलब्ध'
+                  : 'Included in metered billing'}
             </div>
           </div>
 
@@ -180,8 +205,8 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
                   ? 'कस्टम पहचान सक्रिय है'
                   : 'Custom Emblem Active'
                 : isHindi
-                  ? '₹10,000 ऐड-ऑन उपलब्ध'
-                  : 'Add-on Available'}
+                  ? '₹999 ऐड-ऑन उपलब्ध'
+                  : '₹999 add-on available'}
             </div>
           </div>
         </div>
@@ -189,15 +214,18 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
 
       {/* Access Selection Matrix */}
       <div className="space-y-4">
-        <div>
-          <h2 className="text-lg font-bold text-slate-900 tracking-tight">
-            {isHindi ? 'पहुंच मॉडल और योगदान' : 'Access Models & Contributions'}
-          </h2>
-          <p className="text-xs text-slate-500">
-            {isHindi
-              ? 'स्वैच्छिक योगदान दें या नागरिक बुनियादी ढांचे को बनाए रखने के लिए संरक्षक बनें।'
-              : 'Support democratic civic infrastructure with voluntary contributions or sustained institutional patronage.'}
-          </p>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-bold text-slate-900 tracking-tight">
+              {isHindi ? 'पहुंच मॉडल और बिलिंग' : 'Access Models & Billing'}
+            </h2>
+            <p className="text-xs text-slate-500">
+              {isHindi
+                ? '5 प्रोफाइल तक मुफ्त। उसके बाद हर सक्रिय साथी ₹11/माह — कोई बेस फीस नहीं, मासिक बिलिंग ही।'
+                : 'Free up to 5 profiles. Beyond that, ₹11/month per active member — no base fee, monthly billing only.'}
+            </p>
+          </div>
+          <ArchiveDormantButton orgId={orgId} isHindi={isHindi} />
         </div>
 
         <BillingPlanSelector
@@ -249,7 +277,13 @@ export default async function BillingDashboardPage({ params }: BillingPageProps)
                       <td className="py-3.5 px-4 capitalize">{tx.plan_period}</td>
                       <td className="py-3.5 px-4 font-bold text-slate-900">₹{Number(tx.amount).toLocaleString()}</td>
                       <td className="py-3.5 px-4 font-mono text-[11px] text-slate-500">
-                        {tx.razorpay_payment_id || tx.razorpay_order_id || '-'}
+                        <Link
+                          href={`/${lang}/dashboard/billing/invoices/${tx.id}`}
+                          className="hover:text-indigo-700 hover:underline"
+                          title={isHindi ? 'चालान देखो' : 'View invoice'}
+                        >
+                          {tx.razorpay_payment_id || tx.razorpay_order_id || '-'}
+                        </Link>
                       </td>
                       <td className="py-3.5 px-4">
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">

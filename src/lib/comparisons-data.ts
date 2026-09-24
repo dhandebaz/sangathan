@@ -74,7 +74,7 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
     heroHeadlineHi: 'भारतीय जन आंदोलन एक्शन नेटवर्क की जगह संगठन क्यों चुनते हैं?',
     heroSubheadlineEn: 'Action Network was built for US progressive email fundraisers charging $105-$1,050/mo (₹9,000 - ₹90,000/mo in USD). Sangathan is built for Indian ground organizers with offline PWA field checks, ₹1 A4 photostat flyers, 30-day RTI reminders, and direct UPI chanda for ₹0.',
     heroSubheadlineHi: 'एक्शन नेटवर्क अमेरिकी ईमेल अभियानों और ₹9,000 से ₹90,000/माह के डॉलर भुगतानों के लिए बना है। संगठन भारतीय जमीनी कार्यकर्ताओं के लिए बना है—ऑफलाइन फील्ड जांच, ₹1 पर्चा, 30-दिवसीय आरटीआई याद और यूपीआई चंदा।',
-    summaryVerdictEn: 'Action Network relies heavily on bulk email marketing and credit card donations in USD ($105+/mo or ₹9,000+/mo). Sangathan provides a true ground operating system tailored for India: physical A4 flyers, WhatsApp-first communication, offline field data sync, ₹0 community tier, and ₹1,000/mo 500-cadre Sustainer plan.',
+    summaryVerdictEn: 'Action Network relies heavily on bulk email marketing and credit card donations in USD ($105+/mo or ₹9,000+/mo). Sangathan provides a true ground operating system tailored for India: physical A4 flyers, WhatsApp-first communication, offline field data sync, ₹0 community tier up to 5 members, and metered billing at ₹11/active member beyond 5.',
     summaryVerdictHi: 'एक्शन नेटवर्क केवल ईमेल और विदेशी कार्ड भुगतानों (₹9,000+/माह) पर निर्भर है। संगठन भारत की जमीनी वास्तविकताओं के अनुरूप है: भौतिक पर्चे, व्हाट्सएप समन्वय, ऑफलाइन डेटा सिंक और ₹0 निःशुल्क नागरिक टियर।',
     activistQuoteEn: '“In Indian bastis, email campaigns don’t work. You need ₹1 photostat leaflets on chai stalls, stamped ward receiving copies, and UPI. That’s why we use Sangathan.”',
     activistQuoteHi: '“भारतीय बस्तियों में ईमेल काम नहीं करते। वहां चाय की दुकानों पर ₹1 पर्चे, नगर निगम की मुहर लगी रिसीविंग और यूपीआई चाहिए। इसीलिए हम संगठन चुनते हैं।”',
@@ -166,8 +166,8 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
       {
         titleEn: 'Pricing & Currency: ₹0 Forever vs ₹9,000+/mo ($105/mo USD)',
         titleHi: 'मूल्य व मुद्रा: ₹0 निःशुल्क बनाम ₹9,000+ प्रति माह ($105/माह)',
-        sangathanDetailEn: 'Sangathan operates on a 2-tier Civic Solidarity model: Community Tier is ₹0 Forever for grassroots collectives up to 20 leaders with unlimited public supporters. For scaling institutions, Sustainer Access provides 500 active cadre slots at ₹1,000/mo, expanding at a transparent ₹11/cadre/mo.',
-        sangathanDetailHi: 'संगठन 2-टियर नागरिक एकजुटता मॉडल पर काम करता है: जमीनी समूहों के लिए ₹0 हमेशा निःशुल्क है (20 कोर लीडर्स, असीमित समर्थक)। बड़े संस्थानों के लिए संरक्षक योजना 500 काडर ₹1,000/माह में देती है और अतिरिक्त काडर केवल ₹11/माह पर बढ़ते हैं।',
+        sangathanDetailEn: 'Sangathan pricing is three numbers: ₹0 Forever for grassroots collectives up to 5 member profiles, then (active members − 5) × ₹11/month metered billing with no base fee and no annual lock-in. Public supporters, voters and petition signers are never counted.',
+        sangathanDetailHi: 'संगठन का मूल्य तीन संख्याओं में है: 5 सदस्य प्रोफाइल तक ₹0 हमेशा निःशुल्क, फिर (सक्रिय सदस्य − 5) × ₹11/माह मीटर बिलिंग — कोई बेस फीस नहीं, कोई वार्षिक बंधन नहीं। सार्वजनिक समर्थक, मतदाता व हस्ताक्षरकर्ता कभी गिने नहीं जाते।',
         competitorDetailEn: 'Action Network charges tiered monthly fees starting at ₹9,000/month ($105/mo USD) and scaling up to ₹90,000/month (~$1,050/mo USD) payable exclusively with international cards.',
         competitorDetailHi: 'एक्शन नेटवर्क न्यूनतम ₹9,000 प्रति माह ($105/माह) से शुरू होकर ₹90,000 प्रति माह तक चार्ज करता है, जिसके लिए अंतरराष्ट्रीय क्रेडिट कार्ड और डॉलर भुगतान अनिवार्य है।',
         verdictEn: 'Sangathan is built for local solidarity, not corporate SaaS extraction.',
@@ -184,7 +184,7 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
       {
         questionEn: 'Does Sangathan support 80G tax exemption receipts for Indian donors?',
         questionHi: 'क्या संगठन भारतीय दानदाताओं के लिए 80G टैक्स रसीदें जारी करता है?',
-        answerEn: 'Yes. Unlike Action Network, Sangathan generates compliant 80G/12A PDF tax receipts with donor PAN, registration number, and annual Form 10BD export.',
+        answerEn: 'Yes. Unlike Action Network, Sangathan generates 80G/12A PDF tax receipts with donor PAN, registration number, and annual Form 10BD export.',
         answerHi: 'हाँ। एक्शन नेटवर्क के विपरीत, संगठन दानदाता के पैन कार्ड के साथ प्रमाणित 80G PDF रसीद और वार्षिक फॉर्म 10BD रिपोर्ट तैयार करता है।'
       }
     ]
@@ -199,8 +199,8 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
     competitorTaglineHi: 'अत्यधिक महंगा अमेरिकी राजनीतिक सीआरएम व डेटाबेस',
     metaTitleEn: 'Sangathan vs NationBuilder: Why Grassroots Movements Choose Sangathan',
     metaTitleHi: 'संगठन बनाम नेशनबिल्डर | जन आंदोलनों व एनजीओ के लिए तुलना',
-    metaDescEn: 'Compare Sangathan and NationBuilder. See why Indian NGOs and civic groups choose Sangathan for ₹0 community tier, 500-member Sustainer plan, Indian statutory compliance, and ground PWA.',
-    metaDescHi: 'संगठन और नेशनबिल्डर की संपूर्ण तुलना। जानें क्यों भारतीय एनजीओ और नागरिक समूह ₹0 टियर, 500 सदस्य संरक्षक प्लान और फील्ड PWA के लिए संगठन चुनते हैं।',
+    metaDescEn: 'Compare Sangathan and NationBuilder. See why Indian NGOs and civic groups choose Sangathan for ₹0 community tier, metered ₹11/member billing, Indian statutory compliance, and ground PWA.',
+    metaDescHi: 'संगठन और नेशनबिल्डर की संपूर्ण तुलना। जानें क्यों भारतीय एनजीओ और नागरिक समूह ₹0 टियर, मीटर ₹11/सदस्य बिलिंग और फील्ड PWA के लिए संगठन चुनते हैं।',
     keywords: [
       'Sangathan vs NationBuilder', 'NationBuilder alternative India', 'NationBuilder pricing review India',
       'NGO software India free', 'civic collective campaign platform'
@@ -209,8 +209,8 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
     heroHeadlineHi: 'नेशनबिल्डर पर लाखों रुपये खर्च करने के बजाय संगठन से ₹0 में आंदोलन चलाएं।',
     heroSubheadlineEn: 'NationBuilder is a legacy enterprise CRM charging from ₹3,300 up to ₹1,29,000+ per month ($39 - $1,500+/mo USD). Sangathan provides purpose-built, accessible infrastructure with Indian statutory registers (Form I, 12A/80G, Cash Book) and mobile field checks for ₹0.',
     heroSubheadlineHi: 'नेशनबिल्डर ₹3,300 से ₹1,29,000+ प्रति माह की भारी विदेशी फीस मांगता है। संगठन भारतीय जमीनी आंदोलनों के लिए बना है—वैधानिक फॉर्म I/H रजिस्टर, 12A/80G रसीदें, पारदर्शी बहीखाता और मोबाइल फील्ड टूल्स।',
-    summaryVerdictEn: 'NationBuilder locks movements into expensive subscriptions starting at ₹3,300 to ₹1,29,000+ per month ($39 - $1,500/mo USD). Sangathan is 100% free for community organizers (up to 20 leaders), includes 500 active cadres in the ₹1,000/mo Sustainer plan with transparent ₹11/cadre scale, and ships with Indian compliance out of the box.',
-    summaryVerdictHi: 'नेशनबिल्डर ₹3,300 से ₹1,29,000+ प्रति माह की महंगी फीस ($39-$1,500/माह) और जटिल सेटअप मांगता है। संगठन जमीनी कार्यकर्ताओं के लिए 100% निःशुल्क है (20 लीडर्स), ₹1,000/माह में 500 काडर देता है (₹11/अतिरिक्त काडर) और भारतीय कानूनी नियमों से लैस है।',
+    summaryVerdictEn: 'NationBuilder locks movements into expensive subscriptions starting at ₹3,300 to ₹1,29,000+ per month ($39 - $1,500/mo USD). Sangathan is free for community organizers (up to 5 member profiles), then metered at (active members − 5) × ₹11/month with no base fee and no annual lock-in, and ships with Indian compliance out of the box.',
+    summaryVerdictHi: 'नेशनबिल्डर ₹3,300 से ₹1,29,000+ प्रति माह की महंगी फीस ($39-$1,500/माह) और जटिल सेटअप मांगता है। संगठन जमीनी कार्यकर्ताओं के लिए 5 प्रोफाइल तक निःशुल्क है, फिर (सक्रिय सदस्य − 5) × ₹11/माह मीटर बिलिंग — कोई बेस फीस नहीं, कोई वार्षिक बंधन नहीं — और भारतीय कानूनी नियमों से लैस है।',
     activistQuoteEn: '“We were quoted ₹3 Lakhs/year for NationBuilder. We moved our 12,000 supporters to Sangathan in 10 minutes at zero cost and our field teams actually use it daily.”',
     activistQuoteHi: '“नेशनबिल्डर ने हमसे सालाना ₹3 लाख मांगे थे। हमने 10 मिनट में अपने 12,000 समर्थक संगठन पर ₹0 में माइग्रेट किए और आज हमारी फील्ड टीम इसे रोज चलाती है।”',
     quoteAttributionEn: 'Civic Collective Organizer',
@@ -229,8 +229,8 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
       {
         featureNameEn: 'Indian Statutory Registers (Form I, Cash Book, 80G)',
         featureNameHi: 'भारतीय वैधानिक रजिस्टर (फॉर्म I, रोकड़, 80G)',
-        sangathanValueEn: 'Built-in auto-generating PDF registers',
-        sangathanValueHi: 'स्वचालित प्रिंट-रेडी वैधानिक रजिस्टर',
+        sangathanValueEn: 'Built-in print-ready PDF registers',
+        sangathanValueHi: 'प्रिंट-रेडी वैधानिक रजिस्टर',
         competitorValueEn: 'None (US IRS format only)',
         competitorValueHi: 'कुछ नहीं (केवल अमेरिकी फॉर्मेट)',
         category: 'compliance',
@@ -273,8 +273,8 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
       {
         questionEn: 'Does Sangathan have contact limits on the free plan?',
         questionHi: 'क्या संगठन के फ्री प्लान में संपर्कों की कोई सीमा है?',
-        answerEn: 'No. The Community Tier supports unlimited public movement supporters, petition signers, and survey respondents with up to 20 core organizational leaders.',
-        answerHi: 'नहीं। फ्री कम्युनिटी प्लान में असीमित समर्थक, याचिका हस्ताक्षरकर्ता और सर्वे प्रतिभागी जोड़े जा सकते हैं।'
+        answerEn: 'Public supporters, petition signers and survey respondents are never counted — open participation under fair-use on every tier. The free Community Tier covers up to 5 member profiles; beyond 5 actives, metered billing runs (active members − 5) × ₹11/month.',
+        answerHi: 'सार्वजनिक समर्थक, याचिका हस्ताक्षरकर्ता व सर्वे प्रतिभागी कभी गिने नहीं जाते — हर श्रेणी में खुली भागीदारी (उचित उपयोग)। मुफ्त कम्युनिटी टियर 5 सदस्य प्रोफाइल तक है; 5 से अधिक सक्रिय सदस्यों पर मीटर बिलिंग (सक्रिय सदस्य − 5) × ₹11/माह।'
       }
     ]
   },
@@ -288,7 +288,7 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
     competitorTaglineHi: 'पारंपरिक गैर-लाभकारी फंडरेज़िंग सॉफ्टवेयर',
     metaTitleEn: 'Sangathan vs EveryAction (Bonterra) | Best Indian NGO Software',
     metaTitleHi: 'संगठन बनाम एवरीएक्शन (बोनटेरा) | भारतीय एनजीओ के लिए तुलना',
-    metaDescEn: 'Compare Sangathan and EveryAction / Bonterra. Discover why Indian NGOs choose Sangathan for automated 80G tax receipts, FCRA tracking, and ₹0-₹1,000 INR pricing vs ₹30,000+/mo USD contracts.',
+    metaDescEn: 'Compare Sangathan and EveryAction / Bonterra. Discover why Indian NGOs choose Sangathan for 80G-ready tax receipts, FCRA tracking, and ₹0-₹1,000 INR pricing vs ₹30,000+/mo USD contracts.',
     metaDescHi: 'संगठन और एवरीएक्शन की तुलना। जानें क्यों भारतीय स्वयंसेवी संस्थाएं 80G दान रसीदों, एफसीआरए ट्रैकिंग और डेटा स्वतंत्रता के लिए संगठन चुनती हैं।',
     keywords: [
       'Sangathan vs EveryAction', 'Bonterra alternative India', 'best NGO donor software India',
@@ -300,8 +300,8 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
     heroSubheadlineHi: 'एवरीएक्शन ₹30,000 से ₹1,50,000+ प्रति माह चार्ज करता है और अमेरिकी 501(c)(3) नियमों के लिए बना है। संगठन भारतीय आयकर धारा 80G/12A, सीएसआर-1 ग्रांट्स, नीति आयोग दर्पण आईडी और डबल-एंट्री कैश बुक के लिए ₹0 से ₹1,000/माह में उपलब्ध है।',
     summaryVerdictEn: 'EveryAction requires long-term lock-in enterprise contracts costing ₹3.6 Lakhs to ₹18 Lakhs/year and lacks support for Indian tax requirements. Sangathan provides out-of-the-box 80G certificates, Form 10BD reporting, and instant UPI giving for ₹0 Community or ₹1,000/mo Sustainer access.',
     summaryVerdictHi: 'एवरीएक्शन में ₹3.6 लाख से ₹18 लाख/वर्ष के भारी वार्षिक अनुबंध होते हैं और भारतीय टैक्स नियमों का कोई सपोर्ट नहीं है। संगठन 80G रसीदें, 10BD फाइलिंग और यूपीआई दान ₹0 कम्युनिटी या ₹1,000/माह संरक्षक प्लान में देता है।',
-    activistQuoteEn: '“EveryAction couldn’t even print a PAN-verified 80G receipt or handle UPI, and quoted us ₹50,000/month. Sangathan automated our entire annual donor audit in one afternoon for ₹1,000/mo.”',
-    activistQuoteHi: '“एवरीएक्शन न तो पैन कार्ड वाली 80G रसीद दे सकता था और न ही यूपीआई, ऊपर से ₹50,000/माह मांग रहा था। संगठन ने ₹1,000/माह में हमारा पूरा वार्षिक डोनर ऑडिट ऑटोमेट कर दिया।”',
+    activistQuoteEn: '“EveryAction couldn’t even print a PAN-verified 80G receipt or handle UPI, and quoted us ₹50,000/month. Sangathan handled our entire annual donor audit in one afternoon for ₹1,000/mo.”',
+    activistQuoteHi: '“एवरीएक्शन न तो पैन कार्ड वाली 80G रसीद दे सकता था और न ही यूपीआई, ऊपर से ₹50,000/माह मांग रहा था। संगठन ने ₹1,000/माह में हमारा पूरा वार्षिक डोनर ऑडिट एक दोपहर में तैयार कर दिया।”',
     quoteAttributionEn: 'National Child Education & Relief Trust Treasurer',
     quoteAttributionHi: 'राष्ट्रीय बाल शिक्षा एवं राहत ट्रस्ट कोषाध्यक्ष',
     comparisonMatrix: [
@@ -318,8 +318,8 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
       {
         featureNameEn: '80G & 12A Compliant Tax Receipts',
         featureNameHi: '80G व 12A आयकर दान रसीदें',
-        sangathanValueEn: 'Automated PDF generation with PAN & 10BD export',
-        sangathanValueHi: 'पैन कार्ड व 10BD एक्सपोर्ट के साथ स्वचालित PDF रसीदें',
+        sangathanValueEn: 'PDF generation with PAN & 10BD export',
+        sangathanValueHi: 'पैन कार्ड व 10BD एक्सपोर्ट के साथ PDF रसीदें',
         competitorValueEn: 'No (US 501(c)(3) only)',
         competitorValueHi: 'नहीं (केवल अमेरिकी टैक्स रसीदें)',
         category: 'compliance',
@@ -575,8 +575,8 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
       {
         featureNameEn: 'Financial Transparency & 80G Receipts',
         featureNameHi: 'वित्तीय पारदर्शिता व टैक्स रसीदें',
-        sangathanValueEn: 'Auto-reconciled double-entry ledger with instant PDF receipts',
-        sangathanValueHi: 'स्वचालित बहीखाता व तुरंत प्रमाणित PDF रसीदें',
+        sangathanValueEn: 'Double-entry ledger with PDF receipts',
+        sangathanValueHi: 'अनुबंध बहीखाता व PDF रसीदें',
         competitorValueEn: 'Manual spreadsheet rows prone to accidental deletion and fraud',
         competitorValueHi: 'एक्सेल शीट जिसमें गलती से डेटा डिलीट होने का खतरा रहता है',
         category: 'compliance',
@@ -629,7 +629,7 @@ export const COMPARISONS_DATA: Record<string, ComparisonPageData> = {
       {
         questionEn: 'Do we have to stop using WhatsApp completely?',
         questionHi: 'क्या हमें व्हाट्सएप का इस्तेमाल पूरी तरह बंद करना होगा?',
-        answerEn: 'No! Sangathan integrates with WhatsApp. You can send broadcast notices, 80G receipts, and vote links directly into your members’ WhatsApp while keeping your core database and records secure on Sangathan.',
+        answerEn: 'No! Sangathan integrates with WhatsApp. You can send broadcast notices, tax/80G-ready receipts, and vote links directly into your members’ WhatsApp while keeping your core database and records secure on Sangathan.',
         answerHi: 'नहीं! संगठन व्हाट्सएप से सीधे जुड़ता है। आप संगठन से सीधे सदस्यों के व्हाट्सएप पर रसीदें, सूचनाएं और वोटिंग लिंक भेज सकते हैं जबकि मुख्य रिकॉर्ड संगठन पर सुरक्षित रहेगा।'
       }
     ]

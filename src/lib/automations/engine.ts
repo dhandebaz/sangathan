@@ -56,12 +56,12 @@ export const PREBUILT_AUTOMATION_RECIPES: Omit<AutomationRule, 'id'>[] = [
     isActive: true,
   },
   {
-    name: 'High-Value Donor 80G Receipt & Thank You',
-    description: 'When a donation > ₹5,000 is received → Automatically issue 80G tax receipt → Notify treasurer.',
+    name: 'High-Value Donor Confirmation & Thank You',
+    description: 'When a donation > ₹5,000 is received → Log an acknowledgment for the treasurer to issue a receipt (80G only if the org holds its own registration) → Notify treasurer.',
     triggerEvent: 'donation_received',
     conditions: [{ field: 'amount', operator: 'greater_than', value: 5000 }],
     actions: [
-      { actionType: 'generate_tax_receipt', params: { compliance: '80G' } },
+      { actionType: 'assign_task', params: { title: 'Issue donor receipt', assigneeRole: 'treasurer' } },
       { actionType: 'send_welcome_message', params: { channel: 'email', template: 'donor_gratitude' } },
     ],
     isActive: true,

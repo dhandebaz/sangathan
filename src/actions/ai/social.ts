@@ -52,6 +52,7 @@ Write 2-3 paragraphs. Use a ${input.tone} tone.`
     const result = await generateResilientCompletion({
       messages: [{ role: 'user', content: prompt }],
       maxTokens: 1_500,
+      budgetKey: context.organizationId,
     })
     const text = result.text
 
@@ -88,6 +89,7 @@ Draft: "${input.draft_text}"`
     const result = await generateResilientCompletion({
       messages: [{ role: 'user', content: prompt }],
       maxTokens: 1_000,
+      budgetKey: context.organizationId,
     })
 
     return { success: true, rewritten: result.text, usage: undefined, providerUsed: result.providerUsed, latencyMs: result.latencyMs }

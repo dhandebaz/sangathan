@@ -281,7 +281,7 @@ CREATE INDEX IF NOT EXISTS idx_event_rsvps_event ON public.event_rsvps(event_id)
 CREATE INDEX IF NOT EXISTS idx_event_rsvps_user ON public.event_rsvps(user_id);
 
 -- 10. STORAGE
-INSERT INTO storage.buckets (id, name, public) VALUES ('organisation_assets', 'organisation_assets', true) ON CONFLICT (id) DO NOTHING;
+INSERT INTO storage.buckets (id, name, public) VALUES ('organisation_assets', 'organisation_assets', false) ON CONFLICT (id) DO NOTHING;
 
 -- Storage RLS policies
 DROP POLICY IF EXISTS "Public Access" ON storage.objects;
@@ -290,7 +290,7 @@ DROP POLICY IF EXISTS "Org admins can update assets" ON storage.objects;
 DROP POLICY IF EXISTS "Org admins can delete assets" ON storage.objects;
 
 DROP POLICY IF EXISTS "Public Access" ON storage.objects;
-CREATE POLICY "Public Access" ON storage.objects FOR SELECT USING ( bucket_id = 'organisation_assets' );
+CREATE POLICY "Organisation Assets Access" ON storage.objects FOR SELECT USING ( bucket_id = 'organisation_assets' AND EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.organisation_id::text = split_part(name, '/', 1)) );
 DROP POLICY IF EXISTS "Org admins can upload assets" ON storage.objects;
 CREATE POLICY "Org admins can upload assets" ON storage.objects FOR INSERT TO authenticated WITH CHECK (
   bucket_id = 'organisation_assets' AND EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.role IN ('admin', 'executive', 'editor') AND p.status = 'active' AND p.organisation_id::text = split_part(name, '/', 1))

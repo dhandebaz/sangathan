@@ -11,8 +11,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   return {
     title: isHindi ? 'ऐप तुलना व विकल्प | संगठन बनाम अन्य सॉफ्टवेयर' : 'Sangathan vs Other Apps | Competitor Comparisons & Alternatives',
     description: isHindi
-      ? 'संगठन की तुलना एक्शन नेटवर्क, नेशनबिल्डर, एवरीएक्शन, मोबिलाइज, CiviCRM, मायगेट और व्हाट्सएप ग्रुप्स से करें।'
-      : 'Compare Sangathan against Action Network, NationBuilder, EveryAction, Mobilize, CiviCRM, MyGate, and WhatsApp Groups.',
+      ? 'संगठन की तुलना एक्शन नेटवर्क, नेशनबिल्डर, एवरीएक्शन, मोबिलाइज, CiviCRM और व्हाट्सएप ग्रुप्स से करें।'
+      : 'Compare Sangathan against Action Network, NationBuilder, EveryAction, Mobilize, CiviCRM, and WhatsApp Groups.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/compare`,
       languages: {
@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     openGraph: {
       title: isHindi ? 'ऐप तुलना व विकल्प | संगठन बनाम अन्य सॉफ्टवेयर' : 'Sangathan vs Other Apps | Platform Comparisons',
       description: isHindi
-        ? 'संगठन की तुलना एक्शन नेटवर्क, नेशनबिल्डर, एवरीएक्शन, मोबिलाइज, CiviCRM, मायगेट और व्हाट्सएप से करें।'
-        : 'Compare Sangathan against Action Network, NationBuilder, EveryAction, Mobilize, CiviCRM, MyGate, and WhatsApp.',
+        ? 'संगठन की तुलना एक्शन नेटवर्क, नेशनबिल्डर, एवरीएक्शन, मोबिलाइज, CiviCRM और व्हाट्सएप से करें।'
+        : 'Compare Sangathan against Action Network, NationBuilder, EveryAction, Mobilize, CiviCRM, and WhatsApp.',
       url: `https://sangathan.space/${lang}/compare`,
       siteName: 'Sangathan',
       type: 'website',
@@ -43,8 +43,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       creator: '@areynetaji',
       title: isHindi ? 'ऐप तुलना व विकल्प | संगठन बनाम अन्य सॉफ्टवेयर' : 'Sangathan vs Other Apps | Platform Comparisons',
       description: isHindi
-        ? 'संगठन की तुलना एक्शन नेटवर्क, नेशनबिल्डर, एवरीएक्शन, मोबिलाइज, CiviCRM, मायगेट और व्हाट्सएप से करें।'
-        : 'Compare Sangathan against Action Network, NationBuilder, EveryAction, Mobilize, CiviCRM, MyGate, and WhatsApp.',
+        ? 'संगठन की तुलना एक्शन नेटवर्क, नेशनबिल्डर, एवरीएक्शन, मोबिलाइज, CiviCRM और व्हाट्सएप से करें।'
+        : 'Compare Sangathan against Action Network, NationBuilder, EveryAction, Mobilize, CiviCRM, and WhatsApp.',
       images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'संगठन बनाम अन्य सॉफ्टवेयर व विकल्प' : 'Sangathan vs Other Movement Platforms')}&desc=${encodeURIComponent(isHindi ? 'एक्शन नेटवर्क, नेशनबिल्डर, एवरीएक्शन, मोबिलाइज और CiviCRM की विस्तृत तुलना।' : 'Feature-by-feature comparison against Action Network, NationBuilder, EveryAction, and CiviCRM.')}&type=compare&tag=Platform+Comparison&lang=${lang}`],
     },
   }

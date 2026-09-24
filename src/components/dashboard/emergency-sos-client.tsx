@@ -141,7 +141,7 @@ export function EmergencySosClient({ initialAlerts, orgName }: EmergencySosClien
               Emergency SOS & Legal Rapid-Response Network
             </h1>
             <p className="text-xs text-red-800 mt-0.5">
-              1-Tap emergency broadcast for peaceful activists, detainees & union workers facing police action or legal threats.
+              1-Tap emergency broadcast for peaceful activists, detainees & field workers facing police action or legal threats.
             </p>
           </div>
         </div>

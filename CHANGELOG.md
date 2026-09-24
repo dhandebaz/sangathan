@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.66.0] - 2026-09-24
+### Added
+- **Razorpay Subscriptions Engine**: Quantity-based metered billing (`lib/billing/subscriptions.ts`) — one ₹11/monthly plan, quantity = billable actives. `POST /api/billing/subscribe` (org-admin only, billable ≥ 1 enforced), status/pause/resume/cancel endpoint, `SubscribeButton` with mandate checkout + activation polling wired into the billing UI. HMAC-verified `POST /api/webhooks/razorpay` handles authenticated/charged/halted/paused/resumed/cancelled/failed (built-in dunning via provider retries; 30-day past-due soft-reverts to Community, data intact).
+- **Monthly Meter Cron + Auto-Downgrade**: `GET /api/cron/meter-billing` counts 60-day-login actives via Auth API, syncs subscription quantity, emails admins, auto-downgrades to Community at zero billable, archives nothing (separate action).
+- **GST Invoices**: Derived from `billing_transactions` + org (SAC 9983, CGST/SGST vs IGST by buyer state, `SANG-YYYY-XXXXXXXX` numbers), printable page at dashboard billing invoices, linked from the transactions table. Seller block via `BILLING_*` env (GSTIN awaited from CA).
+- **Dormant Archive Flow**: `archiveDormantMembers` (90d, self-safe, audited) + billing dashboard button.
+- **Plugins Framework + Canva + Gallery**: Minimal-scope OAuth registry, AES-256-GCM token envelopes (fail-closed key), capabilities-backed store with audit, PKCE connect/callback routes, meter-gated, disconnect purge, dashboard `/integrations` gallery + sidebar link, daily token-refresh cron with error surfacing.
+### Changed
+- **Zero-DDL Delivery**: Supabase Management API token lost privileges (403), so Phase 2/3 run on capabilities JSON + Auth API + derived invoices — no migration needed, no functionality lost. Dedicated tables deferred.
+> Note: v1.26.0 → v1.65.0 history is tracked in the in-app changelog (`src/app/[lang]/(site)/changelog/page.tsx`), which is the canonical source.
+
+## [1.65.0] - 2026-09-24
+### Changed
+- **Pricing v1.0 Locked (₹0 / ₹11 / ₹999)**: Monthly-only metered billing — free up to 5 member profiles (admin included), then (active members − 5) × ₹11/month counted month-end (active = login within 60 days). No base fee, no slabs, no annual, no trial (free tier is the trial). Whitelabel is a ₹999 one-time lifetime purchase on both tiers. Paid event ticketing retired (orgs collect on their own UPI ID). Sustainer/annual/White-label-plan language removed across pricing page, plan selector, billing dashboard, refund policy, solutions/comparisons data, features, JSON-LD, llms.txt/llms-full.txt; legacy Sustainer orgs grandfathered (₹1,000 + 500 while subscribed).
+### Added
+- **Free Environmental Survey Templates**: 4 ready templates (air quality log, water TDS log, garbage dump report, tree census) in `lib/forms/templates.ts`, visible to every org type. Survey caps codified (free 3 active + 500 responses/mo; metered 50 + 50k/mo). AI suite verified gated to paying tiers (`Metered` added to `nvidia.ts` checks + admin billing capabilities).
+> Note: v1.26.0 → v1.64.0 history is tracked in the in-app changelog (`src/app/[lang]/(site)/changelog/page.tsx`), which is the canonical source.
+
+## [1.64.0] - 2026-09-24
+### Added
+- **52-Guide SEO Library (`/guides/[slug]`)**: 52 English how-to guides (~46,000 words) across 6 categories — NGO registration, compliance & filings, donations & fundraising, governance & operations, RTI & civic action, collectives & movements. Every article carries key takeaways, TOC anchors, figures/tables, 4-6 FAQs, Article + FAQ + Breadcrumb JSON-LD, OG/Twitter cards via the new `guide` OG theme, and canonical URLs. Content validated by `tests/seo-articles.test.ts` (lengths, structure, banned-claim scan).
+- **Admin SEO Posts Registry (`/admin/seo-posts`)**: Internal table of all guides with word counts, reading time, FAQ counts, view + copy-link actions. Guides are sitemap-listed and cross-linked via related-article cards but intentionally absent from all public navigation (`/admin/*` is robots-disallowed).
+- **AI-Search Wiring**: Guides index appended to `llms.txt` and full per-guide summaries to `llms-full.txt`; robots already allow AI crawlers (GPTBot, ClaudeBot, PerplexityBot, etc.).
+> Note: v1.26.0 → v1.63.0 history is tracked in the in-app changelog (`src/app/[lang]/(site)/changelog/page.tsx`), which is the canonical source.
+
+## [1.63.0] - 2026-09-24
+### Removed
+- **Retired Union-Only Dashboard Modules**: Deleted the orphaned, unlinked `posts` (Union Posts registry), `legal-aid` (Anti-Ragging Cell), `induction` (induction desk) and `collaboration` (alliance hub) routes, components, and their dedicated server actions, plus the now-unused `lib/posts`, `types/posts`, default-union-posts seed, dead institution reference data (`lib/institutions`, `types/institutions`, `indian-institutions.json`) and the unused regional union-terms dictionary (`lib/i18n/regional`). Shared `actions/collaboration` (used by events, settings, and the public org profile) is kept.
+### Changed
+- **Letterhead Uses Your Organisation's Name & Logo**: The letterhead studio now loads the signed-up organisation's own `name` and `logo_url`, renders the logo (or name initials) on the printed sheet, and exposes editable heading, tagline, and logo-URL fields. Removed "Union" wording, the student-union fallback name, and the "Recognized" tagline claim.
+- **Neutral Copy in Reachable UI**: Admin-hub Hindi letterhead card no longer mentions the university registrar; calendar location placeholder is now "Community Hall / Online"; petition, emergency-SOS, broadcast, admin-billing, and OG-image copy de-unionized.
+> Note: v1.26.0 → v1.62.0 history is tracked in the in-app changelog (`src/app/[lang]/(site)/changelog/page.tsx`), which is the canonical source.
+
+## [1.62.0] - 2026-09-24
+### Added
+- **Honest 80G/12A Receipt Wording**: Marketing, FAQ and policy pages now describe receipts as "*80G/12A-ready*" and only as 80G receipts when the organisation holds its own registration. Removed the US 501c3 label and "auto/instant/compliant" overclaims across `features`, `ngo-management`, `solutions-data`, `focus-blueprints`, `comparisons-data`, `privacy`, `press`, `refund-policy`, and `llms-full.txt`.
+- **Working Donation Receipt Page**: Generated donation receipts now resolve to a real, print-ready page at `/api/tax-receipts/[orgId]/[number].pdf` instead of a broken placeholder URL. The page states the 80G/12A-ready disclaimer.
+### Changed
+- **Two-Type Model Enforced End-to-End**: Student Union, Workers Union and RWA modes retired at the database level (org_type CHECK constraint via `20260922000000_remove_discontinued_org_types.sql`), in RPC functions, compliance seeders, code, tests, and public copy. Only `civic_collective` and `ngo` (plus legacy `other`) remain.
+- **Legal Statutory Fields Cleanup**: Removed the retired `trade_union_registration` reference from `legal-entity-types.ts`, the legal API route, and the statutory-registration action.
+> Note: v1.26.0 → v1.61.0 history is tracked in the in-app changelog (`src/app/[lang]/(site)/changelog/page.tsx`), which is the canonical source.
+
 ## [1.25.0] - 2026-08-09
 ### Added
 - **Public Org Portal Polish & Events Feed**: Enhanced the public organization landing page (`/org/[slug]`) with upcoming public events feeds, direct RSVP integration, localized Hindi translations, and streamlined membership applications.

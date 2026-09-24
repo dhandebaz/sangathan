@@ -9,20 +9,22 @@ import { toast } from 'sonner'
 interface LetterheadClientProps {
   organisationId: string
   defaultOrgName: string
+  defaultLogoUrl?: string
 }
 
-export default function LetterheadClient({ defaultOrgName }: LetterheadClientProps) {
-  const [unionName, setUnionName] = useState(defaultOrgName || 'CIVIC COLLECTIVE EXECUTIVE COUNCIL')
-  const [tagline, setTagline] = useState('Recognized Grassroots Collective • Community Representation')
+export default function LetterheadClient({ defaultOrgName, defaultLogoUrl }: LetterheadClientProps) {
+  const [orgName, setOrgName] = useState(defaultOrgName || 'My Organisation')
+  const [logoUrl, setLogoUrl] = useState(defaultLogoUrl || '')
+  const [tagline, setTagline] = useState('Community Representation • Grassroots Service')
   const id = useId()
-  const [refNumber, setRefNumber] = useState(`CIVIC/REG/${new Date().getFullYear()}/${Math.floor(1000 + parseInt(id.replace(/[^0-9]/g, '').slice(0, 4) || '0042', 10))}`)
+  const [refNumber, setRefNumber] = useState(`REF/${new Date().getFullYear()}/${Math.floor(1000 + parseInt(id.replace(/[^0-9]/g, '').slice(0, 4) || '0042', 10))}`)
   const [letterDate, setLetterDate] = useState(new Date().toISOString().split('T')[0])
   const [recipient, setRecipient] = useState('To,\nThe Concerned Authority,\nOffice of Public Grievance')
   const [subject, setSubject] = useState('MEMORANDUM REGARDING COMMUNITY ISSUE & PUBLIC GRIEVANCE')
   const [body, setBody] = useState(
 `Respected Sir/Madam,
 
-We, the elected representatives of the Collective, wish to bring your urgent attention to pressing community grievances regarding public services and civic infrastructure.
+We, the authorised representatives of the organisation, wish to bring your urgent attention to pressing community grievances regarding public services and civic infrastructure.
 
 Despite multiple oral representations, concrete action remains pending. We request an official meeting within 48 hours to discuss the Action Taken Report (ATR).
 
@@ -30,8 +32,15 @@ Thanking you,
 
 Yours sincerely,`
   )
-  const [signatory1, setSignatory1] = useState('President, Collective')
-  const [signatory2, setSignatory2] = useState('General Secretary, Collective')
+  const [signatory1, setSignatory1] = useState('President / Chairperson')
+  const [signatory2, setSignatory2] = useState('General Secretary')
+
+  const orgInitials = orgName
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(w => w[0]?.toUpperCase() || '')
+    .join('') || 'ORG'
 
   const handlePrint = () => {
     window.print()
@@ -52,7 +61,7 @@ Yours sincerely,`
             <Printer className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Official Collective Letterhead &amp; Printable PDF Exporter</h2>
+            <h2 className="text-lg font-bold text-slate-900">Official Organisation Letterhead &amp; Printable PDF Exporter</h2>
             <p className="text-slate-500 text-xs mt-0.5">
               Format formal representations, press releases, and RTI applications into official print-ready letterheads.
             </p>
@@ -88,11 +97,30 @@ Yours sincerely,`
         <CardContent className="space-y-4 pt-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Collective Heading Title</label>
+              <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Organisation Name</label>
               <input
                 type="text"
-                value={unionName}
-                onChange={e => setUnionName(e.target.value)}
+                value={orgName}
+                onChange={e => setOrgName(e.target.value)}
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Logo URL (optional)</label>
+              <input
+                type="text"
+                value={logoUrl}
+                onChange={e => setLogoUrl(e.target.value)}
+                placeholder="https://.../logo.png"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Tagline</label>
+              <input
+                type="text"
+                value={tagline}
+                onChange={e => setTagline(e.target.value)}
                 className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
               />
             </div>
@@ -175,12 +203,17 @@ Yours sincerely,`
         {/* Letterhead Top Emblem & Header */}
         <div className="border-b-4 border-double border-slate-900 pb-4 mb-6 text-center">
           <div className="flex justify-center items-center gap-3 mb-2">
-            <div className="w-12 h-12 rounded-full border-2 border-slate-900 flex items-center justify-center font-bold text-lg font-sans bg-slate-100">
-              CC
-            </div>
+            {logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={logoUrl} alt={`${orgName} logo`} className="w-12 h-12 rounded-full border-2 border-slate-900 object-cover bg-white" />
+            ) : (
+              <div className="w-12 h-12 rounded-full border-2 border-slate-900 flex items-center justify-center font-bold text-lg font-sans bg-slate-100">
+                {orgInitials}
+              </div>
+            )}
             <div className="text-center">
               <h1 className="text-xl sm:text-2xl font-black tracking-wider uppercase font-sans text-slate-900">
-                {unionName}
+                {orgName}
               </h1>
               <p className="text-xs font-sans text-slate-600 tracking-wide mt-0.5">
                 {tagline}
@@ -217,7 +250,7 @@ Yours sincerely,`
               [Official Signature & Seal]
             </div>
             <p className="font-bold border-t pt-1 uppercase text-slate-900">{signatory1}</p>
-            <p className="text-[10px] text-slate-500">{unionName}</p>
+            <p className="text-[10px] text-slate-500">{orgName}</p>
           </div>
 
           <div className="text-center">
@@ -225,7 +258,7 @@ Yours sincerely,`
               [Official Signature & Seal]
             </div>
             <p className="font-bold border-t pt-1 uppercase text-slate-900">{signatory2}</p>
-            <p className="text-[10px] text-slate-500">{unionName}</p>
+            <p className="text-[10px] text-slate-500">{orgName}</p>
           </div>
         </div>
       </div>

@@ -12,6 +12,7 @@ import { logger } from '@/lib/logger'
 import { invalidateUserMembershipsCache } from '@/lib/auth/context'
 import { checkRateLimit } from '@/lib/rate-limit/db-limiter'
 import { detectOTPRisk } from '@/lib/risk-engine'
+import { getAuthLocale, translateAuthMessage } from '@/lib/i18n/auth-errors'
 
 type Profile = Database['public']['Tables']['profiles']['Row']
 type Organisation = Database['public']['Tables']['organisations']['Row']
@@ -61,7 +62,8 @@ const ResetPasswordSchema = z.object({
 // --- Actions ---
 
 const LOCKOUT_THRESHOLD = 5
-const LOCKOUT_DURATION = 15 * 60
+const LOCKOUT_DURATION = 30 * 60 // 30 minutes
+const LOCKOUT_COOLDOWN = 10 * 60 // 10 min minimum before lockout can trigger again
 
 async function getLockoutKey(email: string): Promise<{ attempts: number; locked: boolean; remaining: number }> {
   const key = `lockout:login:${email.toLowerCase()}`
@@ -78,14 +80,18 @@ async function incrementLockout(email: string): Promise<void> {
 }
 
 async function clearLockout(email: string): Promise<void> {
+  const cooldownKey = `lockout:cooldown:${email.toLowerCase()}`
   await redis.del(`lockout:login:${email.toLowerCase()}`)
+  // Set cooldown so lockout can't immediately re-trigger
+  await redis.set(cooldownKey, '1', { ex: LOCKOUT_COOLDOWN })
 }
 
 export async function login(input: z.infer<typeof LoginSchema>) {
   try {
+    const locale = await getAuthLocale()
     const result = LoginSchema.safeParse(input)
     if (!result.success) {
-      return { success: false, error: result.error.issues[0].message }
+      return { success: false, error: translateAuthMessage(result.error.issues[0].message, locale) }
     }
 
     const { email, password } = result.data
@@ -94,7 +100,17 @@ export async function login(input: z.infer<typeof LoginSchema>) {
     if (lockout.locked) {
       return {
         success: false,
-        error: `Account temporarily locked. Try again in ${Math.ceil(lockout.remaining / 60)} minutes.`,
+        error: translateAuthMessage(`Account temporarily locked. Try again in ${Math.ceil(lockout.remaining / 60)} minutes.`, locale),
+      }
+    }
+
+    // Check cooldown - if a cooldown is active, wait before attempting login
+    const cooldownKey = `lockout:cooldown:${email.toLowerCase()}`
+    const cooldownActive = await redis.exists(cooldownKey)
+    if (cooldownActive) {
+      return {
+        success: false,
+        error: translateAuthMessage('Too many attempted logins. Please wait before trying again.', locale),
       }
     }
 
@@ -135,12 +151,13 @@ export async function login(input: z.infer<typeof LoginSchema>) {
 
       if (org && org.status === 'suspended') {
         await supabase.auth.signOut()
-        return { success: false, error: 'Your organisation has been suspended. Please contact support.' }
+        return { success: false, error: translateAuthMessage('Your organisation has been suspended. Please contact support.', locale) }
       }
     }
   } catch (err: unknown) {
     console.error('Login Error:', err)
-    return { success: false, error: err instanceof Error ? err.message : 'Failed to login' }
+    const locale = await getAuthLocale()
+    return { success: false, error: translateAuthMessage(err instanceof Error ? err.message : 'Failed to login', locale) }
   }
 
   const headersList = await headers()
@@ -153,9 +170,10 @@ export async function login(input: z.infer<typeof LoginSchema>) {
 
 export async function signup(input: z.infer<typeof SignupSchema>) {
   try {
+    const locale = await getAuthLocale()
     const result = SignupSchema.safeParse(input)
     if (!result.success) {
-      return { success: false, error: result.error.issues[0].message }
+      return { success: false, error: translateAuthMessage(result.error.issues[0].message, locale) }
     }
 
     const { email, password, fullName } = result.data
@@ -163,7 +181,7 @@ export async function signup(input: z.infer<typeof SignupSchema>) {
     const signupKey = `rate_limit:signup:${email.toLowerCase()}`
     const signupAttempts = (await redis.get<number>(signupKey)) || 0
     if (signupAttempts >= 3) {
-      return { success: false, error: 'Too many signup attempts for this email. Please try again later.' }
+      return { success: false, error: translateAuthMessage('Too many signup attempts for this email. Please try again later.', locale) }
     }
 
     const supabase = await createClient()
@@ -188,30 +206,32 @@ export async function signup(input: z.infer<typeof SignupSchema>) {
     }
 
     if (data.user && data.user.identities && data.user.identities.length === 0) {
-      return { success: false, error: 'User already registered. Please login.' }
+      return { success: false, error: translateAuthMessage('User already registered. Please login.', locale) }
     }
 
     await redis.set(signupKey, signupAttempts + 1)
     await redis.expire(signupKey, 3600)
 
-    return { success: true, message: 'Check your email to verify your account.' }
+    return { success: true, message: translateAuthMessage('Check your email to verify your account.', locale) }
   } catch (err: unknown) {
     console.error('Signup Error:', err)
-    return { success: false, error: err instanceof Error ? err.message : 'Failed to sign up' }
+    const locale = await getAuthLocale()
+    return { success: false, error: translateAuthMessage(err instanceof Error ? err.message : 'Failed to sign up', locale) }
   }
 }
 
 export async function otpLogin(input: z.infer<typeof OtpLoginSchema>) {
   try {
+    const locale = await getAuthLocale()
     const result = OtpLoginSchema.safeParse(input)
-    if (!result.success) return { success: false, error: result.error.issues[0].message }
+    if (!result.success) return { success: false, error: translateAuthMessage(result.error.issues[0].message, locale) }
 
     const headersList = await headers()
     const ip = headersList.get('x-forwarded-for') || 'unknown'
 
     // Risk Check
     const riskCheck = await detectOTPRisk(result.data.email, ip)
-    if (riskCheck.blocked) return { success: false, error: 'Too many login attempts. Please try again later.' }
+    if (riskCheck.blocked) return { success: false, error: translateAuthMessage('Too many login attempts. Please try again later.', locale) }
 
     const supabase = await createClient()
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://sangathan.space'
@@ -227,17 +247,19 @@ export async function otpLogin(input: z.infer<typeof OtpLoginSchema>) {
 
     if (error) return { success: false, error: error.message }
 
-    return { success: true, message: 'Check your email for the login link.' }
+    return { success: true, message: translateAuthMessage('Check your email for the login link.', locale) }
   } catch (err: unknown) {
     console.error('OTP Login Error:', err)
-    return { success: false, error: err instanceof Error ? err.message : 'Failed to send login link' }
+    const locale = await getAuthLocale()
+    return { success: false, error: translateAuthMessage(err instanceof Error ? err.message : 'Failed to send login link', locale) }
   }
 }
 
 export async function forgotPassword(input: z.infer<typeof ForgotPasswordSchema>) {
   try {
+    const locale = await getAuthLocale()
     const result = ForgotPasswordSchema.safeParse(input)
-    if (!result.success) return { success: false, error: result.error.issues[0].message }
+    if (!result.success) return { success: false, error: translateAuthMessage(result.error.issues[0].message, locale) }
 
     const supabase = await createClient()
     const origin = (await headers()).get('origin')
@@ -248,17 +270,19 @@ export async function forgotPassword(input: z.infer<typeof ForgotPasswordSchema>
 
     if (error) return { success: false, error: error.message }
 
-    return { success: true, message: 'Password reset link sent to your email.' }
+    return { success: true, message: translateAuthMessage('Password reset link sent to your email.', locale) }
   } catch (err: unknown) {
     console.error('Forgot Password Error:', err)
-    return { success: false, error: err instanceof Error ? err.message : 'Failed to send password reset link' }
+    const locale = await getAuthLocale()
+    return { success: false, error: translateAuthMessage(err instanceof Error ? err.message : 'Failed to send password reset link', locale) }
   }
 }
 
 export async function resetPassword(input: z.infer<typeof ResetPasswordSchema>) {
   try {
+    const locale = await getAuthLocale()
     const result = ResetPasswordSchema.safeParse(input)
-    if (!result.success) return { success: false, error: result.error.issues[0].message }
+    if (!result.success) return { success: false, error: translateAuthMessage(result.error.issues[0].message, locale) }
 
     const supabase = await createClient()
     const {
@@ -279,7 +303,8 @@ export async function resetPassword(input: z.infer<typeof ResetPasswordSchema>) 
     }
   } catch (err: unknown) {
     console.error('Reset Password Error:', err)
-    return { success: false, error: err instanceof Error ? err.message : 'Failed to reset password' }
+    const locale = await getAuthLocale()
+    return { success: false, error: translateAuthMessage(err instanceof Error ? err.message : 'Failed to reset password', locale) }
   }
 
   const headersList = await headers()
@@ -315,6 +340,7 @@ export async function finalizeSignup(input: {
   enableEmergencySos?: boolean
 }) {
   try {
+    const locale = await getAuthLocale()
     const supabase = await createClient()
     const {
       data: { user },
@@ -322,7 +348,7 @@ export async function finalizeSignup(input: {
     } = await supabase.auth.getUser()
 
     if (authError || !user || !user.email) {
-      return { success: false, error: 'Session expired or invalid. Please login again.' }
+      return { success: false, error: translateAuthMessage('Session expired or invalid. Please login again.', locale) }
     }
 
     const rateLimit = await checkRateLimit('create_org', user.id, 5, 86400)
@@ -334,7 +360,7 @@ export async function finalizeSignup(input: {
     const fullName = ((metadata.full_name as string) || (metadata.name as string) || user.email.split('@')[0] || 'Administrator').trim()
 
     if (!orgName) {
-      return { success: false, error: 'Organisation name is required.' }
+      return { success: false, error: translateAuthMessage('Organisation name is required.', locale) }
     }
 
     let targetSlug = ''
@@ -416,7 +442,7 @@ export async function finalizeSignup(input: {
           orgName,
           orgType,
         })
-        return { success: false, error: newOrgErr?.message || rpcRes1.error?.message || 'Failed to create organisation. Please try again.' }
+        return { success: false, error: translateAuthMessage(newOrgErr?.message || rpcRes1.error?.message || 'Failed to create organisation. Please try again.', locale) }
       }
       orgId = (newOrg as { id: string }).id
 
@@ -538,9 +564,10 @@ export async function finalizeSignup(input: {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
     })
+    const locale = await getAuthLocale()
     return {
       success: false,
-      error: err instanceof Error ? err.message : 'An unexpected error occurred during setup. Please try again.',
+      error: translateAuthMessage(err instanceof Error ? err.message : 'An unexpected error occurred during setup. Please try again.', locale),
     }
   }
 }

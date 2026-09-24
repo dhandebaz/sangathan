@@ -79,7 +79,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'FileText', title: 'Government Letter Draft Helper', desc: 'Draft government letters referencing relevant provisions (DMC Act, RTI) for SDMs and municipal bodies. You review, print and submit them yourself.' },
         { icon: 'Sparkles', title: 'Grassroots Survey & Goal Studio (SEO Links & WhatsApp CTA)', desc: 'Build 1-click townhall polls, issue prioritization surveys, and volunteer pledges with memorable SEO custom slugs (/f/[slug]), 1-click WhatsApp forward templates, live Sentiment Matrix, and Participant PDF Dossiers.' },
         { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Publish open letters, campaigns, and drives with live signature counters and instant volunteer conversion hooks.' },
-        { icon: 'Vote', title: 'Direct Democracy & Secret Voting Engine', desc: 'Secure, cryptographic anonymous secret ballots and leadership elections with instant tamper-evident tallies.' },
+        { icon: 'Vote', title: 'Direct Democracy & Secret Voting Engine', desc: 'Anonymous secret ballots for group decisions and leadership votes. Members see only totals, never individual choices.' },
         { icon: 'Network', title: 'Joint Front & Coalition Engine (संयुक्त मोर्चा)', desc: 'Form alliances with other movements, co-sign joint representations, and publish shared public statements.' },
         { icon: 'ShieldAlert', title: 'Emergency SOS Team Broadcast', desc: '1-tap alert to your own team members and saved contacts with location and details you type. Not a legal rescue service.' },
         { icon: 'Database', title: 'Offline-First Field Organizer PWA', desc: 'Door-to-door membership intake and field grievance capture in zero-connectivity areas with automatic background queue sync.' },
@@ -108,7 +108,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'LayoutDashboard', title: 'Smart Organization-Specific Parent Feature Hubs', desc: 'Streamlined navigation architecture grouping specialized operations inside 5 core power hubs: Dashboard, Inbox, Calendar, People, and Forms & Surveys.' },
         { icon: 'MessageSquare', title: 'Unified Inbox & Dispatch (Google Meet + Telegram Bot)', desc: 'Centralized 2-way donor/supporter chats, Telegram bot webhooks, 1-click Google Meet video rooms, and urgent disaster response SOS alerts.' },
         { icon: 'Calendar', title: 'Centralized Calendar & Operations Sync (Google & Apple iCal)', desc: 'Centralized schedule for board meetings, field work, and volunteer drives with RFC 5545 iCalendar (.ics) / webcal:// live feeds and Google Calendar sync.' },
-        { icon: 'Award', title: 'Cryptographic Volunteer Service Certificates', desc: 'Issue official volunteer recognition certificates with service hours recognized, digital verification seals, and tamper-proof SHA-256 hashes.' },
+        { icon: 'Award', title: 'Verifiable Volunteer Service Certificates', desc: 'Issue volunteer recognition certificates with service hours and a verification code that anyone can match against org records.' },
         { icon: 'DollarSign', title: 'Grant Tranche Accounting & Milestone Spend', desc: 'Track milestone tranche disbursements, line-item expenditures against sanctioned budgets, and real-time remaining balance accounting.' },
         { icon: 'Globe', title: '1-Click Public Petition & Campaign Studio', desc: 'Publish open letters, campaigns, and drives with live signature counters and instant volunteer conversion hooks.' },
         { icon: 'Award', title: 'Sharable Verified Member Badges & Credential Studio', desc: 'Generate high-resolution verified credentials and social graphics for volunteers, trustees, and 80G officers with photo avatars, 5 layout engines, and cryptographic verification.' },
@@ -125,7 +125,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Lock', title: 'Defensive Permission Guards & Dual Approvals', desc: 'Cryptographically linked immutable audit chain with mandatory dual-approval workflows for high-risk operations.' },
         { icon: 'Database', title: 'Donor CRM Database', desc: 'Centralized profiles, giving history, and engagement tracking.' },
         { icon: 'Wallet', title: 'Donation Ledger', desc: 'Process one-time, recurring, and offline contributions.' },
-        { icon: 'Receipt', title: 'Tax Receipts Automation', desc: 'Auto-generate 80G/501c3 compliant tax receipts for donors.' },
+        { icon: 'Receipt', title: 'Tax Receipts Automation', desc: 'Generate sequentially-numbered 80G/12A-ready PDF receipts for donors, labelled as 80G receipts only when your organisation holds its own registration.' },
         { icon: 'Briefcase', title: 'Grant Tracking', desc: 'Manage grant applications and monitor fund utilization.' },
         { icon: 'ShieldCheck', title: 'Audit-Ready Ledgers', desc: 'Automated cash books and government compliance reporting.' },
         { icon: 'Users', title: 'Volunteer Registry', desc: 'Onboard volunteers, track skills, and log service hours.' },
@@ -135,7 +135,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'ClipboardList', title: 'Field Forms & Surveys', desc: 'Offline-capable data collection for field workers.' },
         { icon: 'Network', title: 'Chapters & Subgroups', desc: 'Organise large NGOs by city chapters or wings.' },
         { icon: 'ShieldCheck', title: 'Helpdesk Support', desc: 'Centralized inbox for public and beneficiary inquiries.' },
-        { icon: 'CreditCard', title: 'Scalable Cadre Capacity & Pay-As-You-Grow (₹11/Cadre)', desc: '500 active cadre slots included in base Sustainer plan with transparent ₹11/cadre/month capacity expansion for large movements and federations.' },
+        { icon: 'CreditCard', title: 'Honest Metered Billing (₹11/Active Member)', desc: 'Free up to 5 member profiles, then (active members − 5) × ₹11/month. No base fee, no slabs, no annual lock-in. Public supporters, voters and signers never counted.' },
         { icon: 'CreditCard', title: 'Subscription & Plan Capacity Governance', desc: 'Predictable tier scaling, live member slot meters, automated receipt archiving, and multi-org enterprise capabilities.' },
         { icon: 'Sparkles', title: 'Civic Form & Survey Studio (SEO Links & WhatsApp CTA)', desc: 'Deploy volunteer skills intake, beneficiary assessments, and donor feedback forms with custom memorable links (/f/[slug]), 1-click direct WhatsApp viral forwarding, live Goal Consensus %, and Participant PDF Dossiers.' },
         { icon: 'FileSpreadsheet', title: 'Live Google Workspace & CSV Importer', desc: 'Import members via live Google People API (1-click contact selection), authenticated Google Sheets API (private sheet access), or traditional CSV upload. Includes automated column matching, phone validation, and deduplication.' },
@@ -145,7 +145,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
         { icon: 'Printer', title: 'Statutory PDF Registers & Audit Books', desc: '1-click export of Form I Member Rolls and Double-Entry Cash Books formatted for inspections.' },
         { icon: 'MapPin', title: 'National Geo Engine (780+ Districts)', desc: 'Pre-populated registry of all 28 Indian States, 8 UTs, and 780+ administrative districts with ISO codes and SDG sector taxonomies.' },
         { icon: 'Globe', title: 'Public SEO & AI Search Engine Citability', desc: 'Schema.org JSON-LD structured data, dynamic Edge OpenGraph image previews, and high-signal public profiles indexed across Google, Bing, and AI answer engines.' },
-        { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Auto-suggests 12A, 80G, FCRA based on actual usage and donations.' },
+        { icon: 'FileText', title: 'Smart Compliance Tracker', desc: 'Suggests 12A, 80G, FCRA items based on actual usage and donations.' },
         { icon: 'ShieldCheck', title: 'Legal Identity & Compliance Engine', desc: 'Manage statutory registrations (PAN, CIN, GSTIN) and compliance filings with upcoming direct Government API integrations.' },
         { icon: 'Smartphone', title: 'All-In-One Public Portal & Native PWA Installation', desc: 'Transform public org profiles into complete standalone web portals with native tabbed feeds, 1-tap UPI Chanda donation sheets, and instant Android/iOS homescreen app installation.' },
         { icon: 'Sparkles', title: 'AI & Vector Official Emblem Studio (2048px Export)', desc: 'Generate mathematically aligned circular statutory seals, modern crests, and letterhead-ready ink stamps with 1-click apply and 2048px high-resolution PNG downloads.' },
@@ -255,8 +255,8 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
               </h3>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed mb-4">
                 {isHindi
-                  ? 'देखें कि संगठन कैसे एक्शन नेटवर्क, नेशनबिल्डर, एवरीएक्शन, मोबिलाइज, CiviCRM और मायगेट से बेहतर है।'
-                  : 'Compare Sangathan against Action Network, NationBuilder, EveryAction, Mobilize, CiviCRM, MyGate, and WhatsApp.'}
+                  ? 'देखें कि संगठन कैसे एक्शन नेटवर्क, नेशनबिल्डर, एवरीएक्शन, मोबिलाइज और CiviCRM से बेहतर है।'
+                  : 'Compare Sangathan against Action Network, NationBuilder, EveryAction, Mobilize, CiviCRM, and WhatsApp.'}
               </p>
             </div>
             <Link

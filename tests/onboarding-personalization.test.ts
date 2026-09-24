@@ -3,8 +3,8 @@ import { FOCUS_BLUEPRINTS } from '@/lib/focus-blueprints'
 import { OrgType } from '@/lib/org-types'
 
 describe('Universal Focus Blueprints & Personalization Suite', () => {
-  it('should define exactly 4 rich focus blueprints for all 5 org types', () => {
-    const orgTypes: OrgType[] = ['civic_collective', 'ngo', 'student_union', 'workers_union', 'rwa']
+  it('should define exactly 4 rich focus blueprints for all 2 org types', () => {
+    const orgTypes: OrgType[] = ['civic_collective', 'ngo']
 
     orgTypes.forEach((type) => {
       const blueprints = FOCUS_BLUEPRINTS[type]
@@ -39,33 +39,15 @@ describe('Universal Focus Blueprints & Personalization Suite', () => {
     expect(citizenScience?.recommendedRoles.some((r) => r.value === 'Lead Researcher')).toBe(true)
   })
 
-  it('should verify student_union blueprints contain elections and mess grievances', () => {
-    const studentBps = FOCUS_BLUEPRINTS['student_union']
-    const ids = studentBps.map((b) => b.id)
-    expect(ids).toContain('campus_elections')
-    expect(ids).toContain('hostel_mess')
-    expect(ids).toContain('academic_antiragging')
-    expect(ids).toContain('student_movement')
+  it('should verify ngo blueprints contain welfare relief and policy advocacy', () => {
+    const ngoBps = FOCUS_BLUEPRINTS['ngo']
+    const ids = ngoBps.map((b) => b.id)
+    expect(ids).toContain('welfare_relief')
+    expect(ids).toContain('policy_advocacy')
+    expect(ids).toContain('community_shg')
+    expect(ids).toContain('animal_green')
 
-    const messBp = studentBps.find((b) => b.id === 'hostel_mess')
-    expect(messBp?.recommendedRoles.some((r) => r.value === 'Mess Secretary')).toBe(true)
-  })
-
-  it('should verify workers_union blueprints contain CBA and safety inspectorate', () => {
-    const unionBps = FOCUS_BLUEPRINTS['workers_union']
-    const ids = unionBps.map((b) => b.id)
-    expect(ids).toContain('cba_negotiations')
-    expect(ids).toContain('safety_inspectorate')
-    expect(ids).toContain('gig_informal')
-    expect(ids).toContain('cadre_delegate')
-  })
-
-  it('should verify rwa blueprints contain estate maintenance and municipal action', () => {
-    const rwaBps = FOCUS_BLUEPRINTS['rwa']
-    const ids = rwaBps.map((b) => b.id)
-    expect(ids).toContain('estate_maintenance')
-    expect(ids).toContain('municipal_civic')
-    expect(ids).toContain('security_amenities')
-    expect(ids).toContain('agm_billing')
+    const reliefBp = ngoBps.find((b) => b.id === 'welfare_relief')
+    expect(reliefBp?.recommendedRoles.some((r) => r.value === 'Program Director')).toBe(true)
   })
 })

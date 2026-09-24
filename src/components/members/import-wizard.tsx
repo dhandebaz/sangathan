@@ -967,8 +967,14 @@ export function ImportWizard({ lang, orgType = 'ngo', remainingCapacity = 1000, 
                 <div className="text-xs text-emerald-800 font-medium">{isHindi ? 'मान्य फ़ोन नंबर' : 'Ready for Insertion'}</div>
               </div>
               <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
-                <div className="text-2xl font-extrabold text-orange-700">{remainingCapacity}</div>
-                <div className="text-xs text-slate-500 font-medium">{isHindi ? 'शेष क्षमता स्लॉट' : 'Plan Capacity Slots'}</div>
+                <div className="text-2xl font-extrabold text-orange-700">
+                  {Number.isFinite(remainingCapacity) ? remainingCapacity : '—'}
+                </div>
+                <div className="text-xs text-slate-500 font-medium">
+                  {Number.isFinite(remainingCapacity)
+                    ? (isHindi ? 'शेष क्षमता स्लॉट' : 'Plan Capacity Slots')
+                    : (isHindi ? 'कोई सीमा नहीं · मीटर ₹11/साथी' : 'No cap · metered ₹11/member')}
+                </div>
               </div>
             </div>
 

@@ -128,7 +128,7 @@ export function EventForm({ orgId, partners = [], initialData }: { orgId: string
         </div>
         <div className="space-y-2">
           <Label>Capacity (Optional)</Label>
-          <Input type="number" value={formData.capacity} onChange={e => setFormData({...formData, capacity: e.target.value})} placeholder="Unlimited" />
+          <Input type="number" value={formData.capacity} onChange={e => setFormData({...formData, capacity: e.target.value})} placeholder="e.g. 200 (blank = open entry, fair-use)" />
         </div>
       </div>
 

@@ -20,6 +20,7 @@ export async function GET(request: NextRequest) {
       survey: { bg: '#f0fdf4', text: '#15803d', border: '#bbf7d0', accent: '#16a34a' },
       compare: { bg: '#f5f3ff', text: '#6d28d9', border: '#ddd6fe', accent: '#7c3aed' },
       policy: { bg: '#f8fafc', text: '#0f172a', border: '#e2e8f0', accent: '#334155' },
+      guide: { bg: '#eef2ff', text: '#3730a9', border: '#c7d2fe', accent: '#4f46eb' },
     }
 
     const currentTheme = archetypeColors[type] || archetypeColors.collective
@@ -33,6 +34,7 @@ export async function GET(request: NextRequest) {
       survey: 'Official Civic Survey & Townhall',
       compare: 'Platform Comparison',
       policy: 'Governance & Privacy Standard',
+      guide: 'How-To Guide',
     }
 
     const typeLabel = typeLabels[type] || 'Digital Public Infrastructure'

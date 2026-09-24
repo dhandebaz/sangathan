@@ -62,8 +62,8 @@ export default async function CommunityManagementPage({ params }: PageProps) {
         ? 'क्या संगठन अनौपचारिक नागरिक समुदायों के लिए पूरी तरह निःशुल्क है?'
         : 'Is Sangathan completely free for informal community groups?',
       answer: isHindi
-        ? 'हाँ। संगठन का कम्युनिटी टियर 20 कोर लीडर्स और असीमित सार्वजनिक समर्थकों के लिए हमेशा ₹0 निःशुल्क है।'
-        : 'Yes. Sangathan provides a ₹0 Forever Community Tier for grassroots collectives with up to 20 core leaders and unlimited public supporters.',
+        ? 'हाँ। संगठन का कम्युनिटी टियर 5 सदस्य प्रोफाइल तक हमेशा ₹0 निःशुल्क है, साथ में सार्वजनिक समर्थकों की खुली भागीदारी (उचित उपयोग)।'
+        : 'Yes. Sangathan provides a ₹0 Forever Community Tier for grassroots collectives with up to 5 member profiles, plus open participation (fair-use) for public supporters.',
     },
     {
       question: isHindi
@@ -226,7 +226,7 @@ export default async function CommunityManagementPage({ params }: PageProps) {
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   {isHindi
                     ? '1-व्यक्ति-1-वोट की पूर्ण निष्पक्षता। सार्वजनिक आम सभा और नेतृत्व चयन के लिए छेड़छाड़-रहित डिजिटल जनमत।'
-                    : 'Conduct tamper-evident, 1-person-1-vote democratic elections and consensus polls with verifiable quorum and mathematical voter secrecy.'}
+                    : 'Conduct 1-person-1-vote polls and consensus decisions with recorded quorum. Individual choices stay hidden from other members.'}
                 </p>
               </div>
             </div>

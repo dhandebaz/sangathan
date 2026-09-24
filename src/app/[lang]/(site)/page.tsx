@@ -356,7 +356,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
                   Non-profits managing field staff, donors, and state compliance.
                 </p>
                 <ul className="space-y-1.5 text-xs text-slate-700 font-medium mb-4">
-                  <li className="flex items-center gap-1.5"><Check size={14} className="text-emerald-600" /> Automated 80G Tax Receipts</li>
+                  <li className="flex items-center gap-1.5"><Check size={14} className="text-emerald-600" /> 80G-Ready Tax Receipts</li>
                   <li className="flex items-center gap-1.5"><Check size={14} className="text-emerald-600" /> Grant Tranche Accounting</li>
                   <li className="flex items-center gap-1.5"><Check size={14} className="text-emerald-600" /> AI CSR Scheme Matcher</li>
                   <li className="flex items-center gap-1.5"><Check size={14} className="text-emerald-600" /> Volunteer Hour Certificates</li>

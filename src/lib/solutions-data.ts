@@ -377,8 +377,8 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
       {
         questionEn: 'Is Sangathan completely free for grassroots groups?',
         questionHi: 'क्या संगठन जमीनी समूहों के लिए पूरी तरह निःशुल्क है?',
-        answerEn: 'Yes. Under our 2-tier Civic Solidarity model, the Community Tier is ₹0 Forever for all grassroots collectives, informal groups, and community volunteers up to 20 core leaders with unlimited public supporters and petition signers. For scaling movements, Sustainer Access provides 500 active cadre slots at ₹1,000/mo with transparent ₹11/cadre/month capacity expansion.',
-        answerHi: 'हाँ। हमारे नागरिक एकजुटता मॉडल के तहत, कम्युनिटी टियर सभी जमीनी समूहों, कार्यकर्ताओं और 20 कोर सदस्यों के लिए हमेशा ₹0 (पूर्णतः निःशुल्क) है। बड़े आंदोलनों के लिए संरक्षक योजना 500 सक्रिय काडर ₹1,000/माह में देती है और अतिरिक्त काडर केवल ₹11/माह पर बढ़ते हैं।'
+        answerEn: 'Yes. The Community Tier is ₹0 Forever for grassroots collectives up to 5 member profiles, with open participation (fair-use) for public supporters and petition signers. Beyond 5 actives, metered billing runs (active members − 5) × ₹11/month — no base fee, no annual lock-in.',
+        answerHi: 'हाँ। कम्युनिटी टियर 5 सदस्य प्रोफाइल तक के सभी जमीनी समूहों के लिए हमेशा ₹0 है, साथ में सार्वजनिक समर्थकों व याचिका हस्ताक्षरकर्ताओं की खुली भागीदारी (उचित उपयोग)। 5 से अधिक सक्रिय सदस्यों पर मीटर बिलिंग (सक्रिय सदस्य − 5) × ₹11/माह — कोई बेस फीस नहीं, कोई वार्षिक बंधन नहीं।'
       },
       {
         questionEn: 'Does Sangathan work offline in zero-connectivity field conditions?',
@@ -398,8 +398,8 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
     categoryBadgeHi: 'सोसायटी, ट्रस्ट एवं धारा 8 एनजीओ',
     metaTitleEn: 'NGO Management Software India | 80G Receipts, FCRA & Donor CRM | Sangathan',
     metaTitleHi: 'एनजीओ प्रबंधन सॉफ्टवेयर | 80G रसीदें, FCRA व डोनर सीआरएम | संगठन',
-    metaDescEn: 'All-in-one management software for Indian NGOs, Trusts & Societies. Automated 80G/12A tax receipts, CSR-1 grant accounting, volunteer hours logging, and Darpan compliance.',
-    metaDescHi: 'भारतीय एनजीओ, ट्रस्ट और सोसायटियों के लिए संपूर्ण प्रबंधन सॉफ्टवेयर। स्वचालित 80G/12A टैक्स रसीदें, सीएसआर अनुदान बहीखाता, स्वयंसेवक ट्रैकर एवं दर्पण अनुपालन।',
+    metaDescEn: 'All-in-one management software for Indian NGOs, Trusts & Societies. 80G/12A tax receipts, CSR-1 grant accounting, volunteer hours logging, and Darpan compliance.',
+    metaDescHi: 'भारतीय एनजीओ, ट्रस्ट और सोसायटियों के लिए संपूर्ण प्रबंधन सॉफ्टवेयर। 80G/12A टैक्स रसीदें, सीएसआर अनुदान बहीखाता, स्वयंसेवक ट्रैकर एवं दर्पण अनुपालन।',
     keywords: [
       'NGO management software India', '80G tax receipt generator NGO', 'FCRA compliance tracker',
       'NGO donor CRM software', 'volunteer management system India', 'CSR grant milestone accounting',
@@ -408,7 +408,7 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
     ],
     heroHeadlineEn: 'Complete Sovereign Infrastructure for Indian Non-Profits.',
     heroHeadlineHi: 'भारतीय स्वयंसेवी संस्थाओं के लिए पूर्ण पारदर्शी डिजिटल बुनियादी ढांचा।',
-    heroSubheadlineEn: 'Replace messy spreadsheets and expensive foreign CRMs with an India-first operating system. Issue 80G tax receipts, track grant tranches, log volunteer hours, and maintain audit-ready statutory cash books.',
+    heroSubheadlineEn: 'Replace messy spreadsheets and expensive foreign CRMs with an India-first operating system. Record donations and issue 80G/12A tax receipts, track grant tranches, log volunteer hours, and maintain audit-ready statutory cash books.',
     heroSubheadlineHi: 'बिखरे हुए स्प्रेडशीट और महंगे विदेशी सॉफ्टवेयर छोड़ें। 80G दान रसीदें बनाएं, सीएसआर ग्रांट्स ट्रैक करें, स्वयंसेवक घंटे दर्ज करें और ऑडिट-रेडी बहीखाता रखें।',
     activistQuoteEn: '“Donors don’t just want emotional stories anymore. They demand real-time programmatic fund utilization, 80G compliance, and cryptographic audit trails.”',
     activistQuoteHi: '“दानदाता केवल कहानियां नहीं, बल्कि पारदर्शी फंड उपयोग, त्वरित 80G रसीद और ऑडिट-प्रमाणित बहीखाता चाहते हैं।”',
@@ -416,10 +416,10 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
     quoteAttributionHi: 'राष्ट्रीय ग्रामीण विकास एवं राहत फाउंडेशन',
     groundPillars: [
       {
-        titleEn: 'Automated 80G & 12A Receipts',
-        titleHi: 'स्वचालित 80G व 12A दान रसीदें',
-        descEn: 'Instant compliant PDF tax exemption receipts with PAN, 10BE filing format, and WhatsApp delivery to donors.',
-        descHi: 'दानदाताओं के पैन कार्ड और 10BE फाइलिंग प्रारूप के साथ तत्काल प्रमाणित 80G टैक्स रसीदें और व्हाट्सएप डिलीवरी।',
+        titleEn: '80G/12A Tax Receipts',
+        titleHi: '80G व 12A दान रसीदें',
+        descEn: 'Generate compliant PDF tax-exemption receipts with donor PAN and 10BE filing format, labelled 80G/12A when your NGO holds its own registration.',
+        descHi: 'दानदाताओं के पैन कार्ड और 10BE फाइलिंग प्रारूप के साथ प्रमाणित टैक्स रसीदें; 80G/12A केवल अपने पंजीकरण पर।',
         icon: 'Receipt'
       },
       {
@@ -448,8 +448,8 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
       {
         nameEn: '80G Tax Exemption Receipt Engine',
         nameHi: '80G टैक्स छूट रसीद जनरेटर',
-        descEn: 'Auto-generates IT-compliant PDF receipts with donor PAN, registration number, and unique serial number.',
-        descHi: 'दानदाता पैन, संस्था पंजीकरण संख्या और अद्वितीय क्रमांक के साथ आयकर-अनुपालन PDF रसीद।',
+        descEn: 'Generates sequentially-numbered PDF receipts with donor PAN and registration number; mark as 80G/12A when your organisation holds its own registration.',
+        descHi: 'दानदाता पैन और संस्था पंजीकरण संख्या के साथ क्रमांकित PDF रसीदें; 80G/12A केवल अपने पंजीकरण पर।',
         icon: 'Receipt',
         badge: 'IT Act 1961'
       },
@@ -484,8 +484,8 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
         slug: 'welfare-relief',
         titleEn: 'Education, Health & Relief Welfare',
         titleHi: 'शिक्षा, स्वास्थ्य व राहत वितरण कार्यक्रम',
-        taglineEn: 'Volunteer hours logging, 80G tax-exempt donor receipts, beneficiary survey forms, and field distribution audits.',
-        taglineHi: 'स्वयंसेवक सेवा घंटे, 80G दान रसीदें, लाभार्थी डेटा सर्वेक्षण और राहत वितरण लेखाजोखा।',
+        taglineEn: 'Volunteer hours logging, 80G/12A donor receipts, beneficiary survey forms, and field distribution audits.',
+        taglineHi: 'स्वयंसेवक सेवा घंटे, 80G/12A दान रसीदें, लाभार्थी डेटा सर्वेक्षण और राहत वितरण लेखाजोखा।',
         metaTitleEn: 'Relief Welfare & Health NGO Software | Beneficiary & 80G System | Sangathan',
         metaTitleHi: 'राहत वितरण व स्वास्थ्य एनजीओ सॉफ्टवेयर | लाभार्थी ट्रैकर व 80G रसीद | संगठन',
         metaDescEn: 'Manage ration kits, medical camps, scholarship distributions, volunteer rosters, and 80G donor receipts for relief non-profits.',
@@ -495,11 +495,11 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
         activistQuoteHi: '“आपदा के समय फाइलें खो जाती हैं। संगठन 5,000 परिवारों तक राशन पहुंचाते हुए पूरे ऑडिट को पारदर्शी रखता है।”',
         groundChallengeEn: 'Managing hundreds of field volunteers, beneficiary lists, and individual donor queries during emergency relief operations.',
         groundChallengeHi: 'राहत कार्यों के दौरान सैकड़ों स्वयंसेवकों, लाभार्थी सूचियों और दानदाताओं की 80G रसीदों को संभालना कठिन होता है।',
-        solutionOverviewEn: 'Sangathan automates beneficiary intake, tracks relief kit dispatches with photos, and sends instant 80G receipts to donors on WhatsApp.',
-        solutionOverviewHi: 'संगठन लाभार्थियों का त्वरित पंजीकरण करता है, राहत वितरण फोटो रिकॉर्ड रखता है और दानदाताओं को व्हाट्सएप पर 80G रसीद भेजता है।',
+        solutionOverviewEn: 'Sangathan streamlines beneficiary intake, tracks relief kit dispatches with photos, and records donation receipts that can be shared with donors via WhatsApp — labelled 80G only when your NGO holds its own registration.',
+        solutionOverviewHi: 'संगठन लाभार्थियों का त्वरित पंजीकरण करता है, राहत वितरण फोटो रिकॉर्ड रखता है और दान रसीदें दर्ज कर व्हाट्सएप पर दानदाताओं से साझा करता है — 80G केवल अपने पंजीकरण पर।',
         keyTools: [
           { nameEn: 'Beneficiary Intake & Ration Logger', nameHi: 'लाभार्थी पंजीकरण व राशन लॉगर', descEn: 'Track ration kit or medicine disbursements per household with Aadhaar/ID check.', descHi: 'परिवार-वार राशन या दवा वितरण का सुरक्षित रिकॉर्ड।', icon: 'ClipboardList' },
-          { nameEn: 'Instant 80G WhatsApp Dispatch', nameHi: 'त्वरित 80G व्हाट्सएप रसीद', descEn: 'Auto-send PDF tax receipt to donor\'s mobile number the moment UPI donation lands.', descHi: 'यूपीआई से दान प्राप्त होते ही दानदाता के व्हाट्सएप पर 80G रसीद भेजें।', icon: 'Receipt' }
+          { nameEn: 'Donation Receipt Dispatch', nameHi: 'दान रसीद वितरण', descEn: 'Record UPI donations and share the generated PDF tax receipt with the donor — labelled 80G/12A when your NGO holds its own registration.', descHi: 'यूपीआई दान दर्ज करें और जनरेट PDF टैक्स रसीद दानदाता के साथ साझा करें — 80G केवल अपने पंजीकरण पर।', icon: 'Receipt' }
         ],
         statutoryActs: [
           { titleEn: 'Income Tax Act, 1961 - Section 80G / 12A', titleHi: 'आयकर अधिनियम, 1961 - धारा 80G / 12A', descEn: '50% tax deduction for donors and annual Form 10BD electronic return filing.', descHi: 'दानदाताओं को 50% टैक्स छूट और वार्षिक फॉर्म 10BD फाइलिंग की वैधानिक व्यवस्था।', provision: 'Section 80G(5)(vi)' }
@@ -507,7 +507,7 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
         stepWorkflow: [
           { stepEn: '01', stepHi: '०१', titleEn: 'Setup Relief Campaign', titleHi: 'राहत अभियान बनाएं', detailEn: 'Create campaign with target beneficiary count and UPI donation gateway.', detailHi: 'लक्ष्य और यूपीआई डोनेशन लिंक के साथ राहत अभियान शुरू करें।' },
           { stepEn: '02', stepHi: '०२', titleEn: 'Distribute with Offline PWA', titleHi: 'फील्ड में वितरण करें', detailEn: 'Field team checks in beneficiaries offline and logs kit numbers.', detailHi: 'फील्ड टीम बिना इंटरनेट के लाभार्थियों को किट वितरित कर डेटा दर्ज करती है।' },
-          { stepEn: '03', stepHi: '०३', titleEn: 'Issue 80G Certificates', titleHi: '80G रसीदें जारी करें', detailEn: 'Auto-generate and email 80G certificates to all contributors.', detailHi: 'सभी दानदाताओं को स्वतः प्रमाणित 80G रसीदें भेजें।' }
+          { stepEn: '03', stepHi: '०३', titleEn: 'Issue Tax Receipts', titleHi: 'टैक्स रसीदें जारी करें', detailEn: 'Generate and email PDF tax receipts to all contributors — labelled 80G when your NGO holds its own registration.', detailHi: 'सभी दानदाताओं को प्रमाणित टैक्स रसीदें भेजें — 80G केवल अपने पंजीकरण पर।' }
         ],
         faqs: [
           {
@@ -640,8 +640,8 @@ export const SOLUTIONS_DATA: Record<string, SolutionOrgType> = {
       {
         questionEn: 'How does pricing work for registered NGOs and trusts?',
         questionHi: 'पंजीकृत एनजीओ और ट्रस्टों के लिए मूल्य निर्धारण कैसे काम करता है?',
-        answerEn: 'NGOs can start on the Community Tier (₹0 / voluntary) or access the Sustainer Plan for ₹1,000/month (or ₹10,000/year) which includes 500 active staff/volunteer slots, Sangathan AI intelligence, and scalable expansion at ₹11/member/month.',
-        answerHi: 'एनजीओ कम्युनिटी टियर (₹0 स्वैच्छिक) से शुरुआत कर सकते हैं या संरक्षक योजना (₹1,000/माह या ₹10,000/वर्ष) चुन सकते हैं जिसमें 500 सक्रिय स्टाफ/स्वयंसेवक स्लॉट, संगठन AI और ₹11/अतिरिक्त सदस्य का पारदर्शी पैमाना शामिल है।'
+        answerEn: 'NGOs start on the Community Tier (₹0, up to 5 member profiles). Beyond 5 actives, metered billing runs (active members − 5) × ₹11/month with no base fee and no annual lock-in — including Sangathan AI intelligence, plugins and priority support. Whitelabel branding removal is a ₹999 one-time payment.',
+        answerHi: 'एनजीओ कम्युनिटी टियर (₹0, 5 सदस्य प्रोफाइल तक) से शुरुआत करते हैं। 5 से अधिक सक्रिय सदस्यों पर मीटर बिलिंग (सक्रिय सदस्य − 5) × ₹11/माह — कोई बेस फीस नहीं, कोई वार्षिक बंधन नहीं — संगठन AI, प्लगइन्स व प्राथमिकता सहायता सहित। व्हाइट-लेबल ब्रांडिंग हटाना ₹999 एकमुश्त है।'
       },
       {
         questionEn: 'How does Sangathan help with NGO audit compliance?',

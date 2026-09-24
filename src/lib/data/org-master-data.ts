@@ -44,60 +44,14 @@ export const NGO_TAX_EXEMPTIONS: MasterItem[] = [
 ]
 
 // ==========================================
-// 2. STUDENT UNION MASTER DATA
+// 2. CIVIC COLLECTIVE MASTER DATA
 // ==========================================
 
-export const STUDENT_CENTRAL_PANEL: MasterItem[] = [
-  { id: 'pres', code: 'SU-PRES', nameEn: 'President (अध्यक्ष)', nameHi: 'अध्यक्ष', descriptionEn: 'Chief representative of the student body', descriptionHi: 'छात्र संघ का मुख्य प्रतिनिधि' },
-  { id: 'vp', code: 'SU-VP', nameEn: 'Vice President (उपाध्यक्ष)', nameHi: 'उपाध्यक्ष', descriptionEn: 'Presides over executive sessions and academic committees', descriptionHi: 'कार्यकारी सत्रों व समितियों का संचालन' },
-  { id: 'gs', code: 'SU-GS', nameEn: 'General Secretary (महासचिव)', nameHi: 'महासचिव', descriptionEn: 'Chief administrative officer and Gyapan signatory', descriptionHi: 'मुख्य प्रशासनिक अधिकारी व ज्ञापन हस्ताक्षरकर्ता' },
-  { id: 'js', code: 'SU-JS', nameEn: 'Joint Secretary (संयुक्त सचिव)', nameHi: 'संयुक्त सचिव', descriptionEn: 'Coordinates welfare drives and campus student records', descriptionHi: 'कल्याणकारी अभियानों व छात्र रिकॉर्ड का समन्वय' },
-  { id: 'cc', code: 'SU-CC', nameEn: 'Central Councillor (केंद्रीय पार्षद)', nameHi: 'केंद्रीय पार्षद', descriptionEn: 'Faculty and department delegate to university council', descriptionHi: 'विश्वविद्यालय परिषद में संकाय प्रतिनिधि' },
-]
-
-export const ACADEMIC_FACULTIES: MasterItem[] = [
-  { id: 'arts', nameEn: 'Faculty of Arts & Humanities', nameHi: 'कला एवं मानविकी संकाय' },
-  { id: 'social_sci', nameEn: 'Faculty of Social Sciences', nameHi: 'सामाजिक विज्ञान संकाय' },
-  { id: 'science', nameEn: 'Faculty of Natural & Applied Sciences', nameHi: 'प्राकृतिक एवं अनुप्रयुक्त विज्ञान संकाय' },
-  { id: 'tech_eng', nameEn: 'Faculty of Engineering & Technology', nameHi: 'अभियांत्रिकी एवं प्रौद्योगिकी संकाय' },
-  { id: 'law', nameEn: 'Faculty of Law & Legal Studies', nameHi: 'विधि एवं कानूनी अध्ययन संकाय' },
-  { id: 'medicine', nameEn: 'Faculty of Medical Sciences & Dentistry', nameHi: 'चिकित्सा विज्ञान एवं दंत चिकित्सा संकाय' },
-  { id: 'commerce', nameEn: 'Faculty of Commerce & Management', nameHi: 'वाणिज्य एवं प्रबंधन संकाय' },
-]
-
-export const CAMPUS_GRIEVANCE_CHANNELS: MasterItem[] = [
-  { id: 'dsw', code: 'OFF-DSW', nameEn: 'Dean of Students Welfare (DSW)', nameHi: 'छात्र कल्याण संकायाध्यक्ष (DSW)' },
-  { id: 'proctor', code: 'OFF-PROCTOR', nameEn: 'Chief Proctor Office (Campus Security)', nameHi: 'मुख्य प्रॉक्टर कार्यालय (कैंपस सुरक्षा)' },
-  { id: 'anti_ragging', code: 'UGC-ARC', nameEn: 'Anti-Ragging Squad & Hotline', nameHi: 'एंटी-रैगिंग दस्ता व हेल्पलाइन' },
-  { id: 'posh_icc', code: 'POSH-ICC', nameEn: 'Internal Complaints Committee (POSH/ICC)', nameHi: 'आंतरिक शिकायत समिति (POSH/ICC)' },
-  { id: 'hostel_council', code: 'HSTL-COUNCIL', nameEn: 'Hostel Wardens & Mess Council', nameHi: 'छात्रावास वार्डन व मेस परिषद' },
-]
-
-// ==========================================
-// 3. WORKERS & TRADE UNION MASTER DATA
-// ==========================================
-
-export const INDUSTRIAL_SECTORS: MasterItem[] = [
-  { id: 'mfg_auto', code: 'SEC-MFG', nameEn: 'Automobile & Heavy Manufacturing', nameHi: 'ऑटोमोबाइल व भारी विनिर्माण' },
-  { id: 'gig_platform', code: 'SEC-GIG', nameEn: 'IT, Tech & App-based Gig Economy', nameHi: 'आईटी, टेक व ऐप-आधारित गिग वर्कर' },
-  { id: 'logistics', code: 'SEC-LOG', nameEn: 'Transportation, Railways & Logistics', nameHi: 'परिवहन, रेलवे व लॉजिस्टिक्स' },
-  { id: 'construction', code: 'SEC-CONST', nameEn: 'Construction & Infrastructure Labour', nameHi: 'भवन निर्माण व बुनियादी ढांचा श्रमिक' },
-  { id: 'health_sanitation', code: 'SEC-SAN', nameEn: 'Healthcare, Nursing & Sanitation', nameHi: 'स्वास्थ्य सेवा, नर्सिंग व स्वच्छता' },
-  { id: 'textile', code: 'SEC-TEX', nameEn: 'Textile, Garment & Leather Units', nameHi: 'कपड़ा, परिधान व चमड़ा उद्योग' },
-  { id: 'mining_energy', code: 'SEC-MINE', nameEn: 'Mining, Coal, Power & Petrochemicals', nameHi: 'खनन, कोयला, बिजली व पेट्रोकेमिकल्स' },
-]
-
-export const LABOUR_DISPUTE_CATEGORIES: MasterItem[] = [
-  { id: 'wage_unpaid', code: 'DISP-WAGE', nameEn: 'Minimum Wage Non-Payment / Delayed Wages', nameHi: 'न्यूनतम वेतन न मिलना / वेतन में देरी' },
-  { id: 'retrenchment', code: 'DISP-RET', nameEn: 'Wrongful Retrenchment & Unlawful Termination', nameHi: 'अनुचित छंटनी व अवैध बर्खास्तगी' },
-  { id: 'workplace_safety', code: 'DISP-SAFE', nameEn: 'Occupational Safety & Hazardous Environment', nameHi: 'कार्यस्थल सुरक्षा व खतरनाक माहौल' },
-  { id: 'overtime', code: 'DISP-OT', nameEn: 'Uncompensated Overtime & 12-Hour Shifts', nameHi: 'अवैतनिक ओवरटाइम व 12 घंटे की शिफ्ट' },
-  { id: 'regularization', code: 'DISP-REG', nameEn: 'Contract Labour Regularization & PF/ESI Default', nameHi: 'ठेका श्रमिक नियमितीकरण व PF/ESI डिफ़ॉल्ट' },
-]
-
-export const STATUTORY_LABOUR_AUTHORITIES: MasterItem[] = [
-  { id: 'alc', code: 'AUTH-ALC', nameEn: 'Assistant Labour Commissioner (Conciliation Officer)', nameHi: 'सहायक श्रम आयुक्त (सुलह अधिकारी)' },
-  { id: 'rlc', code: 'AUTH-RLC', nameEn: 'Regional Labour Commissioner (Central / State)', nameHi: 'क्षेत्रीय श्रम आयुक्त (केंद्रीय / राज्य)' },
-  { id: 'tribunal', code: 'AUTH-IT', nameEn: 'Industrial Disputes Tribunal', nameHi: 'औद्योगिक विवाद न्यायाधिकरण' },
-  { id: 'cgit', code: 'AUTH-CGIT', nameEn: 'Central Govt Industrial Tribunal (CGIT)', nameHi: 'केंद्रीय सरकार औद्योगिक न्यायाधिकरण (CGIT)' },
+export const CIVIC_ACTION_AREAS: MasterItem[] = [
+  { id: 'waste_water', code: 'CIVIC-SWACHH', nameEn: 'Waste Management & Sewer Overflow', nameHi: 'कचरा प्रबंधन व सीवर ओवरफ्लो', category: 'Sanitation' },
+  { id: 'air_quality', code: 'CIVIC-AIR', nameEn: 'Air Pollution & Stubble Burning Audit', nameHi: 'वायु प्रदूषण व पराली जलाने की जांच', category: 'Environment' },
+  { id: 'road_lighting', code: 'CIVIC-ROAD', nameEn: 'Roads, Streetlights & Public Infrastructure', nameHi: 'सड़क, स्ट्रीट लाइट व सार्वजनिक बुनियादी ढांचा', category: 'Infrastructure' },
+  { id: 'water_supply', code: 'CIVIC-WATER', nameEn: 'Drinking Water Supply & Tanker Scheduling', nameHi: 'पेयजल आपूर्ति व टैंकर शेड्यूलिंग', category: 'Utilities' },
+  { id: 'safety_harassment', code: 'CIVIC-SAFETY', nameEn: 'Public Safety, Harassment & Police Response', nameHi: 'सार्वजनिक सुरक्षा, उत्पीड़न व पुलिस व्यवस्था', category: 'Rights' },
+  { id: 'education_health', code: 'CIVIC-EDU', nameEn: 'Local Schools, Health Centres & Anganwadi', nameHi: 'स्थानीय स्कूल, स्वास्थ्य केंद्र व आंगनवाड़ी', category: 'Social Services' },
 ]

@@ -2,6 +2,7 @@ import { MetadataRoute } from 'next'
 import { createServiceClient } from '@/lib/supabase/service'
 import { SOLUTIONS_DATA } from '@/lib/solutions-data'
 import { COMPARISONS_DATA } from '@/lib/comparisons-data'
+import { ALL_GUIDE_ARTICLES } from '@/lib/seo-articles'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://sangathan.space'
@@ -289,6 +290,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   } catch (err) {
     console.error('Error generating dynamic sitemap items:', err)
+  }
+
+  // 7. SEO Guides (English-only, no /hi alternate — single canonical URL)
+  for (const article of ALL_GUIDE_ARTICLES) {
+    sitemapEntries.push({
+      url: `${baseUrl}/guides/${article.slug}`,
+      lastModified: new Date(article.datePublished),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    })
   }
 
   return sitemapEntries

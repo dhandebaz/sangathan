@@ -2,15 +2,11 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { sendWeeklyEngineeringDigestEmail } from '@/lib/digest/weekly-engineering-digest'
 import { logger } from '@/lib/logger'
 import { captureException } from '@/lib/sentry'
+import { validateCronRequest } from '@/lib/cron-auth'
 
 export async function GET(request: NextRequest) {
-  const authHeader = request.headers.get('x-cron-secret')
-  if (authHeader !== process.env.CRON_SECRET) {
-    logger.security('cron_weekly_digest', 'Unauthorized weekly digest cron invocation', {
-      ip: request.headers.get('x-forwarded-for') || 'unknown',
-    })
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const auth = await validateCronRequest(request)
+  if (!auth.ok) return auth.response
 
   try {
     logger.info('cron_weekly_digest', 'Executing automated weekly engineering & complaints digest cron')

@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       type: 'website',
       images: [
         {
-          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'सुरक्षा, एन्क्रिप्शन व RLS वास्तुकला' : 'Security & Defensive Infrastructure')}&desc=${encodeURIComponent(isHindi ? 'प्रतिकूल डिजिटल वातावरण में आपके डेटा की संप्रभु सुरक्षा।' : 'Multi-tenant database isolation, zero-profiling guarantees, and cryptographic verification.')}&type=policy&tag=Defensive+Security&lang=${lang}`,
+          url: `https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'सुरक्षा, एन्क्रिप्शन व RLS वास्तुकला' : 'Security & Defensive Infrastructure')}&desc=${encodeURIComponent(isHindi ? 'प्रतिकूल डिजिटल वातावरण में आपके डेटा की संप्रभु सुरक्षा।' : 'Multi-tenant database isolation, zero-profiling guarantees, and verifiable records.')}&type=policy&tag=Defensive+Security&lang=${lang}`,
           width: 1200,
           height: 630,
           alt: 'Sangathan Security',
@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       description: isHindi
         ? 'हम प्रतिकूल डिजिटल वातावरण में आपके डेटा की सुरक्षा कैसे करते हैं।'
         : 'How we protect your data in a hostile digital environment.',
-      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'सुरक्षा, एन्क्रिप्शन व RLS वास्तुकला' : 'Security & Defensive Infrastructure')}&desc=${encodeURIComponent(isHindi ? 'प्रतिकूल डिजिटल वातावरण में आपके डेटा की संप्रभु सुरक्षा।' : 'Multi-tenant database isolation, zero-profiling guarantees, and cryptographic verification.')}&type=policy&tag=Defensive+Security&lang=${lang}`],
+      images: [`https://sangathan.space/api/og?title=${encodeURIComponent(isHindi ? 'सुरक्षा, एन्क्रिप्शन व RLS वास्तुकला' : 'Security & Defensive Infrastructure')}&desc=${encodeURIComponent(isHindi ? 'प्रतिकूल डिजिटल वातावरण में आपके डेटा की संप्रभु सुरक्षा।' : 'Multi-tenant database isolation, zero-profiling guarantees, and verifiable records.')}&type=policy&tag=Defensive+Security&lang=${lang}`],
     },
   }
 }

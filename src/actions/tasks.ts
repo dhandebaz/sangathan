@@ -5,6 +5,8 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import { enqueueJob } from '@/lib/queue'
+import { logger } from '@/lib/logger'
 
 const TaskSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 chars'),
@@ -72,6 +74,42 @@ export const createTask = createSafeAction(
         .insert(assignments as never)
 
       if (assignError) console.error('Assignment Error:', assignError)
+
+      // Notify assignees so an assigned task never disappears silently.
+      const adminClient = createServiceClient()
+      const { data: assignees } = await adminClient
+        .from('profiles')
+        .select('email, full_name')
+        .in('id', input.assignee_ids)
+
+      if (assignees?.length) {
+        const adminClient = createServiceClient()
+        const { data: org } = await adminClient
+          .from('organisations')
+          .select('name')
+          .eq('id', context.organizationId)
+          .maybeSingle()
+        const orgName = org?.name || 'your organisation'
+        const html = `
+          <p>Hello,</p>
+          <p>You have been assigned a new task in <strong>${orgName}</strong>:</p>
+          <h3 style="margin:16px 0 4px;">${input.title}</h3>
+          ${input.description ? `<p style="color:#475569;">${input.description}</p>` : ''}
+          ${input.due_date ? `<p style="color:#475569;">Due: ${new Date(input.due_date).toLocaleDateString()}</p>` : ''}
+          <p><a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://sangathan.space'}/en/dashboard/tasks" style="background:#4f46e5;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;">View task</a></p>`
+
+        const queued = await enqueueJob('send_email', {
+          to: assignees.map((a) => a.email).filter(Boolean),
+          subject: `New task assigned: ${input.title}`,
+          html,
+          text: `You have been assigned a new task in ${orgName}: ${input.title}`,
+          tags: ['task_assignment'],
+        })
+
+        if (!queued) {
+          logger.error('tasks', 'Failed to enqueue task assignment notification emails', { taskId: task.id })
+        }
+      }
     }
 
     await context.logAction({

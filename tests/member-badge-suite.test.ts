@@ -4,8 +4,8 @@ import { OrgType } from '@/lib/org-types'
 import { HERALDIC_SYMBOLS } from '@/lib/logo-generator/symbols-and-palettes'
 
 describe('Multi-Org Verified Member Badge & Credential Suite', () => {
-  it('defines valid configurations for all 5 organisation archetypes', () => {
-    const requiredTypes: OrgType[] = ['civic_collective', 'ngo', 'student_union', 'workers_union', 'rwa']
+  it('defines valid configurations for all 2 organisation archetypes', () => {
+    const requiredTypes: OrgType[] = ['civic_collective', 'ngo']
 
     for (const orgType of requiredTypes) {
       const arch = ORG_ARCHETYPES[orgType]

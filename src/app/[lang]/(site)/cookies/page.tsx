@@ -38,14 +38,14 @@ export default function CookiesPage() {
         <section>
           <h2 className="text-xl font-semibold text-black mb-3">2. How Sangathan Uses Cookies</h2>
           <p>
-            Sangathan uses cookies only for essential platform functionality and basic analytics. We do not sell your
-            data or use cookies for invasive cross-site tracking.
+            Sangathan uses cookies only for essential platform functionality. We do not run advertising, do not sell
+            your data, and do not use cookies for invasive cross-site tracking.
           </p>
           <ul className="list-disc pl-5 space-y-2">
             <li>Authentication cookies to keep you signed in securely.</li>
             <li>Security cookies to help detect suspicious or abusive activity.</li>
             <li>Preference cookies to remember language and basic UI settings.</li>
-            <li>Analytics cookies to understand aggregate usage and improve the Platform.</li>
+            <li>Reliability cookies (via our error monitoring provider, Sentry) to detect crashes and improve stability.</li>
           </ul>
         </section>
 
@@ -57,8 +57,12 @@ export default function CookiesPage() {
               navigating between pages.
             </li>
             <li>
-              <strong>Performance and Analytics Cookies:</strong> Help us understand how the Platform is used so we can
-              improve reliability and usability.
+              <strong>Preference Cookies:</strong> Remember your language and UI settings so you do not have to set them
+              again on every visit.
+            </li>
+            <li>
+              <strong>Reliability Monitoring Cookies:</strong> Set by our error-monitoring provider (Sentry) to detect
+              application errors. We use this data only to improve stability, not to track you across other websites.
             </li>
           </ul>
         </section>
@@ -66,9 +70,9 @@ export default function CookiesPage() {
         <section>
           <h2 className="text-xl font-semibold text-black mb-3">4. Third-Party Cookies</h2>
           <p>
-            Some cookies may be set by third-party services integrated into the Platform, such as authentication
-            providers or analytics tools. These providers have their own privacy and cookie policies, which we
-            encourage you to review.
+            Our error-monitoring service (Sentry) may set a cookie to help attribute errors to a browsing session. Sentry
+            has its own privacy policy and cookie handling, which we encourage you to review. We do not integrate
+            advertising, social, or cross-site tracking networks.
           </p>
         </section>
 

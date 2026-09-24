@@ -12,7 +12,7 @@ import {
   Printer, ShieldCheck,
   Sparkles, MessageSquare,
   FolderLock, BookOpen,
-  Activity, Clock, HandCoins
+  Activity, Clock, HandCoins, PlugZap
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -65,6 +65,7 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
         { href: `/${lang}/dashboard/calendar`, icon: Calendar, label: 'Meetings', show: true },
         { href: `/${lang}/dashboard/people`, icon: Users, label: 'People', show: true },
         { href: `/${lang}/dashboard/forms`, icon: Sparkles, label: 'Forms', show: true },
+        { href: `/${lang}/dashboard/integrations`, icon: PlugZap, label: 'Integrations', show: true },
       ].filter(i => i.show)
     }
 

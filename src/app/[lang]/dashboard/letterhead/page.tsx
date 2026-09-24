@@ -14,7 +14,7 @@ export default async function LetterheadPage({ params }: { params: Promise<{ lan
   const adminClient = createServiceClient()
   const { data: org } = await adminClient
     .from('organisations')
-    .select('name')
+    .select('name, logo_url')
     .eq('id', organisationId)
     .maybeSingle()
 
@@ -23,17 +23,18 @@ export default async function LetterheadPage({ params }: { params: Promise<{ lan
       <div className="print:hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-            Official Union Letterhead & PDF Exporter
+            Official Letterhead & PDF Exporter
           </h1>
           <p className="text-slate-500 mt-1">
-            Format formal Gyapans, Press Releases, and RTI Applications into official print-ready letterheads.
+            Format formal representations, press releases, and RTI applications into official print-ready letterheads.
           </p>
         </div>
       </div>
 
       <LetterheadClient
         organisationId={organisationId}
-        defaultOrgName={org?.name || "STUDENT UNION EXECUTIVE COUNCIL"}
+        defaultOrgName={org?.name || 'My Organisation'}
+        defaultLogoUrl={org?.logo_url || ''}
       />
     </div>
   )

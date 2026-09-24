@@ -370,7 +370,7 @@ export function UnifiedAdministrationHub({
               </h4>
               <p className="text-xs text-slate-600 leading-relaxed font-medium">
                 {isHindi
-                  ? 'सरकारी अधिकारियों, निगम वार्डों, और कुलसचिव को औपचारिक पत्र व ज्ञापन जारी करें।'
+                  ? 'सरकारी अधिकारियों और निगम वार्डों को औपचारिक पत्र व ज्ञापन जारी करें।'
                   : 'Draft and export official memorandums, municipal representations, and statutory demand letters.'}
               </p>
               <div className="pt-2">

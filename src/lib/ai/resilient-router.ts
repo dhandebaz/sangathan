@@ -1,6 +1,7 @@
 import 'server-only'
 
 import { z } from 'zod'
+import { redis } from '@/lib/redis'
 
 type ChatMessage = {
   role: 'system' | 'user' | 'assistant'
@@ -18,6 +19,12 @@ export type ResilientCompletionOptions = {
   messages: ChatMessage[]
   temperature?: number
   maxTokens?: number
+  /**
+   * Optional per-org budget key (e.g. the organisation id) used to cap
+   * shared AI spend. When provided, calls are tallied in Redis and refused
+   * once the daily limit is hit, so one heavy org cannot burn shared keys.
+   */
+  budgetKey?: string
 }
 
 export type ResilientCompletion = {
@@ -27,6 +34,7 @@ export type ResilientCompletion = {
 }
 
 const REQUEST_TIMEOUT_MS = 25_000
+const DAILY_CALL_LIMIT = Number(process.env.AI_DAILY_CALL_LIMIT) || 200
 
 const providers: Provider[] = [
   {
@@ -82,6 +90,31 @@ export async function generateResilientCompletion(
 
   if (configuredProviders.length === 0) {
     throw new Error('No AI provider is configured')
+  }
+
+  // Enforce per-key daily budget before spending shared provider credits.
+  if (options.budgetKey) {
+    const budgetKey = `ai_budget:${options.budgetKey}`
+    const dayKey = `ai_budget_day:${options.budgetKey}`
+    const today = new Date().toISOString().slice(0, 10)
+    try {
+      const [count, trackedDay] = await Promise.all([
+        redis.incr(budgetKey),
+        redis.get(dayKey),
+      ])
+      if (trackedDay !== today) {
+        await redis.set(dayKey, today, { ex: 60 * 60 * 24 })
+        await redis.set(budgetKey, 1, { ex: 60 * 60 * 24 })
+      }
+      if (count > DAILY_CALL_LIMIT) {
+        throw new Error('Daily AI usage limit reached for this organisation')
+      }
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Daily AI usage limit reached for this organisation') {
+        throw error
+      }
+      // If Redis is unavailable, fail open (budget tracking is best-effort)
+    }
   }
 
   const failures: string[] = []
@@ -158,6 +191,7 @@ export async function generateStructuredCompletion<T>(
     }],
     temperature: options.temperature ?? 0.2,
     maxTokens: options.maxTokens,
+    budgetKey: options.budgetKey,
   })
 
   const json = completion.text

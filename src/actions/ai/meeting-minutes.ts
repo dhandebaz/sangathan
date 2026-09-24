@@ -47,6 +47,7 @@ Notes: ${input.notes}
 
 Extract: summary, key discussion points, decisions made, action items with priority, and next steps.`,
       maxTokens: 2_500,
+      budgetKey: context.organizationId,
     }, MinutesSchema)
     const minutes = minutesResult.object
 
@@ -70,6 +71,7 @@ ${minutes.action_items.map(a => `- [ ] ${a.task} (${a.priority} priority)${a.ass
 Next Steps:
 ${minutes.next_steps.map(n => `- ${n}`).join('\n')}` }],
       maxTokens: 2_500,
+      budgetKey: context.organizationId,
     })
     const formattedMinutes = formattedResult.text
 
@@ -126,6 +128,7 @@ export const createTasksFromMinutes = createSafeAction(
 
 Notes: ${input.notes}`,
       maxTokens: 2_000,
+      budgetKey: context.organizationId,
     }, taskSchema)
     const object = taskResult.object
 

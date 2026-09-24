@@ -57,7 +57,7 @@ export default async function AdminBillingPage() {
             <span className="text-xs font-bold text-indigo-900 uppercase tracking-wider">Institution Patronage</span>
           </div>
           <div className="text-3xl font-extrabold text-slate-900">{institutionCount}</div>
-          <p className="text-xs text-slate-500 mt-1">Funded NGOs & Unions covering compute</p>
+          <p className="text-xs text-slate-500 mt-1">Funded NGOs & collectives covering compute</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
@@ -113,8 +113,9 @@ export default async function AdminBillingPage() {
               required
               className="min-h-11 rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-800"
             >
-              <option value="Community">Community (₹0 - Max 20 members)</option>
-              <option value="Institution">Institution (Solidarity - Unlimited + AI)</option>
+              <option value="Community">Community (₹0 - Max 5 profiles)</option>
+              <option value="Metered">Metered ((actives − 5) × ₹11/mo)</option>
+              <option value="Institution">Institution (Legacy grandfathered - 500 + AI)</option>
             </select>
           </div>
 

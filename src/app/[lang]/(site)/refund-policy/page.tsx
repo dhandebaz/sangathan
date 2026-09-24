@@ -31,20 +31,20 @@ export default function RefundPolicyPage() {
         <section>
           <h2 className="text-xl font-semibold text-slate-900 mb-3">1. Introduction & Public-Good Ethos</h2>
           <p>
-            Sangathan operates as digital public infrastructure for grassroots collectives, student bodies, worker unions, resident associations, and non-profits. We rely on institutional solidarity patronage and voluntary contributions to sustain server hosting, database storage, and AI GPU compute for the civic sector.
+            Sangathan operates as digital public infrastructure for grassroots collectives and registered non-profits. We rely on institutional solidarity patronage and voluntary contributions to sustain server hosting, database storage, and AI GPU compute for the civic sector.
           </p>
         </section>
 
         <section>
           <h2 className="text-xl font-semibold text-slate-900 mb-3">2. Plans & Patronage Tiers</h2>
           <p>
-            <strong>Community Plan (₹0 / Free Forever):</strong> Free civic infrastructure for grassroots collectives (up to 20 users). Full access to all democratic governance tools, voting engines, meetings, tasks, and coalition federation features without fees or advertisements.
+            <strong>Community Plan (₹0 / Free Forever):</strong> Free civic infrastructure for grassroots collectives (up to 5 member profiles). Full access to all democratic governance tools, voting engines, meetings, tasks, surveys and coalition federation features without fees or advertisements.
           </p>
           <p>
-            <strong>Institution Plan (₹1,000/mo or ₹10,000/yr):</strong> Solidarity patronage by funded NGOs and registered unions requiring unlimited members, advanced analytics, and AI intelligence tools (Llama 3.3 70B inference).
+            <strong>Metered Billing ((active members − 5) × ₹11/month, monthly only):</strong> No base fee and no annual lock-in. Public supporters, voters and petition signers are never counted. AI suite, plugins and priority support included with quota-bound fair use.
           </p>
           <p>
-            <strong>White-Label Addon (₹10,000 One-time):</strong> Optional emblem identity customization for established institutions.
+            <strong>Whitelabel for Life (₹999 One-time):</strong> Optional one-time emblem identity customization, buyable on Free and Metered, removing platform branding forever.
           </p>
         </section>
 

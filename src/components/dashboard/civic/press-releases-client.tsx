@@ -143,11 +143,11 @@ export function PressReleasesClient({ orgId, orgName, initialReleases }: PressRe
               <Newspaper className="w-5 h-5" />
             </span>
             <h1 className="text-2xl font-black tracking-tight text-slate-900">
-              Press Release & Media Dispatch Studio
+              Press Release & Media Kit Studio
             </h1>
           </div>
           <p className="text-sm text-slate-500 mt-1">
-            Draft, format, and dispatch bilingual media releases with standard embargo headers and 1-click WhatsApp copy.
+            Draft and format bilingual media releases with standard embargo headers, then copy the WhatsApp snippet to send out yourself.
           </p>
         </div>
 
@@ -243,7 +243,7 @@ export function PressReleasesClient({ orgId, orgName, initialReleases }: PressRe
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-indigo-600" />
-                <h2 className="text-base font-bold text-slate-900">AI Press Release & Media Dispatch Studio</h2>
+                <h2 className="text-base font-bold text-slate-900">AI Press Release Drafting Studio</h2>
               </div>
               <button onClick={() => setIsCreateModalOpen(false)} className="text-slate-400 hover:text-slate-700">
                 <X className="w-5 h-5" />

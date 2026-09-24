@@ -20,8 +20,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ? 'एनजीओ मैनेजमेंट सॉफ्टवेयर भारत | 80G टैक्स रसीद व डोनर CRM | संगठन'
     : 'NGO Management Software India | 80G Donor CRM & Compliance | Sangathan'
   const description = isHindi
-    ? 'भारतीय गैर-लाभकारी संस्थाओं, ट्रस्टों और सोसायटियों के लिए संपूर्ण सॉफ्टवेयर। स्वचालित 80G/12A PDF रसीदें, फॉर्म 10BD एक्सपोर्ट, दर्पण आईडी ट्रैकिंग और ₹0-₹1,000 मूल्य।'
-    : 'All-in-one NGO management software for Indian non-profits, trusts, and Section 8 companies. Automated 80G/12A tax receipts, Form 10BD filing exports, Darpan ID tracking, and ₹0-₹1,000 INR pricing.'
+    ? 'भारतीय गैर-लाभकारी संस्थाओं, ट्रस्टों और सोसायटियों के लिए संपूर्ण सॉफ्टवेयर। 80G/12A रसीद जनरेटर, फॉर्म 10BD एक्सपोर्ट, दर्पण आईडी ट्रैकिंग और ₹0-₹1,000 मूल्य।'
+    : 'All-in-one NGO management software for Indian non-profits, trusts, and Section 8 companies. 80G/12A receipt generator, Form 10BD filing exports, Darpan ID tracking, and ₹0-₹1,000 INR pricing.'
 
   return {
     title,
@@ -59,11 +59,11 @@ export default async function NgoManagementPage({ params }: PageProps) {
   const faqs = [
     {
       question: isHindi
-        ? 'क्या संगठन 80G और 12A आयकर प्रमाणित टैक्स रसीदें स्वतः जारी करता है?'
-        : 'Does Sangathan automatically issue 80G and 12A tax exemption receipts?',
+        ? 'क्या संगठन 80G और 12A आयकर प्रमाणित टैक्स रसीदें जारी करता है?'
+        : 'Does Sangathan issue 80G and 12A tax exemption receipts?',
       answer: isHindi
-        ? 'हाँ। दानदाता का पैन (PAN) नंबर दर्ज होते ही संगठन QR कोड और संस्था के पंजीकरण नंबर के साथ कानूनी रूप से मान्य PDF रसीद उत्पन्न करता है।'
-        : 'Yes. Upon receiving a donation, Sangathan automatically generates compliant PDF tax receipts featuring the donor’s PAN, organization 80G approval number, and QR verification.',
+        ? 'हाँ। संगठन दानदाता के पैन (PAN) और QR सत्यापन के साथ अनुक्रमित PDF टैक्स रसीदें उत्पन्न करता है। किसी रसीद को 80G/12A रसीद के रूप में केवल तभी चिह्नित करें जब आपकी संस्था के पास अपना 80G/12A पंजीकरण हो।'
+        : 'Yes. Sangathan generates sequentially-numbered PDF receipts with the donor\u2019s PAN and QR verification. Label a receipt as 80G/12A only when your organisation holds its own 80G/12A registration.',
     },
     {
       question: isHindi
@@ -78,8 +78,8 @@ export default async function NgoManagementPage({ params }: PageProps) {
         ? 'विदेशी एनजीओ सॉफ्टवेयर (जैसे EveryAction/Blackbaud) की तुलना में संगठन कितना सस्ता है?'
         : 'How does Sangathan compare in price to US non-profit CRMs?',
       answer: isHindi
-        ? 'विदेशी सॉफ्टवेयर ₹30,000 से ₹1,50,000/माह ($350-$1,800/mo USD) चार्ज करते हैं। संगठन जमीनी संस्थाओं के लिए ₹0 कम्युनिटी और 500 काडर के लिए मात्र ₹1,000/माह में उपलब्ध है।'
-        : 'US legacy CRMs cost ₹30,000 to ₹1,50,000/month ($350 - $1,800/mo USD). Sangathan offers a ₹0 Community Tier and ₹1,000/mo Sustainer Tier for 500 active cadres in Indian Rupees.',
+        ? 'विदेशी सॉफ्टवेयर ₹30,000 से ₹1,50,000/माह ($350-$1,800/mo USD) चार्ज करते हैं। संगठन 5 प्रोफाइल तक ₹0 है, फिर (सक्रिय सदस्य − 5) × ₹11/माह — कोई बेस फीस नहीं, कोई वार्षिक बंधन नहीं।'
+        : 'US legacy CRMs cost ₹30,000 to ₹1,50,000/month ($350 - $1,800/mo USD). Sangathan is ₹0 up to 5 member profiles, then metered at (active members − 5) × ₹11/month — no base fee, no annual lock-in.',
     },
   ]
 
@@ -117,7 +117,7 @@ export default async function NgoManagementPage({ params }: PageProps) {
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed mb-8">
               {isHindi
                 ? 'विदेशी डॉलर भुगतानों और जटिल अमेरिकी सीआरएम से मुक्ति पाएं। संगठन विशेष रूप से भारतीय आयकर 80G/12A रसीदों, फॉर्म 10BD एक्सपोर्ट, सीएसआर-1 ग्रांट्स और नीति आयोग दर्पण ट्रैकिंग के लिए बना है।'
-                : 'Say goodbye to expensive USD contracts and western CRMs. Sangathan is engineered specifically for Indian statutory realities: automated 80G/12A PDF receipts, annual Form 10BD filings, NITI Aayog Darpan ID, and multi-program CSR grant tracking.'}
+                : 'Say goodbye to expensive USD contracts and western CRMs. Sangathan is engineered specifically for Indian statutory realities: 80G/12A-ready PDF receipts, annual Form 10BD filings, NITI Aayog Darpan ID, and multi-program CSR grant tracking.'}
             </p>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
@@ -173,12 +173,12 @@ export default async function NgoManagementPage({ params }: PageProps) {
                   <FileText size={20} />
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 mb-2">
-                  {isHindi ? 'स्वचालित 80G व 12A PDF रसीदें' : 'Automated 80G/12A PDF Receipts'}
+                  {isHindi ? '80G/12A PDF रसीदें' : '80G/12A PDF Receipts'}
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   {isHindi
-                    ? 'पैन कार्ड सत्यापन के साथ प्रत्येक ऑनलाइन या ऑफलाइन दान पर स्वतः डिजिटल टैक्स रसीद जारी करें। दानदाता सीधे अपने फोन से रसीद डाउनलोड कर सकते हैं।'
-                    : 'Issue official PDF receipts instantly upon donation with donor PAN, registration timestamps, and automatic email/WhatsApp delivery.'}
+                    ? 'पैन कार्ड सत्यापन के साथ प्रत्येक ऑनलाइन या ऑफलाइन दान पर डिजिटल टैक्स रसीद जारी करें। दानदाता सीधे अपने फोन से रसीद डाउनलोड कर सकते हैं। 80G/12A चिह्न केवल अपने पंजीकरण पर लगाएं।'
+                    : 'Issue official PDF receipts per donation with donor PAN and registration timestamps. Receipts are labelled 80G/12A only when your organisation holds its own registration.'}
                 </p>
               </div>
             </div>

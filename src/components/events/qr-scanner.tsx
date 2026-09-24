@@ -22,6 +22,13 @@ export function QRScanner({ userId }: { eventId: string, userId: string }) {
     async function onScanSuccess(decodedText: string) {
       if (isProcessingRef.current) return // Debounce using ref (not stale state)
       
+      if (!navigator.onLine) {
+        setStatus('error')
+        setMessage('No internet connection. Please try again when online.')
+        isProcessingRef.current = false
+        return
+      }
+      
       isProcessingRef.current = true
       setStatus('idle')
       setMessage('Verifying...')

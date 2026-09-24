@@ -943,7 +943,7 @@ export function CentralizedCalendarHub({
                 <Input
                   value={meetingLocation}
                   onChange={e => setMeetingLocation(e.target.value)}
-                  placeholder="e.g. Union Hall / Online"
+                  placeholder="e.g. Community Hall / Online"
                   className="text-xs"
                 />
               </div>

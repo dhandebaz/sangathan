@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { generateText } from 'ai'
-import { nvidia, SMART_MODEL, checkAiAccess } from '@/lib/ai/nvidia'
+import { checkAiAccess } from '@/lib/ai/nvidia'
+import { generateResilientCompletion } from '@/lib/ai/resilient-router'
 import { checkRateLimit } from '@/lib/ratelimit'
 
 export async function GET(request: Request) {
@@ -20,7 +20,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const allowed = await checkRateLimit(`ai_summary:${user.id}`, 'API')
+    const { allowed } = await checkRateLimit(`ai_summary:${user.id}`, 'API')
     if (!allowed) {
       return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
     }
@@ -65,16 +65,17 @@ export async function GET(request: Request) {
       })
     }
 
-    const { text } = await generateText({
-      model: nvidia(SMART_MODEL),
-      prompt: `You are a strategic advisor for a civic organization. Write a brief, encouraging 3-4 sentence weekly summary based on these stats from the last 7 days:
+    const { text } = await generateResilientCompletion({
+      messages: [{ role: 'user', content: `You are a strategic advisor for a civic organization. Write a brief, encouraging 3-4 sentence weekly summary based on these stats from the last 7 days:
 - ${stats.newTickets} new tickets/grievances
 - ${stats.resolvedTickets} tickets resolved
 - ${stats.newMembers} new members joined
 - ${stats.upcomingEvents} upcoming events
 - ${stats.activePolls} active polls
 
-Highlight achievements, note areas needing attention, and end with a forward-looking statement. Do not use bullet points. Do not mention you are an AI.`,
+Highlight achievements, note areas needing attention, and end with a forward-looking statement. Do not use bullet points. Do not mention you are an AI.` }],
+      maxTokens: 300,
+      budgetKey: orgId,
     })
 
     return NextResponse.json({ summary: text, isAi: true, stats })

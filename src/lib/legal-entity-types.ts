@@ -12,7 +12,7 @@ export type StatutoryIdType =
   | 'darpan_uid' | 'certificate_12a' | 'certificate_80g'
   | 'fcra_registration' | 'csr_registration'
   | 'eci_registration' // Not used currently, but ready
-  | 'trade_union_registration' | 'cooperative_registration'
+  | 'cooperative_registration'
   | 'society_registration' | 'trust_registration'
   | 'epfo_code' | 'esic_code' | 'udyam_registration'
   | 'aishe_code' | 'udise_code' | 'lgd_code'
@@ -57,7 +57,6 @@ export const STATUTORY_ID_PATTERNS: Record<StatutoryIdType, RegExp> = {
   fcra_registration: /^FCRA[0-9]{6,10}$/,
   csr_registration: /^CSR-[0-9]{7}$/,
   eci_registration: /^ECI-[0-9]{8}$/,
-  trade_union_registration: /^TU-[0-9]{6,10}$/,
   cooperative_registration: /^COOP-[0-9]{6,10}$/,
   society_registration: /^SOC-[0-9]{6,10}$/,
   trust_registration: /^TRUST-[0-9]{6,10}$/,
@@ -89,7 +88,6 @@ export const GOVT_PORTAL_LINKS: Record<StatutoryIdType, string> = {
   fcra_registration: 'https://fcraonline.nic.in/',
   csr_registration: 'https://www.mca.gov.in/',
   eci_registration: 'https://www.mca.gov.in/',
-  trade_union_registration: 'https://labour.gov.in/',
   cooperative_registration: 'https://cooperative.gov.in/',
   society_registration: 'https://ros.gov.in/',
   trust_registration: 'https://charitycommissioner.gov.in/',
@@ -117,7 +115,6 @@ export const STATUTORY_ID_CONFIG: Record<
   fcra_registration: { dbColumn: 'fcra_registration', en: 'FCRA Registration', example: 'FCRA123456' },
   csr_registration: { dbColumn: 'csr_registration', en: 'CSR Registration', example: 'CSR-1234567' },
   eci_registration: { dbColumn: 'eci_registration', en: 'ECI Registration', example: 'ECI-12345678' },
-  trade_union_registration: { dbColumn: 'trade_union_registration', en: 'Trade Union Registration', example: 'TU-123456' },
   cooperative_registration: { dbColumn: 'cooperative_registration', en: 'Cooperative Registration', example: 'COOP-123456' },
   society_registration: { dbColumn: 'society_registration', en: 'Society Registration', example: 'SOC-123456' },
   trust_registration: { dbColumn: 'trust_registration', en: 'Trust Registration', example: 'TRUST-123456' },

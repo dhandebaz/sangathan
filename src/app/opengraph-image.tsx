@@ -121,7 +121,7 @@ export default async function Image() {
               letterSpacing: '-0.03em',
             }}
           >
-            Digital Operating System for Indian Civic Movements, NGOs &amp; Unions
+            Digital Operating System for Indian Civic Movements, NGOs &amp; Collectives
           </div>
 
           <div

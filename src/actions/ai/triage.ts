@@ -18,6 +18,7 @@ export async function triageTicketContent(content: string, orgId: string) {
       
       Content: "${content}"`,
       maxTokens: 500,
+      budgetKey: orgId,
     }, triageSchema)
 
     return object

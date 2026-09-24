@@ -4,8 +4,17 @@ function getSecretKey(): string {
   const secretKey =
     process.env.COOKIE_SIGNING_SECRET ||
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    'sangathan-default-cookie-signing-secret-key-32-chars-long'
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  // If no env-provided key, generate a cryptographically random 32-byte key
+  if (!secretKey) {
+    const randomBytes = new Uint8Array(32)
+    crypto.getRandomValues(randomBytes)
+    const randomHex = Array.from(randomBytes)
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('')
+    return 'sangathan-gen-' + randomHex
+  }
 
   if (secretKey.length >= 32) {
     return secretKey
