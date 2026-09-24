@@ -14,6 +14,20 @@ env:
   NODE_VERSION: 22
 
 jobs:
+  migration-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Forbid deleted migration files
+        run: |
+          DELETED=$(git diff --name-only --diff-filter=D origin/main...HEAD -- supabase/migrations || true)
+          if [ -n "$DELETED" ]; then
+            echo "::error::Never delete files under supabase/migrations — applied remote versions live in supabase_migrations.schema_migrations and deletion breaks every Supabase push/preview ('Remote migration versions not found'). Squash only via repair flow. Deleted files: $DELETED"
+            exit 1
+          fi
+
   quality:
     runs-on: ubuntu-latest
     steps:

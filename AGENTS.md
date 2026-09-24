@@ -19,6 +19,7 @@ Example:
 
 - **NEVER** run `git clean -fd` or `git reset --hard` without checking `git log` and verifying commits exist.
 - **NEVER** delete untracked files or folders blindly. Always backup or stash before bulk edits.
+- **NEVER delete or rename files under `supabase/migrations/`** (even "cleanup" or "squash" deletions). Applied remote versions live in `supabase_migrations.schema_migrations`; deleting their files breaks every Supabase push/preview with "Remote migration versions not found in local migrations directory" (incident: Sep 2026, 14 deleted versions). Squash policy: create a NEW consolidation migration, keep old files, and reconcile history only via `supabase migration repair` (or dashboard SQL on the history table) — never via deletion.
 
 ## 🧭 ACTIVE CONTEXT
 
