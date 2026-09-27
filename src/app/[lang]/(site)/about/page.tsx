@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Shield, Globe, Lock, Heart } from 'lucide-react'
 import { Metadata } from 'next'
 import { PageHeader } from '@/components/public/page-header'
@@ -71,17 +72,42 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
         <div className="prose prose-lg prose-slate max-w-none space-y-16">
           <section>
             <h2 className="text-3xl font-bold text-slate-900 mb-6">{isHindi ? 'हमारा मिशन और पहचान' : 'Our Mission & Identity'}</h2>
-            <div className="text-slate-600 space-y-6">
-              <p>
-                {isHindi
-                  ? 'संगठन नागरिक डिजिटल बुनियादी ढांचा है, जिसे गैर-सरकारी संगठनों (NGOs), पंजीकृत संगठनों और जमीनी स्तर के नागरिक समूहों को अधिक पारदर्शिता, गोपनीयता और जवाबदेही के साथ संगठित करने, शासन करने, संवाद करने और संचालित करने में मदद करने के लिए बनाया गया है।'
-                  : 'Sangathan is civic digital infrastructure built to help NGOs, registered organizations, and grassroots civic collectives organize, govern, communicate, and operate with greater transparency, privacy, and accountability.'}
-              </p>
-              <p>
-                {isHindi
-                  ? 'बहुत लंबे समय से, महत्वपूर्ण सामाजिक कार्य नाजुक स्प्रेडशीट, असुरक्षित मैसेजिंग ऐप और महंगे कॉर्पोरेट सॉफ़्टवेयर पर प्रबंधित किए गए हैं। हमने संगठन को गैर-लाभकारी सिद्धांतों पर बनाया है ताकि हर लोकतांत्रिक समूह को संप्रभु, सुरक्षित और स्वतंत्र तकनीकी उपकरण मिल सकें।'
-                  : 'For too long, vital social work has been managed on fragile spreadsheets, unencrypted messaging groups, and expensive corporate software. We operate under Bahujan Queer Foundation as a non-profit initiative to provide lasting, neutral, and secure digital rails for democratic organizing.'}
-              </p>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+              {/* Mission text */}
+              <div className="lg:col-span-7 text-slate-600 space-y-6">
+                <p>
+                  {isHindi
+                    ? 'संगठन नागरिक डिजिटल बुनियादी ढांचा है, जिसे गैर-सरकारी संगठनों (NGOs), पंजीकृत संगठनों और जमीनी स्तर के नागरिक समूहों को अधिक पारदर्शिता, गोपनीयता और जवाबदेही के साथ संगठित करने, शासन करने, संवाद करने और संचालित करने में मदद करने के लिए बनाया गया है।'
+                    : 'Sangathan is civic digital infrastructure built to help NGOs, registered organizations, and grassroots civic collectives organize, govern, communicate, and operate with greater transparency, privacy, and accountability.'}
+                </p>
+                <p>
+                  {isHindi
+                    ? 'बहुत लंबे समय से, महत्वपूर्ण सामाजिक कार्य नाजुक स्प्रेडशीट, असुरक्षित मैसेजिंग ऐप और महंगे कॉर्पोरेट सॉफ़्टवेयर पर प्रबंधित किए गए हैं। हमने संगठन को गैर-लाभकारी सिद्धांतों पर बनाया है ताकि हर लोकतांत्रिक समूह को संप्रभु, सुरक्षित और स्वतंत्र तकनीकी उपकरण मिल सकें।'
+                    : 'For too long, vital social work has been managed on fragile spreadsheets, unencrypted messaging groups, and expensive corporate software. We operate under Bahujan Queer Foundation as a non-profit initiative to provide lasting, neutral, and secure digital rails for democratic organizing.'}
+                </p>
+              </div>
+
+              {/* Ground movement leader — geometric frame */}
+              <div className="lg:col-span-5 flex justify-center">
+                <div className="relative w-full max-w-[280px] bg-slate-50 border border-slate-200 rounded-lg p-3">
+                  <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t border-r border-slate-300 pointer-events-none" />
+                  <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b border-l border-slate-300 pointer-events-none" />
+                  <div className="relative w-full h-[300px] flex items-end justify-center">
+                    <Image
+                      src="/images/activist-leader.png"
+                      alt={isHindi ? 'जमीनी आंदोलन नेतृत्व — संगठन' : 'Ground movement leadership — Sangathan'}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 280px"
+                      className="object-contain object-bottom"
+                    />
+                  </div>
+                  <div className="pt-2 mt-1 border-t border-slate-200 text-center">
+                    <span className="text-[11px] font-bold text-slate-900 block font-mono">
+                      {isHindi ? 'जमीनी नेतृत्व • लिखित रिकॉर्ड संस्कृति' : 'Ground Leadership • Written Record Culture'}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 

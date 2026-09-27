@@ -1,14 +1,10 @@
 import { getPublicMemberCredential } from '@/actions/member-credentials'
-import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import Image from 'next/image'
 import { Metadata } from 'next'
+import Link from 'next/link'
 import {
-  ShieldCheck, CheckCircle2, Award, Calendar, MapPin, Building2,
-  Lock, Share2, Download, ExternalLink, ArrowRight, Activity, FileCheck
+  ShieldCheck, CheckCircle2, Award, Building2,
+  Lock, FileCheck
 } from 'lucide-react'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { getOrgLabel, OrgType } from '@/lib/org-types'
 
 export const dynamic = 'force-dynamic'
@@ -80,7 +76,7 @@ export default async function CredentialVerificationPage(props: VerifyPageProps)
   const org = credential.organisations
   const orgType = (org?.org_type || 'civic_collective') as OrgType
   const orgLabel = getOrgLabel(orgType, isHindi ? 'hi' : 'en')
-  const shaHash = credential.verification_hash || 'SHA256:7FA8219B8D0E1F4C89A7E6B5D4C3A2B1'
+  const shaHash = credential.verification_hash
 
   return (
     <div className="bg-white min-h-screen py-10 sm:py-16">
@@ -135,9 +131,11 @@ export default async function CredentialVerificationPage(props: VerifyPageProps)
                     {org?.name}
                   </h2>
                 </div>
-                <span className="px-2.5 py-1 bg-indigo-950/80 border border-indigo-700/60 text-indigo-300 font-mono text-xs rounded">
-                  {credential.joining_year || '2026'}
-                </span>
+                {credential.joining_year && (
+                  <span className="px-2.5 py-1 bg-indigo-950/80 border border-indigo-700/60 text-indigo-300 font-mono text-xs rounded">
+                    {credential.joining_year}
+                  </span>
+                )}
               </div>
 
               <div className="py-6 space-y-4">
@@ -171,14 +169,12 @@ export default async function CredentialVerificationPage(props: VerifyPageProps)
                   <span>CREDENTIAL_ID:</span>
                   <span className="text-slate-200 font-bold">{credential.credential_id}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>SHA256_HASH:</span>
-                  <span className="text-indigo-400">{shaHash.slice(0, 24)}...</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>IMMUTABILITY:</span>
-                  <span className="text-emerald-400">TAMPER_EVIDENT_ACTIVE</span>
-                </div>
+                {shaHash && (
+                  <div className="flex justify-between">
+                    <span>SHA256_HASH:</span>
+                    <span className="text-indigo-400">{shaHash.slice(0, 24)}...</span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -237,7 +233,11 @@ export default async function CredentialVerificationPage(props: VerifyPageProps)
 
                 <div>
                   <span className="text-slate-500 font-medium block">{isHindi ? 'वैधता अवधि' : 'Validity Cycle'}</span>
-                  <span className="font-semibold text-slate-800">{credential.joining_year} – 2028 (Biennial Verification)</span>
+                  <span className="font-semibold text-slate-800">
+                    {credential.joining_year
+                      ? (isHindi ? `${credential.joining_year} से सदस्य` : `Member since ${credential.joining_year}`)
+                      : (isHindi ? 'रिकॉर्ड में उपलब्ध नहीं' : 'Not available in record')}
+                  </span>
                 </div>
               </div>
             </div>

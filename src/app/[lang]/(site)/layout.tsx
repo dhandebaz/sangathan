@@ -81,11 +81,15 @@ export default async function SiteLayout({
   return (
     <div className="relative flex min-h-screen flex-col bg-white font-sans text-slate-900 selection:bg-indigo-200 selection:text-indigo-900">
       
-      <div className="pointer-events-none fixed inset-0 flex justify-center -z-10">
-        {/* Subtle mesh gradient top */}
-        <div className="absolute top-0 w-[1000px] max-w-full h-[600px] bg-gradient-to-b from-indigo-50/50 via-white to-white rounded-full blur-3xl opacity-60"></div>
-        {/* Subtle dot pattern */}
-        <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/dzvy8unqg/image/upload/v1724213160/noise_uvwxxa.webp')] opacity-[0.03] mix-blend-overlay"></div>
+      <div className="pointer-events-none fixed inset-0 -z-10" aria-hidden="true">
+        {/* Crisp geometric dot grid */}
+        <div
+          className="absolute inset-0 opacity-[0.035]"
+          style={{ backgroundImage: 'radial-gradient(circle, #0f172a 1px, transparent 1px)', backgroundSize: '24px 24px' }}
+        />
+        {/* Thin structural rule wash at top */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-slate-200/70" />
+        <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-slate-50/80 to-transparent" />
       </div>
 
       <OrganizationJsonLd />

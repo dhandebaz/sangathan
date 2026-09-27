@@ -1,11 +1,9 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { Metadata } from 'next'
 import { 
   ArrowRight, ShieldCheck, Activity, Printer, Clock, FileText, 
-  Receipt, Wallet, Users, Vote, Scale, AlertTriangle, CheckSquare, 
-  Building2, Check, Megaphone,
-  Smartphone, MessageSquare, Banknote, Globe, Newspaper, Sparkles, Lock
+  Users, Vote, Scale, Check, CheckSquare, Building2, Megaphone,
+  Smartphone, MessageSquare, Banknote, Globe, Sparkles, Lock
 } from 'lucide-react'
 import { SoftwareApplicationJsonLd, BreadcrumbJsonLd } from '@/components/seo/json-ld'
 
@@ -144,55 +142,57 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
               </div>
             </div>
 
-            {/* Right Column: Charismatic Activist Leader Anchor */}
+            {/* Right Column: Geometric Field Toolkit Panel */}
             <div className="lg:col-span-5 flex flex-col items-center relative">
-              <div className="relative w-full max-w-md bg-gradient-to-b from-slate-50 via-slate-50/50 to-white border border-slate-200 rounded-xl p-4 sm:p-6 shadow-xs overflow-hidden">
-                
-                {/* Background Tech Geometry */}
-                <div className="absolute top-0 right-0 w-32 h-32 border-b border-l border-slate-200 pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-24 h-24 border-t border-r border-slate-200 pointer-events-none" />
-                
-                {/* Main Leader Image */}
-                <div className="relative w-full h-[360px] sm:h-[440px] flex items-end justify-center">
-                  <Image
-                    src="/images/activist-leader.png"
-                    alt="Civic Activist and Grassroots Leader - Sangathan"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 40vw"
-                    className="object-contain object-bottom drop-shadow-md"
-                    priority
-                  />
+              <div className="relative w-full max-w-md bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden">
+
+                {/* Corner geometry */}
+                <div className="absolute top-3 right-3 w-4 h-4 border-t border-r border-slate-300 pointer-events-none" />
+                <div className="absolute bottom-3 left-3 w-4 h-4 border-b border-l border-slate-300 pointer-events-none" />
+
+                {/* Panel header */}
+                <div className="px-5 pt-5 pb-3 border-b border-slate-200 flex items-center justify-between">
+                  <span className="text-[11px] font-mono font-bold text-slate-900">
+                    {isHindi ? 'फील्ड टूलकिट' : 'FIELD TOOLKIT'}
+                  </span>
+                  <span className="text-[10px] font-mono text-slate-400">01–04</span>
                 </div>
 
-                {/* Ground Status Cards */}
-                <div className="absolute top-4 left-4 right-4 flex flex-col gap-2 pointer-events-none">
-                  <div className="bg-white/95 backdrop-blur-xs border border-slate-300 rounded p-2 text-left shadow-xs flex items-center justify-between">
-                    <div className="text-[10px] font-mono leading-tight">
-                      <strong className="text-slate-900 block">30-Day RTI Reminder</strong>
-                      <span className="text-slate-500">MCD Ward 42 • Diary No. 1492</span>
+                {/* Module stack — real platform modules */}
+                <div className="px-5 py-4 space-y-0">
+                  {[
+                    { icon: Activity, name: isHindi ? 'स्पॉट सेंसर ऑडिट' : 'Spot Sensor Audits', meta: 'PM2.5 · PM10 · TDS', href: `/${lang}/features` },
+                    { icon: Printer, name: isHindi ? '₹1 फोटोस्टेट पर्चे' : '₹1 Photostat Parchas', meta: isHindi ? 'ए4 काला-सफेद' : 'A4 Monochrome', href: `/${lang}/features` },
+                    { icon: Clock, name: isHindi ? 'शिकायत डायरी व आरटीआई' : 'Complaint Diary & RTI', meta: isHindi ? '30-दिवसीय याद' : '30-Day Reminder', href: `/${lang}/features` },
+                    { icon: Vote, name: isHindi ? 'गुप्त मतदान' : 'Secret Ballots', meta: isHindi ? 'गुमनाम मतदान' : 'Anonymous Voting', href: `/${lang}/features` },
+                  ].map((mod, idx) => (
+                    <div key={idx} className="relative">
+                      {idx > 0 && <div className="absolute left-[19px] top-0 bottom-0 w-px bg-slate-200" />}
+                      <Link href={mod.href} className="relative flex items-center gap-3.5 py-3.5 group">
+                        <div className="w-10 h-10 shrink-0 bg-slate-50 border border-slate-200 rounded flex items-center justify-center group-hover:border-slate-400 transition-colors">
+                          <mod.icon className="text-slate-700" size={18} />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold text-slate-900 leading-tight">{mod.name}</div>
+                          <div className="text-[10px] font-mono text-slate-500 mt-0.5">{mod.meta}</div>
+                        </div>
+                        <ArrowRight size={14} className="ml-auto text-slate-300 group-hover:text-slate-600 transition-colors shrink-0" />
+                      </Link>
                     </div>
-                    <span className="text-[9px] font-mono font-bold bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded border border-amber-300">
-                      Live
-                    </span>
-                  </div>
+                  ))}
                 </div>
 
-                <div className="absolute bottom-4 left-4 right-4 pointer-events-none">
-                  <div className="bg-slate-900/90 text-white backdrop-blur-xs border border-slate-700 rounded p-2.5 text-left shadow-xs flex items-center justify-between">
-                    <div className="text-[11px] leading-tight">
-                      <span className="font-bold text-rose-400 block">Spot Air Quality Audit</span>
-                      <span className="text-[10px] text-slate-300">PM2.5: 485 µg/m³ • Hazardous</span>
-                    </div>
-                    <span className="text-[9px] font-mono font-bold bg-rose-900/80 text-rose-200 px-1.5 py-0.5 rounded border border-rose-700">
-                      DPCC Notice Ready
-                    </span>
-                  </div>
+                {/* Panel footer */}
+                <div className="px-5 py-3.5 border-t border-slate-200 bg-slate-50/60">
+                  <Link href={`/${lang}/features`} className="flex items-center justify-between text-[11px] font-mono font-bold text-slate-700 hover:text-slate-900 transition-colors">
+                    <span>{isHindi ? 'पूरा टूलकिट देखें' : 'VIEW FULL TOOLKIT'}</span>
+                    <ArrowRight size={13} />
+                  </Link>
                 </div>
-
               </div>
 
-              <div className="mt-3 text-center">
-                <p className="text-xs font-bold text-slate-700">
+              <div className="mt-4 text-center max-w-md">
+                <p className="text-xs font-bold text-slate-700 leading-relaxed">
                   {isHindi ? '“अधिकारियों से मौखिक शिकायत नहीं, तारीख वाली लिखित रिसीविंग से हिसाब रखें।”' : '“Don’t rely on verbal complaints. Keep dated written records with stamped receiving numbers.”'}
                 </p>
                 <span className="text-[11px] text-slate-400 font-mono">

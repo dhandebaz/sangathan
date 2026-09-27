@@ -44,7 +44,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16 items-start">
           
           {/* Contact Form Section */}
-          <div className="bg-slate-50 p-8 rounded-3xl border border-slate-200">
+          <div className="bg-slate-50 p-8 rounded-xl border border-slate-200">
             <h2 className="text-2xl font-bold mb-2 text-slate-900">
               {isHindi ? 'हमें एक संदेश भेजें' : 'Send us a message'}
             </h2>
@@ -58,7 +58,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
 
           {/* Department Information Section */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="p-6 bg-slate-50  border border-slate-200  rounded-3xl hover:border-indigo-500/50 transition-colors group">
+            <div className="p-6 bg-slate-50  border border-slate-200  rounded-xl hover:border-indigo-500/50 transition-colors group">
                <div className="w-10 h-10 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-4">
                  <Mail className="w-5 h-5 text-indigo-500 group-hover:scale-110 transition-transform" />
                </div>
@@ -71,7 +71,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
                <span className="text-sm text-indigo-600 font-medium">support@sangathan.space</span>
             </div>
 
-            <div className="p-6 bg-slate-50  border border-slate-200  rounded-3xl hover:border-red-500/50 transition-colors group">
+            <div className="p-6 bg-slate-50  border border-slate-200  rounded-xl hover:border-red-500/50 transition-colors group">
                <div className="w-10 h-10 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-4">
                  <ShieldAlert className="w-5 h-5 text-red-500 group-hover:scale-110 transition-transform" />
                </div>
@@ -84,7 +84,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
                <span className="text-sm text-red-500 font-medium">abuse@sangathan.space</span>
             </div>
 
-            <div className="p-6 bg-slate-50  border border-slate-200  rounded-3xl hover:border-emerald-500/50 transition-colors group">
+            <div className="p-6 bg-slate-50  border border-slate-200  rounded-xl hover:border-emerald-500/50 transition-colors group">
                <div className="w-10 h-10 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-4">
                  <CreditCard className="w-5 h-5 text-emerald-500 group-hover:scale-110 transition-transform" />
                </div>
@@ -97,7 +97,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
                <span className="text-sm text-emerald-600 font-medium">billing@sangathan.space</span>
             </div>
 
-            <div className="p-6 bg-slate-50  border border-slate-200  rounded-3xl hover:border-cyan-500/50 transition-colors group">
+            <div className="p-6 bg-slate-50  border border-slate-200  rounded-xl hover:border-cyan-500/50 transition-colors group">
                <div className="w-10 h-10 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-4">
                  <MessageSquare className="w-5 h-5 text-cyan-500 group-hover:scale-110 transition-transform" />
                </div>
@@ -112,7 +112,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
           </div>
         </div>
 
-        <div className="bg-slate-50  p-8 rounded-3xl border border-slate-200  text-center max-w-2xl mx-auto">
+        <div className="bg-slate-50  p-8 rounded-xl border border-slate-200  text-center max-w-2xl mx-auto">
            <h3 className="text-xl font-bold text-slate-900  mb-3">{isHindi ? 'प्रतिक्रिया समय की उम्मीदें' : 'Response Time Expectations'}</h3>
            <p className="text-slate-500 ">
               {isHindi
@@ -121,7 +121,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
            </p>
         </div>
 
-        <div className="mt-8 bg-slate-50 p-8 rounded-3xl border border-slate-200 text-center max-w-2xl mx-auto">
+        <div className="mt-8 bg-slate-50 p-8 rounded-xl border border-slate-200 text-center max-w-2xl mx-auto">
            <h3 className="text-xl font-bold text-slate-900 mb-3">{isHindi ? 'पंजीकृत जानकारी' : 'Registered Information'}</h3>
            <div className="text-slate-500 space-y-2">
               <p><strong>{isHindi ? 'प्रोपराइटर' : 'Proprietor'}:</strong> Sheikh Arsalan Ullah Chishti</p>

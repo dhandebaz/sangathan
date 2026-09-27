@@ -85,7 +85,7 @@ export function Footer({ lang }: { lang: string }) {
            {/* Links Columns */}
            {[footerLinks.product, footerLinks.initiative, footerLinks.trust, footerLinks.legal].map((section, idx) => (
              <div key={idx} className="col-span-1">
-                <h4 className="font-bold mb-5 text-slate-900 tracking-tight text-xs uppercase tracking-wider">{section.title}</h4>
+                 <h4 className="font-bold mb-5 text-slate-900 text-xs uppercase tracking-wider">{section.title}</h4>
                 <ul className="space-y-3.5 text-xs sm:text-sm">
                    {section.links.map((link) => (
                      <li key={link.href}>

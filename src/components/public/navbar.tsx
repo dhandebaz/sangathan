@@ -59,7 +59,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                   alt="Sangathan"
                   width={140}
                   height={40}
-                  className="h-8 w-auto transition-transform group-hover:scale-105"
+                  className="h-8 w-auto"
                   priority
                 />
               </Link>
@@ -109,7 +109,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                 {isAuthenticated ? (
                    <Link 
                       href={`/${lang}/dashboard`}
-                      className="inline-flex items-center gap-2 rounded-full border border-slate-200  bg-white  px-4 py-2 text-sm font-bold text-slate-900  transition-all hover:scale-105 hover:shadow-sm"
+                      className="inline-flex items-center gap-2 rounded-full border border-slate-200  bg-white  px-4 py-2 text-sm font-bold text-slate-900  transition-colors hover:border-slate-300 hover:bg-slate-50"
                     prefetch={true}
                    >
                       <LayoutDashboard size={16} />
@@ -126,7 +126,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
                       </Link>
                       <Link 
                          href={`/${lang}/login?tab=signup`}
-                         className="group inline-flex items-center gap-1 rounded-full bg-slate-900  px-5 py-2 text-sm font-bold text-white  transition-all hover:bg-slate-800  hover:scale-105 shadow-[0_0_20px_rgb(0,0,0,0.1)]"
+                          className="group inline-flex items-center gap-1 rounded-full bg-slate-900  px-5 py-2 text-sm font-bold text-white  transition-colors hover:bg-slate-800 "
                       >
                          {isHindi ? 'साइन अप' : 'Get Started'}
                          <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />

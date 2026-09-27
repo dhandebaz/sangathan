@@ -37,7 +37,7 @@ export default async function GovernancePage({ params }: { params: Promise<{ lan
       <div className="max-w-4xl mx-auto py-16 px-6">
         <div className="prose prose-lg prose-slate  max-w-none space-y-16">
           
-          <section className="bg-slate-50  p-8 rounded-3xl border border-slate-200 ">
+          <section className="bg-slate-50  p-8 rounded-xl border border-slate-200 ">
             <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center">
                 <Scale className="w-6 h-6 text-indigo-500" />
@@ -72,7 +72,7 @@ export default async function GovernancePage({ params }: { params: Promise<{ lan
             </div>
           </section>
 
-          <section className="bg-slate-50  p-8 rounded-3xl border border-slate-200 ">
+          <section className="bg-slate-50  p-8 rounded-xl border border-slate-200 ">
             <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center">
                 <Ban className="w-6 h-6 text-red-500" />
@@ -93,7 +93,7 @@ export default async function GovernancePage({ params }: { params: Promise<{ lan
             </div>
           </section>
 
-          <section className="bg-slate-50  p-8 rounded-3xl border border-slate-200 ">
+          <section className="bg-slate-50  p-8 rounded-xl border border-slate-200 ">
             <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center">
                 <ShieldAlert className="w-6 h-6 text-amber-500" />
@@ -114,7 +114,7 @@ export default async function GovernancePage({ params }: { params: Promise<{ lan
             </div>
           </section>
 
-          <section className="bg-slate-50  p-8 rounded-3xl border border-slate-200 ">
+          <section className="bg-slate-50  p-8 rounded-xl border border-slate-200 ">
             <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-12 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center">
                 <Eye className="w-6 h-6 text-cyan-500" />

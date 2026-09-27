@@ -1,0 +1,29 @@
+▲ Next.js 16.3.0 (Turbopack)
+- Local:         http://localhost:3199
+- Network:       http://192.168.1.50:3199
+- Environments: .env.local
+✓ Ready in 25.5s
+✓ Running next.config.ts took 78s
+⚠ Slow filesystem detected. The benchmark took 389ms. If \\?\C:\Users\hudav\Documents\trae_projects\sangathan\.next\dev is a network drive, consider moving it to a local folder.
+See more: https://nextjs.org/docs/app/guides/local-development
+○ Compiling instrumentation Edge ...
+○ Compiling proxy ...
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+
+✓ Generated AGENTS.md for AI agents. Set `agentRules: false` in next.config to disable.
+○ Compiling /[lang] ...
+ GET /en 200 in 394ms (next.js: 36ms, proxy.ts: 12ms, application-code: 346ms)
+ GET /en 200 in 468ms (next.js: 30ms, proxy.ts: 9ms, application-code: 428ms)
+ GET /hi 200 in 360ms (next.js: 15ms, proxy.ts: 13ms, application-code: 332ms)
+ GET /en/features 200 in 4.5s (next.js: 4.2s, proxy.ts: 10ms, application-code: 303ms)
+ GET /en/about 200 in 3.8s (next.js: 3.6s, proxy.ts: 9ms, application-code: 241ms)
+ GET /en/transparency 200 in 3.4s (next.js: 3.1s, proxy.ts: 7ms, application-code: 254ms)
+ GET /en/changelog 200 in 4.2s (next.js: 3.3s, proxy.ts: 7ms, application-code: 895ms)
+○ Compiling /[lang]/contact ...
+ GET /en/contact 200 in 6.9s (next.js: 6.6s, proxy.ts: 10ms, application-code: 264ms)
+ GET /en/governance 200 in 4.7s (next.js: 4.5s, proxy.ts: 7ms, application-code: 237ms)
+ GET /en/pricing 200 in 5.6s (next.js: 3.6s, proxy.ts: 10ms, application-code: 1979ms)
+ GET /en/verify/nonexistent-org/NONEXIST123 200 in 5.7s (next.js: 4.2s, proxy.ts: 11ms, application-code: 1502ms)
+ GET /en 200 in 394ms (next.js: 31ms, proxy.ts: 9ms, application-code: 354ms)

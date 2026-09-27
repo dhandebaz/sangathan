@@ -1,6 +1,6 @@
-import { FileSearch, Database, HeartHandshake, Shield, Scale, Ban, Eye, Lock, BrainCircuit } from 'lucide-react'
+import { FileSearch, HeartHandshake, Shield, Scale, Ban, Lock } from 'lucide-react'
 import { Metadata } from 'next'
-import Link from 'next/link'
+import Image from 'next/image'
 import { PageHeader } from '@/components/public/page-header'
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
@@ -88,8 +88,22 @@ export default async function TransparencyPage({ params }: { params: Promise<{ l
                 ))}
               </ul>
             </div>
-            <div className="w-40 h-40 sm:w-48 sm:h-48 shrink-0 bg-white border border-slate-200 rounded-xl flex items-center justify-center relative shadow-xs">
-              <Lock className="text-slate-400 w-16 h-16" />
+            <div className="w-40 h-40 sm:w-52 sm:h-52 shrink-0 relative bg-white border border-slate-200 rounded-xl overflow-hidden">
+              <div className="absolute top-2 right-2 z-10 w-3.5 h-3.5 border-t border-r border-slate-300 pointer-events-none" />
+              <div className="absolute bottom-2 left-2 z-10 w-3.5 h-3.5 border-b border-l border-slate-300 pointer-events-none" />
+              <Image
+                src="/images/activist-leader.png"
+                alt={isHindi ? 'जमीनी आंदोलनकर्ता — संप्रभु डेटा सुरक्षा' : 'Ground movement organizer — sovereign data protection'}
+                fill
+                sizes="(max-width: 768px) 160px, 208px"
+                className="object-contain object-bottom p-1"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-white/95 border-t border-slate-200 py-1 flex items-center justify-center gap-1.5">
+                <Lock className="w-3 h-3 text-slate-700" />
+                <span className="text-[9px] font-mono font-bold text-slate-700">
+                  {isHindi ? 'संप्रभु डेटा' : 'SOVEREIGN DATA'}
+                </span>
+              </div>
             </div>
           </div>
         </section>
@@ -181,7 +195,7 @@ export default async function TransparencyPage({ params }: { params: Promise<{ l
           </div>
 
           <div className="grid sm:grid-cols-2 gap-6">
-            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+            <div className="bg-white p-8 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
               <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center mb-6">
                 <Scale className="w-6 h-6 text-indigo-500" />
               </div>
@@ -193,7 +207,7 @@ export default async function TransparencyPage({ params }: { params: Promise<{ l
               </p>
             </div>
 
-            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+            <div className="bg-white p-8 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
               <div className="w-12 h-12 rounded-2xl bg-red-50 border border-red-100 flex items-center justify-center mb-6">
                 <Ban className="w-6 h-6 text-red-500" />
               </div>
@@ -208,7 +222,7 @@ export default async function TransparencyPage({ params }: { params: Promise<{ l
         </section>
 
         {/* The Supporter Model */}
-        <section className="bg-indigo-50 rounded-3xl p-8 sm:p-12 border border-indigo-100">
+        <section className="bg-indigo-50 rounded-xl p-8 sm:p-12 border border-indigo-100">
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="w-24 h-24 shrink-0 bg-white rounded-full flex items-center justify-center shadow-sm border border-indigo-100">
               <HeartHandshake className="w-10 h-10 text-indigo-500" />

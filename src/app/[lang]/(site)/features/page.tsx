@@ -1,7 +1,6 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { Metadata } from 'next'
-import { ArrowRight, ShieldCheck, Activity, Printer, Clock, Sparkles } from 'lucide-react'
+import { ShieldCheck, Activity, Printer, Clock } from 'lucide-react'
 import { InteractiveFeatures } from '@/components/features/interactive-features'
 import { SoftwareApplicationJsonLd, BreadcrumbJsonLd } from '@/components/seo/json-ld'
 
@@ -181,38 +180,52 @@ export default async function FeaturesPage({ params }: { params: Promise<{ lang:
                   : 'Purpose-built for civic collectives and NGOs. From 1-tap spot audits and ₹1 printable Parchas to secret ballots and 80G tax receipts.'}
               </p>
 
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 pt-2 text-xs font-medium text-slate-600">
-                <span className="inline-flex items-center gap-1 bg-white border border-slate-200 px-2.5 py-1 rounded">
+              {/* Inline capability spec row */}
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 pt-2 text-xs font-medium text-slate-600">
+                <span className="inline-flex items-center gap-1.5">
                   <Activity className="w-3.5 h-3.5 text-rose-600" /> Sensor Audits
                 </span>
-                <span className="inline-flex items-center gap-1 bg-white border border-slate-200 px-2.5 py-1 rounded">
+                <span className="w-px h-3 bg-slate-200 hidden sm:block" />
+                <span className="inline-flex items-center gap-1.5">
                   <Printer className="w-3.5 h-3.5 text-slate-700" /> ₹1 A4 Parchas
                 </span>
-                <span className="inline-flex items-center gap-1 bg-white border border-slate-200 px-2.5 py-1 rounded">
+                <span className="w-px h-3 bg-slate-200 hidden sm:block" />
+                <span className="inline-flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5 text-amber-600" /> 30-Day RTI Reminder
                 </span>
-                <span className="inline-flex items-center gap-1 bg-white border border-slate-200 px-2.5 py-1 rounded">
+                <span className="w-px h-3 bg-slate-200 hidden sm:block" />
+                <span className="inline-flex items-center gap-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" /> BQF Recognition
                 </span>
               </div>
             </div>
 
-            {/* Right Leader Box */}
+            {/* Right Module Index Panel — real counts from page data */}
             <div className="lg:col-span-4 flex justify-center">
-              <div className="relative w-full max-w-[260px] sm:max-w-[300px] bg-slate-50 border border-slate-200 rounded-lg p-3 shadow-xs">
-                <div className="relative w-full h-[280px] sm:h-[320px] flex items-end justify-center">
-                  <Image
-                    src="/images/activist-leader.png"
-                    alt="Ground Movement Leader - Sangathan Features"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 300px"
-                    className="object-contain object-bottom"
-                    priority
-                  />
+              <div className="relative w-full max-w-[300px] bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+                  <span className="text-[11px] font-mono font-bold text-slate-900">
+                    {isHindi ? 'मॉड्यूल सूची' : 'MODULE INDEX'}
+                  </span>
+                  <span className="text-[10px] font-mono text-slate-400">02 TYPES</span>
                 </div>
-                <div className="text-center pt-2 border-t border-slate-200">
-                  <span className="text-[11px] font-bold text-slate-900 block font-mono">
-                    Zero Tech Friction • 100% Ground Ready
+
+                <div className="py-3 space-y-3">
+                  {orgs.map((org) => (
+                    <div key={org.id} className="flex items-baseline justify-between gap-3">
+                      <span className="text-xs font-bold text-slate-900 leading-snug">
+                        {org.title}
+                      </span>
+                      <span className="text-[11px] font-mono font-bold text-slate-500 shrink-0">
+                        {org.features.length} {isHindi ? 'मॉड्यूल' : 'mods'}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-3 border-t border-slate-200">
+                  <span className="text-[11px] font-mono font-bold text-slate-900 block">
+                    {isHindi ? 'जीरो टेक फ्रिक्शन • 100% ग्राउंड रेडी' : 'Zero Tech Friction • 100% Ground Ready'}
                   </span>
                 </div>
               </div>

@@ -69,6 +69,37 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.67.0',
+    titleEn: 'Public Website Redesign: Crisp, Light & Geometric',
+    titleHi: 'सार्वजनिक वेबसाइट पुनःरूपांतरण: स्पष्ट, हल्का व ज्यामितीय',
+    dateEn: 'September 2026',
+    dateHi: 'सितंबर 2026',
+    descEn: 'Every public page now follows one clean, light, geometric design language. The homepage introduces an honest field-toolkit index instead of sample status cards, the features page gets a module index with live counts, and our ground leadership visual now lives on the About and Transparency pages. Member credential verification pages now show only what is actually in your organisation record — nothing placeholder, ever.',
+    descHi: 'हर सार्वजनिक पृष्ठ अब एक स्पष्ट, हल्की व ज्यामितीय डिज़ाइन भाषा का पालन करता है। होमपेज पर नमूना स्थिति कार्डों की जगह ईमानदार फील्ड-टूलकिट सूची आई है, सुविधाएं पृष्ठ पर मॉड्यूल सूचक मिलता है, और हमारा जमीनी नेतृत्व चित्र अब About व Transparency पृष्ठों पर है। सदस्य पहचान सत्यापन पृष्ठ अब केवल वही दिखाता है जो वास्तव में आपके संगठन रिकॉर्ड में है — कोई प्लेसहोल्डर नहीं, कभी नहीं।',
+    color: 'slate',
+    icon: Globe,
+    features: [
+      {
+        nameEn: 'Unified public design system',
+        nameHi: 'एकीकृत सार्वजनिक डिज़ाइन प्रणाली',
+        textEn: 'A shared light, geometric visual language across the navbar, footer, and all public pages — consistent spacing, crisp borders, and clean typography on every device.',
+        textHi: 'नेवबार, फुटर व सभी सार्वजनिक पृष्ठों पर साझा हल्की, ज्यामितीय दृश्य भाषा — हर डिवाइस पर एकसमान रिक्ति, स्पष्ट किनारे व स्वच्छ टाइपोग्राफी।',
+      },
+      {
+        nameEn: 'Honest homepage toolkit index',
+        nameHi: 'ईमानदार होमपेज टूलकिट सूची',
+        textEn: 'The homepage hero now shows the real field toolkit — spot audits, printable parchas, complaint diary, and secret ballots — instead of made-up status cards.',
+        textHi: 'होमपेज हीरो अब बनावटी स्थिति कार्डों की जगह वास्तविक फील्ड टूलकिट दिखाता है — स्पॉट ऑडिट, प्रिंट करने योग्य पर्चे, शिकायत डायरी व गुप्त मतदान।',
+      },
+      {
+        nameEn: 'Verified credential pages show only real records',
+        nameHi: 'सत्यापित क्रेडेंशियल पृष्ठ केवल वास्तविक रिकॉर्ड दिखाते हैं',
+        textEn: 'Public member verification pages now display the credential hash, joining year, and validity strictly from your organisation record — with clear notes when a detail is not available.',
+        textHi: 'सार्वजनिक सदस्य सत्यापन पृष्ठ अब क्रेडेंशियल हैश, प्रवेश वर्ष व वैधता कड़ई अर्थों में केवल आपके संगठन रिकॉर्ड से दिखाते हैं — जानकारी अनुपलब्ध होने पर स्पष्ट टिप्पणी के साथ।',
+      },
+    ],
+  },
+  {
     version: 'v1.66.0',
     titleEn: 'UPI Autopay Billing Live, GST Invoices & Canva Integrations',
     titleHi: 'UPI ऑटोपे बिलिंग लाइव, GST चालान व Canva इंटीग्रेशन',
