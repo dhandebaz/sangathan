@@ -180,7 +180,7 @@ export default async function OrgPage(props: { params: Promise<{ slug: string; l
     slug: p.slug,
     description: p.description,
     target_decision_maker: p.target_decision_maker,
-    signature_goal: p.signature_goal || 500,
+    signature_goal: p.signature_goal,
     current_signatures: p.current_signatures || 0,
     created_at: p.created_at,
   }))

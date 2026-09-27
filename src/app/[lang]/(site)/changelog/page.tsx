@@ -69,6 +69,37 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.67.1',
+    titleEn: 'No Fake Data, No Bypass Fallbacks',
+    titleHi: 'कोई नकली डेटा नहीं, कोई बायपास फॉलबैक नहीं',
+    dateEn: 'September 2026',
+    dateHi: 'सितंबर 2026',
+    descEn: 'Petition progress, goals and signature counts now render only from real records. All demo/mock/simulated fallbacks have been removed from public petition listings, org portals and verification pages. When a goal is not set, the UI shows a neutral state without inventing numbers.',
+    descHi: 'याचिका प्रगति, लक्ष्य व हस्ताक्षर संख्या अब केवल वास्तविक रिकॉर्ड से दिखती है। सार्वजनिक याचिका सूची, संगठन पोर्टल व सत्यापन पृष्ठों से सभी डेमो/मॉक/सिमुलेटेड फॉलबैक हटा दिए गए हैं। जब लक्ष्य सेट नहीं है तो UI बिना संख्या बनाये तटस्थ स्थिति दिखाता है।',
+    color: 'emerald',
+    icon: ShieldCheck,
+    features: [
+      {
+        nameEn: 'Petition goal handling',
+        nameHi: 'याचिका लक्ष्य हैंडलिंग',
+        textEn: 'Signature goals are nullable. Progress bars and goal labels appear only when a goal exists; otherwise counts are shown without fabricated targets.',
+        textHi: 'हस्ताक्षर लक्ष्य नल हो सकते हैं। प्रगति बार व लक्ष्य लेबल केवल तभी दिखते हैं जब लक्ष्य मौजूद हो; अन्यथा बिना बनावटी लक्ष्य के केवल संख्या दिखाई जाती है।',
+      },
+      {
+        nameEn: 'Verification pages strictly real',
+        nameHi: 'सत्यापन पृष्ठ पूरी तरह वास्तविक',
+        textEn: 'Member verification pages no longer inject placeholder hashes or joining years. Missing data is shown as “—” with explanatory notes.',
+        textHi: 'सदस्य सत्यापन पृष्ठ अब प्लेसहोल्डर हैश या प्रवेश वर्ष नहीं डालते। अनुपलब्ध डेटा को “—” के साथ स्पष्ट टिप्पणी के साथ दिखाया जाता है।',
+      },
+      {
+        nameEn: 'Public transparency metrics',
+        nameHi: 'सार्वजनिक पारदर्शिता मीट्रिक',
+        textEn: 'Organisation transparency page metrics are computed from real tables. No hardcoded trust scores or fund totals remain.',
+        textHi: 'संगठन पारदर्शिता पृष्ठ मीट्रिक वास्तविक तालिकाओं से गणना की जाती है। कोई हार्डकोडेड भरोसे स्कोर या फंड कुल नहीं रहता।',
+      },
+    ],
+  },
+  {
     version: 'v1.67.0',
     titleEn: 'Public Website Redesign: Crisp, Light & Geometric',
     titleHi: 'सार्वजनिक वेबसाइट पुनःरूपांतरण: स्पष्ट, हल्का व ज्यामितीय',

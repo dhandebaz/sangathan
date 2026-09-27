@@ -65,7 +65,7 @@ export interface PublicPetition {
   slug: string
   description: string
   target_decision_maker: string
-  signature_goal: number
+  signature_goal: number | null
   current_signatures?: number
   created_at: string
 }
@@ -649,7 +649,9 @@ export function PublicOrgPortal({
               <div className="space-y-4">
                 {petitions.map((pet) => {
                   const sigCount = pet.current_signatures || 0
-                  const percent = Math.min(100, Math.round((sigCount / (pet.signature_goal || 100)) * 100))
+                  const percent = pet.signature_goal
+                    ? Math.min(100, Math.round((sigCount / pet.signature_goal) * 100))
+                    : 0
 
                   return (
                     <div
@@ -680,14 +682,18 @@ export function PublicOrgPortal({
                       <div className="space-y-1.5 pt-1">
                         <div className="flex justify-between text-xs font-semibold">
                           <span className="text-slate-900">{sigCount} {isHindi ? 'हस्ताक्षर प्राप्त' : 'signatures logged'}</span>
-                          <span className="text-slate-500">{pet.signature_goal} {isHindi ? 'का लक्ष्य' : 'target'}</span>
+                          {pet.signature_goal && (
+                            <span className="text-slate-500">{pet.signature_goal} {isHindi ? 'का लक्ष्य' : 'target'}</span>
+                          )}
                         </div>
-                        <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-indigo-600 rounded-full transition-all"
-                            style={{ width: `${percent}%` }}
-                          />
-                        </div>
+                        {pet.signature_goal && (
+                          <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-indigo-600 rounded-full transition-all"
+                              style={{ width: `${percent}%` }}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   )

@@ -173,57 +173,28 @@ export default async function CompetitorComparisonPage({ params }: ComparisonPag
               </div>
             </div>
 
-            {/* Right Column: Activist Leader Hero Anchor */}
+            {/* Right Column: Comparison Summary Panel */}
             <div className="lg:col-span-5 flex flex-col items-center relative">
-              <div className="relative w-full max-w-md bg-gradient-to-b from-slate-50 via-slate-50/50 to-white border border-slate-200 rounded-xl p-4 sm:p-6 shadow-xs overflow-hidden">
-                
-                <div className="absolute top-0 right-0 w-28 h-28 border-b border-l border-slate-200 pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-20 h-20 border-t border-r border-slate-200 pointer-events-none" />
-                
-                <div className="relative w-full h-[340px] sm:h-[400px] flex items-end justify-center">
-                  <Image
-                    src="/images/activist-leader.png"
-                    alt={`Movement Leader - Sangathan vs ${comp.competitorName}`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 40vw"
-                    className="object-contain object-bottom drop-shadow-md"
-                    priority
-                  />
-                </div>
-
-                <div className="absolute top-4 left-4 right-4 flex flex-col gap-2 pointer-events-none">
-                  <div className="bg-white/95 backdrop-blur-xs border border-slate-300 rounded p-2 text-left shadow-xs flex items-center justify-between">
-                    <div className="text-[10px] font-mono leading-tight">
-                      <strong className="text-slate-900 block">Sangathan vs {comp.competitorName}</strong>
-                      <span className="text-slate-500">{isHindi ? 'नागरिक संप्रभुता बनाम कॉरपोरेट SaaS' : 'Civic Sovereignty vs Closed SaaS'}</span>
-                    </div>
-                    <span className="text-[9px] font-mono font-bold bg-indigo-100 text-indigo-900 px-1.5 py-0.5 rounded border border-indigo-300">
-                      Comparison
-                    </span>
+              <div className="relative w-full max-w-md bg-white border border-slate-200 rounded-sm p-6 shadow-xs">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500">
+                    <ShieldCheck size={16} className="text-indigo-600" />
+                    <span>Sangathan vs {comp.competitorName}</span>
                   </div>
-                </div>
-
-                <div className="absolute bottom-4 left-4 right-4 pointer-events-none">
-                  <div className="bg-slate-900/90 text-white backdrop-blur-xs border border-slate-700 rounded p-2.5 text-left shadow-xs flex items-center justify-between">
-                    <div className="text-[11px] leading-tight">
-                      <span className="font-bold text-emerald-400 block">Sangathan</span>
-                      <span className="text-[10px] text-slate-300">₹0 Community Tier Forever</span>
+                  <div className="space-y-3 text-sm">
+                    <div className="border-b border-slate-100 pb-3">
+                      <div className="font-semibold text-slate-900">{isHindi ? 'मुख्य अंतर' : 'Key Differences'}</div>
+                      <ul className="text-xs text-slate-600 mt-1 list-disc list-inside space-y-1">
+                        <li>{isHindi ? '₹0 ग्रासरूट टियर' : '₹0 Grassroots Tier'}</li>
+                        <li>{isHindi ? 'भारतीय वैधानिक अनुपालन' : 'Indian Statutory Compliance'}</li>
+                        <li>{isHindi ? 'डेटा संप्रभुता' : 'Data Sovereignty'}</li>
+                      </ul>
                     </div>
-                    <span className="text-[9px] font-mono font-bold bg-slate-800 text-slate-200 px-1.5 py-0.5 rounded border border-slate-600">
-                      BQF Shield
-                    </span>
                   </div>
+                  <Link href={`/${lang}/compare`} className="inline-flex items-center gap-1 text-xs font-bold text-indigo-700 hover:text-indigo-800">
+                    {isHindi ? 'सभी तुलना देखें' : 'View all comparisons'} <ChevronRight size={14} />
+                  </Link>
                 </div>
-
-              </div>
-
-              <div className="mt-3 text-center">
-                <p className="text-xs font-bold text-slate-700">
-                  {isHindi ? comp.activistQuoteHi : comp.activistQuoteEn}
-                </p>
-                <span className="text-[11px] text-slate-400 font-mono">
-                  {isHindi ? comp.quoteAttributionHi : comp.quoteAttributionEn}
-                </span>
               </div>
             </div>
 

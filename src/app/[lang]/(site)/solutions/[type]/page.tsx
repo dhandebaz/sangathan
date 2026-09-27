@@ -198,60 +198,32 @@ export default async function SolutionOrgTypePage({ params }: SolutionPageProps)
               </div>
             </div>
 
-            {/* Right Column: Charismatic Activist Leader Anchor */}
+            {/* Right Column: Solution Index Panel */}
             <div className="lg:col-span-5 flex flex-col items-center relative">
-              <div className="relative w-full max-w-md bg-gradient-to-b from-slate-50 via-slate-50/50 to-white border border-slate-200 rounded-xl p-4 sm:p-6 shadow-xs overflow-hidden">
-                
-                {/* Tech Geometry */}
-                <div className="absolute top-0 right-0 w-32 h-32 border-b border-l border-slate-200 pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-24 h-24 border-t border-r border-slate-200 pointer-events-none" />
-                
-                {/* Main Leader Image */}
-                <div className="relative w-full h-[360px] sm:h-[430px] flex items-end justify-center">
-                  <Image
-                    src="/images/activist-leader.png"
-                    alt={`Activist and Leader - ${isHindi ? solution.titleHi : solution.titleEn}`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 40vw"
-                    className="object-contain object-bottom drop-shadow-md"
-                    priority
-                  />
-                </div>
-
-                {/* Ground Status Cards */}
-                <div className="absolute top-4 left-4 right-4 flex flex-col gap-2 pointer-events-none">
-                  <div className="bg-white/95 backdrop-blur-xs border border-slate-300 rounded p-2 text-left shadow-xs flex items-center justify-between">
-                    <div className="text-[10px] font-mono leading-tight">
-                      <strong className="text-slate-900 block">{isHindi ? 'सत्यापित आंदोलन अवसंरचना' : 'Verified Movement Infrastructure'}</strong>
-                      <span className="text-slate-500">{isHindi ? solution.titleHi : solution.titleEn}</span>
-                    </div>
-                    <span className="text-[9px] font-mono font-bold bg-emerald-100 text-emerald-900 px-1.5 py-0.5 rounded border border-emerald-300">
-                      Active
-                    </span>
+              <div className="relative w-full max-w-md bg-white border border-slate-200 rounded-sm p-6 shadow-xs">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500">
+                    <ShieldCheck size={16} className="text-indigo-600" />
+                    <span>{isHindi ? 'समाधान सारांश' : 'Solution Summary'}</span>
                   </div>
-                </div>
-
-                <div className="absolute bottom-4 left-4 right-4 pointer-events-none">
-                  <div className="bg-slate-900/90 text-white backdrop-blur-xs border border-slate-700 rounded p-2.5 text-left shadow-xs flex items-center justify-between">
-                    <div className="text-[11px] leading-tight">
-                      <span className="font-bold text-emerald-400 block">{isHindi ? 'वैधानिक सुरक्षा सक्रिय' : 'Statutory Shield Active'}</span>
-                      <span className="text-[10px] text-slate-300">{isHindi ? solution.categoryBadgeHi : solution.categoryBadgeEn}</span>
+                  <div className="space-y-3 text-sm">
+                    <div className="border-b border-slate-100 pb-3">
+                      <div className="font-semibold text-slate-900">{isHindi ? solution.titleHi : solution.titleEn}</div>
+                      <div className="text-xs text-slate-600 mt-1">{isHindi ? solution.metaDescHi : solution.metaDescEn}</div>
                     </div>
-                    <span className="text-[9px] font-mono font-bold bg-slate-800 text-slate-200 px-1.5 py-0.5 rounded border border-slate-600">
-                      BQF Verified
-                    </span>
+                    <div>
+                      <div className="font-semibold text-slate-900">{isHindi ? 'मुख्य कार्यप्रवाह' : 'Key Workflows'}</div>
+                      <ul className="text-xs text-slate-600 mt-1 list-disc list-inside space-y-1">
+                        {solution.subtypes.slice(0,3).map(st => (
+                          <li key={st.id}>{isHindi ? st.titleHi : st.titleEn}</li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
+                  <Link href={`/${lang}/solutions/${solution.slug}`} className="inline-flex items-center gap-1 text-xs font-bold text-indigo-700 hover:text-indigo-800">
+                    {isHindi ? 'पूर्ण समाधान देखें' : 'View full solution'} <ChevronRight size={14} />
+                  </Link>
                 </div>
-
-              </div>
-
-              <div className="mt-3 text-center">
-                <p className="text-xs font-bold text-slate-700">
-                  {isHindi ? solution.activistQuoteHi : solution.activistQuoteEn}
-                </p>
-                <span className="text-[11px] text-slate-400 font-mono">
-                  {isHindi ? solution.quoteAttributionHi : solution.quoteAttributionEn}
-                </span>
               </div>
             </div>
 

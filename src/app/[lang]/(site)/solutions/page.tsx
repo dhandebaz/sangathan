@@ -114,33 +114,31 @@ export default async function SolutionsDirectoryPage({ params }: { params: Promi
               </div>
             </div>
 
-            {/* Activist Leader Anchor Card */}
+            {/* Solution Index Panel */}
             <div className="lg:col-span-5 flex flex-col items-center relative">
-              <div className="relative w-full max-w-md bg-gradient-to-b from-slate-50 via-slate-50/60 to-white border border-slate-200 rounded-xl p-4 sm:p-6 shadow-xs overflow-hidden">
-                <div className="absolute top-0 right-0 w-28 h-28 border-b border-l border-slate-200 pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-20 h-20 border-t border-r border-slate-200 pointer-events-none" />
-
-                <div className="relative w-full h-[320px] sm:h-[380px] flex items-end justify-center">
-                  <Image
-                    src="/images/activist-leader.png"
-                    alt="Grassroots Movement Leader - Sangathan Solutions"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 40vw"
-                    className="object-contain object-bottom drop-shadow-md"
-                    priority
-                  />
-                </div>
-
-                <div className="absolute bottom-4 left-4 right-4 pointer-events-none">
-                  <div className="bg-slate-900/90 text-white backdrop-blur-xs border border-slate-700 rounded p-2.5 text-left shadow-xs flex items-center justify-between">
-                    <div className="text-[11px] leading-tight">
-                      <span className="font-bold text-indigo-400 block">Sovereign Civic Infrastructure</span>
-                      <span className="text-[10px] text-slate-300">2 Archetypes • 8 Blueprints</span>
-                    </div>
-                    <span className="text-[9px] font-mono font-bold bg-emerald-900/80 text-emerald-200 px-2 py-0.5 rounded border border-emerald-700">
-                      ₹0 Community Tier
-                    </span>
+              <div className="relative w-full max-w-md bg-white border border-slate-200 rounded-sm p-6 shadow-xs">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500">
+                    <ShieldCheck size={16} className="text-indigo-600" />
+                    <span>{isHindi ? 'उद्देश्य-निर्मित समाधान' : 'Purpose-Built Solutions'}</span>
                   </div>
+                  <div className="space-y-3 text-sm">
+                    <div className="border-b border-slate-100 pb-3">
+                      <div className="font-semibold text-slate-900">{isHindi ? 'नागरिक समूह' : 'Civic Collectives'}</div>
+                      <div className="text-xs text-slate-600 mt-1">{isHindi ? '₹0 हमेशा फ्री, ऑफलाइन PWA, गुप्त बैलट' : 'Free forever, offline PWA, secret ballots'}</div>
+                    </div>
+                    <div className="border-b border-slate-100 pb-3">
+                      <div className="font-semibold text-slate-900">{isHindi ? 'पंजीकृत एनजीओ' : 'Registered NGOs'}</div>
+                      <div className="text-xs text-slate-600 mt-1">{isHindi ? '80G/12A/FKRA रजिस्टर, लेखा, ऑडिट' : '80G/12A/FCRA registers, accounting, audits'}</div>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-slate-900">{isHindi ? 'ग्रासरूट ब्लूप्रिंट्स' : 'Grassroots Blueprints'}</div>
+                      <div className="text-xs text-slate-600 mt-1">{isHindi ? 'स्पॉट ऑडिट, परचा प्रिंट, शिकायत डायरी' : 'Spot audits, parcha print, complaint diary'}</div>
+                    </div>
+                  </div>
+                  <Link href={`/${lang}/solutions`} className="inline-flex items-center gap-1 text-xs font-bold text-indigo-700 hover:text-indigo-800">
+                    {isHindi ? 'सभी समाधान देखें' : 'View all solutions'} <ChevronRight size={14} />
+                  </Link>
                 </div>
               </div>
             </div>
@@ -218,7 +216,7 @@ export default async function SolutionsDirectoryPage({ params }: { params: Promi
 
         {/* LIGHT TECHNICAL CTA */}
         <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
-          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-8 sm:p-12 text-center max-w-4xl mx-auto">
+          <div className="bg-slate-50 border border-slate-200 rounded-sm p-8 sm:p-12 text-center max-w-4xl mx-auto">
             <h3 className="text-2xl sm:text-3xl font-black text-slate-900 mb-3">
               {isHindi ? 'आज ही अपने संगठन के लिए शुरू करें' : 'Start Organizing Your Collective Today'}
             </h3>

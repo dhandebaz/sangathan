@@ -31,7 +31,7 @@ interface PetitionViewProps {
     title: string
     description: string
     target_decision_maker: string
-    signature_goal: number
+    signature_goal: number | null
     current_signatures: number
     status: string
     volunteer_prompt_enabled: boolean
@@ -75,8 +75,8 @@ export function PetitionView({ lang, org, petition, recentSignatures: initialSig
     wantsToVolunteer: true,
   })
 
-  const goal = petition.signature_goal || 500
-  const progressPercent = Math.min(100, Math.round((signaturesCount / goal) * 100))
+  const goal = petition.signature_goal
+  const progressPercent = goal ? Math.min(100, Math.round((signaturesCount / goal) * 100)) : 0
 
   async function handleSign(e: React.FormEvent) {
     e.preventDefault()
@@ -104,7 +104,7 @@ export function PetitionView({ lang, org, petition, recentSignatures: initialSig
         {
           id: 'temp-' + Date.now(),
           supporter_name: form.name,
-          supporter_locality: form.locality || 'Verified Citizen',
+          supporter_locality: form.locality || 'Supporter',
           comment: form.comment,
           signed_at: new Date().toISOString(),
         },
@@ -240,7 +240,7 @@ export function PetitionView({ lang, org, petition, recentSignatures: initialSig
             {/* Live Signers Ticker */}
             <div className="bg-white border border-slate-200 p-6 rounded-sm shadow-sm">
               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center justify-between">
-                <span>Recent Verified Signatories</span>
+                <span>Recent Signatories</span>
                 <span className="text-xs text-slate-500 font-normal">{signaturesCount} total supporters</span>
               </h3>
 
@@ -252,7 +252,7 @@ export function PetitionView({ lang, org, petition, recentSignatures: initialSig
                       {sig.comment && <p className="text-slate-600 italic mt-0.5">&ldquo;{sig.comment}&rdquo;</p>}
                     </div>
                     <span className="text-slate-400 font-mono text-[11px] whitespace-nowrap ml-4">
-                      {sig.supporter_locality || 'Verified Citizen'}
+                      {sig.supporter_locality || 'Supporter'}
                     </span>
                   </div>
                 ))}
@@ -267,17 +267,27 @@ export function PetitionView({ lang, org, petition, recentSignatures: initialSig
               <div className="mb-6">
                 <div className="flex items-baseline justify-between mb-2">
                   <span className="text-2xl font-extrabold text-slate-900">{signaturesCount.toLocaleString()}</span>
-                  <span className="text-xs text-slate-500 font-medium">Goal: {goal.toLocaleString()} signatures</span>
+                  {goal && (
+                    <span className="text-xs text-slate-500 font-medium">Goal: {goal.toLocaleString()} signatures</span>
+                  )}
                 </div>
-                <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                  <div
-                    className="bg-indigo-600 h-full transition-all duration-500 ease-out"
-                    style={{ width: `${progressPercent}%` }}
-                  />
-                </div>
-                <p className="text-xs text-slate-500 mt-2">
-                  {progressPercent}% towards triggering official submission to {petition.target_decision_maker}.
-                </p>
+                {goal ? (
+                  <>
+                    <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                      <div
+                        className="bg-indigo-600 h-full transition-all duration-500 ease-out"
+                        style={{ width: `${progressPercent}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-slate-500 mt-2">
+                      {progressPercent}% of the signature goal reached. Every signature is recorded on the public ledger.
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-xs text-slate-500 mt-2">
+                    {signaturesCount.toLocaleString()} {signaturesCount === 1 ? 'signature' : 'signatures'} recorded on the public ledger.
+                  </p>
+                )}
               </div>
 
               {hasSigned ? (

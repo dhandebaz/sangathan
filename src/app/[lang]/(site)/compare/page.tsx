@@ -115,33 +115,31 @@ export default async function CompareDirectoryPage({ params }: { params: Promise
               </div>
             </div>
 
-            {/* Activist Leader Anchor Card */}
+            {/* Comparison Summary Panel */}
             <div className="lg:col-span-5 flex flex-col items-center relative">
-              <div className="relative w-full max-w-md bg-gradient-to-b from-slate-50 via-slate-50/50 to-white border border-slate-200 rounded-xl p-4 sm:p-6 shadow-xs overflow-hidden">
-                <div className="absolute top-0 right-0 w-28 h-28 border-b border-l border-slate-200 pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-20 h-20 border-t border-r border-slate-200 pointer-events-none" />
-
-                <div className="relative w-full h-[320px] sm:h-[380px] flex items-end justify-center">
-                  <Image
-                    src="/images/activist-leader.png"
-                    alt="Movement Leader - Sangathan vs Competitors"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 40vw"
-                    className="object-contain object-bottom drop-shadow-md"
-                    priority
-                  />
-                </div>
-
-                <div className="absolute bottom-4 left-4 right-4 pointer-events-none">
-                  <div className="bg-slate-900/90 text-white backdrop-blur-xs border border-slate-700 rounded p-2.5 text-left shadow-xs flex items-center justify-between">
-                    <div className="text-[11px] leading-tight">
-                      <span className="font-bold text-indigo-400 block">Sovereign Civic Infrastructure</span>
-                      <span className="text-[10px] text-slate-300">Zero Ads • Zero Data Selling</span>
-                    </div>
-                    <span className="text-[9px] font-mono font-bold bg-emerald-900/80 text-emerald-200 px-2 py-0.5 rounded border border-emerald-700">
-                      ₹0 Tier
-                    </span>
+              <div className="relative w-full max-w-md bg-white border border-slate-200 rounded-sm p-6 shadow-xs">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500">
+                    <ShieldCheck size={16} className="text-indigo-600" />
+                    <span>{isHindi ? 'तुलना सारांश' : 'Comparison Summary'}</span>
                   </div>
+                  <div className="space-y-3 text-sm">
+                    <div className="border-b border-slate-100 pb-3">
+                      <div className="font-semibold text-slate-900">{isHindi ? 'भारतीय वैधानिक अनुपालन' : 'Indian Statutory Compliance'}</div>
+                      <div className="text-xs text-slate-600 mt-1">{isHindi ? '80G/12A/FCRA रजिस्टर, ऑफ़लाइन PWA' : '80G/12A/FCRA registers, offline PWA'}</div>
+                    </div>
+                    <div className="border-b border-slate-100 pb-3">
+                      <div className="font-semibold text-slate-900">{isHindi ? 'डेटा संप्रभुता' : 'Data Sovereignty'}</div>
+                      <div className="text-xs text-slate-600 mt-1">{isHindi ? 'कोई विज्ञापन नहीं, डेटा बिक्री नहीं' : 'Zero ads, zero data selling'}</div>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-slate-900">{isHindi ? 'लागत' : 'Cost'}</div>
+                      <div className="text-xs text-slate-600 mt-1">{isHindi ? 'ग्रासरूट के लिए ₹0 हमेशा' : '₹0 forever for grassroots'}</div>
+                    </div>
+                  </div>
+                  <Link href={`/${lang}/solutions`} className="inline-flex items-center gap-1 text-xs font-bold text-indigo-700 hover:text-indigo-800">
+                    {isHindi ? 'समाधान देखें' : 'View solutions'} <ChevronRight size={14} />
+                  </Link>
                 </div>
               </div>
             </div>

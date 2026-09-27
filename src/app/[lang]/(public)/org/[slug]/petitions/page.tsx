@@ -93,8 +93,8 @@ export default async function OrgPetitionsListingPage({ params }: PageProps) {
           <div className="space-y-4">
             {petitions.map((petition) => {
               const current = petition.current_signatures || 0
-              const goal = petition.signature_goal || 500
-              const progressPct = Math.min(100, Math.round((current / goal) * 100))
+              const goal = petition.signature_goal
+              const progressPct = goal ? Math.min(100, Math.round((current / goal) * 100)) : 0
 
               return (
                 <div
@@ -128,14 +128,16 @@ export default async function OrgPetitionsListingPage({ params }: PageProps) {
                     <div className="pt-2 max-w-md">
                       <div className="flex justify-between text-xs font-medium text-slate-600 mb-1">
                         <span className="font-bold text-slate-900">{current.toLocaleString()} signed</span>
-                        <span>Goal: {goal.toLocaleString()}</span>
+                        {goal && <span>Goal: {goal.toLocaleString()}</span>}
                       </div>
-                      <div className="w-full bg-slate-100 rounded-xs h-2 overflow-hidden">
-                        <div
-                          className="bg-emerald-600 h-full rounded-xs transition-all duration-500"
-                          style={{ width: `${progressPct}%` }}
-                        />
-                      </div>
+                      {goal && (
+                        <div className="w-full bg-slate-100 rounded-xs h-2 overflow-hidden">
+                          <div
+                            className="bg-emerald-600 h-full rounded-xs transition-all duration-500"
+                            style={{ width: `${progressPct}%` }}
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
 

@@ -79,7 +79,7 @@ export function NeutralInfrastructureFeatures() {
             >
               <ShieldCheck
                 size={20}
-                className="text-[var(--accent)] group-hover:scale-110 group-hover:drop-shadow-sm transition-transform"
+                className="text-[var(--accent)]"
               />
               <span className="underline-offset-4 group-hover:underline">
                 {feature.title}

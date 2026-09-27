@@ -90,9 +90,13 @@ export default async function PublicTransparencyPage({ params }: PageProps) {
 
   const programmaticRatio = totalExpenditure > 0
     ? Math.round((programmaticSpending / totalExpenditure) * 100)
-    : 88
+    : null
 
-  const trustScore = 96
+  const hashVerifiedCount = entries.filter((e) => e.receipt_sha256_hash).length
+  const activeMembers = membersCount.count ?? 0
+
+  const categoryPercent = (value: number) =>
+    totalExpenditure > 0 ? Math.min(100, Math.round((value / totalExpenditure) * 100)) : 0
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
@@ -111,9 +115,9 @@ export default async function PublicTransparencyPage({ params }: PageProps) {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-sm text-right">
-              <div className="text-xs text-emerald-800 font-bold">Public Trust Rating</div>
-              <div className="text-xl font-extrabold text-emerald-700">{trustScore}/100 • Grade A+</div>
+            <div className="p-3 bg-slate-50 border border-slate-200 rounded-sm text-right">
+              <div className="text-xs text-slate-600 font-bold">Active Members</div>
+              <div className="text-xl font-extrabold text-slate-900">{activeMembers.toLocaleString()}</div>
             </div>
           </div>
         </div>
@@ -127,9 +131,9 @@ export default async function PublicTransparencyPage({ params }: PageProps) {
               Total Inflow / Raised
             </div>
             <div className="text-2xl font-extrabold text-slate-900">
-              ₹{(totalFundsRaised || 125000).toLocaleString()}
+              ₹{totalFundsRaised.toLocaleString()}
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">Verified micro-contributions & dues</p>
+            <p className="text-[11px] text-slate-400 mt-1">Recorded contributions & dues</p>
           </div>
 
           <div className="bg-white p-5 rounded-sm border border-slate-200 shadow-sm">
@@ -137,9 +141,11 @@ export default async function PublicTransparencyPage({ params }: PageProps) {
               Programmatic Allocation
             </div>
             <div className="text-2xl font-extrabold text-indigo-600">
-              {programmaticRatio}%
+              {programmaticRatio !== null ? `${programmaticRatio}%` : '—'}
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">Direct field advocacy & legal defense</p>
+            <p className="text-[11px] text-slate-400 mt-1">
+              {programmaticRatio !== null ? 'Direct field advocacy & legal defense' : 'No public expenditure entries yet'}
+            </p>
           </div>
 
           <div className="bg-white p-5 rounded-sm border border-slate-200 shadow-sm">
@@ -147,9 +153,9 @@ export default async function PublicTransparencyPage({ params }: PageProps) {
               Verified Audit Trail
             </div>
             <div className="text-2xl font-extrabold text-emerald-700">
-              100% SHA-256
+              {entries.length > 0 ? `${hashVerifiedCount}/${entries.length}` : '—'}
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">Cryptographic tamper-evident receipts</p>
+            <p className="text-[11px] text-slate-400 mt-1">Public entries with SHA-256 receipt hashes</p>
           </div>
         </div>
 
@@ -171,7 +177,7 @@ export default async function PublicTransparencyPage({ params }: PageProps) {
                   <span>₹{(categoryTotals.programs + categoryTotals.student_welfare + categoryTotals.labor_relief).toLocaleString()}</span>
                 </div>
                 <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div className="bg-indigo-600 h-full" style={{ width: '55%' }} />
+                  <div className="bg-indigo-600 h-full" style={{ width: `${categoryPercent(categoryTotals.programs + categoryTotals.student_welfare + categoryTotals.labor_relief)}%` }} />
                 </div>
               </div>
 
@@ -181,7 +187,7 @@ export default async function PublicTransparencyPage({ params }: PageProps) {
                   <span>₹{categoryTotals.legal_aid.toLocaleString()}</span>
                 </div>
                 <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div className="bg-emerald-600 h-full" style={{ width: '25%' }} />
+                  <div className="bg-emerald-600 h-full" style={{ width: `${categoryPercent(categoryTotals.legal_aid)}%` }} />
                 </div>
               </div>
 
@@ -191,7 +197,7 @@ export default async function PublicTransparencyPage({ params }: PageProps) {
                   <span>₹{categoryTotals.operations.toLocaleString()}</span>
                 </div>
                 <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div className="bg-slate-500 h-full" style={{ width: '12%' }} />
+                  <div className="bg-slate-500 h-full" style={{ width: `${categoryPercent(categoryTotals.operations)}%` }} />
                 </div>
               </div>
             </div>
@@ -202,7 +208,7 @@ export default async function PublicTransparencyPage({ params }: PageProps) {
                 <span>Audited Financial Standing</span>
               </div>
               <p>
-                All expenditures logged above are tied to verified vendor invoices and dual-approved by the elected executive treasurer before publication.
+                All expenditures listed above are published from the organisation's own transparency ledger. Members can cross-verify each entry against internal records at any time.
               </p>
             </div>
           </div>
@@ -247,7 +253,7 @@ export default async function PublicTransparencyPage({ params }: PageProps) {
                       ₹{Number(item.amount).toLocaleString()}
                     </td>
                     <td className="py-3 px-3 font-mono text-[10px] text-slate-400">
-                      {item.receipt_sha256_hash ? item.receipt_sha256_hash.slice(0, 16) + '...' : 'VERIFIED'}
+                      {item.receipt_sha256_hash ? item.receipt_sha256_hash.slice(0, 16) + '...' : '—'}
                     </td>
                   </tr>
                 ))}

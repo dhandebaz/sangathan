@@ -395,7 +395,9 @@ export function CampaignManager({
       {activeTab === 'petitions' && (
         <div className="space-y-4">
           {filteredPetitions.map((petition) => {
-            const progress = Math.min(100, Math.round(((petition.current_signatures || 0) / (petition.signature_goal || 500)) * 100))
+            const progress = petition.signature_goal
+              ? Math.min(100, Math.round(((petition.current_signatures || 0) / petition.signature_goal) * 100))
+              : 0
             const publicUrl = `/${lang}/org/${orgSlug}/petitions/${petition.slug || petition.id}`
 
             return (
@@ -418,7 +420,8 @@ export function CampaignManager({
 
                   <div className="flex items-center gap-4 text-xs pt-1">
                     <span className="font-semibold text-slate-900">
-                      {petition.current_signatures || 0} / {petition.signature_goal || 500} signatures
+                      {petition.current_signatures || 0}
+                      {petition.signature_goal ? ` / ${petition.signature_goal}` : ''} signatures
                     </span>
                     <div className="w-32 bg-slate-100 h-1.5 rounded-full overflow-hidden">
                       <div className="bg-indigo-600 h-full" style={{ width: `${progress}%` }} />

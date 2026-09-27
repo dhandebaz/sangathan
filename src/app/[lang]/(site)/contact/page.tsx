@@ -60,7 +60,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="p-6 bg-slate-50  border border-slate-200  rounded-xl hover:border-indigo-500/50 transition-colors group">
                <div className="w-10 h-10 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-4">
-                 <Mail className="w-5 h-5 text-indigo-500 group-hover:scale-110 transition-transform" />
+                 <Mail className="w-5 h-5 text-indigo-500" />
                </div>
                <h3 className="text-lg font-bold mb-2 text-slate-900 ">{isHindi ? 'सामान्य सहायता' : 'General Support'}</h3>
                <p className="text-sm text-slate-500  mb-4">
@@ -73,7 +73,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
 
             <div className="p-6 bg-slate-50  border border-slate-200  rounded-xl hover:border-red-500/50 transition-colors group">
                <div className="w-10 h-10 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-4">
-                 <ShieldAlert className="w-5 h-5 text-red-500 group-hover:scale-110 transition-transform" />
+                 <ShieldAlert className="w-5 h-5 text-red-500" />
                </div>
                <h3 className="text-lg font-bold mb-2 text-slate-900 ">{isHindi ? 'विश्वास और सुरक्षा' : 'Trust & Safety'}</h3>
                <p className="text-sm text-slate-500  mb-4">
@@ -86,7 +86,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
 
             <div className="p-6 bg-slate-50  border border-slate-200  rounded-xl hover:border-emerald-500/50 transition-colors group">
                <div className="w-10 h-10 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-4">
-                 <CreditCard className="w-5 h-5 text-emerald-500 group-hover:scale-110 transition-transform" />
+                 <CreditCard className="w-5 h-5 text-emerald-500" />
                </div>
                <h3 className="text-lg font-bold mb-2 text-slate-900 ">{isHindi ? 'बिलिंग और रिफंड' : 'Billing & Refunds'}</h3>
                <p className="text-sm text-slate-500  mb-4">
@@ -99,7 +99,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
 
             <div className="p-6 bg-slate-50  border border-slate-200  rounded-xl hover:border-cyan-500/50 transition-colors group">
                <div className="w-10 h-10 rounded-2xl bg-white  border border-slate-200  flex items-center justify-center mb-4">
-                 <MessageSquare className="w-5 h-5 text-cyan-500 group-hover:scale-110 transition-transform" />
+                 <MessageSquare className="w-5 h-5 text-cyan-500" />
                </div>
                <h3 className="text-lg font-bold mb-2 text-slate-900 ">{isHindi ? 'मीडिया और प्रेस' : 'Media & Press'}</h3>
                <p className="text-sm text-slate-500  mb-4">
