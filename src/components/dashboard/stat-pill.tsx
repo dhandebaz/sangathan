@@ -34,12 +34,12 @@ export function StatPill({ icon: Icon, value, label, href, color = 'brand', clas
     <Link
       href={href}
       className={cn(
-        'flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl border transition-all hover:shadow-xs active:scale-[0.98] min-h-[64px]',
+        'flex items-center gap-3 p-3.5 sm:p-4 rounded-sm border transition-colors hover:shadow-xs  min-h-[64px]',
         colorMap[color],
         className
       )}
     >
-      <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-2xs', iconWrapMap[color])}>
+      <div className={cn('w-10 h-10 rounded-sm flex items-center justify-center shrink-0 shadow-2xs', iconWrapMap[color])}>
         <Icon className="h-5 w-5" />
       </div>
       <div className="min-w-0">

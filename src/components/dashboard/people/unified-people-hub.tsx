@@ -143,7 +143,7 @@ export function UnifiedPeopleHub({
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         <div
           onClick={() => setActiveTab('members')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'members' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -153,7 +153,7 @@ export function UnifiedPeopleHub({
 
         <div
           onClick={() => setActiveTab('badges')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'badges' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -163,7 +163,7 @@ export function UnifiedPeopleHub({
 
         <div
           onClick={() => setActiveTab('teams')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'teams' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -173,7 +173,7 @@ export function UnifiedPeopleHub({
 
         <div
           onClick={() => setActiveTab('volunteers')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'volunteers' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -183,7 +183,7 @@ export function UnifiedPeopleHub({
 
         <div
           onClick={() => setActiveTab('certificates')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'certificates' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -194,7 +194,7 @@ export function UnifiedPeopleHub({
 
       {/* 3. Navigation Tabs */}
       <div className="overflow-x-auto pb-1 scrollbar-none">
-        <div className="inline-flex items-center gap-1 p-1 bg-slate-100/90 border border-slate-200/80 rounded-xl shadow-2xs">
+        <div className="inline-flex items-center gap-1 p-1 bg-slate-100/90 border border-slate-200/80 rounded-sm shadow-2xs">
           {[
             { id: 'members', label: isHindi ? 'सदस्य निर्देशिका' : 'Member Directory', icon: Users },
             { id: 'badges', label: isHindi ? 'डिजिटल आईडी व सत्यापित बैज' : 'ID Cards & Badges Studio', icon: Award },
@@ -209,7 +209,7 @@ export function UnifiedPeopleHub({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors ${
                   isActive
                     ? 'bg-white text-slate-900 shadow-2xs border border-slate-200/90 font-extrabold'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
@@ -227,7 +227,7 @@ export function UnifiedPeopleHub({
       {activeTab === 'members' && (
         <div className="space-y-4">
           {/* Search and Filters Strip */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-card border border-border p-3 rounded-xl shadow-2xs">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-card border border-border p-3 rounded-sm shadow-2xs">
             <div className="relative w-full sm:w-80">
               <Search className="w-4 h-4 absolute left-3 top-3 text-muted-foreground" />
               <Input
@@ -284,7 +284,7 @@ export function UnifiedPeopleHub({
       {/* 5. Tab 2: ID Cards & Member Badge Studio */}
       {activeTab === 'badges' && (
         <div className="space-y-6">
-          <div className="p-4 bg-indigo-50/60 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-900 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-indigo-50/60 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-900 rounded-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h3 className="text-sm font-bold text-indigo-950 dark:text-indigo-200 flex items-center gap-2">
                 <Award className="w-4 h-4 text-indigo-600" />
@@ -336,7 +336,7 @@ export function UnifiedPeopleHub({
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {subgroups.length === 0 ? (
-              <div className="col-span-full p-8 text-center bg-card border border-border rounded-xl">
+              <div className="col-span-full p-8 text-center bg-card border border-border rounded-sm">
                 <Network className="w-8 h-8 mx-auto mb-2 text-muted-foreground/40" />
                 <p className="text-xs font-bold text-foreground">No Committees Created Yet</p>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -345,7 +345,7 @@ export function UnifiedPeopleHub({
               </div>
             ) : (
               subgroups.map((sg) => (
-                <div key={sg.id} className="p-4 bg-card border border-border rounded-xl shadow-2xs space-y-3">
+                <div key={sg.id} className="p-4 bg-card border border-border rounded-sm shadow-2xs space-y-3">
                   <div className="flex items-center justify-between">
                     <h4 className="text-sm font-bold text-foreground">{sg.name}</h4>
                     <span className="text-[10px] font-bold px-2 py-0.5 bg-muted rounded uppercase">
@@ -413,7 +413,7 @@ export function UnifiedPeopleHub({
 
           <div className="grid gap-4 sm:grid-cols-2">
             {networks.length === 0 ? (
-              <div className="col-span-full p-8 text-center bg-card border border-border rounded-xl">
+              <div className="col-span-full p-8 text-center bg-card border border-border rounded-sm">
                 <Globe className="w-8 h-8 mx-auto mb-2 text-muted-foreground/40" />
                 <p className="text-xs font-bold text-foreground">No Network Alliances Joined</p>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -422,7 +422,7 @@ export function UnifiedPeopleHub({
               </div>
             ) : (
               networks.map((net) => (
-                <div key={net.id} className="p-4 bg-card border border-border rounded-xl shadow-2xs space-y-2">
+                <div key={net.id} className="p-4 bg-card border border-border rounded-sm shadow-2xs space-y-2">
                   <h4 className="text-sm font-bold text-foreground">{net.name}</h4>
                   <p className="text-xs text-muted-foreground line-clamp-2">{net.description}</p>
                 </div>

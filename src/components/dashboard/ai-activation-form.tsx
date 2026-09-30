@@ -9,9 +9,9 @@ export function AiActivationForm({ lang }: { lang: string }) {
   const isHi = lang === 'hi'
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm space-y-6">
+    <div className="rounded-sm border border-slate-200 bg-white p-6 sm:p-8 shadow-sm space-y-6">
       <div className="flex items-center gap-4 border-b border-slate-100 pb-6">
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-600 shadow-sm">
+        <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-indigo-50 border border-indigo-200 text-indigo-600 shadow-sm">
           <Sparkles className="h-6 w-6" />
         </div>
         <div>
@@ -26,7 +26,7 @@ export function AiActivationForm({ lang }: { lang: string }) {
         </div>
       </div>
 
-      <div className="rounded-xl bg-slate-50 border border-slate-200 p-4 text-xs sm:text-sm text-slate-600 space-y-2">
+      <div className="rounded-sm bg-slate-50 border border-slate-200 p-4 text-xs sm:text-sm text-slate-600 space-y-2">
         <p className="font-semibold text-slate-900 flex items-center gap-2">
           <ShieldCheck className="w-4 h-4 text-emerald-600" />
           {isHi ? 'शून्य डेटा साझाकरण व मानवीय नियंत्रण' : 'Strict Privacy & Human Governance'}
@@ -41,7 +41,7 @@ export function AiActivationForm({ lang }: { lang: string }) {
       <div className="flex flex-wrap items-center gap-3 pt-2">
         <Link
           href={`/${lang}/dashboard/settings`}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold transition-colors shadow-sm"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white text-xs sm:text-sm font-bold transition-colors shadow-sm"
         >
           <Sliders className="w-4 h-4" />
           <span>{isHi ? 'AI सेटिंग्स प्रबंधित करें' : 'Manage AI Settings'}</span>
@@ -50,7 +50,7 @@ export function AiActivationForm({ lang }: { lang: string }) {
         <SangathanAiModal lang={lang} isHindi={isHi}>
           <button
             type="button"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs sm:text-sm font-semibold transition-colors border border-indigo-200"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-sm bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs sm:text-sm font-semibold transition-colors border border-indigo-200"
           >
             <Sparkles className="w-4 h-4 text-indigo-600" />
             <span>{isHi ? 'AI वास्तुकला पढ़ें' : 'View AI Architecture'}</span>

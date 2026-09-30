@@ -433,15 +433,15 @@ export function UnifiedInboxHub({
 
       {/* 2. Unified KPIs Ribbon */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3.5 bg-white border border-slate-200 rounded-xl shadow-2xs">
+        <div className="p-3.5 bg-white border border-slate-200 rounded-sm shadow-2xs">
           <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Active Member Chats</div>
           <div className="text-xl font-black text-slate-900 mt-0.5">{stats.totalConversations}</div>
         </div>
-        <div className="p-3.5 bg-white border border-slate-200 rounded-xl shadow-2xs">
+        <div className="p-3.5 bg-white border border-slate-200 rounded-sm shadow-2xs">
           <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Inbound Messages</div>
           <div className="text-xl font-black text-slate-900 mt-0.5">{stats.totalInboundMessages}</div>
         </div>
-        <div className="p-3.5 bg-white border border-slate-200 rounded-xl shadow-2xs">
+        <div className="p-3.5 bg-white border border-slate-200 rounded-sm shadow-2xs">
           <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Telegram Bot Status</div>
           <div className="text-sm font-bold text-sky-600 mt-1 flex items-center gap-1.5">
             {isTgActive ? (
@@ -457,7 +457,7 @@ export function UnifiedInboxHub({
             )}
           </div>
         </div>
-        <div className="p-3.5 bg-white border border-slate-200 rounded-xl shadow-2xs">
+        <div className="p-3.5 bg-white border border-slate-200 rounded-sm shadow-2xs">
           <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Emergency SOS Desk</div>
           <div className="text-sm font-bold text-rose-600 mt-1 flex items-center gap-1.5">
             <ShieldAlert className="w-4 h-4 text-rose-500" />
@@ -468,7 +468,7 @@ export function UnifiedInboxHub({
 
       {/* 3. Navigation Tabs */}
       <div className="overflow-x-auto pb-1 scrollbar-none">
-        <div className="inline-flex items-center gap-1 p-1 bg-slate-100/90 border border-slate-200/80 rounded-xl shadow-2xs">
+        <div className="inline-flex items-center gap-1 p-1 bg-slate-100/90 border border-slate-200/80 rounded-sm shadow-2xs">
           {[
             { id: 'chats', label: isHindi ? '2-तरफा सदस्य संवाद' : 'Direct & Member Chats', icon: MessageSquare },
             { id: 'telegram', label: isHindi ? 'टेलीग्राम बॉट एवं चैनल' : 'Telegram Bot & Channels', icon: Radio },
@@ -482,7 +482,7 @@ export function UnifiedInboxHub({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors ${
                   isActive
                     ? 'bg-white text-slate-900 shadow-2xs border border-slate-200/90 font-extrabold'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
@@ -498,7 +498,7 @@ export function UnifiedInboxHub({
 
       {/* 4. Tab 1: Direct Member Chats & Unified Inbound Workspace */}
       {activeTab === 'chats' && (
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 bg-card border border-border rounded-xl shadow-2xs overflow-hidden min-h-[580px]">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 bg-card border border-border rounded-sm shadow-2xs overflow-hidden min-h-[580px]">
           {/* Left Column: Conversation Roster */}
           <div className="md:col-span-5 border-r border-border flex flex-col h-full bg-muted/20">
             {/* Search + New Chat Button */}
@@ -546,7 +546,7 @@ export function UnifiedInboxHub({
                           : 'hover:bg-muted/50'
                       }`}
                     >
-                      <div className="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center shrink-0 text-foreground font-bold text-xs">
+                      <div className="w-9 h-9 rounded-full bg-slate-200 bg-slate-50 flex items-center justify-center shrink-0 text-foreground font-bold text-xs">
                         {isTg ? 'TG' : 'WA'}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -626,7 +626,7 @@ export function UnifiedInboxHub({
                           className={`flex flex-col ${isOutgoing ? 'items-end' : 'items-start'}`}
                         >
                           <div
-                            className={`max-w-[80%] rounded-2xl p-3 text-xs leading-relaxed ${
+                            className={`max-w-[80%] rounded-sm p-3 text-xs leading-relaxed ${
                               isOutgoing
                                 ? 'bg-orange-600 text-white rounded-br-none'
                                 : 'bg-muted text-foreground rounded-bl-none border border-border'
@@ -681,7 +681,7 @@ export function UnifiedInboxHub({
 
       {/* 5. Tab 2: Telegram Bot & Channels Studio */}
       {activeTab === 'telegram' && (
-        <div className="p-6 bg-card border border-border rounded-xl shadow-2xs space-y-6">
+        <div className="p-6 bg-card border border-border rounded-sm shadow-2xs space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
             <div>
               <h3 className="text-base font-bold text-foreground flex items-center gap-2">
@@ -702,7 +702,7 @@ export function UnifiedInboxHub({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl border border-sky-200 bg-sky-50/50 dark:border-sky-950 dark:bg-sky-950/20 space-y-2">
+            <div className="p-4 rounded-sm border border-sky-200 bg-sky-50/50 dark:border-sky-950 dark:bg-sky-950/20 space-y-2">
               <span className="text-xs font-bold text-sky-950 dark:text-sky-200 uppercase tracking-wider">
                 1. Bot Token & Webhook Status
               </span>
@@ -720,7 +720,7 @@ export function UnifiedInboxHub({
               </div>
             </div>
 
-            <div className="p-4 rounded-xl border border-border bg-muted/20 space-y-2">
+            <div className="p-4 rounded-sm border border-border bg-muted/20 space-y-2">
               <span className="text-xs font-bold text-foreground uppercase tracking-wider">
                 2. Test Bot Outbound Message
               </span>
@@ -760,7 +760,7 @@ export function UnifiedInboxHub({
 
       {/* 6. Tab 3: Emergency SOS Crisis Desk */}
       {activeTab === 'emergency' && (
-        <div className="p-6 bg-card border border-border rounded-xl shadow-2xs space-y-6">
+        <div className="p-6 bg-card border border-border rounded-sm shadow-2xs space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
             <div>
               <h3 className="text-base font-bold text-foreground flex items-center gap-2">
@@ -775,7 +775,7 @@ export function UnifiedInboxHub({
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Quick Trigger Form */}
-            <div className="lg:col-span-5 p-4 rounded-xl border border-rose-200 bg-rose-50/40 dark:border-rose-950 dark:bg-rose-950/20 space-y-3">
+            <div className="lg:col-span-5 p-4 rounded-sm border border-rose-200 bg-rose-50/40 dark:border-rose-950 dark:bg-rose-950/20 space-y-3">
               <span className="text-xs font-bold text-rose-900 dark:text-rose-200 uppercase tracking-wider">
                 Broadcast Emergency SOS Alert
               </span>
@@ -836,13 +836,13 @@ export function UnifiedInboxHub({
                 Active Incident Alerts ({sosAlerts.length})
               </span>
               {sosAlerts.length === 0 ? (
-                <div className="p-8 text-center border border-border rounded-xl bg-muted/20 text-xs text-muted-foreground">
+                <div className="p-8 text-center border border-border rounded-sm bg-muted/20 text-xs text-muted-foreground">
                   <ShieldCheck className="w-8 h-8 mx-auto mb-1 text-emerald-600" />
                   No active SOS incidents reported. All units safe.
                 </div>
               ) : (
                 sosAlerts.map((alt) => (
-                  <div key={alt.id} className="p-3.5 rounded-xl border border-rose-200 bg-card space-y-2">
+                  <div key={alt.id} className="p-3.5 rounded-sm border border-rose-200 bg-card space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-rose-700">{alt.activist_name}</span>
                       <span className="text-[10px] font-bold px-2 py-0.5 bg-rose-100 text-rose-800 rounded">
@@ -861,7 +861,7 @@ export function UnifiedInboxHub({
 
       {/* 7. Tab 4: Announcements & Mass Broadcasts */}
       {activeTab === 'broadcasts' && (
-        <div className="p-6 bg-card border border-border rounded-xl shadow-2xs space-y-6">
+        <div className="p-6 bg-card border border-border rounded-sm shadow-2xs space-y-6">
           <div className="flex items-center justify-between border-b border-border pb-4">
             <div>
               <h3 className="text-base font-bold text-foreground flex items-center gap-2">
@@ -882,7 +882,7 @@ export function UnifiedInboxHub({
             </Button>
           </div>
 
-          <div className="p-8 text-center bg-muted/20 border border-border rounded-xl">
+          <div className="p-8 text-center bg-muted/20 border border-border rounded-sm">
             <Megaphone className="w-8 h-8 text-orange-600 mx-auto mb-2" />
             <p className="text-xs font-bold text-foreground">Multi-Channel Broadcast Ready</p>
             <p className="text-xs text-muted-foreground mt-1 max-w-md mx-auto">
@@ -895,7 +895,7 @@ export function UnifiedInboxHub({
       {/* 8. Tab 5: Conduits & Integrations Hub */}
       {activeTab === 'integrations' && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 bg-card border border-border rounded-xl space-y-3">
+          <div className="p-4 bg-card border border-border rounded-sm space-y-3">
             <div className="flex items-center gap-2 text-xs font-bold text-sky-600">
               <Radio className="w-4 h-4" />
               <span>Telegram Bot Conduit</span>
@@ -913,7 +913,7 @@ export function UnifiedInboxHub({
             </Button>
           </div>
 
-          <div className="p-4 bg-card border border-border rounded-xl space-y-3">
+          <div className="p-4 bg-card border border-border rounded-sm space-y-3">
             <div className="flex items-center gap-2 text-xs font-bold text-emerald-600">
               <Video className="w-4 h-4" />
               <span>Google Meet Video Hub</span>
@@ -931,7 +931,7 @@ export function UnifiedInboxHub({
             </Button>
           </div>
 
-          <div className="p-4 bg-card border border-border rounded-xl space-y-3">
+          <div className="p-4 bg-card border border-border rounded-sm space-y-3">
             <div className="flex items-center gap-2 text-xs font-bold text-rose-600">
               <ShieldAlert className="w-4 h-4" />
               <span>Emergency Legal SOS</span>
@@ -1080,12 +1080,12 @@ export function UnifiedInboxHub({
             </div>
 
             {activeMeetLink ? (
-              <div className="p-4 rounded-xl border border-indigo-200 bg-indigo-50 dark:border-indigo-950 dark:bg-indigo-950/40 space-y-3">
+              <div className="p-4 rounded-sm border border-indigo-200 bg-indigo-50 dark:border-indigo-950 dark:bg-indigo-950/40 space-y-3">
                 <div className="flex items-center gap-2 text-xs font-bold text-indigo-800 dark:text-indigo-300">
                   <CheckCircle2 className="w-4 h-4 text-indigo-600" />
                   <span>Video Room is Active</span>
                 </div>
-                <Input readOnly value={activeMeetLink} className="text-xs font-mono bg-white dark:bg-slate-900" />
+                <Input readOnly value={activeMeetLink} className="text-xs font-mono bg-white dark:bg-white" />
                 <div className="flex items-center gap-2">
                   <Button
                     size="sm"

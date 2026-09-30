@@ -199,7 +199,7 @@ Yours sincerely,`
       </Card>
 
       {/* Official Printable Letterhead Sheet */}
-      <div className="bg-white p-8 sm:p-12 rounded-xl border border-slate-300 shadow-2xl max-w-4xl mx-auto print:shadow-none print:border-none print:p-0 print:m-0 text-slate-900 font-serif">
+      <div className="bg-white p-8 sm:p-12 rounded-sm border border-slate-300 shadow-2xl max-w-4xl mx-auto print:shadow-none print:border-none print:p-0 print:m-0 text-slate-900 font-serif">
         {/* Letterhead Top Emblem & Header */}
         <div className="border-b-4 border-double border-slate-900 pb-4 mb-6 text-center">
           <div className="flex justify-center items-center gap-3 mb-2">

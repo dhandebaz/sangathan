@@ -144,7 +144,7 @@ export function UnifiedAdministrationHub({
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         <div
           onClick={() => setActiveTab('vault')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'vault' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -154,7 +154,7 @@ export function UnifiedAdministrationHub({
 
         <div
           onClick={() => setActiveTab('registers_compliance')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'registers_compliance' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -164,7 +164,7 @@ export function UnifiedAdministrationHub({
 
         <div
           onClick={() => setActiveTab('legal_helpdesk')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'legal_helpdesk' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -174,7 +174,7 @@ export function UnifiedAdministrationHub({
 
         <div
           onClick={() => setActiveTab('letters_media')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'letters_media' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -184,7 +184,7 @@ export function UnifiedAdministrationHub({
 
         <div
           onClick={() => setActiveTab('roles_audit')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'roles_audit' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -195,7 +195,7 @@ export function UnifiedAdministrationHub({
 
       {/* 3. Navigation Tabs (Segmented Control) */}
       <div className="overflow-x-auto pb-1 scrollbar-none">
-        <div className="inline-flex items-center gap-1 p-1 bg-slate-100/90 border border-slate-200/80 rounded-xl shadow-2xs">
+        <div className="inline-flex items-center gap-1 p-1 bg-slate-100/90 border border-slate-200/80 rounded-sm shadow-2xs">
           {tabsList.map((tab) => {
             const Icon = tab.icon
             const isActive = activeTab === tab.id
@@ -203,7 +203,7 @@ export function UnifiedAdministrationHub({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors ${
                   isActive
                     ? 'bg-white text-slate-900 shadow-2xs border border-slate-200/90 font-extrabold'
                     : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
@@ -235,7 +235,7 @@ export function UnifiedAdministrationHub({
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Registers Suite */}
-            <div className="p-5 bg-white border border-slate-200 rounded-xl shadow-2xs space-y-3">
+            <div className="p-5 bg-white border border-slate-200 rounded-sm shadow-2xs space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-indigo-600 flex items-center gap-1.5">
                   <BookOpen className="w-4 h-4" />
@@ -262,7 +262,7 @@ export function UnifiedAdministrationHub({
             </div>
 
             {/* Compliance Suite */}
-            <div className="p-5 bg-white border border-slate-200 rounded-xl shadow-2xs space-y-3">
+            <div className="p-5 bg-white border border-slate-200 rounded-sm shadow-2xs space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-emerald-600 flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4" />
@@ -296,7 +296,7 @@ export function UnifiedAdministrationHub({
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Disputes & Grievances */}
-            <div className="p-5 bg-white border border-slate-200 rounded-xl shadow-2xs space-y-3">
+            <div className="p-5 bg-white border border-slate-200 rounded-sm shadow-2xs space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-rose-600 flex items-center gap-1.5">
                   <Scale className="w-4 h-4" />
@@ -323,7 +323,7 @@ export function UnifiedAdministrationHub({
             </div>
 
             {/* Support Helpdesk */}
-            <div className="p-5 bg-white border border-slate-200 rounded-xl shadow-2xs space-y-3">
+            <div className="p-5 bg-white border border-slate-200 rounded-sm shadow-2xs space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-sky-600 flex items-center gap-1.5">
                   <AlertCircle className="w-4 h-4" />
@@ -357,7 +357,7 @@ export function UnifiedAdministrationHub({
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Letterhead & Letters */}
-            <div className="p-5 bg-white border border-slate-200 rounded-xl shadow-2xs space-y-3">
+            <div className="p-5 bg-white border border-slate-200 rounded-sm shadow-2xs space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-indigo-600 flex items-center gap-1.5">
                   <Printer className="w-4 h-4" />
@@ -384,7 +384,7 @@ export function UnifiedAdministrationHub({
             </div>
 
             {/* Press Releases & Media */}
-            <div className="p-5 bg-white border border-slate-200 rounded-xl shadow-2xs space-y-3">
+            <div className="p-5 bg-white border border-slate-200 rounded-sm shadow-2xs space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-emerald-600 flex items-center gap-1.5">
                   <Newspaper className="w-4 h-4" />
@@ -418,7 +418,7 @@ export function UnifiedAdministrationHub({
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Roles & Permissions */}
-            <div className="p-5 bg-white border border-slate-200 rounded-xl shadow-2xs space-y-3">
+            <div className="p-5 bg-white border border-slate-200 rounded-sm shadow-2xs space-y-3">
               <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
                 <UserCog className="w-4 h-4" />
               </div>
@@ -438,7 +438,7 @@ export function UnifiedAdministrationHub({
             </div>
 
             {/* Audit & Guardrails */}
-            <div className="p-5 bg-white border border-slate-200 rounded-xl shadow-2xs space-y-3">
+            <div className="p-5 bg-white border border-slate-200 rounded-sm shadow-2xs space-y-3">
               <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
                 <ShieldCheck className="w-4 h-4" />
               </div>
@@ -458,7 +458,7 @@ export function UnifiedAdministrationHub({
             </div>
 
             {/* Transparency Ledger */}
-            <div className="p-5 bg-white border border-slate-200 rounded-xl shadow-2xs space-y-3">
+            <div className="p-5 bg-white border border-slate-200 rounded-sm shadow-2xs space-y-3">
               <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
                 <Landmark className="w-4 h-4" />
               </div>

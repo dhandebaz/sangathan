@@ -27,13 +27,13 @@ export function FeatureTile({ icon: Icon, emoji, title, subtitle, href, color = 
     <Link
       href={href}
       className={cn(
-        'group flex flex-col justify-between p-4 sm:p-5 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 active:scale-[0.98] transition-all shadow-xs min-h-[110px]',
+        'group flex flex-col justify-between p-4 sm:p-5 rounded-sm border border-slate-200 bg-white hover:bg-slate-50  transition-colors shadow-xs min-h-[110px]',
         className
       )}
     >
       <div className="flex items-start justify-between gap-2 mb-3">
         {Icon && (
-          <div className={cn('w-11 h-11 rounded-xl flex items-center justify-center shrink-0 shadow-2xs', iconWrapMap[color])}>
+          <div className={cn('w-11 h-11 rounded-sm flex items-center justify-center shrink-0 shadow-2xs', iconWrapMap[color])}>
             <Icon className="h-5 w-5" />
           </div>
         )}

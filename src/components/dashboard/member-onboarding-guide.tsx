@@ -52,7 +52,7 @@ export function MemberOnboardingGuide({ orgType, orgName = 'Your Organisation', 
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/70 p-4 md:p-6">
-      <div className="relative w-full max-w-lg bg-white rounded-xl shadow-2xl overflow-hidden border border-slate-200">
+      <div className="relative w-full max-w-lg bg-white rounded-sm shadow-2xl overflow-hidden border border-slate-200">
         <button
           onClick={onSkip}
           className="absolute top-4 right-4 text-xs text-slate-400 hover:text-slate-700 font-medium px-3 py-1 rounded-full hover:bg-slate-100 transition-colors z-10"
@@ -73,7 +73,7 @@ export function MemberOnboardingGuide({ orgType, orgName = 'Your Organisation', 
         <div className="p-6 md:p-8 space-y-4 min-h-[200px]">
           {step === 0 && (
             <div className="text-center space-y-4">
-              <div className="w-16 h-16 rounded-xl bg-slate-900 text-white flex items-center justify-center mx-auto">
+              <div className="w-16 h-16 rounded-sm bg-white text-slate-900 border border-slate-200 flex items-center justify-center mx-auto">
                 <Users className="w-8 h-8" />
               </div>
               <p className="text-sm text-slate-700 leading-relaxed max-w-sm mx-auto">
@@ -95,7 +95,7 @@ export function MemberOnboardingGuide({ orgType, orgName = 'Your Organisation', 
                   key={s.href}
                   href={`/${lang}${s.href}`}
                   onClick={onComplete}
-                  className="flex items-center gap-3 p-3.5 rounded-xl border border-slate-200 bg-white hover:border-slate-400 hover:bg-slate-50 transition-all"
+                  className="flex items-center gap-3 p-3.5 rounded-sm border border-slate-200 bg-white hover:border-slate-400 hover:bg-slate-50 transition-colors"
                 >
                   <div className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
                     {s.href.includes('people') ? <Users className="w-4 h-4" /> : s.href.includes('calendar') ? <Calendar className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
@@ -130,7 +130,7 @@ export function MemberOnboardingGuide({ orgType, orgName = 'Your Organisation', 
           ) : (
             <div />
           )}
-          <Button onClick={handleNext} className="h-9 px-6 text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white">
+          <Button onClick={handleNext} className="h-9 px-6 text-xs font-semibold bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white">
             {step === 2 ? (hi ? 'शुरू करें' : 'Start') : hi ? 'आगे →' : 'Next →'}
           </Button>
         </div>

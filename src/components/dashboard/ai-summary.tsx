@@ -33,7 +33,7 @@ export function AiSummaryWidget({ orgId }: { orgId: string }) {
   }, [generateSummary])
 
   return (
-    <div className="bg-gradient-to-br from-indigo-50/70 to-white rounded-2xl border border-indigo-100 p-6 shadow-sm relative overflow-hidden">
+    <div className="bg-white rounded-sm border border-indigo-100 p-6 shadow-sm relative overflow-hidden">
       <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
         {isAi ? <Sparkles size={120} /> : <BarChart2 size={120} />}
       </div>
@@ -45,7 +45,7 @@ export function AiSummaryWidget({ orgId }: { orgId: string }) {
             className="flex items-center gap-2 text-indigo-700 hover:text-indigo-900 transition-colors text-left group"
           >
             {isAi ? (
-              <Sparkles size={20} className="text-indigo-500 group-hover:scale-110 transition-transform" />
+              <Sparkles size={20} className="text-indigo-500 group- transition-transform" />
             ) : (
               <BarChart2 size={20} className="text-indigo-500" />
             )}

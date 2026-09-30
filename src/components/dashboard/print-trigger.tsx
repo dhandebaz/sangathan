@@ -16,7 +16,7 @@ export function PrintTrigger() {
     <div className="print:hidden mb-6 flex justify-end gap-2">
       <Button
         onClick={() => window.print()}
-        className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs gap-2 shadow-sm rounded-xl"
+        className="bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white font-bold text-xs gap-2 shadow-sm rounded-sm"
       >
         <Printer className="w-4 h-4" />
         Print / Save as PDF

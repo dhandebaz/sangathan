@@ -272,7 +272,7 @@ export function ReceivingTrackerClient({ orgId, orgName, initialTrackers }: Rece
                     className={`text-xs h-7 font-bold gap-1 shadow-2xs ${
                       isOverdue
                         ? 'bg-red-700 hover:bg-red-800 text-white animate-pulse'
-                        : 'bg-slate-900 hover:bg-slate-800 text-white'
+                        : 'bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white'
                     }`}
                   >
                     <Sparkles className="w-3 h-3" />
@@ -287,7 +287,7 @@ export function ReceivingTrackerClient({ orgId, orgName, initialTrackers }: Rece
 
       {/* Modal: Log Stamped Letter */}
       {isLogModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-white/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 rounded-lg max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2">
@@ -407,7 +407,7 @@ export function ReceivingTrackerClient({ orgId, orgName, initialTrackers }: Rece
 
       {/* Modal: Generate RTI Application */}
       {selectedForRti && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-white/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
@@ -515,7 +515,7 @@ export function ReceivingTrackerClient({ orgId, orgName, initialTrackers }: Rece
                   <Button
                     size="sm"
                     onClick={() => window.print()}
-                    className="bg-slate-900 text-white font-bold gap-1"
+                    className="bg-white text-slate-900 border border-slate-200 font-bold gap-1"
                   >
                     <Printer className="w-3.5 h-3.5" />
                     <span>Print RTI Application</span>

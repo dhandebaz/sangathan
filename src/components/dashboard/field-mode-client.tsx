@@ -151,7 +151,7 @@ export function FieldModeClient({ orgName }: FieldModeClientProps) {
           <Button
             onClick={triggerSync}
             disabled={isSyncing || queue.length === 0}
-            className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs h-9 rounded-sm"
+            className="bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white font-semibold text-xs h-9 rounded-sm"
           >
             <UploadCloud className="w-4 h-4 mr-1.5" />
             {isSyncing ? 'Syncing...' : `Sync Queue (${queue.length})`}
@@ -176,7 +176,7 @@ export function FieldModeClient({ orgName }: FieldModeClientProps) {
             <button
               type="button"
               onClick={() => setActiveTab('member')}
-              className={`flex-1 py-2 font-semibold rounded-sm transition-all flex items-center justify-center gap-1.5 ${
+              className={`flex-1 py-2 font-semibold rounded-sm transition-colors flex items-center justify-center gap-1.5 ${
                 activeTab === 'member'
                   ? 'bg-white text-slate-900 shadow-sm border border-slate-200'
                   : 'text-slate-600 hover:text-slate-900'
@@ -188,7 +188,7 @@ export function FieldModeClient({ orgName }: FieldModeClientProps) {
             <button
               type="button"
               onClick={() => setActiveTab('grievance')}
-              className={`flex-1 py-2 font-semibold rounded-sm transition-all flex items-center justify-center gap-1.5 ${
+              className={`flex-1 py-2 font-semibold rounded-sm transition-colors flex items-center justify-center gap-1.5 ${
                 activeTab === 'grievance'
                   ? 'bg-white text-slate-900 shadow-sm border border-slate-200'
                   : 'text-slate-600 hover:text-slate-900'
@@ -237,7 +237,7 @@ export function FieldModeClient({ orgName }: FieldModeClientProps) {
 
               <Button
                 type="submit"
-                className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold h-12 rounded-sm text-sm"
+                className="w-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white font-bold h-12 rounded-sm text-sm"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Save Member Record (Instant Offline Store)
@@ -272,7 +272,7 @@ export function FieldModeClient({ orgName }: FieldModeClientProps) {
 
               <Button
                 type="submit"
-                className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold h-12 rounded-sm text-sm"
+                className="w-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white font-bold h-12 rounded-sm text-sm"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Save Field Grievance (Instant Offline Store)

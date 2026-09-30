@@ -102,7 +102,7 @@ export function NeutralInfrastructureFeatures() {
           </DialogHeader>
           <div className="mt-4 space-y-4 text-sm text-[var(--text-primary)]">
             <p>{activeFeature.description}</p>
-            <div className="flex items-center gap-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-secondary)]/60 px-3 py-2">
+            <div className="flex items-center gap-3 rounded-sm border border-[var(--border-subtle)] bg-[var(--bg-secondary)]/60 px-3 py-2">
               <Lock size={18} className="text-[var(--success)]" />
               <span className="text-xs font-medium text-[var(--text-secondary)]">
                 Designed for governance, not advertising or data resale.

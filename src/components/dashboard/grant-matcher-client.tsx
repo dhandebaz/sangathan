@@ -110,7 +110,7 @@ ${activeProposal.impactKpis.map((k) => `- ${k}`).join('\n')}
           <button
             type="button"
             onClick={() => setFilterType('all')}
-            className={`px-3 py-1 rounded-sm font-semibold transition-all ${
+            className={`px-3 py-1 rounded-sm font-semibold transition-colors ${
               filterType === 'all' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
             }`}
           >
@@ -119,7 +119,7 @@ ${activeProposal.impactKpis.map((k) => `- ${k}`).join('\n')}
           <button
             type="button"
             onClick={() => setFilterType('government')}
-            className={`px-3 py-1 rounded-sm font-semibold transition-all ${
+            className={`px-3 py-1 rounded-sm font-semibold transition-colors ${
               filterType === 'government' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
             }`}
           >
@@ -128,7 +128,7 @@ ${activeProposal.impactKpis.map((k) => `- ${k}`).join('\n')}
           <button
             type="button"
             onClick={() => setFilterType('csr_corporate')}
-            className={`px-3 py-1 rounded-sm font-semibold transition-all ${
+            className={`px-3 py-1 rounded-sm font-semibold transition-colors ${
               filterType === 'csr_corporate' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
             }`}
           >
@@ -144,7 +144,7 @@ ${activeProposal.impactKpis.map((k) => `- ${k}`).join('\n')}
           return (
             <div
               key={opp.id}
-              className="bg-white border border-slate-200 p-5 rounded-sm shadow-sm space-y-4 flex flex-col justify-between hover:border-slate-300 transition-all"
+              className="bg-white border border-slate-200 p-5 rounded-sm shadow-sm space-y-4 flex flex-col justify-between hover:border-slate-300 transition-colors"
             >
               <div className="space-y-2">
                 <div className="flex items-start justify-between gap-3">
@@ -194,7 +194,7 @@ ${activeProposal.impactKpis.map((k) => `- ${k}`).join('\n')}
                 <Button
                   onClick={() => handleGenerateDraft(m)}
                   disabled={isGenerating && selectedMatch?.opportunity.id === opp.id}
-                  className="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs h-9 rounded-sm"
+                  className="flex-1 bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white font-semibold text-xs h-9 rounded-sm"
                 >
                   <Sparkles className="w-3.5 h-3.5 mr-1.5 text-amber-400" />
                   {isGenerating && selectedMatch?.opportunity.id === opp.id
@@ -290,7 +290,7 @@ ${activeProposal.impactKpis.map((k) => `- ${k}`).join('\n')}
                 </Button>
                 <Button
                   onClick={handleDownloadProposalMarkdown}
-                  className="bg-slate-900 text-white text-xs font-semibold"
+                  className="bg-white text-slate-900 border border-slate-200 text-xs font-semibold"
                 >
                   <Download className="w-3.5 h-3.5 mr-1.5" />
                   Download Proposal Markdown

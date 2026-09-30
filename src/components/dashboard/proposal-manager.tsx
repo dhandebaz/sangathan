@@ -292,7 +292,7 @@ export function ProposalManager({ proposals: initialProposals }: { proposals: Pr
           <Card 
             key={proposal.id} 
             onClick={() => handleOpenDetail(proposal)}
-            className="hover:border-brand-400 transition-all cursor-pointer group bg-card hover:shadow-sm"
+            className="hover:border-brand-400 transition-colors cursor-pointer group bg-card hover:shadow-sm"
           >
             <CardHeader className="pb-3">
               <div className="flex justify-between items-start gap-4">
@@ -334,7 +334,7 @@ export function ProposalManager({ proposals: initialProposals }: { proposals: Pr
 
       {/* Selected Proposal Detail & Deliberation Modal */}
       {selectedProposal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+        <div className="fixed inset-0 z-50 bg-white/90 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-card border border-border rounded-sm max-w-2xl w-full max-h-[90vh] flex flex-col shadow-xl animate-in zoom-in-95 duration-200">
             
             {/* Modal Header */}

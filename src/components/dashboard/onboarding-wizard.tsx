@@ -638,9 +638,9 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
             return (
               <div key={s.number} className="flex flex-col items-center text-center">
                 <div
-                  className={`w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center transition-all ${
+                  className={`w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center transition-colors ${
                     isCurrent
-                      ? 'bg-slate-900 text-white ring-2 ring-slate-900/10'
+                      ? 'bg-white text-slate-900 border border-slate-200 ring-2 ring-slate-900/10'
                       : isCompleted
                       ? 'bg-emerald-600 text-white'
                       : 'bg-slate-100 text-slate-400 border border-slate-200'
@@ -671,7 +671,7 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
           </div>
           <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden border border-slate-200">
             <div
-              className="bg-emerald-600 h-full transition-all duration-300 rounded-full"
+              className="bg-emerald-600 h-full transition-colors duration-300 rounded-full"
               style={{ width: `${(step / 6) * 100}%` }}
             />
           </div>
@@ -783,7 +783,7 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
                 {isHi ? 'संगठन का लोगो / मोहर (Logo & Official Emblem)' : 'Organisation Logo & Official Emblem'}
               </Label>
               <div className="mt-2 flex flex-col sm:flex-row items-start sm:items-center gap-3.5 p-3 bg-slate-50 border border-slate-200 rounded-sm">
-                <div className="h-14 w-14 rounded-xl bg-white border border-slate-300 p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+                <div className="h-14 w-14 rounded-sm bg-white border border-slate-300 p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
                   {orgData.logoUrl ? (
                     <Image
                       src={orgData.logoUrl}
@@ -864,7 +864,7 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
                     key={id}
                     type="button"
                     onClick={() => handleOrgTypeChange(id)}
-                    className={`p-3.5 text-left border rounded-sm transition-all ${
+                    className={`p-3.5 text-left border rounded-sm transition-colors ${
                       isSelected
                         ? 'border-slate-900 bg-slate-50 ring-1 ring-slate-900 shadow-xs'
                         : 'border-slate-200 bg-white hover:bg-slate-50/70'
@@ -907,7 +907,7 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
                           primaryRole: bp.recommendedRoles[0]?.value || orgData.primaryRole,
                         })
                       }}
-                      className={`p-3 border rounded-sm text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 ${
+                      className={`p-3 border rounded-sm text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 ${
                         isSelected
                           ? 'bg-white border-slate-900 ring-1 ring-slate-900 shadow-xs'
                           : 'bg-white/80 border-slate-200 hover:border-slate-300'
@@ -952,7 +952,7 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
                         registrationStatus: opt.type === 'unregistered' ? 'unregistered' : 'registered',
                       })
                     }}
-                    className={`w-full p-3.5 border rounded-sm text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 ${
+                    className={`w-full p-3.5 border rounded-sm text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 ${
                       isSelected
                         ? 'bg-white border-slate-900 ring-1 ring-slate-900 shadow-xs'
                         : 'bg-white border-slate-200 hover:border-slate-300'
@@ -1051,7 +1051,7 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
               <button
                 type="button"
                 onClick={() => setOrgData({ ...orgData, duesType: 'free', monthlyDues: '0' })}
-                className={`p-3.5 text-left border rounded-sm transition-all ${
+                className={`p-3.5 text-left border rounded-sm transition-colors ${
                   orgData.duesType === 'free'
                     ? 'border-slate-900 bg-slate-50 ring-1 ring-slate-900 shadow-xs'
                     : 'border-slate-200 bg-white hover:bg-slate-50/70'
@@ -1070,7 +1070,7 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
               <button
                 type="button"
                 onClick={() => setOrgData({ ...orgData, duesType: 'paid', monthlyDues: orgData.monthlyDues === '0' ? '100' : orgData.monthlyDues })}
-                className={`p-3.5 text-left border rounded-sm transition-all ${
+                className={`p-3.5 text-left border rounded-sm transition-colors ${
                   orgData.duesType === 'paid'
                     ? 'border-slate-900 bg-slate-50 ring-1 ring-slate-900 shadow-xs'
                     : 'border-slate-200 bg-white hover:bg-slate-50/70'
@@ -1126,7 +1126,7 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
               <button
                 type="button"
                 onClick={() => setOrgData({ ...orgData, enablePublicPetitions: !orgData.enablePublicPetitions })}
-                className={`p-3 w-full text-left border rounded-sm flex items-center justify-between transition-all ${
+                className={`p-3 w-full text-left border rounded-sm flex items-center justify-between transition-colors ${
                   orgData.enablePublicPetitions ? 'border-slate-900 bg-slate-50/80 shadow-xs' : 'border-slate-200 bg-white'
                 }`}
               >
@@ -1142,7 +1142,7 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
               <button
                 type="button"
                 onClick={() => setOrgData({ ...orgData, enableTransparencyLedger: !orgData.enableTransparencyLedger })}
-                className={`p-3 w-full text-left border rounded-sm flex items-center justify-between transition-all ${
+                className={`p-3 w-full text-left border rounded-sm flex items-center justify-between transition-colors ${
                   orgData.enableTransparencyLedger ? 'border-slate-900 bg-slate-50/80 shadow-xs' : 'border-slate-200 bg-white'
                 }`}
               >
@@ -1158,7 +1158,7 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
               <button
                 type="button"
                 onClick={() => setOrgData({ ...orgData, enableEmergencySos: !orgData.enableEmergencySos })}
-                className={`p-3 w-full text-left border rounded-sm flex items-center justify-between transition-all ${
+                className={`p-3 w-full text-left border rounded-sm flex items-center justify-between transition-colors ${
                   orgData.enableEmergencySos ? 'border-slate-900 bg-slate-50/80 shadow-xs' : 'border-slate-200 bg-white'
                 }`}
               >
@@ -1244,7 +1244,7 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
               type="button"
               size="sm"
               onClick={handleNext}
-              className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs h-9 px-5 rounded-sm shadow-xs"
+              className="bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white font-semibold text-xs h-9 px-5 rounded-sm shadow-xs"
             >
               <span>{t('continue')}</span>
               <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
@@ -1254,7 +1254,7 @@ export function OnboardingWizard({ lang }: OnboardingWizardProps) {
               type="button"
               disabled={loading}
               onClick={handleFinalSubmit}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs h-10 px-6 rounded-sm shadow-md transition-all flex items-center gap-1.5"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs h-10 px-6 rounded-sm shadow-md transition-colors flex items-center gap-1.5"
             >
               {loading ? (
                 <>

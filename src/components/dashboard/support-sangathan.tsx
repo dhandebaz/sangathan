@@ -143,7 +143,7 @@ export function SupportSangathan({ lang }: { lang: string; isPublic?: boolean })
                 <button
                   onClick={handleRazorpayPayment}
                   disabled={isProcessing || !amount}
-                  className="flex items-center gap-2 rounded-sm bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 rounded-sm bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white px-4 py-2 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isProcessing ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
                   {isHi ? 'भुगतान करें' : 'Pay'}

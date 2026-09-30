@@ -184,7 +184,7 @@ export function UnifiedFormsHub({
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div
           onClick={() => { setActiveTab('studio'); setStatusFilter('all'); }}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'studio' && statusFilter === 'all' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -194,7 +194,7 @@ export function UnifiedFormsHub({
 
         <div
           onClick={() => { setActiveTab('studio'); setStatusFilter('active'); }}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'studio' && statusFilter === 'active' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -204,7 +204,7 @@ export function UnifiedFormsHub({
 
         <div
           onClick={() => setActiveTab('submissions')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'submissions' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -214,7 +214,7 @@ export function UnifiedFormsHub({
 
         <div
           onClick={() => setActiveTab('offline_field')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'offline_field' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -228,7 +228,7 @@ export function UnifiedFormsHub({
 
       {/* 3. Navigation Tabs */}
       <div className="overflow-x-auto pb-1 scrollbar-none">
-        <div className="inline-flex items-center gap-1 p-1 bg-slate-100/90 border border-slate-200/80 rounded-xl shadow-2xs">
+        <div className="inline-flex items-center gap-1 p-1 bg-slate-100/90 border border-slate-200/80 rounded-sm shadow-2xs">
           {[
             { id: 'studio', label: isHindi ? 'फॉर्म एवं सर्वेक्षण सूची' : 'Forms & Survey Studio', icon: FileText },
             { id: 'submissions', label: isHindi ? 'उत्तर एवं लाइव एनालिटिक्स' : 'Submissions & Analytics', icon: BarChart3 },
@@ -242,7 +242,7 @@ export function UnifiedFormsHub({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors ${
                   isActive
                     ? 'bg-white text-slate-900 shadow-2xs border border-slate-200/90 font-extrabold'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
@@ -260,7 +260,7 @@ export function UnifiedFormsHub({
       {activeTab === 'studio' && (
         <div className="space-y-4">
           {/* Search & Filter Strip */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-card border border-border p-3 rounded-xl shadow-2xs">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-card border border-border p-3 rounded-sm shadow-2xs">
             <div className="relative w-full sm:w-80">
               <Search className="w-4 h-4 absolute left-3 top-3 text-muted-foreground" />
               <Input
@@ -298,8 +298,8 @@ export function UnifiedFormsHub({
 
           {/* Form Cards Grid */}
           {filteredForms.length === 0 ? (
-            <div className="text-center py-16 px-4 bg-card rounded-2xl border border-dashed border-border">
-              <div className="w-12 h-12 rounded-2xl bg-orange-50 dark:bg-orange-950/40 text-orange-600 flex items-center justify-center mx-auto mb-4">
+            <div className="text-center py-16 px-4 bg-card rounded-sm border border-dashed border-border">
+              <div className="w-12 h-12 rounded-sm bg-orange-50 dark:bg-orange-950/40 text-orange-600 flex items-center justify-center mx-auto mb-4">
                 <FileText className="w-6 h-6" />
               </div>
               <h3 className="text-base font-bold text-foreground mb-1">
@@ -337,7 +337,7 @@ export function UnifiedFormsHub({
                 return (
                   <div
                     key={form.id}
-                    className="bg-card border border-border rounded-xl p-5 shadow-2xs hover:border-orange-200 dark:hover:border-orange-900 transition-all flex flex-col justify-between"
+                    className="bg-card border border-border rounded-sm p-5 shadow-2xs hover:border-orange-200 dark:hover:border-orange-900 transition-colors flex flex-col justify-between"
                   >
                     <div>
                       {/* Top status bar */}
@@ -473,7 +473,7 @@ export function UnifiedFormsHub({
       {/* 5. Tab 2: Submissions & Field Analytics */}
       {activeTab === 'submissions' && (
         <div className="space-y-6">
-          <div className="p-4 bg-indigo-50/60 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-900 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-indigo-50/60 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-900 rounded-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h3 className="text-sm font-bold text-indigo-950 dark:text-indigo-200 flex items-center gap-2">
                 <BarChart3 className="w-4 h-4 text-indigo-600" />
@@ -491,7 +491,7 @@ export function UnifiedFormsHub({
             {forms.map((form) => {
               const subCount = form.form_submissions?.[0]?.count ?? 0
               return (
-                <div key={form.id} className="p-4 bg-card border border-border rounded-xl shadow-2xs flex flex-col justify-between">
+                <div key={form.id} className="p-4 bg-card border border-border rounded-sm shadow-2xs flex flex-col justify-between">
                   <div>
                     <h4 className="text-sm font-bold text-foreground mb-1">{form.title}</h4>
                     <p className="text-xs text-muted-foreground line-clamp-1 mb-3">{form.description || 'No description'}</p>
@@ -526,9 +526,9 @@ export function UnifiedFormsHub({
 
       {/* 7. Tab 4: Offline Field Mode & Door-to-Door Kiosk */}
       {activeTab === 'offline_field' && (
-        <div className="p-6 bg-card border border-border rounded-2xl shadow-2xs space-y-6 max-w-4xl">
+        <div className="p-6 bg-card border border-border rounded-sm shadow-2xs space-y-6 max-w-4xl">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-sm bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 flex items-center justify-center shrink-0">
               <Smartphone className="w-6 h-6" />
             </div>
             <div>
@@ -585,7 +585,7 @@ export function UnifiedFormsHub({
       {/* 8. Tab 5: Printable Paper Survey Sheets & Parchas */}
       {activeTab === 'paper_print' && (
         <div className="space-y-6">
-          <div className="p-4 bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h3 className="text-sm font-bold text-amber-950 dark:text-amber-200 flex items-center gap-2">
                 <Printer className="w-4 h-4 text-amber-600" />
@@ -599,7 +599,7 @@ export function UnifiedFormsHub({
             </div>
           </div>
 
-          <div className="bg-card border border-border p-6 rounded-2xl shadow-2xs space-y-6 max-w-4xl">
+          <div className="bg-card border border-border p-6 rounded-sm shadow-2xs space-y-6 max-w-4xl">
             <div className="space-y-2">
               <Label className="text-xs font-bold">Select Form to Print</Label>
               <select
@@ -619,7 +619,7 @@ export function UnifiedFormsHub({
             </div>
 
             {paperFormSelected && (
-              <div className="border border-slate-300 dark:border-slate-700 p-6 rounded-xl bg-white text-slate-900 space-y-4">
+              <div className="border border-slate-300 dark:border-slate-700 p-6 rounded-sm bg-white text-slate-900 space-y-4">
                 <div className="border-b border-slate-900 pb-3 flex items-start justify-between">
                   <div>
                     <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-600">
@@ -688,7 +688,7 @@ export function UnifiedFormsHub({
             </DialogHeader>
 
             <div className="flex flex-col items-center justify-center p-6 space-y-4">
-              <div className="p-4 bg-white rounded-xl border border-slate-200 shadow-xs">
+              <div className="p-4 bg-white rounded-sm border border-slate-200 shadow-xs">
                 {/* Responsive QR preview image using standard dynamic generator */}
                 <img
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(getPublicFormUrl(qrModalForm))}`}

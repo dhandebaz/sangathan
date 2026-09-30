@@ -114,7 +114,7 @@ export function FeaturedOn({ lang }: FeaturedOnProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
           {platforms.map((platform) => {
             const cardContent = (
-              <div className="h-full bg-white border border-slate-200 hover:border-indigo-400 p-4 rounded-lg transition-all flex flex-col justify-between group shadow-xs">
+              <div className="h-full bg-white border border-slate-200 hover:border-indigo-400 p-4 rounded-sm transition-colors flex flex-col justify-between group shadow-xs">
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2.5">
@@ -149,7 +149,7 @@ export function FeaturedOn({ lang }: FeaturedOnProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 title={`${platform.name} - ${platform.category}`}
-                className="block focus:outline-hidden focus:ring-2 focus:ring-indigo-500 rounded-lg"
+                className="block focus:outline-hidden focus:ring-2 focus:ring-indigo-500 rounded-sm"
               >
                 {cardContent}
               </a>

@@ -38,7 +38,7 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
   return (
     <div className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 sm:pt-6 w-full pointer-events-none">
       <nav 
-        className={`pointer-events-auto w-auto max-w-6xl transition-all duration-300 rounded-2xl sm:rounded-full border ${
+        className={`pointer-events-auto w-auto max-w-6xl transition-all duration-300 rounded-sm border ${
           scrolled 
             ? 'bg-white/80  backdrop-blur-lg border-slate-200/50  shadow-[0_8px_30px_rgb(0,0,0,0.06)]' 
             : 'bg-white/50  backdrop-blur-md border-transparent shadow-none'
@@ -149,61 +149,61 @@ export function Navbar({ lang, isAuthenticated }: { lang: string; isAuthenticate
         </div>
 
         {/* Mobile Dropdown */}
-        {isOpen && (
-          <div className="border-t border-slate-200/50  md:hidden bg-white/95  backdrop-blur-xl rounded-b-2xl">
+{isOpen && (
+            <div className="border-t border-slate-200/50  md:hidden bg-white/95  backdrop-blur-xl rounded-b-sm">
             <div className="flex flex-col p-4 space-y-2">
-               {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setIsOpen(false)}
-                    className={`flex items-center rounded-xl px-4 py-3 text-sm font-bold transition-colors ${
-                      pathname === link.href
-                        ? 'bg-slate-100  text-slate-900 '
-                        : 'text-slate-600  hover:bg-slate-50 '
-                    }`}
-                    prefetch={true}
-                  >
-                    {link.label}
-                  </Link>
-               ))}
+{navLinks.map((link) => (
+                   <Link
+                     key={link.href}
+                     href={link.href}
+                     onClick={() => setIsOpen(false)}
+                     className={`flex items-center rounded-sm px-4 py-3 text-sm font-bold transition-colors ${
+                       pathname === link.href
+                         ? 'bg-slate-100  text-slate-900 '
+                         : 'text-slate-600  hover:bg-slate-50 '
+                     }`}
+                     prefetch={true}
+                   >
+                     {link.label}
+                   </Link>
+                ))}
                
                <div className="pt-4 mt-2 border-t border-slate-200/50 ">
-                  <div className="flex gap-2 p-1 bg-slate-100/50  rounded-xl">
-                     <Link href={getPathForLang('en')} className={`flex-1 text-center py-2 rounded-lg text-sm font-bold transition-colors ${lang === 'en' ? 'bg-white  text-slate-900  shadow-sm' : 'text-slate-500'}`}>English</Link>
-                     <Link href={getPathForLang('hi')} className={`flex-1 text-center py-2 rounded-lg text-sm font-bold transition-colors ${lang === 'hi' ? 'bg-white  text-slate-900  shadow-sm' : 'text-slate-500'}`}>हिंदी</Link>
-                  </div>
+<div className="flex items-center gap-2 p-1 bg-slate-100/50  rounded-sm">
+                      <Link href={getPathForLang('en')} className={`flex-1 text-center py-2 rounded-sm text-sm font-bold transition-colors ${lang === 'en' ? 'bg-white  text-slate-900  shadow-sm' : 'text-slate-500'}`}>English</Link>
+                      <Link href={getPathForLang('hi')} className={`flex-1 text-center py-2 rounded-sm text-sm font-bold transition-colors ${lang === 'hi' ? 'bg-white  text-slate-900  shadow-sm' : 'text-slate-500'}`}>हिंदी</Link>
+                   </div>
                </div>
                
-               {isAuthenticated ? (
-                  <Link
-                    href={`/${lang}/dashboard`}
-                    onClick={() => setIsOpen(false)}
-                    className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200  bg-white  px-4 py-3 font-bold text-slate-900  shadow-sm"
-                    prefetch={true}
-                   >
-                    <LayoutDashboard size={18} />
-                    {isHindi ? 'डैशबोर्ड पर जाएं' : 'Go to Dashboard'}
-                  </Link>
-               ) : (
-                  <div className="grid grid-cols-2 gap-3 mt-4">
-                       <Link
-                          href={`/${lang}/login`}
-                          onClick={() => setIsOpen(false)}
-                          className="flex items-center justify-center rounded-xl border border-slate-200  py-3 font-bold text-slate-900 "
-                          prefetch={true}
-                       >
-                          {isHindi ? 'लॉग इन' : 'Login'}
-                       </Link>
-                       <Link
-                          href={`/${lang}/login?tab=signup`}
-                          onClick={() => setIsOpen(false)}
-                          className="flex items-center justify-center rounded-xl bg-slate-900  py-3 font-bold text-white  shadow-md"
-                          prefetch={true}
-                       >
-                          {isHindi ? 'साइन अप' : 'Get Started'}
-                       </Link>
-                  </div>
+{isAuthenticated ? (
+                   <Link
+                     href={`/${lang}/dashboard`}
+                     onClick={() => setIsOpen(false)}
+                     className="mt-4 flex w-full items-center justify-center gap-2 rounded-sm border border-slate-200  bg-white  px-4 py-3 font-bold text-slate-900  shadow-sm"
+                     prefetch={true}
+                    >
+                     <LayoutDashboard size={18} />
+                     {isHindi ? 'डैशबोर्ड पर जाएं' : 'Go to Dashboard'}
+                   </Link>
+                ) : (
+<div className="grid grid-cols-2 gap-3 mt-4">
+                        <Link
+                           href={`/${lang}/login`}
+                           onClick={() => setIsOpen(false)}
+                           className="flex items-center justify-center rounded-sm border border-slate-200  py-3 font-bold text-slate-900 "
+                           prefetch={true}
+                        >
+                           {isHindi ? 'लॉग इन' : 'Login'}
+                        </Link>
+                        <Link
+                           href={`/${lang}/login?tab=signup`}
+                           onClick={() => setIsOpen(false)}
+                           className="flex items-center justify-center rounded-sm bg-slate-900  py-3 font-bold text-white  shadow-md"
+                           prefetch={true}
+                        >
+                           {isHindi ? 'साइन अप' : 'Get Started'}
+                        </Link>
+                   </div>
                )}
             </div>
           </div>

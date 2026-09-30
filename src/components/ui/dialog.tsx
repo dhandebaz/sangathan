@@ -41,11 +41,11 @@ const DialogContent = React.forwardRef<
         "fixed z-50 gap-4 overflow-y-auto bg-white text-slate-900 shadow-xl",
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
         /* Bottom sheet on mobile */
-        "bottom-0 left-0 right-0 max-h-[85dvh] rounded-t-2xl border border-b-0 border-slate-200 p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]",
+        "bottom-0 left-0 right-0 max-h-[85dvh] rounded-t-sm border border-b-0 border-slate-200 p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]",
         "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
         "data-[state=closed]:duration-300 data-[state=open]:duration-400",
         /* Center modal on desktop */
-        "sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:max-h-[calc(100dvh-2rem)] sm:w-[calc(100%-2rem)] sm:max-w-lg sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-xl sm:border sm:p-6 sm:pb-6",
+        "sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:max-h-[calc(100dvh-2rem)] sm:w-[calc(100%-2rem)] sm:max-w-lg sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-sm sm:border sm:p-6 sm:pb-6",
         "sm:data-[state=closed]:slide-out-to-bottom-0 sm:data-[state=open]:slide-in-from-bottom-0 sm:data-[state=closed]:zoom-out-95 sm:data-[state=open]:zoom-in-95",
         className
       )}

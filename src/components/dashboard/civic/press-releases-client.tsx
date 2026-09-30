@@ -156,7 +156,7 @@ export function PressReleasesClient({ orgId, orgName, initialReleases }: PressRe
             setAiDraft(null)
             setIsCreateModalOpen(true)
           }}
-          className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs gap-2 px-4 h-9 shadow-xs"
+          className="bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white font-bold text-xs gap-2 px-4 h-9 shadow-xs"
         >
           <Plus className="w-4 h-4" />
           <span>New Press Release (प्रेस विज्ञप्ति)</span>
@@ -238,7 +238,7 @@ export function PressReleasesClient({ orgId, orgName, initialReleases }: PressRe
 
       {/* Modal: Create Press Release */}
       {isCreateModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-white/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2">
@@ -349,7 +349,7 @@ export function PressReleasesClient({ orgId, orgName, initialReleases }: PressRe
             ) : (
               /* Review & Publish AI Draft */
               <div className="space-y-4 text-xs text-slate-800">
-                <div className="p-4 bg-slate-900 text-white rounded font-mono space-y-1">
+                <div className="p-4 bg-white text-slate-900 border border-slate-200 rounded font-mono space-y-1">
                   <div className="flex justify-between text-rose-400 font-bold text-[10px]">
                     <span>{orgName.toUpperCase()} • MEDIA RELEASE</span>
                     <span>{embargoType === 'immediate' ? 'FOR IMMEDIATE RELEASE' : 'EMBARGOED'}</span>
@@ -403,7 +403,7 @@ export function PressReleasesClient({ orgId, orgName, initialReleases }: PressRe
                       size="sm"
                       disabled={isSaving}
                       onClick={() => handleSaveRelease(true)}
-                      className="bg-slate-900 hover:bg-slate-800 text-white font-bold"
+                      className="bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white font-bold"
                     >
                       Publish Release
                     </Button>
@@ -417,7 +417,7 @@ export function PressReleasesClient({ orgId, orgName, initialReleases }: PressRe
 
       {/* Modal: View Full Statement */}
       {selectedRelease && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-white/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <span className="font-mono text-xs font-bold text-indigo-700">{selectedRelease.location_header}</span>
@@ -449,7 +449,7 @@ export function PressReleasesClient({ orgId, orgName, initialReleases }: PressRe
             </div>
 
             <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
-              <Button size="sm" onClick={() => window.print()} className="bg-slate-900 text-white font-bold gap-1">
+              <Button size="sm" onClick={() => window.print()} className="bg-white text-slate-900 border border-slate-200 font-bold gap-1">
                 <Printer className="w-3.5 h-3.5" />
                 <span>Print Official Release</span>
               </Button>

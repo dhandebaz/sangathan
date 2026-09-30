@@ -224,7 +224,7 @@ export function FieldAuditsClient({ orgId, orgName, initialAudits }: FieldAudits
             <button
               key={tab.id}
               onClick={() => setFilterType(tab.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
                 active
                   ? 'bg-rose-700 text-white shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -374,7 +374,7 @@ export function FieldAuditsClient({ orgId, orgName, initialAudits }: FieldAudits
                     <Button
                       size="sm"
                       onClick={() => handleGenerateNotice(audit)}
-                      className="text-xs h-7 font-bold gap-1 bg-slate-900 hover:bg-slate-800 text-white shadow-2xs"
+                      className="text-xs h-7 font-bold gap-1 bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white shadow-2xs"
                     >
                       <Printer className="w-3.5 h-3.5 text-rose-400" />
                       <span>Authority Letter Draft</span>
@@ -389,7 +389,7 @@ export function FieldAuditsClient({ orgId, orgName, initialAudits }: FieldAudits
 
       {/* Modal: New Spot Audit */}
       {isNewAuditModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-white/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 rounded-lg max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2">
@@ -577,7 +577,7 @@ export function FieldAuditsClient({ orgId, orgName, initialAudits }: FieldAudits
 
       {/* Modal: Representation Letter Draft View */}
       {selectedAuditForNotice && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-white/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
@@ -659,7 +659,7 @@ export function FieldAuditsClient({ orgId, orgName, initialAudits }: FieldAudits
                   <Button
                     size="sm"
                     onClick={() => window.print()}
-                    className="bg-slate-900 hover:bg-slate-800 text-white font-bold gap-1"
+                    className="bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white font-bold gap-1"
                   >
                     <Printer className="w-3.5 h-3.5" />
                     <span>Print Official Letter</span>
@@ -673,7 +673,7 @@ export function FieldAuditsClient({ orgId, orgName, initialAudits }: FieldAudits
 
       {/* Modal: Public Health Bulletin Generator */}
       {selectedAuditForBulletin && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-white/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 rounded-lg max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
@@ -702,7 +702,7 @@ export function FieldAuditsClient({ orgId, orgName, initialAudits }: FieldAudits
             ) : generatedBulletin ? (
               <div className="space-y-4 text-xs">
                 {/* Visual Card Preview */}
-                <div className="p-4 bg-slate-900 text-white rounded-lg space-y-2.5 shadow-md">
+                <div className="p-4 bg-white text-slate-900 border border-slate-200 rounded-lg space-y-2.5 shadow-md">
                   <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                     <span className="font-mono text-[10px] uppercase text-rose-400 font-bold">
                       {orgName} • FIELD AUDIT

@@ -154,7 +154,7 @@ export default function DuesClient({
             No dues found. Generate dues to start collecting.
           </Card>
         ) : (
-          <div className="bg-white rounded-xl border overflow-hidden">
+          <div className="bg-white rounded-sm border overflow-hidden">
             <table className="w-full text-sm text-left text-slate-600">
               <thead className="bg-slate-50 text-slate-900 border-b">
                 <tr>
@@ -227,7 +227,7 @@ export default function DuesClient({
             </Card>
           ))}
           {plans.length === 0 && (
-            <div className="col-span-3 text-center py-8 text-slate-500 border-2 border-dashed rounded-xl">
+            <div className="col-span-3 text-center py-8 text-slate-500 border-2 border-dashed rounded-sm">
               No billing plans configured.
             </div>
           )}

@@ -184,7 +184,7 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
         <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
-            className="relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-2xs active:scale-95"
+            className="relative inline-flex h-10 w-10 items-center justify-center rounded-sm border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-2xs "
             aria-label="Notifications"
           >
             <Bell className="h-4 w-4" />
@@ -199,7 +199,7 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
             <button
               type="button"
               className={cn(
-                'flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 hover:bg-slate-50 transition-all shadow-2xs active:scale-95',
+                'flex items-center gap-2 rounded-sm border border-slate-200 bg-white px-3 py-1.5 hover:bg-slate-50 transition-colors shadow-2xs ',
                 'h-10'
               )}
               aria-haspopup="menu"
@@ -230,10 +230,10 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
               <div
                 role="menu"
                 aria-label="Profile menu"
-                className="absolute right-0 mt-2 w-60 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150"
+                className="absolute right-0 mt-2 w-60 overflow-hidden rounded-sm border border-slate-200 bg-white shadow-xl py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150"
               >
                 <div className="px-3.5 py-3 border-b border-slate-100 flex items-center gap-3">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-indigo-50 text-indigo-700 font-bold text-sm shrink-0 border border-indigo-100">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-sm bg-indigo-50 text-indigo-700 font-bold text-sm shrink-0 border border-indigo-100">
                     {initials}
                   </div>
                   <div className="flex flex-col min-w-0">
@@ -244,7 +244,7 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
                 <div className="p-1.5 space-y-0.5">
                   <button
                     type="button"
-                    className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors text-left"
+                    className="w-full flex items-center gap-2.5 rounded-sm px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors text-left"
                     role="menuitem"
                     onClick={() => {
                       router.push(`/${lang}/dashboard/settings`)
@@ -256,7 +256,7 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
                   </button>
                   <button
                     type="button"
-                    className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors text-left"
+                    className="w-full flex items-center gap-2.5 rounded-sm px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors text-left"
                     role="menuitem"
                     onClick={() => {
                       router.push(`/${lang}/dashboard/billing`)
@@ -270,7 +270,7 @@ export function DashboardTopBar(props: DashboardTopBarProps) {
                 <div className="border-t border-slate-100 p-1.5">
                   <button
                     type="button"
-                    className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 transition-colors text-left"
+                    className="w-full flex items-center gap-2.5 rounded-sm px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 transition-colors text-left"
                     role="menuitem"
                     onClick={handleSignOut}
                     disabled={isSigningOut}

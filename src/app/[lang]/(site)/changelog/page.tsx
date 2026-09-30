@@ -3278,8 +3278,8 @@ export default async function ChangelogPage({ params }: { params: Promise<{ lang
                     {isHindi ? entry.descHi : entry.descEn}
                   </p>
                   
-                  {entry.features && entry.features.length > 0 && (
-                    <div className="mt-6 bg-slate-50  rounded-xl p-6 border border-slate-100 ">
+{entry.features && entry.features.length > 0 && (
+                      <div className="mt-6 bg-slate-50 rounded-sm p-6 border border-slate-100 ">
                       <ul className="space-y-4 m-0 p-0 list-none">
                         {entry.features.map((feature, fIndex) => (
                           <li key={fIndex} className="flex items-start m-0 p-0">

@@ -276,7 +276,7 @@ export function AdminDashboard({
   return (
     <div className="space-y-6 pb-24 md:pb-8">
       {/* Welcome — single language, no jargon */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 md:p-6 shadow-xs space-y-4">
+      <div className="rounded-sm border border-slate-200 bg-white p-5 md:p-6 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -296,7 +296,7 @@ export function AdminDashboard({
             <Button
               asChild
               size="sm"
-              className="h-9 px-3.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs transition-all active:scale-95 shadow-xs"
+              className="h-9 px-3.5 rounded-sm bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs transition-colors  shadow-xs"
             >
               <Link href={`/${lang}/dashboard/people`}>
                 <Plus className="w-3.5 h-3.5 mr-1" />
@@ -307,7 +307,7 @@ export function AdminDashboard({
               asChild
               variant="outline"
               size="sm"
-              className="h-9 px-3.5 rounded-xl border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all active:scale-95 shadow-2xs"
+              className="h-9 px-3.5 rounded-sm border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors  shadow-2xs"
             >
               <Link href={`/${lang}/dashboard/calendar`}>
                 <Megaphone className="w-3.5 h-3.5 mr-1 text-indigo-600" />
@@ -320,10 +320,10 @@ export function AdminDashboard({
 
       {/* Get started — only for new workspaces, max 3 steps */}
       {(stats.members <= 2 || upcomingEvents.length === 0) && (
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-3">
+        <div className="rounded-sm border border-slate-200 bg-white p-5 shadow-xs space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xs">
+              <div className="w-8 h-8 rounded-sm bg-white text-slate-900 border border-slate-200 flex items-center justify-center shadow-xs">
                 <Sparkles className="w-4 h-4" />
               </div>
               <div>
@@ -350,7 +350,7 @@ export function AdminDashboard({
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
             {/* Step A: WhatsApp Member Invite */}
-            <div className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-2">
+            <div className="p-3.5 rounded-sm border border-slate-200 bg-white space-y-2">
               <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
                 <Share2 className="w-4 h-4 text-emerald-600" />
                 <span>{isHindi ? '1. सदस्य जोड़ें' : '1. Add members'}</span>
@@ -382,7 +382,7 @@ export function AdminDashboard({
             </div>
 
             {/* Step B: Schedule First Assembly / Event */}
-            <div className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-2">
+            <div className="p-3.5 rounded-sm border border-slate-200 bg-white space-y-2">
               <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
                 <Calendar className="w-4 h-4 text-indigo-600" />
                 <span>{isHindi ? '2. पहली बैठक बुलाएं' : '2. Call first meeting'}</span>
@@ -403,7 +403,7 @@ export function AdminDashboard({
             </div>
 
             {/* Step C: First Document / Parcha */}
-            <div className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-2">
+            <div className="p-3.5 rounded-sm border border-slate-200 bg-white space-y-2">
               <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
                 <Printer className="w-4 h-4 text-rose-600" />
                 <span>{isHindi ? '3. पहला काम करें' : '3. Do first work'}</span>
@@ -500,9 +500,9 @@ export function AdminDashboard({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           <Link
             href={`/${lang}/dashboard/inbox`}
-            className="flex items-center gap-3.5 p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 active:scale-[0.98] transition-all shadow-2xs group"
+            className="flex items-center gap-3.5 p-4 rounded-sm border border-slate-200 bg-white hover:bg-slate-50  transition-colors shadow-2xs group"
           >
-            <div className="w-11 h-11 rounded-xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-700 shrink-0">
+            <div className="w-11 h-11 rounded-sm bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-700 shrink-0">
               <MessageSquare className="w-5 h-5" />
             </div>
             <div className="flex-1 min-w-0">
@@ -518,9 +518,9 @@ export function AdminDashboard({
 
           <Link
             href={`/${lang}/dashboard/documents`}
-            className="flex items-center gap-3.5 p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 active:scale-[0.98] transition-all shadow-2xs group"
+            className="flex items-center gap-3.5 p-4 rounded-sm border border-slate-200 bg-white hover:bg-slate-50  transition-colors shadow-2xs group"
           >
-            <div className="w-11 h-11 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 shrink-0">
+            <div className="w-11 h-11 rounded-sm bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 shrink-0">
               <FolderLock className="w-5 h-5" />
             </div>
             <div className="flex-1 min-w-0">
@@ -536,9 +536,9 @@ export function AdminDashboard({
 
           <Link
             href={`/${lang}/dashboard/governance`}
-            className="flex items-center gap-3.5 p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 active:scale-[0.98] transition-all shadow-2xs group"
+            className="flex items-center gap-3.5 p-4 rounded-sm border border-slate-200 bg-white hover:bg-slate-50  transition-colors shadow-2xs group"
           >
-            <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 shrink-0">
+            <div className="w-11 h-11 rounded-sm bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 shrink-0">
               <Landmark className="w-5 h-5" />
             </div>
             <div className="flex-1 min-w-0">
@@ -563,7 +563,7 @@ export function AdminDashboard({
               <p className="text-xs text-slate-500 mt-1">
                 {isHindi ? 'नए आवेदन' : 'New requests'}
               </p>
-              <Button asChild variant="outline" size="sm" className="mt-2 h-8 px-4 rounded-xl text-xs font-bold">
+              <Button asChild variant="outline" size="sm" className="mt-2 h-8 px-4 rounded-sm text-xs font-bold">
                 <Link href={`/${lang}/dashboard/membership-requests`}>
                   {isHindi ? 'देखें' : 'Review'}
                 </Link>
@@ -576,7 +576,7 @@ export function AdminDashboard({
               <p className="text-xs text-slate-500 mt-1">
                 {isHindi ? 'अपीलें' : 'Appeals'}
               </p>
-              <Button asChild variant="outline" size="sm" className="mt-2 h-8 px-4 rounded-xl text-xs font-bold">
+              <Button asChild variant="outline" size="sm" className="mt-2 h-8 px-4 rounded-sm text-xs font-bold">
                 <Link href={`/${lang}/dashboard/appeals`}>
                   {isHindi ? 'देखें' : 'Manage'}
                 </Link>

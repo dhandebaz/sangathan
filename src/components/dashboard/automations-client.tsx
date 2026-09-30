@@ -121,7 +121,7 @@ export function AutomationsClient({ initialAutomations, orgName }: AutomationsCl
 
         <Button
           onClick={() => setIsOpen(true)}
-          className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs h-9 rounded-sm"
+          className="bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white font-semibold text-xs h-9 rounded-sm"
         >
           <Plus className="w-4 h-4 mr-1.5" />
           Create Custom Rule
@@ -332,7 +332,7 @@ export function AutomationsClient({ initialAutomations, orgName }: AutomationsCl
                 type="submit"
                 disabled={isSubmitting}
                 size="sm"
-                className="bg-slate-900 text-white font-semibold text-xs"
+                className="bg-white text-slate-900 border border-slate-200 font-semibold text-xs"
               >
                 {isSubmitting ? 'Creating...' : 'Activate Rule'}
               </Button>

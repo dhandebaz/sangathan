@@ -77,7 +77,7 @@ export function ParchaClient({ orgName, orgSlug }: ParchaClientProps) {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <div className="flex items-center gap-2.5">
-            <span className="p-2 bg-slate-900 text-white rounded-lg">
+            <span className="p-2 bg-white text-slate-900 border border-slate-200 rounded-lg">
               <Printer className="w-5 h-5" />
             </span>
             <h1 className="text-2xl font-black tracking-tight text-slate-900">
@@ -185,7 +185,7 @@ export function ParchaClient({ orgName, orgSlug }: ParchaClientProps) {
                   <button
                     onClick={() => setActiveTab('parcha')}
                     className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors ${
-                      activeTab === 'parcha' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      activeTab === 'parcha' ? 'bg-white text-slate-900 border border-slate-200' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                     }`}
                   >
                     1. Movement Parcha (पर्चा)
@@ -193,7 +193,7 @@ export function ParchaClient({ orgName, orgSlug }: ParchaClientProps) {
                   <button
                     onClick={() => setActiveTab('signature_sheet')}
                     className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors ${
-                      activeTab === 'signature_sheet' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      activeTab === 'signature_sheet' ? 'bg-white text-slate-900 border border-slate-200' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                     }`}
                   >
                     2. Signature Sheet (हस्ताक्षर पत्र)
@@ -201,7 +201,7 @@ export function ParchaClient({ orgName, orgSlug }: ParchaClientProps) {
                   <button
                     onClick={() => setActiveTab('whatsapp')}
                     className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors ${
-                      activeTab === 'whatsapp' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      activeTab === 'whatsapp' ? 'bg-white text-slate-900 border border-slate-200' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                     }`}
                   >
                     3. WhatsApp Forward
@@ -212,7 +212,7 @@ export function ParchaClient({ orgName, orgSlug }: ParchaClientProps) {
                   <Button
                     size="sm"
                     onClick={() => window.print()}
-                    className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs gap-1.5 h-8"
+                    className="bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white font-bold text-xs gap-1.5 h-8"
                   >
                     <Printer className="w-3.5 h-3.5" />
                     <span>Print (A4 Sheet)</span>
@@ -267,7 +267,7 @@ export function ParchaClient({ orgName, orgSlug }: ParchaClientProps) {
                     <span className="text-sm font-black uppercase block">
                       {parchaData.callToActionHi}
                     </span>
-                    <div className="text-xs font-bold mt-1 bg-black text-white py-1 px-2">
+                    <div className="text-xs font-bold mt-1 bg-white text-slate-900 border border-slate-200 py-1 px-2">
                       📍 {rallyOrMeetingInfo}
                     </div>
                   </div>

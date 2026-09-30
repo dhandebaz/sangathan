@@ -25,7 +25,7 @@ export function PlanUsageBanner({ usage, lang }: PlanUsageBannerProps) {
       : 'bg-indigo-600'
 
   return (
-    <div className="mb-6 rounded-2xl border border-slate-200 bg-slate-50/80 p-5 shadow-sm transition-all hover:border-slate-300">
+    <div className="mb-6 rounded-sm border border-slate-200 bg-slate-50/80 p-5 shadow-sm transition-colors hover:border-slate-300">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1.5 flex-1">
           <div className="flex items-center gap-2">
@@ -45,7 +45,7 @@ export function PlanUsageBanner({ usage, lang }: PlanUsageBannerProps) {
           {/* Progress Bar */}
           <div className="w-full max-w-md bg-slate-200 rounded-full h-2 overflow-hidden mt-2">
             <div
-              className={`h-full transition-all duration-500 rounded-full ${barColor}`}
+              className={`h-full transition-colors duration-500 rounded-full ${barColor}`}
               style={{ width: `${Math.min(100, usage.memberUsagePercentage)}%` }}
             />
           </div>
@@ -78,7 +78,7 @@ export function PlanUsageBanner({ usage, lang }: PlanUsageBannerProps) {
         <div className="shrink-0 flex items-center gap-3">
           <Link
             href={`/${lang}/dashboard/billing`}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-sm transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-sm text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-sm transition-colors"
           >
             <span>{isFull ? (isHindi ? 'अनलॉक करने के लिए अपग्रेड करें' : 'Upgrade to Unlock') : (isHindi ? 'बिलिंग और योजनाएं देखें' : 'View Billing & Plans')}</span>
             <ArrowUpRight className="w-3.5 h-3.5" />

@@ -221,7 +221,7 @@ export function BqfVerificationClient({
                         key={item.id}
                         type="button"
                         onClick={() => setIdType(item.id as typeof idType)}
-                        className={`p-3 text-xs font-semibold rounded border text-center transition-all ${
+                        className={`p-3 text-xs font-semibold rounded border text-center transition-colors ${
                           idType === item.id
                             ? 'border-purple-600 bg-purple-50 text-purple-900'
                             : 'border-slate-200 text-slate-600 hover:bg-slate-50'

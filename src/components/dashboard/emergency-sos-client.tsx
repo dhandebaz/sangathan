@@ -311,7 +311,7 @@ export function EmergencySosClient({ initialAlerts, orgName }: EmergencySosClien
                     <Button
                       size="sm"
                       onClick={() => setDispatchAlertId(alert.id)}
-                      className="bg-slate-900 hover:bg-slate-800 text-white text-xs h-8 rounded-sm font-semibold"
+                      className="bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white text-xs h-8 rounded-sm font-semibold"
                     >
                       <UserCheck className="w-3.5 h-3.5 mr-1" />
                       Dispatch Advocate

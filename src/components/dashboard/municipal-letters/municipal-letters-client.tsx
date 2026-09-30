@@ -197,7 +197,7 @@ export default function MunicipalLettersClient({
                 <button
                   key={t.id}
                   onClick={() => handleSelectTemplate(t)}
-                  className="text-left bg-purple-50/40 border border-purple-200 rounded-sm p-4 hover:border-purple-400 transition-all group"
+                  className="text-left bg-purple-50/40 border border-purple-200 rounded-sm p-4 hover:border-purple-400 transition-colors group"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0 flex-1">
@@ -231,7 +231,7 @@ export default function MunicipalLettersClient({
                   <button
                     key={template.id}
                     onClick={() => handleSelectTemplate(template)}
-                    className="text-left bg-white border border-slate-200 rounded-sm p-4 hover:border-sky-300 hover:bg-sky-50/30 transition-all group"
+                    className="text-left bg-white border border-slate-200 rounded-sm p-4 hover:border-sky-300 hover:bg-sky-50/30 transition-colors group"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0 flex-1">
@@ -276,7 +276,7 @@ export default function MunicipalLettersClient({
           <Button variant="outline" size="sm" onClick={handleCopyText} className="gap-1.5">
             <Copy className="w-3.5 h-3.5" /> Copy Text
           </Button>
-          <Button size="sm" onClick={handlePrint} className="gap-1.5 bg-slate-900 hover:bg-slate-800 text-white">
+          <Button size="sm" onClick={handlePrint} className="gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white">
             <Printer className="w-3.5 h-3.5" /> Print / Save PDF
           </Button>
         </div>

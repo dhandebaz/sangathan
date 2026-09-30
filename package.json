@@ -14,7 +14,9 @@
     "secrets:scan": "node scripts/scan-secrets.mjs",
     "setup-hooks": "git config core.hooksPath .githooks",
     "precommit": "npm run secrets:scan && npm run lint",
-    "ci": "npm run lint && npm run build && npm run audit"
+    "ci": "npm run lint && npm run build && npm run audit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.71",
@@ -72,6 +74,17 @@
     "supabase": "^2.84.4",
     "tailwindcss": "^4.2.2",
     "typescript": "^5",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.9",
+    "storybook": "^10.6.1",
+    "@storybook/nextjs-vite": "^10.6.1",
+    "@chromatic-com/storybook": "latest",
+    "@storybook/addon-vitest": "^10.6.1",
+    "@storybook/addon-a11y": "^10.6.1",
+    "@storybook/addon-docs": "^10.6.1",
+    "@storybook/addon-mcp": "^10.6.1",
+    "vite": "latest",
+    "eslint-plugin-storybook": "^10.6.1",
+    "@vitest/browser-playwright": "4.1.9",
+    "playwright": "latest"
   }
 }

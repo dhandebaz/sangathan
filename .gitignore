@@ -67,3 +67,6 @@ CLAUDE.md
 .brainsync/
 .kilo/
 .claude/
+
+*storybook.log
+storybook-static

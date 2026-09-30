@@ -430,7 +430,7 @@ export function CommunicationsClient({
                         <div
                           className={`max-w-md p-3 rounded-sm text-xs shadow-2xs ${
                             isOutgoing
-                              ? 'bg-slate-900 text-white rounded-br-none'
+                              ? 'bg-white text-slate-900 border border-slate-200 rounded-br-none'
                               : 'bg-white border border-slate-200 text-slate-900 rounded-bl-none'
                           }`}
                         >
@@ -480,7 +480,7 @@ export function CommunicationsClient({
                 <Button
                   type="submit"
                   disabled={sendingReply}
-                  className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs h-10 px-4 rounded-sm shrink-0"
+                  className="bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white font-semibold text-xs h-10 px-4 rounded-sm shrink-0"
                 >
                   <Send className="w-3.5 h-3.5 mr-1" />
                   {sendingReply ? 'Sending...' : 'Send Direct Reply'}

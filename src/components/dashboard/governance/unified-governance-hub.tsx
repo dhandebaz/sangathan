@@ -162,7 +162,7 @@ export function UnifiedGovernanceHub({
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
         <div
           onClick={() => setActiveTab('proposals')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'proposals' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -172,7 +172,7 @@ export function UnifiedGovernanceHub({
 
         <div
           onClick={() => setActiveTab('voting')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'voting' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -182,7 +182,7 @@ export function UnifiedGovernanceHub({
 
         <div
           onClick={() => setActiveTab('ledger')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'ledger' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -192,7 +192,7 @@ export function UnifiedGovernanceHub({
 
         <div
           onClick={() => setActiveTab('chanda')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'chanda' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -202,7 +202,7 @@ export function UnifiedGovernanceHub({
 
         <div
           onClick={() => setActiveTab('grants')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'grants' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -212,7 +212,7 @@ export function UnifiedGovernanceHub({
 
         <div
           onClick={() => setActiveTab('campaigns')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'campaigns' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -222,7 +222,7 @@ export function UnifiedGovernanceHub({
 
         <div
           onClick={() => setActiveTab('tasks')}
-          className={`p-3.5 bg-white border rounded-xl shadow-2xs cursor-pointer transition-all ${
+          className={`p-3.5 bg-white border rounded-sm shadow-2xs cursor-pointer transition-colors ${
             activeTab === 'tasks' ? 'border-orange-500 ring-1 ring-orange-500' : 'border-slate-200 hover:border-slate-300'
           }`}
         >
@@ -233,7 +233,7 @@ export function UnifiedGovernanceHub({
 
       {/* 3. Navigation Tabs (Segmented Control) */}
       <div className="overflow-x-auto pb-1 scrollbar-none">
-        <div className="inline-flex items-center gap-1 p-1 bg-slate-100/90 border border-slate-200/80 rounded-xl shadow-2xs">
+        <div className="inline-flex items-center gap-1 p-1 bg-slate-100/90 border border-slate-200/80 rounded-sm shadow-2xs">
           {tabsList.map((tab) => {
             const Icon = tab.icon
             const isActive = activeTab === tab.id
@@ -241,7 +241,7 @@ export function UnifiedGovernanceHub({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors ${
                   isActive
                     ? 'bg-white text-slate-900 shadow-2xs border border-slate-200/90 font-extrabold'
                     : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
@@ -265,7 +265,7 @@ export function UnifiedGovernanceHub({
       {/* 5. Tab 2: Voting & Ballots */}
       {activeTab === 'voting' && (
         <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white border border-slate-200 p-3 rounded-xl shadow-2xs">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white border border-slate-200 p-3 rounded-sm shadow-2xs">
             <div className="relative w-full sm:w-80">
               <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
               <Input
@@ -286,8 +286,8 @@ export function UnifiedGovernanceHub({
           </div>
 
           {polls.length === 0 ? (
-            <div className="text-center py-16 px-4 bg-white rounded-2xl border border-dashed border-slate-200">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-4">
+            <div className="text-center py-16 px-4 bg-white rounded-sm border border-dashed border-slate-200">
+              <div className="w-12 h-12 rounded-sm bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-4">
                 <Vote className="w-6 h-6" />
               </div>
               <h3 className="text-base font-bold text-slate-900 mb-1">
@@ -308,7 +308,7 @@ export function UnifiedGovernanceHub({
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {polls.map((poll) => (
-                <div key={poll.id} className="p-5 bg-white border border-slate-200 rounded-xl shadow-2xs space-y-3">
+                <div key={poll.id} className="p-5 bg-white border border-slate-200 rounded-sm shadow-2xs space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-800">
                       {poll.status || 'Active'}
@@ -336,7 +336,7 @@ export function UnifiedGovernanceHub({
       {activeTab === 'ledger' && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 bg-emerald-50/50 border border-emerald-200 rounded-xl shadow-2xs">
+            <div className="p-4 bg-emerald-50/50 border border-emerald-200 rounded-sm shadow-2xs">
               <div className="flex items-center justify-between text-xs font-extrabold text-emerald-800 uppercase tracking-wide">
                 <span>Total Inflow (Income)</span>
                 <ArrowDownLeft className="w-4 h-4 text-emerald-600" />
@@ -345,7 +345,7 @@ export function UnifiedGovernanceHub({
               <p className="text-[11px] text-emerald-700 mt-1">Verified chanda, dues & grants</p>
             </div>
 
-            <div className="p-4 bg-rose-50/50 border border-rose-200 rounded-xl shadow-2xs">
+            <div className="p-4 bg-rose-50/50 border border-rose-200 rounded-sm shadow-2xs">
               <div className="flex items-center justify-between text-xs font-extrabold text-rose-800 uppercase tracking-wide">
                 <span>Total Outflow (Expenses)</span>
                 <ArrowUpRight className="w-4 h-4 text-rose-600" />
@@ -354,7 +354,7 @@ export function UnifiedGovernanceHub({
               <p className="text-[11px] text-rose-700 mt-1">Ground actions, parcha print & aid</p>
             </div>
 
-            <div className="p-4 bg-white border border-slate-200 rounded-xl shadow-2xs">
+            <div className="p-4 bg-white border border-slate-200 rounded-sm shadow-2xs">
               <div className="flex items-center justify-between text-xs font-extrabold text-slate-700 uppercase tracking-wide">
                 <span>Net Treasury Balance</span>
                 <Landmark className="w-4 h-4 text-indigo-600" />
@@ -365,7 +365,7 @@ export function UnifiedGovernanceHub({
           </div>
 
           {/* Transactions Feed */}
-          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs space-y-4">
+          <div className="bg-white border border-slate-200 rounded-sm p-5 shadow-2xs space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">
                 {isHindi ? 'हालिया लेनदेन व बहीखाता प्रविष्टियां' : 'Recent Transactions Ledger'}
@@ -407,7 +407,7 @@ export function UnifiedGovernanceHub({
       {/* 7. Tab 4: Chanda & Donation Receipts */}
       {activeTab === 'chanda' && (
         <div className="space-y-4">
-          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="bg-white border border-slate-200 rounded-sm p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h3 className="text-sm font-bold text-slate-900">
                 {isHindi ? 'चंदा व दान रसीद डेस्क' : 'Chanda & Donation Receipts Desk'}
@@ -433,7 +433,7 @@ export function UnifiedGovernanceHub({
       {/* 8. Tab 5: Grants & CSR Matcher */}
       {activeTab === 'grants' && (
         <div className="space-y-4">
-          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="bg-white border border-slate-200 rounded-sm p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h3 className="text-sm font-bold text-slate-900">
                 {isHindi ? 'सरकारी योजनाएं व CSR अनुदान मैचिंग' : 'AI Grant Discovery & CSR Matcher'}
@@ -457,7 +457,7 @@ export function UnifiedGovernanceHub({
       {/* 9. Tab 6: Campaigns & Petitions */}
       {activeTab === 'campaigns' && (
         <div className="space-y-4">
-          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="bg-white border border-slate-200 rounded-sm p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h3 className="text-sm font-bold text-slate-900">
                 {isHindi ? 'जन-अभियान, हस्ताक्षर याचिकाएं व संयुक्त मोर्चा' : 'Public Campaigns, Petitions & Coalition Alliances'}
@@ -481,7 +481,7 @@ export function UnifiedGovernanceHub({
       {/* 10. Tab 7: Program Tasks & Dispatch */}
       {activeTab === 'tasks' && (
         <div className="space-y-4">
-          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="bg-white border border-slate-200 rounded-sm p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h3 className="text-sm font-bold text-slate-900">
                 {isHindi ? 'कार्यक्रम कार्यभार व फील्ड टास्क बोर्ड' : 'Program & Field Action Tasks'}

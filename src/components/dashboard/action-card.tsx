@@ -37,14 +37,14 @@ export function ActionCard({
   return (
     <div
       className={cn(
-        'rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-xs transition-all hover:shadow-sm',
+        'rounded-sm border border-slate-200 bg-white p-4 sm:p-5 shadow-xs transition-colors hover:shadow-sm',
         className
       )}
     >
       <div className="flex items-start gap-3.5">
         <div
           className={cn(
-            'w-11 h-11 rounded-xl flex items-center justify-center shrink-0 shadow-2xs',
+            'w-11 h-11 rounded-sm flex items-center justify-center shrink-0 shadow-2xs',
             iconBgMap[color]
           )}
         >
@@ -69,7 +69,7 @@ export function ActionCard({
             <Button
               asChild
               size="sm"
-              className="h-8 px-3.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs transition-all active:scale-95 shadow-xs"
+              className="h-8 px-3.5 rounded-sm bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs transition-colors  shadow-xs"
             >
               <Link href={actionHref}>
                 {actionLabel}

@@ -39,7 +39,7 @@ type Petition = {
   slug: string
   description: string
   target_decision_maker: string
-  signature_goal: number
+  signature_goal: number | null
   current_signatures: number
   status: string
   volunteer_prompt_enabled: boolean
@@ -117,7 +117,8 @@ export function CampaignManager({
     const slug = (formData.get('slug') as string) || title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
     const description = formData.get('description') as string
     const targetDecisionMaker = formData.get('target_decision_maker') as string
-    const goal = Number(formData.get('signature_goal')) || 500
+    const goalInput = formData.get('signature_goal')
+    const goal = goalInput ? Number(goalInput) : 500
     const volunteerCtaText = (formData.get('volunteer_cta_text') as string) || 'Join the Movement & Volunteer'
 
     const result = await createPetitionAction({
@@ -186,7 +187,7 @@ export function CampaignManager({
           {activeTab === 'petitions' ? (
             <Dialog open={isPetitionModalOpen} onOpenChange={setIsPetitionModalOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs h-9 rounded-sm">
+                <Button className="bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white font-semibold text-xs h-9 rounded-sm">
                   <Plus className="w-4 h-4 mr-1.5" />
                   Publish Public Petition
                 </Button>
@@ -228,13 +229,12 @@ export function CampaignManager({
                     </div>
                     <div>
                       <Label htmlFor="signature_goal" className="text-xs font-semibold text-slate-700">
-                        Signature Target Goal
+                        Signature Target Goal (optional)
                       </Label>
                       <Input
                         id="signature_goal"
                         name="signature_goal"
                         type="number"
-                        defaultValue={500}
                         className="mt-1 h-9 text-xs rounded-sm"
                       />
                     </div>
@@ -293,7 +293,7 @@ export function CampaignManager({
                       type="submit"
                       disabled={isLoading}
                       size="sm"
-                      className="bg-slate-900 text-white font-semibold text-xs"
+                      className="bg-white text-slate-900 border border-slate-200 font-semibold text-xs"
                     >
                       {isLoading ? 'Publishing...' : 'Launch Petition'}
                     </Button>
@@ -304,7 +304,7 @@ export function CampaignManager({
           ) : (
             <Dialog open={isCampaignModalOpen} onOpenChange={setIsCampaignModalOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs h-9 rounded-sm">
+                <Button className="bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white font-semibold text-xs h-9 rounded-sm">
                   <Plus className="w-4 h-4 mr-1.5" />
                   New Internal Campaign
                 </Button>
@@ -340,7 +340,7 @@ export function CampaignManager({
                     />
                   </div>
                   <div className="flex justify-end gap-2 pt-2">
-                    <Button type="submit" disabled={isLoading} size="sm" className="bg-slate-900 text-white text-xs">
+                    <Button type="submit" disabled={isLoading} size="sm" className="bg-white text-slate-900 border border-slate-200 text-xs">
                       Create Campaign
                     </Button>
                   </div>
@@ -357,7 +357,7 @@ export function CampaignManager({
           <button
             type="button"
             onClick={() => setActiveTab('petitions')}
-            className={`px-3 py-1.5 font-semibold rounded-sm transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 font-semibold rounded-sm transition-colors flex items-center gap-1.5 ${
               activeTab === 'petitions'
                 ? 'bg-white text-slate-900 shadow-sm border border-slate-200'
                 : 'text-slate-600 hover:text-slate-900'
@@ -369,7 +369,7 @@ export function CampaignManager({
           <button
             type="button"
             onClick={() => setActiveTab('campaigns')}
-            className={`px-3 py-1.5 font-semibold rounded-sm transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 font-semibold rounded-sm transition-colors flex items-center gap-1.5 ${
               activeTab === 'campaigns'
                 ? 'bg-white text-slate-900 shadow-sm border border-slate-200'
                 : 'text-slate-600 hover:text-slate-900'

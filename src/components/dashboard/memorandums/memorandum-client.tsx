@@ -130,7 +130,7 @@ export default function MemorandumClient({ initialMemorandums }: MemorandumClien
   return (
     <div className="space-y-8">
       {/* Action Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 rounded-2xl shadow-lg border border-slate-800">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white border border-slate-200 text-slate-900 p-6 rounded-sm shadow-lg border border-slate-800">
         <div>
           <div className="flex items-center gap-2">
             <FileText className="w-6 h-6 text-brand-400" />
@@ -142,7 +142,7 @@ export default function MemorandumClient({ initialMemorandums }: MemorandumClien
         </div>
         <button
           onClick={() => setIsCreating(!isCreating)}
-          className="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-4 py-2.5 rounded-xl font-medium transition shadow"
+          className="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-4 py-2.5 rounded-sm font-medium transition shadow"
         >
           <Plus className="w-4 h-4" />
           {isCreating ? 'Cancel Draft' : 'Draft New Gyapan'}
@@ -263,7 +263,7 @@ export default function MemorandumClient({ initialMemorandums }: MemorandumClien
                 </div>
               </CardHeader>
               <CardContent className="py-4">
-                <pre className="whitespace-pre-wrap font-sans text-sm text-slate-700 bg-slate-50 p-4 rounded-xl border text-left leading-relaxed">
+                <pre className="whitespace-pre-wrap font-sans text-sm text-slate-700 bg-slate-50 p-4 rounded-sm border text-left leading-relaxed">
                   {mem.content}
                 </pre>
               </CardContent>

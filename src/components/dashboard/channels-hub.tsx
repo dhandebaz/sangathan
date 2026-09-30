@@ -258,7 +258,7 @@ export function ChannelsHub({
                 <Button
                   type="submit"
                   disabled={tgLoading}
-                  className="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs h-9 rounded-sm"
+                  className="w-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white font-semibold text-xs h-9 rounded-sm"
                 >
                   <Zap className="w-3.5 h-3.5 mr-1.5 text-amber-400" />
                   {tgLoading ? 'Connecting Bot with Telegram...' : '1-Click Link Bot & Activate Webhook'}

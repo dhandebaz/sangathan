@@ -343,9 +343,9 @@ export function CentralizedCalendarHub({
       </div>
 
       {/* Control Strip: Filter Tabs + View Mode + Month Nav */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white border border-slate-200 p-3 rounded-xl shadow-2xs">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white border border-slate-200 p-3 rounded-sm shadow-2xs">
         {/* Category Filters */}
-        <div className="inline-flex items-center gap-1 p-1 bg-slate-100/90 border border-slate-200/80 rounded-xl shadow-2xs overflow-x-auto scrollbar-none">
+        <div className="inline-flex items-center gap-1 p-1 bg-slate-100/90 border border-slate-200/80 rounded-sm shadow-2xs overflow-x-auto scrollbar-none">
           {[
             { id: 'all', label: isHindi ? 'सभी' : 'All Items' },
             { id: 'event', label: isHindi ? 'कार्यक्रम' : 'Events' },
@@ -356,7 +356,7 @@ export function CentralizedCalendarHub({
             <button
               key={f.id}
               onClick={() => setActiveFilter(f.id as any)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors ${
                 activeFilter === f.id
                   ? 'bg-white text-slate-900 shadow-2xs border border-slate-200/90 font-extrabold'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
@@ -409,7 +409,7 @@ export function CentralizedCalendarHub({
           <div className="flex items-center bg-muted/60 p-0.5 rounded-lg border border-border">
             <button
               onClick={() => setViewMode('month')}
-              className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
+              className={`px-2.5 py-1 rounded text-xs font-bold transition-colors ${
                 viewMode === 'month' ? 'bg-background text-foreground shadow-2xs' : 'text-muted-foreground'
               }`}
             >
@@ -417,7 +417,7 @@ export function CentralizedCalendarHub({
             </button>
             <button
               onClick={() => setViewMode('agenda')}
-              className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
+              className={`px-2.5 py-1 rounded text-xs font-bold transition-colors ${
                 viewMode === 'agenda' ? 'bg-background text-foreground shadow-2xs' : 'text-muted-foreground'
               }`}
             >
@@ -429,7 +429,7 @@ export function CentralizedCalendarHub({
 
       {/* Main Calendar View: Month Grid */}
       {viewMode === 'month' ? (
-        <div className="bg-card border border-border rounded-xl shadow-2xs overflow-hidden">
+        <div className="bg-card border border-border rounded-sm shadow-2xs overflow-hidden">
           {/* Day Headers */}
           <div className="grid grid-cols-7 border-b border-border bg-muted/40 text-center py-2 text-xs font-bold text-muted-foreground uppercase tracking-wider">
             <span>Sun</span>
@@ -495,7 +495,7 @@ export function CentralizedCalendarHub({
                       return (
                         <div
                           key={item.id}
-                          className={`text-[10px] font-bold px-1.5 py-0.5 rounded border truncate cursor-pointer transition-transform hover:scale-[1.02] ${colorClass}`}
+                          className={`text-[10px] font-bold px-1.5 py-0.5 rounded border truncate cursor-pointer transition-transform  ${colorClass}`}
                           title={`${item.title} (${item.type})`}
                           onClick={() => {
                             if (item.meeting_link) window.open(item.meeting_link, '_blank')
@@ -516,7 +516,7 @@ export function CentralizedCalendarHub({
         /* Agenda / Timeline List View */
         <div className="space-y-3">
           {filteredItems.length === 0 ? (
-            <div className="p-12 text-center bg-card border border-border rounded-xl">
+            <div className="p-12 text-center bg-card border border-border rounded-sm">
               <CalendarIcon className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
               <p className="text-sm font-bold text-foreground">
                 {isHindi ? 'कोई निर्धारित कार्यक्रम या फील्ड रोस्टर नहीं' : 'No scheduled items found'}
@@ -534,10 +534,10 @@ export function CentralizedCalendarHub({
               return (
                 <div
                   key={item.id}
-                  className="p-4 bg-card border border-border rounded-xl shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-slate-300 dark:hover:border-slate-700 transition-all"
+                  className="p-4 bg-card border border-border rounded-sm shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-slate-300 dark:hover:border-slate-700 transition-colors"
                 >
                   <div className="flex items-start gap-3 min-w-0">
-                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-muted border border-border min-w-[54px] shrink-0 text-center">
+                    <div className="flex flex-col items-center justify-center p-2 rounded-sm bg-muted border border-border min-w-[54px] shrink-0 text-center">
                       <span className="text-[10px] font-bold uppercase text-muted-foreground">
                         {itemDate.toLocaleString('default', { month: 'short' })}
                       </span>
@@ -766,7 +766,7 @@ export function CentralizedCalendarHub({
           {subscriptionUrls && (
             <div className="space-y-4 pt-2">
               {/* 1-Tap iOS / Mac Button */}
-              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 space-y-2">
+              <div className="p-4 rounded-sm border border-slate-200 border-slate-200 bg-slate-50 dark:bg-white/50 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-foreground">Apple Calendar (iOS / iPadOS / macOS)</span>
                   <span className="text-[10px] font-bold px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded">1-Tap Live Sync</span>
@@ -777,7 +777,7 @@ export function CentralizedCalendarHub({
                 <Button
                   size="sm"
                   asChild
-                  className="w-full bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-900 font-bold"
+                  className="w-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white dark:bg-white dark:text-slate-900 font-bold"
                 >
                   <a href={subscriptionUrls.webcalUrl}>
                     <Smartphone className="w-3.5 h-3.5 mr-1.5" />
@@ -842,7 +842,7 @@ export function CentralizedCalendarHub({
             </div>
 
             {generatedMeetUrl ? (
-              <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50 dark:border-emerald-900 dark:bg-emerald-950/40 space-y-3">
+              <div className="p-4 rounded-sm border border-emerald-200 bg-emerald-50 dark:border-emerald-900 dark:bg-emerald-950/40 space-y-3">
                 <div className="flex items-center gap-2 text-xs font-bold text-emerald-800 dark:text-emerald-300">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                   <span>{isHindi ? 'Google Meet कक्ष तैयार है:' : 'Google Meet room is active:'}</span>
@@ -850,7 +850,7 @@ export function CentralizedCalendarHub({
                 <Input
                   readOnly
                   value={generatedMeetUrl}
-                  className="text-xs font-mono bg-white dark:bg-slate-900"
+                  className="text-xs font-mono bg-white dark:bg-white"
                 />
                 <div className="flex items-center gap-2">
                   <Button

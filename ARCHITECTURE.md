@@ -1,141 +1,283 @@
-# Platform Architecture & Governance Structure
+# Sangathan Architecture Documentation
 
-## 1. Hybrid Platform Structure
+## System Overview
 
-Sangathan operates as a **Hybrid Civic Infrastructure Platform**, balancing three roles:
-1.  **Neutral Infrastructure**: Providing tools for any organization without ideological bias.
-2.  **Public-Good Civic Tool**: Enabling transparency and open data where appropriate.
-3.  **Governance Backbone**: Enforcing structural integrity and legal compliance.
+Sangathan is a civic infrastructure platform built for Indian grassroots organizers, NGOs, and collectives. It provides purpose-built digital tools for organizing, compliance, fundraising, and transparency.
 
-## 2. Modular Capability System
+### Core Philosophy
 
-We use a **Feature Tiering System** to gate advanced capabilities. This ensures organizations only access tools they are ready for or have authorized.
+- **No fake data** - All metrics, goals, and counts come from real database records
+- **Crisp, light, geometric design** - Canva × Figma aesthetic with `rounded-sm` radius system
+- **Bilingual first** - Hindi and English throughout
+- **Offline-first PWA** - Field tools work without connectivity
+- **Zero vendor lock-in** - Data portability and sovereignty built-in
 
-### Capability Flags (`org_capabilities`)
+---
 
-| Capability | Description | Default |
-| :--- | :--- | :--- |
-| `basic_governance` | Core membership, simple announcements. | `true` |
-| `advanced_analytics` | Deep insights into engagement and growth. | `false` |
-| `federation_mode` | Cross-org linking, joint events, coalitions. | `false` |
-| `voting_engine` | Formal and informal polling system. | `false` |
-| `volunteer_engine` | Task management and hour logging. | `false` |
-| `transparency_mode` | Public-facing stats and charter adherence badge. | `true` (Opt-in via Settings) |
-| `coalition_tools` | Advanced network features (future). | `false` |
+## Tech Stack
 
-### Governance Firewall
+| Layer | Technology |
+|-------|------------|
+| Framework | Next.js 16 (App Router, Turbopack) |
+| Language | TypeScript (strict mode) |
+| Styling | Tailwind CSS v4 (CSS variables, geometric tokens) |
+| Database | PostgreSQL (Supabase) |
+| Auth | Supabase Auth (JWT + cookies) |
+| Realtime | Supabase Realtime + Redis |
+| Caching | Redis (Upstash) |
+| Payments | Razorpay (UPI Autopay) |
+| Email | Cloudflare Email Routing |
+| Hosting | Cloudflare Workers / Vercel |
 
-*   **No Hidden Capabilities**: All features are controlled by explicit flags in the `organisations` table.
-*   **No Silent Overrides**: System admins cannot enable features without an audit log entry in `platform_actions`.
-*   **Equal Enforcement**: Logic checks (`checkCapability`) apply universally to all organizations.
+---
 
-## 3. Legal Separation Strategy
+## Directory Structure
 
-To maintain neutrality and trust, we prepare for structural separation:
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── [lang]/            # i18n routes (en, hi)
+│   │   ├── (site)/        # Public marketing pages
+│   │   │   ├── about/
+│   │   │   ├── compare/
+│   │   │   ├── features/
+│   │   │   ├── solutions/
+│   │   │   ├── transparency/
+│   │   │   ├── verify/
+│   │   │   └── ...
+│   │   ├── (public)/      # Public org microsites
+│   │   │   └── org/[slug]/
+│   │   │       ├── petitions/
+│   │   │       └── transparency/
+│   │   ├── (auth)/        # Auth pages
+│   │   └── dashboard/     # Protected dashboard
+│   └── api/               # API routes
+│       ├── billing/
+│       ├── webhooks/
+│       └── v1/
+├── components/
+│   ├── public/            # Public site components (Navbar, Footer, PageHeader, etc.)
+│   ├── dashboard/         # Dashboard components
+│   ├── ui/                # Base UI primitives (Button, Card, Skeleton, etc.)
+│   ├── org/               # Org-specific components
+│   └── ...
+├── lib/                   # Shared libraries
+│   ├── supabase/         # Supabase clients & middleware
+│   ├── auth/             # Auth utilities
+│   ├── i18n/             # i18n config
+│   ├── billing/          # Razorpay integration
+│   ├── forms/            # Form engines
+│   └── ...
+├── hooks/                 # Custom React hooks
+├── types/                 # TypeScript types
+└── scripts/              # Build/generation scripts
+```
 
-*   **Operational Entity**: Manages servers, billing, and day-to-day uptime.
-*   **Foundation / Governance Board**: Holds the "Platform Charter," manages appeals, and oversees the "Public-Good" mission.
-*   **Data Stewardship**: Organizational data is legally owned by the organization, not the platform. The platform acts as a data processor.
+---
 
-## 4. System Admin Limitations
+## Key Architectural Decisions
 
-System Administrators are bound by code and policy:
+### 1. Radius System (`rounded-sm` everywhere)
+- **Decision**: Single `rounded-sm` radius for all cards, buttons, inputs
+- **Rationale**: Geometric consistency, no `rounded-xl/2xl/3xl` mix
+- **Impact**: Visual cohesion across public + dashboard
 
-1.  **Immutable Logs**: All administrative actions (suspensions, capability changes) are logged to `platform_actions`.
-2.  **No Data Alteration**: Admins cannot modify vote results or financial logs.
-3.  **Appeal Process**: Any severe action (suspension) must have a corresponding appeal route (`/dashboard/appeals`).
+### 2. No Fake Data Policy
+- **Decision**: Zero fallbacks for metrics (`|| 500`, `|| 96`, etc.)
+- **Implementation**: Nullable fields, conditional rendering, "—" for missing
+- **Files**: `Petition.signature_goal: number | null`, transparency computed metrics
 
-## 5. Unified Backend Action Pattern
+### 3. i18n Middleware
+- **Location**: `src/lib/supabase/middleware.ts`
+- **Behavior**: Locale detection → redirect → auth guard → capability check
+- **Locales**: `en` (default), `hi`
 
-Every server action MUST use the `createSafeAction` wrapper from `src/lib/auth/actions.ts`. This is the single canonical entry point for all authenticated server-side mutations.
+### 4. Public vs Dashboard Separation
+- `(site)/` - Marketing pages, static generation
+- `(public)/org/[slug]/` - Org microsites, dynamic
+- `dashboard/` - Protected, capability-gated
 
-### Standard Pattern
+### 5. Supabase Middleware (Single Source of Truth)
+- Auth state, i18n redirect, capability enforcement
+- Security headers (CSP, HSTS, COOP, CORP)
+- Body size limits, mutation detection
 
-```typescript
-'use server'
+---
 
-import { createSafeAction } from '@/lib/auth/actions'
-import { createClient } from '@/lib/supabase/server'
-import { revalidatePath } from 'next/cache'
-import { z } from 'zod'
+## Data Flow
 
-const MySchema = z.object({
-  // NEVER include organisation_id — it comes from the auth context
-  name: z.string().min(1),
-})
+### Public Pages (SSG/ISR)
+```
+Request → Middleware (i18n redirect) → Page Component → Supabase (server client) → Static HTML
+```
 
-export const myAction = createSafeAction(
-  MySchema,
-  async (input, context) => {
-    // context.user.id      — authenticated user
-    // context.organizationId — resolved org from session cookie
-    // context.role          — user's role in this org
-    // context.logAction()   — helper to write audit logs
+### Dashboard (SSR)
+```
+Request → Middleware (auth check + capability) → Page → Server Actions → Supabase → HTML
+```
 
-    const supabase = await createClient()
-    const { data, error } = await supabase
-      .from('my_table')
-      .insert({ organisation_id: context.organizationId, ...input })
-      .select()
-      .single()
+### Server Actions (Mutations)
+```
+Client → Server Action → Supabase Service Client → DB → Revalidate Path → Response
+```
 
-    if (error) return { error: error.message }
+### Background Jobs
+```
+Cron (GitHub Actions/Vercel) → API Route → Supabase Service Client → DB
+```
 
-    await context.logAction({
-      action: 'MY_ACTION',
-      resourceTable: 'my_table',
-      resourceId: data.id,
-    })
+---
 
-    revalidatePath('/', 'layout')
-    return { success: true, id: data.id }
-  },
-  {
-    allowedRoles: ['admin', 'editor'],          // optional role gate
-    allowedCapabilities: ['voting_engine'],      // optional capability gate
-    actionName: 'my_action',                     // rate-limit key
-    rateLimit: { points: 30, duration: 60 },     // optional: default 60/min
-    audit: {                                     // optional auto-audit
-      action: 'MY_ACTION',
-      resourceTable: 'my_table',
-      getResourceId: (input, ctx) => ctx.organizationId,
-    },
-  },
+## Component Conventions
+
+### Public Components (`src/components/public/`)
+- **Navbar** - Responsive, language switcher, auth state
+- **Footer** - Links, legal, social
+- **PageHeader** - Consistent hero section
+- **ContactForm** - Server action submission
+- **PetitionView** - Real-time signatures, endorsements
+- **NeutralInfrastructure** - Feature cards with dialogs
+
+### Dashboard Components
+- **Feature tiles** - `rounded-sm`, no scale effects
+- **Cards** - `bg-white border border-slate-200 rounded-sm`
+- **Buttons** - `bg-white hover:bg-slate-50 border` (primary: `bg-slate-900`)
+- **Skeletons** - `@/components/ui/skeleton` for async sections
+
+### UI Primitives (`src/components/ui/`)
+- Button, Card, Dialog, Input, Select, Table, Skeleton, etc.
+- All `rounded-sm`, geometric, light theme
+
+---
+
+## Database Schema Highlights
+
+### Organisations
+```sql
+organisations (
+  id uuid PK,
+  slug text UNIQUE,
+  name text,
+  org_type text,           -- 'collective' | 'ngo' | 'federation' | 'platform'
+  capabilities jsonb,      -- { donations, campaigns, volunteers, ... }
+  settings jsonb,
+  created_at timestamptz
 )
 ```
 
-### Rules
-
-| Rule | Description |
-|------|-------------|
-| **No raw `try/catch`** | `createSafeAction` handles all error logging and consistent response format |
-| **No manual auth checks** | Never call `getUser()`, `getAdminOrg()`, or profile queries yourself |
-| **No `organisation_id` from client** | Always sourced from the auth context cookie, never from form input |
-| **No inline rate limiting** | Use `createSafeAction` options; the wrapper uses centralized Upstash Redis |
-| **Audit every mutation** | Call `context.logAction()` or use the `audit` option for every write operation |
-| **Zod first** | Validate ALL inputs with Zod schemas; never trust raw `FormData` or params |
-| **Return `{ success, data?, error? }`** | All actions return the standard `ActionResponse` shape |
-
-### When NOT to use `createSafeAction`
-
-- **Public/unauthenticated actions** (e.g., public form submission) — write a raw server action with explicit public intent
-- **Internal utilities** (e.g., `generateQRData`) — keep as plain async functions with no server action wrapper
-- **Actions with highly custom auth** (e.g., `rsvpToEvent` which handles both public and role-gated access) — use raw pattern but follow the same response contract
-
-### Response Contract
-
-```typescript
-type ActionResponse<T = null> = {
-  success: boolean
-  data?: T
-  error?: string       // user-safe message — never expose stack traces
-}
+### Petitions (Nullable Goal)
+```sql
+petitions (
+  id uuid PK,
+  organisation_id uuid FK,
+  title text,
+  slug text,
+  description text,
+  target_decision_maker text,
+  signature_goal int NULL,        -- NULLABLE - no fake fallback
+  current_signatures int DEFAULT 0,
+  status text,                    -- 'draft' | 'published' | 'completed'
+  created_at timestamptz
+)
 ```
 
-Consumers always check `success` first. If `false`, display `error`. If `true`, use `data`.
+### Transparency (Computed)
+```sql
+-- No stored trust_score, total_funds, etc.
+-- Computed at query time from:
+--   - donations table (amount, status)
+--   - expenditures table
+--   - compliance_filings table
+```
 
-## 6. Future Extensibility
+---
 
-The architecture supports future growth via:
-*   **API Layer**: Modular service functions in `src/lib/supabase/service.ts` can be exposed via API routes.
-*   **Plugin Ecosystem**: The `capabilities` JSONB column allows adding new feature flags without schema migrations.
+## Security
+
+### Headers (Middleware)
+- CSP: `default-src 'self'`, nonce-based scripts
+- HSTS: `max-age=63072000; includeSubDomains; preload`
+- COOP: `same-origin`, CORP: `same-origin`
+- Referrer-Policy: `strict-origin-when-cross-origin`
+
+### Auth
+- Supabase Auth (JWT in httpOnly cookies)
+- Middleware validates claims on every request
+- Capability-based route protection
+
+### Secrets
+- `.env.local` for local, GitHub Secrets for CI
+- `scripts/scan-secrets.mjs` in pre-commit + CI
+
+---
+
+## Build & Deploy
+
+### Commands
+```bash
+npm run dev          # Turbopack dev server
+npm run build        # Production build (89 routes)
+npm run lint         # ESLint
+npm run typecheck    # tsc --noEmit
+npm run test         # vitest run
+npx playwright test  # E2E tests
+npm run storybook    # Storybook dev server
+npm run ci           # lint + build + audit
+```
+
+### CI Pipeline (`.github/workflows/ci.yml`)
+1. **migration-guard** - Forbid deleted migration files
+2. **quality** - lint, typecheck, audit, secrets scan
+3. **build** - `npm run build`
+4. **test** - `vitest run`
+5. **e2e** - Playwright tests (needs build)
+
+---
+
+## Extending the System
+
+### Adding a New Public Page
+1. Create `src/app/[lang]/(site)/new-page/page.tsx`
+2. Use `PageHeader`, `Footer`, geometric layout
+3. Add metadata in `generateMetadata()`
+4. Run `npm run build` to verify
+
+### Adding a Dashboard Feature
+1. Create component in `src/components/dashboard/`
+2. Add route in `src/app/[lang]/dashboard/feature/page.tsx`
+3. Add capability flag in `organisations.capabilities`
+4. Middleware enforces capability check
+
+### Adding an API Endpoint
+1. Create `src/app/api/new-endpoint/route.ts`
+2. Export `GET`/`POST` async functions
+5. Run `node scripts/generate-openapi.cjs` to update spec
+
+---
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| 404 on `/en/*` | Check middleware i18n redirect logic |
+| CSP errors | Check nonce propagation in middleware |
+| Build fails on types | Run `npx tsc --noEmit` locally |
+| Migration guard fails | Never delete `supabase/migrations/` files |
+| Auth redirect loop | Check middleware `isProtectedPath` logic |
+
+---
+
+## Glossary
+
+| Term | Meaning |
+|------|---------|
+| **BQF** | Bahujan Queer Foundation (parent org) |
+| **FCRA** | Foreign Contribution Regulation Act |
+| **80G/12A** | Indian tax exemption certificates |
+| **Parcha** | Printable notice/petition sheet |
+| **Metered Billing** | `(active - 5) × ₹11/month` UPI Autopay |
+| **Capability** | Org feature flag (donations, campaigns, etc.) |
+
+---
+
+*Last updated: September 2026 | Version 1.67.2*

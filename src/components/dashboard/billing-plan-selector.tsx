@@ -38,7 +38,7 @@ export function BillingPlanSelector({
     <div className="space-y-8">
       {/* Legacy grandfathered banner (existing Sustainer orgs only) */}
       {isLegacyInstitution && (
-        <div className="p-5 rounded-xl bg-indigo-50 border border-indigo-200">
+        <div className="p-5 rounded-sm bg-indigo-50 border border-indigo-200">
           <h3 className="text-sm font-bold text-indigo-900">
             {isHindi ? 'संरक्षक पहुंच (पुरानी सुरक्षित श्रेणी)' : 'Sustainer Access (grandfathered)'}
           </h3>
@@ -54,7 +54,7 @@ export function BillingPlanSelector({
       <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
         {/* Community Free Card */}
         <div
-          className={`rounded-xl border p-6 sm:p-8 flex flex-col justify-between ${
+          className={`rounded-sm border p-6 sm:p-8 flex flex-col justify-between ${
             isCurrentCommunity
               ? 'border-emerald-500 bg-emerald-50/20 shadow-2xs'
               : 'border-slate-200 bg-white shadow-2xs'
@@ -105,7 +105,7 @@ export function BillingPlanSelector({
 
         {/* Metered Card */}
         <div
-          className={`relative rounded-xl border-2 p-6 sm:p-8 flex flex-col justify-between overflow-hidden shadow-2xs ${
+          className={`relative rounded-sm border-2 p-6 sm:p-8 flex flex-col justify-between overflow-hidden shadow-2xs ${
             isCurrentMetered
               ? 'border-indigo-600 bg-indigo-50/10'
               : 'border-indigo-600 bg-white'
@@ -130,7 +130,7 @@ export function BillingPlanSelector({
               {isHindi ? PLAN_TIERS.Metered.descriptionHi : PLAN_TIERS.Metered.descriptionEn}
             </p>
 
-            <div className="mb-5 p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <div className="mb-5 p-4 rounded-sm bg-slate-50 border border-slate-200 space-y-2">
               {METER_PREVIEW_SIZES.map((n) => {
                 const calc = calculateMeteredBill(n)
                 return (
@@ -176,7 +176,7 @@ export function BillingPlanSelector({
       </div>
 
       {/* Whitelabel one-time Card (₹999 lifetime) */}
-      <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 max-w-5xl mx-auto shadow-2xs">
+      <div className="rounded-sm border border-slate-200 bg-slate-50/80 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 max-w-5xl mx-auto shadow-2xs">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-700 shrink-0">
             <Building2 className="w-6 h-6 text-indigo-600" />
@@ -220,7 +220,7 @@ export function BillingPlanSelector({
               labelHi="ब्रांडिंग हटाएं"
               isHindi={isHindi}
               orgId={orgId}
-              className="px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold text-center transition-colors shadow-2xs"
+              className="px-5 py-2.5 rounded-lg bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 text-white text-xs font-bold text-center transition-colors shadow-2xs"
             />
           )}
         </div>

@@ -186,9 +186,9 @@ export function SidebarNav({ lang, isAdmin, capabilities, orgType }: SidebarNavP
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        'flex items-center justify-between px-3 py-2 text-xs font-bold rounded-xl transition-all',
+                        'flex items-center justify-between px-3 py-2 text-xs font-bold rounded-sm transition-colors',
                         active
-                          ? 'bg-orange-50/90 text-orange-950 font-black border border-orange-300/80 shadow-2xs dark:bg-slate-800 dark:text-white dark:border-slate-700'
+                          ? 'bg-orange-50/90 text-orange-950 font-black border border-orange-300/80 shadow-2xs bg-slate-50 dark:text-white dark:border-slate-700'
                           : 'text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-slate-950 dark:hover:text-white'
                       )}
                     >
