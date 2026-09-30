@@ -208,7 +208,7 @@ export default async function PublicTransparencyPage({ params }: PageProps) {
                 <span>Audited Financial Standing</span>
               </div>
               <p>
-                All expenditures listed above are published from the organisation's own transparency ledger. Members can cross-verify each entry against internal records at any time.
+                All expenditures listed above are published from the organisation&apos;s own transparency ledger. Members can cross-verify each entry against internal records at any time.
               </p>
             </div>
           </div>
