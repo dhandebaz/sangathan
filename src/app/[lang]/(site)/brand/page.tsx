@@ -5,7 +5,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'ब्रांड दिशानिर्देश | संगठन' : 'Brand Guidelines | Sangathan',
+    title: isHindi ? 'ब्रांड दिशानिर्देश' : 'Brand Guidelines',
     description: isHindi
       ? 'संगठन ब्रांड का सही तरीके से उपयोग कैसे करें।'
       : 'How to use the Sangathan brand correctly.',

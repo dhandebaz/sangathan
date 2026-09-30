@@ -8,7 +8,7 @@ export async function generateMetadata({
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'डेटा प्रथाएं और सुरक्षा वास्तुकला | संगठन' : 'Data Practices & Security Architecture | Sangathan',
+    title: isHindi ? 'डेटा प्रथाएं और सुरक्षा वास्तुकला' : 'Data Practices & Security Architecture',
     description: isHindi ? 'एन्क्रिप्शन, शून्य-ज्ञान सिद्धांतों और संप्रभु डेटा प्रबंधन का अवलोकन।' : 'Overview of encryption, zero-knowledge principles, and sovereign data handling.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/data-practices`,

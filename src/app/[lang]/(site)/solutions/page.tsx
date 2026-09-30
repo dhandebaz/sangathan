@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'नागरिक समाधान व संगठन प्रकार | संगठन' : 'Civic Solutions & Movement Archetypes | Sangathan',
+    title: isHindi ? 'नागरिक समाधान व संगठन प्रकार' : 'Civic Solutions & Movement Archetypes',
     description: isHindi
       ? 'नागरिक समूहों और पंजीकृत एनजीओ के लिए उद्देश्य-निर्मित डिजिटल समाधान।'
       : 'Purpose-built civic solutions for grassroots collectives and registered NGOs.',

@@ -8,7 +8,7 @@ export async function generateMetadata({
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'सेवा की शर्तें | संगठन' : 'Terms of Service | Sangathan',
+    title: isHindi ? 'सेवा की शर्तें' : 'Terms of Service',
     description: isHindi ? 'संगठन नागरिक डिजिटल बुनियादी ढांचे के उपयोग की शर्तें।' : 'Terms of service for using Sangathan civic digital infrastructure.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/terms`,

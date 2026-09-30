@@ -23,7 +23,7 @@ export async function generateMetadata(props: {
 
   if (!event) {
     return {
-      title: 'Event Not Found | Sangathan',
+      title: 'Event Not Found',
       description: 'The requested event could not be found.',
     }
   }

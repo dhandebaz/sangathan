@@ -8,7 +8,7 @@ export async function generateMetadata({
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'प्लेटफ़ॉर्म चार्टर | संगठन' : 'Platform Charter | Sangathan',
+    title: isHindi ? 'प्लेटफ़ॉर्म चार्टर' : 'Platform Charter',
     description: isHindi ? 'सामुदायिक संप्रभुता और खुले शासन को बनाए रखने वाला लोकतांत्रिक मंच चार्टर।' : 'The democratic platform charter upholding community sovereignty and open governance.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/governance/platform-charter`,

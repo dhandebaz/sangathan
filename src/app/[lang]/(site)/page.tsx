@@ -11,9 +11,11 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi 
-      ? 'संगठन - नागरिक समूहों और एनजीओ के लिए डिजिटल बुनियादी ढांचा'
-      : 'Sangathan - Digital Operating System for Civic Movements & Collectives',
+    title: {
+      absolute: isHindi
+        ? 'संगठन - नागरिक समूहों और एनजीओ के लिए डिजिटल बुनियादी ढांचा | संगठन'
+        : 'Sangathan - Digital Operating System for Civic Movements & Collectives | Sangathan',
+    },
     description: isHindi
       ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं और एनजीओ के लिए जमीनी डिजिटल हथियार। 1-टैप फील्ड जांच, ₹1 पर्चे, आरटीआई ट्रैकर एवं विधिक सुरक्षा।'
       : 'The zero-tech, mobile-first operating system for civic collectives, citizen science networks, and NGOs. 1-tap spot audits, ₹1 printable Parchas, 30-day RTI reminders, and BQF community recognition.',

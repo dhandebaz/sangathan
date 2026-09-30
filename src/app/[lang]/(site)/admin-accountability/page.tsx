@@ -8,7 +8,7 @@ export async function generateMetadata({
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'प्रशासक जवाबदेही और दोहरी स्वीकृति | संगठन' : 'Admin Accountability & Dual Approval | Sangathan',
+    title: isHindi ? 'प्रशासक जवाबदेही और दोहरी स्वीकृति' : 'Admin Accountability & Dual Approval',
     description: isHindi ? 'क्रिप्टोग्राफ़िक लॉग, दोहरी स्वीकृति वर्कफ़्लो और अपरिवर्तनीय प्रशासक पारदर्शिता।' : 'Cryptographic logs, dual-approval workflows, and immutable admin transparency.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/admin-accountability`,

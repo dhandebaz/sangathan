@@ -8,7 +8,7 @@ export async function generateMetadata({
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'आपके डेटा अधिकार | संगठन' : 'Your Data Rights | Sangathan',
+    title: isHindi ? 'आपके डेटा अधिकार' : 'Your Data Rights',
     description: isHindi ? 'भारतीय डिजिटल कानूनों के तहत अपने डेटा निर्यात, पोर्टेबिलिटी और विलोपन अधिकारों का प्रयोग करें।' : 'Exercise your data export, portability, and deletion rights under Indian digital laws.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/data-rights`,

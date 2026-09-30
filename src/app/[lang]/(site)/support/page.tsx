@@ -5,7 +5,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'संगठन का समर्थन करें | संगठन' : 'Support Sangathan - Civic Infrastructure',
+    title: isHindi ? 'संगठन का समर्थन करें' : 'Support Sangathan - Civic Infrastructure',
     description: isHindi ? 'उच्च-उपलब्धता सर्वर और सुरक्षा बनाए रखने के लिए संगठन का समर्थन करें।' : 'Contribute to Sangathan to help maintain high-availability civic infrastructure and strict security.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/support`,

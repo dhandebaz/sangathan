@@ -7,7 +7,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'अक्सर पूछे जाने वाले प्रश्न | संगठन' : 'FAQ | Sangathan',
+    title: isHindi ? 'अक्सर पूछे जाने वाले प्रश्न' : 'FAQ',
     description: isHindi
       ? 'हमारे मिशन, सुरक्षा, डेटा संप्रभुता और संचालन के बारे में स्पष्ट उत्तर।'
       : 'Common questions about our mission, security, data sovereignty, and operations.',

@@ -8,7 +8,7 @@ export async function generateMetadata({
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'स्वीकार्य उपयोग नीति | संगठन' : 'Acceptable Use Policy | Sangathan',
+    title: isHindi ? 'स्वीकार्य उपयोग नीति' : 'Acceptable Use Policy',
     description: isHindi ? 'संगठन नागरिक कार्यक्षेत्रों के लिए दिशानिर्देश और स्वीकार्य उपयोग नीतियां।' : 'Guidelines and acceptable use policies for Sangathan civic workspaces.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/acceptable-use-policy`,

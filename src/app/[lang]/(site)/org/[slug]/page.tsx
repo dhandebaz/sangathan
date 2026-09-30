@@ -30,7 +30,7 @@ export async function generateMetadata(props: {
 
   if (!org) {
     return {
-      title: 'Organisation Not Found | Sangathan',
+      title: 'Organisation Not Found',
       description: 'The requested organisation profile could not be found.',
     }
   }

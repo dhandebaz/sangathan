@@ -8,7 +8,7 @@ export async function generateMetadata({
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'सामुदायिक दिशानिर्देश | संगठन' : 'Community Guidelines | Sangathan',
+    title: isHindi ? 'सामुदायिक दिशानिर्देश' : 'Community Guidelines',
     description: isHindi ? 'सुरक्षित, लोकतांत्रिक और जवाबदेह नागरिक आंदोलनों को बढ़ावा देने वाले सामुदायिक दिशानिर्देश।' : 'Community guidelines fostering safe, democratic, and accountable civic movements.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/community-guidelines`,

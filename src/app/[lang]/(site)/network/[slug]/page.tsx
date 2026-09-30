@@ -14,7 +14,7 @@ export async function generateMetadata(props: {
   const networkData = await getNetworkDetails(slug)
   if (!networkData) {
     return {
-      title: 'Federation Not Found | Sangathan',
+      title: 'Federation Not Found',
       description: 'The requested civic coalition or federation could not be found.',
     }
   }

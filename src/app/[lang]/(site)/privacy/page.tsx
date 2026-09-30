@@ -8,7 +8,7 @@ export async function generateMetadata({
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'गोपनीयता नीति | संगठन' : 'Privacy Policy | Sangathan',
+    title: isHindi ? 'गोपनीयता नीति' : 'Privacy Policy',
     description: isHindi ? 'संगठन नागरिक बुनियादी ढांचे के लिए गोपनीयता नीति और डेटा सुरक्षा प्रतिबद्धताएं।' : 'Privacy policy and data protection commitments for Sangathan civic infrastructure.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/privacy`,

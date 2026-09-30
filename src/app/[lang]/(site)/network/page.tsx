@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'नेटवर्क | संगठन' : 'Network | Sangathan',
+    title: isHindi ? 'नेटवर्क' : 'Network',
     description: isHindi
       ? 'सार्वजनिक संगठनों के बीच सहयोग और समर्थन के लिए नेटवर्क।'
       : 'Networks connecting public organisations for collaboration and mutual support.',

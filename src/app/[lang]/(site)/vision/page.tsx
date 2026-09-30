@@ -7,7 +7,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'दीर्घकालिक दृष्टि | संगठन' : 'Long-Term Vision | Sangathan',
+    title: isHindi ? 'दीर्घकालिक दृष्टि' : 'Long-Term Vision',
     description: isHindi
       ? 'नागरिक समाज और अगली सदी के लोकतांत्रिक आंदोलनों के लिए डिजिटल बुनियादी ढांचा।'
       : 'Building sovereign digital infrastructure for the next century of democratic civic engagement.',

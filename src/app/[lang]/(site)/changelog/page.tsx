@@ -6,7 +6,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'परिवर्तन लॉग (Changelog) | संगठन' : 'Changelog | Sangathan',
+    title: isHindi ? 'परिवर्तन लॉग (Changelog)' : 'Changelog',
     description: isHindi
       ? 'हमारे अपडेट और सुधारों का एक पारदर्शी रिकॉर्ड।'
       : 'A transparent record of our updates and improvements.',
@@ -68,6 +68,37 @@ type ChangelogEntry = {
 }
 
 const changelogData: ChangelogEntry[] = [
+  {
+    version: 'v1.67.3',
+    titleEn: 'Cleaner Page Titles, Correct Hindi Pricing Text & Verified Public Pages',
+    titleHi: 'साफ़ पृष्ठ शीर्षक, सही हिंदी मूल्य पाठ व सत्यापित सार्वजनिक पृष्ठ',
+    dateEn: 'October 2026',
+    dateHi: 'अक्टूबर 2026',
+    descEn: 'Page titles now show the organisation name exactly once — it was appearing twice in browser tabs and search results on most public pages. The Hindi pricing page no longer shows broken characters, and two release entries sharing a version number no longer collide on the changelog timeline. Every public page is now also checked automatically before an update goes live.',
+    descHi: 'पृष्ठ शीर्षक में संगठन का नाम अब ठीक एक बार आता है — पहले अधिकांश सार्वजनिक पृष्ठों पर ब्राउज़र टैब व खोज परिणामों में यह दो बार दिखता था। हिंदी मूल्य पृष्ठ अब बिगड़े अक्षर नहीं दिखाता, और एक ही संस्करण संख्या वाली दो रिलीज़ प्रविष्टियाँ अब परिवर्तन लॉग टाइमलाइन पर टकराती नहीं। हर सार्वजनिक पृष्ठ अपडेट लाइव होने से पहले स्वचालित रूप से जाँचा भी जाता है।',
+    color: 'blue',
+    icon: Code,
+    features: [
+      {
+        nameEn: 'Single, clean page titles',
+        nameHi: 'एकल, स्वच्छ पृष्ठ शीर्षक',
+        textEn: 'Browser tabs and search results now show each page title once, with the correct language suffix — English pages end with “Sangathan”, Hindi pages with “संगठन”.',
+        textHi: 'ब्राउज़र टैब व खोज परिणाम अब हर पृष्ठ शीर्षक एक ही बार दिखाते हैं, सही भाषा उपसर्ग के साथ — अंग्रेज़ी पृष्ठ “Sangathan” और हिंदी पृष्ठ “संगठन” पर समाप्त होते हैं।',
+      },
+      {
+        nameEn: 'Hindi pricing page text restored',
+        nameHi: 'हिंदी मूल्य पृष्ठ का पाठ बहाल',
+        textEn: 'The Hindi pricing page was showing garbled characters throughout — pricing, FAQ and feature copy now render correctly in Devanagari.',
+        textHi: 'हिंदी मूल्य पृष्ठ में पूरे पाठ के अक्षर बिगड़े हुए दिख रहे थे — मूल्य, प्रश्नोत्तर व सुविधा विवरण अब देवनागरी में सही दिखते हैं।',
+      },
+      {
+        nameEn: 'Automated public page checks',
+        nameHi: 'स्वचालित सार्वजनिक पृष्ठ जाँच',
+        textEn: 'Every update now runs an automated browser check across key English and Hindi pages, verifying titles, console health and core interactions before release.',
+        textHi: 'हर अपडेट पर अब प्रमुख अंग्रेज़ी व हिंदी पृष्ठों पर स्वचालित ब्राउज़र जाँच चलती है, जो रिलीज़ से पहले शीर्षक, कंसोल स्वास्थ्य व मुख्य अंतरक्रियाएँ सत्यापित करती है।',
+      },
+    ],
+  },
   {
     version: 'v1.67.2',
     titleEn: 'Cleaner Pricing Page',
@@ -3267,7 +3298,7 @@ export default async function ChangelogPage({ params }: { params: Promise<{ lang
           {changelogData.map((entry, index) => {
             const Icon = entry.icon
             return (
-              <div key={entry.version} className={`mb-16 ms-8 md:ms-12 ${index === changelogData.length - 1 ? 'mb-0' : ''}`}>
+              <div key={`${entry.version}-${index}`} className={`mb-16 ms-8 md:ms-12 ${index === changelogData.length - 1 ? 'mb-0' : ''}`}>
                 <span className={`absolute flex items-center justify-center w-10 h-10 rounded-full -start-5 ring-8 ring-white  shadow-sm ${colorClasses[entry.color]}`}>
                   <Icon size={18} className="stroke-[2.5]" />
                 </span>

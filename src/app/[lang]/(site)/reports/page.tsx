@@ -8,7 +8,7 @@ export async function generateMetadata({
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'सार्वजनिक रिपोर्ट और पारदर्शिता ऑडिट | संगठन' : 'Public Reports & Transparency Audits | Sangathan',
+    title: isHindi ? 'सार्वजनिक रिपोर्ट और पारदर्शिता ऑडिट' : 'Public Reports & Transparency Audits',
     description: isHindi ? 'सार्वजनिक पारदर्शिता ऑडिट, अनुपालन सारांश और परिचालन बेंचमार्क।' : 'Public transparency audits, compliance summaries, and operational benchmarks.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/reports`,

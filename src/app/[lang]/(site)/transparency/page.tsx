@@ -7,7 +7,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'पारदर्शिता और शासन | संगठन' : 'Transparency & Governance | Sangathan',
+    title: isHindi ? 'पारदर्शिता और शासन' : 'Transparency & Governance',
     description: isHindi
       ? 'कट्टरपंथी खुलेपन और डेटा सुरक्षा के माध्यम से विश्वास।'
       : 'Trust through radical openness and strict data sovereignty.',

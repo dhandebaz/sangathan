@@ -15,7 +15,7 @@ export default defineConfig({
         alias: {
           '@': path.resolve(__dirname, './src')
         },
-        exclude: ['node_modules', '.kilo', 'tests/e2e']
+        exclude: ['node_modules', '.kilo', 'tests/e2e', '**/*.spec.ts']
       }
     }, {
       extends: true,

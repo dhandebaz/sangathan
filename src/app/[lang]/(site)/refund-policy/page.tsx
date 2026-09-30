@@ -8,7 +8,7 @@ export async function generateMetadata({
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'धनवापसी नीति | संगठन' : 'Refund Policy | Sangathan',
+    title: isHindi ? 'धनवापसी नीति' : 'Refund Policy',
     description: isHindi ? 'संगठन के लिए धनवापसी नीति और स्वैच्छिक योगदान की शर्तें।' : 'Refund policy and voluntary contribution terms for Sangathan.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/refund-policy`,

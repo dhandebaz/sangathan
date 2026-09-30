@@ -24,7 +24,7 @@ export async function generateMetadata(props: VerifyPageProps): Promise<Metadata
 
   if (!credential) {
     return {
-      title: isHindi ? 'सत्यापन विफल | संगठन' : 'Verification Record Not Found | Sangathan',
+      title: isHindi ? 'सत्यापन विफल' : 'Verification Record Not Found',
     }
   }
 

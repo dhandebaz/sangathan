@@ -8,7 +8,7 @@ export async function generateMetadata({
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'कुकी नीति | संगठन' : 'Cookie Policy | Sangathan',
+    title: isHindi ? 'कुकी नीति' : 'Cookie Policy',
     description: isHindi ? 'संगठन द्वारा उपयोग की जाने वाली आवश्यक और कार्यात्मक कुकीज के बारे में जानकारी।' : 'Information about how Sangathan uses essential and functional cookies.',
     alternates: {
       canonical: `https://sangathan.space/${lang}/cookies`,

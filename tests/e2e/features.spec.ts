@@ -5,8 +5,8 @@ test.describe('Sangathan Platform Features Page', () => {
     await page.goto('/en/features');
     await page.waitForLoadState('networkidle');
 
-    await expect(page).toHaveTitle(/Features \| Sangathan/);
-    await expect(page.getByRole('heading', { name: 'Purpose-Built Features for Civic Collectives' })).toBeVisible();
+    await expect(page).toHaveTitle(/Features & Movement Tools/);
+    await expect(page.getByRole('heading', { name: 'Every Tool an Organizer Needs to Build Power and Win.' })).toBeVisible();
 
     // Civic Collectives tab should be active by default (orgs[0]).
     const civicTabButton = page.getByRole('button', { name: 'Civic Collectives & Grassroots Movements' });
@@ -76,14 +76,14 @@ test.describe('Sangathan Platform Features Page', () => {
   test('4. Verify bilingual page titles and text rendering (English and Hindi)', async ({ page }) => {
     await page.goto('/en/features');
     await page.waitForLoadState('networkidle');
-    await expect(page).toHaveTitle(/Features \| Sangathan/);
-    await expect(page.getByRole('heading', { name: 'Purpose-Built Features for Civic Collectives' })).toBeVisible();
+    await expect(page).toHaveTitle(/Features & Movement Tools/);
+    await expect(page.getByRole('heading', { name: 'Every Tool an Organizer Needs to Build Power and Win.' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Registered Non-Governmental Organisations' })).toBeVisible();
 
     await page.goto('/hi/features');
     await page.waitForLoadState('networkidle');
-    await expect(page).toHaveTitle(/सुविधाएं \| संगठन/);
-    await expect(page.getByRole('heading', { name: 'नागरिक समूहों के लिए तैयार की गई सुविधाएं' })).toBeVisible();
+    await expect(page).toHaveTitle(/नागरिक सुविधाएं/);
+    await expect(page.getByRole('heading', { name: 'हर आंदोलनकारी और नागरिक समूह की डिजिटल ताकत' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'पंजीकृत स्वयंसेवी संगठन (NGO)' })).toBeVisible();
   });
 
@@ -101,7 +101,7 @@ test.describe('Sangathan Platform Features Page', () => {
       await expect(accordionHeader).toBeVisible();
       await accordionHeader.click();
 
-      const descText = page.locator('.lg\\:hidden p', { hasText: 'Auto-generate 80G/501c3 compliant tax receipts for donors.' });
+      const descText = page.locator('.lg\\:hidden p', { hasText: 'Generate sequentially-numbered 80G/12A-ready PDF receipts for donors' });
       await expect(descText).toBeVisible();
     } else {
       const ngoTab = page.getByRole('button', { name: 'Registered Non-Governmental Organisations' });
@@ -114,7 +114,7 @@ test.describe('Sangathan Platform Features Page', () => {
       const detailHeading = page.locator('.hidden.lg\\:grid h3', { hasText: 'Tax Receipts Automation' }).first();
       await expect(detailHeading).toBeVisible();
 
-      const detailDesc = page.locator('.hidden.lg\\:grid p', { hasText: 'Auto-generate 80G/501c3 compliant tax receipts for donors.' }).first();
+      const detailDesc = page.locator('.hidden.lg\\:grid p', { hasText: 'Generate sequentially-numbered 80G/12A-ready PDF receipts for donors' }).first();
       await expect(detailDesc).toBeVisible();
     }
   });

@@ -8,7 +8,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params
   const isHindi = lang === 'hi'
   return {
-    title: isHindi ? 'नागरिक सुविधाएं | संगठन' : 'Features & Movement Tools | Sangathan',
+    title: isHindi ? 'नागरिक सुविधाएं' : 'Features & Movement Tools',
     description: isHindi
       ? 'नागरिक समूहों, पर्यावरण कार्यकर्ताओं और एनजीओ के लिए विशेष डिजिटल बुनियादी ढांचा।'
       : 'Purpose-built features for civic collectives, citizen science networks, and NGOs.',
