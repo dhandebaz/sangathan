@@ -69,6 +69,17 @@ type ChangelogEntry = {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: 'v1.67.2',
+    titleEn: 'Cleaner Pricing Page',
+    titleHi: 'साफ़ मूल्य निर्धारण पृष्ठ',
+    dateEn: 'September 2026',
+    dateHi: 'सितंबर 2026',
+    descEn: 'The Pay & Price page no longer opens with a funding progress meter. The page now leads directly with access models, contribution transparency, and infrastructure details, so visitors get to the actual pricing information immediately.',
+    descHi: 'योगदान एवं मूल्य पृष्ठ अब फंडिंग प्रगति मीटर से शुरू नहीं होता। पृष्ठ अब सीधे पहुंच मॉडल, योगदान पारदर्शिता व अवसंरचना विवरण से शुरू होता है, जिससे आगंतुक तुरंत वास्तविक मूल्य जानकारी तक पहुंचते हैं।',
+    color: 'slate',
+    icon: Sparkles,
+  },
+  {
     version: 'v1.67.1',
     titleEn: 'No Fake Data, No Bypass Fallbacks',
     titleHi: 'कोई नकली डेटा नहीं, कोई बायपास फॉलबैक नहीं',

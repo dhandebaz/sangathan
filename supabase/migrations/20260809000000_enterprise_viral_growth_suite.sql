@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS public.transparency_audit_reports (
     programmatic_ratio NUMERIC(5, 2) NOT NULL DEFAULT 85.0,
     transparency_score INTEGER NOT NULL DEFAULT 96,
     auditor_notes TEXT,
-    verified_status TEXT NOT NULL DEFAULT 'verified' CHECK (status IN ('draft', 'under_audit', 'verified', 'published')),
+    verified_status TEXT NOT NULL DEFAULT 'verified' CHECK (verified_status IN ('draft', 'under_audit', 'verified', 'published')),
     published_at TIMESTAMPTZ DEFAULT NOW(),
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
